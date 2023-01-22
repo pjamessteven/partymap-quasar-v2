@@ -1,8 +1,13 @@
 import { defineStore } from 'pinia';
-import { checkAuthenticatedRequest } from 'src/api';
+import { checkAuthenticatedRequest, logoutRequest } from 'src/api';
+import { PrivateUser } from 'src/types/autogen_types';
 
+interface AuthState {
+  currentUser: PrivateUser | null;
+  hasCheckedAuthCookie: boolean;
+}
 export const useAuthStore = defineStore('auth', {
-  state: () => ({
+  state: (): AuthState => ({
     currentUser: null,
     hasCheckedAuthCookie: false,
   }),
@@ -11,7 +16,7 @@ export const useAuthStore = defineStore('auth', {
   },
   actions: {
     async checkAuthCookie() {
-      const user = (await checkAuthenticatedRequest()).data;
+      const user: PrivateUser = (await checkAuthenticatedRequest()).data;
       if (user) {
         this.currentUser = user;
         // for facebook signup
@@ -21,6 +26,14 @@ export const useAuthStore = defineStore('auth', {
         }
       }
       this.hasCheckedAuthCookie = true;
+    },
+    async logout() {
+      try {
+        await logoutRequest();
+        this.currentUser = null;
+      } catch (error) {
+        return error;
+      }
     },
   },
 });

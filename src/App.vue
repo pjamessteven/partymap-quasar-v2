@@ -5,8 +5,8 @@
 <script>
 import axios from 'axios';
 import { mapActions, mapState } from 'pinia';
-import { useSettingsStore } from './stores/settings-store';
-import { useAuthStore } from './stores/auth-store';
+import { useMainStore } from './stores/main';
+import { useAuthStore } from './stores/auth';
 
 export default {
   name: 'App',
@@ -33,11 +33,11 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useSettingsStore, ['darkModeToggle']),
+    ...mapActions(useMainStore, ['darkModeToggle']),
     ...mapActions(useAuthStore, ['checkAuthCookie']),
   },
   computed: {
-    ...mapState(useSettingsStore, ['darkMode']),
+    ...mapState(useMainStore, ['darkMode']),
   },
   watch: {
     darkMode: function (newval) {
@@ -115,7 +115,6 @@ html {
 body {
   height: 100%;
   max-height: 100%;
-
   overflow: hidden;
   font-family: BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Helvetica, Arial,
@@ -125,6 +124,9 @@ body {
   max-height: -webkit-fill-available;
   touch-action: none;
   overscroll-behavior-x: none;
+  #q-app {
+    height: 100%;
+  }
 }
 
 .menubar {

@@ -1,0 +1,176 @@
+<template>
+  <div class="navigation-bar flex row no-wrap">
+    <q-tabs
+      v-model="sidebarPanel"
+      no-caps
+      indicator-color="transparent"
+      :compact="$q.screen.lt.sm"
+      :shrink="$q.screen.gt.xs"
+    >
+      <q-tab
+        name="nearby"
+        :icon="sidebarPanel === 'nearby' ? 'mdi-home' : 'mdi-home-outline'"
+        :label="$q.screen.gt.xs ? null : 'Nearby'"
+        content-class="tab"
+        :ripple="false"
+        @click="backToExplore"
+      />
+      <q-tab
+        name="explore"
+        icon="mdi-earth"
+        :label="$q.screen.gt.xs ? null : 'Explore'"
+        content-class="tab"
+        :ripple="false"
+        @click="backToExplore"
+      />
+      <q-tab
+        name="favorites"
+        icon="mdi-heart-outline"
+        :label="$q.screen.gt.xs ? null : 'Saved'"
+        content-class="tab"
+        :ripple="false"
+        @click="backToExplore"
+      />
+      <q-tab
+        name="search"
+        icon="mdi-magnify"
+        :label="$q.screen.gt.xs ? null : 'Search'"
+        content-class="tab"
+        :ripple="false"
+        @click="backToExplore"
+      />
+    </q-tabs>
+  </div>
+</template>
+<script>
+import { getFineLocation } from 'assets/common.js';
+import { mapState, mapWritableState } from 'pinia';
+import { useAuthStore } from 'src/stores/auth';
+import { useMainStore } from 'src/stores/main';
+import { useMapQueryStore } from 'src/stores/map-query';
+
+export default {
+  name: 'NavigationBar',
+
+  components: {},
+  props: {},
+
+  data() {
+    return {};
+  },
+  methods: {
+    // go back to explore
+    // if the user is on an event or artist page
+    backToExplore() {
+      if (this.$route.name !== 'explore') {
+        this.$router.push({ name: 'Explore' });
+      }
+    },
+  },
+  watch: {
+    sidebarPanel(to, from) {
+      this.backToExplore();
+      if (to === 'explore') {
+        this.showPanelMobile = false;
+      }
+      if (to === 'search') {
+        this.showPanelMobile = true;
+      }
+      if (to === 'nearby') {
+        // this.getFineLocation()
+        this.showPanelMobile = true;
+      }
+      if (to === 'favorites') {
+        if (this.currentUser) {
+          this.controlFavoritesSelected = true;
+          this.showPanelMobile = true;
+        } else {
+          this.$router.push({ name: 'Login' });
+        }
+      } else if (from === 'favorites') {
+        this.controlFavoritesSelected = false;
+      }
+    },
+  },
+  computed: {
+    ...mapState(useAuthStore, ['currentUser']),
+    ...mapWritableState(useMainStore, ['sidebarPanel', 'showPanelMobile']),
+    ...mapWritableState(useMapQueryStore, ['controlFavoritesSelected']),
+  },
+  created() {
+    this.getFineLocation = getFineLocation;
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.body--dark {
+  .nav-separator {
+    background: linear-gradient(
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+  }
+}
+.body--light {
+  .nav-separator {
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.1), transparent);
+  }
+}
+.navigation-bar {
+  width: 216px;
+  padding-right: 8px;
+  //height: 62px;
+  :deep(.q-tabs) {
+    height: 100%;
+    width: 100%;
+    font-family: chicagoflf;
+    .q-tab {
+      padding-top: 4px;
+      opacity: 0.3;
+      padding: 0px;
+      &.q-tab--active {
+        opacity: 1;
+      }
+    }
+  }
+}
+.nav-separator {
+  width: 1px;
+  height: 100%;
+}
+@media only screen and (max-width: 600px) {
+  .body--dark {
+    .navigation-bar {
+      background: $bi-2;
+      box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.8);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+      //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.1);
+    }
+  }
+  .body--light {
+    .navigation-bar {
+      background: white;
+      box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.1);
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      :deep(.q-tabs) {
+        .q-tab {
+          color: black;
+        }
+      }
+    }
+  }
+  .nav-separator {
+    display: none;
+  }
+  .navigation-bar {
+    width: unset;
+    padding-right: unset;
+    :deep(.q-tab__icon) {
+      padding: 6px 4px;
+    }
+  }
+}
+</style>

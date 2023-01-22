@@ -1,0 +1,971 @@
+<template>
+  <div class="event-list-vertical shadow-0">
+    <div class="touch-overlay" v-touch-swipe="handleSwipe" />
+    <div
+      class="event-list-inner"
+      v-bind:class="{
+        'event-list-expanded': $q.screen.lt.sm && showPanelMobile,
+      }"
+    >
+      <div
+        class="flex column grow no-wrap"
+        :class="{ 'q-mx-sm': $q.screen.lt.sm }"
+        style="height: 100%; position: relative;"
+      >
+        <!--
+        <q-icon
+          v-if="$q.screen.lt.sm"
+          @click="handleSwipe"
+          flat
+          v-touch-swipe="handleSwipe"
+          name="mdi-chevron-up"
+          class="mobile-hide-icon t1"
+          :class="{
+            'rotate-180 slower': showPanelMobile,
+            'q-py-sm q-px-md q-py-sm': $q.screen.lt.sm
+          }"
+          size="1.5rem"
+        />
+        <!--
+        <div class="date-header-bg" />
+-->
+        <div class="flex q-px-md" v-if="controlFavoritesSelected">
+          <q-select label="All my events" outlined square />
+        </div>
+        <q-scroll-area
+          vertical
+          @scroll="onScrollMainContent"
+          ref="scroll"
+          :thumb-style="{
+            right: $q.screen.gt.xs ? '0px' : '-16px',
+            width: $q.screen.gt.xs ? '4px' : '4px',
+          }"
+          class="scroll-area flex grow"
+          :content-style="{
+            height: '100%',
+            'will-change': 'scroll-position',
+            'touch-action': showPanelMobile ? 'auto' : 'auto',
+          }"
+        >
+          <!--
+          <q-input
+            ref="search"
+            debounce="300"
+            clearable
+            outlined
+            dense
+            class="search-input grow chicago q-mx-md q-mb-sm q-mt-sm"
+            :placeholder="$t('search.search_box_text')"
+            v-model="query"
+            @keyup.enter="search"
+          >
+            <template v-slot:prepend>
+              <i style="font-size: 0.7em!important" class="mdi mdi-magnify" />
+            </template>
+          </q-input>
+          <div
+            class="chicago text-h4  q-pt-lg"
+            :class="$q.screen.lt.sm ? 'q-pl-sm q-mb-sm ' : 'q-pl-md q-mb-lg'"
+          >
+            <span v-if="sidebarPanel === 'favorites'">My favorites:</span>
+            <span v-else>
+              Explore
+            </span>
+          </div>
+-->
+          <div
+            class="sidebar-header flex row grow no-wrap items-stretch justify-between ellipsis no-wrap q-pl-md"
+            v-touch-swipe="
+              () => {
+                sidebarPanel = 'explore';
+              }
+            "
+          >
+            <div class="q-pt-md q-pb-  q-pr-md ellipsis" style="width: 100%">
+              <span class="text-h4 chicago">Explore</span>
+            </div>
+          </div>
+          <transition enter-active-class="animated fadeIn">
+            <div class="flex column no-wrap scroll-content content">
+              <!--
+          <transition appear enter-active-class="animated fadeIn">
+            <div
+              class="flex column q-pb-md"
+              style="overflow: hidden;"
+              v-show="eventDates && (!mapMoving || blockUpdates)"
+            >
+              <EventDateCard
+                :class="$q.screen.gt.xs ? 'q-px-md' : 'q-px-sm'"
+                v-for="(ed, index) in eventDates"
+                :key="index"
+                :event="ed[0]"
+                style="max-width: 100%;"
+                class="q-pb-md"
+              />
+            </div>
+          </transition>
+        -->
+              <ControlsComponent
+                v-if="$q.screen.gt.sm"
+                class="controls-component "
+                :class="$q.screen.lt.sm ? 'q-pt-sm' : 'q-mb-sm q-mt-md'"
+              />
+
+              <div
+                class="artist-profile-wrapper"
+                v-if="
+                  controlArtistSelectedOptions.length > 0 && $q.screen.gt.xs
+                "
+              >
+                <ArtistProfile
+                  :key="controlArtistSelectedOptions[0].id"
+                  :id="controlArtistSelectedOptions[0].id"
+                />
+              </div>
+              <ControlsComponent
+                class="controls-component "
+                :class="$q.screen.lt.sm ? 'q-pt-sm' : 'q-mb-sm '"
+                :showSelectedValue="true"
+                :showOnlySelected="true"
+              />
+              <div
+                class="flex column artists-wrapper "
+                v-if="noFiltersSelected && nearbyArtists.length > 0"
+              >
+                <div
+                  class="chicago header q-py-md  t1"
+                  :class="
+                    $q.screen.lt.sm ? 'q-pl-sm q-mt-sm' : 'q-pl-md  q-py-md'
+                  "
+                >
+                  Top artists in this area:
+                </div>
+                <ArtistsComponent class="artists-component" />
+              </div>
+              <transition appear enter-active-class="animated fadeIn">
+                <div
+                  class="no-parties-text chicago t4 flex grow q-mt-md"
+                  v-if="
+                    componentGroup &&
+                      Object.keys(componentGroup).length == 0 &&
+                      !loadingEventDates &&
+                      !isLoadingDatesInitial
+                  "
+                >
+                  No parties in this area :'(
+                </div>
+              </transition>
+              <transition appear enter-active-class="animated fadeIn">
+                <div
+                  class="flex column"
+                  v-show="
+                    !isLoadingInitial &&
+                      !computedMapMoving &&
+                      Object.keys(componentGroup).length > 0
+                  "
+                >
+                  <div
+                    v-for="yearMonth in Object.keys(componentGroup)"
+                    :key="yearMonth"
+                  >
+                    <component
+                      v-if="componentGroup[yearMonth].header"
+                      :key="yearMonth + '-header'"
+                      class="header q-mt-"
+                      :class="$q.screen.lt.sm ? '' : ''"
+                      :is="componentGroup[yearMonth].header.type"
+                      v-bind="componentGroup[yearMonth].header.propsData"
+                    >
+                    </component>
+
+                    <div
+                      class="ed-card-grid q-pb-sm"
+                      :style="computedGridColumns"
+                      :class="{
+                        'q-px-md ': $q.screen.gt.xs,
+                        'q-px-sm  q-mt-': $q.screen.lt.sm,
+                      }"
+                    >
+                      <component
+                        v-for="(component, index) in componentGroup[yearMonth]
+                          .dates"
+                        :key="index"
+                        :is="component.type"
+                        v-bind="component.propsData"
+                      >
+                      </component>
+                    </div>
+                  </div>
+                </div>
+              </transition>
+
+              <div
+                class="row justify-center q-my-lg q-mb-xl"
+                v-if="
+                  hasNext &&
+                    loadingEventDates &&
+                    !isLoadingInitial &&
+                    Object.keys(componentGroup).length !== 0
+                "
+              >
+                <q-spinner-ios
+                  :color="$q.dark.isActive ? 'white' : 'black'"
+                  size="2em"
+                />
+              </div>
+              <div
+                class="flex row justify-center q-mb-lg q-mt-lg t4"
+                v-if="
+                  !hasNext &&
+                    componentGroup &&
+                    Object.keys(componentGroup).length !== 0 &&
+                    !loadingEventDates &&
+                    !isLoadingDatesInitial
+                "
+              >
+                <div>End of results</div>
+              </div>
+            </div>
+          </transition>
+        </q-scroll-area>
+      </div>
+      <div
+        v-touch-swipe="handleSwipe"
+        class="event-date-center flex grow  justify-center q-pt-lg"
+        style="height: 100%; position: absolute; width: 100%"
+      >
+        <q-spinner-ios
+          :thickness="1"
+          :color="$q.dark.isActive ? 'white' : 'black'"
+          size="2em"
+          v-if="
+            isLoadingInitial &&
+              componentGroup &&
+              Object.keys(componentGroup).length == 0
+          "
+          v-touch-swipe="handleSwipe"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import _ from "lodash";
+import EventDateCard from "components/MapView/Sidebar/ExploreView/EventDateListView/EventDateCard.vue";
+// import SortControl from './SortControl'
+import DateHeader from "./DateHeader.vue";
+import ArtistProfile from "components/ArtistPage/ArtistProfile";
+import moment from "moment-timezone";
+import ArtistsComponent from "./ArtistsComponent.vue";
+import ControlsComponent from "components/Controls/ControlsComponent.vue";
+import LoadingDots from "components/LoadingDots.vue";
+export default {
+  components: {
+    EventDateCard,
+    ControlsComponent,
+    DateHeader,
+    ArtistProfile,
+    ArtistsComponent,
+  },
+  props: { showControls: { default: false } },
+  beforeMount() {},
+  mounted() {
+    // dont use these filters on the map view
+    this.controlCountrySelectedOption = null;
+    this.controlRegionSelectedOption = null;
+    this.controlLocalitySelectedOption = null;
+    this.query = null;
+    if (!this.blockUpdates) {
+      this.getInitialList();
+      // watcher on map bounds triggers inital load i think
+    }
+    setTimeout(() => {
+      this.hasLoaded = true;
+    }, 500);
+  },
+  data() {
+    return {
+      mainContentScrollPosition: 0,
+      scrollingUp: false,
+      hasLoaded: false,
+      headerYPosition: 0,
+      year: 0,
+      componentGroup: {},
+      isLoadingDatesInitial: false,
+      isLoadingArtistsInitial: false,
+    };
+  },
+  methods: {
+    // insert date header components and event dates into list
+    generateComponentGroup(eventDates) {
+      for (let ed of eventDates) {
+        // assumes eventDates are sorted by time
+        const start = moment(ed[0].start_naive);
+        let yearMonth = start.month() + "" + start.year();
+        if (!this.componentGroup[yearMonth]) {
+          this.componentGroup[yearMonth] = {
+            header: {
+              type: "DateHeader",
+              propsData: {
+                date: ed[0].start_naive,
+              },
+            },
+            dates: [],
+          };
+        }
+        if (
+          !this.componentGroup[yearMonth].dates.find(
+            (x) => x.propsData.event.id === ed[0].id
+          )
+        )
+          this.componentGroup[yearMonth].dates.push({
+            type: "EventDateCard",
+            propsData: {
+              editing: this.editing,
+              event: ed[0],
+              class: "ed-card",
+              shortDate: true,
+            },
+          });
+      }
+      this.componentGroup = { ...this.componentGroup }; // needed to trigger re-render
+    },
+
+    getInitialList() {
+      this.$nextTick(() => {
+        if (this.$route.name === "Explore" && !this.blockUpdates) {
+          // Artist stuff
+          this.nearbyArtistsPage = 1;
+          this.isLoadingArtistsInitial = true;
+          this.$store
+            .dispatch("main/loadNearbyArtists", {
+              per_page: 10,
+              page: 1,
+              sort: "event_count",
+              desc: true,
+            })
+            .then(() => {
+              this.isLoadingArtistsInitial = false;
+            });
+
+          // event date stuff
+          this.componentGroup = {};
+          this.$refs.scroll.setScrollPercentage(0);
+          this.hasNext = true;
+          this.page = 1;
+          this.isLoadingDatesInitial = true;
+          if (!this.currentLocation) {
+            this.$store.dispatch("main/getIpInfo").then(() => {
+              this.loadMore();
+            });
+          } else {
+            this.loadMore();
+          }
+        }
+      });
+    },
+    loadMore() {
+      if (
+        this.$route.name === "Explore" &&
+        this.hasNext &&
+        !this.blockUpdates
+      ) {
+        this.$store
+          .dispatch("main/loadEventDates", {
+            page: this.poage,
+            per_page: 10,
+            distinct: true,
+          })
+          .then(({ data }) => {
+            this.generateComponentGroup(data.items);
+            this.isLoadingDatesInitial = false;
+          })
+          .catch(() => {
+            this.isLoadingDatesInitial = false;
+          });
+        this.page += 1;
+      }
+    },
+    handleSwipe({ evt, ...info }) {
+      this.showPanelMobile = !this.showPanelMobile;
+    },
+    onScrollMainContent(info) {
+      if (
+        this.hasLoaded &&
+        this.eventDates != null &&
+        !this.loadingEventDates
+      ) {
+        // this.mainContentScrollPosition = info.verticalPosition
+        // this.headerYOffset = info.verticalPosition
+        /*
+        if (info.verticalPercentage > 0) {
+          // slide up mobile bottom panel when user tries to scroll
+          // and to top to stop scroll action
+          if (this.showPanelMobile === false) {
+            this.showPanelMobile = true
+            let interval = setInterval(() => {
+              this.$refs.scroll.setScrollPercentage(0)
+            }, 10)
+            setTimeout(() => {
+              clearInterval(interval)
+            }, 400)
+          }
+        }
+        */
+      }
+      this.mainContentScrollPosition = info.verticalPosition;
+
+      if (info.verticalPercentage === 1) {
+        // reached bottom
+        this.loadMore();
+      }
+    },
+  },
+  watch: {
+    route: {
+      handler: function(to, from) {
+        if (to.name === "Explore") {
+          if (!this.eventDates) {
+            if (!this.currentLocation) {
+              this.$store.dispatch("main/getIpInfo").then(() => {
+                this.getInitialList();
+              });
+            } else {
+              this.getInitialList();
+            }
+          }
+        }
+      },
+    },
+    mapBounds() {
+      if (!this.blockUpdates) {
+        // map moved
+        // if updates are not blocked, update event dates
+        this.getInitialList();
+      }
+    },
+
+    sidebarPanel: {
+      handler: (newVal, oldVal) => {
+        if (newVal === "favorites" || newVal === "explore") {
+          //this.getInitialList();
+        }
+      },
+    },
+    currentUser(newVal, oldVal) {
+      // load favorites after user logs in
+      if (this.sidebarPanel === "favorites") {
+        this.getInitialList();
+      }
+    },
+    selectedTags() {
+      this.getInitialList();
+    },
+    selectedDateRange() {
+      this.getInitialList();
+    },
+    controlDurationSelectedOptions() {
+      this.getInitialList();
+    },
+    controlSizeSelectedOptions() {
+      this.getInitialList();
+    },
+    controlArtistSelectedOptions() {
+      this.getInitialList();
+    },
+    controlTagSelectedOptions() {
+      this.getInitialList();
+    },
+    controlFavoritesSelected() {
+      this.getInitialList();
+    },
+    sortMethod() {
+      this.getInitialList();
+    },
+    query() {
+      this.debouncedGetInitalList();
+    },
+    showPanelMobile(newVal, oldVal) {
+      // block list from updaeting when mobile panel showing
+      if (newVal === true) {
+        // this.blockUpdates = true
+      } else {
+        this.blockUpdates = false;
+      }
+    },
+  },
+  computed: {
+    noFiltersSelected() {
+      return (
+        this.controlArtistSelectedOptions.length === 0 &&
+        this.controlDurationSelectedOptions.length === 0 &&
+        this.controlSizeSelectedOptions.length === 0 &&
+        this.controlFavoritesSelected.length === 0 &&
+        this.controlTagSelectedOptions.length === 0
+      );
+    },
+    isLoadingInitial() {
+      return this.isLoadingDatesInitial && this.isLoadingArtistsInitial;
+    },
+    computedMapMoving() {
+      return this.mapMoving && !this.blockUpdates;
+    },
+    computedGridColumns() {
+      if (this.sidebarExpanded) {
+        return `
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        `;
+      } else {
+        return `
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        `;
+      }
+    },
+    sidebarExpanded: {
+      get() {
+        return this.$store.state.main.sidebarExpanded;
+      },
+      set(val) {
+        this.$store.commit("main/setSidebarExpanded", val);
+      },
+    },
+    route() {
+      return this.$route;
+    },
+    mapBounds() {
+      return this.$store.state.main.mapBounds;
+    },
+    selectedTags() {
+      return this.$store.state.main.selectedTags;
+    },
+    selectedDateRange() {
+      return this.$store.state.main.selectedDateRange;
+    },
+    controlDurationSelectedOptions() {
+      return this.$store.state.main.controlDurationSelectedOptions;
+    },
+    controlSizeSelectedOptions() {
+      return this.$store.state.main.controlSizeSelectedOptions;
+    },
+    controlTagSelectedOptions() {
+      return this.$store.state.main.controlTagSelectedOptions;
+    },
+    controlArtistSelectedOptions() {
+      return this.$store.state.main.controlArtistSelectedOptions;
+    },
+    controlFavoritesSelected() {
+      return this.$store.state.main.controlFavoritesSelected;
+    },
+    currentLocation() {
+      return this.$store.state.main.currentLocation;
+    },
+    loadingEventDates() {
+      return this.$store.state.main.loadingEventDates;
+    },
+    sidebarPanel() {
+      return this.$store.state.main.sidebarPanel;
+    },
+    query: {
+      get() {
+        return this.$store.state.main.query;
+      },
+      set(val) {
+        this.$store.commit("main/setQuery", val);
+      },
+    },
+    eventDates: {
+      get() {
+        return this.$store.state.main.eventDates;
+      },
+      set(val) {
+        this.$store.commit("main/setEventDates", {
+          eventDates: val,
+          page: 1,
+        });
+      },
+    },
+    eventDateRadius: {
+      get() {
+        return this.$store.state.main.eventDateRadius;
+      },
+      set(val) {
+        this.$store.commit("main/setEventDateRadius", val);
+      },
+    },
+    showPanelMobile: {
+      get() {
+        return this.$store.state.main.showPanelMobile;
+      },
+      set(val) {
+        this.$store.commit("main/setShowPanelMobile", val);
+      },
+    },
+    blockUpdates: {
+      get() {
+        return this.$store.state.main.blockUpdates;
+      },
+      set(val) {
+        this.$store.commit("main/setBlockUpdates", val);
+      },
+    },
+    mapMoving: {
+      get() {
+        return this.$store.state.main.mapMoving;
+      },
+      set(val) {
+        this.$store.commit("main/setMapMoving", val);
+      },
+    },
+    page: {
+      get() {
+        return this.$store.state.main.eventDatesPage;
+      },
+      set(val) {
+        this.$store.commit("main/setEventDatesPage", val);
+      },
+    },
+    hasNext: {
+      get() {
+        return this.$store.state.main.eventDatesHasNext;
+      },
+      set(val) {
+        this.$store.commit("main/setEventDatesHasNext", val);
+      },
+    },
+    sortMethod: {
+      get() {
+        return this.$store.state.main.sortMethod;
+      },
+      set(val) {
+        this.$store.commit("main/setSortMethod", val);
+      },
+    },
+    controlCountrySelectedOption: {
+      get() {
+        return this.$store.state.main.controlCountrySelectedOption;
+      },
+      set(val) {
+        this.$store.commit("main/setControlCountrySelectedOption", val);
+      },
+    },
+    controlRegionSelectedOption: {
+      get() {
+        return this.$store.state.main.controlRegionSelectedOption;
+      },
+      set(val) {
+        this.$store.commit("main/setControlRegionSelectedOption", val);
+      },
+    },
+    controlLocalitySelectedOption: {
+      get() {
+        return this.$store.state.main.controlLocalitySelectedOption;
+      },
+      set(val) {
+        this.$store.commit("main/setControlLocalitySelectedOption", val);
+      },
+    },
+    getBottomDivider() {
+      var opacity = 0 + this.mainContentScrollPosition / 150;
+      var op1, op2;
+      if (opacity > 0.09) {
+        op1 = 0.09;
+      } else {
+        op1 = opacity;
+      }
+      if (opacity > 0.065) {
+        op2 = 0.065;
+      } else {
+        op2 = opacity;
+      }
+      return `
+      box-shadow: 0 3px 6px 0 rgba(40, 40, 90, ${op1}), 0 1px 1px 0 rgba(0, 0, 0, ${op2});`;
+    },
+    getBottomDividerDark() {
+      var opacity = 0 + this.mainContentScrollPosition / 150;
+      var op;
+      if (opacity > 0.09) {
+        op = 0.09;
+      } else {
+        op = opacity;
+      }
+      return `
+      border-bottom: 1px solid rgba(255,255,255,${op});`;
+    },
+    // NEARBY ARTISTS
+    nearbyArtists: {
+      get() {
+        return this.$store.state.main.nearbyArtists;
+      },
+      set(val) {
+        this.$store.commit("main/setNearbyArtists", val);
+      },
+    },
+    loadingNearbyArtists() {
+      return this.$store.state.main.loadingNearbyArtists;
+    },
+    nearbyArtistsHasNext() {
+      return this.$store.state.main.nearbyArtistsHasNext;
+    },
+    nearbyArtistsPage: {
+      get() {
+        return this.$store.state.main.nearbyArtistsPage;
+      },
+      set(val) {
+        this.$store.commit("main/setNearbyArtistsPage", val);
+      },
+    },
+  },
+  created() {
+    this.debouncedOnScrollMainContent = _.debounce(
+      this.onScrollMainContent,
+      10
+    );
+    this.debouncedGetInitalList = _.debounce(this.getInitialList, 150, {
+      leading: false,
+      trailing: true,
+    });
+  },
+  destroyed() {},
+};
+</script>
+
+<style lang="scss" scoped>
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(180deg);
+  }
+}
+
+.card:first-child {
+  margin-top: 0px !important;
+}
+.event-list-transparent-bg {
+  background: rgba(0, 0, 0, 0) !important;
+  border: none;
+}
+
+.header {
+  //position: absolute;
+  z-index: 100;
+  //transition: all 0.3s ease;
+  // width: 100%;
+  width: 100%;
+  //height: 56px;
+  position: sticky;
+  top: 0px;
+  //max-height: 48px;
+  z-index: 10;
+}
+.event-list-vertical {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: background 0.3s;
+  //z-index: 3000;
+  position: absolute;
+  pointer-events: none;
+  .controls-component {
+    z-index: 100;
+    //position: sticky;
+    top: 0px;
+    //transition: all 0.2s;
+    &.controls-component-hidden {
+      //margin-top: -96px !important;
+    }
+  }
+  .event-list-inner {
+    pointer-events: all;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: all 0.3s;
+
+    .date-header-bg {
+      // only useful for light theme
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 48px;
+      width: 100%;
+      z-index: 10;
+    }
+  }
+  //margin-top: 54px;
+  .sort-control-wrapper {
+    position: relative;
+  }
+
+  .no-parties-text {
+    margin-left: 16px;
+  }
+  .scroll-area {
+    height: 100%;
+    .search-input {
+      /deep/.q-field__control {
+        &:before {
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          border-radius: 9px;
+        }
+      }
+    }
+    .artists-wrapper {
+      border-radius: 0px;
+      .artists-component {
+        z-index: 2;
+      }
+      //background: whitesmoke;
+    }
+    .artist-profile-wrapper {
+      padding: 16px;
+      width: 100%;
+
+      .artist-profile {
+        width: 500px;
+        max-width: 100%;
+        //height: 200px;
+        border-radius: 9px !important;
+      }
+    }
+    .scroll-content {
+      position: relative;
+      width: 100%;
+      min-height: 100%;
+      .ed-card-grid {
+        display: grid;
+        grid-gap: 1rem;
+        .ed-card {
+          //max-height: 280px;
+          .card {
+            height: 100%;
+            .card-content {
+              height: 100%;
+              justify-content: space-between;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // pointer-events: none;
+  .sort-control-wrapper {
+    //border-bottom: 1px solid transparent;
+    //border-top: 1px solid transparent;
+  }
+  .touch-overlay {
+    position: absolute;
+    height: 100%;
+    width: calc(100% + 10px);
+    margin-left: -5px;
+    z-index: -1;
+    pointer-events: all;
+  }
+}
+
+.event-date-center {
+  z-index: 1;
+  align-items: center;
+  pointer-events: none;
+}
+
+.body--dark {
+  .scroll-area {
+    background: transparent;
+  }
+  .event-list-vertical {
+    pointer-events: none;
+    .controls-component {
+      background: black;
+    }
+    .event-list-inner {
+      //background: black;
+    }
+  }
+
+  .header {
+    background: black;
+  }
+  .separator {
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    ) !important;
+    height: 1px;
+    border: none;
+  }
+}
+
+.body--light {
+  .scroll-area {
+    background: transparent;
+    .search-input {
+      background: #fafafa;
+
+      /deep/.q-field__control {
+      }
+    }
+  }
+  .event-list-vertical {
+    .event-list-inner {
+      //background: white;
+    }
+  }
+  .header {
+    background: white;
+    //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.2);
+  }
+  .controls-component {
+    background: white;
+  }
+  .date-header-bg {
+    background: white;
+  }
+  .separator {
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(0, 0, 0, 0.1),
+      transparent
+    ) !important;
+    height: 1px;
+    border: none;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .event-date-center {
+    margin-top: 74px;
+    align-items: start;
+  }
+
+  .event-list-vertical {
+    .event-list-inner {
+      .artists-component {
+        height: 178px;
+      }
+      .controls-component {
+        z-index: 101;
+        top: 0px;
+      }
+      .scroll-area {
+        .no-parties-text {
+          margin-left: 8px;
+        }
+        .scroll-content {
+          //margin-top: -24px;
+          .header {
+            display: sticky;
+            top: 0px;
+            z-index: 100;
+          }
+        }
+      }
+    }
+  }
+}
+</style>
