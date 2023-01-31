@@ -162,7 +162,7 @@ export default {
     if (this.$q.screen.gt.lg) {
       this.sidebarExpanded = true;
     }
-    this.$refs.resizer.addEventListener('mousedown', (event) => {
+    this.$refs.resizer.addEventListener('mousedown', () => {
       document.addEventListener('mousemove', this.resize, false);
       document.addEventListener(
         'mouseup',
@@ -204,7 +204,7 @@ export default {
     hideDialog() {
       this.$router.push({ name: 'Explore' });
     },
-    handleSwipe(info) {
+    handleSwipe() {
       if (this.currentSidebarPanel !== 'explore') {
         this.currentSidebarPanel = 'explore';
         this.sidebarPanel = 'explore';
@@ -212,18 +212,18 @@ export default {
       this.showPanelMobile = !this.showPanelMobile;
       // native Javascript event
     },
-    handleSwipeDown(info) {
+    handleSwipeDown() {
       this.showPanelMobile = !this.showPanelMobile;
       // native Javascript event
     },
   },
   watch: {
     mapMoving() {
-      if (this.view === 'nearby' && !this.loadingLocation) {
+      if (this.view === 'nearby' && !this.loadingUserLocation) {
         this.view = 'explore';
       }
     },
-    currentLocation() {
+    userLocation() {
       if (this.view === 'explore') {
         this.view = 'nearby';
       }
@@ -257,20 +257,13 @@ export default {
     },
   },
   computed: {
-    currentLocation() {
-      return this.$store.state.main.currentLocation;
-    },
-    loadingLocation() {
-      return this.$store.state.main.loadingLocation;
-    },
-    mapMoving: {
-      get() {
-        return this.$store.state.main.mapMoving;
-      },
-      set(val) {
-        this.$store.commit('main/setMapMoving', val);
-      },
-    },
+    ...mapState(useMainStore, ['userLocation', 'loadingUserLocation']),
+    ...mapWritableState(useMainStore, [
+      'sidebarExpanded',
+      'showPanelMobile',
+      'sidebarPanel',
+    ]),
+    ...mapState(useMapStore, ['mapMoving']),
     computedSidebarWidth() {
       if (this.$q.screen.lt.sm) {
         return 'width: 100%';
@@ -283,41 +276,7 @@ export default {
     currentRoute() {
       return this.$router.currentRoute.name;
     },
-    sidebarExpanded: {
-      get() {
-        return this.$store.state.main.sidebarExpanded;
-      },
-      set(val) {
-        this.$store.commit('main/setSidebarExpanded', val);
-      },
-    },
-    showPanelMobile: {
-      get() {
-        return this.$store.state.main.showPanelMobile;
-      },
-      set(val) {
-        this.$store.commit('main/setShowPanelMobile', val);
-      },
-    },
-    sidebarPanel: {
-      get() {
-        return this.$store.state.main.sidebarPanel;
-      },
-      set(val) {
-        this.$store.commit('main/setSidebarPanel', val);
-      },
-    },
-    showSidebar: {
-      get() {
-        return this.$store.state.main.showSidebar;
-      },
-      set(val) {
-        this.$store.commit('main/setShowSidebar', val);
-      },
-    },
   },
-  created() {},
-  unmounted() {},
 };
 </script>
 
