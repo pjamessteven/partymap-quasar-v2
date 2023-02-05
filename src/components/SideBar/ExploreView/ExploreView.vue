@@ -10,7 +10,7 @@
       <div
         class="flex column grow no-wrap"
         :class="{ 'q-mx-sm': $q.screen.lt.sm }"
-        style="height: 100%; position: relative;"
+        style="height: 100%; position: relative"
       >
         <!--
         <q-icon
@@ -26,10 +26,9 @@
           }"
           size="1.5rem"
         />
-        <!--
         <div class="date-header-bg" />
 -->
-        <div class="flex q-px-md" v-if="controlFavoritesSelected">
+        <div class="flex q-px-md" v-if="controlFavorites">
           <q-select label="All my events" outlined square />
         </div>
         <q-scroll-area
@@ -81,7 +80,7 @@
               }
             "
           >
-            <div class="q-pt-md q-pb-  q-pr-md ellipsis" style="width: 100%">
+            <div class="q-pt-md q-pb- q-pr-md ellipsis" style="width: 100%">
               <span class="text-h4 chicago">Explore</span>
             </div>
           </div>
@@ -107,49 +106,52 @@
         -->
               <ControlsComponent
                 v-if="$q.screen.gt.sm"
-                class="controls-component "
+                class="controls-component"
                 :class="$q.screen.lt.sm ? 'q-pt-sm' : 'q-mb-sm q-mt-md'"
               />
 
               <div
                 class="artist-profile-wrapper"
-                v-if="
-                  controlArtistSelectedOptions.length > 0 && $q.screen.gt.xs
-                "
+                v-if="controlArtist.length > 0 && $q.screen.gt.xs"
               >
                 <ArtistProfile
-                  :key="controlArtistSelectedOptions[0].id"
-                  :id="controlArtistSelectedOptions[0].id"
+                  :key="controlArtist[0].id"
+                  :id="controlArtist[0].id"
                 />
               </div>
               <ControlsComponent
-                class="controls-component "
+                class="controls-component"
                 :class="$q.screen.lt.sm ? 'q-pt-sm' : 'q-mb-sm '"
                 :showSelectedValue="true"
                 :showOnlySelected="true"
               />
               <div
-                class="flex column artists-wrapper "
+                class="flex column artists-wrapper"
                 v-if="noFiltersSelected && nearbyArtists.length > 0"
               >
                 <div
-                  class="chicago header q-py-md  t1"
+                  class="chicago header q-py-md t1"
                   :class="
                     $q.screen.lt.sm ? 'q-pl-sm q-mt-sm' : 'q-pl-md  q-py-md'
                   "
                 >
                   Top artists in this area:
                 </div>
-                <ArtistsComponent class="artists-component" />
+                <ArtistsComponent
+                  class="artists-component"
+                  :artists="nearbyArtists"
+                  :hasNext="nearbyArtistsHasNext"
+                  :loadMore="loadMoreArtists"
+                />
               </div>
               <transition appear enter-active-class="animated fadeIn">
                 <div
                   class="no-parties-text chicago t4 flex grow q-mt-md"
                   v-if="
                     componentGroup &&
-                      Object.keys(componentGroup).length == 0 &&
-                      !loadingEventDates &&
-                      !isLoadingDatesInitial
+                    Object.keys(componentGroup).length == 0 &&
+                    !loadingEventDates &&
+                    !isLoadingDatesInitial
                   "
                 >
                   No parties in this area :'(
@@ -160,8 +162,8 @@
                   class="flex column"
                   v-show="
                     !isLoadingInitial &&
-                      !computedMapMoving &&
-                      Object.keys(componentGroup).length > 0
+                    !computedMapMoving &&
+                    Object.keys(componentGroup).length > 0
                   "
                 >
                   <div
@@ -202,10 +204,10 @@
               <div
                 class="row justify-center q-my-lg q-mb-xl"
                 v-if="
-                  hasNext &&
-                    loadingEventDates &&
-                    !isLoadingInitial &&
-                    Object.keys(componentGroup).length !== 0
+                  eventDatesHasNext &&
+                  loadingEventDates &&
+                  !isLoadingInitial &&
+                  Object.keys(componentGroup).length !== 0
                 "
               >
                 <q-spinner-ios
@@ -216,11 +218,11 @@
               <div
                 class="flex row justify-center q-mb-lg q-mt-lg t4"
                 v-if="
-                  !hasNext &&
-                    componentGroup &&
-                    Object.keys(componentGroup).length !== 0 &&
-                    !loadingEventDates &&
-                    !isLoadingDatesInitial
+                  !eventDatesHasNext &&
+                  componentGroup &&
+                  Object.keys(componentGroup).length !== 0 &&
+                  !loadingEventDates &&
+                  !isLoadingDatesInitial
                 "
               >
                 <div>End of results</div>
@@ -231,7 +233,7 @@
       </div>
       <div
         v-touch-swipe="handleSwipe"
-        class="event-date-center flex grow  justify-center q-pt-lg"
+        class="event-date-center flex grow justify-center q-pt-lg"
         style="height: 100%; position: absolute; width: 100%"
       >
         <q-spinner-ios
@@ -240,8 +242,8 @@
           size="2em"
           v-if="
             isLoadingInitial &&
-              componentGroup &&
-              Object.keys(componentGroup).length == 0
+            componentGroup &&
+            Object.keys(componentGroup).length == 0
           "
           v-touch-swipe="handleSwipe"
         />
@@ -250,15 +252,19 @@
   </div>
 </template>
 <script>
-import _ from "lodash";
-import EventDateCard from "components/MapView/Sidebar/ExploreView/EventDateListView/EventDateCard.vue";
-// import SortControl from './SortControl'
-import DateHeader from "./DateHeader.vue";
-import ArtistProfile from "components/ArtistPage/ArtistProfile";
-import moment from "moment-timezone";
-import ArtistsComponent from "./ArtistsComponent.vue";
-import ControlsComponent from "components/Controls/ControlsComponent.vue";
-import LoadingDots from "components/LoadingDots.vue";
+import _ from 'lodash';
+import moment from 'moment-timezone';
+import EventDateCard from 'components/EventDateCard.vue';
+import DateHeader from './DateHeader.vue';
+import ArtistProfile from 'components/ArtistProfile.vue';
+import ArtistsComponent from './../ArtistsComponent.vue';
+import ControlsComponent from 'src/components/Controls/ControlsComponent.vue';
+import { useMapStore } from 'src/stores/map';
+import { useQueryStore } from 'src/stores/query';
+import { useMainStore } from 'src/stores/main';
+import { useAuthStore } from 'src/stores/auth';
+import { mapActions, mapWritableState } from 'pinia';
+
 export default {
   components: {
     EventDateCard,
@@ -268,13 +274,7 @@ export default {
     ArtistsComponent,
   },
   props: { showControls: { default: false } },
-  beforeMount() {},
   mounted() {
-    // dont use these filters on the map view
-    this.controlCountrySelectedOption = null;
-    this.controlRegionSelectedOption = null;
-    this.controlLocalitySelectedOption = null;
-    this.query = null;
     if (!this.blockUpdates) {
       this.getInitialList();
       // watcher on map bounds triggers inital load i think
@@ -296,16 +296,22 @@ export default {
     };
   },
   methods: {
+    ...mapActions(useQueryStore, [
+      'loadEventDates',
+      'loadArtists',
+      'loadMoreArtists',
+    ]),
+    ...mapActions(useMainStore, ['loadIpInfo']),
     // insert date header components and event dates into list
     generateComponentGroup(eventDates) {
       for (let ed of eventDates) {
         // assumes eventDates are sorted by time
         const start = moment(ed[0].start_naive);
-        let yearMonth = start.month() + "" + start.year();
+        let yearMonth = start.month() + '' + start.year();
         if (!this.componentGroup[yearMonth]) {
           this.componentGroup[yearMonth] = {
             header: {
-              type: "DateHeader",
+              type: 'DateHeader',
               propsData: {
                 date: ed[0].start_naive,
               },
@@ -319,11 +325,11 @@ export default {
           )
         )
           this.componentGroup[yearMonth].dates.push({
-            type: "EventDateCard",
+            type: 'EventDateCard',
             propsData: {
               editing: this.editing,
               event: ed[0],
-              class: "ed-card",
+              class: 'ed-card',
               shortDate: true,
             },
           });
@@ -331,62 +337,48 @@ export default {
       this.componentGroup = { ...this.componentGroup }; // needed to trigger re-render
     },
 
-    getInitialList() {
-      this.$nextTick(() => {
-        if (this.$route.name === "Explore" && !this.blockUpdates) {
+    async getInitialList() {
+      this.$nextTick(async () => {
+        if (this.$route.name === 'Explore' && !this.blockUpdates) {
           // Artist stuff
-          this.nearbyArtistsPage = 1;
+          this.artistsPage = 1;
+          this.artistsHasNext = true;
           this.isLoadingArtistsInitial = true;
-          this.$store
-            .dispatch("main/loadNearbyArtists", {
-              per_page: 10,
-              page: 1,
-              sort: "event_count",
-              desc: true,
-            })
-            .then(() => {
-              this.isLoadingArtistsInitial = false;
-            });
+          await this.loadArtists();
+          this.isLoadingArtistsInitial = false;
 
           // event date stuff
           this.componentGroup = {};
           this.$refs.scroll.setScrollPercentage(0);
-          this.hasNext = true;
-          this.page = 1;
+          this.eventDatesHasNext = true;
+          this.eventDatesPage = 1;
           this.isLoadingDatesInitial = true;
-          if (!this.currentLocation) {
-            this.$store.dispatch("main/getIpInfo").then(() => {
-              this.loadMore();
-            });
+          if (!this.userLocation) {
+            await this.loadIpInfo();
+            this.loadMore();
           } else {
             this.loadMore();
           }
         }
       });
     },
-    loadMore() {
+    async loadMore() {
       if (
-        this.$route.name === "Explore" &&
-        this.hasNext &&
+        this.$route.name === 'Explore' &&
+        this.eventDatesHasNext &&
         !this.blockUpdates
       ) {
-        this.$store
-          .dispatch("main/loadEventDates", {
-            page: this.poage,
-            per_page: 10,
-            distinct: true,
-          })
-          .then(({ data }) => {
-            this.generateComponentGroup(data.items);
-            this.isLoadingDatesInitial = false;
-          })
-          .catch(() => {
-            this.isLoadingDatesInitial = false;
-          });
-        this.page += 1;
+        try {
+          const dates = await this.loadEventDates();
+          this.generateComponentGroup(dates);
+          this.isLoadingDatesInitial = false;
+          this.eventDatesPage += 1;
+        } catch (error) {
+          this.isLoadingDatesInitial = false;
+        }
       }
     },
-    handleSwipe({ evt, ...info }) {
+    handleSwipe() {
       this.showPanelMobile = !this.showPanelMobile;
     },
     onScrollMainContent(info) {
@@ -423,11 +415,11 @@ export default {
   },
   watch: {
     route: {
-      handler: function(to, from) {
-        if (to.name === "Explore") {
+      handler: function (to, from) {
+        if (to.name === 'Explore') {
           if (!this.eventDates) {
-            if (!this.currentLocation) {
-              this.$store.dispatch("main/getIpInfo").then(() => {
+            if (!this.userLocation) {
+              this.$store.dispatch('main/getIpInfo').then(() => {
                 this.getInitialList();
               });
             } else {
@@ -445,63 +437,76 @@ export default {
       }
     },
 
-    sidebarPanel: {
-      handler: (newVal, oldVal) => {
-        if (newVal === "favorites" || newVal === "explore") {
-          //this.getInitialList();
-        }
-      },
-    },
-    currentUser(newVal, oldVal) {
-      // load favorites after user logs in
-      if (this.sidebarPanel === "favorites") {
+    sidebarPanel(newVal) {
+      if (newVal === 'favorites' || newVal === 'explore') {
         this.getInitialList();
       }
     },
-    selectedTags() {
-      this.getInitialList();
-    },
-    selectedDateRange() {
-      this.getInitialList();
-    },
-    controlDurationSelectedOptions() {
-      this.getInitialList();
-    },
-    controlSizeSelectedOptions() {
-      this.getInitialList();
-    },
-    controlArtistSelectedOptions() {
-      this.getInitialList();
-    },
-    controlTagSelectedOptions() {
-      this.getInitialList();
-    },
-    controlFavoritesSelected() {
-      this.getInitialList();
-    },
-    sortMethod() {
-      this.getInitialList();
-    },
-    query() {
-      this.debouncedGetInitalList();
-    },
-    showPanelMobile(newVal, oldVal) {
-      // block list from updaeting when mobile panel showing
-      if (newVal === true) {
-        // this.blockUpdates = true
-      } else {
-        this.blockUpdates = false;
+    currentUser() {
+      // load favorites after user logs in
+      if (this.sidebarPanel === 'favorites') {
+        this.getInitialList();
       }
+    },
+    controlTags() {
+      this.getInitialList();
+    },
+    controlDateRange() {
+      this.getInitialList();
+    },
+    controlDuration() {
+      this.getInitialList();
+    },
+    controlSize() {
+      this.getInitialList();
+    },
+    controlArtist() {
+      this.getInitialList();
+    },
+    controlTag() {
+      this.getInitialList();
+    },
+    controlFavorites() {
+      this.getInitialList();
     },
   },
   computed: {
+    ...mapState(useMainStore, [
+      'sidebarExpanded',
+      'sidebarPanel',
+      'userLocation',
+    ]),
+    ...mapWritableState(useMainStore, ['showPanelMobile']),
+    ...mapState(useAuthStore, ['currentUser']),
+    ...mapState(useMapStore, ['mapBounds', 'mapMoving', 'blockUpdates']),
+    ...mapState(useQueryStore, [
+      'controlTag',
+      'controlDateRange',
+      'controlSize',
+      'controlDuration',
+      'controlArtist',
+      'controlFavorites',
+      'artists',
+      'artistsHasNext',
+      'eventDates',
+      'eventDatesPage',
+      'eventDatesHasNext',
+      'eventDatesLoading',
+    ]),
+    ...mapWritableState(useQueryStore, [
+      'eventDatesPage',
+      'eventDatesHasNext',
+      'artistsPage',
+      'artistsHasNext',
+    ]),
     noFiltersSelected() {
       return (
-        this.controlArtistSelectedOptions.length === 0 &&
-        this.controlDurationSelectedOptions.length === 0 &&
-        this.controlSizeSelectedOptions.length === 0 &&
-        this.controlFavoritesSelected.length === 0 &&
-        this.controlTagSelectedOptions.length === 0
+        this.controlDateRange.end === null &&
+        this.controlArtist.length === 0 &&
+        this.controlDuration.length === 0 &&
+        this.controlSize.length === 0 &&
+        this.controlFavorites === false &&
+        this.controlTag.length === 0
       );
     },
     isLoadingInitial() {
@@ -521,148 +526,9 @@ export default {
         `;
       }
     },
-    sidebarExpanded: {
-      get() {
-        return this.$store.state.main.sidebarExpanded;
-      },
-      set(val) {
-        this.$store.commit("main/setSidebarExpanded", val);
-      },
-    },
+
     route() {
       return this.$route;
-    },
-    mapBounds() {
-      return this.$store.state.main.mapBounds;
-    },
-    selectedTags() {
-      return this.$store.state.main.selectedTags;
-    },
-    selectedDateRange() {
-      return this.$store.state.main.selectedDateRange;
-    },
-    controlDurationSelectedOptions() {
-      return this.$store.state.main.controlDurationSelectedOptions;
-    },
-    controlSizeSelectedOptions() {
-      return this.$store.state.main.controlSizeSelectedOptions;
-    },
-    controlTagSelectedOptions() {
-      return this.$store.state.main.controlTagSelectedOptions;
-    },
-    controlArtistSelectedOptions() {
-      return this.$store.state.main.controlArtistSelectedOptions;
-    },
-    controlFavoritesSelected() {
-      return this.$store.state.main.controlFavoritesSelected;
-    },
-    currentLocation() {
-      return this.$store.state.main.currentLocation;
-    },
-    loadingEventDates() {
-      return this.$store.state.main.loadingEventDates;
-    },
-    sidebarPanel() {
-      return this.$store.state.main.sidebarPanel;
-    },
-    query: {
-      get() {
-        return this.$store.state.main.query;
-      },
-      set(val) {
-        this.$store.commit("main/setQuery", val);
-      },
-    },
-    eventDates: {
-      get() {
-        return this.$store.state.main.eventDates;
-      },
-      set(val) {
-        this.$store.commit("main/setEventDates", {
-          eventDates: val,
-          page: 1,
-        });
-      },
-    },
-    eventDateRadius: {
-      get() {
-        return this.$store.state.main.eventDateRadius;
-      },
-      set(val) {
-        this.$store.commit("main/setEventDateRadius", val);
-      },
-    },
-    showPanelMobile: {
-      get() {
-        return this.$store.state.main.showPanelMobile;
-      },
-      set(val) {
-        this.$store.commit("main/setShowPanelMobile", val);
-      },
-    },
-    blockUpdates: {
-      get() {
-        return this.$store.state.main.blockUpdates;
-      },
-      set(val) {
-        this.$store.commit("main/setBlockUpdates", val);
-      },
-    },
-    mapMoving: {
-      get() {
-        return this.$store.state.main.mapMoving;
-      },
-      set(val) {
-        this.$store.commit("main/setMapMoving", val);
-      },
-    },
-    page: {
-      get() {
-        return this.$store.state.main.eventDatesPage;
-      },
-      set(val) {
-        this.$store.commit("main/setEventDatesPage", val);
-      },
-    },
-    hasNext: {
-      get() {
-        return this.$store.state.main.eventDatesHasNext;
-      },
-      set(val) {
-        this.$store.commit("main/setEventDatesHasNext", val);
-      },
-    },
-    sortMethod: {
-      get() {
-        return this.$store.state.main.sortMethod;
-      },
-      set(val) {
-        this.$store.commit("main/setSortMethod", val);
-      },
-    },
-    controlCountrySelectedOption: {
-      get() {
-        return this.$store.state.main.controlCountrySelectedOption;
-      },
-      set(val) {
-        this.$store.commit("main/setControlCountrySelectedOption", val);
-      },
-    },
-    controlRegionSelectedOption: {
-      get() {
-        return this.$store.state.main.controlRegionSelectedOption;
-      },
-      set(val) {
-        this.$store.commit("main/setControlRegionSelectedOption", val);
-      },
-    },
-    controlLocalitySelectedOption: {
-      get() {
-        return this.$store.state.main.controlLocalitySelectedOption;
-      },
-      set(val) {
-        this.$store.commit("main/setControlLocalitySelectedOption", val);
-      },
     },
     getBottomDivider() {
       var opacity = 0 + this.mainContentScrollPosition / 150;
@@ -691,29 +557,6 @@ export default {
       return `
       border-bottom: 1px solid rgba(255,255,255,${op});`;
     },
-    // NEARBY ARTISTS
-    nearbyArtists: {
-      get() {
-        return this.$store.state.main.nearbyArtists;
-      },
-      set(val) {
-        this.$store.commit("main/setNearbyArtists", val);
-      },
-    },
-    loadingNearbyArtists() {
-      return this.$store.state.main.loadingNearbyArtists;
-    },
-    nearbyArtistsHasNext() {
-      return this.$store.state.main.nearbyArtistsHasNext;
-    },
-    nearbyArtistsPage: {
-      get() {
-        return this.$store.state.main.nearbyArtistsPage;
-      },
-      set(val) {
-        this.$store.commit("main/setNearbyArtistsPage", val);
-      },
-    },
   },
   created() {
     this.debouncedOnScrollMainContent = _.debounce(
@@ -725,7 +568,6 @@ export default {
       trailing: true,
     });
   },
-  destroyed() {},
 };
 </script>
 
@@ -804,7 +646,7 @@ export default {
   .scroll-area {
     height: 100%;
     .search-input {
-      /deep/.q-field__control {
+      :deep(.q-field__control) {
         &:before {
           border: 1px solid rgba(0, 0, 0, 0.1);
           border-radius: 9px;
@@ -905,9 +747,6 @@ export default {
     background: transparent;
     .search-input {
       background: #fafafa;
-
-      /deep/.q-field__control {
-      }
     }
   }
   .event-list-vertical {

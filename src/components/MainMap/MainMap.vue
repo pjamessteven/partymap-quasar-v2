@@ -20,7 +20,7 @@ import { mapWritableState, mapState, mapActions } from 'pinia';
 
 import { useMapStore } from 'stores/map.ts';
 import { useMainStore } from 'stores/main.ts';
-import { useMapQueryStore } from 'src/stores/map-query';
+import { useQueryStore } from 'src/stores/query';
 
 import _ from 'lodash';
 import L from 'leaflet';
@@ -126,9 +126,7 @@ export default {
     selectedEventAttributesState() {
       this.loadPoints();
     },
-    query() {
-      this.debouncedLoadPoints();
-    },
+
     controlDateRange() {
       this.loadPoints();
     },
@@ -138,7 +136,7 @@ export default {
     controlSizes() {
       this.loadPoints();
     },
-    controlFavoritesSelected() {
+    controlFavorites() {
       this.loadPoints();
     },
 
@@ -258,7 +256,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(useMapQueryStore, ['loadPoints']),
+    ...mapActions(useQueryStore, ['loadPoints']),
     fitBoundsForExplorePage(coords) {
       // paddingTopLeft is so that the sidebar is considered
       var latlng = L.latLng(coords);
@@ -604,8 +602,7 @@ export default {
       'sidebarExpanded',
       'userLocation',
     ]),
-    ...mapState(useMapQueryStore, [
-      'query',
+    ...mapState(useQueryStore, [
       'controlDateRange',
       'controlDuration',
       'controlSize',

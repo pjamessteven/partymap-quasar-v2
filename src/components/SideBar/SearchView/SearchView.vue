@@ -1,16 +1,16 @@
 <template>
-  <div class="search-view flex column grow no-wrap ">
+  <div class="search-view flex column grow no-wrap">
     <div class="sidebar-header">
       <div
-        class="chicago text-h4  q-mt-md q-pl-md"
+        class="chicago text-h4 q-mt-md q-pl-md"
         :class="$q.screen.lt.sm ? ' ' : 'q-mb-sm'"
       >
         Search
       </div>
     </div>
-    <div class="content flex column grow q-px-md  q-pt-md">
+    <div class="content flex column grow q-px-md q-pt-md">
       <div
-        class="chicago text-large t2  q-mt-sm "
+        class="chicago text-large t2 q-mt-sm"
         :class="$q.screen.lt.sm ? 'q-mt-md ' : ' '"
       >
         Events, artists, places & more:
@@ -40,41 +40,38 @@
 </template>
 
 <script>
-import SearchResults from "./SearchResults.vue";
-import { OpenStreetMapProvider } from "leaflet-geosearch";
-
+import SearchResults from './SearchResults.vue';
+import { OpenStreetMapProvider } from 'leaflet-geosearch';
+import { getSearchSuggestionsRequest } from 'src/api';
 export default {
   components: { SearchResults },
   data() {
-    return {};
+    return {
+      searchResults: [],
+      searchLocationReslults: [],
+    };
   },
   methods: {
-    search() {
+    async search() {
       this.$refs.search.blur();
-      this.$store.dispatch("main/getSearchSuggestions", { query: this.query });
-      this.searchLocations();
-    },
-    searchLocations() {
       const provider = new OpenStreetMapProvider();
-      provider.search({ query: this.query }).then((results) => {
-        var locationSearchResults = results.map((res) => {
-          return { label: res.label, location: { lat: res.y, lon: res.x } };
-        });
-        this.searchLocationResults = locationSearchResults;
-      });
+
+      const [searchResultsResponse, locationSearchResponse] = await Promise.all(
+        [
+          getSearchSuggestionsRequest({ query: this.query })(),
+          provider.search({ query: this.query }),
+        ]
+      );
+
+      this.searchResults = searchResultsResponse.data.results;
+      this.locationSearchResults = locationSearchResponse.map((res) => ({
+        label: res.label,
+        location: { lat: res.y, lng: res.x },
+      }));
     },
   },
   watch: {},
-  computed: {
-    query: {
-      get() {
-        return this.$store.state.main.query;
-      },
-      set(val) {
-        this.$store.commit("main/setQuery", val);
-      },
-    },
-  },
+  computed: {},
   mounted() {
     setTimeout(() => {
       // mobile hack
@@ -85,15 +82,13 @@ export default {
       }
     }, 300);
   },
-  created() {},
-  destroyed() {},
 };
 </script>
 
 <style lang="scss" scoped>
 .body--dark {
   .searchbar-input {
-    /deep/.q-field__inner {
+    :deep(.q-field__inner) {
       .q-field__control {
         &::before {
           //border-color: rgba(0, 0, 0, 0);'
@@ -103,13 +98,12 @@ export default {
     }
   }
 }
-.body--light {
-}
+
 .search-view {
   height: 100%;
 }
 .searchbar-input {
-  /deep/.q-field__inner {
+  :deep(.q-field__inner) {
     .q-field__control {
       &::before {
         border: 1px solid rgba(0, 0, 0, 0.1);
@@ -117,6 +111,6 @@ export default {
     }
   }
 }
-@media only (max-width: 600px) {
+@media only screen and (max-width: 600px) {
 }
 </style>

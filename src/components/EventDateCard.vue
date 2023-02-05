@@ -1,7 +1,7 @@
 <template>
   <router-link
-    @click.native="showEventPage"
-    style="text-decoration: none; color: unset;"
+    @click="showEventPage"
+    style="text-decoration: none; color: unset"
     :to="{
       name: 'EventPage',
       params: {
@@ -17,7 +17,7 @@
       <div
         class="ed-card"
         @mouseover="setFocusMarker"
-        @mouseleave="eventDateHoverFocus = null"
+        @mouseleave="eventDateHoverMarker = null"
         :class="{
           'animated-shimmer': false,
         }"
@@ -60,22 +60,22 @@
 
         </div>
   -->
-        <div class="card-bottom-content flex column  ">
+        <div class="card-bottom-content flex column">
           <div class="card-bottom-background" :style="getBottomBgImgStyle()" />
           <div class="card-bottom-background-hover-overlay" />
           <!--:style="getBottomBgImgStyle()" /> -->
           <div class="card-bottom-foreground flex row no-wrap q-px-md q-py-md">
             <div
-              class="image-container flex  justify-center items-center shadow-2xl"
+              class="image-container flex justify-center items-center shadow-2xl"
             >
               <div
-                class="image-container-background "
+                class="image-container-background"
                 :style="computedAvatarStyle()"
               ></div>
             </div>
             <div class="flex column ellipsis q-pl-md">
               <div
-                class="ed-card-header  flex row justify-between items-start no-wrap ellipsis"
+                class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
               >
                 <div
                   class="flex row items-baseline no-wrap text-large chicago q-mr-sm ellipsis"
@@ -95,7 +95,7 @@
                       :offset="[10, 10]"
                       content-style="font-size: 16px"
                     >
-                      {{ $t("event.official_page") }}
+                      {{ $t('event.official_page') }}
                     </q-tooltip></q-icon
                   >
                 </div>
@@ -147,22 +147,22 @@
                     <span
                       v-if="
                         event.event.rrule &&
-                          event.event.rrule.separation_count > 0
+                        event.event.rrule.separation_count > 0
                       "
-                      class="flex row items-center q-ml-xs o-070  no-wrap ellipsis"
+                      class="flex row items-center q-ml-xs o-070 no-wrap ellipsis"
                     >
                       <q-icon class="q-ml-xs q-mr-sm" name="las la-redo-alt" />
                       {{ simplifiedRecurringPattern(event.event.rrule) }}
                     </span>
                   </div>
                   <q-badge
-                    class="q-my-xs chicago "
+                    class="q-my-xs chicago"
                     color="red"
                     :label="$t('event_date_inline.cancelled')"
                     v-if="event.cancelled"
                   />
                 </div>
-                <div class="ellipsis ">
+                <div class="ellipsis">
                   <span v-if="event.location && event.location.locality">
                     <q-icon name="las la-map-marker" class="q-mr-sm" />{{
                       event.location.locality.long_name
@@ -231,8 +231,10 @@
 </template>
 
 <script>
-import common, { localDayOfMonth } from "assets/common";
-import Tag from "components/EventPage/Tags/Tag";
+import common, { localDayOfMonth } from 'assets/common';
+import Tag from 'src/components/TagComponent.vue';
+import { mapWritableState } from 'pinia';
+import { useMapStore } from 'src/stores/map';
 export default {
   components: {
     Tag,
@@ -246,14 +248,14 @@ export default {
   },
   methods: {
     setFocusMarker() {
-      this.eventDateHoverFocus = {
+      this.eventDateHoverMarker = {
         lat: this.event.location.lat,
         lng: this.event.location.lng,
         name: this.event.name,
       };
     },
     getBottomBgImgStyle() {
-      var imageUrl = "";
+      var imageUrl = '';
       if (
         this.event &&
         this.event.event.cover_items &&
@@ -280,7 +282,7 @@ export default {
       }
     },
     computedAvatarStyle() {
-      var imageUrl = "";
+      var imageUrl = '';
       if (
         this.event &&
         this.event.event.cover_items &&
@@ -292,7 +294,7 @@ export default {
         background-position: cover`;
     },
     getBgImgStyle() {
-      var imageUrl = "";
+      var imageUrl = '';
       if (
         this.event &&
         this.event.event.cover_items &&
@@ -318,28 +320,14 @@ export default {
       }
     },
     showEventPage() {
-      this.$store.commit("main/setEventPageFocus", {
+      this.$store.commit('main/setEventPageFocus', {
         lat: this.event.location.lat,
         lng: this.event.location.lng,
       });
     },
   },
   computed: {
-    loadingEventDates() {
-      return this.$store.state.main.loadingEventDates;
-    },
-
-    getCardBackgroundStyle() {
-      return ``;
-    },
-    eventDateHoverFocus: {
-      get() {
-        return this.$store.state.main.eventDateHoverFocus;
-      },
-      set(val) {
-        this.$store.commit("main/setEventDateHoverFocus", val);
-      },
-    },
+    ...mapWritableState(useMapStore, ['eventDateHoverMarker']),
   },
   created() {
     // import common methods
@@ -402,8 +390,6 @@ export default {
     .tag {
       color: $ti-2 !important;
       border: 1px solid rgba(255, 255, 255, 0.2) !important;
-      /deep/.tag-inner-wrapper {
-      }
     }
   }
 }
@@ -551,7 +537,7 @@ export default {
       z-index: 1;
       width: 100%;
       .tag-container {
-        /deep/.tag {
+        :deep(.tag) {
           background: transparent !important;
           border: 1px solid rgba(255, 255, 255, 0.2) !important;
         }
@@ -677,7 +663,7 @@ export default {
 }
 
 // sm
-@media only (max-width: 600px) {
+@media only screen and (max-width: 600px) {
   .card {
     &:active {
       transform: none;

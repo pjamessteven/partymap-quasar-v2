@@ -1,75 +1,11 @@
 <template>
   <div class="landing-page flex column no-wrap">
-    <!--
-
-    <transition appear enter-active-class="animated fadeIn slow">
-      <div
-        v-show="showMapGap"
-        class="map-gap flex justify-center items-center "
-        :class="$q.screen.gt.xs ? 'q-pt-xl' : ''"
-        :style="computedMapGapOpacity"
-        @click="$router.push({ name: 'Explore' })"
-      >
-        <div>
-          <div class="flex column grow text-wrapper">
-            <div
-              v-if="$q.screen.gt.xs"
-              class="anim-text-flow"
-              style="text-align: center;"
-              :class="$q.screen.gt.xs ? 'text-large' : 'o-060'"
-            >
-              <span
-                v-for="(char, index) in $t('landing_page.tagline')"
-                :key="index"
-                ><i>{{ char }}</i>
-              </span>
-            </div>
-            <div
-              class="no-wrap flex row grow justify-center items-center explore anim-text-flow"
-              style="width: 100%;"
-              v-if="$q.screen.gt.xs"
-              :class="
-                $q.screen.gt.xs
-                  ? 'text-large q-mt-sm q-mb-md'
-                  : 'text-large q-mt-lg'
-              "
-            >
-              <span
-                v-for="(char, index) in $t('landing_page.explore')"
-                :key="index"
-                ><i>{{ char }}</i>
-              </span>
-              <span><q-icon name="mdi-chevron-right" class="q-ml-sm"/></span>
-            </div>
-            <div
-              class="explore anim-text-flow"
-              style="width: 100%; text-align: center;"
-              v-else
-              :class="
-                $q.screen.gt.xs
-                  ? 'text-large q-mt-sm q-mb-md'
-                  : 'text-large q-mt-lg'
-              "
-            >
-              <span
-                v-for="(char, index) in $t('landing_page.explore_map')"
-                :key="index"
-                ><i>{{ char }}</i>
-              </span>
-              <span><q-icon name="mdi-chevron-right" class="q-ml-sm"/></span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </transition>
-  -->
-
     <div class="main-content flex row justify-center">
       <transition enter-active-class="">
-        <div class="flex column grow no-wrap" style="width: 100%;">
+        <div class="flex column grow no-wrap" style="width: 100%">
           <div
             class="flex column grow no-wrap"
-            style="height: 100%; width: 100% "
+            style="height: 100%; width: 100%"
           >
             <q-scroll-area
               @scroll="onScroll"
@@ -102,7 +38,7 @@
                       "
                       class="  flex column  no-wrap "
                     >
-                      <!--<div class="separator" />-->
+                      <div class="separator" />-->
 
               <!--
             <q-icon
@@ -138,16 +74,13 @@
   -->
               <div
                 class="flex row justify-center items-center q-py-xl q-mt-xl"
-                style="height: 300px; width: 100%; "
-                v-if="nearbyEventDates == null || !everythingHasLoaded"
+                style="height: 300px; width: 100%"
+                v-if="loadingEverything"
               >
                 <q-spinner-ios color="primary" size="2em" />
               </div>
 
-              <div
-                class="flex column scroll-content q-mt-"
-                v-if="everythingHasLoaded"
-              >
+              <div class="flex column scroll-content q-mt-" v-else>
                 <div
                   class="sidebar-header flex column grow no-wrap items-stretch justify-between ellipsis no-wrap q-pl-md"
                   v-touch-swipe="
@@ -156,31 +89,31 @@
                     }
                   "
                 >
-                  <div class=" q-pr-md ellipsis">
+                  <div class="q-pr-md ellipsis">
                     <span class="text-h4 chicago">Nearby</span>
                   </div>
                   <div
-                    class=" flex items-center justify-between no-wrap text-large  chicago  t1 q-mt- q-pt-md "
+                    class="flex items-center justify-between no-wrap text-large chicago t1 q-mt- q-pt-md"
                     :class="$q.screen.lt.sm ? 'q-py-md' : ''"
                     style="text-transform: "
                   >
-                    <span v-if="currentLocationName" class="ellipsis">
-                      {{ currentLocationName }}
+                    <span v-if="userLocationName" class="ellipsis">
+                      {{ userLocationName }}
                     </span>
                     <span v-else
                       >class="ellipsis" Finding your location...
                     </span>
                     <q-btn
-                      class="q-ml-sm q--r "
+                      class="q-ml-sm q--r"
                       :class="$q.screen.gt.sm ? 'q-mr-md' : ''"
                       style="cursor: pointer"
                       flat
                       sqaure
-                      :loading="loadingLocation"
+                      :loading="userLocationLoading"
                       @click="getLocation"
                     >
                       <template v-slot:default>
-                        <div v-if="!loadingLocation">
+                        <div v-if="!userLocationLoading">
                           <q-icon
                             name="mdi-crosshairs-gps"
                             class="q-px-sm"
@@ -192,7 +125,7 @@
                             v-else
                           />
                         </div>
-                        <div v-else style="position: relative;">
+                        <div v-else style="position: relative">
                           <q-icon
                             class="q-pa-sm"
                             style="z-index: 1"
@@ -213,7 +146,7 @@
                           :offset="[10, 10]"
                           content-style="font-size: 16px"
                         >
-                          {{ $t("landing_page.improve_location") }}
+                          {{ $t('landing_page.improve_location') }}
                         </q-tooltip>
                       </template>
                     </q-btn>
@@ -225,19 +158,19 @@
                   <div class="q-py-md header q-mt-sm">
                     <div
                       v-if="nearbyTags && nearbyTags.length > 0"
-                      class="t1 text- chicago q-pl-md "
+                      class="t1 text- chicago q-pl-md"
                     >
                       Top tags:
                     </div>
                   </div>
                   <div
-                    class="q-pl-md  "
+                    class="q-pl-md"
                     v-if="nearbyTags && nearbyTags.length > 0"
                   >
                     <q-scroll-area
                       horizontal
-                      class="tag-scroll-area "
-                      style=" width: 100%;"
+                      class="tag-scroll-area"
+                      style="width: 100%"
                       :thumb-style="
                         $q.screen.gt.xs
                           ? { bottom: '0px', height: '8px' }
@@ -245,40 +178,28 @@
                       "
                     >
                       <div class="flex column">
-                        <div class="flex row  no-wrap q-gutter-sm">
+                        <div class="flex row no-wrap q-gutter-sm">
                           <div
                             v-for="(tag, index) in nearbyTags.filter(
                               (x, i) => i % 2
                             )"
                             :key="index"
                             @selected="clickTag(tag)"
-                            class="tag  t2 text-  chicago"
+                            class="tag t2 text- chicago"
                             style="text-transform: capitalize"
-                            :class="
-                              selectedTags.findIndex((x) => x.tag == tag.tag) >
-                              -1
-                                ? 'selected'
-                                : ''
-                            "
                           >
                             {{ tag.tag }}
                           </div>
                         </div>
-                        <div class="flex row  no-wrap q-gutter-sm q-pt-sm">
+                        <div class="flex row no-wrap q-gutter-sm q-pt-sm">
                           <div
                             v-for="(tag, index) in nearbyTags.filter(
                               (x, i) => i % 2 !== 1
                             )"
                             :key="index"
                             @selected="clickTag(tag)"
-                            class="tag  t2 text- chicago"
+                            class="tag t2 text- chicago"
                             style="text-transform: capitalize"
-                            :class="
-                              selectedTags.findIndex((x) => x.tag == tag.tag) >
-                              -1
-                                ? 'selected'
-                                : ''
-                            "
                           >
                             {{ tag.tag }}
                           </div>
@@ -329,13 +250,16 @@
                   <!-- artists -->
 
                   <div
-                    class="t1  header q-py-md chicago q-pl-md"
+                    class="t1 header q-py-md chicago q-pl-md"
                     v-if="nearbyArtists && nearbyArtists.length > 0"
                   >
-                    {{ $t("landing_page.top_artists_in_area") }}:
+                    {{ $t('landing_page.top_artists_in_area') }}:
                   </div>
                   <ArtistsComponent
                     v-if="nearbyArtists && nearbyArtists.length > 0"
+                    :artists="nearbyArtists"
+                    :hasNext="nearbyArtistsHasNext"
+                    :loadMore="loadMoreNearbyArtists"
                   />
 
                   <!--
@@ -358,10 +282,10 @@
                   <!-- NEARBY EVENTS -->
 
                   <div
-                    class=" t1 chicago header q-py-sm flex row items-baseline q-pl-md"
+                    class="t1 chicago header q-py-sm flex row items-baseline q-pl-md"
                   >
                     <div class="">
-                      {{ $t("landing_page.events_within") }}
+                      {{ $t('landing_page.events_within') }}
                     </div>
                     <q-select
                       emit-value
@@ -369,7 +293,7 @@
                       borderless
                       map-options
                       behavior="menu"
-                      class="q-ml-xs radius-select chicago o-050 "
+                      class="q-ml-xs radius-select chicago o-050"
                       v-model="queryRadius"
                       :options="queryRadiusOptions"
                     />
@@ -393,9 +317,9 @@
                   </transition>
                   <div
                     v-if="
-                      !loadingNearbyEventDates &&
-                        nearbyEventDates &&
-                        nearbyEventDates.length === 0
+                      !nearbyEventDatesLoading &&
+                      nearbyEventDates &&
+                      nearbyEventDates.length === 0
                     "
                     class="t4"
                     :class="{
@@ -403,12 +327,12 @@
                       'q-pl-md': $q.screen.lt.sm,
                     }"
                   >
-                    {{ $t("landing_page.no_events_in_area") }}
+                    {{ $t('landing_page.no_events_in_area') }}
                   </div>
                   <!-- ALL EVENTS -->
 
                   <div
-                    class="location-header flex items-center justify-between no-wrap text-large  chicago  t1 q-mt- q-py-md q-pl-md"
+                    class="location-header flex items-center justify-between no-wrap text-large chicago t1 q-mt- q-py-md q-pl-md"
                     :class="$q.screen.lt.sm ? 'q-py-md' : ''"
                     v-touch-swipe="
                       () => {
@@ -422,9 +346,9 @@
                       <div class="ellipsis flex grow items-center">
                         <div
                           class="ellipsis t1 text-large chicago"
-                          v-if="currentLocationName"
+                          v-if="userLocationName"
                         >
-                          {{ $t("landing_page.all_upcoming_events") }}:
+                          {{ $t('landing_page.all_upcoming_events') }}:
                         </div>
                       </div>
                     </div>
@@ -449,7 +373,7 @@
                   </transition>
                   <div
                     class="flex row justify-center q-mt-md"
-                    style="opacity: 0;"
+                    style="opacity: 0"
                   >
                     <a
                       v-for="i in eventDatesPageNumbers"
@@ -480,29 +404,30 @@
 </template>
 
 <script>
-import { getFineLocation } from "@/assets/common.js";
+import { getFineLocation } from 'assets/common.js';
 
-import Tag from "components/EventPage/Tags/Tag";
-import ArtistsComponent from "./ArtistsComponent.vue";
-import EventDateCard from "components/MapView/Sidebar/ExploreView/EventDateListView/EventDateCard.vue";
+import ArtistsComponent from './../ArtistsComponent.vue';
+import EventDateCard from 'components/EventDateCard.vue';
+import { useQueryStore } from 'src/stores/query';
+import { useMainStore } from 'src/stores/main';
 
 export default {
-  name: "LandingPage",
+  name: 'LandingPage',
   meta() {
     return {
       // this accesses the "title" property in your Vue "data";
       // whenever "title" prop changes, your meta will automatically update
-      title: "PartyMap | The Global Map of Festivals and Events",
+      title: 'PartyMap | The Global Map of Festivals and Events',
       meta: {
         description: {
-          name: "description",
+          name: 'description',
           content:
-            "PartyMap is a community-driven platform for discovering festivals and events near you and around the world.",
+            'PartyMap is a community-driven platform for discovering festivals and events near you and around the world.',
         },
         keywords: {
-          name: "keywords",
+          name: 'keywords',
           content:
-            "Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list",
+            'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list',
         },
       },
     };
@@ -511,60 +436,53 @@ export default {
   components: {
     EventDateCard,
     ArtistsComponent,
-    Tag,
   },
   data() {
     return {
-      showMapGap: false,
-      initialNearbyTagsLoaded: false,
-      initialNearbyArtistsLoaded: false,
-      initialNearbyEventDatesLoaded: false,
-      locationInput: null,
-      eventDatesPerPage: 10,
       scrollPosition: 0,
       queryRadiusOptions: [
         {
-          label: "10km",
+          label: '10km',
           value: 10000,
         },
         {
-          label: "20km",
+          label: '20km',
           value: 20000,
         },
         {
-          label: "50km",
+          label: '50km',
           value: 50000,
         },
         {
-          label: "100km",
+          label: '100km',
           value: 100000,
         },
         {
-          label: "200km",
+          label: '200km',
           value: 200000,
         },
         {
-          label: "500km",
+          label: '500km',
           value: 500000,
         },
         {
-          label: "1000km",
+          label: '1000km',
           value: 1000000,
         },
         {
-          label: "2000km",
+          label: '2000km',
           value: 2000000,
         },
         {
-          label: "5000km",
+          label: '5000km',
           value: 5000000,
         },
         {
-          label: "10,000km",
+          label: '10,000km',
           value: 10000000,
         },
         {
-          label: "20,000km",
+          label: '20,000km',
           value: 20000000,
         },
       ],
@@ -574,6 +492,14 @@ export default {
     this.getFineLocation = getFineLocation;
   },
   methods: {
+    ...mapActions(useMainStore, ['loadIpInfo']),
+    ...mapActions(useNearbyStore, [
+      'loadEverything',
+      'loadMoreNearbyTags',
+      'loadMoreNearbyArtists',
+      'loadMoreNearbyEventDates',
+      'loadMoreEventDates',
+    ]),
     onScroll(info) {
       // infinite scrolling
       this.scrollPosition = info.verticalPosition;
@@ -590,14 +516,14 @@ export default {
         {},
         null,
         this.$route.path +
-          "?" +
+          '?' +
           Object.keys(params)
             .map((key) => {
               return (
-                encodeURIComponent(key) + "=" + encodeURIComponent(params[key])
+                encodeURIComponent(key) + '=' + encodeURIComponent(params[key])
               );
             })
-            .join("&")
+            .join('&')
       );
     },
     getLocation() {
@@ -605,199 +531,72 @@ export default {
     },
     clickTag(tag) {
       // mutation toggles tag
-      this.selectedTags = tag;
-      this.controlTagSelectedOptions = tag;
+      this.controlTag = [tag];
     },
-    loadEverything() {
-      // loading event dates will set the query radius,
-      // so do that first
-      this.nearbyEventDates = null;
-      this.nearbyTags = null;
-      this.nearbyArtists = null;
-      this.loadInitialNearbyEventDates().then(() => {
-        this.loadInitialNearbyArtists();
-        this.loadInitialNearbyTags();
-        this.loadInitialEventDates();
-        setTimeout(() => {
-          window.prerenderReady = true;
-        }, 300);
-      });
-    },
-    loadInitialEventDates() {
-      return new Promise((resolve, reject) => {
-        if (this.$route.query.global_page) {
-          // used by hidden pagination for SEO
-          this.eventDatesPage = Number(this.$route.query.global_page);
-        } else {
-          this.eventDatesPage = 1;
-        }
-        this.$store
-          .dispatch("landingPage/loadEventDates", {
-            per_page: this.eventDatesPerPage,
-            page: this.eventDatesPage,
-            distinct: true,
-          })
-          .then(
-            () => {
-              this.initialEventDatesLoaded = true;
-              resolve();
-            },
-            () => reject()
-          );
-      });
-    },
-    loadMoreEventDates() {
-      if (this.eventDatesHasNext) {
-        this.eventDatesPage += 1;
-        this.$store.dispatch("landingPage/loadEventDates", {
-          per_page: this.eventDatesPerPage,
-          page: this.eventDatesPage,
-          distinct: true,
-        });
-      }
-    },
+
     loadEventDatePage(page) {
       // hidden pagination for SEO
       this.addParamsToLocation({ global_page: page });
       this.eventDates = null;
       this.eventDatesPage = page;
-      this.$store.dispatch("landingPage/loadEventDates", {
-        per_page: this.eventDatesPerPage,
-        page: page,
-        distinct: true,
-      });
+      this.loadEventDates;
     },
-    loadInitialNearbyEventDates() {
-      return new Promise((resolve, reject) => {
-        this.nearbyEventDatesPage = 1;
-        this.$store
-          .dispatch("landingPage/loadNearbyEventDates", {
-            per_page: this.eventDatesPerPage,
-            page: 1,
-            distinct: true,
-          })
-          .then(
-            () => {
-              this.initialNearbyEventDatesLoaded = true;
-              resolve();
-            },
-            () => reject()
-          );
-      });
-    },
-    loadMoreNearbyEventDates() {
-      if (this.nearbyEventDatesHasNext) {
-        this.nearbyEventDatesPage += 1;
-        this.$store.dispatch("landingPage/loadNearbyEventDates", {
-          per_page: this.eventDatesPerPage,
-          page: this.nearbyEventDatesPage,
-          distinct: true,
-        });
-      }
-    },
-    loadInitialNearbyArtists() {
-      this.nearbyArtistsPage = 1;
-      this.$store
-        .dispatch("landingPage/loadNearbyArtists", {
-          per_page: 10,
-          page: 1,
-          sort: "event_count",
-          desc: true,
-        })
-        .then(() => {
-          this.initialNearbyArtistsLoaded = true;
-        });
-    },
-    loadMoreNearbyArtists() {
-      if (this.nearbyArtistsHasNext) {
-        this.artistsPage += 1;
-        this.$store.dispatch("landingPage/loadNearbyArtists", {
-          per_page: 10,
-          page: this.artistsPage,
-          sort: "event_count",
-          desc: true,
-        });
-      }
-    },
-    loadInitialNearbyTags() {
-      this.nearbyTagsPage = 1;
-      this.$store
-        .dispatch("landingPage/loadNearbyTags", {
-          per_page: 20,
-          page: this.nearbyTagsPage,
-          sort: "count",
-          desc: true,
-        })
-        .then(() => {
-          this.initialNearbyTagsLoaded = true;
-        });
-    },
-    loadMoreNearbyTags() {
-      if (this.nearbyTagsHasNext) {
-        this.nearbyTagsPage += 1;
-        this.$store.dispatch("landingPage/loadNearbyTags", {
-          per_page: 20,
-          page: this.nearbyTagsPage,
-          sort: "count",
-          desc: true,
-        });
-      }
-    },
+
     handleSwipe({ evt, ...info }) {
       this.showPanelMobile = !this.showPanelMobile;
     },
   },
   watch: {
-    currentLocation: {
-      handler: function(newval, oldval) {
+    userLocation: {
+      handler: function (newval, oldval) {
         if (oldval != null) {
           this.queryRadius = null;
           this.loadEverything();
-          this.$nextTick(() => {
-            this.locationInput = this.currentLocationName;
-          });
         }
       },
     },
     queryRadius: {
-      handler: function(newval, oldval) {
+      handler: function (newval, oldval) {
         if (oldval != null) {
           this.loadEverything();
         }
       },
     },
-    selectedTags: {
-      handler: function(newval, oldval) {
-        this.loadInitialNearbyEventDates();
-        this.loadInitialEventDates();
-      },
-    },
   },
   computed: {
-    showPanelMobile: {
-      get() {
-        return this.$store.state.main.showPanelMobile;
-      },
-      set(val) {
-        this.$store.commit("main/setShowPanelMobile", val);
-      },
-    },
-    sidebarPanel: {
-      get() {
-        return this.$store.state.main.sidebarPanel;
-      },
-      set(val) {
-        this.$store.commit("main/setSidebarPanel", val);
-      },
-    },
-    sidebarExpanded: {
-      get() {
-        return this.$store.state.main.sidebarExpanded;
-      },
-      set(val) {
-        this.$store.commit("main/setSidebarExpanded", val);
-      },
-    },
+    ...mapWritableState(useMainStore, [
+      'sidebarExpanded',
+      'showPanelMobile',
+      'sidebarPanel',
+      'menubarOpacity',
+      'userLocationLoading',
+    ]),
+    ...mapState(useMainStore, [
+      'userLocationLoading',
+      'userLocation',
+      'userLocationName',
+    ]),
+    ...mapWritableState(useQueryStore, ['controlTag']),
+    ...mapWritableState(useNearbyStore, [
+      'queryRadius',
+      'eventDates',
+      'eventDatesPage',
+    ]),
+    ...mapState(useNearbyStore, [
+      'loadingEverything',
+      'nearbyTags',
+      'nearbyTagsHasNext',
+      'nearbyTagsPage',
+      'nearbyArtists',
+      'nearbyArtistsHasNext',
+      'nearbyArtistsPage',
+      'nearbyEventDates',
+      'nearbyEventDatesHasNext',
+      'nearbyEventDatesPage',
+      'eventDatesHasNext',
+      'eventDatesPages',
+    ]),
+
     computedGridColumns() {
       if (this.sidebarExpanded) {
         return `
@@ -809,136 +608,8 @@ export default {
         `;
       }
     },
-    menuBarOpacity: {
-      get() {
-        return this.$store.state.main.menuBarOpacity;
-      },
-      set(val) {
-        this.$store.commit("main/setMenuBarOpacity", val);
-      },
-    },
 
-    everythingHasLoaded() {
-      if (
-        this.nearbyEventDates != null &&
-        this.nearbyTags != null &&
-        this.nearbyArtists != null
-      ) {
-        return true;
-      } else if (
-        !this.initialNearbyTagsLoaded ||
-        !this.initialNearbyArtistsLoaded ||
-        !this.initialNearbyEventDatesLoaded
-      ) {
-        return false;
-      } else {
-        return false;
-      }
-    },
-    // NEARBY TAGS
-    nearbyTags: {
-      get() {
-        return this.$store.state.landingPage.nearbyTags;
-      },
-      set(val) {
-        this.$store.commit("landingPage/setNearbyTags", val);
-      },
-    },
-    nearbyTagsHasNext() {
-      return this.$store.state.landingPage.nearbyTagsHasNext;
-    },
-    loadingNearbyTags() {
-      return this.$store.state.landingPage.loadingNearbyTags;
-    },
-    nearbyTagsPage: {
-      get() {
-        return this.$store.state.landingPage.nearbyTagsPage;
-      },
-      set(val) {
-        this.$store.commit("landingPage/setNearbyTagsPage", val);
-      },
-    },
-    selectedTags: {
-      get() {
-        return this.$store.state.landingPage.selectedTags;
-      },
-      set(val) {
-        this.$store.commit("landingPage/setSelectedTags", val);
-      },
-    },
-    controlTagSelectedOptions: {
-      get() {
-        return this.$store.state.main.controlTagSelectedOptions;
-      },
-      set(val) {
-        this.$store.commit("main/setControlTagSelectedOptions", val);
-      },
-    },
-    // NEARBY ARTISTS
-    nearbyArtists: {
-      get() {
-        return this.$store.state.landingPage.nearbyArtists;
-      },
-      set(val) {
-        this.$store.commit("landingPage/setNearbyArtists", val);
-      },
-    },
-    loadingNearbyArtists() {
-      return this.$store.state.landingPage.loadingNearbyArtists;
-    },
-    nearbyArtistsHasNext() {
-      return this.$store.state.landingPage.nearbyArtistsHasNext;
-    },
-    nearbyArtistsPage: {
-      get() {
-        return this.$store.state.landingPage.nearbyArtistsPage;
-      },
-      set(val) {
-        this.$store.commit("landingPage/setNearbyArtistsPage", val);
-      },
-    },
-
-    // NEABY EVENT DATES
-    nearbyEventDates: {
-      get() {
-        return this.$store.state.landingPage.nearbyEventDates;
-      },
-      set(val) {
-        this.$store.commit("landingPage/setNearbyEventDates", val);
-      },
-    },
-    loadingNearbyEventDates() {
-      return this.$store.state.landingPage.loadingNearbyEventDates;
-    },
-    nearbyEventDatesHasNext() {
-      return this.$store.state.landingPage.nearbyEventDatesHasNext;
-    },
-    nearbyEventDatesPage: {
-      get() {
-        return this.$store.state.landingPage.nearbyEventDatesPage;
-      },
-      set(val) {
-        this.$store.commit("landingPage/setNearbyEventDatesPage", val);
-      },
-    },
-    // GENERAL EVENT DATES
-    eventDates: {
-      get() {
-        return this.$store.state.landingPage.eventDates;
-      },
-      set(val) {
-        this.$store.commit("landingPage/setEventDates", val);
-      },
-    },
-    loadingEventDates() {
-      return this.$store.state.landingPage.loadingEventDates;
-    },
-    eventDatesHasNext() {
-      return this.$store.state.landingPage.eventDatesHasNext;
-    },
-    eventDatesPages() {
-      return this.$store.state.landingPage.eventDatesPages;
-    },
+    // make array of page numbers for SEO
     eventDatesPageNumbers() {
       var ans = [];
       for (let i = 1; i <= this.eventDatesPages; i++) {
@@ -946,72 +617,32 @@ export default {
       }
       return ans;
     },
-    eventDatesPage: {
-      get() {
-        return this.$store.state.landingPage.eventDatesPage;
-      },
-      set(val) {
-        this.$store.commit("landingPage/setEventDatesPage", val);
-      },
-    },
-
-    // LOCATION
-    ipInfo() {
-      return this.$store.state.main.ipInfo;
-    },
-    currentLocation() {
-      return this.$store.state.main.currentLocation;
-    },
-    currentLocationName() {
-      return this.$store.state.main.currentLocationName;
-    },
-    fineLocation() {
-      return this.$store.state.main.fineLocation;
-    },
-    loadingLocation: {
-      get() {
-        return this.$store.state.main.loadingLocation;
-      },
-      set(val) {
-        this.$store.commit("main/setLoadingLocation", val);
-      },
-    },
-    queryRadius: {
-      get() {
-        return this.$store.state.landingPage.queryRadius;
-      },
-      set(val) {
-        this.$store.commit("landingPage/setQueryRadius", val);
-      },
-    },
   },
   beforeMount() {
     window.prerenderReady = false;
   },
 
-  destroyed() {
-    this.$store.commit("main/setMenuBarOpacity", 1);
+  unmounted() {
+    this.menuBarOpacity = 1;
   },
 
-  mounted() {
-    // load nearby event dates
-    if (!this.currentLocation) {
-      this.$store.dispatch("main/getIpInfo").then(() => {
-        this.loadEverything();
-        this.getFineLocation();
-      });
-    } else {
-      this.locationInput = this.currentLocationName;
-      if (!this.nearbyEventDates) {
-        this.loadEverything();
-      }
+  async mounted() {
+    if (!this.userLocation) {
+      await this.loadIpInfo();
     }
-
-    setTimeout(() => {
-      this.showMapGap = true;
-    }, 300);
-
-    // load hot artists
+    if (this.$route.query.global_page) {
+      // used by hidden pagination for SEO
+      this.eventDatesPage = Number(this.$route.query.global_page);
+      await this.loadEventDates();
+      setTimeout(() => {
+        window.prerenderReady = true;
+      }, 300);
+    } else {
+      await this.loadEverything();
+      setTimeout(() => {
+        window.prerenderReady = true;
+      }, 300);
+    }
   },
 };
 </script>
@@ -1187,7 +818,7 @@ export default {
         width: 100%;
       }
     }
-    /deep/.q-scrollarea__thumb {
+    :deep(.q-scrollarea__thumb) {
       z-index: 10;
     }
   }

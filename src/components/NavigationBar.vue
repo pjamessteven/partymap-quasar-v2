@@ -47,7 +47,7 @@ import { getFineLocation } from 'assets/common.js';
 import { mapState, mapWritableState } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
 import { useMainStore } from 'src/stores/main';
-import { useMapQueryStore } from 'src/stores/map-query';
+import { useQueryStore } from 'src/stores/query';
 
 export default {
   name: 'NavigationBar',
@@ -82,20 +82,20 @@ export default {
       }
       if (to === 'favorites') {
         if (this.currentUser) {
-          this.controlFavoritesSelected = true;
+          this.controlFavorites = true;
           this.showPanelMobile = true;
         } else {
           this.$router.push({ name: 'Login' });
         }
       } else if (from === 'favorites') {
-        this.controlFavoritesSelected = false;
+        this.controlFavorites = false;
       }
     },
   },
   computed: {
     ...mapState(useAuthStore, ['currentUser']),
     ...mapWritableState(useMainStore, ['sidebarPanel', 'showPanelMobile']),
-    ...mapWritableState(useMapQueryStore, ['controlFavoritesSelected']),
+    ...mapWritableState(useQueryStore, ['controlFavorites']),
   },
   created() {
     this.getFineLocation = getFineLocation;

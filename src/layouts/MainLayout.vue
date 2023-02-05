@@ -12,11 +12,6 @@ import { ref } from 'vue';
 import MainMap from 'components/MainMap/MainMap.vue';
 import SideBar from 'components/SideBar/SideBar.vue';
 import MenuBar from 'components/MenuBar/MenuBar.vue';
-const leftDrawerOpen = ref(false);
-
-function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
-}
 </script>
 <style lang="scss">
 .main-layout {

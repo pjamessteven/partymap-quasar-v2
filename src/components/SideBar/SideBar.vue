@@ -103,8 +103,7 @@
                   : ' animated fadeOut '
               "
             >
-              <EventDateListVertical
-                class="event-date-list"
+              <ExploreView
                 style="position: absolute; height: 100%; width: 100%"
                 v-if="
                   currentSidebarPanel === 'explore' ||
@@ -146,14 +145,17 @@
 </template>
 
 <script>
-import EventDateListVertical from './ExploreView/EventDateListVertical.vue';
+import ExploreView from './ExploreView/ExploreView.vue';
 import SearchView from './SearchView/SearchView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
-import NavigationBar from '/components/NavigationBar.vue';
+import NavigationBar from 'components/NavigationBar.vue';
+import { mapState, mapWritableState } from 'pinia';
+import { useMainStore } from 'src/stores/main';
+import { useMapStore } from 'src/stores/map';
 
 export default {
   components: {
-    EventDateListVertical,
+    ExploreView,
     SearchView,
     NavigationBar,
     NearbyView,
@@ -293,12 +295,12 @@ export default {
       background: rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(10px);
     }
-    /deep/.content {
+    :deep(.content) {
       background: black;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    /deep/.sidebar-header {
+    :deep(.sidebar-header) {
       background: $bi-2;
     }
     /*
@@ -352,11 +354,11 @@ export default {
       backdrop-filter: blur(10px);
     }
     */
-    /deep/.content {
+    :deep(.content) {
       background: white;
       border-top: 1px solid rgba(0, 0, 0, 0.05);
     }
-    /deep/.sidebar-header {
+    :deep(.sidebar-header) {
       color: $bi-2;
       background: #fafafa;
     }
@@ -403,7 +405,7 @@ export default {
   height: 100%;
 
   pointer-events: all;
-  /deep/.scroll-area {
+  :deep(.scroll-area) {
     //border-radius: 18px;
     overflow: hidden;
     .scroll-content {
@@ -411,7 +413,7 @@ export default {
     }
   }
 
-  /deep/.sidebar-header {
+  :deep(.sidebar-header) {
     padding-top: 8px;
     padding-bottom: 16px;
     color: white;
@@ -419,7 +421,7 @@ export default {
     top: 0px;
     z-index: 100;
   }
-  /deep/.content {
+  :deep(.content) {
     width: 100%;
     //border-radius: 18px !important;
   }
@@ -540,7 +542,7 @@ export default {
       padding-bottom: 73px;
       overflow: hidden !important;
       border: none !important;
-      /deep/.content {
+      :deep(.content) {
         //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.4);
 
         //border-top-right-radius: 18px;
