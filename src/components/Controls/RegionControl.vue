@@ -2,30 +2,28 @@
   <div
     class="select-control-wrapper"
     :class="{
-      active: controlCountrySelectedOption != null
+      active: controlCountry != null,
     }"
   >
     <q-select
       borderless
-      :disable="controlCountrySelectedOption == null"
-      v-model="controlRegionSelectedOption"
-      :options="
-        controlCountrySelectedOption ? controlCountrySelectedOption.regions : []
-      "
+      v-model="controlRegion"
+      :options="countryOptions"
       option-value="short_name"
       option-label="long_name"
-      :label="$t('list_view.region')"
+      :label="$t('list_view.country')"
       style="width: 150px"
       dense
-      @input="onSelectRegion"
+      @input="onSelect"
+      :loading="regionOptionsLoading"
     >
-      <template slot="prepend">
+      <template v-slot:prepend>
         <q-icon
-          style=" font-size: 18px;"
-          name="mdi-close-thick"
+          style="font-size: 18px"
+          name="mdi-close-circle"
           class="q-pr-md"
-          @click="controlRegionSelectedOption = null"
-          v-if="controlRegionSelectedOption"
+          @click="controlCountry = null"
+          v-if="controlCountry"
         />
       </template>
     </q-select>
@@ -33,72 +31,31 @@
 </template>
 
 <script>
+import { mapActions, mapWritableState } from 'pinia';
+import { useQueryStore } from 'src/stores/query';
 export default {
-  components: {},
-  props: {},
-  data () {
+  data() {
     return {
-      menuShowing: false
-    }
+      menuShowing: false,
+    };
   },
   watch: {},
   methods: {
-    onSelectRegion () {
-      this.controlLocalitySelectedOption = null
-    }
+    ...mapActions(useQueryStore, ['loadRegions']),
+    onSelect() {
+      this.controlLocality = null;
+    },
   },
   computed: {
-    localities () {
-      return this.$store.state.main.localities
-    },
-    controlCountrySelectedOption: {
-      get () {
-        return this.$store.state.main.controlCountrySelectedOption
-      },
-      set (val) {
-        this.$store.commit('main/setControlCountrySelectedOption', val)
-      }
-    },
-    controlRegionSelectedOption: {
-      get () {
-        return this.$store.state.main.controlRegionSelectedOption
-      },
-      set (val) {
-        this.$store.commit('main/setControlRegionSelectedOption', val)
-      }
-    },
-    controlLocalitySelectedOption: {
-      get () {
-        return this.$store.state.main.controlLocalitySelectedOption
-      },
-      set (val) {
-        this.$store.commit('main/setControlLocalitySelectedOption', val)
-      }
-    }
+    ...mapWritableState(useQueryStore, 'controlRegion', 'controlLocality'),
+    ...mapState(useQueryStore, 'regionOptions, regionOptionsLoading'),
   },
-  created () {},
-
-  destroyed () {},
-  beforeMount () {},
-  mounted () {}
-}
+};
 </script>
 
 <style lang="scss" scoped>
 .body--dark {
 }
 .body--light {
-}
-
-.date-picker {
-  border-radius: 0px !important;
-  border-bottom-left-radius: 9px !important;
-  border-bottom-rightradius: 9px !important;
-
-  /deep/.vc-container {
-  }
-}
-
-@media only (max-width: 1023px) {
 }
 </style>

@@ -4,8 +4,7 @@
       no-caps
       class="button-control flex items-center"
       :class="{
-        active:
-          controlTagSelectedOptions && controlTagSelectedOptions.length > 0,
+        active: controlTag && controlTag.length > 0,
       }"
     >
       <div class="flex items-center row no-wrap">
@@ -16,31 +15,22 @@
           class="q-pr-md"
           @click.stop="
             () => {
-              controlTagSelectedOptions = [];
+              controlTag = [];
               menuShowing = false;
             }
           "
-          v-if="
-            controlTagSelectedOptions && controlTagSelectedOptions.length > 0
-          "
+          v-if="controlTag && controlTag.length > 0"
         />
         <i class="las la-tags q-mr-sm q-ml-none q-pr-none" />
 
-        <div
-          v-if="
-            !controlTagSelectedOptions || controlTagSelectedOptions.length === 0
-          "
-        >
+        <div v-if="!controlTag || controlTag.length === 0">
           {{ $t('top_controls.select_tags') }}
         </div>
         <div v-else>
-          <span v-for="(tag, index) in controlTagSelectedOptions" :key="index"
+          <span v-for="(tag, index) in controlTag" :key="index"
             >{{ tag.tag
             }}<span
-              v-if="
-                index != controlTagSelectedOptions.length - 1 &&
-                controlTagSelectedOptions.length > 1
-              "
+              v-if="index != controlTag.length - 1 && controlTag.length > 1"
             >
               +
             </span></span
@@ -117,11 +107,7 @@
                     dense
                     clickable
                     @click="clickTag(tag)"
-                    :active="
-                      controlTagSelectedOptions.findIndex(
-                        (x) => x.tag == tag.tag
-                      ) > -1
-                    "
+                    :active="controlTag.findIndex((x) => x.tag == tag.tag) > -1"
                   >
                     <div
                       class="flex row grow justify-between items-center no-wrap"
@@ -133,9 +119,7 @@
                       </q-item-label>
                       <q-checkbox
                         :value="
-                          controlTagSelectedOptions.findIndex(
-                            (x) => x.tag == tag.tag
-                          ) > -1
+                          controlTag.findIndex((x) => x.tag == tag.tag) > -1
                         "
                         @input="clickTag(tag)"
                       />
@@ -143,7 +127,7 @@
                   </q-item>
                 </div>
               </q-list>
-              <div class="row justify-center q-my-md" v-if="hasNext">
+              <div class="row justify-center q-my-md" v-if="tagOptionsHasNext">
                 <q-spinner-tail
                   :color="$q.dark.isActive ? 'white' : 'black'"
                   size="2em"
@@ -151,7 +135,7 @@
               </div>
               <div
                 class="flex row grow justify-center items-center q-my-md"
-                v-if="loading && page == 1"
+                v-if="tagOptionsLoading && tagOptionsPage == 1"
                 style="height: 100%"
               >
                 <q-spinner-tail
@@ -168,24 +152,25 @@
 </template>
 
 <script>
-import { getTagRequest } from '@/api';
 export default {
-  components: {},
-  props: {},
   data() {
     return {
       menuShowing: false,
       query: null,
     };
   },
-  watch: {},
   methods: {
+    ...mapActions(useQueryStore, ['loadTagOptions', 'loadMoreTagOptions']),
     onBeforeShowMenu() {
       // used to stop the ed list refrshing on mobile viewport size change
       //this.blockUpdates = true;
       if (!this.tagOptions || this.tagOptions.length === 0) {
         this.loadInitialList();
       }
+    },
+    loadInitialList() {
+      this.artistOptionsPage = 1;
+      this.loadArtistOptions(this.query);
     },
     onBeforeHideMenu() {
       setTimeout(() => {
@@ -194,7 +179,7 @@ export default {
     },
     clickTag(tag) {
       // mutation toggles tag
-      this.controlTagSelectedOptions = tag;
+      this.controlTag = [tag];
     },
     onScrollMainContent(info) {
       if (info.verticalPercentage === 1) {
@@ -202,92 +187,22 @@ export default {
         this.loadMore();
       }
     },
-    loadInitialList() {
-      this.loading = true;
-      this.page = 1;
-      getTagRequest({
-        tag_name: this.query,
-        page: this.page,
-        sort: 'count',
-        desc: true,
-        per_page: 20,
-      }).then((response) => {
-        // list concatenation handled in store mutation
-        this.tagOptions = response.data;
-        this.loading = false;
-      });
-    },
-    loadMore() {
-      if (this.hasNext) {
-        this.page += 1;
-        this.loading = true;
-        getTagRequest({
-          tag_name: this.query,
-          page: this.page,
-          sort: 'count',
-          desc: true,
-          per_page: 20,
-        }).then(
-          (response) => {
-            // list concatenation handled in store mutation
-            this.tagOptions = response.data;
-            this.loading = false;
-          },
-          () => {}
-        );
-      }
-    },
   },
   computed: {
-    blockUpdates: {
-      // used to stop the ed list refrshing on mobile viewport size change
-      get() {
-        return this.$store.state.main.blockUpdates;
-      },
-      set(val) {
-        this.$store.commit('main/setBlockUpdates', val);
-      },
-    },
-    controlTagSelectedOptions: {
-      get() {
-        return this.$store.state.main.controlTagSelectedOptions;
-      },
-      set(val) {
-        this.$store.commit('main/setControlTagSelectedOptions', val);
-      },
-    },
-    tagOptions: {
-      get() {
-        return this.$store.state.main.tagOptions;
-      },
-      set(val) {
-        this.$store.commit('main/settagOptions', val);
-      },
-    },
-    page: {
-      get() {
-        return this.$store.state.main.tagOptionsPage;
-      },
-      set(val) {
-        this.$store.commit('main/settagOptionsPage', val);
-      },
-    },
-    hasNext() {
-      return this.$store.state.main.tagOptionsHasNext;
-    },
-    loading: {
-      get() {
-        return this.$store.state.main.tagOptionsLoading;
-      },
-      set(val) {
-        this.$store.commit('main/settagOptionsLoading', val);
-      },
+    computed: {
+      ...mapWritableState(useMapStore, ['blockUpdates']),
+      ...mapWritableState(useQueryStore, [
+        'controlTag',
+        'tagOptionstagOptionsPage',
+      ]),
+      ...mapState(useQueryStore, [
+        'tagOptions',
+        'tagOptionsHasNext',
+        'tagOptionsLoading',
+      ]),
     },
   },
-  created() {},
 
-  destroyed() {},
-  beforeMount() {},
   mounted() {
     setTimeout(() => {
       if (!this.tagOptions) {
@@ -316,16 +231,5 @@ export default {
   position: sticky;
   z-index: 1;
   top: 0;
-}
-.date-picker {
-  border-radius: 0px !important;
-  border-bottom-left-radius: 9px !important;
-  border-bottom-rightradius: 9px !important;
-
-  /deep/.vc-container {
-  }
-}
-
-@media only (max-width: 1023px) {
 }
 </style>

@@ -3,7 +3,7 @@ import { getIpInfoRequest } from 'src/api';
 import { IpInfo } from 'src/types/ip_info';
 import { Coordinates } from 'src/types/map';
 import NodeGeocoder from 'node-geocoder';
-
+import { Notify } from 'quasar';
 interface MainStoreState {
   darkMode: boolean;
   mapStyle: 'satellite' | 'transport' | 'high_contrast';
@@ -108,7 +108,7 @@ export const useMainStore = defineStore('main', {
               });
           },
           () => {
-            this.$q.notify(this.$t('error_codes.no_location'));
+            Notify.create('Cannot get your location');
             this.userLocationLoading = false;
           },
           { timeout: 10000 }

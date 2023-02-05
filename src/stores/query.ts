@@ -17,11 +17,13 @@ import {
 import { useMainStore } from './main';
 import { useMapStore } from './map';
 
+// TODO: improve interface
+
 interface QueryState {
   // control main event date query filters
 
-  controlDateRange: { start: string; end: string };
-  controlDateRangeSelectedOption: { value: string; label: string };
+  controlDateRange: { start: string; end: string | null };
+  controlDateRangeSelectedOption: { value: string; label: string } | null;
   controlFavorites: boolean;
   controlDuration: string[];
   controlSize: string[];
@@ -83,7 +85,8 @@ interface QueryState {
 
 export const useQueryStore = defineStore('query', {
   state: (): QueryState => ({
-    controlDateRange: { start: moment().toISOString(), end: null, label: null },
+    controlDateRange: { start: moment().toISOString(), end: null },
+    controlDateRangeSelectedOption: null, // keep state of dynamic date label
     controlFavorites: false,
     controlDuration: [],
     controlSize: [],
@@ -137,7 +140,20 @@ export const useQueryStore = defineStore('query', {
     artistsPage: 1,
     artistsLoading: false,
   }),
-  getters: {},
+  getters: {
+    anyQueryFiltersEnabled(): boolean {
+      return (
+        !!this.controlDateRange.end ||
+        this.controlDuration.length > 0 ||
+        this.controlSize.length > 0 ||
+        this.controlArtist.length > 0 ||
+        this.controlTag.length > 0 ||
+        !!this.controlCountry ||
+        !!this.controlRegion ||
+        !!this.controlLocality
+      );
+    },
+  },
   actions: {
     async loadPoints() {
       try {
@@ -263,6 +279,22 @@ export const useQueryStore = defineStore('query', {
       this.artistsPage += 1;
       return await this.loadArtists();
     },
+    resetControls() {
+      this.controlDateRange = {
+        start: moment().toISOString(),
+        end: null,
+      };
+      this.controlDateRangeSelectedOption = null;
+      this.controlFavorites = false;
+      this.controlDuration = [];
+      this.controlSize = [];
+      this.controlArtist = [];
+      this.controlTag = [];
+      this.controlCountry = null;
+      this.controlLocality = null;
+      this.controlRegion = null;
+    },
+
     async loadArtistOptions(query: string) {
       try {
         this.artistOptionsLoading = true;

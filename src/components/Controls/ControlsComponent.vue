@@ -202,7 +202,7 @@ export default {
     showDateControl() {
       return (
         !this.showOnlySelected ||
-        (this.showOnlySelected && controlDateRange.end)
+        (this.showOnlySelected && !!controlDateRange.end)
       );
     },
     showDurationControl() {

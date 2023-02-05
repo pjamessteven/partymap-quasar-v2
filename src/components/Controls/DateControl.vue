@@ -23,14 +23,9 @@
           />
           <i v-else class="las la-calendar" />
         </div>
-        <div
-          v-if="
-            showSelectedValue &&
-            controlDateRange &&
-            controlDateRange.value != null
-          "
-          v-html="controlDateRange.label"
-        ></div>
+        <div v-if="showSelectedValue && !!controlDateRangeSelectedOption">
+          {{ controlDateRangeSelectedOption.value }}
+        </div>
         <div v-else>
           {{ $t('top_controls.select_dates') }}
         </div>

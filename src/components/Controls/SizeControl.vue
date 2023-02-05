@@ -2,33 +2,30 @@
   <div>
     <q-btn
       no-caps
-      class="button-control flex items-center "
+      class="button-control flex items-center"
       :class="{
-        active:
-          controlSizeSelectedOptions && controlSizeSelectedOptions.length > 0,
+        active: controlSize && controlSize.length > 0,
       }"
     >
       <div class="flex items-center row no-wrap">
         <!--<q-icon left name="las la-calendar " />-->
         <q-icon
-          style=" font-size: 18px;"
+          style="font-size: 18px"
           name="mdi-close-circle"
           class="q-pr-md"
           @click.stop="
             () => {
-              controlSizeSelectedOptions = [];
+              controlSize = [];
               menuShowing = false;
             }
           "
-          v-if="
-            controlSizeSelectedOptions && controlSizeSelectedOptions.length > 0
-          "
+          v-if="controlSize && controlSize.length > 0"
         />
 
         <i class="las la-user-friends q-mr-sm q-ml-none q-pr-none" />
 
         <div>
-          {{ $t("top_controls.select_size") }}
+          {{ $t('top_controls.select_size') }}
         </div>
         <!--
         <i
@@ -46,27 +43,27 @@
       >
         <div class="q-gutter-xs flex column q-pr-md q-pa-xs">
           <q-checkbox
-            v-model="controlSizeSelectedOptions"
+            v-model="controlSize"
             val="0,1000"
             :label="$t('top_controls.less_than_one_thousand')"
           />
           <q-checkbox
-            v-model="controlSizeSelectedOptions"
+            v-model="controlSize"
             val="1000,5000"
             :label="'1000 - 5000 ' + $t('top_controls.people')"
           />
           <q-checkbox
-            v-model="controlSizeSelectedOptions"
+            v-model="controlSize"
             val="5000,20000"
             :label="'5000 - 20,000 ' + $t('top_controls.people')"
           />
           <q-checkbox
-            v-model="controlSizeSelectedOptions"
+            v-model="controlSize"
             val="20000,50000"
             :label="'20,000 - 50,000 ' + $t('top_controls.people')"
           />
           <q-checkbox
-            v-model="controlSizeSelectedOptions"
+            v-model="controlSize"
             val="50000,200000"
             :label="$t('top_controls.more_than_fifty_thousand')"
           />
@@ -77,6 +74,8 @@
 </template>
 
 <script>
+import { mapWritableState } from 'pinia';
+import { useQueryStore } from 'src/stores/query';
 export default {
   components: {},
   props: {},
@@ -88,20 +87,8 @@ export default {
   watch: {},
   methods: {},
   computed: {
-    controlSizeSelectedOptions: {
-      get() {
-        return this.$store.state.main.controlSizeSelectedOptions;
-      },
-      set(val) {
-        this.$store.commit("main/setControlSizeSelectedOptions", val);
-      },
-    },
+    ...mapWritableState(useQueryStore, ['controlSize']),
   },
-  created() {},
-
-  destroyed() {},
-  beforeMount() {},
-  mounted() {},
 };
 </script>
 
@@ -111,6 +98,6 @@ export default {
 .body--light {
 }
 
-@media only (max-width: 1023px) {
+@media only screen and (max-width: 1023px) {
 }
 </style>

@@ -213,7 +213,7 @@ export default {
     },
     onScrollMainContent(info) {
       if (info.verticalPercentage === 1) {
-        // reached bottom of list, auto load more items
+        // reached bottom
         this.loadMoreArtistOptions(this.query);
       }
     },
