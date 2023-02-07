@@ -110,7 +110,7 @@
                       flat
                       sqaure
                       :loading="userLocationLoading"
-                      @click="getLocation"
+                      @click="getFineLocation"
                     >
                       <template v-slot:default>
                         <div v-if="!userLocationLoading">
@@ -404,12 +404,13 @@
 </template>
 
 <script>
-import { getFineLocation } from 'assets/common.js';
-
 import ArtistsComponent from './../ArtistsComponent.vue';
 import EventDateCard from 'components/EventDateCard.vue';
+
+import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useQueryStore } from 'src/stores/query';
 import { useMainStore } from 'src/stores/main';
+import { useNearbyStore } from 'src/stores/nearby';
 
 export default {
   name: 'LandingPage',
@@ -488,11 +489,9 @@ export default {
       ],
     };
   },
-  created() {
-    this.getFineLocation = getFineLocation;
-  },
+
   methods: {
-    ...mapActions(useMainStore, ['loadIpInfo']),
+    ...mapActions(useMainStore, ['loadIpInfo', 'getFineLocation']),
     ...mapActions(useNearbyStore, [
       'loadEverything',
       'loadMoreNearbyTags',
@@ -526,9 +525,7 @@ export default {
             .join('&')
       );
     },
-    getLocation() {
-      this.getFineLocation();
-    },
+
     clickTag(tag) {
       // mutation toggles tag
       this.controlTag = [tag];

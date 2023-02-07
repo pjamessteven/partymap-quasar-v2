@@ -146,7 +146,7 @@
               </q-menu>
             </q-item>
           </q-list>
-          <DatePicker
+          <v-date-picker
             title-position="center"
             @input="onSelectedCustomDateRange"
             class="date-picker flex"
@@ -165,15 +165,13 @@
 </template>
 
 <script>
-import DatePicker from 'v-calendar/lib/components/date-picker.umd';
+import 'v-calendar/dist/style.css';
+
 import moment from 'moment';
 import { mapWritableState } from 'pinia';
 import { useQueryStore } from 'src/stores/query';
 
 export default {
-  components: {
-    DatePicker,
-  },
   props: {
     showSelectedValue: {
       default: false,

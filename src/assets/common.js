@@ -1,66 +1,68 @@
 import moment from 'moment-timezone';
 import { i18n } from 'src/boot/i18n.ts';
 
+const { t } = i18n.global;
+
 const weekdays = [
-  i18n.t('weekdays.monday'),
-  i18n.t('weekdays.tuesday'),
-  i18n.t('weekdays.wednesday'),
-  i18n.t('weekdays.thursday'),
-  i18n.t('weekdays.friday'),
-  i18n.t('weekdays.saturday'),
-  i18n.t('weekdays.sunday'),
+  t('weekdays.monday'),
+  t('weekdays.tuesday'),
+  t('weekdays.wednesday'),
+  t('weekdays.thursday'),
+  t('weekdays.friday'),
+  t('weekdays.saturday'),
+  t('weekdays.sunday'),
 ];
 const months = [
-  i18n.t('months.jan'),
-  i18n.t('months.feb'),
-  i18n.t('months.mar'),
-  i18n.t('months.apr'),
-  i18n.t('months.may'),
-  i18n.t('months.jun'),
-  i18n.t('months.jul'),
-  i18n.t('months.aug'),
-  i18n.t('months.sep'),
-  i18n.t('months.oct'),
-  i18n.t('months.nov'),
-  i18n.t('months.dec'),
+  t('months.jan'),
+  t('months.feb'),
+  t('months.mar'),
+  t('months.apr'),
+  t('months.may'),
+  t('months.jun'),
+  t('months.jul'),
+  t('months.aug'),
+  t('months.sep'),
+  t('months.oct'),
+  t('months.nov'),
+  t('months.dec'),
 ];
 const ordinals = [
-  i18n.t('ordinal_long.1'),
-  i18n.t('ordinal_long.2'),
-  i18n.t('ordinal_long.3'),
+  t('ordinal_long.1'),
+  t('ordinal_long.2'),
+  t('ordinal_long.3'),
 ];
 const ordinalsShort = [
-  i18n.t('ordinal_short.1'),
-  i18n.t('ordinal_short.2'),
-  i18n.t('ordinal_short.3'),
-  i18n.t('ordinal_short.4'),
-  i18n.t('ordinal_short.5'),
-  i18n.t('ordinal_short.6'),
-  i18n.t('ordinal_short.7'),
-  i18n.t('ordinal_short.8'),
-  i18n.t('ordinal_short.9'),
-  i18n.t('ordinal_short.10'),
-  i18n.t('ordinal_short.11'),
-  i18n.t('ordinal_short.12'),
-  i18n.t('ordinal_short.13'),
-  i18n.t('ordinal_short.14'),
-  i18n.t('ordinal_short.15'),
-  i18n.t('ordinal_short.16'),
-  i18n.t('ordinal_short.17'),
-  i18n.t('ordinal_short.18'),
-  i18n.t('ordinal_short.19'),
-  i18n.t('ordinal_short.20'),
-  i18n.t('ordinal_short.21'),
-  i18n.t('ordinal_short.22'),
-  i18n.t('ordinal_short.23'),
-  i18n.t('ordinal_short.24'),
-  i18n.t('ordinal_short.25'),
-  i18n.t('ordinal_short.26'),
-  i18n.t('ordinal_short.27'),
-  i18n.t('ordinal_short.28'),
-  i18n.t('ordinal_short.29'),
-  i18n.t('ordinal_short.30'),
-  i18n.t('ordinal_short.31'),
+  t('ordinal_short.1'),
+  t('ordinal_short.2'),
+  t('ordinal_short.3'),
+  t('ordinal_short.4'),
+  t('ordinal_short.5'),
+  t('ordinal_short.6'),
+  t('ordinal_short.7'),
+  t('ordinal_short.8'),
+  t('ordinal_short.9'),
+  t('ordinal_short.10'),
+  t('ordinal_short.11'),
+  t('ordinal_short.12'),
+  t('ordinal_short.13'),
+  t('ordinal_short.14'),
+  t('ordinal_short.15'),
+  t('ordinal_short.16'),
+  t('ordinal_short.17'),
+  t('ordinal_short.18'),
+  t('ordinal_short.19'),
+  t('ordinal_short.20'),
+  t('ordinal_short.21'),
+  t('ordinal_short.22'),
+  t('ordinal_short.23'),
+  t('ordinal_short.24'),
+  t('ordinal_short.25'),
+  t('ordinal_short.26'),
+  t('ordinal_short.27'),
+  t('ordinal_short.28'),
+  t('ordinal_short.29'),
+  t('ordinal_short.30'),
+  t('ordinal_short.31'),
 ];
 
 export const localDayOfMonth = (t, tz) => {
@@ -136,7 +138,7 @@ export default {
     var ONE_HOUR = 3600000;
     var ONE_MINUTE = 600000;
 
-    moment.locale(this.$i18n.locale);
+    moment.locale(this.$locale);
     t1 = moment.tz(t1, timezone).valueOf();
 
     if (t2) {
@@ -200,55 +202,55 @@ export default {
     }
   },
   localDateTimeLong: function (t, tz) {
-    moment.locale(this.$i18n.locale);
+    moment.locale(this.$locale);
     var m = moment.tz(t, tz);
     return m.format('dddd') + ', ' + m.format('LLL');
   },
   localDateTimeShort: function (t, tz) {
-    moment.locale(this.$i18n.locale);
+    moment.locale(this.$locale);
     var m = moment.tz(t, tz);
     return m.format('dddd') + ', ' + m.format('lll');
   },
   localDateWithWeekday: function (t, tz) {
-    moment.locale(this.$i18n.locale);
+    moment.locale(this.$locale);
     var m = moment.tz(t, tz);
     return m.format('ddd') + ' ' + m.format('ll');
   },
   localDateLong: function (t, tz) {
-    moment.locale(this.$i18n.locale);
+    moment.locale(this.$locale);
     var m = moment.tz(t, tz);
     return m.format('dddd') + ', ' + moment.tz(t, tz).format('LL');
   },
   localDate: function (t, tz) {
-    moment.locale(this.$i18n.locale);
+    moment.locale(this.$locale);
     return moment.tz(t, tz).format('LL');
   },
   localDateISOString: function (t, tz) {
-    moment.locale(this.$i18n.locale);
+    moment.locale(this.$locale);
     return moment.tz(t, tz).toISOString();
   },
   localDay: function (t, tz) {
-    moment.locale(this.$i18n.locale);
+    moment.locale(this.$locale);
     return moment.tz(t, tz).format('dddd');
   },
   localTimeCompact: function (t, tz) {
-    moment.locale(this.$i18n.locale);
+    moment.locale(this.$locale);
     return moment.tz(t, tz).format('LT');
   },
   dateUTCToLocal: function (t) {
-    moment.locale(this.$i18n.locale);
+    moment.locale(this.$locale);
     return moment.utc(t).local().format('MMMM Do YYYY');
   },
   dateTimeUTCToLocal: function (t) {
-    moment.locale(this.$i18n.locale);
+    moment.locale(this.$locale);
     return moment.utc(t).local().format('MMMM Do YYYY, h:mm a');
   },
   dateTimeUTCToLocalCompact: function (t) {
-    moment.locale(this.$i18n.locale);
+    moment.locale(this.$locale);
     return moment.utc(t).local().format('MMMM Do, h:mm a');
   },
   timeZoneAbbreviention: function (t, tz) {
-    moment.locale(this.$i18n.locale);
+    moment.locale(this.$locale);
     return moment.tz.zone(tz).abbr(moment(t).valueOf());
   },
   simplifiedRecurringPattern: function (rrule) {

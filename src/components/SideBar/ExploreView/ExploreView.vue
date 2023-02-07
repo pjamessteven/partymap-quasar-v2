@@ -263,7 +263,7 @@ import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
 import { useMainStore } from 'src/stores/main';
 import { useAuthStore } from 'src/stores/auth';
-import { mapActions, mapWritableState } from 'pinia';
+import { mapActions, mapWritableState, mapState } from 'pinia';
 
 export default {
   components: {
@@ -415,7 +415,7 @@ export default {
   },
   watch: {
     route: {
-      handler: function (to, from) {
+      handler: function (to) {
         if (to.name === 'Explore') {
           if (!this.eventDates) {
             if (!this.userLocation) {

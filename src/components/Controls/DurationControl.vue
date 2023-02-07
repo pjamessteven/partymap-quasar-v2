@@ -75,6 +75,8 @@
 
 <script>
 import { useMainStore } from 'src/stores/main';
+import { mapWritableState } from 'pinia';
+
 export default {
   data() {
     return {

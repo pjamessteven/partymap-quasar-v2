@@ -62,6 +62,10 @@
 </template>
 
 <script>
+import { mapWritableState } from 'pinia';
+import { useMainStore } from 'src/stores/main';
+import { useSearchStore } from 'src/stores/search';
+import { useQueryStore } from 'src/stores/query';
 export default {
   name: 'SearchResults',
 
@@ -108,12 +112,12 @@ export default {
       this.$emit('resultSelected');
     },
     clickLocationResult(location) {
-      this.$store.commit('main/setCurrentLocationName', location.label);
-
-      this.$store.commit('main/setCurrentLocation', {
+      this.userLocation = {
         lat: parseFloat(location.location.lat),
         lng: parseFloat(location.location.lng),
-      });
+      };
+      this.userLocationName = location.label;
+
       this.query = null;
       this.$emit('resultSelected');
       this.sidebarPanel = 'nearby';
@@ -121,6 +125,8 @@ export default {
   },
   computed: {
     ...mapWritableState(useQueryStore, ['controlTag']),
+    ...mapWritableState(useMainStore, ['userLocation']),
+    ...mapWritableState(useSearchStore, ['query']),
   },
 };
 </script>

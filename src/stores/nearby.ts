@@ -7,6 +7,7 @@ import {
 } from 'src/api';
 import { Artist, EventDate, Tag } from 'src/types/autogen_types';
 import { useMainStore } from 'src/stores/main';
+
 interface NearbyState {
   loadingEverything: boolean;
 
@@ -27,6 +28,7 @@ interface NearbyState {
   eventDates: EventDate[];
   eventDatesHasNext: boolean;
   eventDatesPage: number;
+
   eventDatesPages: number; // total pages
 }
 export const useNearbyStore = defineStore('nearby', {

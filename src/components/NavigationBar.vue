@@ -43,7 +43,6 @@
   </div>
 </template>
 <script>
-import { getFineLocation } from 'assets/common.js';
 import { mapState, mapWritableState } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
 import { useMainStore } from 'src/stores/main';
@@ -77,7 +76,6 @@ export default {
         this.showPanelMobile = true;
       }
       if (to === 'nearby') {
-        // this.getFineLocation()
         this.showPanelMobile = true;
       }
       if (to === 'favorites') {
@@ -96,9 +94,6 @@ export default {
     ...mapState(useAuthStore, ['currentUser']),
     ...mapWritableState(useMainStore, ['sidebarPanel', 'showPanelMobile']),
     ...mapWritableState(useQueryStore, ['controlFavorites']),
-  },
-  created() {
-    this.getFineLocation = getFineLocation;
   },
 };
 </script>

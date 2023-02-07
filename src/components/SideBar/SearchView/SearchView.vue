@@ -43,6 +43,8 @@
 import SearchResults from './SearchResults.vue';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import { getSearchSuggestionsRequest } from 'src/api';
+import { mapWritableState } from 'pinia';
+import { useSearchStore } from 'src/stores/search';
 export default {
   components: { SearchResults },
   data() {
@@ -71,7 +73,9 @@ export default {
     },
   },
   watch: {},
-  computed: {},
+  computed: {
+    ...mapWritableState(useSearchStore, ['query']),
+  },
   mounted() {
     setTimeout(() => {
       // mobile hack

@@ -3,6 +3,7 @@ import { getIpInfoRequest } from 'src/api';
 import { IpInfo } from 'src/types/ip_info';
 import { Coordinates } from 'src/types/map';
 import NodeGeocoder from 'node-geocoder';
+//import HttpsAdapter from 'node-geocoder/lib/httpadapter/fetchadapter';
 import { Notify } from 'quasar';
 interface MainStoreState {
   darkMode: boolean;
@@ -19,6 +20,7 @@ interface MainStoreState {
   userLocationName: string | null;
   fineLocation: boolean;
 }
+
 export const useMainStore = defineStore('main', {
   state: (): MainStoreState => ({
     darkMode: false,
@@ -54,7 +56,8 @@ export const useMainStore = defineStore('main', {
         return error;
       }
     },
-    async getFineLocation() {
+    getFineLocation() {
+      console.log('get fine location');
       if (navigator.geolocation) {
         this.userLocationLoading = true;
         navigator.geolocation.getCurrentPosition(
@@ -64,12 +67,21 @@ export const useMainStore = defineStore('main', {
               lat: position.coords.latitude,
               lng: position.coords.longitude,
             };
+            const unknownCityCoords =
+              position.coords.latitude + ', ' + position.coords.longitude;
 
-            const nodeFetch = require('node-fetch');
+            this.userLocationName = unknownCityCoords;
+
+            this.userLocationLoading = false;
+            /*
+            TODO: fix this shit: get current location name
+
+            const fetchAdapter = require('node-geocoder/lib/httpadapter/fetchadapter');
+
             const geocoder = NodeGeocoder({
               provider: 'openstreetmap',
               fetch: function fetch(url, options) {
-                return nodeFetch(url, {
+                return fetchAdapter(url, {
                   ...options,
                   headers: {
                     'user-agent': 'PartyMap <info@partymap.com>',
@@ -77,6 +89,8 @@ export const useMainStore = defineStore('main', {
                 });
               },
             });
+            console.log('create geocoder');
+
             geocoder
               .reverse({
                 lat: position.coords.latitude,
@@ -105,7 +119,7 @@ export const useMainStore = defineStore('main', {
                 this.userLocationName = unknownCityCoords;
 
                 this.userLocationLoading = false;
-              });
+              }); */
           },
           () => {
             Notify.create('Cannot get your location');

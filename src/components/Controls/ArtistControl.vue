@@ -182,8 +182,9 @@
 </template>
 
 <script>
-import { mapActions, mapWritableState } from 'pinia';
+import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
+import { useQueryStore } from 'src/stores/query';
 export default {
   data() {
     return {

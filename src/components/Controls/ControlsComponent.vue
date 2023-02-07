@@ -128,7 +128,7 @@ import SizeControl from './SizeControl.vue';
 import TagControl from './TagControl.vue';
 import ArtistProfile from 'src/components/ArtistProfile.vue';
 import LocalityControl from './LocalityControl.vue';
-import { mapWritableState } from 'pinia';
+import { mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useQueryStore } from 'src/stores/query';
 
@@ -251,7 +251,7 @@ export default {
       text-shadow: 1px 1px 2px black;
       display: none;
     }
-    /deep/.select-control-wrapper {
+    :deep(.select-control-wrapper) {
       background: transparent;
       color: rgba(255, 255, 255, 0.68);
       text-shadow: 1px 1px 2px black;
@@ -271,7 +271,7 @@ export default {
         border: 1px solid rgba(0, 0, 0, 1);
       }
     }
-    /deep/.button-control {
+    :deep(.button-control) {
       background: $bi-1;
       color: $ti-1;
       // text-shadow: 1px 1px 1px black;
@@ -292,7 +292,7 @@ export default {
         border: 1px solid rgba(0, 0, 0, 1);
       }
     }
-    /deep/.button-control {
+    :deep(.button-control) {
       background: transparent;
       color: $ti-1;
       background: $bi-1;
@@ -318,7 +318,7 @@ export default {
         border: 1px solid rgba(255, 255, 255, 0);
       }
     }
-    /deep/.tag {
+    :deep(.tag) {
       background: rgba(48, 48, 48, 0.68);
       color: rgba(255, 255, 255, 0.68);
       text-shadow: 1px 1px 2px black;
@@ -363,7 +363,7 @@ export default {
       text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.2);
       display: none;
     }
-    /deep/.select-control-wrapper {
+    :deep(.select-control-wrapper) {
       background: rgba(255, 255, 255, 0.48);
       color: $t-3;
       text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.48);
@@ -383,7 +383,7 @@ export default {
         border: 1px solid rgba(255, 255, 255, 0);
       }
     }
-    /deep/.button-control {
+    :deep(.button-control) {
       color: $t-1;
       text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
       /*
@@ -408,7 +408,7 @@ export default {
         border: 1px solid rgba(0, 0, 0, 0.1);
       }
     }
-    /deep/.tag {
+    :deep(.tag) {
       background: rgba(255, 255, 255, 0.48);
       color: $t-3;
       text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.48);
@@ -425,7 +425,7 @@ export default {
       }
     }
     &.satellite-enabled {
-      /deep/.button-control {
+      :deep(button-control) {
         background: rgba(255, 255, 255, 0.68);
         box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
       }
@@ -447,7 +447,7 @@ export default {
     overflow-y: hidden;
     .scroll-wrapper {
       //padding-right: 64px;
-      /deep/.button-control {
+      :deep(.button-control) {
         z-index: 1500;
         border-radius: 9px !important;
       }
@@ -456,7 +456,7 @@ export default {
           //margin-right: 8px;
 
           // border-right: none !important;
-          /deep/.button-control {
+          :deep(.button-control) {
             // border-right: none !important;
           }
         }
@@ -478,13 +478,13 @@ export default {
     width: 100%;
     //height: 48px;
     overflow-y: hidden;
-    /deep/.select-control-wrapper {
+    :deep(.select-control-wrapper) {
       border-radius: 50px;
       font-weight: 400;
       padding: 0px 12px;
     }
 
-    /deep/.tag {
+    :deep(.tag) {
       border-radius: 50px;
 
       .tag-inner-wrapper {
@@ -497,13 +497,13 @@ export default {
       height: 200px;
       .scroll-wrapper {
         padding: 4px;
-        /deep/.tag {
+        :deep(.tag) {
           //height: 42px;
         }
       }
     }
   }
-  /deep/.button-control {
+  :deep(.button-control) {
     padding: 6px 14px;
     font-weight: 400;
     font-family: chicagoflf;
@@ -523,27 +523,21 @@ export default {
     }
   }
   width: 100%;
-  /deep/.filter-option {
-    //min-width: 150px;
-  }
 }
 
 @media only screen and (max-width: 600px) {
   .inner-wrapper {
     .artist-profile-wrapper {
       width: 100%;
-
-      .artist-profile {
-      }
     }
   }
   .body--light {
     .inner-wrapper {
       .scroll-area {
-        /deep/.button-control {
+        :deep(.button-control) {
           //background: rgba(255, 255, 255, 0.9);
         }
-        /deep/.tag {
+        :deep(.tag) {
           background: rgba(255, 255, 255, 0.9);
         }
         /*
@@ -567,9 +561,6 @@ export default {
           }
         }
         */
-      }
-      /deep/.filter-option {
-        //min-width: 150px;
       }
     }
   }
@@ -597,9 +588,6 @@ export default {
         }
         */
     }
-    /deep/.filter-option {
-      //min-width: 150px;
-    }
   }
 
   .inner-wrapper {
@@ -619,7 +607,7 @@ export default {
         overflow-y: hidden;
         padding-left: 8px;
         padding-right: 24px;
-        /deep/.button-control {
+        :deep(.button-control) {
           //padding: 4px 12px;
           //border-radius: 48px !important;
         }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-btn
-      @click="getLocation"
+      @click="getFineLocation"
       no-caps
       class="button-control flex items-center"
       :loading="userLocationLoading"
