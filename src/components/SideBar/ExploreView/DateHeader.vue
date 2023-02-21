@@ -11,21 +11,21 @@
   </div>
 </template>
 <script>
-import moment from "moment-timezone";
+import moment from 'moment-timezone';
 
 export default {
   props: {
-    date: String
+    date: String,
   },
   computed: {
     dateString() {
       if (this.date) {
-        return "Events in " + moment(this.date).format("MMM YYYY");
+        return 'Events in ' + moment(this.date).format('MMM YYYY');
       } else {
-        return "";
+        return '';
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -59,9 +59,6 @@ export default {
   }
 }
 .body--dark {
-  .date-header {
-    background: black !important;
-  }
 }
 @media only screen and (max-width: 600px) {
   .date-header {

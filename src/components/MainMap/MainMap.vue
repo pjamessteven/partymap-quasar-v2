@@ -109,10 +109,14 @@ export default {
     };
   },
   created() {
-    this.debouncedLoadPoints = _.debounce(this.loadPoints, 500, {
-      leading: true,
-      trailing: true,
-    });
+    this.debouncedclearMarkersAndLoadPoints = _.debounce(
+      this.clearMarkersAndLoadPoints,
+      500,
+      {
+        leading: true,
+        trailing: true,
+      }
+    );
     this.debouncedInvalidateMapSize = _.debounce(this.invalidateMapSize, 500, {
       leading: false,
       trailing: true,
@@ -123,28 +127,55 @@ export default {
     windowHeight() {
       this.invalidateMapSize();
     },
-    selectedEventAttributesState() {
-      this.loadPoints();
+    controlDateRange: {
+      handler() {
+        this.clearMarkersAndLoadPoints();
+      },
+      deep: true,
     },
-
-    controlDateRange() {
-      this.loadPoints();
+    controlDuration: {
+      handler() {
+        this.clearMarkersAndLoadPoints();
+      },
+      deep: true,
     },
-    controlDurations() {
-      this.loadPoints();
+    controlSize: {
+      handler() {
+        this.clearMarkersAndLoadPoints();
+      },
+      deep: true,
     },
-    controlSizes() {
-      this.loadPoints();
+    controlFavorite: {
+      handler() {
+        this.clearMarkersAndLoadPoints();
+      },
     },
-    controlFavorites() {
-      this.loadPoints();
+    controlArtist: {
+      handler() {
+        this.clearMarkersAndLoadPoints();
+      },
+      deep: true,
     },
-
-    controlArtists() {
-      this.loadPoints();
+    controlTag: {
+      handler() {
+        this.clearMarkersAndLoadPoints();
+      },
+      deep: true,
     },
-    controlTags() {
-      this.loadPoints();
+    controlCountry: {
+      handler() {
+        this.clearMarkersAndLoadPoints();
+      },
+    },
+    controlRegion: {
+      handler() {
+        this.clearMarkersAndLoadPoints();
+      },
+    },
+    controlLocality: {
+      handler() {
+        this.clearMarkersAndLoadPoints();
+      },
     },
     userLocation: {
       handler: function (newval) {
@@ -156,10 +187,13 @@ export default {
         if (this.map) {
           if (to.name === 'EventPage') {
             // enter event page
-            if (this.map.hasLayer(this.mapMarkers)) {
+            if (this.mapMarkers && this.map.hasLayer(this.mapMarkers)) {
               this.map.removeLayer(this.mapMarkers);
             }
-            if (this.map.hasLayer(this.eventDateHoverLayer)) {
+            if (
+              this.eventDateHoverLayer &&
+              this.map.hasLayer(this.eventDateHoverLayer)
+            ) {
               this.eventDateHoverLayer.clearLayers();
               this.map.removeLayer(this.eventDateHoverLayer);
             }
@@ -176,11 +210,17 @@ export default {
               this.tileLayer.setOpacity(this.monochromeMapOpactiy);
             }
 
-            if (this.map.hasLayer(this.focusMarkerLayer)) {
+            if (
+              this.focusMarkerLayer &&
+              this.map.hasLayer(this.focusMarkerLayer)
+            ) {
               this.focusMarkerLayer.clearLayers();
               this.map.removeLayer(this.focusMarkerLayer);
             }
-            if (this.map.hasLayer(this.eventDateHoverLayer)) {
+            if (
+              this.eventDateHoverLayer &&
+              this.map.hasLayer(this.eventDateHoverLayer)
+            ) {
               this.eventDateHoverLayer.clearLayers();
               this.map.removeLayer(this.eventDateHoverLayer);
             }
@@ -198,7 +238,7 @@ export default {
             if (this.mapMarkers) {
               this.map.addLayer(this.mapMarkers);
             } else {
-              this.loadPoints();
+              this.clearMarkersAndLoadPoints();
             }
           }
         }
@@ -257,6 +297,12 @@ export default {
 
   methods: {
     ...mapActions(useQueryStore, ['loadPoints']),
+    clearMarkersAndLoadPoints() {
+      if (this.mapMarkers !== null) {
+        this.mapMarkers.clearLayers();
+      }
+      this.loadPoints();
+    },
     fitBoundsForExplorePage(coords) {
       // paddingTopLeft is so that the sidebar is considered
       var latlng = L.latLng(coords);
@@ -519,9 +565,6 @@ export default {
     initMarkers() {
       this.markersLoaded = false;
 
-      if (this.mapMarkers !== null) {
-        this.mapMarkers.clearLayers();
-      }
       if (this.points.length > 0) {
         // this.map.locate({setView: true, maxZoom: 17});
         // Leaflet.markercluster
@@ -601,6 +644,7 @@ export default {
       'mapStyle',
       'sidebarExpanded',
       'userLocation',
+      'sidebarPanel',
     ]),
     ...mapState(useQueryStore, [
       'controlDateRange',
@@ -608,6 +652,9 @@ export default {
       'controlSize',
       'controlArtist',
       'controlTag',
+      'controlCountry',
+      'controlRegion',
+      'controlLocality',
       'loadingPoints',
       'points',
     ]),
@@ -673,7 +720,7 @@ export default {
   mounted() {
     if (this.$route.name === 'Explore') {
       // don't load points if page load starts with eventpage
-      this.loadPoints();
+      this.clearMarkersAndLoadPoints();
     }
     this.initMap();
     this.windowHeight = window.innerHeight;

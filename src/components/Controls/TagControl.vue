@@ -4,7 +4,7 @@
       no-caps
       class="button-control flex items-center"
       :class="{
-        active: controlTag && controlTag.length > 0,
+        active: controlTag?.length > 0,
       }"
     >
       <div class="flex items-center row no-wrap">
@@ -19,7 +19,7 @@
               menuShowing = false;
             }
           "
-          v-if="controlTag && controlTag.length > 0"
+          v-if="controlTag?.length > 0"
         />
         <i class="las la-tags q-mr-sm q-ml-none q-pr-none" />
 
@@ -48,6 +48,8 @@
       </div>
 
       <q-menu
+        transition-show="jump-down"
+        transition-hide="jump-up"
         v-model="menuShowing"
         @before-show="onBeforeShowMenu"
         @before-hide="onBeforeHideMenu"
@@ -58,7 +60,6 @@
         <div class="flex column">
           <div class="sticky-input">
             <q-input
-              @input="loadInitialList()"
               debounce="500"
               clearable
               class="q-ml-md q-mr-md"
@@ -96,7 +97,6 @@
                   v-if="!query || query.length == 0"
                   >{{ $t('top_controls.top_tags_in_area') }}:</q-item-label
                 >
-
                 <div
                   class="flex column"
                   v-for="(tag, index) in tagOptions"
@@ -107,7 +107,9 @@
                     dense
                     clickable
                     @click="clickTag(tag)"
-                    :active="controlTag.findIndex((x) => x.tag == tag.tag) > -1"
+                    :active="
+                      controlTag?.findIndex((x) => x.tag === tag.tag) > -1
+                    "
                   >
                     <div
                       class="flex row grow justify-between items-center no-wrap"
@@ -118,17 +120,16 @@
                         >
                       </q-item-label>
                       <q-checkbox
-                        :value="
-                          controlTag.findIndex((x) => x.tag == tag.tag) > -1
+                        :model-value="
+                          controlTag?.findIndex((x) => x.tag === tag.tag) > -1
                         "
-                        @input="clickTag(tag)"
                       />
                     </div>
                   </q-item>
                 </div>
               </q-list>
               <div class="row justify-center q-my-md" v-if="tagOptionsHasNext">
-                <q-spinner-tail
+                <q-spinner-ios
                   :color="$q.dark.isActive ? 'white' : 'black'"
                   size="2em"
                 />
@@ -138,7 +139,7 @@
                 v-if="tagOptionsLoading && tagOptionsPage == 1"
                 style="height: 100%"
               >
-                <q-spinner-tail
+                <q-spinner-ios
                   :color="$q.dark.isActive ? 'white' : 'black'"
                   size="2em"
                 />
@@ -163,8 +164,13 @@ export default {
       query: null,
     };
   },
+  watch: {
+    query() {
+      this.loadInitialList();
+    },
+  },
   methods: {
-    ...mapActions(useQueryStore, ['loadTagOptions', 'loadMoreTagOptions']),
+    ...mapActions(useQueryStore, ['loadTagOptions']),
     onBeforeShowMenu() {
       // used to stop the ed list refrshing on mobile viewport size change
       //this.blockUpdates = true;
@@ -173,8 +179,11 @@ export default {
       }
     },
     loadInitialList() {
-      this.artistOptionsPage = 1;
-      this.loadArtistOptions(this.query);
+      this.tagOptionsPage = 1;
+      this.loadTagOptions(this.query);
+    },
+    loadMore() {
+      this.loadTagOptions(this.query);
     },
     onBeforeHideMenu() {
       setTimeout(() => {
@@ -183,7 +192,13 @@ export default {
     },
     clickTag(tag) {
       // mutation toggles tag
-      this.controlTag = [tag];
+      let index = this.controlTag?.findIndex((x) => x.tag === tag.tag);
+      if (index > -1) {
+        // tag exists, deselect
+        this.controlTag.splice(index, 1);
+      } else {
+        this.controlTag.push(tag);
+      }
     },
     onScrollMainContent(info) {
       if (info.verticalPercentage === 1) {
@@ -193,18 +208,13 @@ export default {
     },
   },
   computed: {
-    computed: {
-      ...mapWritableState(useMapStore, ['blockUpdates']),
-      ...mapWritableState(useQueryStore, [
-        'controlTag',
-        'tagOptionstagOptionsPage',
-      ]),
-      ...mapState(useQueryStore, [
-        'tagOptions',
-        'tagOptionsHasNext',
-        'tagOptionsLoading',
-      ]),
-    },
+    ...mapWritableState(useMapStore, ['blockUpdates']),
+    ...mapWritableState(useQueryStore, ['controlTag', 'tagOptionsPage']),
+    ...mapState(useQueryStore, [
+      'tagOptions',
+      'tagOptionsHasNext',
+      'tagOptionsLoading',
+    ]),
   },
 
   mounted() {

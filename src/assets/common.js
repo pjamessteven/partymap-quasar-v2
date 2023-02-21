@@ -2,6 +2,7 @@ import moment from 'moment-timezone';
 import { i18n } from 'src/boot/i18n.ts';
 
 const { t } = i18n.global;
+const locale = 'en';
 
 const weekdays = [
   t('weekdays.monday'),
@@ -138,7 +139,7 @@ export default {
     var ONE_HOUR = 3600000;
     var ONE_MINUTE = 600000;
 
-    moment.locale(this.$locale);
+    moment.locale(locale);
     t1 = moment.tz(t1, timezone).valueOf();
 
     if (t2) {
@@ -202,55 +203,55 @@ export default {
     }
   },
   localDateTimeLong: function (t, tz) {
-    moment.locale(this.$locale);
+    moment.locale(locale);
     var m = moment.tz(t, tz);
     return m.format('dddd') + ', ' + m.format('LLL');
   },
   localDateTimeShort: function (t, tz) {
-    moment.locale(this.$locale);
+    moment.locale(locale);
     var m = moment.tz(t, tz);
     return m.format('dddd') + ', ' + m.format('lll');
   },
   localDateWithWeekday: function (t, tz) {
-    moment.locale(this.$locale);
+    moment.locale(locale);
     var m = moment.tz(t, tz);
     return m.format('ddd') + ' ' + m.format('ll');
   },
   localDateLong: function (t, tz) {
-    moment.locale(this.$locale);
+    moment.locale(locale);
     var m = moment.tz(t, tz);
     return m.format('dddd') + ', ' + moment.tz(t, tz).format('LL');
   },
   localDate: function (t, tz) {
-    moment.locale(this.$locale);
+    moment.locale(locale);
     return moment.tz(t, tz).format('LL');
   },
   localDateISOString: function (t, tz) {
-    moment.locale(this.$locale);
+    moment.locale(locale);
     return moment.tz(t, tz).toISOString();
   },
   localDay: function (t, tz) {
-    moment.locale(this.$locale);
+    moment.locale(locale);
     return moment.tz(t, tz).format('dddd');
   },
   localTimeCompact: function (t, tz) {
-    moment.locale(this.$locale);
+    moment.locale(locale);
     return moment.tz(t, tz).format('LT');
   },
   dateUTCToLocal: function (t) {
-    moment.locale(this.$locale);
+    moment.locale(locale);
     return moment.utc(t).local().format('MMMM Do YYYY');
   },
   dateTimeUTCToLocal: function (t) {
-    moment.locale(this.$locale);
+    moment.locale(locale);
     return moment.utc(t).local().format('MMMM Do YYYY, h:mm a');
   },
   dateTimeUTCToLocalCompact: function (t) {
-    moment.locale(this.$locale);
+    moment.locale(locale);
     return moment.utc(t).local().format('MMMM Do, h:mm a');
   },
   timeZoneAbbreviention: function (t, tz) {
-    moment.locale(this.$locale);
+    moment.locale(locale);
     return moment.tz.zone(tz).abbr(moment(t).valueOf());
   },
   simplifiedRecurringPattern: function (rrule) {

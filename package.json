@@ -7,13 +7,18 @@
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.ts,.vue ./",
+    "lint-fix": "eslint --ext .js,.ts,.vue ./ --fix",
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
+    "@egjs/flicking-plugins": "^4.7.0",
+    "@egjs/vue3-flicking": "^4.10.6",
+    "@hcaptcha/vue3-hcaptcha": "^1.2.1",
     "@quasar/extras": "^1.15.10",
     "@types/leaflet": "^1.9.0",
     "axios": "^0.21.1",
+    "hcaptcha": "^0.1.1",
     "leaflet": "^1.9.3",
     "leaflet-geosearch": "^3.7.0",
     "leaflet.markercluster": "^1.5.3",

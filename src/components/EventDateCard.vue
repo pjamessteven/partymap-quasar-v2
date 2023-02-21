@@ -320,10 +320,10 @@ export default {
       }
     },
     showEventPage() {
-      this.$store.commit('main/setEventPageFocus', {
+      this.focusMarker = {
         lat: this.event.location.lat,
         lng: this.event.location.lng,
-      });
+      };
     },
   },
   computed: {
@@ -574,7 +574,7 @@ export default {
           transform: scale(1.2);
           display: flex;
           flex-grow: 1;
-          justify-content: start;
+          justify-content: flex-start;
           align-items: flex-start;
           img {
             width: 100%;

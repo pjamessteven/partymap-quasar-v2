@@ -1,0 +1,1222 @@
+<template>
+  <div class="event-page">
+    <!--<div class="event-page-overlay" /-->
+    <div
+      class="flex row no-wrap event-page-content"
+      :style="computedSidebarPadding"
+    >
+      <div
+        class="flex history-container col-4 col-xs-12 col-sm-6 col-md-5 col-lg-4 col-xl-4"
+        v-if="showingHistory"
+      >
+        <!--
+        <HistoryComponent @close="showingHistory = false" />
+        -->
+      </div>
+      <div class="scroll-area flex grow" @scroll="onScrollMainContent">
+        <div class="row flex grow main-row no-wrap justify-center">
+          <div
+            class="clickable-background"
+            @click="$router.push({ name: 'Explore' })"
+          />
+
+          <q-card
+            class="content-card flex column no-wrap"
+            :class="
+              showingHistory
+                ? 'col-12 no-margin-top'
+                : 'col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12'
+            "
+          >
+            <div
+              class="mobile-dismiss-list q-pt-md flex column"
+              v-if="$q.screen.lt.sm"
+              @click="handleSwipe"
+              v-touch-swipe="handleSwipe"
+            >
+              <div class="flex items-center justify-center">
+                <div class="swipe-nav-bar"></div>
+              </div>
+            </div>
+
+            <div class="flex column">
+              <div class="header flex column">
+                <q-inner-loading :showing="loading">
+                  <q-spinner-ios :color="'white'" size="2em" />
+                </q-inner-loading>
+
+                <FeaturedMediaBackground
+                  v-if="
+                    event && event.media_items && event.media_items.length > 0
+                  "
+                  class="featured-media"
+                  :editing="editing"
+                  @openGallery="showingGalleryDialog = true"
+                />
+                <div class="header-content grow row">
+                  <div
+                    class="flex column justify-start items-stretch col-6 col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"
+                    :class="{
+                      'q-pa-xl': $q.screen.gt.xs,
+                      'q-pa-lg': $q.screen.lt.md && $q.screen.gt.xs,
+                      'q-pl-md q-pb-md': $q.screen.lt.sm,
+                    }"
+                  >
+                    <div
+                      class="flex row justify-between items-start no-wrap"
+                      style="position: relative"
+                    >
+                      <div
+                        class="o-090 text-h4 flex items-baseline flex chicago no-wrap"
+                        :class="{
+                          'q-pt-lg q-pr-xl q-mr-xl': $q.screen.lt.sm,
+                        }"
+                        style="text-transform: "
+                        :style="
+                          $q.screen.lt.sm
+                            ? 'font-size: x-large; line-height: unset;'
+                            : ''
+                        "
+                      >
+                        <div>{{ computedName }}</div>
+                        <!--
+                        <q-icon
+                          class="q-ml-md"
+                          name="mdi-check-outline"
+                          v-if="event && event.host"
+                        >
+                          <q-tooltip
+                            :content-class="
+                              $q.dark.isActive
+                                ? 'bg-black text-white'
+                                : 'bg-white text-black'
+                            "
+                            :offset="[10, 10]"
+                            content-style="font-size: 16px"
+                          >
+                            {{ $t('event.official_page') }}
+                          </q-tooltip></q-icon
+                        >
+                      --></div>
+                      <!--
+                      <q-icon
+                        v-touch-swipe="handleSwipe"
+                        v-if="$q.screen.lt.sm"
+                        @click="handleSwipe"
+                        flat
+                        name="mdi-chevron-down"
+                        class="mobile-hide-icon absolute"
+                        :class="{
+                          'q-pt-lg q-pb-xl q-px-lg': $q.screen.lt.sm,
+                        }"
+                        size="2em"
+                      />
+                      -->
+                    </div>
+
+                    <NextEventDateSummary
+                      :class="{
+                        'o-050': editing,
+                        'q-mt-md': $q.screen.gt.xs,
+                        'q-mt-sm': $q.screen.lt.sm,
+                      }"
+                      class=""
+                      v-if="event && selectedEventDate"
+                      :key="selectedEventDate.id"
+                      :ed="selectedEventDate"
+                    />
+
+                    <FeaturedMediaComponent
+                      v-if="event?.media_items?.length > 0 && $q.screen.lt.sm"
+                      :editing="editing"
+                      class="q-mt-lg"
+                      :items="!!event?.media_items ? event.media_items : null"
+                    />
+
+                    <div
+                      v-if="
+                        (computedTicketUrl || computedExternalUrl) &&
+                        event?.host &&
+                        false
+                      "
+                      class="event-buttons flex row justify-start items-center wrap"
+                      :class="$q.screen.gt.sm ? 'q-mt-lg' : 'q-mt-md'"
+                    >
+                      <a
+                        :href="computedExternalUrl"
+                        target="_blank"
+                        v-if="computedExternalUrl && !editing"
+                        class="q-mr-sm q-mt-sm"
+                      >
+                        <q-btn
+                          color="grey-3"
+                          text-color="black"
+                          :label="$t('event.go_to_website')"
+                          size="md"
+                          class="border-radius"
+                          icon="las la-external-link-alt"
+                        />
+                      </a>
+                      <a
+                        :href="computedTicketUrl"
+                        target="_blank"
+                        v-if="computedTicketUrl && !editing"
+                        class="q-mr-sm q-mt-sm"
+                      >
+                        <q-btn
+                          :disabled="editing"
+                          color="grey-3"
+                          text-color="black"
+                          :label="$t('event.get_tickets')"
+                          size="md"
+                          class="border-radius"
+                          icon="las la-ticket-alt"
+                        />
+                      </a>
+                    </div>
+
+                    <div
+                      class="flex grow justify-start items-start"
+                      v-if="!!event"
+                    >
+                      <!--
+                          <DescriptionComponent
+                            :editing="editing"
+                            :class="
+                              $q.screen.gt.sm ? 'q-mt-md' : 'q-mt-lg q-mr-lg'
+                            "
+                          />
+                        -->
+                    </div>
+                    <div
+                      class="flex row justify-between items-end no-wrap tags-wrapper"
+                      :class="$q.screen.gt.sm ? 'q-pt-lg' : 'q-pt-md'"
+                      v-if="event?.event_tags"
+                    >
+                      <TagsComponent :editing="editing" />
+                    </div>
+                  </div>
+                  <div
+                    class="flex column no-wrap justify-center q-py-xl col-6 col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"
+                    v-if="$q.screen.gt.xs"
+                  >
+                    <FeaturedMediaComponent
+                      v-if="!!event"
+                      :editing="editing"
+                      :items="event?.media_items"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <EventDates v-if="!!event" />
+
+              <!--
+            <div class="">
+              <q-btn
+                no-caps
+                color="orange"
+                class="add-event-button q-ma-xl"
+                @click="$router.push({ name: 'AddEvent' })"
+              >
+                <div class="flex row items-center">
+                  <div class="o-080 ">Something not quite right?&nbsp;</div>
+                  <div class="q-mr-sm">
+                    Improve this page!
+                  </div>
+                  <q-icon name="mdi-hand-heart" size="1rem" />
+                </div>
+              </q-btn>
+            </div>
+            --></div>
+            <div
+              v-if="!!event"
+              class="bottom-section flex"
+              :class="{
+                'column reverse q-gutter-lg justify-center items-center no-wrap q-pa-md q-pb-xl q-mt-md':
+                  $q.screen.lt.sm,
+                'row justify-between items-center': $q.screen.gt.xs,
+                'q-pa-xl': $q.screen.gt.sm,
+                'q-pa-md': $q.screen.gt.xs && $q.screen.lt.md,
+                'q-mt-xl': $q.screen.gt.xs,
+              }"
+            >
+              <div
+                class="flex column"
+                :class="$q.screen.gt.xs ? 'items-start' : 'items-center'"
+              >
+                <div class="t4">{{ event.page_views }} page views</div>
+                <div class="t4 flex column items-start no-wrap q-mt-xs">
+                  <div v-if="event?.last_transaction?.user?.username">
+                    <span
+                      class="link-hover underline"
+                      @click="showingHistory = !showingHistory"
+                      >{{ $t('event.last_updated') }}</span
+                    >
+
+                    <span>
+                      {{ timeAgo(event.last_transaction.issued_at + 'Z') }}
+                    </span>
+                    <!--
+                    <router-link
+                      class="link-hover underline"
+                      :to="{
+                        name: 'UserPage',
+                        params: { id: event.last_transaction.user.username }
+                      }"
+                      >{{ event.last_transaction.user.username }}</router-link
+                    >
+                  --></div>
+
+                  <div v-else-if="event?.transaction?.user?.username">
+                    <!-- shown when displaying EventVersion -->
+                    <span
+                      class="link-hover underline"
+                      @click="showingHistory = !showingHistory"
+                      >{{ $t('event.last_updated') }}</span
+                    >
+                    {{ timeAgo(event.transaction.issued_at + 'Z') }}
+                    {{ $t('event.by') }}
+                    <router-link
+                      class="link-hover underline"
+                      :to="{
+                        name: 'UserPage',
+                        params: { id: event.transaction.user.username },
+                      }"
+                    >
+                      {{ event.transaction.user.username }}
+                    </router-link>
+                  </div>
+                </div>
+              </div>
+              <div class="flex event-buttons items-center">
+                <q-btn-group>
+                  <!-- show share button -->
+                  <q-btn
+                    :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
+                    :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
+                    :label="$t('event.share')"
+                    no-caps
+                    icon="mdi-share"
+                    style="padding-left: 4px"
+                    :style="
+                      $q.dark.isActive
+                        ? 'border-right: 1px solid rgba(255,255,255,0.05)'
+                        : 'border-right: 1px solid rgba(0,0,0,0.05)'
+                    "
+                    @click="share"
+                    v-if="!editing"
+                  />
+                  <!-- show favorite button -->
+                  <q-btn
+                    v-if="!editing"
+                    :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
+                    :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
+                    :label="
+                      event.is_favorited
+                        ? $t('event.unsave_event')
+                        : $t('event.save_event')
+                    "
+                    no-caps
+                    :icon="
+                      event.is_favorited ? 'mdi-heart' : 'mdi-heart-outline'
+                    "
+                    style="padding-left: 4px"
+                    :style="
+                      $q.dark.isActive
+                        ? 'border-right: 1px solid rgba(255,255,255,0.05)'
+                        : 'border-right: 1px solid rgba(0,0,0,0.05)'
+                    "
+                    @click="toggleFavorite"
+                  />
+                  <!-- show EDIT BUTTON if user is host or user is staff and public event -->
+                  <q-btn
+                    :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
+                    :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
+                    :label="$t('event.edit_event')"
+                    no-caps
+                    :icon="
+                      $q.screen.gt.xs ? 'mdi-square-edit-outline' : undefined
+                    "
+                    style="padding-left: 4px"
+                    :style="
+                      $q.dark.isActive
+                        ? 'border-right: 1px solid rgba(255,255,255,0.05)'
+                        : 'border-right: 1px solid rgba(0,0,0,0.05)'
+                    "
+                    :size="$q.screen.gt.xs ? 'md' : 'md'"
+                    @click="editing = !editing"
+                    v-if="currentUserIsHost && !editing"
+                  />
+                  <!-- CORRESPONDING 'DONE' BUTTON -->
+                  <q-btn
+                    color="primary"
+                    text-color="white"
+                    :label="$t('event.done')"
+                    no-caps
+                    :icon="$q.screen.gt.xs ? 'mdi-check' : undefined"
+                    style="padding-left: 4px"
+                    :style="
+                      $q.dark.isActive
+                        ? 'border-right: 1px solid rgba(255,255,255,0.05)'
+                        : 'border-right: 1px solid rgba(0,0,0,0.05)'
+                    "
+                    :size="$q.screen.gt.xs ? 'md' : 'md'"
+                    @click="editing = !editing"
+                    v-else-if="
+                      (currentUserIsHost ||
+                        (currentUserIsStaff && event.host == null)) &&
+                      editing
+                    "
+                  />
+
+                  <q-btn
+                    :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
+                    :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
+                    round
+                    split
+                    icon="mdi-dots-vertical"
+                    style="padding-right: 4px"
+                    :size="$q.screen.gt.xs ? 'md' : 'md'"
+                  >
+                    <q-tooltip
+                      :content-class="
+                        $q.dark.isActive
+                          ? 'bg-black text-white'
+                          : 'bg-white text-black'
+                      "
+                      :offset="[10, 10]"
+                      content-style="font-size: 16px"
+                    >
+                      {{ $t('sidebar.more') }}
+                    </q-tooltip>
+                    <q-menu
+                      transition-show="jump-down"
+                      transition-hide="jump-up"
+                      anchor="bottom right"
+                      self="top right"
+                    >
+                      <!-- SHOW REPORT if not host -->
+                      <q-item
+                        v-ripple
+                        v-if="!currentUserIsHost"
+                        v-on:click="showingReportDialog = true"
+                        clickable
+                      >
+                        <q-item-section avatar>
+                          <q-icon name="mdi-alert-circle-outline" />
+                        </q-item-section>
+                        <q-item-section>
+                          <q-item-label>{{
+                            $t('report.report_event')
+                          }}</q-item-label>
+                        </q-item-section>
+                      </q-item>
+                      <!-- SHOW CLAIM if there is no event host -->
+                      <q-item
+                        v-ripple
+                        v-if="!currentUserIsHost && !event.host"
+                        @click="
+                          currentUser
+                            ? (showingClaimDialog = true)
+                            : $router.push({ name: 'Login' })
+                        "
+                        clickable
+                      >
+                        <q-item-section avatar>
+                          <q-icon name="mdi-check-decagram-outline" />
+                        </q-item-section>
+                        <q-item-section>
+                          <q-item-label>{{
+                            $t('report.are_you_host')
+                          }}</q-item-label>
+                        </q-item-section>
+                      </q-item>
+
+                      <!-- SHOW SUGGESTIONS if there is no event host -->
+                      <q-item
+                        v-ripple
+                        v-if="!currentUserIsHost && event.host == null"
+                        @click="editing = !editing"
+                        clickable
+                      >
+                        <q-item-section avatar>
+                          <q-icon name="las la-hand-peace" />
+                        </q-item-section>
+                        <q-item-section>
+                          <q-item-label>{{
+                            $t('suggestions.improve_this_page')
+                          }}</q-item-label>
+                        </q-item-section>
+                      </q-item>
+                      <!-- SHOW EDIT if currentUserIsStaff -->
+                      <q-item
+                        v-if="currentUserIsStaff"
+                        v-ripple
+                        v-on:click="editing = !editing"
+                        clickable
+                      >
+                        <q-item-section avatar>
+                          <q-icon name="las la-edit" />
+                        </q-item-section>
+                        <q-item-section>
+                          <q-item-label
+                            >{{
+                              $t('event.edit_event')
+                            }}
+                            &nbsp;(admin)</q-item-label
+                          >
+                        </q-item-section>
+                      </q-item>
+                      <q-item
+                        v-if="currentUserIsHost || currentUserIsStaff"
+                        v-ripple
+                        v-on:click="deleteEvent()"
+                        clickable
+                      >
+                        <q-item-section avatar>
+                          <q-icon name="las la-trash" />
+                        </q-item-section>
+                        <q-item-section>
+                          <q-item-label
+                            >{{ $t('event.delete_event') }}
+                            <span
+                              v-if="currentUserIsStaff && !currentUserIsHost"
+                              >(admin)</span
+                            ></q-item-label
+                          >
+                        </q-item-section>
+                      </q-item>
+                      <q-item
+                        v-if="currentUserIsStaff"
+                        v-ripple
+                        v-on:click="showingHistory = true"
+                        clickable
+                      >
+                        <q-item-section avatar>
+                          <q-icon name="las la-history" />
+                        </q-item-section>
+                        <q-item-section>
+                          <q-item-label>
+                            Suggestions and Activity
+                          </q-item-label>
+                        </q-item-section>
+                      </q-item>
+                    </q-menu>
+                  </q-btn>
+                </q-btn-group>
+              </div>
+            </div>
+          </q-card>
+        </div>
+      </div>
+
+      <!-- hidden element for copying url
+      <input :value="computedUrl" ref="copyUrlInput" style="display: none" />
+      <q-dialog v-model="showingReportDialog">
+        <ReportDialog @closeDialog="showingReportDialog = false" />
+      </q-dialog>
+      <q-dialog v-model="showingClaimDialog">
+        <ReportDialog
+          @closeDialog="showingClaimDialog = false"
+          :mode="'claim'"
+        />
+      </q-dialog>
+      -->
+    </div>
+  </div>
+</template>
+
+<script>
+import { deleteEventRequest } from 'src/api';
+
+import { useMainStore } from 'src/stores/main';
+import { useAuthStore } from 'src/stores/auth';
+import { useMapStore } from 'src/stores/map';
+import { useEventStore } from 'src/stores/event';
+
+import { mapActions, mapState, mapWritableState } from 'pinia';
+
+import _ from 'lodash';
+import common from 'assets/common';
+//import DescriptionComponent from 'components/EventPage/DescriptionComponent.vue';
+import EventDates from 'components/EventPage/EventDates/EventDates.vue';
+import FeaturedMediaBackground from 'components/EventPage/Gallery/FeaturedMediaBackground.vue';
+import FeaturedMediaComponent from 'components/EventPage/Gallery/FeaturedMediaComponent.vue';
+// import HistoryComponent from 'components/EventPage/Activity/HistoryComponent.vue';
+import NextEventDateSummary from 'components/EventPage/EventDates/NextEventDateSummary.vue';
+// import ReportDialog from './ReportDialog.vue';
+import TagsComponent from 'components/EventPage/Tags/TagsComponent.vue';
+
+export default {
+  name: 'EventPage',
+  meta() {
+    return {
+      // this accesses the "title" property in your Vue "data";
+      // whenever "title" prop changes, your meta will automatically update
+      title: this.computedName + ' | PartyMap',
+      meta: {
+        description: {
+          name: 'description',
+          content:
+            'Find out about ' +
+            this.computedName +
+            'and other similar events on PartyMap. ' +
+            this.description,
+        },
+        keywords: {
+          name: 'keywords',
+          content:
+            'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list',
+        },
+      },
+    };
+  },
+  components: {
+    TagsComponent,
+    FeaturedMediaComponent,
+    FeaturedMediaBackground,
+    //DescriptionComponent,
+    NextEventDateSummary,
+    //ReportDialog,
+    //HistoryComponent,
+    EventDates,
+  },
+  props: {
+    id: {
+      default: null,
+    },
+    eventDateId: {
+      default: null,
+    },
+    name: {
+      default: null,
+    },
+  },
+  data() {
+    return {
+      scrollPercentage: 0,
+      showingReportDialog: false,
+      showingClaimDialog: false,
+      loading: false,
+      windowHeight: window.innerHeight,
+      epSectionTopPosition: {
+        top: null,
+        bottom: null,
+      },
+      epSectionMiddlePosition: {
+        top: 0,
+        bottom: null,
+      },
+      showingHistory: false,
+      // showingSuggestionsDialog: false
+    };
+  },
+  methods: {
+    ...mapActions(useEventStore, ['loadEvent', 'toggleFavorite']),
+    toggleFavorite() {
+      if (this.currentUser) {
+        this.toggleFavorite();
+      } else {
+        this.$router.push({ name: 'Login' });
+      }
+    },
+    deleteEvent() {
+      this.$q
+        .dialog({
+          title: this.$t('event_dates.delete_event'),
+          message: this.$t('event_dates.delete_event_confirm'),
+          cancel: true,
+          persistent: false,
+        })
+        .onOk(() => {
+          deleteEventRequest(this.event.id).then(() => {
+            this.$router.push({ name: 'Explore' });
+          });
+        });
+    },
+    handleSwipe() {
+      this.$router.go(-1);
+    },
+    onScrollMainContent(info) {
+      // window height
+      /*
+      var height = window.innerHeight / 3 - 120 // this is the height of the gap between menu bar and top of event card
+      var scrollPercentage = info.target.scrollTop / height
+      if (scrollPercentage >= 1) {
+        this.menuBarOpacity = 0
+      } else {
+        this.menuBarOpacity = 1
+      }
+      // this.menuBarOpacity = scrollPercentage * -1 + 1
+      */
+      var height = window.innerHeight / 3 - 120; // this is the height of the gap between menu bar and top of event card
+      this.scrollPercentage = info.target.scrollTop / height;
+      if (this.$q.screen.lt.lg) {
+        // menubar should always show on large screens
+        if (this.$q.screen.gt.xs) {
+          this.menuBarOpacity = (info.target.scrollTop / 100) * -1 + 1;
+        } else {
+          this.menuBarOpacity = ((info.target.scrollTop * 1.5) / 100) * -1 + 1;
+        }
+      }
+    },
+    share() {
+      if (navigator.share) {
+        navigator.share({
+          title: this.event.name,
+          text: 'Check out ' + this.event.name + ' on PartyMap',
+          url: this.computedUrl,
+        });
+      } else {
+        // copy url to clipboard
+        var copyText = this.$refs.copyUrlInput;
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+        /* Copy the text inside the text field */
+        document.execCommand('copy');
+
+        /* Alert the copied text */
+        alert('Copied the text: ' + copyText.value);
+      }
+    },
+    async load() {
+      if (this.event && this.event.id !== this.id) {
+        this.event = null;
+      }
+
+      try {
+        const response = await this.loadEvent(this.id);
+
+        this.editing = this.$route.params.editing;
+        this.loading = false;
+        // add name to url if not already there
+        var queryString = '?name=' + response.data.name.replace(/ /g, '_');
+        if (window.location.pathname.indexOf(queryString) === -1) {
+          this.$router.replace({
+            path: this.$router.currentRoute.path,
+            query: { name: response.data.name.replace(/ /g, '_') },
+          });
+        }
+
+        // are we navigating to a specific event date?
+        var eventDateId;
+        if (this.$route.params.eventDateId) {
+          eventDateId = this.$route.params.eventDateId;
+        } else if (this.$route.query.eventDateId) {
+          eventDateId = this.$route.query.eventDateId;
+        } else {
+          eventDateId = null;
+        }
+        if (
+          (response.data.next_date && !eventDateId) ||
+          (response.data.next_date &&
+            response.data.next_date.id === eventDateId)
+        ) {
+          if (!this.focusMarker) {
+            // only do this if focusedlatlng not already set before mounting this component
+            // (by eventdatecard)
+            this.focusMarker = {
+              lat: response.data.next_date.location.lat,
+              lng: response.data.next_date.location.lng,
+            };
+          }
+        } else if (
+          eventDateId &&
+          (!response.data.next_date ||
+            response.data.next_date.id !== eventDateId)
+        ) {
+          // if navigating to specific date, load it
+          this.loadEventDate(eventDateId);
+
+          const eventDateResponse = await this.loadEventDate(id);
+
+          if (!this.focusMarker) {
+            // only do this if focusedlatlng not already set before mounting this component
+            // (by eventdatecard)
+            this.focusMarker = {
+              lat: eventDateResponse.data.location.lat,
+              lng: eventDateResponse.data.location.lng,
+            };
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+
+      // for prerender.io
+      setTimeout(() => {
+        window.prerenderReady = true;
+      }, 300);
+    },
+  },
+  watch: {
+    id: function () {
+      this.loadEvent();
+    },
+  },
+  computed: {
+    ...mapState(useMainStore, ['sidebarExpanded']),
+    ...mapWritableState(useMainStore, ['menubarOpacity']),
+    ...mapWritableState(useMapStore, ['focusMarker']),
+    ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
+    ...mapState(useEventStore, ['loadingEvent', 'selectedEventDate']),
+    ...mapWritableState(useEventStore, ['event', 'editing']),
+    computedOverlayOpacity() {
+      if (this.$q.screen.gt.xs) {
+        return `opacity: calc(0.2 + ${this.scrollPercentage * 2})`;
+      } else {
+        return 'opacity: 0';
+      }
+    },
+    computedSidebarPadding() {
+      if (this.$q.screen.lt.lg) {
+        return 'padding-left: 0px';
+      } else if (this.sidebarExpanded) {
+        return 'padding-left: 736px';
+      } else {
+        return 'padding-left: 370px';
+      }
+    },
+    pageViewChars() {
+      if (this.event.page_views) {
+        var chars = this.event.page_views.toString().split('');
+        return chars;
+      } else {
+        return [];
+      }
+    },
+    description() {
+      if (this.event) {
+        return this.event.description;
+      } else {
+        return '';
+      }
+    },
+    computedUrl() {
+      if (this.event) {
+        return (
+          'https://partymap.com/event/' +
+          this.event.id +
+          '?' +
+          this.$route.query.name
+        );
+      } else {
+        return '';
+      }
+    },
+    /* this funciton will fade as you scroll
+    getReverseOpacity () {
+
+    box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.2)
+    box-shadow: 0 1px 5px rgba(0, 0, 0, ${0.2 *
+      opacity}), 0 2px 2px rgba(0, 0, 0,${0.14 *
+      opacity}), 0 3px 1px -2px rgba(0, 0, 0, ${0.12 * opacity});
+
+      var scroll
+      if (this.mainContentScrollPosition < 200) {
+        scroll = 0
+      } else {
+        scroll = this.mainContentScrollPosition - 200
+      }
+      return `
+      opacity: ${opacity}`
+    },
+    */
+
+    currentUserIsHost() {
+      if (
+        this.event?.host?.username &&
+        this.currentUser?.username === this.event.host.username
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    computedName() {
+      if (this.event?.name) {
+        return this.event.name;
+      } else if (this.$route.query.name) {
+        return this.$route.query.name.replace(/_/g, ' ');
+      } else {
+        return null;
+      }
+    },
+    computedExternalUrl() {
+      if (this.event?.event_dates?.[0]?.url) {
+        // ensure that there is a protocol prefix
+        if (
+          this.event.event_dates[0].url.indexOf('http://') < 0 &&
+          this.event.event_dates[0].url.indexOf('https://') < 0
+        ) {
+          return '//' + this.event.event_dates[0].url;
+        } else return this.event.event_dates[0].url;
+      } else {
+        return null;
+      }
+    },
+    computedTicketUrl() {
+      const ticketUrl = this.event?.event_dates?.[0]?.ticket_url;
+      if (ticketUrl) {
+        // ensure that there is a protocol prefix
+        if (
+          ticketUrl.indexOf('http://') < 0 &&
+          ticketUrl.indexOf('https://') < 0
+        ) {
+          return '//' + ticketUrl;
+        } else return ticketUrl;
+      } else {
+        return null;
+      }
+    },
+  },
+  beforeMount() {
+    window.prerenderReady = false;
+  },
+  mounted() {
+    this.menuBarOpacity = 1;
+    this.editing = this.$route.params.editing;
+    // clear previous event
+    this.load();
+  },
+  created() {
+    this.timeAgo = common.timeAgo;
+    this.throttledOnScrollMainContent = _.throttle(
+      this.onScrollMainContent,
+      50,
+      {
+        leading: false,
+        trailing: true,
+      }
+    );
+  },
+  beforeUnmount() {
+    this.mapOverlay = false;
+    setTimeout(() => {
+      this.focusMarker = null;
+    }, 1500);
+    this.menuBarOpacity = 1;
+  },
+};
+</script>
+
+<style lang="scss">
+.q-dialog {
+  @media only screen and (max-width: 600px) {
+    min-width: unset;
+  }
+}
+</style>
+<style lang="scss" scoped>
+a {
+  color: unset;
+  text-decoration: none;
+}
+
+.body--dark {
+  .event-page {
+    .history-container {
+      background: black;
+    }
+    .edit-bar {
+      background: $bi-2;
+    }
+
+    .scroll-area {
+      .content-card {
+        box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
+          rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
+          rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
+        .bottom-section {
+          background: $bi-3;
+          border-top: 1px solid rgba(255, 255, 255, 0.05);
+          border-bottom: none;
+
+          .page-views {
+            border-radius: 4px;
+            .page-view-char {
+              border-color: $bi-4 !important;
+              background: linear-gradient($bi-1, $bi-4, $bi-1) !important;
+              color: $ti-2 !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .title-section {
+    border-color: $bi-3;
+  }
+  .community-icon {
+    color: white;
+  }
+
+  .event-title {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .event-page {
+    :deep(.q-btn) {
+      background: $bi-3;
+    }
+    .scroll-area {
+      .edit-event-dates {
+        background: $bi-2;
+      }
+      .content-card {
+        overflow: hidden;
+
+        .header {
+          background: $bi-2 !important;
+          :deep(.tag) {
+            border-color: rgba(255, 255, 255, 0.1) !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+.body--light {
+  .event-page {
+    background: transparent;
+
+    .history-container {
+      background: $b-1;
+    }
+    .scroll-area {
+      .main-row {
+        .content-card {
+          background: $b-1;
+          box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
+            rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
+            rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
+          .bottom-section {
+            background: $b-2;
+            border-top: 1px solid rgba(0, 0, 0, 0.03);
+
+            .page-views {
+              .page-view-char {
+                background: linear-gradient(black, grey, black);
+                border-color: grey !important;
+                color: white;
+              }
+            }
+          }
+
+          .event-dates-component {
+            //border: 1px solid rgba(0, 0, 0, 0.1);
+          }
+          .header {
+            background: $bi-4 !important;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            color: white;
+
+            .header-content {
+              color: white;
+
+              :deep(.tag) {
+                border-color: rgba(255, 255, 255, 0.1) !important;
+              }
+            }
+          }
+        }
+      }
+    }
+    .title-section {
+      border-color: $b-3;
+    }
+
+    .t2 {
+      color: $t-2;
+    }
+  }
+}
+
+.event-page {
+  .event-page-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+  }
+  .event-page-content {
+    width: 100%;
+    .history-container {
+      z-index: 1;
+      position: sticky;
+      top: 0px;
+      left: 0px;
+      max-height: calc(100vh - 64px);
+      height: 100vh;
+      overflow-y: scroll;
+      box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.4);
+    }
+    .scroll-area {
+      height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+
+      .main-row {
+        position: relative;
+
+        .content-card {
+          margin-top: Max(calc((100vh - 66vh) - 64px), 0px);
+          max-width: 960px;
+          border: none !important;
+          min-height: 100vh;
+
+          overflow: hidden;
+          border-top-left-radius: 0px !important;
+          border-top-right-radius: 0px !important;
+          pointer-events: all;
+          padding-bottom: 0px;
+          &.no-margin-top {
+            margin-top: 0px;
+          }
+
+          .header {
+            position: relative;
+            width: 100%;
+            display: flex;
+            transition: flex-grow 1s;
+            max-height: min-content;
+            background: #fafafa;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            min-height: Min(66vh, 440px);
+            .q-inner-loading {
+              background: none;
+            }
+            :deep(.editing-outline) {
+              border-color: white !important;
+            }
+            .header-content {
+              position: relative;
+              width: 100%;
+              height: 100%;
+              // color: white;
+              z-index: 2;
+              .mobile-hide-icon {
+                position: absolute;
+                right: 0px;
+              }
+              .tags-wrapper {
+              }
+            }
+            .featured-media {
+              position: absolute;
+              top: 0px;
+              left: 0px;
+              z-index: 0;
+              width: 100%;
+              height: 100%;
+            }
+            :deep(.tag) {
+              background: transparent !important;
+              border: 1px solid rgba(255, 255, 255, 0.1) !important;
+
+              .tag-inner-wrapper {
+                background: transparent;
+                //border-color: rgba(0, 0, 0, 0.8) !important;
+              }
+            }
+          }
+
+          .bottom-section {
+            position: relative;
+            .page-views {
+              .page-view-char {
+                display: inline-block;
+                padding: 4px;
+                font-weight: bold;
+                border: 1px solid grey;
+                &:not(:first-child) {
+                  border-left: none;
+                }
+              }
+            }
+            .event-buttons {
+              position: relative;
+
+              .q-btn-group {
+                box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+                  rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+              }
+            }
+          }
+        }
+        .clickable-background {
+          position: absolute;
+          height: 100%;
+          width: 100vw;
+          top: 0;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+.mobile-dismiss-list {
+  position: absolute;
+  height: 34px;
+  width: 100%;
+  z-index: 4000;
+  pointer-events: auto;
+  .swipe-nav-bar {
+    background: rgba(255, 255, 255, 0.2) !important;
+  }
+}
+
+.title-section {
+  position: absolute;
+  margin-top: 150px;
+}
+
+.event-page {
+  height: 100%;
+  display: flex;
+}
+@media only screen and (max-width: 600px) {
+  .body--dark {
+    .event-page {
+      .scroll-area {
+        .content-card {
+          border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+      }
+    }
+  }
+  .event-page {
+    .scroll-area {
+      height: 100%;
+      .featured-media {
+        overflow: hidden;
+      }
+
+      .main-row {
+        .content-card {
+          margin-top: Max(calc((100vh - 66vh) - 64px), 0px);
+          border: none;
+          min-height: max-content;
+          max-width: 100vw;
+
+          overflow: hidden;
+
+          .event-dates-component {
+            border: none;
+          }
+          .header {
+            min-height: 550px;
+          }
+        }
+      }
+    }
+  }
+}
+</style>

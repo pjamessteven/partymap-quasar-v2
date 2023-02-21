@@ -33,7 +33,7 @@
           <q-spinner-ios
             :thickness="2"
             :color="$q.dark.isActive ? 'white' : 'black'"
-            size="3em"
+            size="2em"
           />
         </div>
       </div>

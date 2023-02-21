@@ -6,7 +6,6 @@ const routes: RouteRecordRaw[] = [
     name: 'Explore',
     component: () => import('src/layouts/MainLayout.vue'),
     children: [
-      /*
       {
         path: '/event/:id/:eventDateId?',
         name: 'EventPage',
@@ -17,6 +16,17 @@ const routes: RouteRecordRaw[] = [
           mapOverlay: true,
         },
       },
+      {
+        path: 'artist/:id',
+        name: 'ArtistPage',
+        component: () => import('src/components/ArtistPage/ArtistPage.vue'),
+        props: true,
+        meta: {
+          mapOverlay: false,
+        },
+      },
+      /*
+
       {
         path: '/login',
         name: 'Login',
@@ -64,15 +74,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
 
-      {
-        path: '/artist/:id',
-        name: 'ArtistPage',
-        component: () => import('src/components/ArtistPage/ArtistPage.vue'),
-        props: true,
-        meta: {
-          mapOverlay: false,
-        },
-      },
+
       {
         path: '/account',
         name: 'ManageAccount',

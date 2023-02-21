@@ -1,5 +1,8 @@
 <template>
-  <div class="event-list-vertical shadow-0">
+  <div
+    class="event-list-vertical shadow-0 main-content"
+    style="height: 100%; width: 100%; position: relative; overflow: hidden"
+  >
     <div class="touch-overlay" v-touch-swipe="handleSwipe" />
     <div
       class="event-list-inner"
@@ -10,7 +13,6 @@
       <div
         class="flex column grow no-wrap"
         :class="{ 'q-mx-sm': $q.screen.lt.sm }"
-        style="height: 100%; position: relative"
       >
         <!--
         <q-icon
@@ -72,160 +74,152 @@
             </span>
           </div>
 -->
-          <div
-            class="sidebar-header flex row grow no-wrap items-stretch justify-between ellipsis no-wrap q-pl-md"
-            v-touch-swipe="
-              () => {
-                sidebarPanel = 'explore';
-              }
-            "
-          >
-            <div class="q-pt-md q-pb- q-pr-md ellipsis" style="width: 100%">
-              <span class="text-h4 chicago">Explore</span>
-            </div>
-          </div>
-          <transition enter-active-class="animated fadeIn">
-            <div class="flex column no-wrap scroll-content content">
-              <!--
-          <transition appear enter-active-class="animated fadeIn">
-            <div
-              class="flex column q-pb-md"
-              style="overflow: hidden;"
-              v-show="eventDates && (!mapMoving || blockUpdates)"
-            >
-              <EventDateCard
-                :class="$q.screen.gt.xs ? 'q-px-md' : 'q-px-sm'"
-                v-for="(ed, index) in eventDates"
-                :key="index"
-                :event="ed[0]"
-                style="max-width: 100%;"
-                class="q-pb-md"
-              />
-            </div>
-          </transition>
-        -->
-              <ControlsComponent
-                v-if="$q.screen.gt.sm"
-                class="controls-component"
-                :class="$q.screen.lt.sm ? 'q-pt-sm' : 'q-mb-sm q-mt-md'"
-              />
 
+          <transition enter-active-class="animated fadeIn">
+            <div class="flex column no-wrap scroll-content">
               <div
-                class="artist-profile-wrapper"
-                v-if="controlArtist.length > 0 && $q.screen.gt.xs"
-              >
-                <ArtistProfile
-                  :key="controlArtist[0].id"
-                  :id="controlArtist[0].id"
-                />
-              </div>
-              <ControlsComponent
-                class="controls-component"
-                :class="$q.screen.lt.sm ? 'q-pt-sm' : 'q-mb-sm '"
-                :showSelectedValue="true"
-                :showOnlySelected="true"
-              />
-              <div
-                class="flex column artists-wrapper"
-                v-if="noFiltersSelected && nearbyArtists.length > 0"
+                class="sidebar-header flex column no-wrap items-stretch justify-between ellipsis no-wrap"
+                v-touch-swipe="
+                  () => {
+                    sidebarPanel = 'explore';
+                  }
+                "
               >
                 <div
-                  class="chicago header q-py-md t1"
-                  :class="
-                    $q.screen.lt.sm ? 'q-pl-sm q-mt-sm' : 'q-pl-md  q-py-md'
-                  "
+                  class="q-pl-md q-pt-md q-pb- q-pr-md ellipsis"
+                  style="width: 100%"
                 >
-                  Top artists in this area:
+                  <span class="text-h4 chicago">Explore</span>
                 </div>
-                <ArtistsComponent
-                  class="artists-component"
-                  :artists="nearbyArtists"
-                  :hasNext="nearbyArtistsHasNext"
-                  :loadMore="loadMoreArtists"
-                />
               </div>
-              <transition appear enter-active-class="animated fadeIn">
+              <div class="flex column no-wrap content">
+                <ControlsComponent
+                  v-if="$q.screen.gt.xs"
+                  class="controls-component"
+                  :class="$q.screen.lt.sm ? 'q-pt-sm' : 'q-mt-md'"
+                />
                 <div
-                  class="no-parties-text chicago t4 flex grow q-mt-md"
-                  v-if="
-                    componentGroup &&
-                    Object.keys(componentGroup).length == 0 &&
-                    !loadingEventDates &&
-                    !isLoadingDatesInitial
-                  "
+                  class="artist-profile-wrapper"
+                  v-if="controlArtist.length > 0 && $q.screen.gt.xs"
                 >
-                  No parties in this area :'(
+                  <ArtistProfile
+                    :key="controlArtist[0].id"
+                    :id="controlArtist[0].id"
+                  />
                 </div>
-              </transition>
-              <transition appear enter-active-class="animated fadeIn">
+                <ControlsComponent
+                  class="controls-component"
+                  :class="$q.screen.lt.sm ? 'q-pt-sm' : 'q-mb-sm '"
+                  :showSelectedValue="true"
+                  :showOnlySelected="true"
+                />
+
                 <div
                   class="flex column"
-                  v-show="
+                  v-if="
                     !isLoadingInitial &&
                     !computedMapMoving &&
                     Object.keys(componentGroup).length > 0
                   "
                 >
                   <div
-                    v-for="yearMonth in Object.keys(componentGroup)"
-                    :key="yearMonth"
+                    class="flex column artists-wrapper"
+                    v-if="noFiltersSelected && artists?.length > 0"
                   >
-                    <component
-                      v-if="componentGroup[yearMonth].header"
-                      :key="yearMonth + '-header'"
-                      class="header q-mt-"
-                      :class="$q.screen.lt.sm ? '' : ''"
-                      :is="componentGroup[yearMonth].header.type"
-                      v-bind="componentGroup[yearMonth].header.propsData"
-                    >
-                    </component>
-
                     <div
-                      class="ed-card-grid q-pb-sm"
-                      :style="computedGridColumns"
-                      :class="{
-                        'q-px-md ': $q.screen.gt.xs,
-                        'q-px-sm  q-mt-': $q.screen.lt.sm,
-                      }"
+                      class="chicago header q-py-md t1"
+                      :class="
+                        $q.screen.lt.sm ? 'q-pl-sm q-mt-sm' : 'q-pl-md  q-py-md'
+                      "
                     >
-                      <component
-                        v-for="(component, index) in componentGroup[yearMonth]
-                          .dates"
-                        :key="index"
-                        :is="component.type"
-                        v-bind="component.propsData"
-                      >
-                      </component>
+                      Top artists in this area:
                     </div>
+                    <ArtistsComponent
+                      class="artists-component"
+                      :artists="artists"
+                      :hasNext="artistsHasNext"
+                      :loadMore="loadMoreArtists"
+                    />
+                  </div>
+
+                  <transition appear enter-active-class="animated fadeIn">
+                    <div class="flex column">
+                      <div
+                        v-for="yearMonth in Object.keys(componentGroup)"
+                        :key="yearMonth"
+                      >
+                        <component
+                          v-if="componentGroup[yearMonth].header"
+                          :key="yearMonth + '-header'"
+                          class="header q-mt-"
+                          :class="$q.screen.lt.sm ? '' : ''"
+                          :is="componentGroup[yearMonth].header.type"
+                          v-bind="componentGroup[yearMonth].header.propsData"
+                        >
+                        </component>
+
+                        <div
+                          class="ed-card-grid q-pb-sm"
+                          :style="computedGridColumns"
+                          :class="{
+                            'q-px-md ': $q.screen.gt.xs,
+                            'q-px-sm  q-mt-': $q.screen.lt.sm,
+                          }"
+                        >
+                          <component
+                            v-for="(component, index) in componentGroup[
+                              yearMonth
+                            ].dates"
+                            :key="index"
+                            :is="component.type"
+                            v-bind="component.propsData"
+                          >
+                          </component>
+                        </div>
+                      </div>
+                    </div>
+                  </transition>
+
+                  <div
+                    class="row justify-center q-my-lg q-mb-xl"
+                    v-if="
+                      eventDatesHasNext &&
+                      eventDatesLoading &&
+                      !isLoadingInitial &&
+                      Object.keys(componentGroup).length !== 0
+                    "
+                  >
+                    <q-spinner-ios
+                      :color="$q.dark.isActive ? 'white' : 'black'"
+                      size="2em"
+                    />
+                  </div>
+                  <div
+                    class="flex row justify-center q-mb-lg q-mt-lg t4"
+                    v-if="
+                      !eventDatesHasNext &&
+                      componentGroup &&
+                      Object.keys(componentGroup).length !== 0 &&
+                      !eventDatesLoading &&
+                      !isLoadingDatesInitial
+                    "
+                  >
+                    <div>End of results</div>
                   </div>
                 </div>
-              </transition>
-
-              <div
-                class="row justify-center q-my-lg q-mb-xl"
-                v-if="
-                  eventDatesHasNext &&
-                  loadingEventDates &&
-                  !isLoadingInitial &&
-                  Object.keys(componentGroup).length !== 0
-                "
-              >
-                <q-spinner-ios
-                  :color="$q.dark.isActive ? 'white' : 'black'"
-                  size="2em"
-                />
-              </div>
-              <div
-                class="flex row justify-center q-mb-lg q-mt-lg t4"
-                v-if="
-                  !eventDatesHasNext &&
-                  componentGroup &&
-                  Object.keys(componentGroup).length !== 0 &&
-                  !loadingEventDates &&
-                  !isLoadingDatesInitial
-                "
-              >
-                <div>End of results</div>
+                <transition appear enter-active-class="animated fadeIn">
+                  <div
+                    class="no-parties-text chicago t4 flex grow q-mt-md"
+                    v-if="
+                      componentGroup &&
+                      Object.keys(componentGroup).length == 0 &&
+                      !eventDatesLoading &&
+                      !isLoadingDatesInitial
+                    "
+                  >
+                    No parties in this area :'(
+                  </div>
+                </transition>
               </div>
             </div>
           </transition>
@@ -276,7 +270,7 @@ export default {
   props: { showControls: { default: false } },
   mounted() {
     if (!this.blockUpdates) {
-      this.getInitialList();
+      //this.getInitialList();
       // watcher on map bounds triggers inital load i think
     }
     setTimeout(() => {
@@ -335,21 +329,16 @@ export default {
           });
       }
       this.componentGroup = { ...this.componentGroup }; // needed to trigger re-render
+      this.isLoadingDatesInitial = false;
     },
 
     async getInitialList() {
       this.$nextTick(async () => {
         if (this.$route.name === 'Explore' && !this.blockUpdates) {
-          // Artist stuff
-          this.artistsPage = 1;
-          this.artistsHasNext = true;
-          this.isLoadingArtistsInitial = true;
-          await this.loadArtists();
-          this.isLoadingArtistsInitial = false;
-
           // event date stuff
           this.componentGroup = {};
-          this.$refs.scroll.setScrollPercentage(0);
+
+          if (this.$refs) this.$refs.scroll.setScrollPercentage('vertical', 0);
           this.eventDatesHasNext = true;
           this.eventDatesPage = 1;
           this.isLoadingDatesInitial = true;
@@ -359,6 +348,12 @@ export default {
           } else {
             this.loadMore();
           }
+          // Artist stuff
+          this.artistsPage = 1;
+          this.artistsHasNext = true;
+          this.isLoadingArtistsInitial = true;
+          await this.loadArtists();
+          this.isLoadingArtistsInitial = false;
         }
       });
     },
@@ -371,7 +366,6 @@ export default {
         try {
           const dates = await this.loadEventDates();
           this.generateComponentGroup(dates);
-          this.isLoadingDatesInitial = false;
           this.eventDatesPage += 1;
         } catch (error) {
           this.isLoadingDatesInitial = false;
@@ -385,7 +379,7 @@ export default {
       if (
         this.hasLoaded &&
         this.eventDates != null &&
-        !this.loadingEventDates
+        !this.eventDatesLoading
       ) {
         // this.mainContentScrollPosition = info.verticalPosition
         // this.headerYOffset = info.verticalPosition
@@ -415,13 +409,12 @@ export default {
   },
   watch: {
     route: {
-      handler: function (to) {
+      handler: async function (to) {
         if (to.name === 'Explore') {
           if (!this.eventDates) {
             if (!this.userLocation) {
-              this.$store.dispatch('main/getIpInfo').then(() => {
-                this.getInitialList();
-              });
+              await this.loadIpInfo();
+              this.getInitialList();
             } else {
               this.getInitialList();
             }
@@ -439,7 +432,7 @@ export default {
 
     sidebarPanel(newVal) {
       if (newVal === 'favorites' || newVal === 'explore') {
-        this.getInitialList();
+        //this.getInitialList();
       }
     },
     currentUser() {
@@ -448,23 +441,41 @@ export default {
         this.getInitialList();
       }
     },
-    controlTags() {
-      this.getInitialList();
+    controlTags: {
+      handler() {
+        this.getInitialList();
+      },
+      deep: true,
     },
-    controlDateRange() {
-      this.getInitialList();
+    controlDateRange: {
+      handler() {
+        this.getInitialList();
+      },
+      deep: true,
     },
-    controlDuration() {
-      this.getInitialList();
+    controlDuration: {
+      handler() {
+        this.getInitialList();
+      },
+      deep: true,
     },
-    controlSize() {
-      this.getInitialList();
+    controlSize: {
+      handler() {
+        this.getInitialList();
+      },
+      deep: true,
     },
-    controlArtist() {
-      this.getInitialList();
+    controlArtist: {
+      handler() {
+        this.getInitialList();
+      },
+      deep: true,
     },
-    controlTag() {
-      this.getInitialList();
+    controlTag: {
+      handler() {
+        this.getInitialList();
+      },
+      deep: true,
     },
     controlFavorites() {
       this.getInitialList();
@@ -510,7 +521,7 @@ export default {
       );
     },
     isLoadingInitial() {
-      return this.isLoadingDatesInitial && this.isLoadingArtistsInitial;
+      return this.isLoadingDatesInitial || this.isLoadingArtistsInitial;
     },
     computedMapMoving() {
       return this.mapMoving && !this.blockUpdates;
@@ -529,6 +540,16 @@ export default {
 
     route() {
       return this.$route;
+    },
+    getTitleOpactity() {
+      let opacity = 1 - this.mainContentScrollPosition / 0;
+      let op1;
+      if (opacity < 0) {
+        op1 = 0;
+      } else {
+        op1 = opacity;
+      }
+      return `opacity: ${op1}`;
     },
     getBottomDivider() {
       var opacity = 0 + this.mainContentScrollPosition / 150;
@@ -601,6 +622,7 @@ export default {
   //max-height: 48px;
   z-index: 10;
 }
+
 .event-list-vertical {
   display: flex;
   flex-direction: column;
@@ -610,13 +632,6 @@ export default {
   position: absolute;
   pointer-events: none;
   .controls-component {
-    z-index: 100;
-    //position: sticky;
-    top: 0px;
-    //transition: all 0.2s;
-    &.controls-component-hidden {
-      //margin-top: -96px !important;
-    }
   }
   .event-list-inner {
     pointer-events: all;
@@ -721,8 +736,12 @@ export default {
     pointer-events: none;
     .controls-component {
       background: black;
+
+      //background: black;
     }
     .event-list-inner {
+      //background: $bi-2;
+
       //background: black;
     }
   }
@@ -730,15 +749,8 @@ export default {
   .header {
     background: black;
   }
-  .separator {
-    background: linear-gradient(
-      to right,
-      transparent,
-      rgba(255, 255, 255, 0.1),
-      transparent
-    ) !important;
-    height: 1px;
-    border: none;
+  .date-header {
+    background: black;
   }
 }
 
@@ -763,16 +775,6 @@ export default {
   }
   .date-header-bg {
     background: white;
-  }
-  .separator {
-    background: linear-gradient(
-      to right,
-      transparent,
-      rgba(0, 0, 0, 0.1),
-      transparent
-    ) !important;
-    height: 1px;
-    border: none;
   }
 }
 

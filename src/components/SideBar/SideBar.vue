@@ -1,17 +1,5 @@
 <template>
   <div class="flex sidebar-wrapper">
-    <!--
-    <div
-      class="hover-trigger"
-      @mouseover="showSidebar = true"
-      v-if="$q.screen.gt.sm"
-    >
-      <div class="hover-indicator-wrapper">
-        <div class="hover-indicator-line" />
-        <div class="hover-indicator-line" />
-      </div>
-    </div>
-  -->
     <transition
       appear
       :enter-active-class="
@@ -43,20 +31,7 @@
           v-if="$q.screen.lt.sm"
           @click="handleSwipe"
           v-touch-swipe="handleSwipe"
-        >
-          <!--
-          <div class="flex items-center justify-center"
-            <div class="swipe-nav-bar"></div>
-          </div>
-          -->
-          <div
-            class="chicago text-h4"
-            :class="$q.screen.lt.sm ? 'q-pl-sm q-my-sm ' : 'q-pl-md q-mb-sm'"
-          >
-            <span v-if="sidebarPanel === 'favorites'">My favorites:</span>
-            <span v-else> Explore </span>
-          </div>
-        </div>
+        ></div>
 
         <div class="flex column menubar">
           <NavigationBar class="nav-bar" v-if="$q.screen.gt.xs" />
@@ -64,73 +39,27 @@
           <div class="logo-padding" />
         </div>
 
-        <div style="height: 100%; width: 100%; overflow: hidden">
-          <div
-            style="
-              position: relative;
-              height: 100%;
-              width: 100%;
-              overflow: hidden;
-            "
-          >
-            <transition
-              :enter-active-class="
-                $q.screen.gt.xs && !sidebarExpanded
-                  ? enterTransition
-                  : 'animated fadeIn'
-              "
-              :leave-active-class="
-                $q.screen.gt.xs && !sidebarExpanded
-                  ? leaveTransition
-                  : 'animated fadeOut'
-              "
-            >
-              <NearbyView
-                v-show="currentSidebarPanel === 'nearby'"
-                style="position: absolute; height: 100%; width: 100%"
-              />
-            </transition>
+        <q-tab-panels
+          keep-alive
+          v-model="sidebarPanel"
+          animated
+          class="shadow-2 rounded-borders"
+          style="height: 100%"
+        >
+          <q-tab-panel name="nearby">
+            <NearbyView />
+          </q-tab-panel>
 
-            <transition
-              :enter-active-class="
-                $q.screen.gt.xs && !sidebarExpanded
-                  ? enterTransition
-                  : 'animated fadeIn'
-              "
-              :leave-active-class="
-                $q.screen.gt.xs && !sidebarExpanded
-                  ? leaveTransition
-                  : ' animated fadeOut '
-              "
-            >
-              <ExploreView
-                style="position: absolute; height: 100%; width: 100%"
-                v-if="
-                  currentSidebarPanel === 'explore' ||
-                  currentSidebarPanel === 'favorites'
-                "
-              />
-            </transition>
+          <q-tab-panel name="explore">
+            <ExploreView
+              style="position: absolute; height: 100%; width: 100%"
+            />
+          </q-tab-panel>
 
-            <transition
-              :enter-active-class="
-                $q.screen.gt.xs && !sidebarExpanded
-                  ? enterTransition
-                  : 'animated fadeIn'
-              "
-              :leave-active-class="
-                $q.screen.gt.xs && !sidebarExpanded
-                  ? leaveTransition
-                  : 'animated fadeOut'
-              "
-            >
-              <SearchView
-                v-if="currentSidebarPanel === 'search'"
-                style="position: absolute; height: 100%; width: 100%"
-              />
-            </transition>
-          </div>
-        </div>
+          <q-tab-panel name="search">
+            <SearchView style="position: absolute; height: 100%; width: 100%" />
+          </q-tab-panel>
+        </q-tab-panels>
 
         <div
           class="resizer flex row items-center"
@@ -160,11 +89,12 @@ export default {
     NavigationBar,
     NearbyView,
   },
-  mounted() {
+  async mounted() {
     if (this.$q.screen.gt.lg) {
       this.sidebarExpanded = true;
     }
-    this.$refs.resizer.addEventListener('mousedown', () => {
+    await this.$nextTick();
+    this.$refs.resizer?.addEventListener('mousedown', () => {
       document.addEventListener('mousemove', this.resize, false);
       document.addEventListener(
         'mouseup',
@@ -185,9 +115,6 @@ export default {
   data() {
     return {
       lastx: 0,
-      enterTransition: 'animated fadeIn',
-      leaveTransition: '',
-      currentSidebarPanel: 'nearby',
     };
   },
   methods: {
@@ -207,8 +134,7 @@ export default {
       this.$router.push({ name: 'Explore' });
     },
     handleSwipe() {
-      if (this.currentSidebarPanel !== 'explore') {
-        this.currentSidebarPanel = 'explore';
+      if (this.sidebarPanel !== 'explore') {
         this.sidebarPanel = 'explore';
       }
       this.showPanelMobile = !this.showPanelMobile;
@@ -229,33 +155,6 @@ export default {
       if (this.view === 'explore') {
         this.view = 'nearby';
       }
-    },
-    sidebarPanel: {
-      handler: function (newval, oldval) {
-        if (oldval === 'nearby') {
-          // from nearby we always goes right
-          this.enterTransition = 'animated slideInRight ';
-          this.leaveTransition = 'animated slideOutLeft';
-        } else if (oldval === 'explore' || oldval === 'favorites') {
-          // we're in the middle, can go left or right
-          if (newval === 'search') {
-            this.enterTransition = 'animated slideInRight ';
-            this.leaveTransition = 'animated slideOutLeft ';
-          } else if (newval === 'nearby') {
-            this.enterTransition = 'animated slideInLeft ';
-            this.leaveTransition = 'animated slideOutRight ';
-          }
-        } else if (oldval === 'search') {
-          // from search we always go left
-          this.enterTransition = 'animated slideInLeft ';
-          this.leaveTransition = 'animated slideOutRight ';
-        }
-        this.$nextTick(() => {
-          this.currentSidebarPanel = newval;
-        });
-        // watch sidebar panel so we can derive the correct transition
-        // before component view updates
-      },
     },
   },
   computed: {
@@ -288,50 +187,23 @@ export default {
     background: rgba(255, 255, 255, 0.2);
   }
   .sidebar {
-    //background: rgba(0, 0, 0, 1);
+    background: black;
     border-right: 1px solid rgba(255, 255, 255, 0.1);
-    background: $bi-2;
     .mobile-dismiss-list {
       background: rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(10px);
     }
     :deep(.content) {
-      background: black;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     :deep(.sidebar-header) {
-      background: $bi-2;
+      background: black;
     }
-    /*
-    @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-      background: rgba(0, 0, 0, 0.9);
-      -webkit-backdrop-filter: blur(10px);
-      backdrop-filter: blur(10px);
-    }
-    */
-    // border-right: 1px solid rgba(255, 255, 255, 0.1);
-    .logo-padding {
-      //border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      //background: black;
-    }
+
     .handle {
       background: rgba(0, 0, 0, 1);
     }
   }
-  /*
-  @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-    .sidebar {
-      background: -webkit-linear-gradient(
-        rgba(0, 0, 0, 0.48),
-        rgba(0, 0, 0, 68)
-      );
-      -webkit-backdrop-filter: blur(20px);
-      backdrop-filter: blur(20px);
-      border-right: none;
-    }
-  }
-  */
 }
 
 .body--light {
@@ -339,57 +211,27 @@ export default {
     background: rgba(0, 0, 0, 0.2);
   }
   .sidebar {
+    background: white;
     .mobile-dismiss-list {
       background: rgba(150, 150, 150, 0.2);
       color: white;
       backdrop-filter: blur(10px);
     }
-    background: #fafafa;
-    //background: rgba(80, 80, 80, 0.2);
-    //backdrop-filter: blur(10px);
-    /*
-    @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-      background: rgba(255, 255, 255, 0.9);
-      -webkit-backdrop-filter: blur(10px);
-      backdrop-filter: blur(10px);
-    }
-    */
+
     :deep(.content) {
       background: white;
-      border-top: 1px solid rgba(0, 0, 0, 0.05);
     }
     :deep(.sidebar-header) {
       color: $bi-2;
-      background: #fafafa;
-    }
-    .logo-padding {
-      //background: white;
-    }
-    .handle {
-      // background: rgba(255, 255, 255, 1);
+      background: white;
     }
   }
-  /*
-  @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-    .sidebar {
-      background: -webkit-linear-gradient(
-        rgba(255, 255, 255, 0.68),
-        rgba(255, 255, 255, 0.68)
-      );
-      -webkit-backdrop-filter: blur(10px) brightness(2);
-      backdrop-filter: blur(4px);
-      border: 1px solid rgba(255, 255, 255, 0.48);
-      // border: none;
-    }
-  }
-  */
 }
 
 .sidebar-wrapper {
   position: absolute;
   height: 100%;
   width: 100%;
-  //z-index: 5000;
   pointer-events: none;
 }
 
@@ -405,11 +247,17 @@ export default {
   height: 100%;
 
   pointer-events: all;
+
+  :deep(.q-tab-panel) {
+    padding: 0px;
+  }
+  :deep(.main-content) {
+    padding-top: 64px;
+  }
   :deep(.scroll-area) {
-    //border-radius: 18px;
     overflow: hidden;
     .scroll-content {
-      padding-top: 32px;
+      //padding-top: 32px;
     }
   }
 
@@ -417,21 +265,14 @@ export default {
     padding-top: 8px;
     padding-bottom: 16px;
     color: white;
-    position: sticky;
+    //position: sticky;
     top: 0px;
     z-index: 100;
   }
   :deep(.content) {
     width: 100%;
-    //border-radius: 18px !important;
   }
-  /*
-  .menubar {
-    position: absolute;
-    top: 0px;
-    width: 100%;
-  }
-  */
+
   .mobile-dismiss-list {
     padding-top: 96px;
   }
@@ -467,9 +308,6 @@ export default {
   .logo-padding {
     min-height: 63px;
     height: 63px;
-
-    // box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.15);
-    //border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -503,29 +341,13 @@ export default {
     }
     .sidebar {
       box-shadow: none;
-
-      //border-top: 1px solid rgba(255, 255, 255, 0.1);
       background: transparent;
-      /*
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(10px);
-      */
     }
   }
   .body--light {
     .sidebar {
       box-shadow: none;
-      //border-top: 1px solid rgba(255, 255, 255, 0.1);
       background: transparent;
-      /*
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(10px);
-      */
-      /*
-      @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-        background: rgba(255, 255, 255, 0.8);
-      }
-      */
     }
   }
   .sidebar-wrapper {

@@ -38,7 +38,13 @@
         </i>
         -->
       </div>
-      <q-menu v-model="menuShowing" :offset="[0, 8]" class="menu">
+      <q-menu
+        transition-show="jump-down"
+        transition-hide="jump-up"
+        v-model="menuShowing"
+        :offset="[0, 8]"
+        class="menu"
+      >
         <div class="calendar-header flex row items-center" style="">
           <q-list dense style="min-width: 100px" v-if="$q.screen.gt.xs">
             <q-item-label header class="q-pb-xs">{{
@@ -128,6 +134,8 @@
               </q-item-section>
 
               <q-menu
+                transition-show="jump-down"
+                transition-hide="jump-up"
                 :anchor="$q.screen.gt.xs ? 'top right' : 'top middle'"
                 :self="$q.screen.gt.xs ? 'top left' : 'top left'"
               >
@@ -148,7 +156,7 @@
           </q-list>
           <v-date-picker
             title-position="center"
-            @input="onSelectedCustomDateRange"
+            @update:model-value="onSelectedCustomDateRange"
             class="date-picker flex"
             is-inline="true"
             v-model="controlDateRange"
@@ -226,7 +234,7 @@ export default {
     };
   },
   watch: {
-    controlDateRange(newVal, oldVal) {
+    controlDateRange(newVal) {
       /* eslint-disable */
       switch (newVal.value) {
         case null: // all future dates

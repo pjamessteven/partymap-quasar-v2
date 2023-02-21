@@ -340,7 +340,7 @@ export default {
         background-size: contain;
         display: flex;
         flex-grow: 1;
-        justify-content: start;
+        justify-content: flex-start;
         align-items: flex-start;
         img {
           width: 100%;

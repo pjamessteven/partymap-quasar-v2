@@ -1,0 +1,68 @@
+<template>
+  <div
+    v-if="selectedEventDate != null"
+    class="flex row items-center no-wrap ed-inline-card editing-outline"
+    :class="[editing ? 'editing q-px-md' : '']"
+    @click="editing ? (showEditingDialog = true) : null"
+  >
+    <q-icon
+      :size="$q.screen.gt.sm ? '2em' : '1.5rem'"
+      :class="selectedEventDate.size ? ' t2' : 't4'"
+      name="las la-user-friends"
+    />
+    <div
+      class="flex column q-ml-md t2"
+      :class="$q.screen.gt.sm ? 'text-large' : ''"
+    >
+      <div v-if="selectedEventDate.size">
+        ~{{ selectedEventDate.size.toLocaleString('en-US') }}&nbsp;{{
+          $t('event_date_inline.size_people')
+        }}
+      </div>
+      <div
+        v-else
+        class="t4"
+        @click="showEditingDialog = true"
+        style="cursor: pointer"
+      >
+        <span>
+          <u>{{ $t('event_date_inline.add_size') }}</u>
+        </span>
+      </div>
+    </div>
+    <q-dialog
+      v-model="showEditingDialog"
+      transition-show="fade"
+      transition-hide="none"
+    >
+      <EditEventDateDialog :ed="selectedEventDate" mode="size" />
+    </q-dialog>
+  </div>
+</template>
+
+<script>
+import { mapState } from 'pinia';
+import { useEventStore } from 'src/stores/event';
+
+import EditEventDateDialog from './EditEventDateDialog.vue';
+
+export default {
+  name: 'EventDateSizeComponent',
+  components: {
+    EditEventDateDialog,
+  },
+  watch: {},
+  data() {
+    return { showEditingDialog: false };
+  },
+  props: {
+    editing: Boolean,
+  },
+  methods: {},
+  computed: {
+    ...mapState(useEventStore, ['event', 'selectedEventDate']),
+  },
+};
+</script>
+
+<style lang="scss" scoped></style>

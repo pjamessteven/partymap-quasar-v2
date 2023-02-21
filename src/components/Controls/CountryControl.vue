@@ -14,7 +14,7 @@
       :label="$t('list_view.country')"
       style="width: 150px"
       dense
-      @input="onSelectCountry"
+      @update:model-value="onSelectCountry"
       :loading="countryOptionsLoading"
     >
       <template v-slot:prepend>

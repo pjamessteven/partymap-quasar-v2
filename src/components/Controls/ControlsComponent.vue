@@ -93,7 +93,7 @@
           :showSelectedValue="showSelectedValue"
         />
         <SizeControl
-          v-if="showSize"
+          v-if="showSizeControl"
           :key="4"
           :showSelectedValue="showSelectedValue"
         />
@@ -197,43 +197,45 @@ export default {
       'controlTag',
       'controlCountry',
       'controlRegion',
-      'controlLocatlity',
+      'controlLocality',
     ]),
     showDateControl() {
       return (
         !this.showOnlySelected ||
-        (this.showOnlySelected && !!controlDateRange.end)
+        (this.showOnlySelected && !!this.controlDateRange.end)
       );
     },
     showDurationControl() {
       return (
         !this.showOnlySelected ||
-        (this.showOnlySelected && controlDuration.length > 0)
+        (this.showOnlySelected && this.controlDuration.length > 0)
       );
     },
     showSizeControl() {
       return (
         !this.showOnlySelected ||
-        (this.showOnlySelected && controlSize.length > 0)
+        (this.showOnlySelected && this.controlSize.length > 0)
       );
     },
     showArtistControl() {
       return (
         !this.showOnlySelected ||
-        (this.showOnlySelected && controlArtist.length > 0)
+        (this.showOnlySelected && this.controlArtist.length > 0)
       );
     },
     showTagControl() {
       return (
         !this.showOnlySelected ||
-        (this.showOnlySelected && controlTag.length > 0)
+        (this.showOnlySelected && this.controlTag.length > 0)
       );
     },
     showLocalityControl() {
       return (
         !this.showOnlySelected ||
         (this.showOnlySelected &&
-          (!!controlCountry || !!controlRegion || !!controlLocality))
+          (!!this.controlCountry ||
+            !!this.controlRegion ||
+            !!this.controlLocality))
       );
     },
   },
@@ -271,31 +273,10 @@ export default {
         border: 1px solid rgba(0, 0, 0, 1);
       }
     }
-    :deep(.button-control) {
-      background: $bi-1;
-      color: $ti-1;
-      // text-shadow: 1px 1px 1px black;
-      transition: none;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: rgba(0, 0, 0, 0.5) 1px 0px 2px 0px;
 
-      .q-btn__wrapper {
-        &:before {
-          box-shadow: none;
-        }
-      }
-      &.active {
-        background: white !important;
-        color: $t-1 !important;
-        // font-weight: bold;
-        text-shadow: none !important;
-        border: 1px solid rgba(0, 0, 0, 1);
-      }
-    }
     :deep(.button-control) {
-      background: transparent;
+      background: $bi-2;
       color: $ti-1;
-      background: $bi-1;
       //text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
       /*
       box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
@@ -394,9 +375,11 @@ export default {
       background: rgba(255, 255, 255, 1);
       transition: none;
       border: 1px solid rgba(0, 0, 0, 0.1);
-      box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
+      //box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
       box-shadow: none !important;
-
+      &::before {
+        box-shadow: none !important;
+      }
       .q-btn__wrapper {
         &:before {
           box-shadow: none;

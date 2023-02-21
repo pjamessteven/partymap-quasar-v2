@@ -40,6 +40,8 @@
       </div>
 
       <q-menu
+        transition-show="jump-down"
+        transition-hide="jump-up"
         @before-show="onBeforeShowMenu"
         @before-hide="onBeforeHideMenu"
         v-model="menuShowing"
@@ -50,7 +52,7 @@
         <div class="flex column">
           <div class="sticky-input">
             <q-input
-              @input="loadInitialList()"
+              @update:model-value="loadInitialList()"
               debounce="500"
               clearable
               class="q-ml-md q-mr-md"
@@ -149,7 +151,7 @@
                               x => x.id == artist.id
                             ) > -1
                           "
-                          @input="clickArtist(artist)"
+                          @update:model-value="clickArtist(artist)"
                         />
                         -->
                       </div>

@@ -4,6 +4,7 @@ import {
   getPointsRequest,
   getEventDatesRequest,
   getArtistsRequest,
+  getTagRequest,
 } from 'src/api';
 import {
   Artist,
@@ -190,7 +191,7 @@ export const useQueryStore = defineStore('query', {
         // keep track of request id
         const requestId = Math.random();
         this.eventDatesRequestId = requestId;
-        getEventDatesRequest({
+        const response = await getEventDatesRequest({
           radius: undefined,
           bounds:
             map.mapBounds && !this.controlFavorites
@@ -221,31 +222,27 @@ export const useQueryStore = defineStore('query', {
           page: this.eventDatesPage,
           per_page: 10,
           distinct: true,
-        }).then(
-          (response) => {
-            if (this.eventDatesRequestId === requestId) {
-              // only save data in store if this is the latest request
-              // this prevents the list updating at weird times if there are a lot of
-              // calls to the server (even though these calls are debounced, sometimes
-              // the round trip takes a while)
-              if (this.eventDatesPage === 1) {
-                this.eventDates = response.data.items;
-              } else {
-                this.eventDates = this.eventDates.concat(response.data.items);
-              }
-              this.eventDates = response.data.items;
-              this.eventDatesLoading = false;
-              this.eventDatesHasNext = response.data.has_next;
-            }
-            return response.data.items;
-          },
-          (error) => {
-            this.eventDatesLoading = false;
-            this.eventDatesHasNext = false;
-            return error;
+        });
+        if (this.eventDatesRequestId === requestId) {
+          // only save data in store if this is the latest request
+          // this prevents the list updating at weird times if there are a lot of
+          // calls to the server (even though these calls are debounced, sometimes
+          // the round trip takes a while)
+          if (this.eventDatesPage === 1) {
+            this.eventDates = response.data.items;
+          } else {
+            this.eventDates = this.eventDates.concat(response.data.items);
           }
-        );
+          this.eventDates = response.data.items;
+          this.eventDatesLoading = false;
+          this.eventDatesHasNext = response.data.has_next;
+          return response.data.items;
+        } else {
+          return;
+        }
       } catch (error) {
+        this.eventDatesLoading = false;
+        this.eventDatesHasNext = false;
         return error;
       }
     },
@@ -266,7 +263,11 @@ export const useQueryStore = defineStore('query', {
           sort: 'event_count',
           desc: true,
         });
-        this.artists = this.artists.concat(response.data.items);
+        if (this.artistsPage === 1) {
+          this.artists = response.data.items;
+        } else {
+          this.artists = this.artists.concat(response.data.items);
+        }
         this.artistsHasNext = response.data.has_next;
         this.artistsLoading = false;
         return response.data.items;
@@ -308,19 +309,44 @@ export const useQueryStore = defineStore('query', {
         if (this.artistOptionsPage === 1) {
           this.artistOptions = response.data.items;
         } else {
-          this.artistOptions = this.artists.concat(response.data.items);
+          this.artistOptions = this.artistOptions.concat(response.data.items);
         }
         this.artistOptionsHasNext = response.data.has_next;
-        this.artistOptionsHasNext = false;
+        this.artistOptionsLoading = false;
+        this.artistOptionsPage += 1;
         return response.data.items;
       } catch (error) {
         this.artistOptionsLoading = false;
         return error;
       }
     },
-    async loadMoreArtistOptions(query: string) {
-      this.artistOptionsPage += 1;
-      return await this.loadArtistOptions(query);
+    async loadTagOptions(query: string) {
+      console.log('called', query);
+      try {
+        this.tagOptionsLoading = true;
+        const response = await getTagRequest({
+          date_min: this.controlDateRange.start,
+          date_max: this.controlDateRange.end,
+          page: this.tagOptionsPage,
+          per_page: 20,
+          tag_name: query,
+          sort: 'count',
+          desc: true,
+        });
+        if (this.tagOptionsPage === 1) {
+          this.tagOptions = response.data.items;
+        } else {
+          this.tagOptions = this.tagOptions.concat(response.data.items);
+        }
+        this.tagOptionsHasNext = response.data.has_next;
+        this.tagOptionsLoading = false;
+        this.tagOptionsPage += 1;
+
+        return response.data.items;
+      } catch (error) {
+        this.tagOptionsLoading = false;
+        return error;
+      }
     },
   },
 });

@@ -12,17 +12,21 @@ interface NearbyState {
   loadingEverything: boolean;
 
   queryRadius: number | null;
+
   nearbyTags: Tag[];
   nearbyTagsHasNext: boolean;
   nearbyTagsPage: number;
+  nearbyTagsSuccess: boolean;
 
   nearbyArtists: Artist[];
   nearbyArtistsHasNext: boolean;
   nearbyArtistsPage: number;
+  nearbyArtistsSuccess: boolean;
 
   nearbyEventDates: EventDate[];
   nearbyEventDatesHasNext: boolean;
   nearbyEventDatesPage: number;
+  nearbyEventDatesSuccess: boolean;
 
   // global event dates for SEO
   eventDates: EventDate[];
@@ -33,24 +37,26 @@ interface NearbyState {
 }
 export const useNearbyStore = defineStore('nearby', {
   state: (): NearbyState => ({
-    loadingEverything: false,
+    loadingEverything: true,
 
     queryRadius: null,
     nearbyTags: [],
-    nearbyTagsHasNext: false,
+    nearbyTagsHasNext: true,
     nearbyTagsPage: 1,
+    nearbyTagsSuccess: false,
 
     nearbyArtists: [],
-    nearbyArtistsHasNext: false,
+    nearbyArtistsHasNext: true,
     nearbyArtistsPage: 1,
+    nearbyArtistsSuccess: false,
 
     nearbyEventDates: [],
-    nearbyEventDatesHasNext: false,
+    nearbyEventDatesHasNext: true,
     nearbyEventDatesPage: 1,
-
+    nearbyEventDatesSuccess: false,
     // global event dates for SEO
     eventDates: [],
-    eventDatesHasNext: false,
+    eventDatesHasNext: true,
     eventDatesPage: 1,
     eventDatesPages: 1, // total pages
   }),
@@ -81,23 +87,22 @@ export const useNearbyStore = defineStore('nearby', {
           date_min: moment().toISOString(),
           date_max: null,
           page: this.nearbyTagsPage,
-          per_page: 10,
+          per_page: 20,
           desc: true,
           sort: 'count',
-          location: main.userLocation,
+          location: JSON.stringify(main.userLocation),
           radius: this.queryRadius ? this.queryRadius : undefined,
         });
         this.nearbyTags = this.nearbyTags.concat(response.data.items);
         this.nearbyTagsHasNext = response.data.has_next;
-        return;
+        this.nearbyTagsPage += 1;
+        this.nearbyTagsSuccess = true;
+        return Promise.resolve();
       } catch (error) {
         return error;
       }
     },
-    async loadMoreNearbyTags() {
-      this.nearbyTagsPage += 1;
-      return await this.loadNearbyTags();
-    },
+
     async loadNearbyArtists() {
       const main = useMainStore();
       try {
@@ -106,35 +111,34 @@ export const useNearbyStore = defineStore('nearby', {
           date_max: null,
           page: this.nearbyArtistsPage,
           per_page: 10,
-          location: main.userLocation,
+          location: JSON.stringify(main.userLocation),
           radius: this.queryRadius,
           sort: 'event_count',
           desc: true,
         });
         this.nearbyArtists = this.nearbyArtists.concat(response.data.items);
         this.nearbyArtistsHasNext = response.data.has_next;
-        return;
+        this.nearbyArtistsPage += 1;
+        this.nearbyArtistsSuccess = true;
+        return Promise.resolve();
       } catch (error) {
         return error;
       }
     },
-    async loadMoreNearbyArtists() {
-      this.nearbyArtistsPage += 1;
-      return await this.loadNearbyArtists();
-    },
+
     async loadNearbyEventDates() {
       const main = useMainStore();
       try {
         const response = await getEventDatesRequest({
-          location: main.userLocation,
+          location: JSON.stringify(main.userLocation),
           date_min: moment().toISOString(),
           date_max: null,
           radius: this.queryRadius,
-          page: this.eventDatesPage,
+          page: this.nearbyEventDatesPage,
           per_page: 10,
           distinct: true,
         });
-        if (this.eventDatesPage === 1) {
+        if (this.nearbyEventDatesPage === 1) {
           this.nearbyEventDates = response.data.items;
         } else {
           this.nearbyEventDates = this.nearbyEventDates.concat(
@@ -147,14 +151,13 @@ export const useNearbyStore = defineStore('nearby', {
           this.queryRadius = response.data.radius;
         }
         this.nearbyEventDatesHasNext = response.data.has_next;
+        this.nearbyEventDatesPage += 1;
+        this.nearbyArtistsSuccess = true;
+
         return;
       } catch (error) {
         return error;
       }
-    },
-    async loadMoreNearbyEventDates() {
-      this.nearbyEventDatesPage += 1;
-      return await this.loadNearbyEventDates();
     },
     // load all event dates for SEO
     async loadEventDates() {
@@ -163,20 +166,22 @@ export const useNearbyStore = defineStore('nearby', {
         const response = await getEventDatesRequest({
           date_min: moment().toISOString(),
           date_max: null,
-          location: main.userLocation,
+          location: JSON.stringify(main.userLocation),
           page: this.eventDatesPage,
           per_page: 10,
           distinct: true,
         });
-        this.eventDates = this.eventDates.concat(response.data.items);
+        if (this.eventDatesPage === 1) {
+          this.eventDates = response.data.items;
+        } else {
+          this.eventDates = this.eventDates.concat(response.data.items);
+        }
         this.eventDatesHasNext = response.data.has_next;
+        this.eventDatesPage += 1;
+        return;
       } catch (error) {
         return error;
       }
-    },
-    async loadMoreEventDates() {
-      this.eventDatesPage += 1;
-      return await this.loadEventDates();
     },
   },
 });

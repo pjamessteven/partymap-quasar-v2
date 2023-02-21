@@ -160,8 +160,8 @@
       style="position: relative"
     >
       <q-menu
-        transition-show="none"
-        transition-hide="none"
+        transition-show="jump-down"
+        transition-hide="jump-up"
         anchor="bottom right"
         self="top right"
         class="main-menu"
@@ -365,7 +365,7 @@ export default {
 }
 
 /*
-@media only (max-width: 600px) {
+@media only screen and (max-width: 600px) {
   .menubar-content {
     .separator-wrapper {
       display: none;

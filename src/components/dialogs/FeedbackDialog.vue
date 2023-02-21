@@ -48,6 +48,7 @@
 
 <script>
 import { postFeedbackRequest } from 'src/api';
+
 export default {
   name: 'FeedbackDialog',
   data() {

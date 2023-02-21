@@ -1,5 +1,5 @@
 <template>
-  <div class="search-view flex column grow no-wrap">
+  <div class="search-view main-content flex column grow no-wrap">
     <div class="sidebar-header">
       <div
         class="chicago text-h4 q-mt-md q-pl-md"
@@ -8,7 +8,7 @@
         Search
       </div>
     </div>
-    <div class="content flex column grow q-px-md q-pt-md">
+    <div class="content flex column grow q-px-md">
       <div
         class="chicago text-large t2 q-mt-sm"
         :class="$q.screen.lt.sm ? 'q-mt-md ' : ' '"

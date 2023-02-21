@@ -4,11 +4,10 @@
       no-caps
       class="button-control flex items-center"
       :class="{
-        active: controlDuration && controlDuration.length != 0,
+        active: controlDuration && controlDuration.length > 0,
       }"
     >
       <div class="flex items-center row no-wrap">
-        <!--<q-icon left name="las la-calendar " />-->
         <q-icon
           @click.stop="
             () => {
@@ -18,7 +17,7 @@
           "
           style="font-size: 18px"
           name="mdi-close-circle"
-          v-if="controlDuration && controlDuration.length != 0"
+          v-if="controlDuration && controlDuration.length > 0"
           class="q-pr-md"
         />
         <i class="las la-clock q-mr-sm q-ml-none q-pr-none" />
@@ -26,16 +25,10 @@
         <div>
           {{ $t('top_controls.select_duration') }}
         </div>
-        <!--
-        <i
-          class="q-select__dropdown-icon material-icons q-icon notranslate q-mr-none q-pr-none"
-          :class="{ 'rotate-180': menuShowing }"
-        >
-  arrow_drop_down
-        </i>
-        -->
       </div>
       <q-menu
+        transition-show="jump-down"
+        transition-hide="jump-up"
         v-model="menuShowing"
         anchor="top middle"
         self="bottom middle"
@@ -74,7 +67,7 @@
 </template>
 
 <script>
-import { useMainStore } from 'src/stores/main';
+import { useQueryStore } from 'src/stores/query';
 import { mapWritableState } from 'pinia';
 
 export default {
@@ -84,7 +77,7 @@ export default {
     };
   },
   computed: {
-    ...mapWritableState(useMainStore, ['controlDuration']),
+    ...mapWritableState(useQueryStore, ['controlDuration']),
   },
 };
 </script>
@@ -93,14 +86,5 @@ export default {
 .body--dark {
 }
 .body--light {
-}
-
-.date-picker {
-  border-radius: 0px !important;
-  border-bottom-left-radius: 9px !important;
-  border-bottom-right-radius: 9px !important;
-
-  :deep(.vc-container) {
-  }
 }
 </style>

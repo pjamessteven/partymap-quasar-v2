@@ -3,7 +3,6 @@
     <q-tabs
       v-model="sidebarPanel"
       no-caps
-      indicator-color="transparent"
       :compact="$q.screen.lt.sm"
       :shrink="$q.screen.gt.xs"
     >
@@ -116,6 +115,7 @@ export default {
 .navigation-bar {
   width: 216px;
   padding-right: 8px;
+  pointer-events: all;
   //height: 62px;
   :deep(.q-tabs) {
     height: 100%;

@@ -1,0 +1,388 @@
+<template>
+  <div
+    class="flex column no-wrap calendar editing-outline"
+    :class="[inline ? 'inline' : '', editing ? 'editing q-px-md' : '']"
+    @click="editing ? (showEditDialog = true) : expand()"
+  >
+    <div
+      class="flex row no-wrap grow items-center justify-between"
+      v-if="inline && selectedEventDate != null"
+    >
+      <div class="flex row items-center no-wrap">
+        <q-icon
+          class="t2"
+          name="las la-clock"
+          :size="$q.screen.gt.sm ? '2em' : '1.5rem'"
+        />
+
+        <div class="flex column q-ml-md">
+          <div class="t2" :class="$q.screen.gt.sm ? 'text-large' : ''">
+            <span
+              v-if="
+                selectedEventDate.end_naive &&
+                selectedEventDate.start_naive != selectedEventDate.end_naive
+              "
+            >
+              {{ $t('event_date_inline.starts') }}
+            </span>
+
+            <span>{{
+              localDateTimeLong(
+                selectedEventDate.start_naive,
+                selectedEventDate.tz
+              )
+            }}</span>
+            <span class="t4">
+              [{{
+                timeZoneAbbreviention(
+                  selectedEventDate.start_naive,
+                  selectedEventDate.tz
+                )
+              }}]
+            </span>
+          </div>
+          <div
+            v-if="
+              selectedEventDate.end &&
+              selectedEventDate.end != selectedEventDate.start
+            "
+            class="t4"
+            :class="$q.screen.gt.sm ? 'text-large' : ''"
+          >
+            <span>{{ $t('event_date_inline.ends') }}&nbsp;</span>
+            <span>{{
+              localDateTimeLong(
+                selectedEventDate.end_naive,
+                selectedEventDate.tz
+              )
+            }}</span>
+          </div>
+        </div>
+      </div>
+      <q-icon
+        size="2em"
+        class="t3 q-ml-md"
+        name="mdi-chevron-down"
+        v-if="expandable && !expanded"
+      />
+      <q-icon
+        size="2em"
+        class="t3 q-ml-md"
+        name="mdi-chevron-up"
+        v-else-if="expandable && expanded"
+      />
+    </div>
+    <Calendar
+      v-if="
+        selectedEventDate != null &&
+        (!inline || (inline && expanded && expandable))
+      "
+      :class="[inline ? 'q-mt-md' : '']"
+      ref="calendar"
+      title-position="left"
+      :is-dark="$q.dark.isActive ? true : false"
+      keepVisibleOnInput
+      :is-inline="true"
+      is-expanded
+      @dayclick="dayClick($event)"
+      :available-dates="calendarAvailableDates"
+      :attributes="computedCalendarAttributes"
+    />
+    <q-dialog
+      v-model="showEditDialog"
+      v-if="editing && selectedEventDate"
+      transition-show="fade"
+      transition-hide="none"
+    >
+      <EditEventDateDialog :ed="selectedEventDate" mode="date" />
+    </q-dialog>
+  </div>
+</template>
+
+<script>
+import { Calendar } from 'v-calendar';
+import common from 'assets/common';
+import moment from 'moment-timezone';
+
+import EditEventDateDialog from './EditEventDateDialog.vue';
+
+import { mapState } from 'pinia';
+import { useEventStore } from 'src/stores/event';
+
+export default {
+  name: 'EventDateTimeComponent',
+  components: {
+    EditEventDateDialog,
+    Calendar,
+  },
+  watch: {
+    calendarSelectedEventDateRange: {
+      handler: function (newval) {
+        // move to currently selected date
+        if (newval != null && newval.start) {
+          setTimeout(() => {
+            if (this.selectedEventDate) {
+              const calendar = this.$refs.calendar;
+              if (calendar) {
+                this.moveToDate(
+                  moment
+                    .utc(this.selectedEventDate.start_naive)
+                    .subtract(this.local.utcOffset(), 'm')
+                    .toDate()
+                );
+              }
+            }
+          }, 300);
+        }
+      },
+    },
+  },
+  data() {
+    return { expanded: false, showEditDialog: false, local: moment() };
+  },
+  props: {
+    editing: Boolean,
+    inline: Boolean, // desktop and mobile (only show text, no calendar)
+    expandable: Boolean, // mobile only
+  },
+  methods: {
+    expand() {
+      this.expanded = !this.expanded;
+      this.delayedMoveToCurrentDate();
+    },
+    dayClick(day) {
+      this.selectedEventDateIndex = this.event.event_dates.findIndex(
+        (x) => x.id === day.attributes[0].customData.id
+      );
+      // eslint-disable-next-line
+      this.selectedEventDate =
+        this.event.event_dates[this.selectedEventDateIndex];
+    },
+    delayedMoveToCurrentDate() {
+      setTimeout(() => {
+        if (this.selectedEventDate) {
+          const calendar = this.$refs.calendar;
+          if (calendar) {
+            calendar.move(
+              moment
+                .utc(this.selectedEventDate.start_naive)
+                .subtract(this.local.utcOffset(), 'm')
+                .toDate()
+            );
+          }
+        }
+      }, 300);
+    },
+    moveToDate(date) {
+      const calendar = this.$refs.calendar;
+      calendar.focusDate(date);
+    },
+  },
+  computed: {
+    ...mapState(useEventStore, [
+      'event',
+      'selectedEventDate',
+      'selectedEventDateIndex',
+    ]),
+
+    calendarSelectedEventDateRange() {
+      // THIS ASSUMES THAT THE INPUT IS A NAIVE DATETIME STRING
+      // LIKE 2021-12-23 11:00:00 OR 2021-12-26T14:00:00Z
+      // we need to 'convert' it to local time
+      if (this.selectedEventDate && this.selectedEventDate.start_naive) {
+        var range = {
+          start: moment
+            .utc(this.selectedEventDate.start_naive)
+            .subtract(this.local.utcOffset(), 'm')
+            .toDate(),
+          end: moment
+            .utc(this.selectedEventDate.end_naive)
+            .subtract(this.local.utcOffset(), 'm')
+            .toDate(),
+        };
+        return range;
+      } else {
+        return { start: null, end: null };
+      }
+    },
+    calendarAvailableDates() {
+      // THIS ASSUMES THAT THE INPUT IS A NAIVE DATETIME STRING
+      // LIKE 2021-12-23 11:00:00 OR 2021-12-26T14:00:00Z
+      // we need to 'convert' it to local time
+      if (this.event && this.event.event_dates) {
+        return this.event.event_dates.map((x) => {
+          return {
+            start: moment
+              .utc(x.start_naive)
+              .subtract(this.local.utcOffset(), 'm')
+              .toDate(),
+            end: moment
+              .utc(x.end_naive)
+              .subtract(this.local.utcOffset(), 'm')
+              .toDate(),
+          };
+        });
+      } else {
+        return [];
+      }
+    },
+    computedCalendarAttributes() {
+      var attrs = [];
+
+      var mappedAvailableDates = this.event.event_dates.map((x) => {
+        return {
+          start: moment
+            .utc(x.start_naive)
+            .subtract(this.local.utcOffset(), 'm')
+            .toDate(),
+          end: moment
+            .utc(x.end_naive)
+            .subtract(this.local.utcOffset(), 'm')
+            .toDate(),
+          id: x.id,
+        };
+      });
+      for (var dateRange of mappedAvailableDates) {
+        attrs.push({
+          highlight: {
+            start: {
+              fillMode: 'light',
+              class: 'highlight-background-inactive',
+              contentClass: 'highlight-end-inactive',
+            },
+            base: {
+              fillMode: 'light',
+              class: 'highlight-background-inactive',
+
+              contentClass: 'highlight-base-inactive',
+            },
+            end: {
+              fillMode: 'light',
+              class: 'highlight-background-inactive',
+              contentClass: 'highlight-end-inactive',
+            },
+          },
+          customData: dateRange,
+          dates: dateRange,
+        });
+      }
+      if (
+        this.calendarSelectedEventDateRange &&
+        this.calendarSelectedEventDateRange.start
+      ) {
+        attrs.push({
+          highlight: {
+            order: 1,
+            start: {
+              fillMode: 'outline',
+              contentClass: 'highlight-end-active',
+              class: 'highlight-background-active',
+            },
+            base: {
+              fillMode: 'solid',
+              contentClass: 'highlight-base-active',
+              class: 'highlight-background-active',
+            },
+            end: {
+              fillMode: 'outline',
+              contentClass: 'highlight-end-active',
+              class: 'highlight-background-active',
+            },
+          },
+          customData: this.selectedEventDate,
+          dates: this.calendarSelectedEventDateRange,
+        });
+      }
+
+      return attrs;
+    },
+  },
+  mounted() {
+    this.delayedMoveToCurrentDate();
+  },
+  created() {
+    this.relativeHumanTime = common.relativeHumanTime;
+    this.localDateTimeLong = common.localDateTimeLong;
+    this.localDateLong = common.localDateLong;
+    this.localTimeCompact = common.localTimeCompact;
+    this.timeZoneAbbreviention = common.timeZoneAbbreviention;
+    this.recurringPattern = common.recurringPattern;
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.body--dark {
+  .calendar {
+    :deep(.vc-container) {
+      .highlight-base-active {
+        color: black !important;
+      }
+      .highlight-end-active {
+        color: black !important;
+        background: $primary;
+      }
+      .highlight-background-active {
+        background: $secondary !important;
+      }
+      .highlight-background-inactive {
+        background-color: $bi-4 !important;
+      }
+      .highlight-base-inactive {
+        color: $ti-3 !important;
+      }
+      .highlight-end-inactive {
+        color: $ti-3 !important;
+        background: $bi-4;
+      }
+    }
+  }
+}
+.body--light {
+  .calendar {
+    :deep(.vc-container) {
+      .highlight-base-active {
+        color: white !important;
+      }
+      .highlight-end-active {
+        color: white !important;
+        background: $primary;
+      }
+      .highlight-background-active {
+        background: $secondary !important;
+      }
+      .highlight-background-inactive {
+        background-color: $b-3 !important;
+      }
+      .highlight-base-inactive {
+        color: $t-3 !important;
+      }
+      .highlight-end-inactive {
+        color: $t-3 !important;
+        background: $b-3;
+      }
+    }
+  }
+}
+.calendar {
+  .vc-container {
+    min-height: 280px;
+    min-width: 280px;
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
+    border-radius: 0px;
+    border: none;
+    box-shadow: 0 0.5em 1em -0.125em rgba(0, 0, 0, 0.1),
+      0 0px 0 1px rgba(0, 0, 0, 0.02);
+  }
+}
+
+.inline {
+  border: none;
+  .vc-container {
+    box-shadow: 0 0.5em 1em -0.125em rgba(0, 0, 0, 0.1),
+      0 0px 0 1px rgba(0, 0, 0, 0.02);
+  }
+}
+</style>

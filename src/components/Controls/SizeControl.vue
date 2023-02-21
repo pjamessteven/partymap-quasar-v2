@@ -8,7 +8,6 @@
       }"
     >
       <div class="flex items-center row no-wrap">
-        <!--<q-icon left name="las la-calendar " />-->
         <q-icon
           style="font-size: 18px"
           name="mdi-close-circle"
@@ -27,15 +26,10 @@
         <div>
           {{ $t('top_controls.select_size') }}
         </div>
-        <!--
-        <i
-          class="q-select__dropdown-icon material-icons q-icon notranslate  q-mr-none q-pr-none"
-          :class="{ 'rotate-180': menuShowing }"
-        >
-          arrow_drop_down
-        </i>-->
       </div>
       <q-menu
+        transition-show="jump-down"
+        transition-hide="jump-up"
         v-model="menuShowing"
         anchor="top middle"
         self="bottom middle"

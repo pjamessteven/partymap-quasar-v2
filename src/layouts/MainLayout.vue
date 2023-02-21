@@ -30,6 +30,7 @@ import MenuBar from 'components/MenuBar/MenuBar.vue';
     height: 100%;
     width: 100%;
     z-index: 100;
+    top: 0px;
   }
 }
 </style>

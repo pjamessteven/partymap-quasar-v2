@@ -30,7 +30,7 @@ export default {
   },
   methods: {},
   computed: {
-    ...mapState(useMainStore, ['showSidebar', 'menubarOpactiy']),
+    ...mapState(useMainStore, ['showSidebar', 'menuBarOpacity']),
     transparentMenuBar() {
       return (
         this.$route.name === 'EventPage' ||

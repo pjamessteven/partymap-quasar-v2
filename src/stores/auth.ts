@@ -13,6 +13,8 @@ export const useAuthStore = defineStore('auth', {
   }),
   getters: {
     authenticated: (state) => state.currentUser != null,
+    currentUserIsStaff: (state) =>
+      state.currentUser?.role && state.currentUser?.role >= 20,
   },
   actions: {
     async checkAuthCookie() {

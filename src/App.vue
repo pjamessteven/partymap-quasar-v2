@@ -309,7 +309,7 @@ body {
     // background: $b-1;
   }
   .separator {
-    border-color: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
   }
 
   .editing {
@@ -591,7 +591,7 @@ body {
   }
 }
 .q-menu {
-  border-radius: 9px;
+  border-radius: 0px;
   //max-height: 100vh !important;
   /*
   max-width: unset !important;
@@ -599,6 +599,10 @@ body {
   overflow-x: auto;
   overflow-y: auto;
   */
+}
+.q-menu--dark {
+  box-shadow: none;
+  border: 1px solid $bi-4;
 }
 .q-input {
   border-radius: 9px !important;
@@ -734,6 +738,11 @@ body {
 
     .solid-page-inner {
     }
+  }
+  .card {
+    margin-top: 0px;
+    width: 100%;
+    height: 100%;
   }
 }
 @media only screen and (max-width: 1023px) {
