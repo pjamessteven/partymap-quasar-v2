@@ -23,15 +23,14 @@
                 selectedEventDate.start_naive != selectedEventDate.end_naive
               "
             >
-              {{ $t('event_date_inline.starts') }}
+              {{
+                localDateTimeLong(
+                  selectedEventDate.start_naive,
+                  selectedEventDate.tz
+                )
+              }}
             </span>
 
-            <span>{{
-              localDateTimeLong(
-                selectedEventDate.start_naive,
-                selectedEventDate.tz
-              )
-            }}</span>
             <span class="t4">
               [{{
                 timeZoneAbbreviention(

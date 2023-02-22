@@ -275,7 +275,7 @@ export default {
     }
 
     :deep(.button-control) {
-      background: $bi-2;
+      background: black;
       color: $ti-1;
       //text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
       /*
@@ -490,7 +490,7 @@ export default {
     padding: 6px 14px;
     font-weight: 400;
     font-family: chicagoflf;
-    font-size: 1em;
+    font-size: 1rem;
     border-radius: 100px;
     &.active {
       font-weight: 500;

@@ -51,8 +51,10 @@
             <img v-else :src="item.thumb_url" />
           </div>
         </div>
-        <span slot="viewport" class="flicking-arrow-prev is-circle"> </span>
-        <span slot="viewport" class="flicking-arrow-next is-circle"> </span>
+        <template v-slot:viewport>
+          <span class="flicking-arrow-prev is-circle"></span>
+          <span class="flicking-arrow-next is-circle"></span>
+        </template>
       </Flicking>
     </div>
     <q-dialog v-model="showEditDialog">
@@ -72,7 +74,6 @@ import { Arrow, Fade } from '@egjs/flicking-plugins';
 import { mapState, mapWritableState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
-import { defineComponent } from 'vue-demi';
 
 const flickingPlugins = [new Arrow(), new Fade()];
 

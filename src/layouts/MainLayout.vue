@@ -3,7 +3,23 @@
     <MenuBar class="menubar" />
     <SideBar />
     <MainMap />
-    <router-view class="main-layout-router" />
+    <transition
+      appear
+      leave
+      :enter-active-class="
+        $q.screen.gt.sm ? 'animated slideInUp fast' : 'animated slideInUp'
+      "
+      :leave-active-class="
+        $q.screen.gt.sm ? 'animated slideOutDown fast' : 'animated slideOutDown'
+      "
+    >
+      <router-view
+        class="main-layout-router"
+        v-bind:class="{
+          'mobile-map-view-router': $q.screen.lt.sm,
+        }"
+      />
+    </transition>
   </div>
 </template>
 

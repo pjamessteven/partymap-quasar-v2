@@ -179,14 +179,10 @@
                       class="flex grow justify-start items-start"
                       v-if="!!event"
                     >
-                      <!--
-                          <DescriptionComponent
-                            :editing="editing"
-                            :class="
-                              $q.screen.gt.sm ? 'q-mt-md' : 'q-mt-lg q-mr-lg'
-                            "
-                          />
-                        -->
+                      <DescriptionComponent
+                        :editing="editing"
+                        :class="$q.screen.gt.sm ? 'q-mt-md' : 'q-mt-lg q-mr-lg'"
+                      />
                     </div>
                     <div
                       class="flex row justify-between items-end no-wrap tags-wrapper"
@@ -539,7 +535,7 @@ import { mapActions, mapState, mapWritableState } from 'pinia';
 
 import _ from 'lodash';
 import common from 'assets/common';
-//import DescriptionComponent from 'components/EventPage/DescriptionComponent.vue';
+import DescriptionComponent from 'components/EventPage/DescriptionComponent.vue';
 import EventDates from 'components/EventPage/EventDates/EventDates.vue';
 import FeaturedMediaBackground from 'components/EventPage/Gallery/FeaturedMediaBackground.vue';
 import FeaturedMediaComponent from 'components/EventPage/Gallery/FeaturedMediaComponent.vue';
@@ -576,7 +572,7 @@ export default {
     TagsComponent,
     FeaturedMediaComponent,
     FeaturedMediaBackground,
-    //DescriptionComponent,
+    DescriptionComponent,
     NextEventDateSummary,
     //ReportDialog,
     //HistoryComponent,

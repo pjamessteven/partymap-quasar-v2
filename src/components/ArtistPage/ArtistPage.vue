@@ -224,7 +224,7 @@ import { getArtistRequest, refreshArtistRequest } from 'src/api';
 
 import _ from 'lodash';
 import ArtistUrl from './ArtistUrl.vue';
-import EventDateCard from 'components/MapView/Sidebar/ExploreView/EventDateListView/EventDateCard.vue';
+import EventDateCard from 'components/EventDateCard.vue';
 import Tag from 'components/EventPage/Tags/TagComponent.vue';
 
 import { mapState } from 'pinia';
@@ -274,7 +274,6 @@ export default {
       default: false,
     },
   },
-  created() {},
   methods: {
     refreshArtist() {
       if (this.currentUser) {

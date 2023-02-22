@@ -249,10 +249,10 @@
     "vite" "^2.9.13"
     "webpack-merge" "^5.8.0"
 
-"@quasar/extras@^1.15.10":
-  "integrity" "sha512-6w8e+wPNfcWhzW43tlnJPHOrcNwAgaaNJ3zBz8k+BMqpenA3fHZhFhxCYEVRZVqPFE2IK/8nRiPBp4t9xlW5tA=="
-  "resolved" "https://registry.npmjs.org/@quasar/extras/-/extras-1.15.10.tgz"
-  "version" "1.15.10"
+"@quasar/extras@^1.15.11":
+  "integrity" "sha512-EEXL10EJQmL9jNs5fp0Kd/nyonG8hTODolj+qpYNPG3qEEoy3txr05Pdmp9qJYaXIzP9rOS9FGhFe9Mnq6MBBg=="
+  "resolved" "https://registry.npmjs.org/@quasar/extras/-/extras-1.15.11.tgz"
+  "version" "1.15.11"
 
 "@quasar/fastclick@1.1.5":
   "integrity" "sha512-p3JKgTjRlJ1YQXbqTw3Bsa4j0mQdt5dq+WfYvyb7MgKGdephHCKdR/kxA5PCTAmJanGJuDKqRdyGYX/hYN4KGw=="

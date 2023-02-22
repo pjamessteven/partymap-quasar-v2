@@ -20,6 +20,7 @@
           class="flex column grow no-wrap"
           :class="$q.screen.gt.xs ? 'q-mt-xl' : 'grow '"
         >
+          <!--
           <div class="flex row q-mb-lg q-gutter-sm q-pr-xl o-080">
             <q-btn
               icon="mdi-star-plus-outline"
@@ -35,6 +36,7 @@
 
             <q-btn icon="las la-cloud-download-alt" />
           </div>
+          -->
           <div
             v-if="
               (event && event.event_dates && event.event_dates.length > 1) ||

@@ -113,36 +113,37 @@
                   :showSelectedValue="true"
                   :showOnlySelected="true"
                 />
-
-                <div
-                  class="flex column"
-                  v-if="
-                    !isLoadingInitial &&
-                    !computedMapMoving &&
-                    Object.keys(componentGroup).length > 0
-                  "
-                >
+                <transition appear enter-active-class="animated fadeIn">
                   <div
-                    class="flex column artists-wrapper"
-                    v-if="noFiltersSelected && artists?.length > 0"
+                    class="flex column"
+                    v-if="
+                      !isLoadingInitial &&
+                      !computedMapMoving &&
+                      Object.keys(componentGroup).length > 0
+                    "
                   >
                     <div
-                      class="chicago header q-py-md t1"
-                      :class="
-                        $q.screen.lt.sm ? 'q-pl-sm q-mt-sm' : 'q-pl-md  q-py-md'
-                      "
+                      class="flex column artists-wrapper"
+                      v-if="noFiltersSelected && artists?.length > 0"
                     >
-                      Top artists in this area:
+                      <div
+                        class="header q-py-md t1"
+                        :class="
+                          $q.screen.lt.sm
+                            ? 'q-pl-sm q-mt-sm'
+                            : 'q-pl-md  q-py-md'
+                        "
+                      >
+                        Top artists in this area:
+                      </div>
+                      <ArtistsComponent
+                        class="artists-component"
+                        :artists="artists"
+                        :hasNext="artistsHasNext"
+                        :loadMore="loadMoreArtists"
+                      />
                     </div>
-                    <ArtistsComponent
-                      class="artists-component"
-                      :artists="artists"
-                      :hasNext="artistsHasNext"
-                      :loadMore="loadMoreArtists"
-                    />
-                  </div>
 
-                  <transition appear enter-active-class="animated fadeIn">
                     <div class="flex column">
                       <div
                         v-for="yearMonth in Object.keys(componentGroup)"
@@ -178,38 +179,39 @@
                         </div>
                       </div>
                     </div>
-                  </transition>
 
-                  <div
-                    class="row justify-center q-my-lg q-mb-xl"
-                    v-if="
-                      eventDatesHasNext &&
-                      eventDatesLoading &&
-                      !isLoadingInitial &&
-                      Object.keys(componentGroup).length !== 0
-                    "
-                  >
-                    <q-spinner-ios
-                      :color="$q.dark.isActive ? 'white' : 'black'"
-                      size="2em"
-                    />
+                    <div
+                      class="row justify-center q-my-lg q-mb-xl"
+                      v-if="
+                        eventDatesHasNext &&
+                        eventDatesLoading &&
+                        !isLoadingInitial &&
+                        Object.keys(componentGroup).length !== 0
+                      "
+                    >
+                      <q-spinner-ios
+                        :color="$q.dark.isActive ? 'white' : 'black'"
+                        size="2em"
+                      />
+                    </div>
+                    <div
+                      class="flex row justify-center q-mb-lg q-mt-lg t4"
+                      v-if="
+                        !eventDatesHasNext &&
+                        componentGroup &&
+                        Object.keys(componentGroup).length !== 0 &&
+                        !eventDatesLoading &&
+                        !isLoadingDatesInitial
+                      "
+                    >
+                      <div>End of results</div>
+                    </div>
                   </div>
-                  <div
-                    class="flex row justify-center q-mb-lg q-mt-lg t4"
-                    v-if="
-                      !eventDatesHasNext &&
-                      componentGroup &&
-                      Object.keys(componentGroup).length !== 0 &&
-                      !eventDatesLoading &&
-                      !isLoadingDatesInitial
-                    "
-                  >
-                    <div>End of results</div>
-                  </div>
-                </div>
+                </transition>
+
                 <transition appear enter-active-class="animated fadeIn">
                   <div
-                    class="no-parties-text chicago t4 flex grow q-mt-md"
+                    class="no-parties-text t4 flex grow q-mt-md"
                     v-if="
                       componentGroup &&
                       Object.keys(componentGroup).length == 0 &&
@@ -621,6 +623,7 @@ export default {
   top: 0px;
   //max-height: 48px;
   z-index: 10;
+  font-size: 1rem;
 }
 
 .event-list-vertical {

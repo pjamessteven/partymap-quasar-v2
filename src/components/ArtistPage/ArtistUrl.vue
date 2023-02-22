@@ -30,22 +30,19 @@
 
 <script>
 export default {
-  name: "ArtistUrl",
+  name: 'ArtistUrl',
   data() {
     return {};
   },
   props: {
     url: {
-      default: null
+      default: null,
     },
     iconsOnly: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  created() {},
-  methods: {},
-  mounted() {}
 };
 </script>
 

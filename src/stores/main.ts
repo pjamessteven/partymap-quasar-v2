@@ -18,6 +18,7 @@ interface MainStoreState {
   userLocationLoading: boolean;
   userLocation: Coordinates | null;
   userLocationName: string | null;
+  userLocationCity: string | null;
   fineLocation: boolean;
 }
 
@@ -35,6 +36,7 @@ export const useMainStore = defineStore('main', {
     userLocationLoading: false,
     userLocation: null,
     userLocationName: null,
+    userLocationCity: null,
     fineLocation: false,
   }),
   actions: {
@@ -51,6 +53,7 @@ export const useMainStore = defineStore('main', {
         };
         this.userLocationName =
           response.data.city + ', ' + response.data.country;
+        this.userLocationCity = response.data.city;
         return;
       } catch (error) {
         return error;
@@ -71,6 +74,7 @@ export const useMainStore = defineStore('main', {
               position.coords.latitude + ', ' + position.coords.longitude;
 
             this.userLocationName = unknownCityCoords;
+            this.userLocationCity = 'test';
 
             this.userLocationLoading = false;
             /*

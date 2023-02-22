@@ -83,16 +83,16 @@
                   "
                 >
                   <div class="q-pr-md ellipsis q-mt-md">
-                    <span class="text-h4 chicago">Nearby</span>
+                    <span class="text-h4 chicago">Near</span>
                   </div>
                 </div>
                 <div
-                  class="location-header flex items-center justify-between no-wrap text-large chicago t1 q-pl-md"
+                  class="text-h4 flex items-center justify-between no-wrap chicago t1 q-pl-md"
                   :class="$q.screen.lt.sm ? 'q-py-md' : ''"
                   style="text-transform: "
                 >
                   <span v-if="userLocationName" class="ellipsis">
-                    {{ userLocationName }}
+                    {{ userLocationCity }}
                   </span>
                   <span class="ellipsis" v-else>Finding your location... </span>
                   <q-btn
@@ -155,13 +155,13 @@
                   <!-- tags -->
 
                   <div
-                    class="q-py-md header q-mt-sm"
+                    class="q-py-md header q-mt-md"
                     v-if="nearbyTags && nearbyTags.length > 0"
                   >
-                    <div class="t1 text- chicago q-pl-md">Top tags:</div>
+                    <div class="t1 text- q-pl-md">Top tags:</div>
                   </div>
                   <div
-                    class="q-pl-md"
+                    class="q-pl-md q-mb-md"
                     v-if="nearbyTags && nearbyTags.length > 0"
                   >
                     <q-scroll-area
@@ -208,10 +208,10 @@
                   <!-- artists -->
 
                   <div
-                    class="t1 header q-py-md chicago q-pl-md"
+                    class="t1 location-header q-py-md q-pl-md"
                     v-if="nearbyArtists && nearbyArtists.length > 0"
                   >
-                    Top artists in the area:
+                    Top artists:
                   </div>
                   <ArtistsComponent
                     v-if="nearbyArtists && nearbyArtists.length > 0"
@@ -223,7 +223,7 @@
                   <!-- NEARBY EVENTS -->
 
                   <div
-                    class="t1 chicago header q-py-sm flex row items-center q-pl-md"
+                    class="t1 location-header q-py-sm flex row items-center q-pl-md"
                   >
                     <div class="">
                       {{ $t('landing_page.events_within') }}
@@ -234,7 +234,7 @@
                       borderless
                       map-options
                       behavior="menu"
-                      class="q-ml-xs radius-select chicago o-050"
+                      class="q-mx-xs radius-select o-050"
                       v-model="queryRadius"
                       :options="queryRadiusOptions"
                     />
@@ -530,6 +530,7 @@ export default {
       'userLocationLoading',
       'userLocation',
       'userLocationName',
+      'userLocationCity',
       'fineLocation',
     ]),
     ...mapWritableState(useQueryStore, ['controlTag']),
@@ -637,7 +638,7 @@ export default {
         .tag {
           opacity: 1;
           transition: all 0.3s ease;
-          background: $bi-1;
+          background: black;
           border: 1px solid rgba(255, 255, 255, 0.2);
 
           &:hover {
@@ -759,6 +760,7 @@ export default {
         top: 0px;
         z-index: 100;
         width: 100%;
+        font-size: 1rem;
       }
     }
     :deep(.q-scrollarea__content) {
@@ -849,6 +851,8 @@ export default {
       position: relative;
       //max-height: 72px;
       z-index: 5;
+      font-size: 1rem;
+
       //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.1);
       .location-input {
         input {
@@ -886,6 +890,7 @@ export default {
         cursor: pointer;
         border-radius: 9px;
         padding: 6px 12px;
+        font-size: 1rem;
         //font-size: small;
         &:hover {
           // opacity: 0.48;

@@ -1,12 +1,14 @@
 <template>
   <div class="flex sidebar-wrapper">
-    <transition
+    <Transition
       appear
       :enter-active-class="
-        $q.screen.lt.sm ? 'animated ' : 'animated slideInLeft'
+        $q.screen.lt.sm ? 'animated ' : 'animated fast slideInLeft'
       "
       :leave-active-class="
-        $q.screen.lt.sm ? 'animated slideOutDown' : 'animated slideOutLeft'
+        $q.screen.lt.sm
+          ? 'animated slideOutDown'
+          : 'animated  fast slideOutLeft'
       "
     >
       <div
@@ -69,7 +71,7 @@
           <q-icon name="las la-grip-lines-vertical" />
         </div>
       </div>
-    </transition>
+    </Transition>
   </div>
 </template>
 
@@ -171,7 +173,7 @@ export default {
       } else if (this.sidebarExpanded && this.$q.screen.gt.sm) {
         return 'width: 736px;';
       } else {
-        return 'width: 370px';
+        return 'width: 398px';
       }
     },
     currentRoute() {
