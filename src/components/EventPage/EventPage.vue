@@ -113,7 +113,6 @@
                       />
                       -->
                     </div>
-
                     <NextEventDateSummary
                       :class="{
                         'o-050': editing,
@@ -197,6 +196,7 @@
                     v-if="$q.screen.gt.xs"
                   >
                     <FeaturedMediaComponent
+                      @featuredMediaHeight="bottomImagePadding = $event"
                       v-if="!!event"
                       :editing="editing"
                       :items="event?.media_items"
@@ -591,6 +591,7 @@ export default {
   },
   data() {
     return {
+      bottomImagePadding: 0,
       scrollPercentage: 0,
       showingReportDialog: false,
       showingClaimDialog: false,
@@ -684,6 +685,7 @@ export default {
       }
 
       try {
+        this.loading = true;
         const response = await this.loadEvent(this.id);
 
         this.editing = this.$route.params.editing;
@@ -692,7 +694,7 @@ export default {
         var queryString = '?name=' + response.data.name.replace(/ /g, '_');
         if (window.location.pathname.indexOf(queryString) === -1) {
           this.$router.replace({
-            path: this.$router.currentRoute.path,
+            path: this.$route.path,
             query: { name: response.data.name.replace(/ /g, '_') },
           });
         }
@@ -760,6 +762,7 @@ export default {
     ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
     ...mapState(useEventStore, ['loadingEvent', 'selectedEventDate']),
     ...mapWritableState(useEventStore, ['event', 'editing']),
+
     computedOverlayOpacity() {
       if (this.$q.screen.gt.xs) {
         return `opacity: calc(0.2 + ${this.scrollPercentage * 2})`;

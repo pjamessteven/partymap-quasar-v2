@@ -83,7 +83,6 @@ import NavigationBar from 'components/NavigationBar.vue';
 import { mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useMapStore } from 'src/stores/map';
-
 export default {
   components: {
     ExploreView,
@@ -121,6 +120,7 @@ export default {
   },
   methods: {
     resize(event) {
+      console.log(this.$refs.psw.pswp);
       if (event.x > 360 && event.x > this.lastx && !this.sidebarExpanded) {
         this.sidebarExpanded = true;
       } else if (
@@ -175,9 +175,6 @@ export default {
       } else {
         return 'width: 398px';
       }
-    },
-    currentRoute() {
-      return this.$router.currentRoute.name;
     },
   },
 };

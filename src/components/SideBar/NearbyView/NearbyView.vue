@@ -89,12 +89,12 @@
                 <div
                   class="text-h4 flex items-center justify-between no-wrap chicago t1 q-pl-md"
                   :class="$q.screen.lt.sm ? 'q-py-md' : ''"
-                  style="text-transform: "
+                  style="width: 100%"
                 >
                   <span v-if="userLocationName" class="ellipsis">
                     {{ userLocationCity }}
                   </span>
-                  <span class="ellipsis" v-else>Finding your location... </span>
+                  <span class="ellipsis" v-else>... </span>
                   <q-btn
                     class="q-ml-sm q--r"
                     :class="$q.screen.gt.sm ? 'q-mr-md' : ''"
@@ -158,7 +158,7 @@
                     class="q-py-md header q-mt-md"
                     v-if="nearbyTags && nearbyTags.length > 0"
                   >
-                    <div class="t1 text- q-pl-md">Top tags:</div>
+                    <div class="t1 text- chicago q-pl-md">Top tags:</div>
                   </div>
                   <div
                     class="q-pl-md q-mb-md"
@@ -208,7 +208,7 @@
                   <!-- artists -->
 
                   <div
-                    class="t1 location-header q-py-md q-pl-md"
+                    class="t1 location-header q-py-md chicago q-pl-md"
                     v-if="nearbyArtists && nearbyArtists.length > 0"
                   >
                     Top artists:
@@ -223,7 +223,7 @@
                   <!-- NEARBY EVENTS -->
 
                   <div
-                    class="t1 location-header q-py-sm flex row items-center q-pl-md"
+                    class="t1 chicago location-header q-py-sm flex row items-center q-pl-md"
                   >
                     <div class="">
                       {{ $t('landing_page.events_within') }}
@@ -234,7 +234,7 @@
                       borderless
                       map-options
                       behavior="menu"
-                      class="q-mx-xs radius-select o-050"
+                      class="q-mx-xs radius-select chicago o-050"
                       v-model="queryRadius"
                       :options="queryRadiusOptions"
                     />

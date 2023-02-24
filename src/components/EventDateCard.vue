@@ -1,6 +1,7 @@
 <template>
   <router-link
-    @click="showEventPage"
+    v-slot="{ navigate }"
+    :custom="true"
     style="text-decoration: none; color: unset"
     :to="{
       name: 'EventPage',
@@ -16,6 +17,7 @@
     <transition appear enter-active-class="animated fadeIn">
       <div
         class="ed-card"
+        @click="() => onClickCard($event, navigate)"
         @mouseover="setFocusMarker"
         @mouseleave="eventDateHoverMarker = null"
         :class="{
@@ -235,6 +237,7 @@ import common, { localDayOfMonth } from 'assets/common';
 import Tag from 'src/components/TagComponent.vue';
 import { mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
+
 export default {
   components: {
     Tag,
@@ -319,15 +322,18 @@ export default {
         `;
       }
     },
-    showEventPage() {
+    onClickCard(event, navigate) {
+      // blocking map updates on focusMarker watcher in MainMap.vue
       this.focusMarker = {
         lat: this.event.location.lat,
         lng: this.event.location.lng,
       };
+
+      navigate(event);
     },
   },
   computed: {
-    ...mapWritableState(useMapStore, ['eventDateHoverMarker']),
+    ...mapWritableState(useMapStore, ['eventDateHoverMarker', 'focusMarker']),
   },
   created() {
     // import common methods

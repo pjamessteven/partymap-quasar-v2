@@ -302,7 +302,7 @@ export default {
 
       if (window.location.pathname.indexOf(queryString) === -1) {
         this.$router.replace({
-          path: this.$router.currentRoute.path,
+          path: this.$route.path,
           query: { name: response.data.name.replace(/ /g, '_') },
         });
       }

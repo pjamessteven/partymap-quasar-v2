@@ -23,11 +23,25 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
+<script lang="ts">
 import MainMap from 'components/MainMap/MainMap.vue';
 import SideBar from 'components/SideBar/SideBar.vue';
 import MenuBar from 'components/MenuBar/MenuBar.vue';
+import { mapWritableState } from 'pinia';
+import { useMapStore } from 'src/stores/map';
+import { useMainStore } from 'src/stores/main';
+
+export default {
+  components: {
+    MainMap,
+    SideBar,
+    MenuBar,
+  },
+  computed: {
+    ...mapWritableState(useMapStore, ['blockUpdates']),
+    ...mapWritableState(useMainStore, ['showSidebar']),
+  },
+};
 </script>
 <style lang="scss">
 .main-layout {

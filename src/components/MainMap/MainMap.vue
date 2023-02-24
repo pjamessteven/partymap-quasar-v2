@@ -247,6 +247,7 @@ export default {
     focusMarker: {
       handler: function (newval) {
         if (newval !== null) {
+          this.blockUpdates = true;
           // save current map view so we can return to it
           if (newval.lat && newval.lng) {
             /*
@@ -281,9 +282,11 @@ export default {
       }
     },
     mapMoving: function (newv) {
-      if (newv === false && this.$router.currentRoute.name === 'Explore') {
-        this.blockUpdates = false;
-      }
+      this.$nextTick(() => {
+        if (newv === false && this.$route.name === 'Explore') {
+          this.blockUpdates = false;
+        }
+      });
     },
     theme: function () {
       this.initTileLayers();

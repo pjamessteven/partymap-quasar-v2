@@ -32,7 +32,7 @@
             hoveringImage = false;
           "
         >
-          <div class="item-wrapper-inner">
+          <div class="item-wrapper-inner" ref="itemWrapperInner">
             <div class="hover-overlay" @click="openPswp(index)"></div>
             <video
               v-if="item.v_low_url && item.v_low_url.length > 0"
@@ -48,7 +48,11 @@
                 class="image-thumb"
               />
             </video>
-            <img v-else :src="item.thumb_url" />
+            <img
+              v-else
+              :src="item.thumb_url"
+              @load="imageLoaded($event, index)"
+            />
           </div>
         </div>
         <template v-slot:viewport>
@@ -110,6 +114,12 @@ export default {
     };
   },
   methods: {
+    imageLoaded(e, index) {
+      console.log(e);
+      if (index === 0) {
+        this.$emit('featuredMediaHeight', e.target.height);
+      }
+    },
     flickingMoveStart(obj) {
       this.originalIndex = this.$refs.flicking.index;
       if (obj.direction === 'NEXT') {
@@ -136,6 +146,7 @@ export default {
     openPswp(index) {
       // set current item
       //
+      console.log('this', this.$Pswp);
       this.currentItemIndex = index;
       if (this.pswpItems[index].v_low_url) {
         // mount video player
@@ -357,6 +368,10 @@ export default {
       width: 100%;
       overflow: visible;
       height: 100%;
+      :deep(.flicking-camera) {
+        max-height: 100%;
+        height: 100%;
+      }
       .flicking-arrow-prev.is-circle,
       .flicking-arrow-next.is-circle {
         border-radius: 0px;

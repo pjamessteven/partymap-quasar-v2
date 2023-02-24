@@ -142,16 +142,16 @@ export const useQueryStore = defineStore('query', {
     artistsLoading: false,
   }),
   getters: {
-    anyQueryFiltersEnabled(): boolean {
+    anyQueryFiltersEnabled: (state): boolean => {
       return (
-        !!this.controlDateRange.end ||
-        this.controlDuration.length > 0 ||
-        this.controlSize.length > 0 ||
-        this.controlArtist.length > 0 ||
-        this.controlTag.length > 0 ||
-        !!this.controlCountry ||
-        !!this.controlRegion ||
-        !!this.controlLocality
+        !!state.controlDateRange.end ||
+        state.controlDuration.length > 0 ||
+        state.controlSize.length > 0 ||
+        state.controlArtist.length > 0 ||
+        state.controlTag.length > 0 ||
+        !!state.controlCountry ||
+        !!state.controlRegion ||
+        !!state.controlLocality
       );
     },
   },

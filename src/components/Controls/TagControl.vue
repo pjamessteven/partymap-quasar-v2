@@ -173,7 +173,7 @@ export default {
     ...mapActions(useQueryStore, ['loadTagOptions']),
     onBeforeShowMenu() {
       // used to stop the ed list refrshing on mobile viewport size change
-      //this.blockUpdates = true;
+      this.blockUpdates = true;
       if (!this.tagOptions || this.tagOptions.length === 0) {
         this.loadInitialList();
       }

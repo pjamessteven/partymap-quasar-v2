@@ -92,6 +92,7 @@
                   <span class="text-h4 chicago">Explore</span>
                 </div>
               </div>
+
               <div class="flex column no-wrap content">
                 <ControlsComponent
                   v-if="$q.screen.gt.xs"
@@ -113,12 +114,13 @@
                   :showSelectedValue="true"
                   :showOnlySelected="true"
                 />
+
                 <transition appear enter-active-class="animated fadeIn">
                   <div
                     class="flex column"
                     v-if="
                       !isLoadingInitial &&
-                      !computedMapMoving &&
+                      showResults &&
                       Object.keys(componentGroup).length > 0
                     "
                   >
@@ -127,7 +129,7 @@
                       v-if="noFiltersSelected && artists?.length > 0"
                     >
                       <div
-                        class="header q-py-md t1"
+                        class="header q-py-md t1 chicago"
                         :class="
                           $q.screen.lt.sm
                             ? 'q-pl-sm q-mt-sm'
@@ -410,6 +412,16 @@ export default {
     },
   },
   watch: {
+    showResults(newv) {
+      console.log(
+        'showResults',
+        newv,
+        'mapMoving',
+        this.mapMoving,
+        'blockupdate',
+        this.blockUpdates
+      );
+    },
     route: {
       handler: async function (to) {
         if (to.name === 'Explore') {
@@ -491,7 +503,12 @@ export default {
     ]),
     ...mapWritableState(useMainStore, ['showPanelMobile']),
     ...mapState(useAuthStore, ['currentUser']),
-    ...mapState(useMapStore, ['mapBounds', 'mapMoving', 'blockUpdates']),
+    ...mapState(useMapStore, [
+      'mapBounds',
+      'showResults',
+      'blockUpdates',
+      'mapMoving',
+    ]),
     ...mapState(useQueryStore, [
       'controlTag',
       'controlDateRange',
@@ -524,9 +541,6 @@ export default {
     },
     isLoadingInitial() {
       return this.isLoadingDatesInitial || this.isLoadingArtistsInitial;
-    },
-    computedMapMoving() {
-      return this.mapMoving && !this.blockUpdates;
     },
     computedGridColumns() {
       if (this.sidebarExpanded) {

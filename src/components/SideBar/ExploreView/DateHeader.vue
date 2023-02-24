@@ -1,7 +1,7 @@
 <template>
   <div class="date-header-wrapper q-m">
     <div
-      class="date-header flex row grow ellipsis q-py-md t1"
+      class="date-header flex row grow ellipsis q-py-md t1 chicago"
       :class="$q.screen.gt.xs ? ' q-px-md' : 'q-px-sm'"
     >
       <div>{{ dateString }}</div>
