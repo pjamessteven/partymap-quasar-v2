@@ -80,7 +80,7 @@
                 class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
               >
                 <div
-                  class="flex row items-baseline no-wrap text-large chicago q-mr-sm ellipsis"
+                  class="flex row items-baseline no-wrap chicago q-mr-sm ellipsis"
                 >
                   <span class="ellipsis">{{ event.name }}</span>
                   <q-icon
@@ -354,15 +354,14 @@ export default {
     background: $bi-1;
     //blue background-color: #0b0e13;
     .card-top-content {
-      border-left: 1px solid rgba(255, 255, 255, 0.1);
-      border-right: 1px solid rgba(255, 255, 255, 0.1);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
       .day-wrapper {
         background: $bi-3;
       }
     }
     .card-bottom-content {
       border-top: 1px solid (rgba(255, 255, 255, 0.2));
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
       .card-bottom-background {
         background: $bi-3;
         opacity: 0.4;
@@ -550,6 +549,7 @@ export default {
       }
 
       .ed-card-header {
+        font-size: 1rem;
         max-width: 100%;
         opacity: 1;
         //color: white !important;

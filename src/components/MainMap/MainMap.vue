@@ -269,7 +269,7 @@ export default {
     eventDateHoverMarker: function (newv) {
       this.eventDateHoverLayer.unbindTooltip();
       this.eventDateHoverLayer.clearLayers();
-      if (newv !== null) {
+      if (newv !== null && this.map) {
         var markers = [
           L.marker([newv.lat, newv.lng], {
             icon: this.defaultIcon,
@@ -499,7 +499,7 @@ export default {
       this.map.on('zoomend', (event) => {
         if (event.target.getZoom() > 10) {
           // show markers with tooltips at a certain zoom level
-          if (this.mapMarkers && this.map.hasLayer(this.mapMarkers)) {
+          if (this.mapMarkers && this.map?.hasLayer(this.mapMarkers)) {
             this.map.removeLayer(this.mapMarkers);
             this.map.addLayer(this.mapMarkersPermanentTooltip);
           }
@@ -507,7 +507,7 @@ export default {
           // remove markers with tooltips
           if (
             this.mapMarkersPermanentTooltip &&
-            this.map.hasLayer(this.mapMarkersPermanentTooltip)
+            this.map?.hasLayer(this.mapMarkersPermanentTooltip)
           ) {
             this.map.removeLayer(this.mapMarkersPermanentTooltip);
             this.map.addLayer(this.mapMarkers);
@@ -518,10 +518,10 @@ export default {
     initTileLayers() {
       let filter = [];
 
-      if (this.tileLayer && this.map.hasLayer(this.tileLayer)) {
+      if (this.tileLayer && this.map?.hasLayer(this.tileLayer)) {
         this.map.removeLayer(this.tileLayer);
       }
-      if (this.labelLayer && this.map.hasLayer(this.labelLayer)) {
+      if (this.labelLayer && this.map?.hasLayer(this.labelLayer)) {
         this.map.removeLayer(this.labelLayer);
       }
       if (this.mapStyle === 'satellite') {

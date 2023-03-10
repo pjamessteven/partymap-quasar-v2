@@ -1,6 +1,5 @@
 <template>
   <div class="event-page">
-    <!--<div class="event-page-overlay" /-->
     <div
       class="flex row no-wrap event-page-content"
       :style="computedSidebarPadding"
@@ -636,6 +635,8 @@ export default {
       this.$router.go(-1);
     },
     onScrollMainContent(info) {
+      console.log('here', info.target.scrollTop);
+
       // window height
       /*
       var height = window.innerHeight / 3 - 120 // this is the height of the gap between menu bar and top of event card
@@ -649,13 +650,22 @@ export default {
       */
       var height = window.innerHeight / 3 - 120; // this is the height of the gap between menu bar and top of event card
       this.scrollPercentage = info.target.scrollTop / height;
+      console.log('scre', this.scrollPercentage);
       if (this.$q.screen.lt.lg) {
-        // menubar should always show on large screens
+        // menubar should always show on large screens (when sidebar is open)
         if (this.$q.screen.gt.xs) {
-          this.menuBarOpacity = (info.target.scrollTop / 100) * -1 + 1;
+          this.overlayOpacity = 1 - this.scrollPercentage * 2;
+
+          // this.menuBarOpacity = (info.target.scrollTop / 100) * -1 + 1;
         } else {
-          this.menuBarOpacity = ((info.target.scrollTop * 1.5) / 100) * -1 + 1;
+          // this.menuBarOpacity = ((info.target.scrollTop * 1.5) / 100) * -1 + 1;
+          this.overlayOpacity = 1 - this.scrollPercentage * 2;
         }
+      }
+      if (this.$q.screen.gt.xs) {
+        this.overlayOpacity = this.scrollPercentage * 2;
+      } else {
+        this.overlayOpacity = 0;
       }
     },
     share() {
@@ -757,19 +767,12 @@ export default {
   },
   computed: {
     ...mapState(useMainStore, ['sidebarExpanded']),
-    ...mapWritableState(useMainStore, ['menubarOpacity']),
+    ...mapWritableState(useMainStore, ['menubarOpacity', 'overlayOpacity']),
     ...mapWritableState(useMapStore, ['focusMarker']),
     ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
     ...mapState(useEventStore, ['loadingEvent', 'selectedEventDate']),
     ...mapWritableState(useEventStore, ['event', 'editing']),
 
-    computedOverlayOpacity() {
-      if (this.$q.screen.gt.xs) {
-        return `opacity: calc(0.2 + ${this.scrollPercentage * 2})`;
-      } else {
-        return 'opacity: 0';
-      }
-    },
     computedSidebarPadding() {
       if (this.$q.screen.lt.lg) {
         return 'padding-left: 0px';

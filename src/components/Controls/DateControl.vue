@@ -47,7 +47,7 @@
       >
         <div class="calendar-header flex row items-center" style="">
           <q-list dense style="min-width: 100px" v-if="$q.screen.gt.xs">
-            <q-item-label header class="q-pb-xs">{{
+            <q-item-label header class="q-pb-sm">{{
               $t('top_controls.shortcuts')
             }}</q-item-label>
             <q-item
@@ -154,7 +154,7 @@
               </q-menu>
             </q-item>
           </q-list>
-          <v-date-picker
+          <DatePicker
             title-position="center"
             @update:model-value="onSelectedCustomDateRange"
             class="date-picker flex"
@@ -178,8 +178,12 @@ import 'v-calendar/dist/style.css';
 import moment from 'moment';
 import { mapWritableState } from 'pinia';
 import { useQueryStore } from 'src/stores/query';
+import { DatePicker } from 'v-calendar';
 
 export default {
+  components: {
+    DatePicker,
+  },
   props: {
     showSelectedValue: {
       default: false,
@@ -631,9 +635,10 @@ export default {
 
 .date-picker {
   border-radius: 0px !important;
-  border-top-right-radius: 9px !important;
-  border-bottom-right-radius: 9px !important;
-  :deep(.vc-container) {
+  border: none !important;
+
+  .vc-container {
+    border: none !important;
   }
 }
 .calendar-header {

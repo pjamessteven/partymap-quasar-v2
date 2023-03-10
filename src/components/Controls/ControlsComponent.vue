@@ -20,13 +20,13 @@
         v-touch-swipe.vertical="handleSwipe"
       >
         <div
-          class="flex row scroll-wrapper tag-controls q-gutter-sm"
+          class="flex row scroll-wrapper tag-controls"
           :class="[
             $q.screen.gt.xs
-              ? $q.screen.lt.xl
+              ? $q.screen.lt.xl && !this.sidebarExpanded
                 ? 'q-px-md q-py-xs '
                 : 'q-px-md q-py-xs no-wrap '
-              : 'q-px-sm  no-wrap q-py-xs q-gutter-xs',
+              : 'q-gutter-sm q-px-sm  no-wrap',
           ]"
         >
           <DateControl
@@ -186,7 +186,7 @@ export default {
     },
   },
   computed: {
-    ...mapWritableState(useMainStore, ['showPanelMobile']),
+    ...mapWritableState(useMainStore, ['showPanelMobile', 'sidebarExpanded']),
     ...mapState(useMainStore, ['mapStyle']),
     ...mapState(useQueryStore, [
       'controlDateRange',
@@ -490,6 +490,7 @@ export default {
     padding: 6px 14px;
     font-weight: 400;
     font-family: chicagoflf;
+    text-transform: lowercase;
     font-size: 1rem;
     border-radius: 100px;
     &.active {
@@ -591,6 +592,9 @@ export default {
         padding-left: 8px;
         padding-right: 24px;
         :deep(.button-control) {
+          font-size: 1em;
+          //border-radius: 100px !important;
+
           //padding: 4px 12px;
           //border-radius: 48px !important;
         }

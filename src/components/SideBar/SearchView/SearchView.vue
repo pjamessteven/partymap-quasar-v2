@@ -1,6 +1,6 @@
 <template>
   <div class="search-view main-content flex column grow no-wrap">
-    <div class="sidebar-header">
+    <div class="sidebar-header" v-if="$q.screen.gt.xs">
       <div
         class="chicago text-h4 q-mt-md q-pl-md"
         :class="$q.screen.lt.sm ? ' ' : 'q-mb-sm'"

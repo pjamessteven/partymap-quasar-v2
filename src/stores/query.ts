@@ -71,7 +71,7 @@ interface QueryState {
   loadingPoints: boolean;
 
   // event dates in bounds/query
-  eventDates: EventDate[];
+  eventDates: [EventDate, string][]; // string is the distance from current location
   eventDatesPage: number;
   eventDatesHasNext: boolean;
   eventDatesLoading: boolean;
@@ -321,7 +321,6 @@ export const useQueryStore = defineStore('query', {
       }
     },
     async loadTagOptions(query: string) {
-      console.log('called', query);
       try {
         this.tagOptionsLoading = true;
         const response = await getTagRequest({

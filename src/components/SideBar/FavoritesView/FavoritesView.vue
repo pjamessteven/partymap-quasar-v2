@@ -77,8 +77,12 @@
           <transition enter-active-class="animated fadeIn">
             <div class="flex column no-wrap scroll-content">
               <div
-                v-if="$q.screen.gt.xs"
                 class="sidebar-header flex column no-wrap items-stretch justify-between ellipsis no-wrap"
+                v-touch-swipe="
+                  () => {
+                    sidebarPanel = 'explore';
+                  }
+                "
               >
                 <div
                   class="q-pl-md q-pt-md q-pb- q-pr-md ellipsis"
@@ -104,14 +108,13 @@
                   />
                 </div>
                 <ControlsComponent
-                  v-if="$q.screen.lt.sm"
                   class="controls-component"
-                  :class="$q.screen.lt.sm ? 'q-mt-md' : 'q-mb-sm '"
+                  :class="$q.screen.lt.sm ? 'q-pt-sm' : 'q-mb-sm '"
                   :showSelectedValue="true"
-                  :showOnlySelected="false"
+                  :showOnlySelected="true"
                 />
 
-                <transition appear enter-active-class="animated fadeIn faster">
+                <transition appear enter-active-class="animated fadeIn">
                   <div
                     class="flex column"
                     v-show="showResults && !isLoadingInitial"
@@ -165,9 +168,7 @@
                       </div>
                       <div
                         v-else-if="
-                          eventDates.length == 0 &&
-                          !isLoadingDatesInitial &&
-                          !eventDatesLoading
+                          eventDates.length == 0 && !isLoadingDatesInitial
                         "
                         class="t4"
                       >
@@ -184,13 +185,13 @@
       <div
         v-touch-swipe="handleSwipe"
         class="event-date-center flex grow justify-center q-pt-lg"
-        style="height: 100%; position: absolute; width: 100%; z-index: 500"
+        style="height: 100%; position: absolute; width: 100%"
       >
         <q-spinner-ios
           :thickness="1"
           :color="$q.dark.isActive ? 'white' : 'black'"
           size="2em"
-          v-if="isLoadingInitial || mapMoving"
+          v-if="isLoadingInitial"
           v-touch-swipe="handleSwipe"
         />
       </div>
@@ -426,10 +427,12 @@ export default {
       'controlFavorites',
       'artists',
       'artistsHasNext',
+      'eventDates',
+      'eventDatesPage',
+      'eventDatesHasNext',
       'eventDatesLoading',
     ]),
     ...mapWritableState(useQueryStore, [
-      'eventDates',
       'eventDatesPage',
       'eventDatesHasNext',
       'artistsPage',

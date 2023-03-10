@@ -1,5 +1,10 @@
 <template>
   <div class="flex sidebar-wrapper">
+    <div
+      class="mobile-dismiss-list-background"
+      :class="{ expanded: $q.screen.lt.sm && showPanelMobile }"
+    />
+
     <Transition
       appear
       :enter-active-class="
@@ -28,12 +33,22 @@
             $q.screen.lt.sm && this.$route.name !== 'Explore',
         }"
       >
+        <!--
         <div
-          class="mobile-dismiss-list q-py-md flex column"
+          class="mobile-dismiss-list q-py-md flex column text-h4 chicago q-pl-md"
           v-if="$q.screen.lt.sm"
           @click="handleSwipe"
+          style="text-transform: capitalize"
           v-touch-swipe="handleSwipe"
-        ></div>
+        >
+          {{ sidebarPanel }}
+        </div>
+-->
+        <div
+          class="handle-container flex grow justify-center items-center q-py-md"
+        >
+          <div class="handle" />
+        </div>
 
         <div class="flex column menubar">
           <NavigationBar class="nav-bar" v-if="$q.screen.gt.xs" />
@@ -44,8 +59,8 @@
         <q-tab-panels
           keep-alive
           v-model="sidebarPanel"
-          animated
-          class="shadow-2 rounded-borders"
+          :animated="$q.screen.gt.xs"
+          class="shadow-2 panels"
           style="height: 100%"
         >
           <q-tab-panel name="nearby">
@@ -54,6 +69,12 @@
 
           <q-tab-panel name="explore">
             <ExploreView
+              style="position: absolute; height: 100%; width: 100%"
+            />
+          </q-tab-panel>
+
+          <q-tab-panel name="favorites">
+            <FavoritesView
               style="position: absolute; height: 100%; width: 100%"
             />
           </q-tab-panel>
@@ -78,6 +99,7 @@
 <script>
 import ExploreView from './ExploreView/ExploreView.vue';
 import SearchView from './SearchView/SearchView.vue';
+import FavoritesView from './FavoritesView/FavoritesView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
 import NavigationBar from 'components/NavigationBar.vue';
 import { mapState, mapWritableState } from 'pinia';
@@ -89,6 +111,7 @@ export default {
     SearchView,
     NavigationBar,
     NearbyView,
+    FavoritesView,
   },
   async mounted() {
     if (this.$q.screen.gt.lg) {
@@ -185,12 +208,14 @@ export default {
   .hover-indicator-line {
     background: rgba(255, 255, 255, 0.2);
   }
+  .mobile-dismiss-list-background {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+  }
   .sidebar {
     background: black;
     border-right: 1px solid rgba(255, 255, 255, 0.1);
     .mobile-dismiss-list {
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(10px);
     }
     :deep(.content) {
     }
@@ -209,16 +234,17 @@ export default {
   .hover-indicator-line {
     background: rgba(0, 0, 0, 0.2);
   }
+  .mobile-dismiss-list-background {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+  }
   .sidebar {
     background: white;
     .mobile-dismiss-list {
-      background: rgba(150, 150, 150, 0.2);
       color: white;
-      backdrop-filter: blur(10px);
     }
 
     :deep(.content) {
-      background: white;
     }
     :deep(.sidebar-header) {
       color: $bi-2;
@@ -246,7 +272,9 @@ export default {
   height: 100%;
 
   pointer-events: all;
-
+  .handle-container {
+    display: none;
+  }
   :deep(.q-tab-panel) {
     padding: 0px;
   }
@@ -268,12 +296,12 @@ export default {
     top: 0px;
     z-index: 100;
   }
-  :deep(.content) {
+  :deep(.panels) {
     width: 100%;
   }
 
   .mobile-dismiss-list {
-    padding-top: 96px;
+    padding-top: 0px;
   }
   .nav-bar {
     position: absolute;
@@ -282,14 +310,7 @@ export default {
     height: 63px;
     width: 204px;
   }
-  .handle {
-    width: 100%;
-    height: 32px;
-    margin-top: -32px;
-    border-top-left-radius: 18px;
-    display: none;
-    border-top-right-radius: 18px;
-  }
+
   .resizer {
     position: absolute;
     top: 50%;
@@ -340,13 +361,35 @@ export default {
     }
     .sidebar {
       box-shadow: none;
-      background: transparent;
+      border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+
+      .handle-container {
+        .handle {
+          background: rgba(255, 255, 255, 0.8);
+        }
+      }
+      :deep(.panels) {
+        box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
+        border-top-right-radius: 18px;
+        border-top-left-radius: 18px;
+        width: 100%;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+      }
     }
   }
   .body--light {
     .sidebar {
       box-shadow: none;
-      background: transparent;
+      border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+
+      .handle-container {
+        .handle {
+          background: rgba(255, 255, 255, 0.68);
+        }
+      }
+      :deep(.panels) {
+        box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
+      }
     }
   }
   .sidebar-wrapper {
@@ -357,18 +400,33 @@ export default {
       transition: all 0.3s ease;
       //margin-top: 48px;
       transform: translate3d(0, calc(100% - 320px), 0);
-      //border-top-right-radius: 18px;
-      //border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+      border-top-left-radius: 18px;
       will-change: transform;
       padding-bottom: 73px;
-      overflow: hidden !important;
-      border: none !important;
-      :deep(.content) {
+      border-left: none;
+      border-right: none;
+      overflow: visible;
+      .handle-container {
+        display: flex;
+        position: relative;
+        top: 0px;
+        width: 100%;
+        height: 16px;
+        z-index: 1000;
+        pointer-events: none;
+        .handle {
+          height: 2px;
+          width: 32px;
+        }
+      }
+      :deep(.main-content) {
+        padding-top: 0px;
+      }
+      :deep(.panels) {
         //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.4);
-
-        //border-top-right-radius: 18px;
-        //border-top-left-radius: 18px;
-        overflow: hidden;
+        border-top-right-radius: 18px;
+        border-top-left-radius: 18px;
         width: 100%;
       }
       .logo-padding {
@@ -387,6 +445,7 @@ export default {
         width: 100%;
         z-index: 100;
       }
+
       .mobile-dismiss-list {
         height: 100px;
         will-change: height;
@@ -394,11 +453,28 @@ export default {
         transition: all 0.3s;
       }
     }
+    .mobile-dismiss-list-background {
+      display: none;
+      transition: all 0.2s ease;
+      width: 100%;
+      z-index: 1;
+      height: 200px;
+      //margin-top: 48px;
+      transform: translate3d(0, calc(100% + 240px), 0);
+      //border-top-right-radius: 18px;
+      //border-top-left-radius: 18px;
+      position: absolute;
+      //top: calc(100% - 320px);
+
+      will-change: transform;
+      &.expanded {
+        transform: translate3d(0, 0, 0) !important;
+      }
+    }
   }
 
   .sidebar-mobile-expanded {
-    //margin-top: 24px;
-    transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 80px, 0) !important;
     .mobile-dismiss-list {
       height: 200px;
     }

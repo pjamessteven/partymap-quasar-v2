@@ -86,6 +86,7 @@ export default {
   }
   .menubar {
     z-index: 1;
+
     &.search-expanded {
       .logo {
         opacity: 0;

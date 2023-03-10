@@ -599,6 +599,12 @@ body {
   overflow-x: auto;
   overflow-y: auto;
   */
+  //font-family: chicagoflf;
+  //font-weight: 200;
+  font-size: unset;
+  border-radius: 0px;
+  //font-family: chicagoflf;
+  //text-transform: lowercase;
 }
 .q-menu--dark {
   box-shadow: none;
@@ -743,6 +749,12 @@ body {
     margin-top: 0px;
     width: 100%;
     height: 100%;
+  }
+  .q-menu {
+    max-width: unset;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+      rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    border-radius: 0px;
   }
 }
 @media only screen and (max-width: 1023px) {

@@ -20,7 +20,7 @@ export default {
   computed: {
     dateString() {
       if (this.date) {
-        return 'Events in ' + moment(this.date).format('MMM YYYY');
+        return '' + moment(this.date).format('MMM YYYY');
       } else {
         return '';
       }
@@ -30,16 +30,21 @@ export default {
 </script>
 <style lang="scss" scoped>
 .date-header-wrapper {
-  position: relative;
+  position: sticky;
+  top: 0px;
   width: 100%;
+  z-index: 3001;
+
   .date-header {
     height: 100%;
     position: relative;
+
+    text-transform: lowercase;
     //position: absolute;
-    z-index: 3001;
     width: 100%;
     display: flex;
     align-items: center;
+    font-size: 1rem;
   }
   /*
   .date-header-shadow {
@@ -59,6 +64,9 @@ export default {
   }
 }
 .body--dark {
+  .date-header {
+    background: black !important;
+  }
 }
 @media only screen and (max-width: 600px) {
   .date-header {

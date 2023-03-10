@@ -3,7 +3,9 @@
     <q-tabs
       v-model="sidebarPanel"
       no-caps
-      :compact="$q.screen.lt.sm"
+      :indicator-color="
+        this.$route.name === 'Explore' ? undefined : 'transparent'
+      "
       :shrink="$q.screen.gt.xs"
     >
       <q-tab
@@ -116,6 +118,7 @@ export default {
   width: 216px;
   padding-right: 8px;
   pointer-events: all;
+
   //height: 62px;
   :deep(.q-tabs) {
     height: 100%;
@@ -161,8 +164,11 @@ export default {
     display: none;
   }
   .navigation-bar {
-    width: unset;
-    padding-right: unset;
+    width: 100%;
+    position: absolute;
+    z-index: 1000;
+    bottom: 0;
+
     :deep(.q-tab__icon) {
       padding: 6px 4px;
     }

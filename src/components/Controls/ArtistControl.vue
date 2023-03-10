@@ -52,7 +52,6 @@
         <div class="flex column">
           <div class="sticky-input">
             <q-input
-              @update:model-value="loadInitialList()"
               debounce="500"
               clearable
               class="q-ml-md q-mr-md"
@@ -83,7 +82,7 @@
               class="flex column"
               style="position: relative; min-height: 400px"
             >
-              <q-list v-if="artists && artists.length > 0">
+              <q-list v-if="artistOptions && artistOptions.length > 0">
                 <q-item-label
                   header
                   class="t3 q-pb-sm"
@@ -93,7 +92,7 @@
 
                 <div
                   class="flex column"
-                  v-for="(artist, index) in artists"
+                  v-for="(artist, index) in artistOptions"
                   :key="index"
                 >
                   <q-separator v-if="index > 0" />
@@ -159,7 +158,10 @@
                   </q-item>
                 </div>
               </q-list>
-              <div class="row justify-center q-my-md" v-if="hasNext">
+              <div
+                class="row justify-center q-my-md"
+                v-if="artistOptionsHasNext && artistOptions?.length > 0"
+              >
                 <q-spinner-ios
                   :color="$q.dark.isActive ? 'white' : 'black'"
                   size="2em"
@@ -167,8 +169,8 @@
               </div>
               <div
                 class="flex row grow justify-center items-center q-my-md"
-                v-if="loading && page == 1"
-                style="height: 100%"
+                v-if="artistOptionsLoading && artistOptionsPage == 1"
+                style="height: 100%; z-index: 10"
               >
                 <q-spinner-ios
                   :color="$q.dark.isActive ? 'white' : 'black'"
@@ -205,7 +207,7 @@ export default {
     onBeforeShowMenu() {
       // used to stop the ed list refrshing on mobile viewport size change
       this.blockUpdates = true;
-      if (!this.artists || this.artists.length === 0) {
+      if (!this.artistOptions || this.artistOptions.length === 0) {
         this.loadInitialList();
       }
     },
@@ -216,8 +218,8 @@ export default {
     },
     onScrollMainContent(info) {
       if (info.verticalPercentage === 1) {
-        // reached bottom
-        this.loadMoreArtistOptions(this.query);
+        // reached bottom, load more
+        this.loadArtistOptions(this.query);
       }
     },
     loadInitialList() {
@@ -225,11 +227,20 @@ export default {
       this.loadArtistOptions(this.query);
     },
   },
+  watch: {
+    query() {
+      this.artistOptions = [];
+      this.loadInitialList();
+    },
+  },
   computed: {
     ...mapWritableState(useMapStore, ['blockUpdates']),
-    ...mapWritableState(useQueryStore, ['controlArtist', 'artistOptionsPage']),
-    ...mapState(useQueryStore, [
+    ...mapWritableState(useQueryStore, [
+      'controlArtist',
+      'artistOptionsPage',
       'artistOptions',
+    ]),
+    ...mapState(useQueryStore, [
       'artistOptionsHasNext',
       'artistOptionsLoading',
     ]),
@@ -263,10 +274,5 @@ export default {
   position: sticky;
   z-index: 1;
   top: 0;
-}
-.date-picker {
-  border-radius: 0px !important;
-  border-bottom-left-radius: 9px !important;
-  border-bottom-rightradius: 9px !important;
 }
 </style>

@@ -88,7 +88,7 @@
                 </div>
                 <div
                   class="text-h4 flex items-center justify-between no-wrap chicago t1 q-pl-md"
-                  :class="$q.screen.lt.sm ? 'q-py-md' : ''"
+                  :class="$q.screen.lt.sm ? 'q-pb-md' : ''"
                   style="width: 100%"
                 >
                   <span v-if="userLocationName" class="ellipsis">
@@ -181,7 +181,7 @@
                               (x, i) => i % 2
                             )"
                             :key="index"
-                            @selected="clickTag(tag)"
+                            @click="clickTag(tag)"
                             class="tag t2 text- chicago"
                             style="text-transform: capitalize"
                           >
@@ -194,7 +194,7 @@
                               (x, i) => i % 2 !== 1
                             )"
                             :key="index"
-                            @selected="clickTag(tag)"
+                            @click="clickTag(tag)"
                             class="tag t2 text- chicago"
                             style="text-transform: capitalize"
                           >
@@ -485,8 +485,13 @@ export default {
     },
 
     clickTag(tag) {
-      // mutation toggles tag
-      this.controlTag = [tag];
+      let index = this.controlTag?.findIndex((x) => x.tag === tag.tag);
+      if (index > -1) {
+        // tag already selected, do nothing
+      } else {
+        this.controlTag.push(tag);
+      }
+      this.sidebarPanel = 'explore';
     },
 
     loadEventDatePage(page) {
@@ -611,9 +616,6 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .landing-page {
-    .landing-page-background {
-      //  background: linear-gradient(180deg, rgba(0, 0, 0, 0.48), black);
-    }
     .map-gap {
       color: white;
       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
@@ -655,9 +657,6 @@ export default {
 }
 .body--light {
   .landing-page {
-    .landing-page-background {
-      //background: linear-gradient(180deg, rgba(0, 0, 0, 0), black);
-    }
     .map-gap {
       color: white;
       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
@@ -681,10 +680,6 @@ export default {
       }
       .header {
         background: white;
-        //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.2);
-
-        //background: linear-gradient($b-3, $b-2);
-        //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.1);
       }
 
       .tag-scroll-area {
@@ -760,6 +755,8 @@ export default {
         top: 0px;
         z-index: 100;
         width: 100%;
+        text-transform: lowercase;
+
         font-size: 1rem;
       }
     }
@@ -852,6 +849,7 @@ export default {
       //max-height: 72px;
       z-index: 5;
       font-size: 1rem;
+      text-transform: lowercase;
 
       //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.1);
       .location-input {

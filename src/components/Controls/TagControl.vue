@@ -128,7 +128,10 @@
                   </q-item>
                 </div>
               </q-list>
-              <div class="row justify-center q-my-md" v-if="tagOptionsHasNext">
+              <div
+                class="row justify-center q-my-md"
+                v-if="tagOptionsHasNext && tagOptions?.length > 0"
+              >
                 <q-spinner-ios
                   :color="$q.dark.isActive ? 'white' : 'black'"
                   size="2em"
@@ -166,6 +169,7 @@ export default {
   },
   watch: {
     query() {
+      this.tagOptions = [];
       this.loadInitialList();
     },
   },
@@ -209,12 +213,12 @@ export default {
   },
   computed: {
     ...mapWritableState(useMapStore, ['blockUpdates']),
-    ...mapWritableState(useQueryStore, ['controlTag', 'tagOptionsPage']),
-    ...mapState(useQueryStore, [
+    ...mapWritableState(useQueryStore, [
+      'controlTag',
+      'tagOptionsPage',
       'tagOptions',
-      'tagOptionsHasNext',
-      'tagOptionsLoading',
     ]),
+    ...mapState(useQueryStore, ['tagOptionsHasNext', 'tagOptionsLoading']),
   },
 
   mounted() {

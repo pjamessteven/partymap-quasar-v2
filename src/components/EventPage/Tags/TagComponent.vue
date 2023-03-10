@@ -85,16 +85,14 @@ export default {
   align-items: center;
   justify-content: center;
   border-radius: 100px;
-  &:first-child {
-    .tag-inner-wrapper {
-      padding: 0px 6px;
-      position: relative;
-      transition: all 150ms ease-in-out;
-      border-radius: 20px;
-      .tag-inner {
-        width: max-content;
-        padding: 4px;
-      }
+  .tag-inner-wrapper {
+    padding: 0px 6px;
+    position: relative;
+    transition: all 150ms ease-in-out;
+    border-radius: 20px;
+    .tag-inner {
+      width: max-content;
+      padding: 4px;
     }
   }
 }

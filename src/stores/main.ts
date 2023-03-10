@@ -14,6 +14,7 @@ interface MainStoreState {
   sidebarPanel: string;
   showPanelMobile: boolean;
   menubarOpacity: number;
+  overlayOpacity: number;
   ipInfo: IpInfo | null;
   userLocationLoading: boolean;
   userLocation: Coordinates | null;
@@ -32,6 +33,7 @@ export const useMainStore = defineStore('main', {
     sidebarPanel: 'nearby',
     showPanelMobile: true,
     menubarOpacity: 1,
+    overlayOpacity: 0,
     ipInfo: null,
     userLocationLoading: false,
     userLocation: null,
