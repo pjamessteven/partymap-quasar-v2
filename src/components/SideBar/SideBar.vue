@@ -45,6 +45,8 @@
         </div>
 -->
         <div
+          @click="handleSwipe"
+          v-touch-swipe.vertical="handleSwipe"
           class="handle-container flex grow justify-center items-center q-py-md"
         >
           <div class="handle" />
@@ -59,7 +61,7 @@
         <q-tab-panels
           keep-alive
           v-model="sidebarPanel"
-          :animated="$q.screen.gt.xs"
+          :xanimated="$q.screen.gt.xs"
           class="shadow-2 panels"
           style="height: 100%"
         >
@@ -158,12 +160,16 @@ export default {
     hideDialog() {
       this.$router.push({ name: 'Explore' });
     },
-    handleSwipe() {
-      if (this.sidebarPanel !== 'explore') {
-        this.sidebarPanel = 'explore';
+    handleSwipe({ evt, ...info }) {
+      if (info.direction === 'down' || info.direction === 'up') {
+        if (this.sidebarPanel !== 'explore') {
+          this.sidebarPanel = 'explore';
+        }
+        this.showPanelMobile = !this.showPanelMobile;
+      } else {
+        evt.preventDefault();
+        evt.stopPropagation();
       }
-      this.showPanelMobile = !this.showPanelMobile;
-      // native Javascript event
     },
     handleSwipeDown() {
       this.showPanelMobile = !this.showPanelMobile;
@@ -414,7 +420,7 @@ export default {
         width: 100%;
         height: 16px;
         z-index: 1000;
-        pointer-events: none;
+        pointer-events: all;
         .handle {
           height: 2px;
           width: 32px;

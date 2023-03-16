@@ -43,11 +43,18 @@
         transition-show="jump-down"
         transition-hide="jump-up"
         @before-show="onBeforeShowMenu"
-        @before-hide="onBeforeHideMenu"
+        @before-hide="onBeforeHideMenu($event)"
         v-model="menuShowing"
         anchor="top middle"
         self="bottom middle"
         :offset="[0, 8]"
+        max-width="300px"
+        style="
+          max-height: 400px !important;
+          height: 400px;
+          min-width: 300px !important;
+        "
+        @scroll="onScrollMainContent($event)"
       >
         <div class="flex column">
           <div class="sticky-input">
@@ -57,93 +64,88 @@
               class="q-ml-md q-mr-md"
               v-model="query"
               borderless
+              ref="input"
               bg-color="transparent"
               :label="$t('top_controls.search_artists')"
+              @keyup.enter="$refs.input.blur()"
             >
               <template v-slot:append>
-                <q-icon name="mdi-magnify" class="q-my-md" />
+                <q-icon
+                  name="mdi-magnify"
+                  class="q-my-md"
+                  v-if="!query || query?.length == 0"
+                />
               </template>
             </q-input>
             <div class="separator" style="width: 100%" />
           </div>
-          <q-scroll-area
-            vertical
-            ref="scroll"
-            @scroll="onScrollMainContent"
-            style="
-              max-height: 400px !important;
-              max-width: 350px;
-              height: 400px;
-              min-width: 300px;
-              overflow-x: hidden;
-            "
+
+          <div
+            class="flex column"
+            style="position: relative; min-height: 400px"
           >
-            <div
-              class="flex column"
-              style="position: relative; min-height: 400px"
-            >
-              <q-list v-if="artistOptions && artistOptions.length > 0">
-                <q-item-label
-                  header
-                  class="t3 q-pb-sm"
-                  v-if="!query || query.length == 0"
-                  >{{ $t('top_controls.top_artists_in_area') }}:</q-item-label
-                >
+            <q-list v-if="artistOptions && artistOptions.length > 0">
+              <q-item-label
+                header
+                class="t3 q-pb-sm"
+                v-if="!query || query.length == 0"
+                >{{ $t('top_controls.top_artists_in_area') }}:</q-item-label
+              >
 
-                <div
-                  class="flex column"
-                  v-for="(artist, index) in artistOptions"
-                  :key="index"
+              <div
+                class="flex column"
+                v-for="(artist, index) in artistOptions"
+                :key="index"
+              >
+                <q-separator v-if="index > 0" />
+                <q-item
+                  :active="
+                    controlArtist.findIndex((x) => x.id == artist.id) > -1
+                  "
+                  clickable
+                  @click="clickArtist(artist)"
                 >
-                  <q-separator v-if="index > 0" />
-                  <q-item
-                    :active="
-                      controlArtist.findIndex((x) => x.id == artist.id) > -1
-                    "
-                    clickable
-                    @click="clickArtist(artist)"
-                  >
-                    <q-item-section avatar>
-                      <q-avatar class="avatar">
-                        <img
-                          v-if="
-                            artist &&
-                            artist.media_items &&
-                            artist.media_items[0] &&
-                            artist.media_items[0].thumb_xxs_url
-                          "
-                          :src="artist.media_items[0].thumb_xxs_url"
-                        />
-                        <q-icon
-                          v-else
-                          size="1em"
-                          class="t3"
-                          name="mdi-account-music-outline"
-                        />
-                      </q-avatar>
-                    </q-item-section>
-                    <q-item-section>
-                      <div class="flex row justify-between no-wrap">
-                        <div class="flex column justify-center no-wrap">
-                          <q-item-label>
-                            {{ artist.name }}
-                          </q-item-label>
+                  <q-item-section avatar>
+                    <q-avatar class="avatar">
+                      <img
+                        v-if="
+                          artist &&
+                          artist.media_items &&
+                          artist.media_items[0] &&
+                          artist.media_items[0].thumb_xxs_url
+                        "
+                        :src="artist.media_items[0].thumb_xxs_url"
+                      />
+                      <q-icon
+                        v-else
+                        size="1em"
+                        class="t3"
+                        name="mdi-account-music-outline"
+                      />
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <div class="flex row justify-between no-wrap">
+                      <div class="flex column justify-center no-wrap">
+                        <q-item-label>
+                          {{ artist.name }}
+                        </q-item-label>
 
-                          <q-item-label
-                            caption
-                            class="t4 ellipsis-2-lines"
-                            v-if="artist.disambiguation || artist.area"
-                          >
-                            {{ artist.disambiguation }}
-                            <span v-if="artist.area">
-                              <span v-if="artist.area.name">
-                                ({{ artist.area.name }})
-                              </span>
-                              <span v-else> ({{ artist.area }}) </span>
+                        <q-item-label
+                          caption
+                          class="t4 ellipsis-2-lines"
+                          v-if="artist.disambiguation || artist.area"
+                        >
+                          {{ artist.disambiguation }}
+                          <span v-if="artist.area">
+                            <span v-if="artist.area.name">
+                              ({{ artist.area.name }})
                             </span>
-                          </q-item-label>
-                        </div>
-                        <!--
+                            <span v-else> ({{ artist.area }}) </span>
+                          </span>
+                        </q-item-label>
+                      </div>
+                      <!--
                         <q-checkbox
                           :value="
                             controlArtist.findIndex(
@@ -153,32 +155,31 @@
                           @update:model-value="clickArtist(artist)"
                         />
                         -->
-                      </div>
-                    </q-item-section>
-                  </q-item>
-                </div>
-              </q-list>
-              <div
-                class="row justify-center q-my-md"
-                v-if="artistOptionsHasNext && artistOptions?.length > 0"
-              >
-                <q-spinner-ios
-                  :color="$q.dark.isActive ? 'white' : 'black'"
-                  size="2em"
-                />
+                    </div>
+                  </q-item-section>
+                </q-item>
               </div>
-              <div
-                class="flex row grow justify-center items-center q-my-md"
-                v-if="artistOptionsLoading && artistOptionsPage == 1"
-                style="height: 100%; z-index: 10"
-              >
-                <q-spinner-ios
-                  :color="$q.dark.isActive ? 'white' : 'black'"
-                  size="2em"
-                />
-              </div>
+            </q-list>
+            <div
+              class="row justify-center q-my-md"
+              v-if="artistOptionsHasNext && artistOptions?.length > 0"
+            >
+              <q-spinner-ios
+                :color="$q.dark.isActive ? 'white' : 'black'"
+                size="2em"
+              />
             </div>
-          </q-scroll-area>
+            <div
+              class="flex row grow justify-center items-center q-my-md"
+              v-if="artistOptionsLoading && artistOptionsPage == 1"
+              style="height: 100%; z-index: 10"
+            >
+              <q-spinner-ios
+                :color="$q.dark.isActive ? 'white' : 'black'"
+                size="2em"
+              />
+            </div>
+          </div>
         </div>
       </q-menu>
     </q-btn>
@@ -211,13 +212,22 @@ export default {
         this.loadInitialList();
       }
     },
-    onBeforeHideMenu() {
+    onBeforeHideMenu(event) {
+      // unload additional pages to reduce render load next time the dialog is opened
+      this.artistOptions = this.artistOptions.slice(
+        0,
+        this.artistOptionsPerPage
+      );
+      this.artistOptionsPage = 2;
       setTimeout(() => {
         this.blockUpdates = false;
       }, 1500);
     },
-    onScrollMainContent(info) {
-      if (info.verticalPercentage === 1) {
+    onScrollMainContent(event) {
+      if (
+        event.target.offsetHeight + event.target.scrollTop >=
+        event.target.scrollHeight
+      ) {
         // reached bottom, load more
         this.loadArtistOptions(this.query);
       }
@@ -243,6 +253,7 @@ export default {
     ...mapState(useQueryStore, [
       'artistOptionsHasNext',
       'artistOptionsLoading',
+      'artistOptionsPerPage',
     ]),
   },
 };

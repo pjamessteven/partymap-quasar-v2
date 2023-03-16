@@ -4,7 +4,18 @@
       v-model="sidebarPanel"
       no-caps
       :indicator-color="
-        this.$route.name === 'Explore' ? undefined : 'transparent'
+        $q.screen.lt.sm
+          ? $route.name === 'Explore'
+            ? undefined
+            : 'transparent'
+          : undefined
+      "
+      :active-class="
+        $q.screen.lt.sm
+          ? $route.name === 'Explore'
+            ? undefined
+            : 'inactive-tab'
+          : undefined
       "
       :shrink="$q.screen.gt.xs"
     >
@@ -69,7 +80,7 @@ export default {
   },
   watch: {
     sidebarPanel(to, from) {
-      this.backToExplore();
+      // this.backToExplore();
       if (to === 'explore') {
         this.showPanelMobile = false;
       }
@@ -84,6 +95,8 @@ export default {
           this.controlFavorites = true;
           this.showPanelMobile = true;
         } else {
+          this.sidebarPanel = from;
+
           this.$router.push({ name: 'Login' });
         }
       } else if (from === 'favorites') {
@@ -137,6 +150,9 @@ export default {
 .nav-separator {
   width: 1px;
   height: 100%;
+}
+.inactive-tab {
+  opacity: 0.3 !important;
 }
 @media only screen and (max-width: 600px) {
   .body--dark {

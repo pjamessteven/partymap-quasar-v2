@@ -153,7 +153,7 @@
           $route.name === 'LandingPage' ||
           $route.name === 'EventPage' ||
           $route.name === 'Explore' ||
-          ($route.meta.fullscreenLayout === true && this.$q.screen.gt.xs),
+          ($route.meta.mapOverlay && this.$q.screen.gt.xs),
       }"
       icon="mdi-menu"
       flat
@@ -191,25 +191,15 @@ import { mapState } from 'pinia';
 export default {
   name: 'MenuBarButtons',
   components: {
-    //AddEventPrompt,
     TopControlsMenu,
   },
-  watch: {
-    /*
-    query: {
-      handler: function (newVal) {
-        if (newVal && newVal.length > 0) {
-          this.search();
-        } else if (newVal === null) {
-          this.searchSuggestions = null;
-        } else {
-          // when newval is '',  clear
-          this.searchSuggestions = null;
-        }
-      },
+  props: {
+    color: {
+      type: String,
+      default: 'light',
     },
-    */
   },
+  watch: {},
   data() {
     return {
       options: [],

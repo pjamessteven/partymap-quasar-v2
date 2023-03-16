@@ -53,56 +53,7 @@ export default {
     if (this.$q.dark.isActive) {
       this.darkModeToggle();
     }
-
     this.checkAuthCookie();
-
-    axios.interceptors.request.use(
-      (config) => {
-        return config;
-      },
-      (error) => Promise.reject(error)
-    );
-
-    axios.interceptors.response.use(
-      (response) => {
-        return response;
-      },
-      (error) => {
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.error
-        ) {
-          /*
-           * The request was made and the server responded with a
-           * status code that falls out of the range of 2xx
-           */
-
-          // if user is not authenticated, return them to login page.
-          // don't do this if the user is updating their password
-          // because the password is checked with the /login method
-
-          var errorMessage = error.response.data.error.message;
-          var errorCode = error.response.data.error.code;
-
-          if (errorCode) {
-            this.$q.notify(this.$t('error_codes.' + errorCode));
-          } else if (errorMessage) {
-            this.$q.notify(errorMessage);
-          }
-        } else if (error.request) {
-          /*
-           * The request was made but no response was received, `error.request`
-           * is an instance of XMLHttpRequest in the browser and an instance
-           * of http.ClientRequest in Node.js
-           */
-          // this.$q.notify(this.$t('errors.' + errorCode))
-        } else {
-          // Something happened in setting up the request and triggered an Error
-        }
-        return Promise.reject(error);
-      }
-    );
   },
 };
 </script>
@@ -308,6 +259,7 @@ body {
   .q-field__control {
     // background: $b-1;
   }
+
   .separator {
     border-color: rgba(0, 0, 0, 0.1);
   }
@@ -523,6 +475,7 @@ body {
   .q-field--dark .q-field__control::before {
     border-color: rgba(255, 255, 255, 0.1);
   }
+
   .q-field__control {
     //background: $bi-3;
   }
@@ -576,7 +529,7 @@ body {
 }
 .q-btn {
   font-size: 14px;
-  border-radius: 9px !important;
+  border-radius: 4px !important;
   .q-btn__content {
     flex-wrap: nowrap;
   }
@@ -616,6 +569,9 @@ body {
 .q-field__control {
   //border-radius: 9px !important;
   overflow: hidden;
+}
+.q-field--filled .q-field__control {
+  border-radius: 4px !important;
 }
 .q-dialog__inner > div {
   border-radius: 0px !important;

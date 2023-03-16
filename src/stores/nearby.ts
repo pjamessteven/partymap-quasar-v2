@@ -99,7 +99,7 @@ export const useNearbyStore = defineStore('nearby', {
         this.nearbyTagsSuccess = true;
         return Promise.resolve();
       } catch (error) {
-        return error;
+        throw error;
       }
     },
 
@@ -122,7 +122,7 @@ export const useNearbyStore = defineStore('nearby', {
         this.nearbyArtistsSuccess = true;
         return Promise.resolve();
       } catch (error) {
-        return error;
+        throw error;
       }
     },
 
@@ -156,7 +156,7 @@ export const useNearbyStore = defineStore('nearby', {
 
         return;
       } catch (error) {
-        return error;
+        throw error;
       }
     },
     // load all event dates for SEO
@@ -180,7 +180,7 @@ export const useNearbyStore = defineStore('nearby', {
         this.eventDatesPage += 1;
         return;
       } catch (error) {
-        return error;
+        throw error;
       }
     },
   },

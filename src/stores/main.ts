@@ -58,7 +58,7 @@ export const useMainStore = defineStore('main', {
         this.userLocationCity = response.data.city;
         return;
       } catch (error) {
-        return error;
+        throw error;
       }
     },
     getFineLocation() {

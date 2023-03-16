@@ -492,7 +492,7 @@ export default {
     font-family: chicagoflf;
     text-transform: lowercase;
     font-size: 1rem;
-    border-radius: 100px;
+    border-radius: 9px !important;
     &.active {
       font-weight: 500;
     }

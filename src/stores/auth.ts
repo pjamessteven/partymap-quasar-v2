@@ -1,5 +1,10 @@
 import { defineStore } from 'pinia';
-import { checkAuthenticatedRequest, logoutRequest } from 'src/api';
+import {
+  loginRequest,
+  checkAuthenticatedRequest,
+  logoutRequest,
+  registerRequest,
+} from 'src/api';
 import { PrivateUser } from 'src/types/autogen_types';
 
 interface AuthState {
@@ -18,7 +23,8 @@ export const useAuthStore = defineStore('auth', {
   },
   actions: {
     async checkAuthCookie() {
-      const user: PrivateUser = (await checkAuthenticatedRequest()).data;
+      const response = await checkAuthenticatedRequest();
+      const user: PrivateUser = response.data;
       if (user) {
         this.currentUser = user;
         // for facebook signup
@@ -29,12 +35,36 @@ export const useAuthStore = defineStore('auth', {
       }
       this.hasCheckedAuthCookie = true;
     },
+    async register(payload: {
+      email: string;
+      password: string;
+      username: string;
+      token: string;
+    }) {
+      try {
+        await registerRequest(payload);
+        return;
+      } catch (error) {
+        throw error;
+      }
+    },
+    async login(identifier: string, password: string) {
+      try {
+        const response = await loginRequest({
+          identifier,
+          password,
+        });
+        this.currentUser = response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
     async logout() {
       try {
         await logoutRequest();
         this.currentUser = null;
       } catch (error) {
-        return error;
+        throw error;
       }
     },
   },

@@ -38,11 +38,13 @@ interface QueryState {
 
   artistOptions: Artist[];
   artistOptionsHasNext: boolean;
+  artistOptionsPerPage: number;
   artistOptionsPage: number;
   artistOptionsLoading: boolean;
 
   tagOptions: Tag[];
   tagOptionsHasNext: boolean;
+  tagOptionsPerPage: number;
   tagOptionsPage: number;
   tagOptionsLoading: boolean;
 
@@ -99,11 +101,13 @@ export const useQueryStore = defineStore('query', {
 
     artistOptions: [],
     artistOptionsHasNext: false,
+    artistOptionsPerPage: 20,
     artistOptionsPage: 1,
     artistOptionsLoading: false,
 
     tagOptions: [],
     tagOptionsHasNext: false,
+    tagOptionsPerPage: 20,
     tagOptionsPage: 1,
     tagOptionsLoading: false,
 
@@ -179,7 +183,7 @@ export const useQueryStore = defineStore('query', {
         return;
       } catch (error) {
         this.loadingPoints = false;
-        return error;
+        throw error;
       }
     },
     async loadEventDates() {
@@ -243,7 +247,7 @@ export const useQueryStore = defineStore('query', {
       } catch (error) {
         this.eventDatesLoading = false;
         this.eventDatesHasNext = false;
-        return error;
+        throw error;
       }
     },
     async loadArtists() {
@@ -273,7 +277,7 @@ export const useQueryStore = defineStore('query', {
         return response.data.items;
       } catch (error) {
         this.artistsLoading = false;
-        return error;
+        throw error;
       }
     },
     async loadMoreArtists() {
@@ -302,7 +306,7 @@ export const useQueryStore = defineStore('query', {
         const response = await getArtistsRequest({
           query: query,
           page: this.artistOptionsPage,
-          per_page: 20,
+          per_page: this.artistOptionsPerPage,
           sort: 'event_count',
           desc: true,
         });
@@ -317,7 +321,7 @@ export const useQueryStore = defineStore('query', {
         return response.data.items;
       } catch (error) {
         this.artistOptionsLoading = false;
-        return error;
+        throw error;
       }
     },
     async loadTagOptions(query: string) {
@@ -327,7 +331,7 @@ export const useQueryStore = defineStore('query', {
           date_min: this.controlDateRange.start,
           date_max: this.controlDateRange.end,
           page: this.tagOptionsPage,
-          per_page: 20,
+          per_page: this.tagOptionsPerPage,
           tag_name: query,
           sort: 'count',
           desc: true,
@@ -344,7 +348,7 @@ export const useQueryStore = defineStore('query', {
         return response.data.items;
       } catch (error) {
         this.tagOptionsLoading = false;
-        return error;
+        throw error;
       }
     },
   },

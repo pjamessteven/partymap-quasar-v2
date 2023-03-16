@@ -54,18 +54,12 @@ export default {
         return true;
       } else return false;
     },
-    currentRoute() {
-      return this.$route.name;
-    },
-    showPanelMobile() {
-      return this.$store.state.main.showPanelMobile;
-    },
     logoColor() {
       if (
         this.$q.dark.isActive ||
         (this.$route.name === 'EventPage' && this.$q.screen.lt.lg) ||
         (this.$route.name === 'Explore' && this.$q.screen.lt.sm) ||
-        (this.$route.meta.fullscreenLayout &&
+        (this.$route.meta.mapOverlay &&
           this.$route.name !== 'Explore' &&
           this.$route.name !== 'EventPage' &&
           this.$q.screen.gt.xs)

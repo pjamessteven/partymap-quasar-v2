@@ -260,23 +260,25 @@ export default {
           offset = el.offsetTop - 330;
         }
         const duration = 300;
-        setScrollPosition(target, offset, duration);
+        setScrollPosition('horizontal', target, offset, duration);
       } else {
         const target = getScrollTarget(el);
         const offset = el.offsetTop - 120;
         const duration = 300;
-        setScrollPosition(target, offset, duration);
+        setScrollPosition('horizontal', target, offset, duration);
       }
     },
     scrollSelectedEdIntoView() {
       if (this.selectedEventDateIndex > 0) {
         // scroll to middle
         this.$refs.scrollArea.setScrollPosition(
+          'horizontal',
           this.selectedEventDateIndex * (180 + 18) - (180 + 18),
           100
         );
       } else {
         this.$refs.scrollArea.setScrollPosition(
+          'horizontal',
           this.selectedEventDateIndex * (180 + 18)
         );
       }

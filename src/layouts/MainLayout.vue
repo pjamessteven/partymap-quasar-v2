@@ -8,23 +8,29 @@
       v-show="$q.screen.lt.sm ? $route.name === 'Explore' : true"
     />
     <MainMap />
-    <transition
-      appear
-      leave
-      :enter-active-class="
-        $q.screen.gt.sm ? 'animated slideInUp fast' : 'animated slideInUp'
-      "
-      :leave-active-class="
-        $q.screen.gt.sm ? 'animated slideOutDown fast' : 'animated slideOutDown'
-      "
+    <router-view
+      v-slot="{ Component }"
+      class="main-layout-router"
+      v-bind:class="{
+        'mobile-map-view-router': $q.screen.lt.sm,
+      }"
     >
-      <router-view
-        class="main-layout-router"
-        v-bind:class="{
-          'mobile-map-view-router': $q.screen.lt.sm,
-        }"
-      />
-    </transition>
+      <transition
+        appear
+        leave
+        :enter-active-class="
+          $q.screen.gt.sm ? 'animated slideInUp fast' : 'animated slideInUp'
+        "
+        :leave-active-class="
+          $q.screen.gt.sm
+            ? 'animated slideOutDown fast'
+            : 'animated slideOutDown'
+        "
+      >
+        <component :is="Component" />
+      </transition>
+    </router-view>
+
     <NavigationBar class="nav-bar" v-if="$q.screen.lt.sm" />
   </div>
 </template>

@@ -737,7 +737,6 @@ export default {
             response.data.next_date.id !== eventDateId)
         ) {
           // if navigating to specific date, load it
-          this.loadEventDate(eventDateId);
 
           const eventDateResponse = await this.loadEventDate(id);
 

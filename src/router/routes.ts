@@ -25,7 +25,6 @@ const routes: RouteRecordRaw[] = [
           mapOverlay: false,
         },
       },
-      /*
 
       {
         path: '/login',
@@ -73,6 +72,7 @@ const routes: RouteRecordRaw[] = [
           mapOverlay: true,
         },
       },
+      /*
 
 
       {

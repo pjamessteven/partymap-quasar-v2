@@ -286,7 +286,6 @@ export default {
       this.showPanelMobile = !this.showPanelMobile;
     },
     onScrollMainContent(info) {
-      console.log(info);
       if (
         this.hasLoaded &&
         this.eventDates != null &&
@@ -315,21 +314,10 @@ export default {
       if (info.verticalPercentage === 1) {
         // reached bottom
         this.loadMore();
-        console.log('bottom');
       }
     },
   },
   watch: {
-    showResults(newv) {
-      console.log(
-        'showResults',
-        newv,
-        'mapMoving',
-        this.mapMoving,
-        'blockupdate',
-        this.blockUpdates
-      );
-    },
     route: {
       handler: async function (to) {
         if (to.name === 'Explore') {

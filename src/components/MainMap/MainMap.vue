@@ -128,10 +128,10 @@ export default {
       this.invalidateMapSize();
     },
     controlDateRange: {
-      handler() {
+      handler(newv, oldv) {
         this.clearMarkersAndLoadPoints();
       },
-      deep: true,
+      deep: false,
     },
     controlDuration: {
       handler() {
@@ -302,7 +302,12 @@ export default {
     ...mapActions(useQueryStore, ['loadPoints']),
     clearMarkersAndLoadPoints() {
       if (this.mapMarkers !== null) {
+        this.map?.removeLayer(this.mapMarkers);
         this.mapMarkers.clearLayers();
+      }
+      if (this.mapMarkersPermanentTooltip !== null) {
+        this.map?.removeLayer(this.mapMarkersPermanentTooltip);
+        this.mapMarkersPermanentTooltip.clearLayers();
       }
       this.loadPoints();
     },

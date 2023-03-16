@@ -85,7 +85,7 @@ export const useEventStore = defineStore('event', {
         return response;
       } catch (error) {
         this.loadingEvent = false;
-        return error;
+        throw error;
       }
     },
     async updateEvent(payload: EventUpdate) {
@@ -94,7 +94,7 @@ export const useEventStore = defineStore('event', {
         this.event = response.data;
         return response;
       } catch (e) {
-        return e;
+        throw e;
       }
     },
 
@@ -103,7 +103,7 @@ export const useEventStore = defineStore('event', {
         const response = suggestEventEditRequest(this.event?.id, payload);
         return response;
       } catch (e) {
-        return e;
+        throw e;
       }
     },
     async toggleFavorite() {
@@ -116,6 +116,7 @@ export const useEventStore = defineStore('event', {
         } catch (e) {
           // revert
           this.event.is_favorited = !this.event.is_favorited;
+          throw e;
         }
       }
     },
@@ -143,7 +144,7 @@ export const useEventStore = defineStore('event', {
         return response;
       } catch (e) {
         this.loadingEventDate = false;
-        return e;
+        throw e;
       }
     },
     async deleteEventDate(id: string) {
@@ -152,7 +153,7 @@ export const useEventStore = defineStore('event', {
         this.event = response.data;
         return response;
       } catch (e) {
-        return e;
+        throw e;
       }
     },
 
@@ -165,7 +166,7 @@ export const useEventStore = defineStore('event', {
         this.event = response.data;
         return response;
       } catch (e) {
-        return e;
+        throw e;
       }
     },
     async addEventDate(payload: EventDateUpdate) {
@@ -174,7 +175,7 @@ export const useEventStore = defineStore('event', {
         this.event = response.data;
         return response;
       } catch (e) {
-        return e;
+        throw e;
       }
     },
     async suggestEventDateEdit(payload: EventDateUpdate) {
@@ -182,7 +183,7 @@ export const useEventStore = defineStore('event', {
         const response = suggestEventDateEditRequest(this.event?.id, payload);
         return response;
       } catch (e) {
-        return e;
+        throw e;
       }
     },
     async updateMediaItem(id: string, payload: { caption: string }) {
@@ -190,7 +191,7 @@ export const useEventStore = defineStore('event', {
         const response = updateMediaItemRequest(id, payload);
         return response;
       } catch (e) {
-        return e;
+        throw e;
       }
     },
     async deleteMediaItem(id: string) {
@@ -198,7 +199,7 @@ export const useEventStore = defineStore('event', {
         const response = deleteMediaItemRequest(id);
         return response;
       } catch (e) {
-        return e;
+        throw e;
       }
     },
     async setMediaItemPosition(
@@ -241,7 +242,7 @@ export const useEventStore = defineStore('event', {
           const response = updateMediaItemRequest(id, { position: toIndex });
           return response;
         } catch (e) {
-          return e;
+          throw e;
         }
       } else {
         throw new Error('Media item index not found');

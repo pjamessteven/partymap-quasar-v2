@@ -1,30 +1,30 @@
 <template>
-  <router-link
-    v-slot="{ navigate }"
-    :custom="true"
-    style="text-decoration: none; color: unset"
-    :to="{
-      name: 'EventPage',
-      params: {
-        id: event.event_id,
-        eventDateId: event.id,
-      },
-      query: {
-        name: event.name.replace(/ /g, '_'),
-      },
-    }"
-  >
-    <transition appear enter-active-class="animated fadeIn">
-      <div
-        class="ed-card"
-        @click="() => onClickCard($event, navigate)"
-        @mouseover="setFocusMarker"
-        @mouseleave="eventDateHoverMarker = null"
-        :class="{
-          'animated-shimmer': false,
-        }"
-      >
-        <!--
+  <div>
+    <router-link
+      v-slot="{ navigate }"
+      :custom="true"
+      :to="{
+        name: 'EventPage',
+        params: {
+          id: event.event_id,
+          eventDateId: event.id,
+        },
+        query: {
+          name: event.name.replace(/ /g, '_'),
+        },
+      }"
+    >
+      <transition appear enter-active-class="animated fadeIn">
+        <div
+          class="ed-card"
+          @click="() => onClickCard($event, navigate)"
+          @mouseover="setFocusMarker"
+          @mouseleave="eventDateHoverMarker = null"
+          :class="{
+            'animated-shimmer': false,
+          }"
+        >
+          <!--
       <q-tooltip
         v-if="$q.screen.gt.xs"
         :content-class="
@@ -56,57 +56,62 @@
         </div>
       </q-tooltip>
   -->
-        <!--
+          <!--
         <div class="card-top-content  flex column justify-end">
           <div class="card-background" :style="getBgImgStyle()" />
 
         </div>
   -->
-        <div class="card-bottom-content flex column">
-          <div class="card-bottom-background" :style="getBottomBgImgStyle()" />
-          <div class="card-bottom-background-hover-overlay" />
-          <!--:style="getBottomBgImgStyle()" /> -->
-          <div class="card-bottom-foreground flex row no-wrap q-px-md q-py-md">
+          <div class="card-bottom-content flex column">
             <div
-              class="image-container flex justify-center items-center shadow-2xl"
+              class="card-bottom-background"
+              :style="getBottomBgImgStyle()"
+            />
+            <div class="card-bottom-background-hover-overlay" />
+            <!--:style="getBottomBgImgStyle()" /> -->
+            <div
+              class="card-bottom-foreground flex row no-wrap q-px-md q-py-md"
             >
               <div
-                class="image-container-background"
-                :style="computedAvatarStyle()"
-              ></div>
-            </div>
-            <div class="flex column ellipsis q-pl-md">
-              <div
-                class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
+                class="image-container flex justify-center items-center shadow-2xl"
               >
                 <div
-                  class="flex row items-baseline no-wrap chicago q-mr-sm ellipsis"
-                >
-                  <span class="ellipsis">{{ event.name }}</span>
-                  <q-icon
-                    class="q-ml-sm o-080"
-                    name="mdi-check-decagram"
-                    v-if="event.event.host"
-                  >
-                    <q-tooltip
-                      :content-class="
-                        $q.dark.isActive
-                          ? 'bg-black text-white'
-                          : 'bg-white text-black'
-                      "
-                      :offset="[10, 10]"
-                      content-style="font-size: 16px"
-                    >
-                      {{ $t('event.official_page') }}
-                    </q-tooltip></q-icon
-                  >
-                </div>
+                  class="image-container-background"
+                  :style="computedAvatarStyle()"
+                ></div>
               </div>
-              <div
-                class="flex column card-bottom-text q-mt-xs o-080"
-                style="font-weight: 400"
-              >
-                <!--
+              <div class="flex column ellipsis q-pl-md">
+                <div
+                  class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
+                >
+                  <div
+                    class="flex row items-baseline no-wrap chicago q-mr-sm ellipsis"
+                  >
+                    <span class="ellipsis">{{ event.name }}</span>
+                    <q-icon
+                      class="q-ml-sm o-080"
+                      name="mdi-check-decagram"
+                      v-if="event.event.host"
+                    >
+                      <q-tooltip
+                        :content-class="
+                          $q.dark.isActive
+                            ? 'bg-black text-white'
+                            : 'bg-white text-black'
+                        "
+                        :offset="[10, 10]"
+                        content-style="font-size: 16px"
+                      >
+                        {{ $t('event.official_page') }}
+                      </q-tooltip></q-icon
+                    >
+                  </div>
+                </div>
+                <div
+                  class="flex column card-bottom-text q-mt-xs o-080"
+                  style="font-weight: 400"
+                >
+                  <!--
 
           <div class="flex row items-center ">
             <q-badge
@@ -122,69 +127,72 @@
             </span>
           </div>
 -->
-                <span>
-                  <q-icon name="las la-clock" class="q-mr-sm" />{{
-                    relativeHumanTime(
-                      event.start_naive,
-                      event.end_naive,
-                      event.tz
-                    )
-                  }}
-                </span>
-                <div class="flex row items-center no-wrap ellipsis">
-                  <q-icon name="las la-calendar" class="q-mr-sm" />
-                  <div
-                    v-if="!event.cancelled"
-                    class="flex row no-wrap ellipsis"
-                  >
-                    <span>
-                      {{
-                        localDateWithWeekday(event.start_naive, event.tz)
-                      }} </span
-                    ><!--
+                  <span>
+                    <q-icon name="las la-clock" class="q-mr-sm" />{{
+                      relativeHumanTime(
+                        event.start_naive,
+                        event.end_naive,
+                        event.tz
+                      )
+                    }}
+                  </span>
+                  <div class="flex row items-center no-wrap ellipsis">
+                    <q-icon name="las la-calendar" class="q-mr-sm" />
+                    <div
+                      v-if="!event.cancelled"
+                      class="flex row no-wrap ellipsis"
+                    >
+                      <span>
+                        {{
+                          localDateWithWeekday(event.start_naive, event.tz)
+                        }} </span
+                      ><!--
               <span v-else>
                 {{ localDay(event.start_naive, event.tz) }}
                 {{ localDayOfMonth(event.start_naive, event.tz) }}</span
               >-->
-                    <span
-                      v-if="
-                        event.event.rrule &&
-                        event.event.rrule.separation_count > 0
-                      "
-                      class="flex row items-center q-ml-xs o-070 no-wrap ellipsis"
-                    >
-                      <q-icon class="q-ml-xs q-mr-sm" name="las la-redo-alt" />
-                      {{ simplifiedRecurringPattern(event.event.rrule) }}
-                    </span>
+                      <span
+                        v-if="
+                          event.event.rrule &&
+                          event.event.rrule.separation_count > 0
+                        "
+                        class="flex row items-center q-ml-xs o-070 no-wrap ellipsis"
+                      >
+                        <q-icon
+                          class="q-ml-xs q-mr-sm"
+                          name="las la-redo-alt"
+                        />
+                        {{ simplifiedRecurringPattern(event.event.rrule) }}
+                      </span>
+                    </div>
+                    <q-badge
+                      class="q-my-xs chicago"
+                      color="red"
+                      :label="$t('event_date_inline.cancelled')"
+                      v-if="event.cancelled"
+                    />
                   </div>
-                  <q-badge
-                    class="q-my-xs chicago"
-                    color="red"
-                    :label="$t('event_date_inline.cancelled')"
-                    v-if="event.cancelled"
-                  />
-                </div>
-                <div class="ellipsis">
-                  <span v-if="event.location && event.location.locality">
-                    <q-icon name="las la-map-marker" class="q-mr-sm" />{{
-                      event.location.locality.long_name
-                    }},
-                    {{ event.location.locality.region.long_name }}
-                  </span>
-                  <span v-else>
-                    <q-icon name="las la-map-marker" class="q-mr-sm" />{{
-                      event.location.name
-                    }}
-                  </span>
-                  <span v-if="event.distance != null" class="o-070 ellipsis"
-                    >({{
-                      Intl.NumberFormat().format(
-                        parseInt(Number(event.distance) / 1000)
-                      )
-                    }}km)</span
-                  >
-                </div>
-                <!--
+                  <div class="ellipsis">
+                    <span v-if="event.location && event.location.locality">
+                      <q-icon name="las la-map-marker" class="q-mr-sm" />{{
+                        event.location.locality.long_name
+                      }},
+                      {{ event.location.locality.region.long_name }}
+                    </span>
+                    <span v-else>
+                      <q-icon name="las la-map-marker" class="q-mr-sm" />{{
+                        event.location.name
+                      }}
+                    </span>
+                    <span v-if="event.distance != null" class="o-070 ellipsis"
+                      >({{
+                        Intl.NumberFormat().format(
+                          parseInt(Number(event.distance) / 1000)
+                        )
+                      }}km)</span
+                    >
+                  </div>
+                  <!--
                 <div
                   class=" q-mb-md o-070 ellipsis"
                   v-if="
@@ -203,33 +211,36 @@
                   </span>
                 </div>
                 -->
-                <div
-                  class="tag-container flex row q-mt-sm no-wrap ellipsis"
-                  style="min-height: 31px"
-                  v-if="
-                    event.event.event_tags && event.event.event_tags.length > 0
-                  "
-                >
-                  <Tag
-                    class="q-mr-xs"
-                    v-for="(et, index) in event.event.event_tags"
-                    :key="index"
-                    :value="et.tag"
-                  ></Tag>
+                  <div
+                    class="tag-container flex row q-mt-sm no-wrap ellipsis"
+                    style="min-height: 31px"
+                    v-if="
+                      event.event.event_tags &&
+                      event.event.event_tags.length > 0
+                    "
+                  >
+                    <Tag
+                      class="q-mr-xs"
+                      v-for="(et, index) in event.event.event_tags"
+                      :key="index"
+                      :value="et.tag"
+                    ></Tag>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <!--
+          <!--
     <q-card-section>
       <div class="tag-container">
         <span v-for="(et, index) in event.tags" :key="index"  >{{et.label}}</span>
       </div>
     </q-card-section>
-      --></div>
-    </transition>
-  </router-link>
+      -->
+        </div>
+      </transition>
+    </router-link>
+  </div>
 </template>
 
 <script>

@@ -56,6 +56,13 @@
         anchor="top middle"
         self="bottom middle"
         :offset="[0, 8]"
+        style="
+          max-height: 400px !important;
+          max-width: 300px !important;
+          height: 400px;
+          min-width: 280px;
+        "
+        @scroll="onScrollMainContent($event)"
       >
         <div class="flex column">
           <div class="sticky-input">
@@ -65,90 +72,79 @@
               class="q-ml-md q-mr-md"
               v-model="query"
               borderless
+              ref="input"
               bg-color="transparent"
               :label="$t('top_controls.search_tags')"
+              @keyup.enter="$refs.input.blur()"
             >
               <template v-slot:append>
-                <q-icon name="mdi-magnify" class="q-my-md" />
+                <q-icon
+                  name="mdi-magnify"
+                  class="q-my-md"
+                  v-if="!query || query?.length == 0"
+                />
               </template>
             </q-input>
             <div class="separator" style="width: 100%" />
           </div>
-          <q-scroll-area
-            vertical
-            ref="scroll"
-            @scroll="onScrollMainContent"
-            style="
-              max-height: 400px !important;
-              max-width: 300px;
-              height: 400px;
-              min-width: 280px;
-              overflow-x: hidden;
-            "
-          >
-            <div
-              class="flex column"
-              style="position: relative; min-height: 400px"
-            >
-              <q-list v-if="tagOptions && tagOptions.length > 0">
-                <q-item-label
-                  header
-                  class="t3 q-pb-sm"
-                  v-if="!query || query.length == 0"
-                  >{{ $t('top_controls.top_tags_in_area') }}:</q-item-label
+
+          <div class="flex column" style="position: relative; height: 100%">
+            <q-list v-if="tagOptions && tagOptions.length > 0">
+              <q-item-label
+                header
+                class="t3 q-pb-sm"
+                v-if="!query || query.length == 0"
+                >{{ $t('top_controls.top_tags_in_area') }}:</q-item-label
+              >
+              <div
+                class="flex column"
+                v-for="(tag, index) in tagOptions"
+                :key="index"
+              >
+                <q-separator v-if="index > 0" />
+                <q-item
+                  dense
+                  clickable
+                  @click="clickTag(tag)"
+                  :active="controlTag?.findIndex((x) => x.tag === tag.tag) > -1"
                 >
-                <div
-                  class="flex column"
-                  v-for="(tag, index) in tagOptions"
-                  :key="index"
-                >
-                  <q-separator v-if="index > 0" />
-                  <q-item
-                    dense
-                    clickable
-                    @click="clickTag(tag)"
-                    :active="
-                      controlTag?.findIndex((x) => x.tag === tag.tag) > -1
-                    "
+                  <div
+                    class="flex row grow justify-between items-center no-wrap"
                   >
-                    <div
-                      class="flex row grow justify-between items-center no-wrap"
-                    >
-                      <q-item-label>
-                        {{ tag.tag }} &nbsp;<span class="t4"
-                          >({{ tag.count }})</span
-                        >
-                      </q-item-label>
-                      <q-checkbox
-                        :model-value="
-                          controlTag?.findIndex((x) => x.tag === tag.tag) > -1
-                        "
-                      />
-                    </div>
-                  </q-item>
-                </div>
-              </q-list>
-              <div
-                class="row justify-center q-my-md"
-                v-if="tagOptionsHasNext && tagOptions?.length > 0"
-              >
-                <q-spinner-ios
-                  :color="$q.dark.isActive ? 'white' : 'black'"
-                  size="2em"
-                />
+                    <q-item-label>
+                      {{ tag.tag }} &nbsp;<span class="t4"
+                        >({{ tag.count }})</span
+                      >
+                    </q-item-label>
+                    <q-checkbox
+                      :model-value="
+                        controlTag?.findIndex((x) => x.tag === tag.tag) > -1
+                      "
+                    />
+                  </div>
+                </q-item>
               </div>
-              <div
-                class="flex row grow justify-center items-center q-my-md"
-                v-if="tagOptionsLoading && tagOptionsPage == 1"
-                style="height: 100%"
-              >
-                <q-spinner-ios
-                  :color="$q.dark.isActive ? 'white' : 'black'"
-                  size="2em"
-                />
-              </div>
+            </q-list>
+            <div
+              class="row justify-center q-my-md"
+              v-if="tagOptionsHasNext && tagOptions?.length > 0"
+            >
+              <q-spinner-ios
+                :color="$q.dark.isActive ? 'white' : 'black'"
+                size="2em"
+              />
             </div>
-          </q-scroll-area>
+            <div
+              class="flex row grow justify-center items-center q-my-md"
+              v-if="tagOptionsLoading && tagOptionsPage == 1"
+              style="height: 100%"
+            >
+              <q-spinner-ios
+                :color="$q.dark.isActive ? 'white' : 'black'"
+                size="2em"
+              />
+            </div>
+          </div>
         </div>
       </q-menu>
     </q-btn>
@@ -190,12 +186,14 @@ export default {
       this.loadTagOptions(this.query);
     },
     onBeforeHideMenu() {
+      // unload additional pages to reduce render load next time the dialog is opened
+      this.tagOptions = this.tagOptions.slice(0, this.tagOptionsPerPage);
+      this.tagOptionsPage = 2;
       setTimeout(() => {
         this.blockUpdates = false;
       }, 1500);
     },
     clickTag(tag) {
-      // mutation toggles tag
       let index = this.controlTag?.findIndex((x) => x.tag === tag.tag);
       if (index > -1) {
         // tag exists, deselect
@@ -204,8 +202,11 @@ export default {
         this.controlTag.push(tag);
       }
     },
-    onScrollMainContent(info) {
-      if (info.verticalPercentage === 1) {
+    onScrollMainContent(event) {
+      if (
+        event.target.offsetHeight + event.target.scrollTop >=
+        event.target.scrollHeight
+      ) {
         // reached bottom
         this.loadMore();
       }
@@ -218,7 +219,11 @@ export default {
       'tagOptionsPage',
       'tagOptions',
     ]),
-    ...mapState(useQueryStore, ['tagOptionsHasNext', 'tagOptionsLoading']),
+    ...mapState(useQueryStore, [
+      'tagOptionsHasNext',
+      'tagOptionsLoading',
+      'tagOptionsPerPage',
+    ]),
   },
 
   mounted() {

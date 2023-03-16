@@ -38,6 +38,7 @@ export default {
         (this.$route.meta.fullscreenLayout === true && this.$q.screen.gt.xs)
       );
     },
+
     computedStyle() {
       var opacity = this.menuBarOpacity;
       return `opacity: ${opacity}`;
