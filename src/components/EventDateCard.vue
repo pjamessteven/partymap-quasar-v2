@@ -365,9 +365,6 @@ export default {
     background: $bi-1;
     //blue background-color: #0b0e13;
     .card-top-content {
-      .day-wrapper {
-        background: $bi-3;
-      }
     }
     .card-bottom-content {
       border-top: 1px solid (rgba(255, 255, 255, 0.2));
@@ -429,9 +426,6 @@ export default {
       transition: opacity 0.2s ease;
     }
     .card-top-content {
-      .day-wrapper {
-        background: rgba(255, 255, 255, 0.67);
-      }
     }
     .card-bottom-content {
       border-top: 1px solid (rgba(255, 255, 255, 0.2));
@@ -498,18 +492,7 @@ export default {
   .card-top-content {
     position: relative;
     height: 140px;
-    .day-wrapper {
-      backdrop-filter: blur(10px);
-      z-index: 2;
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      margin-left: 0px;
-      margin-top: 0px;
-      border-bottom-right-radius: 9px !important;
-      //box-shadow: none !important;
-      //border: none;
-    }
+
     .card-background {
       border: none;
       overflow: hidden;

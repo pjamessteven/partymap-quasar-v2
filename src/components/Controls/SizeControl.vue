@@ -2,6 +2,11 @@
   <div>
     <q-btn
       no-caps
+      @click="
+        () => {
+          showing = !showing;
+        }
+      "
       class="button-control flex items-center"
       :class="{
         active: controlSize && controlSize.length > 0,
@@ -27,15 +32,11 @@
           {{ $t('top_controls.select_size') }}
         </div>
       </div>
-      <q-menu
-        transition-show="jump-down"
-        transition-hide="jump-up"
-        v-model="menuShowing"
-        anchor="top middle"
-        self="bottom middle"
-        :offset="[0, 8]"
-      >
-        <div class="q-gutter-xs flex column q-pr-md q-pa-xs">
+      <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
+        <div
+          class="q-gutter-xs flex column q-pr-md q-pa-xs"
+          :class="$q.screen.lt.sm ? 'q-py-sm' : ''"
+        >
           <q-checkbox
             v-model="controlSize"
             val="0,1000"
@@ -56,13 +57,14 @@
             val="20000,50000"
             :label="'20,000 - 50,000 ' + $t('top_controls.people')"
           />
+
           <q-checkbox
             v-model="controlSize"
             val="50000,200000"
             :label="$t('top_controls.more_than_fifty_thousand')"
           />
         </div>
-      </q-menu>
+      </MenuWrapper>
     </q-btn>
   </div>
 </template>
@@ -70,16 +72,27 @@
 <script>
 import { mapWritableState } from 'pinia';
 import { useQueryStore } from 'src/stores/query';
+import MenuWrapper from './MenuWrapper.vue';
+
 export default {
-  components: {},
+  components: {
+    MenuWrapper,
+  },
   props: {},
   data() {
     return {
-      menuShowing: false,
+      showing: false,
     };
   },
   watch: {},
-  methods: {},
+  methods: {
+    onHide() {
+      this.showing = false;
+    },
+    onShow() {
+      this.showing = true;
+    },
+  },
   computed: {
     ...mapWritableState(useQueryStore, ['controlSize']),
   },
@@ -92,6 +105,6 @@ export default {
 .body--light {
 }
 
-@media only screen and (max-width: 1023px) {
+@media only screen and (max-width: 600px) {
 }
 </style>

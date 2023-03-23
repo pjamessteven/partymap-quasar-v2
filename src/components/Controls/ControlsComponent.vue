@@ -25,12 +25,12 @@
             $q.screen.gt.xs
               ? $q.screen.lt.xl && !this.sidebarExpanded
                 ? 'q-px-md q-py-xs '
-                : 'q-px-md q-py-xs no-wrap '
+                : 'q-px-md q-py-xs '
               : 'q-gutter-sm q-px-sm  no-wrap',
           ]"
         >
           <DateControl
-            v-if="showDateRange"
+            v-if="showDateControl"
             :key="1"
             class="flex"
             :showSelectedValue="showSelectedValue"
@@ -177,7 +177,10 @@ export default {
   },
   methods: {
     handleSwipe({ evt, ...info }) {
-      if (info.direction === 'down' || info.direction === 'up') {
+      if (
+        (this.showPanelMobile && info.direction === 'down') ||
+        (!this.showPanelMobile && info.direction === 'up')
+      ) {
         this.showPanelMobile = !this.showPanelMobile;
       } else {
         evt.preventDefault();
@@ -496,6 +499,7 @@ export default {
     &.active {
       font-weight: 500;
     }
+
     .q-btn__wrapper {
       padding: 0;
     }

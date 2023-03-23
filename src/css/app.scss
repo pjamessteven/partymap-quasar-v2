@@ -73,3 +73,42 @@
 .o-010 {
   opacity: 0.1;
 }
+
+.body--dark {
+  .sticky-input {
+    background: black;
+  }
+}
+
+.body--light {
+  .sticky-input {
+    background: white;
+  }
+}
+
+.sticky-input {
+  position: sticky;
+  z-index: 1;
+  top: 0;
+}
+
+.control-menu {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+@media only screen and (max-width: 600px) {
+  .component-wrapper {
+    .sticky-input {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+    .control-menu {
+      max-height: 400px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+  }
+}

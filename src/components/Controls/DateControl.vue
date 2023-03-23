@@ -2,6 +2,11 @@
   <div>
     <q-btn
       no-caps
+      @click="
+        () => {
+          showing = !showing;
+        }
+      "
       class="button-control flex items-center date-control"
       :class="{
         active:
@@ -26,6 +31,7 @@
         <div v-if="showSelectedValue && !!controlDateRangeSelectedOption">
           {{ controlDateRangeSelectedOption.value }}
         </div>
+        <div v-else-if="$q.screen.lt.sm">dates</div>
         <div v-else>
           {{ $t('top_controls.select_dates') }}
         </div>
@@ -38,16 +44,10 @@
         </i>
         -->
       </div>
-      <q-menu
-        transition-show="jump-down"
-        transition-hide="jump-up"
-        v-model="menuShowing"
-        :offset="[0, 8]"
-        class="menu"
-      >
+      <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
         <div class="calendar-header flex row items-center" style="">
           <q-list dense style="min-width: 100px" v-if="$q.screen.gt.xs">
-            <q-item-label header class="q-pb-sm">{{
+            <q-item-label header class="q-pb-md">{{
               $t('top_controls.shortcuts')
             }}</q-item-label>
             <q-item
@@ -97,11 +97,17 @@
               </q-menu>
             </q-item>
           </q-list>
-          <q-list dense padding style="min-width: 100px" v-if="$q.screen.lt.sm">
-            <q-item-label header class="q-pb-xs">{{
+          <q-list
+            padding
+            style="min-width: 100px"
+            class="grow"
+            v-if="$q.screen.lt.sm"
+          >
+            <q-item-label header class="q-pb-sm">{{
               $t('top_controls.shortcuts')
             }}</q-item-label>
             <q-item
+              dense
               clickable
               v-close-popup
               v-for="option in menuOptions"
@@ -111,8 +117,14 @@
               <q-item-section>{{ option.label }}</q-item-section>
             </q-item>
           </q-list>
-          <q-list dense padding style="min-width: 100px" v-if="$q.screen.lt.sm">
-            <q-item-label header class="q-pb-xs">&nbsp;</q-item-label>
+          <q-list
+            dense
+            padding
+            style="min-width: 100px"
+            class="grow"
+            v-if="$q.screen.lt.sm"
+          >
+            <q-item-label header class="q-pb-sm">&nbsp;</q-item-label>
 
             <q-item
               style="white-space: nowrap"
@@ -167,7 +179,7 @@
             :is-dark="$q.dark.isActive"
           />
         </div>
-      </q-menu>
+      </MenuWrapper>
     </q-btn>
   </div>
 </template>
@@ -179,10 +191,12 @@ import moment from 'moment';
 import { mapWritableState } from 'pinia';
 import { useQueryStore } from 'src/stores/query';
 import { DatePicker } from 'v-calendar';
+import MenuWrapper from './MenuWrapper.vue';
 
 export default {
   components: {
     DatePicker,
+    MenuWrapper,
   },
   props: {
     showSelectedValue: {
@@ -192,7 +206,7 @@ export default {
   },
   data() {
     return {
-      menuShowing: false,
+      showing: false,
       customDateRange: null,
       modelConfig: {
         type: 'string',
@@ -518,6 +532,12 @@ export default {
     },
   },
   methods: {
+    onHide() {
+      this.showing = false;
+    },
+    onShow() {
+      this.showing = true;
+    },
     onSelectedCustomDateRange() {
       // set button label
       var label = this.$t('top_controls.custom');
@@ -643,19 +663,40 @@ export default {
 }
 .calendar-header {
   //max-width: 582px;
-  min-width: 658px;
+  min-width: 660px;
+  width: 660px;
 }
+
 @media only screen and (max-width: 600px) {
+  .body--dark {
+    .calendar-header {
+      .date-picker {
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+    }
+  }
+  .body--light {
+    .calendar-header {
+      .date-picker {
+        border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+      }
+    }
+  }
+
   .calendar-header {
-    max-width: 290px;
-    min-width: 275px;
+    max-width: 100%;
+    min-width: unset;
+    justify-content: start;
+
     .date-picker {
+      margin-top: 8px;
       border-radius: 0px !important;
       border-top-right-radius: 0px !important;
       border-top-left-radius: 0px !important;
       width: 100%;
-
+      padding: 16px 16px;
       :deep(.vc-container) {
+        font-size: larger !important;
       }
     }
   }

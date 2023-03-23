@@ -5,7 +5,7 @@
       :class="$q.screen.gt.xs ? ' q-px-md' : 'q-px-sm'"
     >
       <div>{{ dateString }}</div>
-      <!--<q-separator class="grow q-ml-md" />-->
+      <q-separator class="grow q-ml-md" v-if="$q.screen.gt.lg" />
     </div>
     <div class="date-header-shadow" />
   </div>
@@ -33,18 +33,19 @@ export default {
   position: sticky;
   top: 0px;
   width: 100%;
-  z-index: 3001;
+  z-index: 501;
 
   .date-header {
     height: 100%;
     position: relative;
-
     text-transform: lowercase;
     //position: absolute;
     width: 100%;
     display: flex;
     align-items: center;
     font-size: 1rem;
+    margin-bottom: 4px;
+    //padding: 32px 0;
   }
   /*
   .date-header-shadow {

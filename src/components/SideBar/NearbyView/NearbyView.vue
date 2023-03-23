@@ -76,11 +76,8 @@
               <div class="flex column scroll-content q-mt-">
                 <div
                   class="sidebar-header flex column grow no-wrap items-stretch justify-between ellipsis no-wrap q-pl-md"
-                  v-touch-swipe="
-                    () => {
-                      sidebarPanel = 'explore';
-                    }
-                  "
+                  style="width: 100%"
+                  v-touch-swipe.vertical="handleSwipe"
                 >
                   <div class="q-pr-md ellipsis q-mt-md">
                     <span class="text-h4 chicago">Near</span>
@@ -88,8 +85,8 @@
                 </div>
                 <div
                   class="text-h4 flex items-center justify-between no-wrap chicago t1 q-pl-md"
-                  :class="$q.screen.lt.sm ? 'q-pb-md' : ''"
                   style="width: 100%"
+                  v-touch-swipe.vertical="handleSwipe"
                 >
                   <span v-if="userLocationName" class="ellipsis">
                     {{ userLocationCity }}
@@ -155,7 +152,7 @@
                   <!-- tags -->
 
                   <div
-                    class="q-py-md header q-mt-md"
+                    class="q-py-md header q-mt-sm"
                     v-if="nearbyTags && nearbyTags.length > 0"
                   >
                     <div class="t1 text- chicago q-pl-md">Top tags:</div>
@@ -348,7 +345,7 @@
 
                 <div
                   class="flex row justify-center q-my-lg t3"
-                  v-if="!eventDatesHasNext"
+                  v-if="!eventDatesHasNext && !loadingEverything"
                 >
                   <div>End of results</div>
                 </div>
@@ -503,7 +500,12 @@ export default {
     },
 
     handleSwipe({ evt, ...info }) {
-      this.showPanelMobile = !this.showPanelMobile;
+      if (info.direction === 'down' && this.scrollPosition == 0) {
+        this.sidebarPanel = 'explore';
+      } else {
+        evt.preventDefault();
+        evt.stopPropagation();
+      }
     },
   },
   watch: {

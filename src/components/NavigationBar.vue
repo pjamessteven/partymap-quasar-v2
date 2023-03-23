@@ -29,7 +29,7 @@
       />
       <q-tab
         name="explore"
-        icon="mdi-earth"
+        icon="mdi-map-search"
         :label="$q.screen.gt.xs ? null : 'Explore'"
         content-class="tab"
         :ripple="false"
@@ -37,8 +37,12 @@
       />
       <q-tab
         name="favorites"
-        icon="mdi-heart-outline"
-        :label="$q.screen.gt.xs ? null : 'Saved'"
+        :icon="
+          sidebarPanel === 'favorites'
+            ? 'mdi-account-circle'
+            : 'mdi-account-circle-outline'
+        "
+        :label="$q.screen.gt.xs ? null : 'You'"
         content-class="tab"
         :ripple="false"
         @click="backToExplore"
@@ -157,9 +161,9 @@ export default {
 @media only screen and (max-width: 600px) {
   .body--dark {
     .navigation-bar {
-      background: $bi-2;
+      background: black;
       box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.8);
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
 
       //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.1);
     }

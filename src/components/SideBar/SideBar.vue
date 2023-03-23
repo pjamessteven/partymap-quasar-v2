@@ -44,54 +44,59 @@
           {{ sidebarPanel }}
         </div>
 -->
-        <div
-          @click="handleSwipe"
-          v-touch-swipe.vertical="handleSwipe"
-          class="handle-container flex grow justify-center items-center q-py-md"
-        >
-          <div class="handle" />
-        </div>
+        <MobileSwipeHandle
+          @swipe="onMobileSwipeHandle($event)"
+          v-if="$q.screen.lt.sm"
+        />
 
         <div class="flex column menubar">
           <NavigationBar class="nav-bar" v-if="$q.screen.gt.xs" />
 
           <div class="logo-padding" />
         </div>
-
-        <q-tab-panels
-          keep-alive
-          v-model="sidebarPanel"
-          :xanimated="$q.screen.gt.xs"
-          class="shadow-2 panels"
-          style="height: 100%"
-        >
-          <q-tab-panel name="nearby">
-            <NearbyView />
-          </q-tab-panel>
-
-          <q-tab-panel name="explore">
-            <ExploreView
-              style="position: absolute; height: 100%; width: 100%"
-            />
-          </q-tab-panel>
-
-          <q-tab-panel name="favorites">
-            <FavoritesView
-              style="position: absolute; height: 100%; width: 100%"
-            />
-          </q-tab-panel>
-
-          <q-tab-panel name="search">
-            <SearchView style="position: absolute; height: 100%; width: 100%" />
-          </q-tab-panel>
-        </q-tab-panels>
-
         <div
-          class="resizer flex row items-center"
-          ref="resizer"
-          v-if="$q.screen.gt.sm"
+          class="sidebar-content"
+          :class="{
+            'sidebar-desktop-expanded': $q.screen.gt.lg || this.sidebarExpanded,
+          }"
         >
-          <q-icon name="las la-grip-lines-vertical" />
+          <q-tab-panels
+            keep-alive
+            v-model="sidebarPanel"
+            :animated="$q.screen.gt.xs"
+            class="panels"
+            style="height: 100%"
+          >
+            <q-tab-panel name="nearby">
+              <NearbyView />
+            </q-tab-panel>
+
+            <q-tab-panel name="explore">
+              <ExploreView
+                style="position: absolute; height: 100%; width: 100%"
+              />
+            </q-tab-panel>
+
+            <q-tab-panel name="favorites">
+              <FavoritesView
+                style="position: absolute; height: 100%; width: 100%"
+              />
+            </q-tab-panel>
+
+            <q-tab-panel name="search">
+              <SearchView
+                style="position: absolute; height: 100%; width: 100%"
+              />
+            </q-tab-panel>
+          </q-tab-panels>
+
+          <div
+            class="resizer flex row items-center"
+            ref="resizer"
+            v-if="$q.screen.gt.sm"
+          >
+            <q-icon name="las la-grip-lines-vertical" />
+          </div>
         </div>
       </div>
     </Transition>
@@ -107,6 +112,7 @@ import NavigationBar from 'components/NavigationBar.vue';
 import { mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useMapStore } from 'src/stores/map';
+import MobileSwipeHandle from '../MobileSwipeHandle.vue';
 export default {
   components: {
     ExploreView,
@@ -114,6 +120,7 @@ export default {
     NavigationBar,
     NearbyView,
     FavoritesView,
+    MobileSwipeHandle,
   },
   async mounted() {
     if (this.$q.screen.gt.lg) {
@@ -171,9 +178,16 @@ export default {
         evt.stopPropagation();
       }
     },
-    handleSwipeDown() {
-      this.showPanelMobile = !this.showPanelMobile;
-      // native Javascript event
+    onMobileSwipeHandle(direction) {
+      if (
+        (this.showPanelMobile && direction === 'down') ||
+        (!this.showPanelMobile && direction === 'up')
+      ) {
+        if (this.sidebarPanel !== 'explore') {
+          this.sidebarPanel = 'explore';
+        }
+        this.showPanelMobile = !this.showPanelMobile;
+      }
     },
   },
   watch: {
@@ -200,7 +214,7 @@ export default {
       if (this.$q.screen.lt.sm) {
         return 'width: 100%';
       } else if (this.sidebarExpanded && this.$q.screen.gt.sm) {
-        return 'width: 736px;';
+        return 'width: 800px;';
       } else {
         return 'width: 398px';
       }
@@ -278,12 +292,7 @@ export default {
   height: 100%;
 
   pointer-events: all;
-  .handle-container {
-    display: none;
-  }
-  :deep(.q-tab-panel) {
-    padding: 0px;
-  }
+
   :deep(.main-content) {
     padding-top: 64px;
   }
@@ -302,8 +311,18 @@ export default {
     top: 0px;
     z-index: 100;
   }
-  :deep(.panels) {
+  .sidebar-content {
+    height: 100%;
     width: 100%;
+    &.sidebar-desktop-expanded {
+      padding: 0 16px;
+    }
+    :deep(.panels) {
+      width: 100%;
+    }
+    :deep(.q-tab-panel) {
+      padding: 0px;
+    }
   }
 
   .mobile-dismiss-list {
@@ -367,13 +386,7 @@ export default {
     }
     .sidebar {
       box-shadow: none;
-      border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
 
-      .handle-container {
-        .handle {
-          background: rgba(255, 255, 255, 0.8);
-        }
-      }
       :deep(.panels) {
         box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
         border-top-right-radius: 18px;
@@ -386,21 +399,17 @@ export default {
   .body--light {
     .sidebar {
       box-shadow: none;
-      border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
 
-      .handle-container {
-        .handle {
-          background: rgba(255, 255, 255, 0.68);
-        }
-      }
       :deep(.panels) {
-        box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
+        //box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
       }
     }
   }
   .sidebar-wrapper {
     padding: 0;
     .sidebar {
+      box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
+
       width: 100%;
       background: transparent;
       transition: all 0.3s ease;
@@ -413,19 +422,7 @@ export default {
       border-left: none;
       border-right: none;
       overflow: visible;
-      .handle-container {
-        display: flex;
-        position: relative;
-        top: 0px;
-        width: 100%;
-        height: 16px;
-        z-index: 1000;
-        pointer-events: all;
-        .handle {
-          height: 2px;
-          width: 32px;
-        }
-      }
+
       :deep(.main-content) {
         padding-top: 0px;
       }

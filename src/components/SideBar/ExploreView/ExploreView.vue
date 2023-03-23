@@ -92,7 +92,11 @@
                 <ControlsComponent
                   v-if="$q.screen.gt.xs"
                   class="controls-component"
-                  :class="$q.screen.lt.sm ? 'q-pt-sm' : 'q-mt-md'"
+                  :class="{
+                    'q-pt-sm': $q.screen.lt.sm,
+                    'q-mt-md ': $q.screen.gt.xs && $q.screen.lt.xl,
+                    'q-mb-md q-mt-md': $q.screen.gt.lg,
+                  }"
                 />
                 <div
                   class="artist-profile-wrapper"
@@ -106,38 +110,43 @@
                 <ControlsComponent
                   v-if="$q.screen.lt.sm"
                   class="controls-component"
-                  :class="$q.screen.lt.sm ? 'q-mt-md' : 'q-mb-sm '"
+                  :class="{
+                    'q-mt-md': $q.screen.lt.sm,
+                    'q-mb-sm ': $q.screen.gt.xs && $q.screen.lt.xl,
+                  }"
                   :showSelectedValue="true"
                   :showOnlySelected="false"
                 />
 
-                <transition appear enter-active-class="animated fadeIn faster">
+                <div
+                  class="flex column"
+                  v-show="showResults && !isLoadingInitial"
+                >
                   <div
-                    class="flex column"
-                    v-show="showResults && !isLoadingInitial"
+                    class="flex column artists-wrapper"
+                    v-if="noFiltersSelected && artists?.length > 0"
                   >
                     <div
-                      class="flex column artists-wrapper"
-                      v-if="noFiltersSelected && artists?.length > 0"
+                      class="header q-py-md t1 chicago"
+                      :class="
+                        $q.screen.lt.sm ? 'q-pl-sm q-mt-sm' : 'q-pl-md  q-py-md'
+                      "
                     >
-                      <div
-                        class="header q-py-md t1 chicago"
-                        :class="
-                          $q.screen.lt.sm
-                            ? 'q-pl-sm q-mt-sm'
-                            : 'q-pl-md  q-py-md'
-                        "
-                      >
-                        Top artists in this area:
-                      </div>
-                      <ArtistsComponent
-                        class="artists-component"
-                        :artists="artists"
-                        :hasNext="artistsHasNext"
-                        :loadMore="loadMoreArtists"
-                      />
+                      Top artists in this area:
                     </div>
+                    <ArtistsComponent
+                      class="artists-component"
+                      :artists="artists"
+                      :hasNext="artistsHasNext"
+                      :loadMore="loadMoreArtists"
+                    />
+                  </div>
+                  <transition
+                    appear
+                    enter-active-class="animated fadeIn slower"
+                  >
                     <EventDateList
+                      v-if="showResults"
                       :eventDates="eventDates"
                       @loaded="
                         () => {
@@ -145,43 +154,45 @@
                         }
                       "
                     />
-                    <div class="row justify-center q-my-lg q-mb-xl">
-                      <q-spinner-ios
-                        :color="$q.dark.isActive ? 'white' : 'black'"
-                        size="2em"
-                        v-if="
-                          eventDatesHasNext &&
-                          !isLoadingDatesInitial &&
-                          eventDates.length > 0
-                        "
-                      />
-                      <div
-                        v-else-if="
-                          eventDates.length > 0 && !isLoadingDatesInitial
-                        "
-                        class="t4"
-                      >
-                        End of results
-                      </div>
-                      <div
-                        v-else-if="
-                          eventDates.length == 0 &&
-                          !isLoadingDatesInitial &&
-                          !eventDatesLoading
-                        "
-                        class="t4"
-                      >
-                        No parties in this area :'(
-                      </div>
+                  </transition>
+
+                  <div class="row justify-center q-my-lg q-mb-xl">
+                    <q-spinner-ios
+                      :color="$q.dark.isActive ? 'white' : 'black'"
+                      size="2em"
+                      v-if="
+                        eventDatesHasNext &&
+                        !isLoadingDatesInitial &&
+                        eventDates.length > 0
+                      "
+                    />
+                    <div
+                      v-else-if="
+                        eventDates.length > 0 && !isLoadingDatesInitial
+                      "
+                      class="t4"
+                    >
+                      End of results
+                    </div>
+                    <div
+                      v-else-if="
+                        eventDates.length == 0 &&
+                        !isLoadingDatesInitial &&
+                        !eventDatesLoading
+                      "
+                      class="t4"
+                    >
+                      No parties in this area :'(
                     </div>
                   </div>
-                </transition>
+                </div>
               </div>
             </div>
           </transition>
         </q-scroll-area>
       </div>
       <div
+        v-if="isLoadingInitial || mapMoving"
         v-touch-swipe="handleSwipe"
         class="event-date-center flex grow justify-center q-pt-lg"
         style="height: 100%; position: absolute; width: 100%; z-index: 500"
@@ -190,7 +201,6 @@
           :thickness="1"
           :color="$q.dark.isActive ? 'white' : 'black'"
           size="2em"
-          v-if="isLoadingInitial || mapMoving"
           v-touch-swipe="handleSwipe"
         />
       </div>
@@ -511,7 +521,6 @@ export default {
 
 .header {
   //position: absolute;
-  z-index: 100;
   //transition: all 0.3s ease;
   // width: 100%;
   width: 100%;
@@ -586,6 +595,9 @@ export default {
       position: relative;
       width: 100%;
       min-height: 100%;
+    }
+    :deep(.q-scrollarea__thumb) {
+      z-index: 1000;
     }
   }
 

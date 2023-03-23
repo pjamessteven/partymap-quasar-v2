@@ -6,6 +6,11 @@
       :class="{
         active: controlTag?.length > 0,
       }"
+      @click="
+        () => {
+          showing = !showing;
+        }
+      "
     >
       <div class="flex items-center row no-wrap">
         <!--<q-icon left name="las la-calendar " />-->
@@ -16,7 +21,7 @@
           @click.stop="
             () => {
               controlTag = [];
-              menuShowing = false;
+              event.preventDefault();
             }
           "
           v-if="controlTag?.length > 0"
@@ -47,49 +52,35 @@
         -->
       </div>
 
-      <q-menu
-        transition-show="jump-down"
-        transition-hide="jump-up"
-        v-model="menuShowing"
-        @before-show="onBeforeShowMenu"
-        @before-hide="onBeforeHideMenu"
-        anchor="top middle"
-        self="bottom middle"
-        :offset="[0, 8]"
-        style="
-          max-height: 400px !important;
-          max-width: 300px !important;
-          height: 400px;
-          min-width: 280px;
-        "
-        @scroll="onScrollMainContent($event)"
-      >
-        <div class="flex column">
-          <div class="sticky-input">
-            <q-input
-              debounce="500"
-              clearable
-              class="q-ml-md q-mr-md"
-              v-model="query"
-              borderless
-              ref="input"
-              bg-color="transparent"
-              :label="$t('top_controls.search_tags')"
-              @keyup.enter="$refs.input.blur()"
-            >
-              <template v-slot:append>
-                <q-icon
-                  name="mdi-magnify"
-                  class="q-my-md"
-                  v-if="!query || query?.length == 0"
-                />
-              </template>
-            </q-input>
-            <div class="separator" style="width: 100%" />
-          </div>
-
-          <div class="flex column" style="position: relative; height: 100%">
-            <q-list v-if="tagOptions && tagOptions.length > 0">
+      <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
+        <div class="sticky-input">
+          <q-input
+            debounce="500"
+            clearable
+            class="q-ml-md q-mr-md"
+            v-model="query"
+            borderless
+            ref="input"
+            bg-color="transparent"
+            :label="$t('top_controls.search_tags')"
+            @keyup.enter="$refs.input.blur()"
+          >
+            <template v-slot:append>
+              <q-icon
+                name="mdi-magnify"
+                class="q-my-md"
+                v-if="!query || query?.length == 0"
+              />
+            </template>
+          </q-input>
+          <div class="separator" style="width: 100%" />
+        </div>
+        <div @scroll="onScrollMainContent($event)" class="control-menu">
+          <div
+            class="flex column grow"
+            v-if="tagOptions && tagOptions.length > 0"
+          >
+            <q-list>
               <q-item-label
                 header
                 class="t3 q-pb-sm"
@@ -126,7 +117,7 @@
               </div>
             </q-list>
             <div
-              class="row justify-center q-my-md"
+              class="row justify-center q-my-lg"
               v-if="tagOptionsHasNext && tagOptions?.length > 0"
             >
               <q-spinner-ios
@@ -134,19 +125,18 @@
                 size="2em"
               />
             </div>
-            <div
-              class="flex row grow justify-center items-center q-my-md"
-              v-if="tagOptionsLoading && tagOptionsPage == 1"
-              style="height: 100%"
-            >
-              <q-spinner-ios
-                :color="$q.dark.isActive ? 'white' : 'black'"
-                size="2em"
-              />
-            </div>
+          </div>
+          <div
+            class="flex row grow justify-center items-center"
+            v-if="tagOptionsLoading && tagOptionsPage == 1"
+          >
+            <q-spinner-ios
+              :color="$q.dark.isActive ? 'white' : 'black'"
+              size="2em"
+            />
           </div>
         </div>
-      </q-menu>
+      </MenuWrapper>
     </q-btn>
   </div>
 </template>
@@ -155,11 +145,15 @@
 import { mapActions, mapWritableState, mapState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
+import MenuWrapper from './MenuWrapper.vue';
 
 export default {
+  components: {
+    MenuWrapper,
+  },
   data() {
     return {
-      menuShowing: false,
+      showing: false,
       query: null,
     };
   },
@@ -171,12 +165,22 @@ export default {
   },
   methods: {
     ...mapActions(useQueryStore, ['loadTagOptions']),
-    onBeforeShowMenu() {
+    onShow() {
       // used to stop the ed list refrshing on mobile viewport size change
       this.blockUpdates = true;
       if (!this.tagOptions || this.tagOptions.length === 0) {
         this.loadInitialList();
       }
+    },
+    onHide() {
+      this.showing = false;
+
+      // unload additional pages to reduce render load next time the dialog is opened
+      this.tagOptions = this.tagOptions.slice(0, this.tagOptionsPerPage);
+      this.tagOptionsPage = 2;
+      setTimeout(() => {
+        this.blockUpdates = false;
+      }, 1500);
     },
     loadInitialList() {
       this.tagOptionsPage = 1;
@@ -185,14 +189,7 @@ export default {
     loadMore() {
       this.loadTagOptions(this.query);
     },
-    onBeforeHideMenu() {
-      // unload additional pages to reduce render load next time the dialog is opened
-      this.tagOptions = this.tagOptions.slice(0, this.tagOptionsPerPage);
-      this.tagOptionsPage = 2;
-      setTimeout(() => {
-        this.blockUpdates = false;
-      }, 1500);
-    },
+
     clickTag(tag) {
       let index = this.controlTag?.findIndex((x) => x.tag === tag.tag);
       if (index > -1) {
@@ -239,20 +236,20 @@ export default {
 
 <style lang="scss" scoped>
 .body--dark {
-  .sticky-input {
-    background: black;
-  }
 }
 
 .body--light {
-  .sticky-input {
-    background: white;
-  }
 }
 
-.sticky-input {
-  position: sticky;
-  z-index: 1;
-  top: 0;
+.control-menu {
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
+  max-width: 300px;
+}
+@media only screen and (max-width: 600px) {
+  .control-menu {
+    max-width: unset;
+  }
 }
 </style>

@@ -2,20 +2,23 @@
   <router-link
     :to="{
       name: 'ArtistPage',
-      params: { id: artist.id },
+      params: { id: artist?.id || 0 },
       query: {
-        name: artist.name.replace(/ /g, '_'),
+        name: artist?.name.replace(/ /g, '_'),
       },
     }"
   >
     <q-card v-if="!closed" class="shadow-lg card flex column">
       <q-inner-loading :showing="loading">
-        <q-spinner-ios
+        <q-linear-progress
+          style="width: 150px"
+          :thickness="1"
+          :indeterminate="true"
           :color="$q.dark.isActive ? 'white' : 'black'"
-          size="2em"
         />
       </q-inner-loading>
       <div
+        v-if="artist"
         class="artist-header flex row justify-between items-start no-wrap q-pa-md"
       >
         <div

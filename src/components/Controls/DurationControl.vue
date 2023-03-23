@@ -2,6 +2,11 @@
   <div>
     <q-btn
       no-caps
+      @click="
+        () => {
+          showing = !showing;
+        }
+      "
       class="button-control flex items-center"
       :class="{
         active: controlDuration && controlDuration.length > 0,
@@ -26,14 +31,7 @@
           {{ $t('top_controls.select_duration') }}
         </div>
       </div>
-      <q-menu
-        transition-show="jump-down"
-        transition-hide="jump-up"
-        v-model="menuShowing"
-        anchor="top middle"
-        self="bottom middle"
-        :offset="[0, 8]"
-      >
+      <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
         <div class="q-gutter-xs flex column q-pr-md q-pa-xs">
           <q-checkbox
             v-model="controlDuration"
@@ -61,7 +59,7 @@
             :label="$t('top_controls.five_days_plus')"
           />
         </div>
-      </q-menu>
+      </MenuWrapper>
     </q-btn>
   </div>
 </template>
@@ -69,12 +67,24 @@
 <script>
 import { useQueryStore } from 'src/stores/query';
 import { mapWritableState } from 'pinia';
+import MenuWrapper from './MenuWrapper.vue';
 
 export default {
+  components: {
+    MenuWrapper,
+  },
   data() {
     return {
-      menuShowing: false,
+      showing: false,
     };
+  },
+  methods: {
+    onHide() {
+      this.showing = false;
+    },
+    onShow() {
+      this.showing = true;
+    },
   },
   computed: {
     ...mapWritableState(useQueryStore, ['controlDuration']),

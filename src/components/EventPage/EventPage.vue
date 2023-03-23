@@ -693,9 +693,9 @@ export default {
       if (this.event && this.event.id !== this.id) {
         this.event = null;
       }
+      this.loading = true;
 
       try {
-        this.loading = true;
         const response = await this.loadEvent(this.id);
 
         this.editing = this.$route.params.editing;
