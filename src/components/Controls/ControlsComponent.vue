@@ -2,19 +2,18 @@
   <div :class="this.mapStyle === 'satellite' ? 'satellite-enabled' : ''">
     <div
       class="inner-wrapper flex column grow no-wrap"
-      :class="$q.screen.gt.xs ? '' : ' t2'"
+      :class="$q.screen.gt.xs ? ' q-pl-md' : ' t2'"
     >
       <q-scroll-area
-        v-if="$q.screen.lt.sm"
         ref="scroll"
         horizontal
         class="scroll-area"
         :style="
-          $q.screen.gt.xs && $q.screen.lt.xl ? 'height: 96px' : 'height: 44px'
+          $q.screen.gt.xs && $q.screen.lt.xl ? 'height: 54px' : 'height: 44px'
         "
         :thumb-style="
           $q.screen.gt.xs
-            ? { bottom: '6px', height: '4px' }
+            ? { bottom: '0px', height: '4px' }
             : { bottom: '-8px', height: '0px' }
         "
         v-touch-swipe.vertical="handleSwipe"
@@ -24,8 +23,8 @@
           :class="[
             $q.screen.gt.xs
               ? $q.screen.lt.xl && !this.sidebarExpanded
-                ? 'q-px-md q-py-xs '
-                : 'q-px-md q-py-xs '
+                ? 'q-gutter-sm q-pr-md q-py-xs no-wrap'
+                : 'q-gutter-sm q-pr-md q-py-xs  no-wrap'
               : 'q-gutter-sm q-px-sm  no-wrap',
           ]"
         >
@@ -64,6 +63,7 @@
           />
         </div>
       </q-scroll-area>
+      <!--
       <div
         v-else
         class="flex row scroll-wrapper tag-controls q-gutter-sm"
@@ -108,6 +108,7 @@
           :showSelectedValue="showSelectedValue"
         />
       </div>
+      -->
       <div class="artist-profile-wrapper" v-if="$q.screen.lt.sm">
         <ArtistProfile
           :key="controlArtist[0].id"
@@ -375,11 +376,11 @@ export default {
       background: rgba(255, 255, 255, 0.9);
       border: 1px solid rgba(255, 255, 255, 0.2);
       */
-      background: rgba(255, 255, 255, 1);
+      //background: $b-2;
       transition: none;
       border: 1px solid rgba(0, 0, 0, 0.1);
-      //box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
-      box-shadow: none !important;
+      //box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
+      //box-shadow: none !important;
       &::before {
         box-shadow: none !important;
       }
@@ -421,21 +422,19 @@ export default {
 
 .inner-wrapper {
   .scroll-area {
-    /*
     mask-image: linear-gradient(
       to left,
       transparent 0%,
       white 64px,
       white calc(100% - 20px),
-      transparent 100%
+      white 100%
     );
-    */
     overflow-y: hidden;
     .scroll-wrapper {
       //padding-right: 64px;
       :deep(.button-control) {
         z-index: 1500;
-        border-radius: 9px !important;
+        //border-radius: 100px !important;
       }
       div {
         &:not(:last-child) {
@@ -490,11 +489,11 @@ export default {
     }
   }
   :deep(.button-control) {
-    padding: 6px 14px;
+    padding: 6px 12px;
     font-weight: 400;
     font-family: chicagoflf;
     text-transform: capitalize;
-    font-size: 1rem;
+    font-size: normal;
     border-radius: 9px !important;
     &.active {
       font-weight: 500;

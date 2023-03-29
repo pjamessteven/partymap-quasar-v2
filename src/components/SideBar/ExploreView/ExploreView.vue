@@ -129,7 +129,7 @@
                     <div
                       class="header q-py-md t1 chicago"
                       :class="
-                        $q.screen.lt.sm ? 'q-pl-sm q-mt-sm' : 'q-pl-md  q-py-md'
+                        $q.screen.lt.sm ? 'q-pl-sm q-mt-sm' : 'q-pl-md  q-pb-md'
                       "
                     >
                       Top artists in this area:
