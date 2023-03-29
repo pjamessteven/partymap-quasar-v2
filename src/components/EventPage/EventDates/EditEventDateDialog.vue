@@ -267,7 +267,7 @@
         </div>
         <GoogleLocationComponent
           class="q-mt-md"
-          v-on:location="location = $event"
+          @location="location = $event"
           :locationProp="location"
         />
       </q-card-section>
@@ -312,7 +312,7 @@
           <p />
         </div>
         <span v-if="!currentUserIsHost">
-          Don't be a bloody dickhead, only do this if this date has been
+          Please respect our data, only do this if this date has really been
           cancelled.
         </span>
         <span v-else>
@@ -532,7 +532,7 @@ export default {
       if (this.locationHasChanged) {
         update.location = this.location;
       }
-      if (this.currentUserIsHost) {
+      if (this.currentUserCanEdit) {
         const progressDialog = this.$q.dialog({
           title: this.$t('edit_event_date.updating_event_date'),
           color: 'primary',

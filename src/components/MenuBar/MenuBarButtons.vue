@@ -148,13 +148,7 @@
     -->
     <q-btn
       class="button-menu"
-      :class="{
-        'light-button':
-          $route.name === 'LandingPage' ||
-          $route.name === 'EventPage' ||
-          $route.name === 'Explore' ||
-          ($route.meta.mapOverlay && this.$q.screen.gt.xs),
-      }"
+      :class="{}"
       icon="mdi-menu"
       flat
       style="position: relative"

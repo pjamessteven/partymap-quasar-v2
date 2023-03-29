@@ -2,7 +2,9 @@
   <q-card class="add-event-date-dialog">
     <!-- DATE AND TIME -->
     <q-card-section class="row items-center sticky-card-header">
-      <div class="text-h6">{{ $t('add_event_date.add_new_event_date') }}</div>
+      <div class="text-h6 chicago">
+        {{ $t('add_event_date.add_new_event_date') }}
+      </div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>

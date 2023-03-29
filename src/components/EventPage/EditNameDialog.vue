@@ -58,63 +58,63 @@ export default {
   },
   methods: {
     ...mapActions(useEventStore, ['suggestEventEdit']),
-    update() {
+    async update() {
       this.loading = true;
-      /*
+
       if (this.currentUserCanEdit) {
-        this.$store
-          .dispatch('currentEvent/editEvent', { name: this.name })
-          .then(response => {
-            this.loading = false
-            this.showEditingDialog = false
-            // this.$store.dispatch('currentEvent/loadEvent', this.event.id)
-          })
+        try {
+          await this.updateEvent({ name: this.name });
+          progressDialog.hide();
+          this.loading = false;
+          this.$emit('closeDialog');
+        } catch (e) {
+          this.loading = false;
+        }
       } else {
-      */
-
-      // ONLY ALLOW SUGGESTING A NEW NAME
-      this.$q
-        .dialog({
-          parent: this,
-          component: SubmitSuggestionPrompt,
-        })
-        .onOk(async (messageAndToken) => {
-          // suggest edit instead of editing directly
-          const progressDialog = this.$q.dialog({
-            title: this.$t('edit_event_date.submitting'),
-            color: 'primary',
-            progress: true, // we enable default settings
-            cancel: false,
-            persistent: true, // we want the user to not be able to close it
-            ok: false,
-          });
-
-          try {
-            // include message and token in request
-            await this.suggestEventEdit({
-              ...messageAndToken,
-              ...{
-                name: this.name,
-              },
+        // ONLY ALLOW SUGGESTING A NEW NAME
+        this.$q
+          .dialog({
+            parent: this,
+            component: SubmitSuggestionPrompt,
+          })
+          .onOk(async (messageAndToken) => {
+            // suggest edit instead of editing directly
+            const progressDialog = this.$q.dialog({
+              title: this.$t('edit_event_date.submitting'),
+              color: 'primary',
+              progress: true, // we enable default settings
+              cancel: false,
+              persistent: true, // we want the user to not be able to close it
+              ok: false,
             });
-            this.$q
-              .dialog({
-                title: this.$t('edit_event_date.submitted'),
-                message: this.$t('edit_event_date.submitted_msg'),
-                color: 'primary',
-                persistent: false, // we want the user to not be able to close it
-              })
-              .onDismiss(() => {
-                this.$emit('closeDialog');
+
+            try {
+              // include message and token in request
+              await this.suggestEventEdit({
+                ...messageAndToken,
+                ...{
+                  name: this.name,
+                },
               });
-            progressDialog.hide();
-            this.loading = false;
-            this.$emit('closeDialog');
-          } catch (e) {
-            progressDialog.hide();
-            this.loading = false;
-          }
-        });
+              this.$q
+                .dialog({
+                  title: this.$t('edit_event_date.submitted'),
+                  message: this.$t('edit_event_date.submitted_msg'),
+                  color: 'primary',
+                  persistent: false, // we want the user to not be able to close it
+                })
+                .onDismiss(() => {
+                  this.$emit('closeDialog');
+                });
+              progressDialog.hide();
+              this.loading = false;
+              this.$emit('closeDialog');
+            } catch (e) {
+              progressDialog.hide();
+              this.loading = false;
+            }
+          });
+      }
     },
   },
   watch: {},
@@ -131,20 +131,13 @@ export default {
 
 <style lang="scss" scoped>
 .body--dark {
-  .description {
-    // border-right: 1px solid rgba(255, 255, 255, 0.2);
-  }
 }
 
 .body--light {
-  .description {
-    // border-right: 1px solid rgba(0, 0, 0, 0.1);
-  }
 }
 
 .edit-card {
   min-width: 400px;
-  // color: white;
 }
 @media only screen and (max-width: 1023px) {
   .card {

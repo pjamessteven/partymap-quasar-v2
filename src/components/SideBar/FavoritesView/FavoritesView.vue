@@ -14,25 +14,6 @@
         class="flex column grow no-wrap"
         :class="{ 'q-mx-sm': $q.screen.lt.sm }"
       >
-        <!--
-        <q-icon
-          v-if="$q.screen.lt.sm"
-          @click="handleSwipe"
-          flat
-          v-touch-swipe="handleSwipe"
-          name="mdi-chevron-up"
-          class="mobile-hide-icon t1"
-          :class="{
-            'rotate-180 slower': showPanelMobile,
-            'q-py-sm q-px-md q-py-sm': $q.screen.lt.sm
-          }"
-          size="1.5rem"
-        />
-        <div class="date-header-bg" />
--->
-        <div class="flex q-px-md" v-if="controlFavorites">
-          <q-select label="All my events" outlined square />
-        </div>
         <q-scroll-area
           vertical
           @scroll="onScrollMainContent"
@@ -88,16 +69,11 @@
                   class="q-pl-md q-pt-md q-pb- q-pr-md ellipsis"
                   style="width: 100%"
                 >
-                  <span class="text-h4 chicago">Explore</span>
+                  <span class="text-h4 chicago">Favorites</span>
                 </div>
               </div>
 
               <div class="flex column no-wrap content">
-                <ControlsComponent
-                  v-if="$q.screen.gt.xs"
-                  class="controls-component"
-                  :class="$q.screen.lt.sm ? 'q-pt-sm' : 'q-mt-md'"
-                />
                 <div
                   class="artist-profile-wrapper"
                   v-if="controlArtist.length > 0 && $q.screen.gt.xs"
@@ -107,39 +83,12 @@
                     :id="controlArtist[0].id"
                   />
                 </div>
-                <ControlsComponent
-                  class="controls-component"
-                  :class="$q.screen.lt.sm ? 'q-pt-sm' : 'q-mb-sm '"
-                  :showSelectedValue="true"
-                  :showOnlySelected="true"
-                />
 
                 <transition appear enter-active-class="animated fadeIn">
                   <div
                     class="flex column"
                     v-show="showResults && !isLoadingInitial"
                   >
-                    <div
-                      class="flex column artists-wrapper"
-                      v-if="noFiltersSelected && artists?.length > 0"
-                    >
-                      <div
-                        class="header q-py-md t1 chicago"
-                        :class="
-                          $q.screen.lt.sm
-                            ? 'q-pl-sm q-mt-sm'
-                            : 'q-pl-md  q-py-md'
-                        "
-                      >
-                        Top artists in this area:
-                      </div>
-                      <ArtistsComponent
-                        class="artists-component"
-                        :artists="artists"
-                        :hasNext="artistsHasNext"
-                        :loadMore="loadMoreArtists"
-                      />
-                    </div>
                     <EventDateList
                       :eventDates="eventDates"
                       @loaded="
@@ -172,7 +121,7 @@
                         "
                         class="t4"
                       >
-                        No parties in this area :'(
+                        Nothing to display
                       </div>
                     </div>
                   </div>
@@ -212,9 +161,7 @@ import { mapActions, mapWritableState, mapState } from 'pinia';
 
 export default {
   components: {
-    ControlsComponent,
     ArtistProfile,
-    ArtistsComponent,
     EventDateList,
   },
   props: { showControls: { default: false } },

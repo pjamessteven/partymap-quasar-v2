@@ -54,10 +54,7 @@ export const useEventStore = defineStore('event', {
     },
     currentUserIsHost: (state) => {
       const authStore = useAuthStore();
-      return (
-        state.event?.host?.username &&
-        authStore.currentUser?.username === state.event.host.username
-      );
+      return state.event?.host?.username === authStore.currentUser?.username;
     },
   },
   actions: {
@@ -163,7 +160,10 @@ export const useEventStore = defineStore('event', {
           this.selectedEventDate?.id,
           payload
         );
-        this.event = response.data;
+        console.log(this.selectedEventDate);
+        this.selectedEventDate = response.data;
+        console.log(this.selectedEventDate);
+
         return response;
       } catch (e) {
         throw e;

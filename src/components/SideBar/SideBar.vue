@@ -33,6 +33,8 @@
             $q.screen.lt.sm && this.$route.name !== 'Explore',
         }"
       >
+        <MenuBar class="menubar" v-if="$q.screen.gt.xs" />
+
         <!--
         <div
           class="mobile-dismiss-list q-py-md flex column text-h4 chicago q-pl-md"
@@ -49,13 +51,8 @@
           v-if="$q.screen.lt.sm"
         />
 
-        <div class="flex column menubar">
-          <NavigationBar class="nav-bar" v-if="$q.screen.gt.xs" />
-
-          <div class="logo-padding" />
-        </div>
         <div
-          class="sidebar-content"
+          class="sidebar-content flex column"
           :class="{
             'sidebar-desktop-expanded': $q.screen.gt.lg || this.sidebarExpanded,
           }"
@@ -89,6 +86,7 @@
               />
             </q-tab-panel>
           </q-tab-panels>
+          <NavigationBar class="nav-bar" v-if="$q.screen.gt.xs" />
 
           <div
             class="resizer flex row items-center"
@@ -109,6 +107,8 @@ import SearchView from './SearchView/SearchView.vue';
 import FavoritesView from './FavoritesView/FavoritesView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
 import NavigationBar from 'components/NavigationBar.vue';
+import MenuBar from 'components/MenuBar/MenuBar.vue';
+
 import { mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useMapStore } from 'src/stores/map';
@@ -117,6 +117,7 @@ export default {
   components: {
     ExploreView,
     SearchView,
+    MenuBar,
     NavigationBar,
     NearbyView,
     FavoritesView,
@@ -247,6 +248,9 @@ export default {
     .handle {
       background: rgba(0, 0, 0, 1);
     }
+    .nav-bar {
+      background: black;
+    }
   }
 }
 
@@ -270,6 +274,9 @@ export default {
       color: $bi-2;
       background: white;
     }
+    .nav-bar {
+      background: white;
+    }
   }
 }
 
@@ -290,12 +297,13 @@ export default {
   transition: width 0.3s;
   overflow: hidden;
   height: 100%;
-
   pointer-events: all;
 
-  :deep(.main-content) {
-    padding-top: 64px;
+  .menubar {
+    position: relative;
+    width: 100%;
   }
+
   :deep(.scroll-area) {
     overflow: hidden;
     .scroll-content {
@@ -314,6 +322,7 @@ export default {
   .sidebar-content {
     height: 100%;
     width: 100%;
+    padding-bottom: 72px;
     &.sidebar-desktop-expanded {
       padding: 0 16px;
     }
@@ -329,11 +338,9 @@ export default {
     padding-top: 0px;
   }
   .nav-bar {
+    width: 100%;
     position: absolute;
-    top: 0px;
-    right: 0px;
-    height: 63px;
-    width: 204px;
+    bottom: 0;
   }
 
   .resizer {
@@ -349,10 +356,6 @@ export default {
     width: 100%;
     height: 100%;
     z-index: 501;
-  }
-  .logo-padding {
-    min-height: 63px;
-    height: 63px;
   }
 }
 
@@ -422,7 +425,9 @@ export default {
       border-left: none;
       border-right: none;
       overflow: visible;
-
+      .sidebar-content {
+        padding-top: unset;
+      }
       :deep(.main-content) {
         padding-top: 0px;
       }
@@ -432,21 +437,13 @@ export default {
         border-top-left-radius: 18px;
         width: 100%;
       }
-      .logo-padding {
-        display: none;
-      }
+
       .lights-wrapper {
         top: 70px;
 
         .lights-image {
           width: 100%;
         }
-      }
-      .nav-bar {
-        position: fixed;
-        bottom: 0px;
-        width: 100%;
-        z-index: 100;
       }
 
       .mobile-dismiss-list {

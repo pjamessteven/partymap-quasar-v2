@@ -8,7 +8,7 @@
       :label="$t('add.select_location')"
       :options="autoCompleteResults"
       @filter="locationSearchFilter"
-      @input="getPlaceInformation"
+      @update:model-value="getPlaceInformation"
       style="width: 100%"
       option-label="description"
       map-options
@@ -53,15 +53,6 @@ export default {
     };
   },
   watch: {
-    location: {
-      handler() {
-        if (this.location != null) {
-          this.$emit('location', this.location);
-        }
-      },
-      deep: true,
-      immediate: true,
-    },
     $props: {
       handler() {
         this.selectedPlace = this.locationProp;
@@ -88,18 +79,23 @@ export default {
       }
     },
     getPlaceInformation() {
-      var request = {
-        placeId: this.selectedPlace.place_id,
-        fields: ['name', 'type', 'address_component', 'geometry'],
-        sessionToken: this.autoCompleteSessionToken,
-      };
-      this.placesService.getDetails(request, (place) => {
-        var loc = {};
-        loc = place;
-        loc.description = this.selectedPlace.description;
-        loc.place_id = this.selectedPlace.place_id;
-        this.location = loc;
-      });
+      if (this.selectedPlace?.place_id) {
+        console.log('getti place is');
+        var request = {
+          placeId: this.selectedPlace.place_id,
+          fields: ['name', 'type', 'address_component', 'geometry'],
+          sessionToken: this.autoCompleteSessionToken,
+        };
+        this.placesService.getDetails(request, (place) => {
+          let loc = {};
+          loc = place;
+          loc.description = this.selectedPlace.description;
+          loc.place_id = this.selectedPlace.place_id;
+          this.location = loc;
+          console.log(loc);
+          this.$emit('location', loc);
+        });
+      }
     },
   },
   async mounted() {
@@ -110,6 +106,7 @@ export default {
       this.placesService = new this.google.maps.places.PlacesService(
         this.$refs.placesDiv
       );
+
       this.autoCompleteSessionToken =
         new this.google.maps.places.AutocompleteSessionToken();
     } catch (error) {

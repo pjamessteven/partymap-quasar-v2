@@ -192,7 +192,7 @@
         </q-scroll-area>
       </div>
       <div
-        v-if="isLoadingInitial || mapMoving"
+        v-if="isLoadingInitial || (mapMoving && !blockUpdates)"
         v-touch-swipe="handleSwipe"
         class="event-date-center flex grow justify-center q-pt-lg"
         style="height: 100%; position: absolute; width: 100%; z-index: 500"
@@ -229,7 +229,7 @@ export default {
   props: { showControls: { default: false } },
   mounted() {
     if (!this.blockUpdates) {
-      //this.getInitialList();
+      this.getInitialList();
       // watcher on map bounds triggers inital load i think
     }
     setTimeout(() => {
@@ -351,9 +351,14 @@ export default {
     },
 
     sidebarPanel(newVal) {
-      if (newVal === 'favorites' || newVal === 'explore') {
-        //this.getInitialList();
+      /*
+      if (
+        (newVal === 'favorites' || newVal === 'explore') &&
+        this.eventDates?.length === 0
+      ) {
+        this.getInitialList();
       }
+      */
     },
     currentUser() {
       // load favorites after user logs in

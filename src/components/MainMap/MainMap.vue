@@ -488,6 +488,8 @@ export default {
       });
 
       this.map.on('moveend', (event) => {
+        this.sidebarPanel = 'explore';
+
         if (!this.blockUpdates) {
           this.exploreMapView = {
             latlng: this.map.getCenter(),

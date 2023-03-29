@@ -1,6 +1,6 @@
 <template>
   <div class="flex row menubar" :style="computedStyle">
-    <MenuBarLogo class="logo" />
+    <MenuBarLogo class="logo" v-if="$q.screen.lt.sm" />
     <transition
       appear
       enter-active-class="animated fadeIn"

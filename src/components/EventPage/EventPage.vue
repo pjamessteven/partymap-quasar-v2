@@ -635,8 +635,6 @@ export default {
       this.$router.go(-1);
     },
     onScrollMainContent(info) {
-      console.log('here', info.target.scrollTop);
-
       // window height
       /*
       var height = window.innerHeight / 3 - 120 // this is the height of the gap between menu bar and top of event card
@@ -650,7 +648,6 @@ export default {
       */
       var height = window.innerHeight / 3 - 120; // this is the height of the gap between menu bar and top of event card
       this.scrollPercentage = info.target.scrollTop / height;
-      console.log('scre', this.scrollPercentage);
       if (this.$q.screen.lt.lg) {
         // menubar should always show on large screens (when sidebar is open)
         if (this.$q.screen.gt.xs) {

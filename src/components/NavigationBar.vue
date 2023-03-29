@@ -8,7 +8,7 @@
           ? $route.name === 'Explore'
             ? undefined
             : 'transparent'
-          : undefined
+          : 'transparent'
       "
       :active-class="
         $q.screen.lt.sm
@@ -17,12 +17,11 @@
             : 'inactive-tab'
           : undefined
       "
-      :shrink="$q.screen.gt.xs"
     >
       <q-tab
         name="nearby"
         :icon="sidebarPanel === 'nearby' ? 'mdi-home' : 'mdi-home-outline'"
-        :label="$q.screen.gt.xs ? null : 'Nearby'"
+        :label="'Nearby'"
         content-class="tab"
         :ripple="false"
         @click="backToExplore"
@@ -30,7 +29,7 @@
       <q-tab
         name="explore"
         icon="mdi-map-search"
-        :label="$q.screen.gt.xs ? null : 'Explore'"
+        :label="'Explore'"
         content-class="tab"
         :ripple="false"
         @click="backToExplore"
@@ -42,7 +41,7 @@
             ? 'mdi-account-circle'
             : 'mdi-account-circle-outline'
         "
-        :label="$q.screen.gt.xs ? null : 'You'"
+        :label="'You'"
         content-class="tab"
         :ripple="false"
         @click="backToExplore"
@@ -50,7 +49,7 @@
       <q-tab
         name="search"
         icon="mdi-magnify"
-        :label="$q.screen.gt.xs ? null : 'Search'"
+        :label="'Search'"
         content-class="tab"
         :ripple="false"
         @click="backToExplore"
@@ -125,8 +124,16 @@ export default {
       transparent
     );
   }
+  .navigation-bar {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
 }
 .body--light {
+  .navigation-bar {
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+
+    //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.2);
+  }
   .nav-separator {
     background: linear-gradient(transparent, rgba(0, 0, 0, 0.1), transparent);
   }
@@ -144,7 +151,7 @@ export default {
     .q-tab {
       padding-top: 4px;
       opacity: 0.3;
-      padding: 0px;
+      //padding: 0px;
       &.q-tab--active {
         opacity: 1;
       }

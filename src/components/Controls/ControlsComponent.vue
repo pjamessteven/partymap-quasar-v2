@@ -493,7 +493,7 @@ export default {
     padding: 6px 14px;
     font-weight: 400;
     font-family: chicagoflf;
-    text-transform: lowercase;
+    text-transform: capitalize;
     font-size: 1rem;
     border-radius: 9px !important;
     &.active {

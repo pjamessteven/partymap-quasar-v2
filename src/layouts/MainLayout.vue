@@ -1,6 +1,7 @@
 <template>
   <div class="main-layout">
-    <MenuBar class="menubar" />
+    <MenuBarLogo class="menubar-logo" v-if="$q.screen.gt.xs" />
+    <MenuBar class="menubar" v-if="$q.screen.lt.sm" />
     <div class="overlay" :style="computedOverlayOpacity" />
     <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
     <SideBar
@@ -31,7 +32,7 @@
       </transition>
     </router-view>
 
-    <NavigationBar class="nav-bar" v-if="$q.screen.lt.sm" />
+    <NavigationBar class="nav-bar" />
   </div>
 </template>
 
@@ -39,6 +40,7 @@
 import MainMap from 'components/MainMap/MainMap.vue';
 import SideBar from 'components/SideBar/SideBar.vue';
 import MenuBar from 'components/MenuBar/MenuBar.vue';
+import MenuBarLogo from 'src/components/MenuBar/MenuBarLogo.vue';
 import NavigationBar from 'src/components/NavigationBar.vue';
 import { mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
@@ -49,6 +51,7 @@ export default {
     MainMap,
     SideBar,
     MenuBar,
+    MenuBarLogo,
     NavigationBar,
   },
   beforeRouteUpdate(to, from, next) {
@@ -117,6 +120,10 @@ export default {
     pointer-events: none;
     z-index: 102;
   }
+  .menubar-logo {
+    position: absolute;
+    z-index: 1000;
+  }
   .controls-mobile {
     position: absolute;
     z-index: 103;
@@ -137,8 +144,6 @@ export default {
     z-index: 104;
   }
   .nav-bar {
-    bottom: 0px !important;
-    position: absolute;
   }
 }
 @media only screen and (max-width: 600px) {

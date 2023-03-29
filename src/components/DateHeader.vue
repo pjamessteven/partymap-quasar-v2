@@ -4,7 +4,7 @@
       class="date-header flex row grow ellipsis q-py-md t1 chicago"
       :class="$q.screen.gt.xs ? ' q-px-md' : 'q-px-sm'"
     >
-      <div>{{ dateString }}</div>
+      Events in {{ dateString }}
       <q-separator class="grow q-ml-md" v-if="$q.screen.gt.lg" />
     </div>
     <div class="date-header-shadow" />
@@ -38,7 +38,6 @@ export default {
   .date-header {
     height: 100%;
     position: relative;
-    text-transform: lowercase;
     //position: absolute;
     width: 100%;
     display: flex;

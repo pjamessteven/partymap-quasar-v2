@@ -757,7 +757,7 @@ export default {
         top: 0px;
         z-index: 100;
         width: 100%;
-        text-transform: lowercase;
+        // text-transform: lowercase;
 
         font-size: 1rem;
       }
@@ -851,7 +851,7 @@ export default {
       //max-height: 72px;
       z-index: 5;
       font-size: 1rem;
-      text-transform: lowercase;
+      //text-transform: lowercase;
 
       //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.1);
       .location-input {
