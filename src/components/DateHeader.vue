@@ -42,7 +42,7 @@ export default {
     width: 100%;
     display: flex;
     align-items: center;
-    font-size: 1rem;
+    //font-size: 1rem;
     margin-bottom: 4px;
     //padding: 32px 0;
   }

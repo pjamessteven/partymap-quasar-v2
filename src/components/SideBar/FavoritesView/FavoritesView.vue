@@ -28,36 +28,10 @@
             'touch-action': showPanelMobile ? 'auto' : 'auto',
           }"
         >
-          <!--
-          <q-input
-            ref="search"
-            debounce="300"
-            clearable
-            outlined
-            dense
-            class="search-input grow chicago q-mx-md q-mb-sm q-mt-sm"
-            :placeholder="$t('search.search_box_text')"
-            v-model="query"
-            @keyup.enter="search"
-          >
-            <template v-slot:prepend>
-              <i style="font-size: 0.7em!important" class="mdi mdi-magnify" />
-            </template>
-          </q-input>
-          <div
-            class="chicago text-h4  q-pt-lg"
-            :class="$q.screen.lt.sm ? 'q-pl-sm q-mb-sm ' : 'q-pl-md q-mb-lg'"
-          >
-            <span v-if="sidebarPanel === 'favorites'">My favorites:</span>
-            <span v-else>
-              Explore
-            </span>
-          </div>
--->
-
           <transition enter-active-class="animated fadeIn">
             <div class="flex column no-wrap scroll-content">
               <div
+                v-if="$q.screen.gt.xs"
                 class="sidebar-header flex column no-wrap items-stretch justify-between ellipsis no-wrap"
                 v-touch-swipe="
                   () => {
@@ -69,11 +43,216 @@
                   class="q-pl-md q-pt-md q-pb- q-pr-md ellipsis"
                   style="width: 100%"
                 >
-                  <span class="text-h4 chicago">Favorites</span>
+                  <span class="text-h4 chicago">Your events</span>
                 </div>
               </div>
 
               <div class="flex column no-wrap content">
+                <div
+                  class="q-mt-md flex column"
+                  :class="$q.screen.gt.xs ? 'q-pl-md' : ''"
+                >
+                  <q-scroll-area
+                    ref="scroll"
+                    horizontal
+                    class="scroll-area"
+                    :style="
+                      $q.screen.gt.xs && $q.screen.lt.xl
+                        ? 'height: 54px'
+                        : 'height: 44px'
+                    "
+                    :thumb-style="
+                      $q.screen.gt.xs
+                        ? { bottom: '0px', height: '4px' }
+                        : { bottom: '-8px', height: '0px' }
+                    "
+                    v-touch-swipe.vertical="handleSwipe"
+                  >
+                    <div
+                      class="flex row scroll-wrapper"
+                      :class="[
+                        $q.screen.gt.xs
+                          ? $q.screen.lt.xl && !this.sidebarExpanded
+                            ? 'q-gutter-sm q-pr-md q-py-xs no-wrap'
+                            : 'q-gutter-sm q-pr-md q-py-xs  no-wrap'
+                          : 'q-gutter-sm q-px-sm  no-wrap',
+                      ]"
+                    >
+                      <q-btn
+                        no-caps
+                        class="button-control flex items-center"
+                        :class="{
+                          active: mode === 'all',
+                        }"
+                        @click="
+                          () => {
+                            mode = 'all';
+                          }
+                        "
+                      >
+                        <div class="flex items-center row no-wrap">
+                          <div>All</div>
+                        </div>
+                      </q-btn>
+
+                      <q-btn
+                        no-caps
+                        class="button-control flex items-center"
+                        :class="{
+                          active: mode === 'going',
+                        }"
+                        @click="
+                          () => {
+                            mode = 'going';
+                          }
+                        "
+                      >
+                        <div class="flex items-center row no-wrap">
+                          <div>Going</div>
+                        </div>
+                      </q-btn>
+
+                      <q-btn
+                        no-caps
+                        class="button-control flex items-center"
+                        :class="{
+                          active: mode === 'interested',
+                        }"
+                        @click="
+                          () => {
+                            mode = 'interested';
+                          }
+                        "
+                      >
+                        <div class="flex items-center row no-wrap">
+                          <div>Interested</div>
+                        </div>
+                      </q-btn>
+
+                      <q-btn
+                        no-caps
+                        class="button-control flex items-center"
+                        :class="{
+                          active: mode === 'hosting',
+                        }"
+                        @click="
+                          () => {
+                            mode = 'hosting';
+                          }
+                        "
+                      >
+                        <div class="flex items-center row no-wrap">
+                          <div>Hosting</div>
+                        </div>
+                      </q-btn>
+
+                      <q-btn
+                        no-caps
+                        class="button-control flex items-center"
+                        :class="{
+                          active: mode === 'created',
+                        }"
+                        @click="
+                          () => {
+                            mode = 'created';
+                          }
+                        "
+                      >
+                        <div class="flex items-center row no-wrap">
+                          <div>Created</div>
+                        </div>
+                      </q-btn>
+
+                      <q-btn
+                        no-caps
+                        class="button-control flex items-center"
+                        :class="{
+                          active: mode === 'contributed',
+                        }"
+                        @click="
+                          () => {
+                            mode = 'following';
+                          }
+                        "
+                      >
+                        <div class="flex items-center row no-wrap">
+                          <div>Contributed</div>
+                        </div>
+                      </q-btn>
+                    </div>
+                  </q-scroll-area>
+                  <q-scroll-area
+                    ref="scroll"
+                    horizontal
+                    class="scroll-area q-my-sm"
+                    :style="'height: 44px'"
+                    :thumb-style="
+                      $q.screen.gt.xs
+                        ? { bottom: '0px', height: '4px' }
+                        : { bottom: '-8px', height: '0px' }
+                    "
+                    v-touch-swipe.vertical="handleSwipe"
+                  >
+                    <div
+                      class="flex row scroll-wrapper"
+                      :class="[
+                        $q.screen.gt.xs
+                          ? $q.screen.lt.xl && !this.sidebarExpanded
+                            ? 'q-gutter-sm q-pr-md q-py-xs no-wrap'
+                            : 'q-gutter-sm q-pr-md q-py-xs  no-wrap'
+                          : 'q-gutter-sm q-px-sm  no-wrap',
+                      ]"
+                    >
+                      <q-btn-group flat>
+                        <q-btn
+                          no-caps
+                          class="button-control flex items-center"
+                          style="
+                            border-top-right-radius: 0px !important;
+                            border-bottom-right-radius: 0px !important;
+                          "
+                          :class="{
+                            active: pastOrFuture === 'future',
+                          }"
+                          @click="
+                            () => {
+                              pastOrFuture = 'future';
+                            }
+                          "
+                        >
+                          <div class="flex items-center row no-wrap">
+                            <div>Upcoming</div>
+                          </div>
+                        </q-btn>
+
+                        <q-btn
+                          no-caps
+                          style="
+                            border-top-left-radius: 0px !important;
+                            border-bottom-left-radius: 0px !important;
+                          "
+                          class="button-control flex items-center"
+                          :class="{
+                            active: pastOrFuture === 'past',
+                          }"
+                          @click="
+                            () => {
+                              pastOrFuture = 'past';
+                            }
+                          "
+                        >
+                          <div class="flex items-center row no-wrap">
+                            <div>Past</div>
+                          </div>
+                        </q-btn>
+                      </q-btn-group>
+                    </div>
+                  </q-scroll-area>
+                </div>
+
+                <UserProfile :user="user" />
+                <!--
+                  TODO: ADD USER ARTIST PROFILE
                 <div
                   class="artist-profile-wrapper"
                   v-if="controlArtist.length > 0 && $q.screen.gt.xs"
@@ -83,14 +262,12 @@
                     :id="controlArtist[0].id"
                   />
                 </div>
+                -->
 
                 <transition appear enter-active-class="animated fadeIn">
-                  <div
-                    class="flex column"
-                    v-show="showResults && !isLoadingInitial"
-                  >
+                  <div class="flex column" v-show="!isLoadingDatesInitial">
                     <EventDateList
-                      :eventDates="eventDates"
+                      :eventDates="userEventDates"
                       @loaded="
                         () => {
                           isLoadingDatesInitial = false;
@@ -102,14 +279,14 @@
                         :color="$q.dark.isActive ? 'white' : 'black'"
                         size="2em"
                         v-if="
-                          eventDatesHasNext &&
+                          userEventDatesHasNext &&
                           !isLoadingDatesInitial &&
-                          eventDates.length > 0
+                          userEventDates.length > 0
                         "
                       />
                       <div
                         v-else-if="
-                          eventDates.length > 0 && !isLoadingDatesInitial
+                          userEventDates.length > 0 && !isLoadingDatesInitial
                         "
                         class="t4"
                       >
@@ -117,7 +294,7 @@
                       </div>
                       <div
                         v-else-if="
-                          eventDates.length == 0 && !isLoadingDatesInitial
+                          userEventDates.length == 0 && !isLoadingDatesInitial
                         "
                         class="t4"
                       >
@@ -140,7 +317,7 @@
           :thickness="1"
           :color="$q.dark.isActive ? 'white' : 'black'"
           size="2em"
-          v-if="isLoadingInitial"
+          v-if="isLoadingDatesInitial"
           v-touch-swipe="handleSwipe"
         />
       </div>
@@ -150,8 +327,8 @@
 <script>
 import _ from 'lodash';
 import ArtistProfile from 'components/ArtistProfile.vue';
-import ArtistsComponent from './../ArtistsComponent.vue';
-import ControlsComponent from 'src/components/Controls/ControlsComponent.vue';
+//import UserListItem from 'components/UserListItem.vue';
+
 import EventDateList from 'src/components/EventDateList.vue';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
@@ -161,70 +338,42 @@ import { mapActions, mapWritableState, mapState } from 'pinia';
 
 export default {
   components: {
-    ArtistProfile,
+    // ArtistProfile,
     EventDateList,
   },
   props: { showControls: { default: false } },
   mounted() {
-    if (!this.blockUpdates) {
-      //this.getInitialList();
-      // watcher on map bounds triggers inital load i think
-    }
-    setTimeout(() => {
-      this.hasLoaded = true;
-    }, 500);
+    this.getInitialList();
   },
   data() {
     return {
+      pastOrFuture: 'future',
+      mode: 'all',
       mainContentScrollPosition: 0,
       scrollingUp: false,
-      hasLoaded: false,
       headerYPosition: 0,
       year: 0,
       componentGroup: {},
       isLoadingDatesInitial: false,
-      isLoadingArtistsInitial: false,
     };
   },
   methods: {
-    ...mapActions(useQueryStore, [
-      'loadEventDates',
-      'loadArtists',
-      'loadMoreArtists',
-    ]),
-    ...mapActions(useMainStore, ['loadIpInfo']),
+    ...mapActions(useQueryStore, ['loadUserEventDates']),
 
     async getInitialList() {
-      if (this.$route.name === 'Explore' && !this.blockUpdates) {
-        // event date stuff
-        this.isLoadingDatesInitial = true;
-        this.eventDates = [];
-        if (this.$refs) this.$refs.scroll.setScrollPercentage('vertical', 0);
-        this.eventDatesHasNext = true;
-        this.eventDatesPage = 1;
-        if (!this.userLocation) {
-          await this.loadIpInfo();
-          this.loadMore();
-        } else {
-          this.loadMore();
-        }
-        // Artist stuff
-        this.artistsPage = 1;
-        this.artistsHasNext = true;
-        this.isLoadingArtistsInitial = true;
-        await this.loadArtists();
-        this.isLoadingArtistsInitial = false;
-      }
+      // event date stuff
+      this.isLoadingDatesInitial = true;
+      if (this.$refs) this.$refs.scroll.setScrollPercentage('vertical', 0);
+      this.userEventDatesHasNext = true;
+      this.userEventDatesPage = 1;
+
+      this.loadMore();
     },
     async loadMore() {
-      if (
-        this.$route.name === 'Explore' &&
-        this.eventDatesHasNext &&
-        !this.blockUpdates
-      ) {
+      if (this.userEventDatesHasNext) {
         try {
-          await this.loadEventDates();
-          this.eventDatesPage += 1;
+          await this.loadUserEventDates(this.mode, this.currentUser.username);
+          this.userEventDatesPage += 1;
         } catch (error) {
           this.isLoadingDatesInitial = false;
         }
@@ -234,121 +383,24 @@ export default {
       this.showPanelMobile = !this.showPanelMobile;
     },
     onScrollMainContent(info) {
-      console.log(info);
-      if (
-        this.hasLoaded &&
-        this.eventDates != null &&
-        !this.eventDatesLoading
-      ) {
-        // this.mainContentScrollPosition = info.verticalPosition
-        // this.headerYOffset = info.verticalPosition
-        /*
-        if (info.verticalPercentage > 0) {
-          // slide up mobile bottom panel when user tries to scroll
-          // and to top to stop scroll action
-          if (this.showPanelMobile === false) {
-            this.showPanelMobile = true
-            let interval = setInterval(() => {
-              this.$refs.scroll.setScrollPercentage(0)
-            }, 10)
-            setTimeout(() => {
-              clearInterval(interval)
-            }, 400)
-          }
-        }
-        */
-      }
       this.mainContentScrollPosition = info.verticalPosition;
 
       if (info.verticalPercentage === 1) {
         // reached bottom
         this.loadMore();
-        console.log('bottom');
       }
     },
   },
   watch: {
-    showResults(newv) {
-      console.log(
-        'showResults',
-        newv,
-        'mapMoving',
-        this.mapMoving,
-        'blockupdate',
-        this.blockUpdates
-      );
-    },
-    route: {
-      handler: async function (to) {
-        if (to.name === 'Explore') {
-          if (!this.eventDates) {
-            if (!this.userLocation) {
-              await this.loadIpInfo();
-              this.getInitialList();
-            } else {
-              this.getInitialList();
-            }
-          }
-        }
-      },
-    },
-    mapBounds() {
-      if (!this.blockUpdates) {
-        // map moved
-        // if updates are not blocked, update event dates
-        this.getInitialList();
-      }
+    mode() {
+      this.getInitialList();
     },
 
-    sidebarPanel(newVal) {
-      if (newVal === 'favorites' || newVal === 'explore') {
-        //this.getInitialList();
-      }
-    },
     currentUser() {
       // load favorites after user logs in
       if (this.sidebarPanel === 'favorites') {
         this.getInitialList();
       }
-    },
-    controlTags: {
-      handler() {
-        this.getInitialList();
-      },
-      deep: true,
-    },
-    controlDateRange: {
-      handler() {
-        this.getInitialList();
-      },
-      deep: true,
-    },
-    controlDuration: {
-      handler() {
-        this.getInitialList();
-      },
-      deep: true,
-    },
-    controlSize: {
-      handler() {
-        this.getInitialList();
-      },
-      deep: true,
-    },
-    controlArtist: {
-      handler() {
-        this.getInitialList();
-      },
-      deep: true,
-    },
-    controlTag: {
-      handler() {
-        this.getInitialList();
-      },
-      deep: true,
-    },
-    controlFavorites() {
-      this.getInitialList();
     },
   },
   computed: {
@@ -359,85 +411,16 @@ export default {
     ]),
     ...mapWritableState(useMainStore, ['showPanelMobile']),
     ...mapState(useAuthStore, ['currentUser']),
-    ...mapState(useMapStore, [
-      'mapBounds',
-      'showResults',
-      'blockUpdates',
-      'mapMoving',
-    ]),
-    ...mapState(useQueryStore, [
-      'controlTag',
-      'controlDateRange',
-      'controlSize',
-      'controlDuration',
-      'controlArtist',
-      'controlFavorites',
-      'artists',
-      'artistsHasNext',
-      'eventDates',
-      'eventDatesPage',
-      'eventDatesHasNext',
-      'eventDatesLoading',
-    ]),
+    ...mapState(useMapStore, ['mapBounds', 'blockUpdates']),
+    ...mapState(useQueryStore, ['userEventDatesLoading']),
     ...mapWritableState(useQueryStore, [
-      'eventDatesPage',
-      'eventDatesHasNext',
-      'artistsPage',
-      'artistsHasNext',
+      'userEventDates',
+      'userEventDatesPage',
+      'userEventDatesHasNext',
     ]),
-    noFiltersSelected() {
-      return (
-        this.controlDateRange.end === null &&
-        this.controlArtist.length === 0 &&
-        this.controlDuration.length === 0 &&
-        this.controlSize.length === 0 &&
-        this.controlFavorites === false &&
-        this.controlTag.length === 0
-      );
-    },
-    isLoadingInitial() {
-      return this.isLoadingDatesInitial || this.isLoadingArtistsInitial;
-    },
 
     route() {
       return this.$route;
-    },
-    getTitleOpactity() {
-      let opacity = 1 - this.mainContentScrollPosition / 0;
-      let op1;
-      if (opacity < 0) {
-        op1 = 0;
-      } else {
-        op1 = opacity;
-      }
-      return `opacity: ${op1}`;
-    },
-    getBottomDivider() {
-      var opacity = 0 + this.mainContentScrollPosition / 150;
-      var op1, op2;
-      if (opacity > 0.09) {
-        op1 = 0.09;
-      } else {
-        op1 = opacity;
-      }
-      if (opacity > 0.065) {
-        op2 = 0.065;
-      } else {
-        op2 = opacity;
-      }
-      return `
-      box-shadow: 0 3px 6px 0 rgba(40, 40, 90, ${op1}), 0 1px 1px 0 rgba(0, 0, 0, ${op2});`;
-    },
-    getBottomDividerDark() {
-      var opacity = 0 + this.mainContentScrollPosition / 150;
-      var op;
-      if (opacity > 0.09) {
-        op = 0.09;
-      } else {
-        op = opacity;
-      }
-      return `
-      border-bottom: 1px solid rgba(255,255,255,${op});`;
     },
   },
   created() {
@@ -482,7 +465,6 @@ export default {
   top: 0px;
   //max-height: 48px;
   z-index: 10;
-  font-size: 1rem;
 }
 
 .event-list-vertical {
@@ -518,6 +500,9 @@ export default {
   }
   .scroll-area {
     height: 100%;
+    :deep(.q-scrollarea__thumb) {
+      z-index: 1000;
+    }
     .search-input {
       :deep(.q-field__control) {
         &:before {

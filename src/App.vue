@@ -260,6 +260,34 @@ body {
     // background: $b-1;
   }
 
+  .button-control {
+    color: $t-1;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
+    /*
+      box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      */
+    //background: $b-2;
+    transition: none;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    //box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
+    //box-shadow: none !important;
+    &::before {
+      box-shadow: none !important;
+    }
+    .q-btn__wrapper {
+      &:before {
+        box-shadow: none;
+      }
+    }
+    &.active {
+      background: $b-3 !important;
+      // font-weight: bold;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+  }
+
   .separator {
     border-color: rgba(0, 0, 0, 0.1);
   }
@@ -350,6 +378,32 @@ body {
       .is-disabled {
         color: rgba(255, 255, 255, 0.2) !important;
       }
+    }
+  }
+
+  .button-control {
+    background: black;
+    color: $ti-1;
+    //text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
+    /*
+      box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      */
+    // background: rgba(255, 255, 255, 0.68);
+    transition: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
+    .q-btn__wrapper {
+      &:before {
+        box-shadow: none;
+      }
+    }
+    &.active {
+      background: $ti-1 !important;
+      color: $t-1 !important;
+      // font-weight: bold;
+      border: 1px solid rgba(255, 255, 255, 0);
     }
   }
 
@@ -543,6 +597,29 @@ body {
       rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   }
 }
+
+.button-control {
+  padding: 6px 12px;
+  font-weight: 400;
+  font-family: chicagoflf;
+  text-transform: capitalize;
+  font-size: normal;
+  border-radius: 9px !important;
+  &.active {
+    font-weight: 500;
+  }
+
+  .q-btn__wrapper {
+    padding: 0;
+  }
+  .q-btn__content {
+    white-space: nowrap;
+    .q-icon {
+      margin-right: -6px;
+    }
+  }
+}
+
 .q-menu {
   border-radius: 0px;
   //max-height: 100vh !important;
@@ -552,9 +629,10 @@ body {
   overflow-x: auto;
   overflow-y: auto;
   */
-  //font-family: chicagoflf;
-  //font-weight: 200;
-  font-size: unset;
+  font-family: chicagoflf;
+  //font-weight: 100;
+  font-size: small;
+  color: $t-1;
   border-radius: 0px;
   //font-family: chicagoflf;
   //text-transform: lowercase;
@@ -562,6 +640,7 @@ body {
 .q-menu--dark {
   box-shadow: none;
   border: 1px solid $bi-4;
+  color: $ti-1;
 }
 .q-input {
   border-radius: 9px !important;
@@ -617,18 +696,21 @@ body {
   overflow: auto;
 }
 
-.solid-page {
+.solid-page-wrapper {
   width: 100%;
   height: 100%;
-  position: relative;
-  pointer-events: auto;
-  z-index: 4000;
-  overflow: auto;
-  padding-top: 48px;
-  .solid-page-inner {
-    max-width: 1000px;
+  .solid-page {
+    position: relative;
+    pointer-events: auto;
+    z-index: 4000;
+    overflow: auto;
+    padding-top: 60px;
+    .solid-page-inner {
+      max-width: 1000px;
+    }
   }
 }
+
 .dialog-page {
   display: flex;
   flex-direction: column;
@@ -645,6 +727,8 @@ body {
 }
 
 .vc-container {
+  font-family: chicagoflf !important;
+
   .on-right {
     // override quasar variable that causes ui artifacts
     margin-left: unset !important;
@@ -717,6 +801,25 @@ body {
 }
 // sm
 @media only screen and (max-width: 600px) {
+  .body--dark {
+    .q-dialog {
+      .menu {
+        color: $bi-2;
+      }
+    }
+  }
+  .body--light {
+    .q-dialog {
+      .menu {
+        color: $b-2;
+      }
+    }
+  }
+  .q-dialog {
+    .menu {
+      font-family: chicagoflf;
+    }
+  }
   .dialog-page {
     .auth-card {
       border: none !important;

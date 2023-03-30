@@ -481,14 +481,22 @@ export default {
       this.initTileLayers();
 
       this.map.on('mousedown', () => {
-        this.sidebarPanel = 'explore';
+        if (
+          this.sidebarPanel !== 'explore' &&
+          this.sidebarPanel !== 'favorites'
+        )
+          this.sidebarPanel = 'explore';
       });
       this.map.on('movestart', () => {
         this.mapMoving = true;
       });
 
       this.map.on('moveend', (event) => {
-        this.sidebarPanel = 'explore';
+        if (
+          this.sidebarPanel !== 'explore' &&
+          this.sidebarPanel !== 'favorites'
+        )
+          this.sidebarPanel = 'explore';
 
         if (!this.blockUpdates) {
           this.exploreMapView = {

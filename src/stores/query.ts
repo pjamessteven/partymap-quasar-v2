@@ -72,6 +72,12 @@ interface QueryState {
   points: Location[];
   loadingPoints: boolean;
 
+  // favorites
+  userEventDates: [EventDate, string][]; // string is the distance from current location
+  userEventDatesPage: number;
+  userEventDatesHasNext: boolean;
+  userEventDatesLoading: boolean;
+
   // event dates in bounds/query
   eventDates: [EventDate, string][]; // string is the distance from current location
   eventDatesPage: number;
@@ -134,6 +140,11 @@ export const useQueryStore = defineStore('query', {
     points: [],
     loadingPoints: false,
 
+    userEventDates: [],
+    userEventDatesHasNext: false,
+    userEventDatesPage: 1,
+    userEventDatesLoading: false,
+
     eventDates: [],
     eventDatesHasNext: false,
     eventDatesPage: 1,
@@ -183,6 +194,49 @@ export const useQueryStore = defineStore('query', {
         return;
       } catch (error) {
         this.loadingPoints = false;
+        throw error;
+      }
+    },
+    async loadUserEventDates(mode: string, username: string) {
+      console.log('mode', mode, username);
+
+      try {
+        this.userEventDatesLoading = true;
+        const response = await getEventDatesRequest({
+          radius: undefined,
+          bounds: undefined,
+          location: null,
+          tags: undefined,
+          artists: undefined,
+          duration_options: null,
+          size_options: null,
+          date_min: this.controlDateRange.start,
+          date_max: this.controlDateRange.end,
+          query: undefined,
+          sort_option: 'date',
+          page: this.userEventDatesPage,
+          per_page: 10,
+          distinct: true,
+          all_related_to_user: mode === 'all' ? username : undefined,
+          following_user: mode === 'following' ? username : undefined,
+          going_user: mode === 'going' ? username : undefined,
+          interested_user: mode === 'interested' ? username : undefined,
+          host_user: mode === 'hosting' ? username : undefined,
+          creator_user: mode === 'created' ? username : undefined,
+        });
+
+        if (this.userEventDatesPage === 1) {
+          this.userEventDates = response.data.items;
+        } else {
+          this.userEventDates = this.userEventDates.concat(response.data.items);
+        }
+        this.userEventDates = response.data.items;
+        this.userEventDatesLoading = false;
+        this.userEventDatesHasNext = response.data.has_next;
+        return response.data.items;
+      } catch (error) {
+        this.userEventDatesLoading = false;
+        this.userEventDatesHasNext = false;
         throw error;
       }
     },

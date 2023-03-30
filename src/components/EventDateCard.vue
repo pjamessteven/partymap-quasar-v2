@@ -543,7 +543,7 @@ export default {
       }
 
       .ed-card-header {
-        font-size: 1rem;
+        //font-size: 1rem;
         max-width: 100%;
         opacity: 1;
         //color: white !important;

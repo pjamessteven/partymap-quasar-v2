@@ -158,7 +158,7 @@
                     <div class="t1 text- chicago q-pl-md">Top tags:</div>
                   </div>
                   <div
-                    class="q-pl-md q-mb-md"
+                    class="q-pl-md q-mb-sm"
                     v-if="nearbyTags && nearbyTags.length > 0"
                   >
                     <q-scroll-area
@@ -758,8 +758,6 @@ export default {
         z-index: 100;
         width: 100%;
         // text-transform: lowercase;
-
-        font-size: 1rem;
       }
     }
     :deep(.q-scrollarea__content) {
@@ -850,7 +848,6 @@ export default {
       position: relative;
       //max-height: 72px;
       z-index: 5;
-      font-size: 1rem;
       //text-transform: lowercase;
 
       //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.1);
@@ -880,7 +877,7 @@ export default {
     }
 
     .tag-scroll-area {
-      height: 88px;
+      height: 84px;
       mask-image: linear-gradient(to left, transparent 0px, white 64px);
       width: 100%;
       .tag {
@@ -890,7 +887,6 @@ export default {
         cursor: pointer;
         border-radius: 9px;
         padding: 6px 12px;
-        font-size: 1rem;
         //font-size: small;
         &:hover {
           // opacity: 0.48;

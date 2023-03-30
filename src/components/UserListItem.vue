@@ -1,14 +1,14 @@
 <template>
   <router-link
     :to="{
-      name: 'ArtistPage',
+      name: 'UserProfile',
       params: { id: artist?.id || 0 },
       query: {
         name: artist?.name.replace(/ /g, '_'),
       },
     }"
   >
-    <q-card class="shadow-lg card flex column">
+    <q-card v-if="!closed" class="shadow-lg card flex column">
       <q-inner-loading :showing="loading">
         <q-spinner-ios
           :color="$q.dark.isActive ? 'white' : 'black'"

@@ -97,6 +97,8 @@
                     'q-mt-md ': $q.screen.gt.xs && $q.screen.lt.xl,
                     'q-mb-md q-mt-md': $q.screen.gt.lg,
                   }"
+                  :showSelectedValue="true"
+                  :showOnlySelected="false"
                 />
                 <div
                   class="artist-profile-wrapper"
@@ -129,7 +131,7 @@
                     <div
                       class="header q-py-md t1 chicago"
                       :class="
-                        $q.screen.lt.sm ? 'q-pl-sm q-mt-sm' : 'q-pl-md  q-pb-md'
+                        $q.screen.lt.sm ? 'q-pl-sm q-mt-sm' : 'q-pl-md  q-py-md'
                       "
                     >
                       Top artists in this area:
@@ -170,19 +172,9 @@
                       v-else-if="
                         eventDates.length > 0 && !isLoadingDatesInitial
                       "
-                      class="t4"
+                      class="t4 chicago"
                     >
                       End of results
-                    </div>
-                    <div
-                      v-else-if="
-                        eventDates.length == 0 &&
-                        !isLoadingDatesInitial &&
-                        !eventDatesLoading
-                      "
-                      class="t4"
-                    >
-                      No parties in this area :'(
                     </div>
                   </div>
                 </div>
@@ -194,7 +186,7 @@
       <div
         v-if="isLoadingInitial || (mapMoving && !blockUpdates)"
         v-touch-swipe="handleSwipe"
-        class="event-date-center flex grow justify-center q-pt-lg"
+        class="event-date-center flex grow justify-center"
         style="height: 100%; position: absolute; width: 100%; z-index: 500"
       >
         <q-spinner-ios
@@ -203,6 +195,21 @@
           size="2em"
           v-touch-swipe="handleSwipe"
         />
+      </div>
+      <div
+        v-else-if="
+          eventDates.length == 0 && !isLoadingDatesInitial && !eventDatesLoading
+        "
+        class="t4 chicago flex grow justify-center items-center"
+        style="
+          height: 100%;
+          position: absolute;
+          width: 100%;
+          z-index: 1;
+          pointer-events: none;
+        "
+      >
+        <div>No parties in this area :'(</div>
       </div>
     </div>
   </div>
@@ -534,7 +541,7 @@ export default {
   top: 0px;
   //max-height: 48px;
   z-index: 10;
-  font-size: 1rem;
+  // font-size: 1rem;
 }
 
 .event-list-vertical {

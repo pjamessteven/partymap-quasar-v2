@@ -63,52 +63,6 @@
           />
         </div>
       </q-scroll-area>
-      <!--
-      <div
-        v-else
-        class="flex row scroll-wrapper tag-controls q-gutter-sm"
-        :class="[
-          $q.screen.gt.xs
-            ? $q.screen.lt.xl
-              ? 'q-px-md q-py-xs '
-              : 'q-px-md q-py-xs no-wrap '
-            : 'q-px-sm q-pb-md no-wrap q-py-sm q-gutter-xs',
-        ]"
-      >
-        <DateControl
-          v-if="showDateControl"
-          :key="1"
-          :showSelectedValue="showSelectedValue"
-        />
-        <TagControl
-          v-if="showTagControl"
-          :key="2"
-          ref="tagControl"
-          :showSelectedValue="showSelectedValue"
-        />
-        <ArtistControl
-          v-if="showArtistControl"
-          :key="3"
-          ref="artistControl"
-          :showSelectedValue="showSelectedValue"
-        />
-        <SizeControl
-          v-if="showSizeControl"
-          :key="4"
-          :showSelectedValue="showSelectedValue"
-        />
-        <DurationControl
-          v-if="showDurationControl"
-          :key="5"
-          :showSelectedValue="showSelectedValue"
-        />
-        <LocalityControl
-          v-if="showLocalityControl"
-          :key="6"
-          :showSelectedValue="showSelectedValue"
-        />
-      </div>
-      -->
       <div class="artist-profile-wrapper" v-if="$q.screen.lt.sm">
         <ArtistProfile
           :key="controlArtist[0].id"
@@ -278,31 +232,6 @@ export default {
       }
     }
 
-    :deep(.button-control) {
-      background: black;
-      color: $ti-1;
-      //text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
-      /*
-      box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      */
-      // background: rgba(255, 255, 255, 0.68);
-      transition: none;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
-      .q-btn__wrapper {
-        &:before {
-          box-shadow: none;
-        }
-      }
-      &.active {
-        background: white !important;
-        color: $t-1 !important;
-        // font-weight: bold;
-        border: 1px solid rgba(255, 255, 255, 0);
-      }
-    }
     :deep(.tag) {
       background: rgba(48, 48, 48, 0.68);
       color: rgba(255, 255, 255, 0.68);
@@ -368,33 +297,7 @@ export default {
         border: 1px solid rgba(255, 255, 255, 0);
       }
     }
-    :deep(.button-control) {
-      color: $t-1;
-      text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
-      /*
-      box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      */
-      //background: $b-2;
-      transition: none;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      //box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
-      //box-shadow: none !important;
-      &::before {
-        box-shadow: none !important;
-      }
-      .q-btn__wrapper {
-        &:before {
-          box-shadow: none;
-        }
-      }
-      &.active {
-        background: $b-3 !important;
-        // font-weight: bold;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-      }
-    }
+
     :deep(.tag) {
       background: rgba(255, 255, 255, 0.48);
       color: $t-3;
@@ -430,23 +333,6 @@ export default {
       white 100%
     );
     overflow-y: hidden;
-    .scroll-wrapper {
-      //padding-right: 64px;
-      :deep(.button-control) {
-        z-index: 1500;
-        //border-radius: 100px !important;
-      }
-      div {
-        &:not(:last-child) {
-          //margin-right: 8px;
-
-          // border-right: none !important;
-          :deep(.button-control) {
-            // border-right: none !important;
-          }
-        }
-      }
-    }
   }
   .artist-profile-wrapper {
     padding-left: 16px;
@@ -488,97 +374,22 @@ export default {
       }
     }
   }
-  :deep(.button-control) {
-    padding: 6px 12px;
-    font-weight: 400;
-    font-family: chicagoflf;
-    text-transform: capitalize;
-    font-size: normal;
-    border-radius: 9px !important;
-    &.active {
-      font-weight: 500;
-    }
 
-    .q-btn__wrapper {
-      padding: 0;
-    }
-    .q-btn__content {
-      white-space: nowrap;
-      .q-icon {
-        margin-right: -6px;
-      }
-    }
-  }
   width: 100%;
 }
 
 @media only screen and (max-width: 600px) {
-  .inner-wrapper {
-    .artist-profile-wrapper {
-      width: 100%;
-    }
-  }
   .body--light {
-    .inner-wrapper {
-      .scroll-area {
-        :deep(.button-control) {
-          //background: rgba(255, 255, 255, 0.9);
-        }
-        :deep(.tag) {
-          background: rgba(255, 255, 255, 0.9);
-        }
-        /*
-
-        @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-          /deep/.button-control {
-            background: -webkit-linear-gradient(
-              rgba(255, 255, 255, 0.68),
-              rgba(255, 255, 255, 0.68)
-            );
-            -webkit-backdrop-filter: blur(8px) brightness(1.2);
-            backdrop-filter: blur(8px) brightness(1.2);
-          }
-          /deep/.tag {
-            background: -webkit-linear-gradient(
-              rgba(255, 255, 255, 0.68),
-              rgba(255, 255, 255, 0.68)
-            );
-            -webkit-backdrop-filter: blur(8px) brightness(1.2);
-            backdrop-filter: blur(8px) brightness(1.2);
-          }
-        }
-        */
-      }
-    }
   }
   .body--dark {
-    .inner-wrapper {
-      /*
-
-        @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-          /deep/.button-control {
-            background: -webkit-linear-gradient(
-              rgba(0, 0, 0, 0.68),
-              rgba(0, 0, 0, 0.68)
-            );
-            -webkit-backdrop-filter: blur(8px) brightness(1.2);
-            backdrop-filter: blur(8px) brightness(1.2);
-          }
-          /deep/.tag {
-            background: -webkit-linear-gradient(
-              rgba(0, 0, 0, 0.68),
-              rgba(0, 0, 0, 0.68)
-            );
-            -webkit-backdrop-filter: blur(8px) brightness(1.2);
-            backdrop-filter: blur(8px) brightness(1.2);
-          }
-        }
-        */
-    }
   }
 
   .inner-wrapper {
     mask-image: none;
+
+    .artist-profile-wrapper {
+      width: 100%;
+    }
     .scroll-area {
       overflow-y: hidden !important;
       mask-image: linear-gradient(
@@ -594,13 +405,6 @@ export default {
         overflow-y: hidden;
         padding-left: 8px;
         padding-right: 24px;
-        :deep(.button-control) {
-          font-size: 1em;
-          //border-radius: 100px !important;
-
-          //padding: 4px 12px;
-          //border-radius: 48px !important;
-        }
       }
     }
   }

@@ -663,7 +663,7 @@ export default {
 }
 .calendar-header {
   //max-width: 582px;
-  min-width: 660px;
+  min-width: 669px;
   width: 660px;
 }
 
