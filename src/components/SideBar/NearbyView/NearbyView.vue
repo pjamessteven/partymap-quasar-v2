@@ -249,7 +249,6 @@
                         v-for="(ed, index) in nearbyEventDates"
                         :key="index"
                         :event="ed[0]"
-                        class="ed-card"
                       />
                     </div>
                   </transition>
@@ -457,7 +456,7 @@ export default {
     onScroll(info) {
       // infinite scrolling
       this.scrollPosition = info.verticalPosition;
-      if (info.verticalPercentage === 1) {
+      if (info.verticalPercentage >= 0.99) {
         if (this.nearbyEventDatesHasNext) {
           this.loadNearbyEventDates();
         } else if (this.eventDatesHasNext) {
@@ -912,16 +911,6 @@ export default {
     .ed-card-grid {
       display: grid;
       grid-gap: 1rem;
-      .ed-card {
-        max-height: 280px;
-        .card {
-          height: 100%;
-          .card-content {
-            height: 100%;
-            justify-content: space-between;
-          }
-        }
-      }
     }
   }
 }
@@ -957,9 +946,7 @@ export default {
       .tag-scroll-area {
         height: 84px;
       }
-      .banner {
-        //margin-top: -60px;
-      }
+
       .header {
         // height: 68px !important;
         //min-height: 68px !important;
@@ -971,11 +958,6 @@ export default {
       .separator {
         width: 100vw;
         margin-left: -16px;
-      }
-      .ed-card-grid {
-      }
-      .scroll-content {
-        //padding-top: 64px;
       }
     }
   }

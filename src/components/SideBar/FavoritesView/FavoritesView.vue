@@ -355,7 +355,7 @@ export default {
     onScrollMainContent(info) {
       this.mainContentScrollPosition = info.verticalPosition;
 
-      if (info.verticalPercentage === 1) {
+      if (info.verticalPercentage >= 0.99) {
         // reached bottom
         this.loadMore();
       }

@@ -108,7 +108,7 @@
                   </div>
                 </div>
                 <div
-                  class="flex column card-bottom-text q-mt-xs o-080"
+                  class="flex column card-bottom-text q-mt-xs t2"
                   style="font-weight: 400"
                 >
                   <!--
@@ -172,7 +172,7 @@
                       v-if="event.cancelled"
                     />
                   </div>
-                  <div class="ellipsis">
+                  <div class="">
                     <span v-if="event.location && event.location.locality">
                       <q-icon name="las la-map-marker" class="q-mr-sm" />{{
                         event.location.locality.long_name
@@ -184,8 +184,8 @@
                         event.location.name
                       }}
                     </span>
-                    <span v-if="event.distance != null" class="o-070 ellipsis"
-                      >({{
+                    <span v-if="event.distance != null" class="t3 ellipsis"
+                      >&nbsp;({{
                         Intl.NumberFormat().format(
                           parseInt(Number(event.distance) / 1000)
                         )

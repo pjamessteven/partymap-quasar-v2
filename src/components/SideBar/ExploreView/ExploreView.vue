@@ -293,8 +293,8 @@ export default {
         */
       }
       this.mainContentScrollPosition = info.verticalPosition;
-
-      if (info.verticalPercentage === 1) {
+      console.log(info);
+      if (info.verticalPercentage >= 0.99) {
         // reached bottom
         this.loadMore();
       }
