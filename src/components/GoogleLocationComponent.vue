@@ -2,10 +2,9 @@
   <div class="container">
     <q-select
       outlined
-      square
       use-input
       v-model="selectedPlace"
-      :label="$t('add.select_location')"
+      :label="'Location'"
       :options="autoCompleteResults"
       @filter="locationSearchFilter"
       @update:model-value="getPlaceInformation"

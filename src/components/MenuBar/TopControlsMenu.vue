@@ -152,15 +152,15 @@
 
     <q-dialog
       v-model="showFeedbackDialog"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <FeedbackDialog @closeDialog="showFeedbackDialog = false" />
     </q-dialog>
     <q-dialog
       v-model="showAboutDialog"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <AboutDialog />
     </q-dialog>

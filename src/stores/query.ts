@@ -197,9 +197,7 @@ export const useQueryStore = defineStore('query', {
         throw error;
       }
     },
-    async loadUserEventDates(mode: string, username: string) {
-      console.log('mode', mode, username);
-
+    async loadUserEventDates(mode: string, tense: string, username: string) {
       try {
         this.userEventDatesLoading = true;
         const response = await getEventDatesRequest({
@@ -210,8 +208,14 @@ export const useQueryStore = defineStore('query', {
           artists: undefined,
           duration_options: null,
           size_options: null,
-          date_min: this.controlDateRange.start,
-          date_max: this.controlDateRange.end,
+          date_min:
+            tense === 'future'
+              ? moment().toISOString()
+              : moment().subtract(10, 'years').toISOString(),
+          date_max:
+            tense === 'future'
+              ? moment().add(10, 'years').toISOString()
+              : moment().toISOString(),
           query: undefined,
           sort_option: 'date',
           page: this.userEventDatesPage,

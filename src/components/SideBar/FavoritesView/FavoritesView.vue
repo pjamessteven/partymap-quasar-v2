@@ -56,14 +56,11 @@
                     ref="scroll"
                     horizontal
                     class="scroll-area"
-                    :style="
-                      $q.screen.gt.xs && $q.screen.lt.xl
-                        ? 'height: 54px'
-                        : 'height: 44px'
-                    "
+                    :class="$q.screen.lt.sm ? 'q-mb-sm' : ''"
+                    :style="$q.screen.gt.xs ? 'height: 54px' : 'height: 44px'"
                     :thumb-style="
                       $q.screen.gt.xs
-                        ? { bottom: '0px', height: '4px' }
+                        ? { bottom: '2px', height: '4px' }
                         : { bottom: '-8px', height: '0px' }
                     "
                     v-touch-swipe.vertical="handleSwipe"
@@ -167,7 +164,7 @@
                         no-caps
                         class="button-control flex items-center"
                         :class="{
-                          active: mode === 'contributed',
+                          active: mode === 'following',
                         }"
                         @click="
                           () => {
@@ -184,8 +181,12 @@
                   <q-scroll-area
                     ref="scroll"
                     horizontal
-                    class="scroll-area q-my-sm"
-                    :style="'height: 44px'"
+                    class="scroll-area q-mb-xs"
+                    :style="
+                      $q.screen.gt.xs && $q.screen.lt.xl
+                        ? 'height: 54px'
+                        : 'height: 44px'
+                    "
                     :thumb-style="
                       $q.screen.gt.xs
                         ? { bottom: '0px', height: '4px' }
@@ -203,49 +204,39 @@
                           : 'q-gutter-sm q-px-sm  no-wrap',
                       ]"
                     >
-                      <q-btn-group flat>
-                        <q-btn
-                          no-caps
-                          class="button-control flex items-center"
-                          style="
-                            border-top-right-radius: 0px !important;
-                            border-bottom-right-radius: 0px !important;
-                          "
-                          :class="{
-                            active: pastOrFuture === 'future',
-                          }"
-                          @click="
-                            () => {
-                              pastOrFuture = 'future';
-                            }
-                          "
-                        >
-                          <div class="flex items-center row no-wrap">
-                            <div>Upcoming</div>
-                          </div>
-                        </q-btn>
+                      <q-btn
+                        no-caps
+                        class="button-control flex items-center"
+                        :class="{
+                          active: tense === 'future',
+                        }"
+                        @click="
+                          () => {
+                            tense = 'future';
+                          }
+                        "
+                      >
+                        <div class="flex items-center row no-wrap">
+                          <div>Upcoming</div>
+                        </div>
+                      </q-btn>
 
-                        <q-btn
-                          no-caps
-                          style="
-                            border-top-left-radius: 0px !important;
-                            border-bottom-left-radius: 0px !important;
-                          "
-                          class="button-control flex items-center"
-                          :class="{
-                            active: pastOrFuture === 'past',
-                          }"
-                          @click="
-                            () => {
-                              pastOrFuture = 'past';
-                            }
-                          "
-                        >
-                          <div class="flex items-center row no-wrap">
-                            <div>Past</div>
-                          </div>
-                        </q-btn>
-                      </q-btn-group>
+                      <q-btn
+                        no-caps
+                        class="button-control flex items-center"
+                        :class="{
+                          active: tense === 'past',
+                        }"
+                        @click="
+                          () => {
+                            tense = 'past';
+                          }
+                        "
+                      >
+                        <div class="flex items-center row no-wrap">
+                          <div>Past</div>
+                        </div>
+                      </q-btn>
                     </div>
                   </q-scroll-area>
                 </div>
@@ -268,39 +259,13 @@
                   <div class="flex column" v-show="!isLoadingDatesInitial">
                     <EventDateList
                       :eventDates="userEventDates"
+                      :hasNext="userEventDatesHasNext"
                       @loaded="
                         () => {
                           isLoadingDatesInitial = false;
                         }
                       "
                     />
-                    <div class="row justify-center q-my-lg q-mb-xl">
-                      <q-spinner-ios
-                        :color="$q.dark.isActive ? 'white' : 'black'"
-                        size="2em"
-                        v-if="
-                          userEventDatesHasNext &&
-                          !isLoadingDatesInitial &&
-                          userEventDates.length > 0
-                        "
-                      />
-                      <div
-                        v-else-if="
-                          userEventDates.length > 0 && !isLoadingDatesInitial
-                        "
-                        class="t4"
-                      >
-                        End of results
-                      </div>
-                      <div
-                        v-else-if="
-                          userEventDates.length == 0 && !isLoadingDatesInitial
-                        "
-                        class="t4"
-                      >
-                        Nothing to display
-                      </div>
-                    </div>
                   </div>
                 </transition>
               </div>
@@ -347,7 +312,7 @@ export default {
   },
   data() {
     return {
-      pastOrFuture: 'future',
+      tense: 'future',
       mode: 'all',
       mainContentScrollPosition: 0,
       scrollingUp: false,
@@ -362,6 +327,7 @@ export default {
 
     async getInitialList() {
       // event date stuff
+      this.userEventDates = [];
       this.isLoadingDatesInitial = true;
       if (this.$refs) this.$refs.scroll.setScrollPercentage('vertical', 0);
       this.userEventDatesHasNext = true;
@@ -372,7 +338,11 @@ export default {
     async loadMore() {
       if (this.userEventDatesHasNext) {
         try {
-          await this.loadUserEventDates(this.mode, this.currentUser.username);
+          await this.loadUserEventDates(
+            this.mode,
+            this.tense,
+            this.currentUser.username
+          );
           this.userEventDatesPage += 1;
         } catch (error) {
           this.isLoadingDatesInitial = false;
@@ -395,7 +365,9 @@ export default {
     mode() {
       this.getInitialList();
     },
-
+    tense() {
+      this.getInitialList();
+    },
     currentUser() {
       // load favorites after user logs in
       if (this.sidebarPanel === 'favorites') {

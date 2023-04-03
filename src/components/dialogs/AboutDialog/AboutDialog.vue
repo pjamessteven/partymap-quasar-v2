@@ -92,22 +92,22 @@
 
     <q-dialog
       v-model="showPrivacyPolicyDialog"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <PrivacyPolicyDialog />
     </q-dialog>
     <q-dialog
       v-model="showTermsAndConditionsDialog"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <TermsAndConditionsDialog />
     </q-dialog>
     <q-dialog
       v-model="showRigsOut"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
       maximized
     >
       <q-card class="rigs-out-dialog">

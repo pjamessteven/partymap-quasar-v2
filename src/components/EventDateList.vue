@@ -28,6 +28,19 @@
         </component>
       </div>
     </div>
+    <div class="row justify-center q-my-lg q-mb-xl">
+      <q-spinner-ios
+        :color="$q.dark.isActive ? 'white' : 'black'"
+        size="2em"
+        v-if="hasNext && eventDates.length > 0"
+      />
+      <div v-else-if="eventDates.length > 0" class="t4 chicago q-mt-md">
+        End of results
+      </div>
+      <div v-else-if="eventDates.length == 0" class="t4 chicago q-mt-md">
+        No results
+      </div>
+    </div>
   </div>
 </template>
 
@@ -43,6 +56,7 @@ const mainStore = useMainStore();
 
 interface Props {
   eventDates: [EventDate, string][];
+  hasNext: boolean;
 }
 
 interface ComponentGroupType {

@@ -170,7 +170,10 @@ export default {
     },
     handleSwipe({ evt, ...info }) {
       if (info.direction === 'down' || info.direction === 'up') {
-        if (this.sidebarPanel !== 'explore') {
+        if (
+          this.sidebarPanel !== 'explore' &&
+          this.sidebarPanel !== 'favorites'
+        ) {
           this.sidebarPanel = 'explore';
         }
         this.showPanelMobile = !this.showPanelMobile;

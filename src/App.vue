@@ -284,7 +284,7 @@ body {
     &.active {
       background: $b-3 !important;
       // font-weight: bold;
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      //border: 1px solid rgba(0, 0, 0, 0.48);
     }
   }
 
@@ -307,9 +307,13 @@ body {
   .overlay-page {
     background: linear-gradient(0deg, white, rgba(255, 255, 255, 0.8));
   }
-  .solid-page {
+  .solid-page-wrapper {
     background: white;
+
+    .solid-page {
+    }
   }
+
   .swipe-nav-bar {
     width: 40px;
     height: 2px;
@@ -400,10 +404,10 @@ body {
       }
     }
     &.active {
-      background: $ti-1 !important;
-      color: $t-1 !important;
+      background: $bi-3 !important;
+      //color: $t-1 !important;
       // font-weight: bold;
-      border: 1px solid rgba(255, 255, 255, 0);
+      //border: 1px solid rgba(255, 255, 255, 0.8);
     }
   }
 
@@ -561,8 +565,11 @@ body {
   .overlay-page {
     background: linear-gradient(0deg, black, rgba(0, 0, 0, 0.8));
   }
-  .solid-page {
+  .solid-page-wrapper {
     background: $bi-1;
+
+    .solid-page {
+    }
   }
 }
 
@@ -699,12 +706,15 @@ body {
 .solid-page-wrapper {
   width: 100%;
   height: 100%;
+  padding-top: 60px;
+  overflow: hidden;
   .solid-page {
+    height: 100%;
+    overflow: auto;
     position: relative;
-    pointer-events: auto;
     z-index: 4000;
     overflow: auto;
-    padding-top: 60px;
+
     .solid-page-inner {
       max-width: 1000px;
     }

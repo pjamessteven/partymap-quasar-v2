@@ -150,6 +150,7 @@
                     <EventDateList
                       v-if="showResults"
                       :eventDates="eventDates"
+                      :hasNext="eventDatesHasNext"
                       @loaded="
                         () => {
                           isLoadingDatesInitial = false;
@@ -157,26 +158,6 @@
                       "
                     />
                   </transition>
-
-                  <div class="row justify-center q-my-lg q-mb-xl">
-                    <q-spinner-ios
-                      :color="$q.dark.isActive ? 'white' : 'black'"
-                      size="2em"
-                      v-if="
-                        eventDatesHasNext &&
-                        !isLoadingDatesInitial &&
-                        eventDates.length > 0
-                      "
-                    />
-                    <div
-                      v-else-if="
-                        eventDates.length > 0 && !isLoadingDatesInitial
-                      "
-                      class="t4 chicago"
-                    >
-                      End of results
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -195,21 +176,6 @@
           size="2em"
           v-touch-swipe="handleSwipe"
         />
-      </div>
-      <div
-        v-else-if="
-          eventDates.length == 0 && !isLoadingDatesInitial && !eventDatesLoading
-        "
-        class="t4 chicago flex grow justify-center items-center"
-        style="
-          height: 100%;
-          position: absolute;
-          width: 100%;
-          z-index: 1;
-          pointer-events: none;
-        "
-      >
-        <div>No parties in this area :'(</div>
       </div>
     </div>
   </div>

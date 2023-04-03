@@ -72,6 +72,26 @@ const routes: RouteRecordRaw[] = [
           mapOverlay: true,
         },
       },
+      {
+        path: '/add/verified_event/',
+        name: 'AddEventHost',
+        component: () => import('src/components/AddEventPage/AddEventPage.vue'),
+        props: { host: true },
+        meta: {
+          auth: false,
+          mapOverlay: true,
+        },
+      },
+      {
+        path: '/add/public_event/',
+        name: 'AddEventPublic',
+        component: () => import('src/components/AddEventPage/AddEventPage.vue'),
+        props: { host: false },
+        meta: {
+          auth: false,
+          mapOverlay: true,
+        },
+      },
       /*
 
 
@@ -117,26 +137,8 @@ const routes: RouteRecordRaw[] = [
         },
       },
 
-      {
-        path: '/add/verified_event/',
-        name: 'AddEventHost',
-        component: () => import('src/components/AddEventPage/AddEventPage.vue'),
-        props: { host: true },
-        meta: {
-          auth: false,
-          mapOverlay: false,
-        },
-      },
-      {
-        path: '/add/public_event/',
-        name: 'AddEventPublic',
-        component: () => import('src/components/AddEventPage/AddEventPage.vue'),
-        props: { host: false },
-        meta: {
-          auth: false,
-          mapOverlay: false,
-        },
-      },
+
+
       {
         path: '/admin',
         name: 'AdminPage',
