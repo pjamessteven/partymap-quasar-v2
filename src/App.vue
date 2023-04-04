@@ -636,7 +636,7 @@ body {
   overflow-x: auto;
   overflow-y: auto;
   */
-  font-family: chicagoflf;
+  //font-family: chicagoflf;
   //font-weight: 100;
   font-size: small;
   color: $t-1;
@@ -737,7 +737,7 @@ body {
 }
 
 .vc-container {
-  font-family: chicagoflf !important;
+  //font-family: chicagoflf !important;
 
   .on-right {
     // override quasar variable that causes ui artifacts
@@ -827,7 +827,7 @@ body {
   }
   .q-dialog {
     .menu {
-      font-family: chicagoflf;
+      //font-family: chicagoflf;
     }
   }
   .dialog-page {

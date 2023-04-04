@@ -1,5 +1,6 @@
 <template>
   <div class="search-view main-content flex column grow no-wrap">
+    <!--
     <div class="sidebar-header" v-if="$q.screen.gt.xs">
       <div
         class="chicago text-h4 q-mt-md q-pl-md"
@@ -8,10 +9,11 @@
         Search
       </div>
     </div>
+    -->
     <div class="content flex column grow q-px-md">
       <div
-        class="chicago text-large t2 q-mt-sm"
-        :class="$q.screen.lt.sm ? 'q-mt-md ' : ' '"
+        class="chicago text-large t2"
+        :class="$q.screen.lt.sm ? 'q-mt-md ' : ' q-mt-lg'"
       >
         Events, artists, places & more:
       </div>

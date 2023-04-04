@@ -50,11 +50,13 @@
           @swipe="onMobileSwipeHandle($event)"
           v-if="$q.screen.lt.sm"
         />
+        <NavigationBar class="nav-bar" v-if="$q.screen.gt.xs" />
 
         <div
           class="sidebar-content flex column"
           :class="{
-            'sidebar-desktop-expanded': $q.screen.gt.lg || this.sidebarExpanded,
+            'sidebar-desktop-expanded q-mt-md':
+              $q.screen.gt.lg && this.sidebarExpanded,
           }"
         >
           <q-tab-panels
@@ -86,7 +88,6 @@
               />
             </q-tab-panel>
           </q-tab-panels>
-          <NavigationBar class="nav-bar" v-if="$q.screen.gt.xs" />
 
           <div
             class="resizer flex row items-center"
@@ -124,7 +125,7 @@ export default {
     MobileSwipeHandle,
   },
   async mounted() {
-    if (this.$q.screen.gt.lg) {
+    if (this.$q.screen.gt.xl) {
       this.sidebarExpanded = true;
     }
     await this.$nextTick();
@@ -139,7 +140,7 @@ export default {
       );
     });
     window.addEventListener('resize', () => {
-      if (this.$q.screen.gt.lg) {
+      if (this.$q.screen.gt.xl) {
         this.sidebarExpanded = true;
       } else {
         this.sidebarExpanded = false;
@@ -153,7 +154,8 @@ export default {
   },
   methods: {
     resize(event) {
-      console.log(this.$refs.psw.pswp);
+      console.log('event.x', event.x);
+      console.log('lastx', this.lastx);
       if (event.x > 360 && event.x > this.lastx && !this.sidebarExpanded) {
         this.sidebarExpanded = true;
       } else if (
@@ -239,6 +241,9 @@ export default {
   .sidebar {
     background: black;
     border-right: 1px solid rgba(255, 255, 255, 0.1);
+    :deep(.nav-bar) {
+      z-index: 10;
+    }
     .mobile-dismiss-list {
     }
     :deep(.content) {
@@ -267,14 +272,21 @@ export default {
   }
   .sidebar {
     background: white;
+    .menubar {
+      background: white;
+      //border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      //box-shadow: rgba(100, 100, 111, 0.15) 0px 7px 29px 0px;
+    }
     .mobile-dismiss-list {
       color: white;
     }
 
-    :deep(.content) {
+    :deep(.nav-bar) {
+      box-shadow: rgba(100, 100, 111, 0.15) 0px 7px 29px 0px;
     }
     :deep(.sidebar-header) {
       color: $bi-2;
+
       background: white;
     }
     .nav-bar {
@@ -320,12 +332,12 @@ export default {
     color: white;
     //position: sticky;
     top: 0px;
-    z-index: 100;
+    z-index: 99;
   }
   .sidebar-content {
     height: 100%;
     width: 100%;
-    padding-bottom: 72px;
+    position: relative;
     &.sidebar-desktop-expanded {
       padding: 0 16px;
     }
@@ -342,8 +354,9 @@ export default {
   }
   .nav-bar {
     width: 100%;
-    position: absolute;
+    //position: absolute;
     bottom: 0;
+    z-index: 100;
   }
 
   .resizer {
@@ -410,6 +423,8 @@ export default {
         //box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
       }
     }
+  }
+  :deep(.sidebar-header) {
   }
   .sidebar-wrapper {
     padding: 0;

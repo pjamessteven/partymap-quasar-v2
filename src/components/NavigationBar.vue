@@ -1,6 +1,7 @@
 <template>
   <div class="navigation-bar flex row no-wrap">
     <q-tabs
+      :content-class="$q.screen.gt.lg ? '' : ''"
       v-model="sidebarPanel"
       no-caps
       :indicator-color="
@@ -125,12 +126,14 @@ export default {
     );
   }
   .navigation-bar {
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
 .body--light {
   .navigation-bar {
     border-top: 1px solid rgba(0, 0, 0, 0.05);
+    //border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
     //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.2);
   }
@@ -142,20 +145,23 @@ export default {
   width: 216px;
   padding-right: 8px;
   pointer-events: all;
-
   //height: 62px;
   :deep(.q-tabs) {
     height: 100%;
     width: 100%;
     font-family: chicagoflf;
+
     .q-tab {
       padding-top: 4px;
       opacity: 0.3;
-      //padding: 0px;
+      //padding-bottom: 4px;
       &.q-tab--active {
         opacity: 1;
       }
     }
+  }
+  :deep(.q-tab__icon) {
+    //padding: 0px 0px;
   }
 }
 .nav-separator {

@@ -76,6 +76,7 @@
 
           <transition enter-active-class="animated fadeIn">
             <div class="flex column no-wrap scroll-content">
+              <!--
               <div
                 v-if="$q.screen.gt.xs"
                 class="sidebar-header flex column no-wrap items-stretch justify-between ellipsis no-wrap"
@@ -87,6 +88,7 @@
                   <span class="text-h4 chicago">Explore</span>
                 </div>
               </div>
+              -->
 
               <div class="flex column no-wrap content">
                 <ControlsComponent
@@ -94,8 +96,7 @@
                   class="controls-component"
                   :class="{
                     'q-pt-sm': $q.screen.lt.sm,
-                    'q-mt-md ': $q.screen.gt.xs && $q.screen.lt.xl,
-                    'q-mb-md q-mt-md': $q.screen.gt.lg,
+                    'q-mt-md ': $q.screen.gt.xs,
                   }"
                   :showSelectedValue="true"
                   :showOnlySelected="false"
@@ -149,13 +150,8 @@
                   >
                     <EventDateList
                       v-if="showResults"
-                      :eventDates="eventDates"
+                      :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
                       :hasNext="eventDatesHasNext"
-                      @loaded="
-                        () => {
-                          isLoadingDatesInitial = false;
-                        }
-                      "
                     />
                   </transition>
                 </div>
@@ -232,8 +228,8 @@ export default {
     async getInitialList() {
       if (this.$route.name === 'Explore' && !this.blockUpdates) {
         // event date stuff
+        this.eventDatesGroupedByMonth = {};
         this.isLoadingDatesInitial = true;
-        this.eventDates = [];
         if (this.$refs) this.$refs.scroll.setScrollPercentage('vertical', 0);
         this.eventDatesHasNext = true;
         this.eventDatesPage = 1;
@@ -260,9 +256,8 @@ export default {
         try {
           await this.loadEventDates();
           this.eventDatesPage += 1;
-        } catch (error) {
-          this.isLoadingDatesInitial = false;
-        }
+        } catch (error) {}
+        this.isLoadingDatesInitial = false;
       }
     },
     handleSwipe() {
@@ -405,7 +400,7 @@ export default {
       'eventDatesLoading',
     ]),
     ...mapWritableState(useQueryStore, [
-      'eventDates',
+      'eventDatesGroupedByMonth',
       'eventDatesPage',
       'eventDatesHasNext',
       'artistsPage',
@@ -647,7 +642,7 @@ export default {
 
 @media only screen and (max-width: 600px) {
   .event-date-center {
-    margin-top: 74px;
+    margin-top: 100px;
     align-items: start;
   }
 

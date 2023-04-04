@@ -77,6 +77,7 @@
                 <div
                   class="sidebar-header flex column grow no-wrap items-stretch justify-between ellipsis no-wrap q-pl-md"
                   style="width: 100%"
+                  :class="$q.screen.gt.xs ? 'q-mt-' : ''"
                   v-touch-swipe.vertical="handleSwipe"
                 >
                   <div class="q-pr-md ellipsis q-mt-md">
@@ -137,7 +138,9 @@
                     </template>
                   </q-btn>
                 </div>
-
+                <div class="q-mt-md q-px-md" style="width: 100%">
+                  <div class="separator" />
+                </div>
                 <div
                   class="flex row justify-center items-center q-py-xl q-mt-xl"
                   style="height: 100%; width: 100%; position: absolute"
@@ -278,7 +281,7 @@
                   <!-- ALL EVENTS -->
 
                   <div
-                    class="location-header flex items-center justify-between no-wrap text-large chicago t1 q-mt- q-py-md q-pl-md"
+                    class="location-header flex items-center justify-between no-wrap chicago t1 q-mt- q-py-md q-pl-md"
                     :class="$q.screen.lt.sm ? 'q-py-md' : ''"
                     v-touch-swipe="
                       () => {
@@ -292,7 +295,7 @@
                     <div class="flex row grow no-wrap ellipsis">
                       <div class="ellipsis flex grow items-center">
                         <div
-                          class="ellipsis t1 text-large chicago"
+                          class="ellipsis t1 chicago"
                           v-if="userLocationName"
                         >
                           {{ $t('landing_page.all_upcoming_events') }}:
@@ -957,25 +960,9 @@ export default {
       .tag-scroll-area {
         height: 84px;
       }
-      .banner {
-        //margin-top: -60px;
-      }
+
       .header {
-        // height: 68px !important;
-        //min-height: 68px !important;
         margin-left: unset;
-      }
-      .artist-scroll-area {
-        // height: 128px;
-      }
-      .separator {
-        width: 100vw;
-        margin-left: -16px;
-      }
-      .ed-card-grid {
-      }
-      .scroll-content {
-        //padding-top: 64px;
       }
     }
   }

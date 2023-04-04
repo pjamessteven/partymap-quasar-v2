@@ -1,23 +1,29 @@
 <template>
-  <div class="date-header-wrapper q-m">
+  <div class="date-header-wrapper">
     <div
-      class="date-header flex row grow ellipsis q-py-md t1 chicago"
-      :class="$q.screen.gt.xs ? ' q-px-md' : 'q-px-sm'"
+      class="date-header flex row grow ellipsis t1 chicago"
+      :class="$q.screen.gt.xs ? ' q-px-md q-py-md' : 'q-px-sm q-py-md'"
     >
       Events in {{ dateString }}
-      <q-separator class="grow q-ml-md" v-if="$q.screen.gt.lg" />
+      <q-separator
+        class="grow q-ml-md"
+        v-if="$q.screen.gt.lg && this.sidebarExpanded"
+      />
     </div>
     <div class="date-header-shadow" />
   </div>
 </template>
 <script>
 import moment from 'moment-timezone';
+import { mapWritableState } from 'pinia';
+import { useMainStore } from 'src/stores/main';
 
 export default {
   props: {
     date: String,
   },
   computed: {
+    ...mapWritableState(useMainStore, ['sidebarExpanded']),
     dateString() {
       if (this.date) {
         return '' + moment(this.date).format('MMM YYYY');
@@ -43,7 +49,7 @@ export default {
     display: flex;
     align-items: center;
     //font-size: 1rem;
-    margin-bottom: 4px;
+    //bottom: 4px;
     //padding: 32px 0;
   }
   /*

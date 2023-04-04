@@ -489,6 +489,10 @@ export default {
       });
       this.map.on('movestart', () => {
         this.mapMoving = true;
+        this.exploreMapView = {
+          latlng: this.map.getCenter(),
+          zoom: this.map.getZoom(),
+        };
       });
 
       this.map.on('moveend', (event) => {

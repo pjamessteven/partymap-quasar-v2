@@ -5,7 +5,6 @@
       ref="musicBrainzInput"
       :options-conver="false"
       :loading="loadingResults"
-      square
       outlined
       use-input
       menu-anchor="top left"

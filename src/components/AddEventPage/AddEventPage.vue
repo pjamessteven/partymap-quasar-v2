@@ -570,10 +570,14 @@
         </transition>
       </div>
       <div
-        class="flex row submit-footer"
-        :class="$q.screen.lt.sm ? 'justify-center ' : 'justify-end'"
+        class="flex row submit-footer items-center"
+        :class="$q.screen.lt.sm ? 'justify-center ' : 'justify-between'"
       >
-        <div v-if="!validation" class="t1 q-mb-md">
+        <div
+          v-if="!validation"
+          class="t1 chicago"
+          :class="$q.screen.gt.xs ? 'q-ml-lg' : 'q-mt-lg'"
+        >
           Please fill out all of the required fields
         </div>
         <q-btn

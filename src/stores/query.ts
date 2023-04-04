@@ -73,13 +73,17 @@ interface QueryState {
   loadingPoints: boolean;
 
   // favorites
-  userEventDates: [EventDate, string][]; // string is the distance from current location
+  userEventDatesGroupedByMonth: {
+    [key: string]: [EventDate, string][];
+  };
   userEventDatesPage: number;
   userEventDatesHasNext: boolean;
   userEventDatesLoading: boolean;
 
   // event dates in bounds/query
-  eventDates: [EventDate, string][]; // string is the distance from current location
+  eventDatesGroupedByMonth: {
+    [key: string]: [EventDate, string][];
+  };
   eventDatesPage: number;
   eventDatesHasNext: boolean;
   eventDatesLoading: boolean;
@@ -140,12 +144,12 @@ export const useQueryStore = defineStore('query', {
     points: [],
     loadingPoints: false,
 
-    userEventDates: [],
+    userEventDatesGroupedByMonth: {},
     userEventDatesHasNext: false,
     userEventDatesPage: 1,
     userEventDatesLoading: false,
 
-    eventDates: [],
+    eventDatesGroupedByMonth: {},
     eventDatesHasNext: false,
     eventDatesPage: 1,
     eventDatesLoading: false,
@@ -230,11 +234,16 @@ export const useQueryStore = defineStore('query', {
         });
 
         if (this.userEventDatesPage === 1) {
-          this.userEventDates = response.data.items;
+          this.userEventDatesGroupedByMonth = groupEventDatesByMonth(
+            {},
+            response.data.items
+          );
         } else {
-          this.userEventDates = this.userEventDates.concat(response.data.items);
+          this.userEventDatesGroupedByMonth = groupEventDatesByMonth(
+            this.userEventDatesGroupedByMonth,
+            response.data.items
+          );
         }
-        this.userEventDates = response.data.items;
         this.userEventDatesLoading = false;
         this.userEventDatesHasNext = response.data.has_next;
         return response.data.items;
@@ -291,11 +300,16 @@ export const useQueryStore = defineStore('query', {
           // calls to the server (even though these calls are debounced, sometimes
           // the round trip takes a while)
           if (this.eventDatesPage === 1) {
-            this.eventDates = response.data.items;
+            this.eventDatesGroupedByMonth = groupEventDatesByMonth(
+              {},
+              response.data.items
+            );
           } else {
-            this.eventDates = this.eventDates.concat(response.data.items);
+            this.eventDatesGroupedByMonth = groupEventDatesByMonth(
+              this.eventDatesGroupedByMonth,
+              response.data.items
+            );
           }
-          this.eventDates = response.data.items;
           this.eventDatesLoading = false;
           this.eventDatesHasNext = response.data.has_next;
           return response.data.items;
@@ -411,3 +425,19 @@ export const useQueryStore = defineStore('query', {
     },
   },
 });
+
+export const groupEventDatesByMonth = (
+  existingDates: { [key: string]: [EventDate, string][] } = {},
+  eventDates: [EventDate, string][]
+) => {
+  for (const ed of eventDates) {
+    // assumes eventDates are sorted by time
+    const start = moment(ed?.[0].start_naive);
+    const yearMonth = start.month() + '' + start.year();
+    if (!existingDates[yearMonth]) {
+      existingDates[yearMonth] = [];
+    }
+    existingDates[yearMonth].push(ed);
+  }
+  return existingDates;
+};

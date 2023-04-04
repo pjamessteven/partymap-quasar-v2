@@ -8,9 +8,7 @@
         ref="scroll"
         horizontal
         class="scroll-area"
-        :style="
-          $q.screen.gt.xs && $q.screen.lt.xl ? 'height: 54px' : 'height: 44px'
-        "
+        :style="$q.screen.gt.xs ? 'height: 54px' : 'height: 44px'"
         :thumb-style="
           $q.screen.gt.xs
             ? { bottom: '0px', height: '4px' }

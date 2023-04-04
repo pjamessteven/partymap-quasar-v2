@@ -176,34 +176,7 @@
                           <div>Contributed</div>
                         </div>
                       </q-btn>
-                    </div>
-                  </q-scroll-area>
-                  <q-scroll-area
-                    ref="scroll"
-                    horizontal
-                    class="scroll-area q-mb-xs"
-                    :style="
-                      $q.screen.gt.xs && $q.screen.lt.xl
-                        ? 'height: 54px'
-                        : 'height: 44px'
-                    "
-                    :thumb-style="
-                      $q.screen.gt.xs
-                        ? { bottom: '0px', height: '4px' }
-                        : { bottom: '-8px', height: '0px' }
-                    "
-                    v-touch-swipe.vertical="handleSwipe"
-                  >
-                    <div
-                      class="flex row scroll-wrapper"
-                      :class="[
-                        $q.screen.gt.xs
-                          ? $q.screen.lt.xl && !this.sidebarExpanded
-                            ? 'q-gutter-sm q-pr-md q-py-xs no-wrap'
-                            : 'q-gutter-sm q-pr-md q-py-xs  no-wrap'
-                          : 'q-gutter-sm q-px-sm  no-wrap',
-                      ]"
-                    >
+                      <div class="separator vertical m" style="height: 32px" />
                       <q-btn
                         no-caps
                         class="button-control flex items-center"
@@ -257,15 +230,15 @@
 
                 <transition appear enter-active-class="animated fadeIn">
                   <div class="flex column" v-show="!isLoadingDatesInitial">
-                    <EventDateList
-                      :eventDates="userEventDates"
-                      :hasNext="userEventDatesHasNext"
-                      @loaded="
-                        () => {
-                          isLoadingDatesInitial = false;
-                        }
-                      "
-                    />
+                    <transition
+                      appear
+                      enter-active-class="animated fadeIn slower"
+                    >
+                      <EventDateList
+                        :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
+                        :hasNext="userEventDatesHasNext"
+                      />
+                    </transition>
                   </div>
                 </transition>
               </div>
@@ -344,6 +317,7 @@ export default {
             this.currentUser.username
           );
           this.userEventDatesPage += 1;
+          this.isLoadingDatesInitial = false;
         } catch (error) {
           this.isLoadingDatesInitial = false;
         }
@@ -386,7 +360,7 @@ export default {
     ...mapState(useMapStore, ['mapBounds', 'blockUpdates']),
     ...mapState(useQueryStore, ['userEventDatesLoading']),
     ...mapWritableState(useQueryStore, [
-      'userEventDates',
+      'userEventDatesGroupedByMonth',
       'userEventDatesPage',
       'userEventDatesHasNext',
     ]),
