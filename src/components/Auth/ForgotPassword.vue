@@ -25,29 +25,30 @@
           bottom-slots
         >
         </q-input>
-
-        <q-inner-loading :showing="loading">
-          <q-spinner-puff size="300px" color="primary" />
-        </q-inner-loading>
       </q-card-section>
 
       <q-card-section class="flex justify-center q-mb-md">
         <q-btn
           class="soft-button-shadow"
-          :disabled="loading"
+          :disable="loading"
           :label="$t('auth.reset_password')"
           color="primary"
           v-on:click="resetPassword"
         />
       </q-card-section>
+      <InnerLoading v-if="loading" :solid="true" />
     </q-card>
   </div>
 </template>
 
 <script>
-import { requestPasswordResetRequest } from '@/api';
+import InnerLoading from 'src/components/InnerLoading.vue';
+
+import { requestPasswordResetRequest } from 'src/api';
 export default {
   name: 'ForgotPassword',
+  components: { InnerLoading },
+
   data() {
     return {
       identifier: '',

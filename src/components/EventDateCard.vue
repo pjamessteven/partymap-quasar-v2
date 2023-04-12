@@ -475,6 +475,8 @@ export default {
   cursor: pointer;
   transition: all 0.3s ease;
   overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
 
   &:hover {
     .card-bottom-content {

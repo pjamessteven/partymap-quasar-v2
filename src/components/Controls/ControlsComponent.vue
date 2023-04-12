@@ -54,11 +54,13 @@
             :key="5"
             :showSelectedValue="showSelectedValue"
           />
+          <!--
           <LocalityControl
             v-if="showLocalityControl"
             :key="6"
             :showSelectedValue="showSelectedValue"
           />
+          -->
         </div>
       </q-scroll-area>
       <div class="artist-profile-wrapper" v-if="$q.screen.lt.sm">
@@ -94,7 +96,7 @@ export default {
     ArtistControl,
     TagControl,
     ArtistProfile,
-    LocalityControl,
+    // LocalityControl,
   },
   watch: {
     controlArtist(newVal) {

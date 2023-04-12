@@ -32,7 +32,7 @@
       </transition>
     </router-view>
 
-    <NavigationBar class="nav-bar" />
+    <NavigationBar class="nav-bar" v-if="$q.screen.lt" />
   </div>
 </template>
 

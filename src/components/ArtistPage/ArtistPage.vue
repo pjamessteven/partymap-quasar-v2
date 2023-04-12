@@ -1,59 +1,48 @@
 <template>
   <DialogPage>
     <template v-slot:title>
-      <div class="text-h5 chicago">
-        {{ computedName }}
-      </div>
-      <div class="t2 q-mt-s" v-if="artist">
-        {{ artist.disambiguation }}
-      </div>
+      {{ computedName }}
     </template>
     <template v-slot>
-      <div class="'solid-page flex row justify-center">
-        <div class="solid-page-inner">
-          <q-inner-loading :showing="loading">
-            <q-spinner-ios
-              :color="$q.dark.isActive ? 'white' : 'black'"
-              size="2em"
-            />
-          </q-inner-loading>
-          <div class="artist-header flex row justify-between no-wrap">
-            <div class="flex column no-wrap" style="width: 100%">
-              <div class="mobile-image-container" v-if="$q.screen.lt.md">
-                <div class="image-container-background">
-                  <transition
-                    appear
-                    enter-active-class="animated fadeIn slower"
-                  >
-                    <img :src="computedImageSrc" v-if="computedImageSrc" />
-                  </transition>
+      <InnerLoading v-if="loading" :solid="true" />
 
-                  <div class="overlay" />
-                </div>
-                <div class="flex-column mobile-title q-pa-md">
-                  <div class="text-h5 chicago">
-                    <b>{{ computedName }}</b>
-                  </div>
-                  <div class="o-050" v-if="artist">
-                    {{ artist.disambiguation }}
-                  </div>
-                </div>
-              </div>
-
+      <div class="artist-header flex row justify-between no-wrap">
+        <div class="flex column no-wrap" style="width: 100%">
+          <div class="mobile-image-container" v-if="$q.screen.lt.md">
+            <div class="image-container-background">
               <transition appear enter-active-class="animated fadeIn slower">
-                <div class="main-content flex column" v-if="artist">
-                  <div
-                    class="q-mt-lg q-mb-sm chicago t3"
-                    v-if="
-                      artist &&
-                      artist.tags &&
-                      artist.tags.length > 0 &&
-                      !loading
-                    "
-                  >
-                    {{ $t('artists.tags') }}:
-                  </div>
-                  <!--
+                <img :src="computedImageSrc" v-if="computedImageSrc" />
+              </transition>
+
+              <div class="overlay" />
+            </div>
+            <div class="flex-column mobile-title q-pa-md">
+              <div class="text-h5 chicago">
+                <b>{{ computedName }}</b>
+              </div>
+              <div class="o-050" v-if="artist">
+                {{ artist.disambiguation }}
+              </div>
+            </div>
+          </div>
+
+          <transition appear enter-active-class="animated fadeIn slower">
+            <div class="main-content flex column" v-if="artist">
+              <div
+                class="t1 q-mt-md text-large chicago"
+                v-if="artist && $q.screen.gt.xs"
+              >
+                {{ artist.disambiguation }}
+              </div>
+              <div
+                class="q-mt-lg q-mb-sm chicago t3"
+                v-if="
+                  artist && artist.tags && artist.tags.length > 0 && !loading
+                "
+              >
+                {{ $t('artists.tags') }}:
+              </div>
+              <!--
             <div
               class="t3"
               v-if="
@@ -65,26 +54,26 @@
               No tags for this artist yet.
             </div>
           -->
-                  <div
-                    class="flex row wrap q-gutter-xs"
-                    style="max-width: 100%"
-                    v-if="artist && artist.tags"
-                  >
-                    <Tag
-                      v-for="(at, index) in artist.tags"
-                      :key="index"
-                      :value="at.tag"
-                      :label="at.label"
-                    ></Tag>
-                  </div>
+              <div
+                class="flex row wrap q-gutter-xs"
+                style="max-width: 100%"
+                v-if="artist && artist.tags"
+              >
+                <Tag
+                  v-for="(at, index) in artist.tags"
+                  :key="index"
+                  :value="at.tag"
+                  :label="at.label"
+                ></Tag>
+              </div>
 
-                  <div
-                    class="q-mt-lg q-mb-sm chicago t3"
-                    v-if="computedDescription && computedDescription.length > 0"
-                  >
-                    {{ $t('artists.description') }}:
-                  </div>
-                  <!--
+              <div
+                class="q-mt-lg q-mb-sm chicago t3"
+                v-if="computedDescription && computedDescription.length > 0"
+              >
+                {{ $t('artists.description') }}:
+              </div>
+              <!--
             <div
               class="t3"
               v-if="
@@ -95,130 +84,121 @@
               No description for this artist yet.
             </div>
           -->
-                  <div
-                    style="max-width: 100%"
-                    v-if="computedDescription && computedDescription.length > 0"
-                  >
-                    <span v-if="artist" v-html="computedDescription" /><span
-                      v-if="longDescription && !showFullDescription"
-                      @click="showFullDescription = true"
-                      class="link-hover underline q-ml-xs"
-                      >...show more</span
-                    >
-                    <span
-                      v-if="longDescription && showFullDescription"
-                      @click="showFullDescription = false"
-                      class="link-hover underline"
-                      >...show less</span
-                    >
-                  </div>
-
-                  <div
-                    class="q-mt-lg q-mb-sm chicago t3"
-                    v-if="urls && urls.length > 0"
-                  >
-                    {{ $t('artists.links') }}:
-                  </div>
-
-                  <div class="flex column" style="max-width: 100%">
-                    <ArtistUrl
-                      v-for="(url, index) in urls"
-                      :url="url"
-                      :key="index"
-                    />
-                  </div>
-
-                  <div
-                    class="flex column"
-                    v-if="artist"
-                    style="max-width: 100%"
-                  >
-                    <div class="q-mt-lg q-mb-md chicago t3">
-                      {{ $t('artists.upcoming_events') }}:
-                    </div>
-                    <div
-                      class="t3"
-                      v-if="
-                        artist &&
-                        artist.future_event_dates &&
-                        artist.future_event_dates.length === 0 &&
-                        !loading
-                      "
-                    >
-                      No upcoming events for this artist. Maybe you should add
-                      some! :D
-                    </div>
-                    <EventDateCard
-                      v-for="(ed, index) in artist.future_event_dates"
-                      :key="index"
-                      :event="ed"
-                      class="q-mb-md ed-card"
-                    />
-                  </div>
-
-                  <div
-                    class="flex column"
-                    v-if="
-                      artist &&
-                      artist.past_event_dates &&
-                      artist.past_event_dates.length > 0
-                    "
-                  >
-                    <div class="q-mt-lg q-mb-md chicago t3">
-                      {{ $t('artists.past_events') }}:
-                    </div>
-                    <div class="flex column" style="max-width: 100%">
-                      <EventDateCard
-                        v-for="(ed, index) in artist.past_event_dates"
-                        :key="index"
-                        :event="ed"
-                        class="q-mb-md ed-card"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </transition>
-            </div>
-
-            <div class="image-container q-ml-lg" v-if="$q.screen.gt.sm">
-              <div class="image-container-background">
-                <transition appear enter-active-class="animated fadeIn slower">
-                  <img :src="computedImageSrc" v-if="computedImageSrc" />
-                </transition>
+              <div
+                style="max-width: 100%"
+                v-if="computedDescription && computedDescription.length > 0"
+              >
+                <span v-if="artist" v-html="computedDescription" /><span
+                  v-if="longDescription && !showFullDescription"
+                  @click="showFullDescription = true"
+                  class="link-hover underline q-ml-xs"
+                  >...show more</span
+                >
+                <span
+                  v-if="longDescription && showFullDescription"
+                  @click="showFullDescription = false"
+                  class="link-hover underline"
+                  >...show less</span
+                >
               </div>
-            </div>
-          </div>
-          <transition appear enter-active-class="animated fadeIn slower">
-            <div class="q-py-xl q-pb-lg footer" v-if="artist">
-              <div class="t4">
-                Artist info by
-                <a
-                  href="https://musicbrainz.org/"
-                  class="link-hover underline"
-                  target="_blank"
-                  >MusicBrainz</a
-                >,
-                <a
-                  href="https://last.fm/"
-                  class="link-hover underline"
-                  target="_blank"
-                  >Last.fm</a
+
+              <div
+                class="q-mt-lg q-mb-sm chicago t3"
+                v-if="urls && urls.length > 0"
+              >
+                {{ $t('artists.links') }}:
+              </div>
+
+              <div class="flex column" style="max-width: 100%">
+                <ArtistUrl
+                  v-for="(url, index) in urls"
+                  :url="url"
+                  :key="index"
+                />
+              </div>
+
+              <div class="flex column" v-if="artist" style="max-width: 100%">
+                <div class="q-mt-lg q-mb-md chicago t3">
+                  {{ $t('artists.upcoming_events') }}:
+                </div>
+                <div
+                  class="t3"
+                  v-if="
+                    !artist.future_event_dates ||
+                    (artist?.future_event_dates?.length === 0 && !loading)
+                  "
                 >
-                and
-                <a
-                  href="https://spotify.com/"
-                  class="link-hover underline"
-                  target="_blank"
-                  >Spotify</a
-                >. In the future users will be able to update this page.
-                <span class="link-hover" @click="refreshArtist">
-                  [Refresh info]</span
-                >
+                  No upcoming events for this artist.
+                </div>
+                <EventDateCard
+                  v-for="(ed, index) in artist.future_event_dates"
+                  :key="index"
+                  :event="ed"
+                  class="q-mb-md ed-card"
+                />
+              </div>
+
+              <div
+                class="flex column"
+                v-if="
+                  artist &&
+                  artist.past_event_dates &&
+                  artist.past_event_dates.length > 0
+                "
+              >
+                <div class="q-mt-lg q-mb-md chicago t3">
+                  {{ $t('artists.past_events') }}:
+                </div>
+                <div class="flex column" style="max-width: 100%">
+                  <EventDateCard
+                    v-for="(ed, index) in artist.past_event_dates"
+                    :key="index"
+                    :event="ed"
+                    class="q-mb-md ed-card"
+                  />
+                </div>
               </div>
             </div>
           </transition>
         </div>
+
+        <div class="image-container q-ma-lg" v-if="$q.screen.gt.sm">
+          <div class="image-container-background">
+            <transition appear enter-active-class="animated fadeIn slower">
+              <img :src="computedImageSrc" v-if="computedImageSrc" />
+            </transition>
+          </div>
+        </div>
       </div>
+      <transition appear enter-active-class="animated fadeIn slower">
+        <div class="q-pb-lg footer" v-if="artist">
+          <div class="t4">
+            Artist info by
+            <a
+              href="https://musicbrainz.org/"
+              class="link-hover underline"
+              target="_blank"
+              >MusicBrainz</a
+            >,
+            <a
+              href="https://last.fm/"
+              class="link-hover underline"
+              target="_blank"
+              >Last.fm</a
+            >
+            and
+            <a
+              href="https://spotify.com/"
+              class="link-hover underline"
+              target="_blank"
+              >Spotify</a
+            >. In the future users will be able to update this page.
+            <span class="link-hover" @click="refreshArtist">
+              [Refresh info]</span
+            >
+          </div>
+        </div>
+      </transition>
     </template>
   </DialogPage>
 </template>
@@ -234,6 +214,7 @@ import DialogPage from 'components/dialogs/DialogPage.vue';
 
 import { mapState } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
+import InnerLoading from 'src/components/InnerLoading.vue';
 
 export default {
   name: 'ArtistPage',
@@ -264,6 +245,7 @@ export default {
     ArtistUrl,
     EventDateCard,
     Tag,
+    InnerLoading,
   },
   data() {
     return {
@@ -432,11 +414,12 @@ export default {
     max-width: 400px;
   }
 }
+.footer {
+  position: absolute;
+  bottom: 0px;
+}
 @media only screen and (max-width: 1023px) {
   .solid-page {
-    padding-top: 0px !important;
-    padding-left: 0px !important;
-    padding-right: 0px !important;
     .artist-header {
       .mobile-image-container {
         width: 100%;
@@ -479,6 +462,8 @@ export default {
       }
     }
     .footer {
+      position: relative;
+      margin-top: 128px;
       padding-left: 16px;
       padding-right: 16px;
     }

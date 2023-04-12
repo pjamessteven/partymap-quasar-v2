@@ -57,7 +57,7 @@
       <q-btn
         v-if="showUploadButton"
         class="q-ml-sm soft-button-shadow"
-        :disabled="!items || items.length == 0"
+        :disable="!items || items.length == 0"
         :label="$t('media_upload.upload')"
         v-on:click="$emit('upload')"
         color="primary"

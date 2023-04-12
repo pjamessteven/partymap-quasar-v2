@@ -44,7 +44,7 @@
             @click="updateEd"
             v-close-popup
             :label="$t('general.save_changes')"
-            :disabled="url == ed.url"
+            :disable="url == ed.url"
           />
         </div>
         <q-space />
@@ -84,7 +84,7 @@
             @click="updateEd"
             v-close-popup
             :label="$t('general.save_changes')"
-            :disabled="ticketUrl == ed.ticket_url"
+            :disable="ticketUrl == ed.ticket_url"
           />
         </div>
         <q-space />
@@ -136,7 +136,7 @@
             @click="updateEd"
             v-close-popup
             :label="$t('general.save_changes')"
-            :disabled="size == ed.size"
+            :disable="size == ed.size"
           />
         </div>
         <q-space />
@@ -244,7 +244,7 @@
             no-caps
             @click="updateEd"
             :label="$t('general.save_changes')"
-            :disabled="!dateTimeHasChanged"
+            :disable="!dateTimeHasChanged"
           />
         </div>
       </q-card-section>
@@ -290,7 +290,7 @@
             @click="updateEd"
             v-close-popup
             :label="$t('general.save_changes')"
-            :disabled="!locationHasChanged"
+            :disable="!locationHasChanged"
           />
         </div>
         <div ref="placesDiv" />

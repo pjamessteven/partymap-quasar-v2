@@ -53,7 +53,7 @@ export default {
     .handle-container-bg {
       border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
 
-      //background: rgba(255, 255, 255, 0.1);
+      //background: rgb(26,26,26);
       //backdrop-filter: blur(10px);
     }
     .handle {

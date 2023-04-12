@@ -89,14 +89,14 @@
                   style="width: 100%"
                   v-touch-swipe.vertical="handleSwipe"
                 >
-                  <span v-if="userLocationName" class="ellipsis">
+                  <span v-if="userLocation" class="ellipsis">
                     {{ userLocationCity }}
                   </span>
                   <span class="ellipsis" v-else>... </span>
                   <q-btn
                     class="q-ml-sm q--r"
                     :class="$q.screen.gt.sm ? 'q-mr-md' : ''"
-                    style="cursor: pointer"
+                    style="cursor: pointer; z-index: 1000"
                     flat
                     fab
                     dense
@@ -252,7 +252,6 @@
                         v-for="(ed, index) in nearbyEventDates"
                         :key="index"
                         :event="ed[0]"
-                        class="ed-card"
                       />
                     </div>
                   </transition>
@@ -294,10 +293,7 @@
 
                     <div class="flex row grow no-wrap ellipsis">
                       <div class="ellipsis flex grow items-center">
-                        <div
-                          class="ellipsis t1 chicago"
-                          v-if="userLocationName"
-                        >
+                        <div class="ellipsis t1 chicago" v-if="userLocation">
                           {{ $t('landing_page.all_upcoming_events') }}:
                         </div>
                       </div>
@@ -539,8 +535,8 @@ export default {
     ...mapState(useMainStore, [
       'userLocationLoading',
       'userLocation',
-      'userLocationName',
       'userLocationCity',
+      'userLocationCountry',
       'fineLocation',
     ]),
     ...mapWritableState(useQueryStore, ['controlTag']),
@@ -853,7 +849,7 @@ export default {
       z-index: 5;
       //text-transform: lowercase;
 
-      //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.1);
+      //box-shadow: 0px 0px 46px -6px rgb(230,230,230);
       .location-input {
         input {
           font-size: 18px;

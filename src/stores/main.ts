@@ -5,6 +5,7 @@ import { Coordinates } from 'src/types/map';
 import NodeGeocoder from 'node-geocoder';
 //import HttpsAdapter from 'node-geocoder/lib/httpadapter/fetchadapter';
 import { Notify } from 'quasar';
+
 interface MainStoreState {
   darkMode: boolean;
   mapStyle: 'satellite' | 'transport' | 'high_contrast';
@@ -18,8 +19,8 @@ interface MainStoreState {
   ipInfo: IpInfo | null;
   userLocationLoading: boolean;
   userLocation: Coordinates | null;
-  userLocationName: string | null;
   userLocationCity: string | null;
+  userLocationCountry: string | null;
   fineLocation: boolean;
 }
 
@@ -37,8 +38,8 @@ export const useMainStore = defineStore('main', {
     ipInfo: null,
     userLocationLoading: false,
     userLocation: null,
-    userLocationName: null,
     userLocationCity: null,
+    userLocationCountry: null,
     fineLocation: false,
   }),
   actions: {
@@ -53,9 +54,8 @@ export const useMainStore = defineStore('main', {
           lat: response.data.lat,
           lng: response.data.lon,
         };
-        this.userLocationName =
-          response.data.city + ', ' + response.data.country;
         this.userLocationCity = response.data.city;
+        this.userLocationCountry = response.data.country;
         return;
       } catch (error) {
         throw error;
@@ -66,7 +66,7 @@ export const useMainStore = defineStore('main', {
       if (navigator.geolocation) {
         this.userLocationLoading = true;
         navigator.geolocation.getCurrentPosition(
-          (position) => {
+          async (position) => {
             this.fineLocation = true;
             this.userLocation = {
               lat: position.coords.latitude,
@@ -75,57 +75,40 @@ export const useMainStore = defineStore('main', {
             const unknownCityCoords =
               position.coords.latitude + ', ' + position.coords.longitude;
 
-            this.userLocationName = unknownCityCoords;
-            this.userLocationCity = 'test';
+            this.userLocationCity = unknownCityCoords;
 
             this.userLocationLoading = false;
-            /*
-            TODO: fix this shit: get current location name
-
-            const fetchAdapter = require('node-geocoder/lib/httpadapter/fetchadapter');
-
-            const geocoder = NodeGeocoder({
-              provider: 'openstreetmap',
-              fetch: function fetch(url, options) {
-                return fetchAdapter(url, {
-                  ...options,
+            try {
+              const response: any = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?lat=${this.userLocation.lat}&lon=${this.userLocation.lng}&format=json&addressdetails=1`,
+                {
+                  method: 'GET',
                   headers: {
                     'user-agent': 'PartyMap <info@partymap.com>',
                   },
-                });
-              },
-            });
-            console.log('create geocoder');
-
-            geocoder
-              .reverse({
-                lat: position.coords.latitude,
-                lon: position.coords.longitude,
-              })
-              .then(async (res: NodeGeocoder.Entry[]) => {
-                if (res[0].city && res[0].city.length > 0) {
-                  this.userLocationName = res[0].city;
-                } else if (res[0].administrativeLevels?.level1short) {
-                  this.userLocationName =
-                    res[0].administrativeLevels?.level1short;
-                } else if (res[0].administrativeLevels?.level2short) {
-                  this.userLocationName =
-                    res[0].administrativeLevels?.level2short;
                 }
-                if (res[0].country) {
-                  this.userLocationName =
-                    this.userLocationName + ', ' + res[0].country;
-                }
-                this.userLocationLoading = false;
-              })
-              .catch(() => {
-                const unknownCityCoords =
-                  position.coords.latitude + ', ' + position.coords.longitude;
+              );
+              const data = await response.json();
+              const address = data.address;
+              console.log('add', address);
 
-                this.userLocationName = unknownCityCoords;
-
-                this.userLocationLoading = false;
-              }); */
+              if (address?.city?.length > 0) {
+                this.userLocationCity = address.city;
+              } else if (address.administrativeLevels?.level1short) {
+                this.userLocationCity =
+                  address.administrativeLevels?.level1short;
+              } else if (address.administrativeLevels?.level2short) {
+                this.userLocationCity =
+                  address.administrativeLevels?.level2short;
+              }
+              this.userLocationCountry = address.country;
+              this.userLocationLoading = false;
+            } catch (e) {
+              // just show the co-ords if reverse geocoding fails
+              this.userLocationCity =
+                position.coords.latitude + ', ' + position.coords.longitude;
+              this.userLocationLoading = false;
+            }
           },
           () => {
             Notify.create('Cannot get your location');

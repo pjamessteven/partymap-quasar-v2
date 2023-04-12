@@ -162,7 +162,7 @@
                         class="q-mr-sm q-mt-sm"
                       >
                         <q-btn
-                          :disabled="editing"
+                          :disable="editing"
                           color="grey-3"
                           text-color="black"
                           :label="$t('event.get_tickets')"
@@ -1007,7 +1007,7 @@ a {
           }
 
           .event-dates-component {
-            //border: 1px solid rgba(0, 0, 0, 0.1);
+            //border: 1px solid rgb(230,230,230);
           }
           .header {
             background: $bi-4 !important;

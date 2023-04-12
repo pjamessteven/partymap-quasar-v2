@@ -428,6 +428,7 @@ export default {
   }
   .sidebar-wrapper {
     padding: 0;
+    overflow: hidden;
     .sidebar {
       box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
 
@@ -443,6 +444,7 @@ export default {
       border-left: none;
       border-right: none;
       overflow: visible;
+
       .sidebar-content {
         padding-top: unset;
       }
@@ -453,6 +455,8 @@ export default {
         //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.4);
         border-top-right-radius: 18px;
         border-top-left-radius: 18px;
+        -webkit-backface-visibility: hidden;
+        -webkit-transform: translate3d(0, 0, 0);
         width: 100%;
       }
 

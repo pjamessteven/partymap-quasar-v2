@@ -13,7 +13,7 @@
     <template v-slot>
       <div
         class="flex row justify-center q-pb-xl"
-        :class="$q.screen.gt.xs ? 'q-px-lg' : ''"
+        :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'"
       >
         <transition
           appear
@@ -586,7 +586,7 @@
           color="primary"
           class="soft-button-shadow chicago q-ma-lg"
           label="Submit"
-          :disabled="!validation"
+          :disable="!validation"
           v-on:click="submitEvent"
         />
       </div>
@@ -787,25 +787,16 @@ export default {
 }
 
 .body--dark {
-  .sticky-header {
-    background: black;
-  }
   .hover-option {
     &:hover {
       background: $bi-3;
-      //color: $primary;
     }
   }
 }
 
 .body--light {
-  .sticky-header {
-    background: white;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  }
   .host-options {
     .host-option {
-      border: 1px solid rgba(0, 0, 0, 0);
       color: $t-1;
       &:hover {
         background: $b-3;
@@ -827,12 +818,6 @@ export default {
 
 .hover-option {
   cursor: pointer;
-}
-
-.sticky-header {
-  position: sticky;
-  top: 0px;
-  z-index: 1000;
 }
 
 // sm

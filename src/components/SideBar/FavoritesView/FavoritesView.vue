@@ -30,6 +30,7 @@
         >
           <transition enter-active-class="animated fadeIn">
             <div class="flex column no-wrap scroll-content">
+              <!--
               <div
                 v-if="$q.screen.gt.xs"
                 class="sidebar-header flex column no-wrap items-stretch justify-between ellipsis no-wrap"
@@ -46,7 +47,7 @@
                   <span class="text-h4 chicago">Your events</span>
                 </div>
               </div>
-
+-->
               <div class="flex column no-wrap content">
                 <div
                   class="q-mt-md flex column"
@@ -173,7 +174,7 @@
                         "
                       >
                         <div class="flex items-center row no-wrap">
-                          <div>Contributed</div>
+                          <div>Contributed/Reviewed</div>
                         </div>
                       </q-btn>
                       <div class="separator vertical m" style="height: 32px" />

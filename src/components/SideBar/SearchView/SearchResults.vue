@@ -1,19 +1,19 @@
 <template>
   <transition
     appear
-    enter-active-class="animated fadeIn"
-    leave-active-class="animated fadeOut"
+    enter-active-class="animated fadeIn faster"
+    leave-active-class="animated fadeOut faster"
   >
     <div
-      class="search-suggestions"
-      v-if="searchResults && searchResults.length > 0"
+      class="search-results"
+      v-if="searchResults?.length > 0 || searchLocationResults?.length > 0"
     >
       <q-list separator>
         <q-item
           clickable
           @click.stop="clickResult(result)"
           :key="index"
-          v-for="(result, index) in searchSuggestions"
+          v-for="(result, index) in searchResults"
         >
           <q-item-section>
             <q-item-label
@@ -99,7 +99,9 @@ export default {
       } else if (result.type === 'tag') {
         obj = { tag: result.result, count: 0 };
         this.controlTag = [obj];
+        this.sidebarPanel = 'explore';
       } else if (result.type === 'event') {
+        console.log(result);
         this.$router.push({
           name: 'EventPage',
           params: { id: result.id },
@@ -108,24 +110,25 @@ export default {
           },
         });
       }
-      this.query = null;
-      this.$emit('resultSelected');
     },
     clickLocationResult(location) {
       this.userLocation = {
         lat: parseFloat(location.location.lat),
         lng: parseFloat(location.location.lng),
       };
-      this.userLocationName = location.label;
-
-      this.query = null;
-      this.$emit('resultSelected');
+      this.userLocationCity = location.label.split(',')[0];
+      this.fineLocation = false;
       this.sidebarPanel = 'nearby';
     },
   },
   computed: {
+    ...mapWritableState(useMainStore, [
+      'userLocation',
+      'userLocationCity',
+      'sidebarPanel',
+      'fineLocation',
+    ]),
     ...mapWritableState(useQueryStore, ['controlTag']),
-    ...mapWritableState(useMainStore, ['userLocation']),
     ...mapWritableState(useSearchStore, ['query']),
   },
 };
@@ -152,7 +155,7 @@ export default {
   }
 }
 
-.search-suggestions {
+.search-results {
   overflow-y: auto;
 }
 @media only screen and (max-width: 600px) {

@@ -9,12 +9,8 @@
     }"
   >
     <q-card v-if="!closed" class="shadow-lg card flex column">
-      <q-inner-loading :showing="loading">
-        <q-spinner-ios
-          :color="$q.dark.isActive ? 'white' : 'black'"
-          size="2em"
-        />
-      </q-inner-loading>
+      <InnerLoading v-if="loading" :solid="true" />
+
       <div
         class="artist-header flex row justify-between items-start no-wrap q-pa-md"
       >
@@ -124,6 +120,7 @@ import _ from 'lodash';
 import ArtistUrl from './ArtistUrl.vue';
 import { useAuthStore } from 'src/stores/auth';
 import { mapState } from 'pinia';
+import InnerLoading from 'src/components/InnerLoading.vue';
 
 export default {
   name: 'AristProfile',
@@ -151,6 +148,7 @@ export default {
   },
   components: {
     ArtistUrl,
+    InnerLoading,
   },
   data() {
     return {

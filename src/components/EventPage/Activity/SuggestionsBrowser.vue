@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Suggestion from './Suggestion.vue';
+import Suggestion from './SuggestionComponent.vue';
 import { getSuggestionsRequest } from 'src/api';
 export default {
   components: {
@@ -68,9 +68,6 @@ export default {
       this.hasNext = response.data.has_next;
     });
   },
-
-  created() {},
-  unmounted() {},
 };
 </script>
 

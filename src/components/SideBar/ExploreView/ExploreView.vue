@@ -30,9 +30,7 @@
         />
         <div class="date-header-bg" />
 -->
-        <div class="flex q-px-md" v-if="controlFavorites">
-          <q-select label="All my events" outlined square />
-        </div>
+
         <q-scroll-area
           vertical
           @scroll="onScrollMainContent"
@@ -370,9 +368,6 @@ export default {
       },
       deep: true,
     },
-    controlFavorites() {
-      this.getInitialList();
-    },
   },
   computed: {
     ...mapState(useMainStore, [
@@ -394,7 +389,6 @@ export default {
       'controlSize',
       'controlDuration',
       'controlArtist',
-      'controlFavorites',
       'artists',
       'artistsHasNext',
       'eventDatesLoading',
@@ -412,7 +406,6 @@ export default {
         this.controlArtist.length === 0 &&
         this.controlDuration.length === 0 &&
         this.controlSize.length === 0 &&
-        this.controlFavorites === false &&
         this.controlTag.length === 0
       );
     },

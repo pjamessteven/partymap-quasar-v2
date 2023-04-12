@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { mapActions, mapState } from 'pinia';
 import { useMainStore } from './stores/main';
 import { useAuthStore } from './stores/auth';
@@ -72,7 +71,6 @@ body {
     sans-serif;
   // /font-family: chicagoflf;
   //letter-spacing: unset !important;
-  max-height: -webkit-fill-available;
   touch-action: none;
   overscroll-behavior-x: none;
   #q-app {
@@ -112,14 +110,22 @@ body {
   padding: 18px 18px;
 }
 
+.sticky-header {
+  position: sticky;
+  top: 0px;
+  z-index: 1000;
+}
+
 .body--light {
   /* ... */
   .sticky-card-header {
     background: $b-2;
-    //color: rgba(0, 0, 0, 0.67);
-
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    //box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+  }
+
+  .sticky-header {
+    background: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   .t1 {
@@ -184,6 +190,13 @@ body {
     background: $b-2 !important;
   }
 
+  .header {
+    background: white;
+  }
+  .footer {
+    background: white;
+  }
+
   .auth-card {
     background: rgba(255, 255, 255, 1) !important;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
@@ -246,15 +259,16 @@ body {
   }
 
   .q-card {
+    position: relative;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    /*box-shadow: 0 0.5em 1em -0.125em rgba(0, 0, 0, 0.1),
+    /*box-shadow: 0 0.5em 1em -0.125em rgb(230,230,230),
       0 0px 0 1px rgba(0, 0, 0, 0.02); */
     //box-shadow: none;
 
     background: white;
   }
   .q-field__control::before {
-    // border-color: rgba(0, 0, 0, 0.1) !important;
+    // border-color: rgb(230,230,230) !important;
   }
   .q-field__control {
     // background: $b-1;
@@ -307,11 +321,9 @@ body {
   .overlay-page {
     background: linear-gradient(0deg, white, rgba(255, 255, 255, 0.8));
   }
-  .solid-page-wrapper {
-    background: white;
 
-    .solid-page {
-    }
+  .solid-page {
+    background: white;
   }
 
   .swipe-nav-bar {
@@ -333,6 +345,10 @@ body {
 
     background: $bi-2;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  }
+  .sticky-header {
+    background: $bi-1;
+    border-bottom: 1px solid rgb(30, 30, 30);
   }
   .t1 {
     color: $ti-1;
@@ -359,16 +375,23 @@ body {
     background-color: $bi-4;
   }
 
+  .header {
+    background: black;
+  }
+  .footer {
+    background: black;
+  }
+
   .q-list--bordered {
     border: 1px solid rgba(255, 255, 255, 0.05);
   }
   .q-separator--dark {
     background: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgb(26, 26, 26);
   }
 
   .vc-container {
-    border-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgb(26, 26, 26) !important;
     background: $bi-3 !important;
     :deep(.vc-day-content.is-disabled) {
       color: rgba(255, 255, 255, 0.2) !important;
@@ -428,7 +451,7 @@ body {
   }
   .leaflet-touch .leaflet-control-layers,
   .leaflet-touch .leaflet-bar {
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: rgb(26, 26, 26);
   }
 
   .search-result {
@@ -512,7 +535,7 @@ body {
 
   .q-card {
     box-shadow: none;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgb(26, 26, 26);
     background: $bi-1;
   }
 
@@ -528,10 +551,10 @@ body {
   }
   .vc-container {
     background-color: $bi-3;
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: rgb(26, 26, 26);
   }
   .q-field--dark .q-field__control::before {
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: rgb(26, 26, 26);
   }
 
   .q-field__control {
@@ -539,7 +562,7 @@ body {
   }
 
   .separator {
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: rgb(26, 26, 26);
   }
 
   .editing {
@@ -565,11 +588,9 @@ body {
   .overlay-page {
     background: linear-gradient(0deg, black, rgba(0, 0, 0, 0.8));
   }
-  .solid-page-wrapper {
-    background: $bi-1;
 
-    .solid-page {
-    }
+  .solid-page {
+    background: $bi-1;
   }
 }
 
@@ -703,21 +724,20 @@ body {
   overflow: auto;
 }
 
-.solid-page-wrapper {
+.solid-page {
+  height: 100%;
+  overflow: auto;
+  position: relative;
+  z-index: 4000;
+  overflow: auto;
   width: 100%;
   height: 100%;
   padding-top: 60px;
   overflow: hidden;
-  .solid-page {
+  .solid-page-inner {
+    overflow: auto;
     height: 100%;
-    overflow: auto;
-    position: relative;
-    z-index: 4000;
-    overflow: auto;
-
-    .solid-page-inner {
-      max-width: 1000px;
-    }
+    max-width: 1000px;
   }
 }
 
@@ -773,42 +793,7 @@ body {
 .shadow-2xl {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
-@media only screen and (max-width: 1023px) {
-  body {
-    //font-size: 16px;
-  }
-  input,
-  select,
-  textarea {
-    font-size: 16px !important; // stop zooming into text fields on mobile
-  }
-  .text-h6 {
-    //font-size: 16px !important;
-  }
-  .auth-card {
-  }
-  .solid-page {
-    overflow-x: hidden;
-    padding-left: 16px;
-    padding-right: 16px;
 
-    .solid-page-inner {
-    }
-  }
-  .card {
-    margin-top: 0px;
-    width: 100%;
-    height: 100%;
-  }
-  .q-menu {
-    max-width: unset;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
-      rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-    border-radius: 0px;
-  }
-}
-@media only screen and (max-width: 1023px) {
-}
 // sm
 @media only screen and (max-width: 600px) {
   .body--dark {
@@ -852,8 +837,10 @@ body {
 
   .solid-page {
     //padding-top: 16px !important;
+    padding-bottom: 74px !important;
+
     .solid-page-inner {
-      margin-bottom: 120px !important;
+      position: relative;
     }
   }
 }

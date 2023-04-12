@@ -1,20 +1,12 @@
 <template>
-  <q-card class="feedback-dialog">
+  <q-card class="about-dialog">
+    <q-card-section class="header row items-center">
+      <div class="chicago text-h6">{{ $t('sidebar.about') }}</div>
+      <q-space />
+      <q-btn icon="close" flat round dense v-close-popup />
+    </q-card-section>
+
     <q-card-section class="t2">
-      <div
-        class="header t1 chicago text-h6 q-mb-lg"
-        style="text-align: center; text-transform: "
-      >
-        {{ $t('sidebar.about') }}
-        <q-btn
-          icon="close"
-          flat
-          round
-          dense
-          v-close-popup
-          style="position: absolute; right: 0"
-        />
-      </div>
       {{ $t('about.mission') }}
       <p />
       {{ $t('about.message') }}
@@ -150,7 +142,7 @@ export default {
 </script>
 
 <style lang="scss">
-.feedback-dialog {
+.about-dialog {
   max-height: 660px !important;
   .header {
     position: sticky;
@@ -191,6 +183,14 @@ export default {
         }
       }
     }
+  }
+}
+// sm
+@media only screen and (max-width: 600px) {
+  .about-dialog {
+    height: 100vh !important;
+    max-height: unset !important;
+    width: 100%;
   }
 }
 </style>

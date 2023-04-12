@@ -44,7 +44,7 @@
         v-else-if="Object.keys(eventDatesGroupedByMonth).length == 0"
         class="t4 chicago q-mt-md"
       >
-        No results
+        No results in this area
       </div>
     </div>
   </div>

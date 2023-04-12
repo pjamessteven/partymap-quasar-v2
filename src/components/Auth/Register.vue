@@ -67,15 +67,13 @@
             bottom-slots
             :rules="[(val) => passwordConfirmValidation(val)]"
           />
-          <q-inner-loading :showing="loading">
-            <q-spinner-puff size="300px" color="primary" />
-          </q-inner-loading>
+          <InnerLoading v-if="loading" :solid="true" />
         </q-card-section>
 
         <q-card-section class="flex justify-center q-mb-md">
           <q-btn
             class="chicago"
-            :disabled="loading"
+            :disable="loading"
             :label="$t('auth.sign_up')"
             outline
             size="medium"
@@ -88,6 +86,8 @@
 </template>
 
 <script>
+import InnerLoading from 'src/components/InnerLoading.vue';
+
 import { mapActions } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
 export default {
@@ -103,6 +103,7 @@ export default {
       email_taken: false,
     };
   },
+  components: { InnerLoading },
   methods: {
     ...mapActions(useAuthStore, ['register']),
     async _register() {

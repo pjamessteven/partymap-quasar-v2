@@ -4,6 +4,7 @@ import {
   checkAuthenticatedRequest,
   logoutRequest,
   registerRequest,
+  editUserRequest,
 } from 'src/api';
 import { PrivateUser } from 'src/types/autogen_types';
 
@@ -65,6 +66,17 @@ export const useAuthStore = defineStore('auth', {
         this.currentUser = null;
       } catch (error) {
         throw error;
+      }
+    },
+    async editUser(payload: any) {
+      try {
+        const response = await editUserRequest(
+          this.currentUser?.email,
+          payload
+        );
+        this.currentUser = response.data;
+      } catch (e) {
+        throw e;
       }
     },
   },

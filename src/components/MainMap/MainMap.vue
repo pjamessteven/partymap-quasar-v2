@@ -487,6 +487,7 @@ export default {
         )
           this.sidebarPanel = 'explore';
       });
+
       this.map.on('movestart', () => {
         this.mapMoving = true;
         this.exploreMapView = {
@@ -496,12 +497,6 @@ export default {
       });
 
       this.map.on('moveend', (event) => {
-        if (
-          this.sidebarPanel !== 'explore' &&
-          this.sidebarPanel !== 'favorites'
-        )
-          this.sidebarPanel = 'explore';
-
         if (!this.blockUpdates) {
           this.exploreMapView = {
             latlng: this.map.getCenter(),

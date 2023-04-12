@@ -58,7 +58,7 @@
           flat
           icon="mdi-minus"
           @click="removeList"
-          :disabled="lists.length === 1"
+          :disable="lists.length === 1"
         />
 
         <q-btn flat icon="mdi-plus">

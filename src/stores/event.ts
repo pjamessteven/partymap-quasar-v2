@@ -58,7 +58,11 @@ export const useEventStore = defineStore('event', {
     },
   },
   actions: {
-    async loadEvent(id: string) {
+    reloadEvent() {
+      if (this.event) return this.loadEvent(this.event?.id);
+      else throw new Error('No current event.');
+    },
+    async loadEvent(id: number) {
       try {
         this.event = null;
         this.loadingEvent = true;

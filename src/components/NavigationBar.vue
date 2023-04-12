@@ -84,7 +84,6 @@ export default {
   },
   watch: {
     sidebarPanel(to, from) {
-      // this.backToExplore();
       if (to === 'explore') {
         this.showPanelMobile = false;
       }
@@ -133,7 +132,7 @@ export default {
 .body--light {
   .navigation-bar {
     border-top: 1px solid rgba(0, 0, 0, 0.05);
-    //border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    //border-bottom: 1px solid rgb(230,230,230);
 
     //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.2);
   }
@@ -175,16 +174,16 @@ export default {
   .body--dark {
     .navigation-bar {
       background: black;
-      box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.8);
+      //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.8);
       border-top: 1px solid rgba(255, 255, 255, 0.1);
 
-      //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.1);
+      //box-shadow: 0px 0px 46px -6px rgb(230,230,230);
     }
   }
   .body--light {
     .navigation-bar {
       background: white;
-      box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.1);
+      //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.1);;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
       :deep(.q-tabs) {
         .q-tab {

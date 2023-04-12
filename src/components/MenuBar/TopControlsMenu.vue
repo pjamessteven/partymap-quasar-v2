@@ -81,7 +81,7 @@
         <q-item-label>{{ $t('sidebar.my_account') }}</q-item-label>
       </q-item-section>
     </q-item>
-
+    <!--
     <q-item
       v-ripple
       v-on:click="
@@ -97,7 +97,7 @@
         <q-item-label>{{ $t('sidebar.profile') }}</q-item-label>
       </q-item-section>
     </q-item>
-
+-->
     <q-item v-ripple @click="showAddEventDialog()" clickable>
       <q-item-section avatar>
         <q-icon name="las la-plus-square" />

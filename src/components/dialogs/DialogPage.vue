@@ -1,12 +1,15 @@
 <template>
   <q-dialog
+    v-if="$q.screen.gt.xs"
     :model-value="true"
     @hide="$router.go(-1)"
     transition-show="jump-up"
     transition-hide="jump-down"
   >
     <q-card class="dialog flex column no-wrap">
-      <q-card-section class="flex items-center sticky-card-header">
+      <q-card-section
+        class="flex items-center sticky-card-header text-h6 chicago"
+      >
         <slot name="title"></slot>
 
         <q-space />
@@ -18,6 +21,11 @@
       </q-card-section>
     </q-card>
   </q-dialog>
+  <div v-else class="solid-page">
+    <div class="solid-page-inner">
+      <slot></slot>
+    </div>
+  </div>
 </template>
 
 <script>
