@@ -11,6 +11,7 @@ import {
   editEventDateRequest,
   updateMediaItemRequest,
   deleteMediaItemRequest,
+  submitContributionRequest,
 } from 'src/api';
 
 import {
@@ -18,6 +19,7 @@ import {
   MiniEventDate,
   Event,
   MediaItem,
+  EventContribution,
 } from 'src/types/autogen_types';
 
 import { EventUpdate } from 'src/types/event';
@@ -250,6 +252,18 @@ export const useEventStore = defineStore('event', {
         }
       } else {
         throw new Error('Media item index not found');
+      }
+    },
+    async addReview(payload: EventContribution) {
+      try {
+        const response = await submitContributionRequest(
+          this.event?.id,
+          payload
+        );
+        this.reloadEvent();
+        return response;
+      } catch (e) {
+        throw e;
       }
     },
   },

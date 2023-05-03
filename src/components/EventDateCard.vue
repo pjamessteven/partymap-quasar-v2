@@ -211,6 +211,7 @@
                   </span>
                 </div>
                 -->
+
                   <div
                     class="tag-container flex row q-mt-sm no-wrap ellipsis"
                     style="min-height: 31px"
@@ -565,8 +566,8 @@ export default {
         position: relative;
         overflow: hidden;
         //border-radius: 100%;
-        width: 96px;
-        min-width: 96px;
+        width: 112px;
+        min-width: 112px;
         border-radius: 9px;
         .image-container-background {
           height: 100%;

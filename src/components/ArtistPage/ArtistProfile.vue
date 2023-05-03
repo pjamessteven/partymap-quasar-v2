@@ -180,7 +180,10 @@ export default {
           }
         );
       } else {
-        this.$router.push({ name: 'Login' });
+        this.$router.push({
+          path: '/login',
+          query: { from: this.$route.path },
+        });
       }
     },
   },

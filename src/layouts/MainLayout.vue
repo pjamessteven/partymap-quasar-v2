@@ -2,7 +2,7 @@
   <div class="main-layout">
     <MenuBarLogo class="menubar-logo" v-if="$q.screen.gt.xs" />
     <MenuBar class="menubar" v-if="$q.screen.lt.sm" />
-    <div class="overlay" :style="computedOverlayOpacity" />
+    <div class="overlay" :style="computedOverlayStyle" />
     <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
     <SideBar
       class="sidebar-component"
@@ -15,6 +15,7 @@
       v-bind:class="{
         'mobile-map-view-router': $q.screen.lt.sm,
       }"
+      @scroll="onScrollMainContent($event)"
     >
       <transition
         appear
@@ -54,6 +55,7 @@ export default {
     MenuBarLogo,
     NavigationBar,
   },
+  methods: {},
   beforeRouteUpdate(to, from, next) {
     if (from.name === 'Explore') {
       console.log('blockupdate');
@@ -71,9 +73,11 @@ export default {
       'overlayOpacity',
       'showPanelMobile',
     ]),
-    computedOverlayOpacity() {
+    computedOverlayStyle() {
       if (this.$q.screen.gt.xs) {
         return `opacity: ${this.overlayOpacity}`;
+      } else if (this.$q.screen.lt.sm && this.$route.name === 'EventPage') {
+        return `opacity: ${this.overlayOpacity}; background: black!important`;
       } else {
         if (this.showPanelMobile && this.$route.name === 'Explore')
           return 'opacity: 1';
@@ -103,7 +107,7 @@ export default {
   height: 100%;
   width: 100%;
   position: relative;
-
+  overflow: hidden;
   .overlay {
     z-index: 103;
     position: absolute;
@@ -162,8 +166,11 @@ export default {
     }
   }
   .main-layout {
+    .main-layout-router {
+      padding-bottom: 72px;
+    }
     .overlay {
-      transition: opacity 0.3s;
+      // transition: opacity 0.3s;
     }
   }
 }

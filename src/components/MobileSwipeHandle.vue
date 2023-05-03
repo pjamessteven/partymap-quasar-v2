@@ -1,5 +1,6 @@
 <template>
   <div
+    @click="this.$emit('swipe', undefined)"
     v-touch-swipe.vertical="handleSwipe"
     :class="{ 'solid-bg': solidBg }"
     class="handle-container flex justify-center items-center q-py-md"

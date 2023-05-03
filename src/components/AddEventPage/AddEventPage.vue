@@ -677,7 +677,10 @@ export default {
       if (this.currentUser) {
         this.event.host = true;
       } else {
-        this.$router.push({ name: 'Login' });
+        this.$router.push({
+          path: '/login',
+          query: { from: this.$route.path },
+        });
       }
     },
     goBack() {

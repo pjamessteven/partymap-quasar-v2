@@ -665,6 +665,7 @@ body {
   //font-family: chicagoflf;
   //text-transform: lowercase;
 }
+
 .q-menu--dark {
   box-shadow: none;
   border: 1px solid $bi-4;

@@ -122,6 +122,8 @@ export default {
         await this.login(this.identifier, this.password);
         if (this.$route.query.from) {
           this.$router.replace(this.$route.query.from);
+        } else if (this.$route.params.from) {
+          this.$router.replace(this.$route.params.from);
         } else {
           this.$router.push('/');
         }

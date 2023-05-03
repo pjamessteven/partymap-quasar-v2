@@ -1,26 +1,6 @@
 <template>
-  <div class="flex column">
-    <div class="flex row no-wrap grow" v-if="!!event">
-      <div
-        class="flex row grow no-wrap"
-        :class="$q.screen.gt.xs ? 'q-pl-xl ' : 'q-pa-md'"
-      >
-        <div
-          class="flex column q-pr-xl q-mt-xl"
-          v-if="$q.screen.gt.sm && event?.event_dates?.length > 0"
-        >
-          <EventDateTimeComponent :inline="false" />
-          <EventDateLocationComponent
-            class="q-mt-lg"
-            :key="selectedEventDate?.id"
-            v-if="!!selectedEventDate?.location"
-          />
-        </div>
-        <div
-          class="flex column grow no-wrap"
-          :class="$q.screen.gt.xs ? 'q-mt-xl' : 'grow '"
-        >
-          <!--
+  <div v-if="!!event" class="flex column grow no-wrap">
+    <!--
           <div class="flex row q-mb-lg q-gutter-sm q-pr-xl o-080">
             <q-btn
               icon="mdi-star-plus-outline"
@@ -37,107 +17,92 @@
             <q-btn icon="las la-cloud-download-alt" />
           </div>
           -->
-          <div
-            v-if="
-              (event && event.event_dates && event.event_dates.length > 1) ||
-              editing
-            "
-            class="event-date-selection"
-            :class="$q.screen.gt.xs ? 'q-mt-md q-mb-md' : ''"
-          >
-            <EventDateSelectionComponent :editing="editing" />
-          </div>
-          <div
-            v-if="loadingEventDate"
-            style="position: relative; height: 200px; width: 100%"
-          >
-            <q-inner-loading :showing="true" style="z-index: 10">
-              <q-spinner-ios
-                :color="$q.dark.isActive ? 'white' : 'black'"
-                size="2em"
-              />
-            </q-inner-loading>
-          </div>
-          <div
-            class="flex column"
-            style="max-width: 500px"
-            v-else-if="selectedEventDate"
-            :key="selectedEventDateIndex + 101"
-          >
-            <div class="chicago t2 text-large q-pr-md q-mb-md">
-              {{ $t('event_dates.event_details') }}
-            </div>
-
-            <q-list class="q-mb-lg" style="position: relative">
-              <div
-                v-for="(component, index) in visibleComponents"
-                :key="component.type"
-                class="flex column"
-                :class="editing ? 'q-gutter-sm' : ''"
-              >
-                <q-separator v-if="index > 0" />
-
-                <component
-                  :is="component.type"
-                  v-bind="component.propsData"
-                  class="q-py-md"
-                  :class="{ 'q-pl-md': $q.screen.gt.xs }"
-                >
-                </component>
-              </div>
-              <!-- SHOW MORE FIELDS -->
-              <div
-                v-if="
-                  !!selectedEventDate &&
-                  !editing &&
-                  !event.host &&
-                  (informationMissing || showMoreFields)
-                "
-                class="flex row items-center no-wrap link-hover ed-inline-card editing-outline q-py-md"
-                :class="{ 'q-pl-md': $q.screen.gt.xs }"
-                @click="showMoreFields = !showMoreFields"
-                style="cursor: pointer"
-              >
-                <q-icon
-                  size="2em"
-                  :name="showMoreFields ? 'las la-minus' : 'las la-plus'"
-                  class="t4"
-                />
-                <div
-                  class="flex column q-ml-md t2"
-                  :class="{ 'text-large': $q.screen.gt.sm }"
-                >
-                  <u class="t4 q-ml-sm" v-if="!showMoreFields">{{
-                    $t('event_date_inline.add_missing_information')
-                  }}</u>
-                  <u class="t4 q-ml-sm" v-else>{{
-                    $t('event_date_inline.hide_missing_information')
-                  }}</u>
-                </div>
-              </div>
-            </q-list>
-            <div
-              class="chicago text-large t2 q-pr-md q-mb"
-              v-if="selectedEventDate?.artists?.length > 0"
-            >
-              {{ $t('event_dates.lineup') }}
-            </div>
-            <ArtistsComponent
-              :editing="editing"
-              class=""
-              v-if="selectedEventDate?.artists?.length > 0"
-            />
-          </div>
-        </div>
-      </div>
+    <div
+      v-if="
+        (event && event.event_dates && event.event_dates.length > 1) || editing
+      "
+      class="event-date-selection"
+      :class="$q.screen.gt.xs ? 'q-mt-md q-mb-md' : ''"
+    >
+      <EventDateSelectionComponent :editing="editing" />
     </div>
     <div
-      v-if="event && (!event.event_dates || event.event_dates.length === 0)"
-      class="q-px-xl q-pt-xl q-pb-xl flex row items-center justify-center"
+      v-if="loadingEventDate"
+      style="position: relative; height: 200px; width: 100%"
     >
-      <div class="t3">
-        {{ $t('event_dates.this_event_doesnt_have_upcoming_dates') }}
+      <q-inner-loading :showing="true" style="z-index: 10">
+        <q-spinner-ios
+          :color="$q.dark.isActive ? 'white' : 'black'"
+          size="2em"
+        />
+      </q-inner-loading>
+    </div>
+    <div
+      class="flex column"
+      v-else-if="selectedEventDate"
+      :key="selectedEventDateIndex + 101"
+    >
+      <div class="chicago t2 text-large q-pr-md q-mb-md">Event details:</div>
+
+      <q-list class="q-mb-lg" style="position: relative">
+        <div
+          v-for="(component, index) in visibleComponents"
+          :key="component.type"
+          class="flex column"
+          :class="editing ? 'q-gutter-sm' : ''"
+        >
+          <q-separator v-if="index > 0" />
+
+          <component
+            :is="component.type"
+            v-bind="component.propsData"
+            class="q-py-md"
+            :class="{ 'q-pl-md': $q.screen.gt.xs }"
+          >
+          </component>
+        </div>
+        <!-- SHOW MORE FIELDS -->
+        <div
+          v-if="
+            !!selectedEventDate &&
+            !editing &&
+            !event.host &&
+            (informationMissing || showMoreFields)
+          "
+          class="flex row items-center no-wrap link-hover ed-inline-card editing-outline q-py-md"
+          :class="{ 'q-pl-md': $q.screen.gt.xs }"
+          @click="showMoreFields = !showMoreFields"
+          style="cursor: pointer"
+        >
+          <q-icon
+            size="2em"
+            :name="showMoreFields ? 'las la-minus' : 'las la-plus'"
+            class="t4"
+          />
+          <div
+            class="flex column q-ml-md t2"
+            :class="{ 'text-large': $q.screen.gt.sm }"
+          >
+            <u class="t4 q-ml-sm" v-if="!showMoreFields">{{
+              $t('event_date_inline.add_missing_information')
+            }}</u>
+            <u class="t4 q-ml-sm" v-else>{{
+              $t('event_date_inline.hide_missing_information')
+            }}</u>
+          </div>
+        </div>
+      </q-list>
+      <div
+        class="chicago text-large t2 q-pr-md q-mt-lg"
+        v-if="selectedEventDate?.artists?.length > 0"
+      >
+        {{ $t('event_dates.lineup') }}
       </div>
+      <ArtistsComponent
+        :editing="editing"
+        class=""
+        v-if="selectedEventDate?.artists?.length > 0"
+      />
     </div>
   </div>
 </template>

@@ -273,7 +273,10 @@ export default {
           }
         );
       } else {
-        this.$router.push({ name: 'Login' });
+        this.$router.push({
+          name: 'Login',
+          query: { from: $router.currentRoute.path },
+        });
       }
     },
   },

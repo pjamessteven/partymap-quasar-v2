@@ -14,6 +14,14 @@
       </q-btn>
     </div>
     <div class="image-transition-group flex column justify-center">
+      <GalleryDialog
+        v-if="items"
+        :open="currentItemIndex != null"
+        :items="items"
+        :showThumbnails="true"
+        :currentItemIndex="currentItemIndex"
+        @onClose="currentItemIndex = null"
+      />
       <Flicking
         :key="loadIndex"
         ref="flicking"
@@ -24,7 +32,7 @@
         :options="flickingOptions"
       >
         <div
-          v-for="(item, index) in pswpItems"
+          v-for="(item, index) in items"
           class="item-wrapper"
           :key="index"
           @mouseleave="
@@ -33,7 +41,7 @@
           "
         >
           <div class="item-wrapper-inner" ref="itemWrapperInner">
-            <div class="hover-overlay" @click="openPswp(index)"></div>
+            <div class="hover-overlay" @click="currentItemIndex = index"></div>
             <video
               v-if="item.v_low_url && item.v_low_url.length > 0"
               class="video"
@@ -48,16 +56,21 @@
                 class="image-thumb"
               />
             </video>
+            <img :src="item.thumb_xs_url" v-if="!loaded.includes(index)" />
             <img
-              v-else
+              v-show="loaded.includes(index)"
               :src="item.thumb_url"
               @load="imageLoaded($event, index)"
             />
           </div>
         </div>
-        <template v-slot:viewport>
-          <span class="flicking-arrow-prev is-circle"></span>
-          <span class="flicking-arrow-next is-circle"></span>
+        <template #viewport>
+          <span class="flicking-arrow-prev"
+            ><q-icon name="mdi-chevron-left-circle" size="2rem"
+          /></span>
+          <span class="flicking-arrow-next"
+            ><q-icon name="mdi-chevron-right-circle" size="2rem"
+          /></span>
         </template>
       </Flicking>
     </div>
@@ -68,13 +81,11 @@
 </template>
 
 <script>
-import { createApp } from 'vue';
-
 import EditGalleryComponent from 'components/EventPage/Gallery/EditGalleryComponent.vue';
-import VideoPlayer from 'components/EventPage/Gallery/VideoPlayer.vue';
 import Flicking from '@egjs/vue3-flicking';
 import { Arrow, Fade } from '@egjs/flicking-plugins';
 
+import GalleryDialog from './GalleryDialog.vue';
 import { mapState, mapWritableState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
@@ -85,6 +96,7 @@ export default {
   components: {
     EditGalleryComponent,
     Flicking,
+    GalleryDialog,
   },
   props: {
     items: Array,
@@ -92,16 +104,13 @@ export default {
   },
   data() {
     return {
+      loaded: [],
       loadIndex: 0, // every time media items changes use new flicking
       loading: false,
       showGallery: false,
       showEditDialog: false,
-      currentItemIndex: null, // for photo sidebar,
+      currentItemIndex: null, // to sync current gallery item with photo sidebar,
       previousItemIndex: null,
-      pswp: null,
-      VideoPlayerClass: VideoPlayer,
-
-      pswpItems: [],
       flickingPlugins,
       flickingOptions: {
         align: 'prev',
@@ -116,6 +125,7 @@ export default {
   methods: {
     imageLoaded(e, index) {
       console.log(e);
+      this.loaded.push(index);
       if (index === 0) {
         this.$emit('featuredMediaHeight', e.target.height);
       }
@@ -143,90 +153,7 @@ export default {
       display: inline-block;
       `;
     },
-    openPswp(index) {
-      // set current item
-      //
-      console.log('this', this.$Pswp);
-      this.currentItemIndex = index;
-      if (this.pswpItems[index].v_low_url) {
-        // mount video player
 
-        this.pswpItems[index].video_player_class = new this.VideoPlayerClass({
-          propsData: {
-            v_low_url: this.pswpItems[index].v_low_url,
-            v_med_url: this.pswpItems[index].v_med_url,
-            v_high_url: this.pswpItems[index].v_high_url,
-            poster_url: this.pswpItems[index].poster_url,
-            id: this.pswpItems[index].id,
-          },
-        }).$mount();
-        this.pswpItems[index].html =
-          this.pswpItems[ // eslint-disable-line
-            index // eslint-disable-line
-          ].video_player_class.$el; // eslint-disable-line
-      }
-
-      // open and configure pswp
-      const pswp = this.$Pswp.open({
-        items: this.pswpItems,
-        options: {
-          index: index,
-          showHideOpacity: true,
-          isClickableElement: function (el) {
-            return el.id === 'slider';
-          },
-        },
-      });
-
-      if (this.pswpItems[index].video_player_class) {
-        this.pswpItems[index].video_player_class.playVideo();
-      }
-
-      pswp.listen('close', () => {
-        if (pswp.currItem.video_player_class) {
-          // pause video
-          pswp.currItem.video_player_class.pauseVideo();
-          // pswp.currItem.video_player_class.$destroy()
-        }
-        this.currentItemIndex = null;
-      });
-      pswp.listen('beforeChange', () => {
-        this.previousItemIndex = this.currentItemIndex;
-
-        if (this.pswpItems[this.previousItemIndex].video_player_class != null) {
-          this.pswpItems[
-            this.previousItemIndex
-          ].video_player_class.pauseVideo();
-        }
-      });
-      pswp.listen('gettingData', (index, item) => {
-        // this.currentItem = item
-        if (item.v_low_url) {
-          // mount video player
-          if (item.video_player_class == null) {
-            item.video_player_class = createApp(this.VideoPlayerClass, {
-              v_low_url: item.v_low_url,
-              v_med_url: item.v_med_url,
-              v_high_url: item.v_high_url,
-              poster_url: item.poster_url,
-              id: item.id,
-            }).mount();
-
-            item.html = item.video_player_class.$el; // eslint-disable-line
-          }
-        }
-      });
-      pswp.listen('afterChange', () => {
-        this.currentItemIndex = pswp.getCurrentIndex();
-        if (pswp.currItem.video_player_class) {
-          // play video
-          pswp.currItem.video_player_class.playVideo();
-        }
-      });
-    },
-    closeGallery() {
-      this.pswp.close();
-    },
     loadItemsToPswp(items) {
       var pswpItems = [];
       for (let i in items) {
@@ -256,13 +183,7 @@ export default {
       this.loadIndex += 1;
     },
   },
-  watch: {
-    items: function (newv) {
-      if (newv) {
-        this.loadItemsToPswp(newv);
-      }
-    },
-  },
+
   computed: {
     ...mapState(useEventStore, ['event']),
     ...mapState(useAuthStore, ['currentUser']),
@@ -279,6 +200,22 @@ export default {
       } else {
         return '';
       }
+    },
+    mappedItems() {
+      return this.items?.map((item) => {
+        let bestQualityUrl = '';
+        // video cases
+        if (item.v_high_url) {
+          bestQualityUrl = v_med_url;
+        } else if (item.v_med_url) {
+          bestQualityUrl = v_med_url;
+        } else if (item.v_low_url) {
+          bestQualityUrl = v_low_url;
+        } else if (item.image_url) {
+          bestQualityUrl = item.image_url;
+        }
+        return { ...item, bestQualityUrl };
+      });
     },
   },
   mounted() {
@@ -369,21 +306,30 @@ export default {
       overflow: visible;
       height: 100%;
       :deep(.flicking-camera) {
+        display: flex;
         max-height: 100%;
         height: 100%;
       }
-      .flicking-arrow-prev.is-circle,
-      .flicking-arrow-next.is-circle {
-        border-radius: 0px;
-        height: 100%;
-        background: transparent;
+      .flicking-arrow-prev,
+      .flicking-arrow-next {
+        position: absolute;
         filter: drop-shadow(0px 2px 5px rgba(0, 0, 0, 0.2));
+        cursor: pointer;
+        opacity: 0.68;
+        transition: opacity 0.3s;
+        &:hover {
+          opacity: 1;
+        }
       }
 
       .flicking-arrow-prev {
-        opacity: 0.8;
-        transition: opacity 0.3s;
-        margin-left: -64px;
+        left: 0px;
+        z-index: 100;
+        top: calc(50% - 20px);
+        width: 20px;
+        height: 20px;
+
+        margin-left: -16px;
         // scale: 0.5;
         //top: calc(100% - 32px);
 
@@ -393,9 +339,13 @@ export default {
         }
       }
       .flicking-arrow-next {
-        opacity: 0.8;
-        transition: opacity 0.3s;
-        margin-right: -16px;
+        right: 0px;
+        z-index: 100;
+        top: calc(50% - 20px);
+        width: 20px;
+        height: 20px;
+
+        margin-right: 48px;
         //top: calc(100% - 32px);
         //scale: 0.5;
         &:after,
@@ -423,6 +373,7 @@ export default {
       .item-wrapper-inner {
         max-height: 100%;
         height: 100%;
+        width: 100%;
         position: relative;
         display: flex;
         justify-content: center;
@@ -433,10 +384,11 @@ export default {
         video {
           max-height: 100%;
           max-width: 100%;
-          height: auto;
-          width: auto;
+          height: 100%;
+          width: 100%;
+          object-fit: contain;
           display: block;
-          box-shadow: 1px 2px 78px 0px rgba(0, 0, 0, 0.68);
+          filter: drop-shadow(1px 2px 78px rgba(0, 0, 0, 0.48));
         }
 
         .hover-overlay {

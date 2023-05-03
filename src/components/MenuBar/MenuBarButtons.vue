@@ -217,7 +217,10 @@ export default {
         })
         .onOk((data) => {
           if (!this.currentUser && data.host) {
-            this.$router.push({ name: 'Login' });
+            this.$router.push({
+              path: '/login',
+              query: { from: this.$route.path },
+            });
           } else if (data.host) {
             this.$router.push({
               name: 'AddEventHost',

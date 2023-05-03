@@ -138,9 +138,7 @@
                     </template>
                   </q-btn>
                 </div>
-                <div class="q-mt-md q-px-md" style="width: 100%">
-                  <div class="separator" />
-                </div>
+
                 <div
                   class="flex row justify-center items-center q-py-xl q-mt-xl"
                   style="height: 100%; width: 100%; position: absolute"

@@ -185,6 +185,9 @@ export default {
       }
     },
     onMobileSwipeHandle(direction) {
+      if (!direction) {
+        this.showPanelMobile = !this.showPanelMobile;
+      }
       if (
         (this.showPanelMobile && direction === 'down') ||
         (!this.showPanelMobile && direction === 'up')

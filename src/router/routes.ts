@@ -30,6 +30,7 @@ const routes: RouteRecordRaw[] = [
         path: '/login',
         name: 'Login',
         component: () => import('src/components/Auth/Login.vue'),
+
         meta: {
           auth: false,
           mapOverlay: true,
