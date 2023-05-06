@@ -1,12 +1,17 @@
 <template>
   <div class="flex column">
     <div v-if="groupByMonth">
-      <div v-for="yearMonth in eventDatesGroupedByMonth" :key="yearMonth">
+      <div
+        v-for="yearMonth in Object.keys(eventDatesGroupedByMonth).sort()"
+        :key="yearMonth"
+      >
         <DateHeader
           :key="yearMonth + '-header'"
           class="header q-mt-"
           :class="$q.screen.lt.sm ? '' : ''"
-          :date="yearMonth.dates[0]?.[0].start_naive"
+          :date="
+            eventDatesGroupedByMonth[Number(yearMonth)][0]?.[0].start_naive
+          "
         >
         </DateHeader>
         <div
@@ -18,7 +23,7 @@
           }"
         >
           <EventDateCard
-            v-for="(date, index) in yearMonth.dates"
+            v-for="(date, index) in eventDatesGroupedByMonth[Number(yearMonth)]"
             :key="index"
             :event="date[0]"
             :short-date="true"
@@ -59,13 +64,14 @@
         size="2em"
         v-if="
           hasNext &&
-          ((groupByMonth && eventDatesGroupedByMonth?.length > 0) ||
+          ((groupByMonth &&
+            Object.keys(eventDatesGroupedByMonth)?.length > 0) ||
             (!groupByMonth && eventDates?.length > 0))
         "
       />
       <div
         v-else-if="
-          (groupByMonth && eventDatesGroupedByMonth?.length > 0) ||
+          (groupByMonth && Object.keys(eventDatesGroupedByMonth)?.length > 0) ||
           (!groupByMonth && eventDates && eventDates.length > 0)
         "
         class="t4 chicago q-mt-md"
@@ -74,7 +80,8 @@
       </div>
       <div
         v-else-if="
-          (groupByMonth && eventDatesGroupedByMonth?.length == 0) ||
+          (groupByMonth &&
+            Object.keys(eventDatesGroupedByMonth)?.length == 0) ||
           (!groupByMonth && eventDates && eventDates.length > 0)
         "
         class="t4 chicago q-mt-md"
@@ -100,9 +107,8 @@ const mainStore = useMainStore();
 interface Props {
   eventDates: [EventDate, string][];
   eventDatesGroupedByMonth: {
-    yearMonth: string;
-    dates: [EventDate, string][];
-  }[];
+    [key: number]: [EventDate, string][];
+  };
   groupByMonth: boolean;
   hasNext: boolean;
 }
@@ -110,7 +116,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   eventDates: () => [],
   eventDatesGroupedByMonth: () => {
-    return [];
+    return {};
   },
   groupByMonth: () => false,
 });
