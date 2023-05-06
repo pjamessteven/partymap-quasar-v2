@@ -19,124 +19,37 @@
                 'will-change': 'scroll-position',
               }"
             >
-              <!--
-              <div class="flex column justify-end items-start banner">
-                <div
-                  class="banner-text q-mt-lg q-mb-sm"
-                  :class="{
-                    'q-pt-sm': $q.screen.lt.sm,
-                    'q-my-xl': sidebarExpanded
-                  }"
-                  style="text-transform: capitalize; width: 100%"
-                >
-                  <div class="flex column">
-                    <div
-                      v-touch-swipe="
-                        () => {
-                          sidebarPanel = 'explore';
-                        }
-                      "
-                      class="  flex column  no-wrap "
-                    >
-                      <div class="separator" />-->
-
-              <!--
-            <q-icon
-              @click="handleSwipe"
-              flat
-              v-touch-swipe="handleSwipe"
-              name="mdi-chevron-up"
-              class="mobile-hide-icon "
-              :class="{
-                'rotate-180': showPanelMobile,
-                'q-py-md q-px-lg': $q.screen.lt.sm
-              }"
-              size="2em"
-              v-if="$q.screen.lt.sm"
-            />
-
-
-                    </div>
-                  </div>
-                </div>
-                <div class="banner-background">
-                  <video
-                    class="banner-video"
-                    src="@/assets/pm1small2.mp4"
-                    autoplay
-                    playsinline
-                    loop
-                    muted
-                    poster="@/assets/pm1small.png"
-                  />
-                </div>
-              </div>
-  -->
-
               <div class="flex column scroll-content q-mt-">
                 <div
+                  v-if="$q.screen.lt.sm"
                   class="sidebar-header flex column grow no-wrap items-stretch justify-between ellipsis no-wrap q-pl-md"
                   style="width: 100%"
                   :class="$q.screen.gt.xs ? 'q-mt-' : ''"
-                  v-touch-swipe.vertical="handleSwipe"
                 >
                   <div class="q-pr-md ellipsis q-mt-md">
                     <span class="text-h4 chicago">Near</span>
                   </div>
                 </div>
                 <div
-                  class="text-h4 flex items-center justify-between no-wrap chicago t1 q-pl-md"
+                  class="flex items-center no-wrap chicago t1 q-pl-md"
                   style="width: 100%"
-                  v-touch-swipe.vertical="handleSwipe"
+                  :class="
+                    $q.screen.gt.xs
+                      ? 'text-h4 q-mt-lg q-mb-sm'
+                      : 'text-h4 justify-between'
+                  "
                 >
-                  <span v-if="userLocation" class="ellipsis">
-                    {{ userLocationCity }}
+                  <span
+                    v-if="userLocation"
+                    class="ellipsis"
+                    :class="$q.screen.gt.xs ? 'q-pa-xs' : ''"
+                  >
+                    {{ userLocationCity
+                    }}<span v-if="$q.screen.gt.xs"
+                      >, {{ userLocationCountry }}</span
+                    >
                   </span>
                   <span class="ellipsis" v-else>... </span>
-                  <q-btn
-                    class="q-ml-sm q--r"
-                    :class="$q.screen.gt.sm ? 'q-mr-md' : ''"
-                    style="cursor: pointer; z-index: 1000"
-                    flat
-                    fab
-                    dense
-                    :loading="userLocationLoading"
-                    @click="getFineLocation"
-                  >
-                    <template v-slot:default>
-                      <div v-if="!userLocationLoading">
-                        <q-icon
-                          name="mdi-crosshairs-gps"
-                          class="q-px-sm"
-                          v-if="fineLocation"
-                        />
-                        <q-icon name="mdi-crosshairs" class="q-px-sm" v-else />
-                      </div>
-                      <div v-else style="position: relative">
-                        <q-icon
-                          class="q-pa-sm"
-                          style="z-index: 1"
-                          name="mdi-crosshairs"
-                        />
-                        <q-icon
-                          style="z-index: 2; left: 0px"
-                          class="q-pa-sm animated infinite flash slowest absolute"
-                          name="mdi-crosshairs-gps"
-                        />
-                      </div>
-                      <q-tooltip
-                        :content-class="
-                          $q.dark.isActive
-                            ? 'bg-black text-white'
-                            : 'bg-white text-black'
-                        "
-                        :offset="[10, 10]"
-                        content-style="font-size: 16px"
-                      >
-                        {{ $t('landing_page.improve_location') }}
-                      </q-tooltip>
-                    </template>
-                  </q-btn>
                 </div>
 
                 <div
@@ -239,19 +152,25 @@
                   </div>
                   <transition
                     appear
-                    enter-active-class="animated fadeIn faster"
-                    v-if="nearbyEventDates && nearbyEventDates.length > 0"
+                    enter-active-class="animated fadeIn slower"
                   >
-                    <div
-                      class="ed-card-grid q-px-md q-mb-md"
-                      :style="computedGridColumns"
-                    >
-                      <EventDateCard
-                        v-for="(ed, index) in nearbyEventDates"
-                        :key="index"
-                        :event="ed[0]"
-                      />
-                    </div>
+                    <EventDateList
+                      v-if="nearbyEventDates && compactView"
+                      :groupByMonth="false"
+                      :eventDates="nearbyEventDates"
+                      :hasNext="nearbyEventDatesHasNext"
+                    />
+                  </transition>
+                  <transition
+                    appear
+                    enter-active-class="animated fadeIn slower"
+                  >
+                    <EventDatePosterList
+                      v-if="nearbyEventDates && !compactView"
+                      :groupByMonth="false"
+                      :eventDates="nearbyEventDates"
+                      :hasNext="nearbyEventDatesHasNext"
+                    />
                   </transition>
                   <div
                     class="flex justify-center items-center q-my-lg"
@@ -299,30 +218,26 @@
                   </div>
                   <transition
                     appear
-                    enter-active-class="animated fadeIn faster"
-                    v-if="eventDates && eventDates.length > 0"
+                    enter-active-class="animated fadeIn slower"
                   >
-                    <div
-                      class="ed-card-grid q-px-md"
-                      :style="computedGridColumns"
-                    >
-                      <EventDateCard
-                        v-for="(ed, index) in eventDates"
-                        :key="index"
-                        :event="ed[0]"
-                        class="ed-card"
-                      />
-                    </div>
-                  </transition>
-                  <div
-                    class="flex justify-center items-center q-my-lg"
-                    v-if="eventDatesHasNext && !nearbyEventDatesHasNext"
-                  >
-                    <q-spinner-ios
-                      color="$a.dark.isActive ? 'white' : 'black'"
-                      size="2em"
+                    <EventDateList
+                      v-if="eventDates && compactView"
+                      :groupByMonth="false"
+                      :eventDates="eventDates"
+                      :hasNext="eventDatesHasNext"
                     />
-                  </div>
+                  </transition>
+                  <transition
+                    appear
+                    enter-active-class="animated fadeIn slower"
+                  >
+                    <EventDatePosterList
+                      v-if="eventDates && !compactView"
+                      :groupByMonth="false"
+                      :eventDates="eventDates"
+                      :hasNext="eventDatesHasNext && !nearbyEventDatesHasNext"
+                    />
+                  </transition>
 
                   <div
                     class="flex row justify-center q-mt-md"
@@ -338,13 +253,6 @@
                       [{{ i }}]
                     </a>
                   </div>
-                </div>
-
-                <div
-                  class="flex row justify-center q-my-lg t3"
-                  v-if="!eventDatesHasNext && !loadingEverything"
-                >
-                  <div>End of results</div>
                 </div>
               </div>
             </q-scroll-area>
@@ -363,6 +271,10 @@ import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useQueryStore } from 'src/stores/query';
 import { useMainStore } from 'src/stores/main';
 import { useNearbyStore } from 'src/stores/nearby';
+
+import EventDateList from 'src/components/EventDateList.vue';
+import EventDatePosterList from 'src/components/EventDatePosterList.vue';
+import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
 
 export default {
   name: 'LandingPage',
@@ -387,8 +299,10 @@ export default {
   },
 
   components: {
-    EventDateCard,
     ArtistsComponent,
+    EventDateList,
+    EventDatePosterList,
+    //EventDateViewOptions,
   },
   data() {
     return {
@@ -443,7 +357,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(useMainStore, ['loadIpInfo', 'getFineLocation']),
+    ...mapActions(useMainStore, ['loadIpInfo']),
     ...mapActions(useNearbyStore, [
       'loadEverything',
       'loadNearbyTags',
@@ -452,8 +366,15 @@ export default {
       'loadEventDates',
     ]),
     onScroll(info) {
-      // infinite scrolling
       this.scrollPosition = info.verticalPosition;
+      // prevent swipes
+      if (info.verticalPercentage === 0) {
+        this.enablePanelSwipeDown = true;
+      } else {
+        this.enablePanelSwipeDown = false;
+      }
+      // infinite scrolling
+
       if (info.verticalPercentage === 1) {
         if (this.nearbyEventDatesHasNext) {
           this.loadNearbyEventDates();
@@ -495,15 +416,6 @@ export default {
       this.eventDatesPage = page;
       this.loadEventDates;
     },
-
-    handleSwipe({ evt, ...info }) {
-      if (info.direction === 'down' && this.scrollPosition == 0) {
-        this.sidebarPanel = 'explore';
-      } else {
-        evt.preventDefault();
-        evt.stopPropagation();
-      }
-    },
   },
   watch: {
     userLocation: {
@@ -524,8 +436,8 @@ export default {
   },
   computed: {
     ...mapWritableState(useMainStore, [
-      'sidebarExpanded',
-      'showPanelMobile',
+      'showPanel',
+      'enablePanelSwipeDown',
       'sidebarPanel',
       'menubarOpacity',
       'userLocationLoading',
@@ -536,6 +448,7 @@ export default {
       'userLocationCity',
       'userLocationCountry',
       'fineLocation',
+      'compactView',
     ]),
     ...mapWritableState(useQueryStore, ['controlTag']),
     ...mapWritableState(useNearbyStore, [
@@ -563,7 +476,11 @@ export default {
     ]),
 
     computedGridColumns() {
-      if (this.sidebarExpanded) {
+      if (this.$q.screen.gt.lg) {
+        return `
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        `;
+      } else if (this.$q.screen.gt.sm) {
         return `
         grid-template-columns: repeat(2, minmax(0, 1fr));
         `;

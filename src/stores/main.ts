@@ -5,15 +5,16 @@ import { Coordinates } from 'src/types/map';
 import NodeGeocoder from 'node-geocoder';
 //import HttpsAdapter from 'node-geocoder/lib/httpadapter/fetchadapter';
 import { Notify } from 'quasar';
-
+import { Screen } from 'quasar';
 interface MainStoreState {
   darkMode: boolean;
   mapStyle: 'satellite' | 'transport' | 'high_contrast';
   showSidebar: boolean;
   showSearchBox: boolean;
-  sidebarExpanded: boolean;
   sidebarPanel: string;
-  showPanelMobile: boolean;
+  showPanel: boolean;
+  enablePanelSwipeDown: boolean;
+
   menubarOpacity: number;
   overlayOpacity: number;
   ipInfo: IpInfo | null;
@@ -22,17 +23,18 @@ interface MainStoreState {
   userLocationCity: string | null;
   userLocationCountry: string | null;
   fineLocation: boolean;
+  groupEventsByMonth: boolean;
+  compactView: boolean;
 }
-
 export const useMainStore = defineStore('main', {
   state: (): MainStoreState => ({
     darkMode: false,
     mapStyle: 'satellite',
     showSidebar: true,
     showSearchBox: false, // for menubar search
-    sidebarExpanded: false,
     sidebarPanel: 'nearby',
-    showPanelMobile: true,
+    showPanel: true,
+    enablePanelSwipeDown: true,
     menubarOpacity: 1,
     overlayOpacity: 0,
     ipInfo: null,
@@ -41,6 +43,8 @@ export const useMainStore = defineStore('main', {
     userLocationCity: null,
     userLocationCountry: null,
     fineLocation: false,
+    groupEventsByMonth: Screen.lt.sm,
+    compactView: Screen.lt.sm,
   }),
   actions: {
     darkModeToggle() {
@@ -75,7 +79,7 @@ export const useMainStore = defineStore('main', {
             const unknownCityCoords =
               position.coords.latitude + ', ' + position.coords.longitude;
 
-            this.userLocationCity = unknownCityCoords;
+            //this.userLocationCity = unknownCityCoords;
 
             this.userLocationLoading = false;
             try {
@@ -90,7 +94,6 @@ export const useMainStore = defineStore('main', {
               );
               const data = await response.json();
               const address = data.address;
-              console.log('add', address);
 
               if (address?.city?.length > 0) {
                 this.userLocationCity = address.city;

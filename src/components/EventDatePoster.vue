@@ -16,7 +16,7 @@
     >
       <transition appear enter-active-class="animated fadeIn">
         <div
-          class="ed-card"
+          class="ed-poster"
           @mousedown="() => onClickCard($event, navigate)"
           @mouseover="setFocusMarker"
           @mouseleave="eventDateHoverMarker = null"
@@ -24,57 +24,23 @@
             'animated-shimmer': false,
           }"
         >
-          <!--
-      <q-tooltip
-        v-if="$q.screen.gt.xs"
-        :content-class="
-          $q.dark.isActive
-            ? 'bg-black text-white'
-            : 'bg-white text-black tooltip'
-        "
-        :offset="[-128, -56]"
-        anchor="top right"
-        self="top left"
-        content-style="font-size: 14px"
-        max-width="300px"
-      >
-        <div class="flex column">
-          <div>
-            {{ event.event.description }}
-          </div>
-          <div
-            class="tag-container flex row q-gutter-xs q-mt-xs q-mb-sm"
-            style="min-height: 31px"
-            v-if="event.event.event_tags && event.event.event_tags.length > 0"
-          >
-            <Tag
-              v-for="(et, index) in event.event.event_tags"
-              :key="index"
-              :value="et.tag"
-            ></Tag>
-          </div>
-        </div>
-      </q-tooltip>
-  -->
-          <!--
-        <div class="card-top-content  flex column justify-end">
-          <div class="card-background" :style="getBgImgStyle()" />
-
-        </div>
-  -->
           <div class="card-bottom-content flex column">
             <div
               class="card-bottom-background"
               :style="getBottomBgImgStyle()"
             />
             <div class="card-bottom-background-hover-overlay" />
-            <!--:style="getBottomBgImgStyle()" /> -->
-            <div
-              class="card-bottom-foreground flex row no-wrap q-px-md q-py-md"
-            >
+            <div class="card-bottom-foreground flex column no-wrap">
               <div
                 class="image-container flex justify-center items-center shadow-2xl"
               >
+                <!--
+
+                <div
+                  class="image-container-bg"
+                  :style="getImageContainerBgStyle()"
+                ></div>
+                -->
                 <img
                   :src="imgThumbXsUrl"
                   class="image not-loaded"
@@ -87,9 +53,9 @@
                   v-show="loadedImage"
                 />
               </div>
-              <div class="flex column ellipsis q-pl-md">
+              <div class="flex column ellipsis q-pa-md">
                 <div
-                  class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
+                  class="ed-poster-header flex row justify-between items-start no-wrap ellipsis"
                 >
                   <div
                     class="flex row items-baseline no-wrap chicago q-mr-sm ellipsis"
@@ -199,6 +165,25 @@
                       }}km)</span
                     >
                   </div>
+                  <!--
+                <div
+                  class=" q-mb-md o-070 ellipsis"
+                  v-if="
+                    event.event.event_tags && event.event.event_tags.length > 0
+                  "
+                  style="max-width: 200px"
+                >
+                  <span
+                    v-for="(t, index) in event.event.event_tags"
+                    :key="index"
+                  >
+                    {{ t.tag
+                    }}<span v-if="index + 1 !== event.event.event_tags.length"
+                      >,</span
+                    >
+                  </span>
+                </div>
+                -->
 
                   <div
                     class="tag-container flex row q-mt-sm no-wrap ellipsis"
@@ -256,6 +241,25 @@ export default {
           name: this.event.name,
         };
     },
+    getImageContainerBgStyle() {
+      if (this.$q.dark.isActive) {
+        return `background-image:  url("${this.imgThumbXsUrl}");
+        background-size: cover;
+        display: inline-block;
+        background-position: center;
+        filter: blur(20px);
+
+        `;
+      } else {
+        return `background-image:  url("${this.imgThumbXsUrl}");
+          background-size: cover;
+          display: inline-block;
+          background-position: center;
+          filter: blur(20px);
+
+          `;
+      }
+    },
     getBottomBgImgStyle() {
       if (this.$q.dark.isActive) {
         return `background-image:  url("${this.imgThumbXsUrl}");
@@ -275,7 +279,32 @@ export default {
           `;
       }
     },
+    getBgImgStyle() {
+      var imageUrl = '';
+      if (
+        this.event &&
+        this.event.event.cover_items &&
+        this.event.event.cover_items[0]
+      ) {
+        imageUrl = this.event.event.cover_items[0].thumb_url;
+      }
+      if (this.$q.dark.isActive) {
+        return `background-image: linear-gradient(0deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.2) 100%), url("${imageUrl}");
+        background-size: cover;
+        display: inline-block;
+        background-position: center;
+        //filter: blur(1px);
 
+        `;
+      } else {
+        return `background-image: linear-gradient(0deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.2) 100%), url("${imageUrl}");
+        background-size: cover;
+        display: inline-block;
+        background-position: center;
+        //filter: blur(1px);
+        `;
+      }
+    },
     onClickCard(event, navigate) {
       // blocking map updates on focusMarker watcher in MainMap.vue
       this.focusMarker = {
@@ -289,7 +318,7 @@ export default {
   computed: {
     ...mapWritableState(useMapStore, ['eventDateHoverMarker', 'focusMarker']),
     imgThumbUrl() {
-      return this.event?.event?.cover_items?.[0]?.thumb_url;
+      return this.event?.event?.cover_items?.[0]?.image_med_url;
     },
     imgThumbXsUrl() {
       return this.event?.event?.cover_items?.[0]?.thumb_xxs_url;
@@ -309,7 +338,7 @@ export default {
 
 <style lang="scss" scoped>
 .body--dark {
-  .ed-card {
+  .ed-poster {
     border: none !important;
     background: $bi-1;
     //blue background-color: #0b0e13;
@@ -324,7 +353,7 @@ export default {
         opacity: 0.4;
       }
       .card-bottom-background-hover-overlay {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.2);
       }
       .card-bottom-foreground {
         background: linear-gradient(
@@ -357,7 +386,7 @@ export default {
 }
 
 .body--light {
-  .ed-card {
+  .ed-poster {
     background: black;
     //border: 1px solid gray;
     /*
@@ -394,7 +423,7 @@ export default {
         //opacity: 1;
       }
       .card-bottom-background-hover-overlay {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.2);
       }
       .card-bottom-foreground {
         background: linear-gradient(rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.3));
@@ -415,7 +444,7 @@ export default {
   }
 }
 
-.ed-card {
+.ed-poster {
   border-radius: 9px;
   direction: ltr;
   display: flex;
@@ -427,9 +456,17 @@ export default {
   -webkit-backface-visibility: hidden;
   -webkit-transform: translate3d(0, 0, 0);
 
+  .card-bottom-foreground {
+    .image-container {
+      transition: transform 0.2s;
+    }
+  }
   &:hover {
-    transform: scale(1.01) translateY(0px);
-
+    .card-bottom-foreground {
+      .image-container {
+        //transform: scale(1.02) translateY(0px);
+      }
+    }
     .card-bottom-content {
       .card-bottom-background-hover-overlay {
         opacity: 1;
@@ -495,7 +532,7 @@ export default {
         }
       }
 
-      .ed-card-header {
+      .ed-poster-header {
         //font-size: 1rem;
         max-width: 100%;
         opacity: 1;
@@ -509,18 +546,18 @@ export default {
         font-size: small;
       }
       .image-container {
-        //max-width: 400px;
-        // max-height: 400px;
-        // min-width: 400px;
+        aspect-ratio: 595 / 842;
         width: 100%;
         position: relative;
         overflow: hidden;
-        //border-radius: 100%;
-        width: 96px;
-        aspect-ratio: 595 / 842;
-
-        min-width: 96px;
-        border-radius: 9px;
+        border-radius: 0px;
+        .image-container-bg {
+          position: absolute;
+          height: 100%;
+          width: 100%;
+          z-index: 1;
+          transform: scale(1.2);
+        }
         .image {
           height: 100%;
           width: 100%;

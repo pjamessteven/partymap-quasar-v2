@@ -5,7 +5,7 @@
       :style="computedStyle"
       v-if="$q.screen.lt.sm && this.$route.name === 'EventPage'"
     />
-    <MenuBarLogo class="logo" v-if="$q.screen.lt.sm" />
+    <MenuBarLogo class="logo" />
     <transition
       appear
       enter-active-class="animated fadeIn"

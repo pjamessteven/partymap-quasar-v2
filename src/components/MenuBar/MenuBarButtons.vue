@@ -151,8 +151,8 @@
       flat
       :class="{
         'light-button':
-          (($route.name === 'EventPage' || $route.name === 'Explore') &&
-            $q.screen.lt.sm) ||
+          $route.name === 'EventPage' ||
+          $route.name === 'Explore' ||
           ($route.meta.fullscreenLayout === true && this.$q.screen.gt.xs),
       }"
       style="position: relative"

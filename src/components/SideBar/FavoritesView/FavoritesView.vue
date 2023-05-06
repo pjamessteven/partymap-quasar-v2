@@ -7,7 +7,7 @@
     <div
       class="event-list-inner"
       v-bind:class="{
-        'event-list-expanded': $q.screen.lt.sm && showPanelMobile,
+        'event-list-expanded': $q.screen.lt.sm && showPanel,
       }"
     >
       <div
@@ -25,7 +25,7 @@
           class="scroll-area flex grow"
           :content-style="{
             'will-change': 'scroll-position',
-            'touch-action': showPanelMobile ? 'auto' : 'auto',
+            'touch-action': showPanel ? 'auto' : 'auto',
           }"
         >
           <transition enter-active-class="animated fadeIn">
@@ -70,7 +70,7 @@
                       class="flex row scroll-wrapper"
                       :class="[
                         $q.screen.gt.xs
-                          ? $q.screen.lt.xl && !this.sidebarExpanded
+                          ? $q.screen.lt.xl
                             ? 'q-gutter-sm q-pr-md q-py-xs no-wrap'
                             : 'q-gutter-sm q-pr-md q-py-xs  no-wrap'
                           : 'q-gutter-sm q-px-sm  no-wrap',
@@ -325,7 +325,7 @@ export default {
       }
     },
     handleSwipe() {
-      this.showPanelMobile = !this.showPanelMobile;
+      this.showPanel = !this.showPanel;
     },
     onScrollMainContent(info) {
       this.mainContentScrollPosition = info.verticalPosition;
@@ -351,17 +351,15 @@ export default {
     },
   },
   computed: {
-    ...mapState(useMainStore, [
-      'sidebarExpanded',
-      'sidebarPanel',
-      'userLocation',
-    ]),
-    ...mapWritableState(useMainStore, ['showPanelMobile']),
+    ...mapState(useMainStore, ['sidebarPanel', 'userLocation']),
+    ...mapWritableState(useMainStore, ['showPanel']),
     ...mapState(useAuthStore, ['currentUser']),
     ...mapState(useMapStore, ['mapBounds', 'blockUpdates']),
-    ...mapState(useQueryStore, ['userEventDatesLoading']),
-    ...mapWritableState(useQueryStore, [
+    ...mapState(useQueryStore, [
+      'userEventDatesLoading',
       'userEventDatesGroupedByMonth',
+    ]),
+    ...mapWritableState(useQueryStore, [
       'userEventDatesPage',
       'userEventDatesHasNext',
     ]),

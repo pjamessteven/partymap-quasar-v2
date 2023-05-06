@@ -1,13 +1,9 @@
 <template>
   <div class="main-layout">
-    <MenuBarLogo class="menubar-logo" v-if="$q.screen.gt.xs" />
-    <MenuBar class="menubar" v-if="$q.screen.lt.sm" />
+    <MenuBar class="menubar" />
     <div class="overlay" :style="computedOverlayStyle" />
     <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
-    <SideBar
-      class="sidebar-component"
-      v-show="$q.screen.lt.sm ? $route.name === 'Explore' : true"
-    />
+    <SideBar class="sidebar-component" v-show="$route.name === 'Explore'" />
     <MainMap />
     <router-view
       v-slot="{ Component }"
@@ -15,7 +11,6 @@
       v-bind:class="{
         'mobile-map-view-router': $q.screen.lt.sm,
       }"
-      @scroll="onScrollMainContent($event)"
     >
       <transition
         appear
@@ -71,17 +66,15 @@ export default {
     ...mapWritableState(useMainStore, [
       'showSidebar',
       'overlayOpacity',
-      'showPanelMobile',
+      'showPanel',
     ]),
     computedOverlayStyle() {
-      if (this.$q.screen.gt.xs) {
-        return `opacity: ${this.overlayOpacity}`;
-      } else if (this.$q.screen.lt.sm && this.$route.name === 'EventPage') {
+      if (this.$q.screen.lt.sm && this.$route.name === 'EventPage') {
         return `opacity: ${this.overlayOpacity}; background: black!important`;
       } else {
-        if (this.showPanelMobile && this.$route.name === 'Explore')
+        if (this.showPanel && this.$route.name === 'Explore')
           return 'opacity: 1';
-        else return 'opacity: 0';
+        else return 'opacity: 0.3';
       }
     },
   },
@@ -91,14 +84,22 @@ export default {
 .body--dark {
   .main-layout {
     .overlay {
-      background: rgba(0, 0, 0, 0.4);
+      background: linear-gradient(
+        rgba(0, 0, 0, 0.78) 0px,
+        rgba(0, 0, 0, 0.78) 64px,
+        rgba(0, 0, 0, 0.58) 128px
+      );
     }
   }
 }
 .body--light {
   .main-layout {
     .overlay {
-      background: rgba(0, 0, 0, 0.2);
+      background: linear-gradient(
+        rgba(0, 0, 0, 0.68) 0px,
+        rgba(0, 0, 0, 0.68) 64px,
+        rgba(0, 0, 0, 0.48) 128px
+      );
     }
   }
 }
@@ -115,6 +116,7 @@ export default {
     width: 100%;
     pointer-events: none;
     will-change: opacity;
+    transition: opacity 0.3s;
   }
   .menubar {
     width: 100%;

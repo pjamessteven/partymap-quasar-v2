@@ -1,9 +1,6 @@
 <template>
   <div class="event-page">
-    <div
-      class="flex row no-wrap event-page-content"
-      :style="computedSidebarPadding"
-    >
+    <div class="flex row no-wrap event-page-content">
       <div
         class="flex history-container col-4 col-xs-12 col-sm-6 col-md-5 col-lg-4 col-xl-4"
         v-if="showingHistory"
@@ -814,22 +811,12 @@ export default {
     },
   },
   computed: {
-    ...mapState(useMainStore, ['sidebarExpanded']),
     ...mapWritableState(useMainStore, ['menubarOpacity', 'overlayOpacity']),
     ...mapWritableState(useMapStore, ['focusMarker']),
     ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
     ...mapState(useEventStore, ['loadingEvent', 'selectedEventDate']),
     ...mapWritableState(useEventStore, ['event', 'editing']),
 
-    computedSidebarPadding() {
-      if (this.$q.screen.lt.lg) {
-        return 'padding-left: 0px';
-      } else if (this.sidebarExpanded) {
-        return 'padding-left: 736px';
-      } else {
-        return 'padding-left: 370px';
-      }
-    },
     pageViewChars() {
       if (this.event.page_views) {
         var chars = this.event.page_views.toString().split('');

@@ -72,18 +72,21 @@ interface QueryState {
   points: Location[];
   loadingPoints: boolean;
 
-  // favorites
-  userEventDatesGroupedByMonth: {
-    [key: string]: [EventDate, string][];
-  };
+  // users events
+  userEventDates: [EventDate, string][];
   userEventDatesPage: number;
   userEventDatesHasNext: boolean;
   userEventDatesLoading: boolean;
+  userEventDatesGroupedByMonth: {
+    yearMonth: string;
+    dates: [EventDate, string][];
+  }[];
 
-  // event dates in bounds/query
+  eventDates: [EventDate, string][];
   eventDatesGroupedByMonth: {
-    [key: string]: [EventDate, string][];
-  };
+    yearMonth: string;
+    dates: [EventDate, string][];
+  }[];
   eventDatesPage: number;
   eventDatesHasNext: boolean;
   eventDatesLoading: boolean;
@@ -144,12 +147,14 @@ export const useQueryStore = defineStore('query', {
     points: [],
     loadingPoints: false,
 
-    userEventDatesGroupedByMonth: {},
+    userEventDates: [],
+    userEventDatesGroupedByMonth: [],
     userEventDatesHasNext: false,
     userEventDatesPage: 1,
     userEventDatesLoading: false,
 
-    eventDatesGroupedByMonth: {},
+    eventDates: [],
+    eventDatesGroupedByMonth: [],
     eventDatesHasNext: false,
     eventDatesPage: 1,
     eventDatesLoading: false,
@@ -234,15 +239,9 @@ export const useQueryStore = defineStore('query', {
         });
 
         if (this.userEventDatesPage === 1) {
-          this.userEventDatesGroupedByMonth = groupEventDatesByMonth(
-            {},
-            response.data.items
-          );
+          this.userEventDates = response.data.items;
         } else {
-          this.userEventDatesGroupedByMonth = groupEventDatesByMonth(
-            this.userEventDatesGroupedByMonth,
-            response.data.items
-          );
+          this.userEventDates = this.userEventDates.concat(response.data.items);
         }
         this.userEventDatesLoading = false;
         this.userEventDatesHasNext = response.data.has_next;
@@ -261,6 +260,7 @@ export const useQueryStore = defineStore('query', {
         this.eventDatesLoading = true;
         // keep track of request id
         const requestId = Math.random();
+
         this.eventDatesRequestId = requestId;
         const response = await getEventDatesRequest({
           radius: undefined,
@@ -300,18 +300,21 @@ export const useQueryStore = defineStore('query', {
           // calls to the server (even though these calls are debounced, sometimes
           // the round trip takes a while)
           if (this.eventDatesPage === 1) {
+            this.eventDates = response.data.items;
             this.eventDatesGroupedByMonth = groupEventDatesByMonth(
-              {},
+              [],
               response.data.items
             );
           } else {
-            this.eventDatesGroupedByMonth = groupEventDatesByMonth(
+            this.eventDates = this.eventDates.concat(response.data.items);
+            groupEventDatesByMonth(
               this.eventDatesGroupedByMonth,
               response.data.items
             );
           }
           this.eventDatesLoading = false;
           this.eventDatesHasNext = response.data.has_next;
+          this.eventDatesPage += 1;
           return response.data.items;
         } else {
           return;
@@ -427,17 +430,18 @@ export const useQueryStore = defineStore('query', {
 });
 
 export const groupEventDatesByMonth = (
-  existingDates: { [key: string]: [EventDate, string][] } = {},
+  yearMonths = [],
   eventDates: [EventDate, string][]
 ) => {
   for (const ed of eventDates) {
     // assumes eventDates are sorted by time
     const start = moment(ed?.[0].start_naive);
-    const yearMonth = start.month() + '' + start.year();
-    if (!existingDates[yearMonth]) {
-      existingDates[yearMonth] = [];
+    const yearMonth = start.year() + '' + start.month();
+    const existingYearMonth = yearMonths.find((x) => x.yearMonth === yearMonth);
+    if (!existingYearMonth) {
+      yearMonths.push({ yearMonth: yearMonth, dates: [ed] });
+    } else {
+      existingYearMonth.dates.push(ed);
     }
-    existingDates[yearMonth].push(ed);
   }
-  return existingDates;
 };

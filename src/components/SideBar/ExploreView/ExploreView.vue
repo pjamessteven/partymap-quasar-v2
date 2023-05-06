@@ -3,34 +3,27 @@
     class="event-list-vertical shadow-0 main-content"
     style="height: 100%; width: 100%; position: relative; overflow: hidden"
   >
-    <div class="touch-overlay" v-touch-swipe="handleSwipe" />
+    <q-linear-progress
+      indeterminate
+      size="2px"
+      color="grey-7"
+      rounded
+      style="position: absolute; z-index: 3000"
+      v-if="
+        $q.screen.gt.xs && (isLoadingInitial || (mapMoving && !blockUpdates))
+      "
+    />
+    <div class="touch-overlay" v-touch-swipe.vertical="handleSwipe" />
     <div
       class="event-list-inner"
       v-bind:class="{
-        'event-list-expanded': $q.screen.lt.sm && showPanelMobile,
+        'event-list-expanded': $q.screen.lt.sm && showPanel,
       }"
     >
       <div
         class="flex column grow no-wrap"
         :class="{ 'q-mx-sm': $q.screen.lt.sm }"
       >
-        <!--
-        <q-icon
-          v-if="$q.screen.lt.sm"
-          @click="handleSwipe"
-          flat
-          v-touch-swipe="handleSwipe"
-          name="mdi-chevron-up"
-          class="mobile-hide-icon t1"
-          :class="{
-            'rotate-180 slower': showPanelMobile,
-            'q-py-sm q-px-md q-py-sm': $q.screen.lt.sm
-          }"
-          size="1.5rem"
-        />
-        <div class="date-header-bg" />
--->
-
         <q-scroll-area
           vertical
           @scroll="onScrollMainContent"
@@ -40,65 +33,30 @@
             width: $q.screen.gt.xs ? '4px' : '4px',
           }"
           class="scroll-area flex grow"
+          :class="!showPanel && 'disable-scroll'"
           :content-style="{
             'will-change': 'scroll-position',
-            'touch-action': showPanelMobile ? 'auto' : 'auto',
           }"
         >
-          <!--
-          <q-input
-            ref="search"
-            debounce="300"
-            clearable
-            outlined
-            dense
-            class="search-input grow chicago q-mx-md q-mb-sm q-mt-sm"
-            :placeholder="$t('search.search_box_text')"
-            v-model="query"
-            @keyup.enter="search"
-          >
-            <template v-slot:prepend>
-              <i style="font-size: 0.7em!important" class="mdi mdi-magnify" />
-            </template>
-          </q-input>
-          <div
-            class="chicago text-h4  q-pt-lg"
-            :class="$q.screen.lt.sm ? 'q-pl-sm q-mb-sm ' : 'q-pl-md q-mb-lg'"
-          >
-            <span v-if="sidebarPanel === 'favorites'">My favorites:</span>
-            <span v-else>
-              Explore
-            </span>
-          </div>
--->
-
           <transition enter-active-class="animated fadeIn">
             <div class="flex column no-wrap scroll-content">
-              <!--
-              <div
-                v-if="$q.screen.gt.xs"
-                class="sidebar-header flex column no-wrap items-stretch justify-between ellipsis no-wrap"
-              >
-                <div
-                  class="q-pl-md q-pt-md q-pb- q-pr-md ellipsis"
-                  style="width: 100%"
-                >
-                  <span class="text-h4 chicago">Explore</span>
-                </div>
-              </div>
-              -->
-
               <div class="flex column no-wrap content">
-                <ControlsComponent
-                  v-if="$q.screen.gt.xs"
-                  class="controls-component"
-                  :class="{
-                    'q-pt-sm': $q.screen.lt.sm,
-                    'q-mt-md ': $q.screen.gt.xs,
-                  }"
-                  :showSelectedValue="true"
-                  :showOnlySelected="false"
-                />
+                <div class="flex row no-wrap">
+                  <ControlsComponent
+                    class="controls-component grow"
+                    :class="{
+                      'q-mt-md': $q.screen.lt.sm,
+                      'q-mt-md ': $q.screen.gt.xs,
+                    }"
+                    :showSelectedValue="true"
+                    :showOnlySelected="false"
+                  />
+                  <EventDateViewOptions
+                    :class="$q.screen.lt.sm && 'q-mt-sm '"
+                    v-if="$q.screen.gt.xs"
+                  />
+                </div>
+
                 <div
                   class="artist-profile-wrapper"
                   v-if="controlArtist.length > 0 && $q.screen.gt.xs"
@@ -108,16 +66,6 @@
                     :id="controlArtist[0].id"
                   />
                 </div>
-                <ControlsComponent
-                  v-if="$q.screen.lt.sm"
-                  class="controls-component"
-                  :class="{
-                    'q-mt-md': $q.screen.lt.sm,
-                    'q-mb-sm ': $q.screen.gt.xs && $q.screen.lt.xl,
-                  }"
-                  :showSelectedValue="true"
-                  :showOnlySelected="false"
-                />
 
                 <div
                   class="flex column"
@@ -147,8 +95,22 @@
                     enter-active-class="animated fadeIn slower"
                   >
                     <EventDateList
-                      v-if="showResults"
+                      v-if="showResults && compactView"
+                      :groupByMonth="groupEventsByMonth"
                       :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
+                      :eventDates="eventDates"
+                      :hasNext="eventDatesHasNext"
+                    />
+                  </transition>
+                  <transition
+                    appear
+                    enter-active-class="animated fadeIn slower"
+                  >
+                    <EventDatePosterList
+                      v-if="showResults && !compactView"
+                      :groupByMonth="groupEventsByMonth"
+                      :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
+                      :eventDates="eventDates"
                       :hasNext="eventDatesHasNext"
                     />
                   </transition>
@@ -159,8 +121,18 @@
         </q-scroll-area>
       </div>
       <div
-        v-if="isLoadingInitial || (mapMoving && !blockUpdates)"
-        v-touch-swipe="handleSwipe"
+        v-if="
+          $q.screen.gt.xs && (isLoadingInitial || (mapMoving && !blockUpdates))
+        "
+        style="height: 100%; position: absolute; width: 100%; z-index: 500"
+        class="t4 chicago q-mt-md event-date-center flex grow justify-center"
+      >
+        Loading...
+      </div>
+      <div
+        v-if="
+          ($q.screen.lt.sm && isLoadingInitial) || (mapMoving && !blockUpdates)
+        "
         class="event-date-center flex grow justify-center"
         style="height: 100%; position: absolute; width: 100%; z-index: 500"
       >
@@ -168,7 +140,6 @@
           :thickness="1"
           :color="$q.dark.isActive ? 'white' : 'black'"
           size="2em"
-          v-touch-swipe="handleSwipe"
         />
       </div>
     </div>
@@ -180,6 +151,9 @@ import ArtistProfile from 'components/ArtistProfile.vue';
 import ArtistsComponent from './../ArtistsComponent.vue';
 import ControlsComponent from 'src/components/Controls/ControlsComponent.vue';
 import EventDateList from 'src/components/EventDateList.vue';
+import EventDatePosterList from 'src/components/EventDatePosterList.vue';
+import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
+
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
 import { useMainStore } from 'src/stores/main';
@@ -192,6 +166,8 @@ export default {
     ArtistProfile,
     ArtistsComponent,
     EventDateList,
+    EventDatePosterList,
+    EventDateViewOptions,
   },
   props: { showControls: { default: false } },
   mounted() {
@@ -226,11 +202,11 @@ export default {
     async getInitialList() {
       if (this.$route.name === 'Explore' && !this.blockUpdates) {
         // event date stuff
-        this.eventDatesGroupedByMonth = {};
         this.isLoadingDatesInitial = true;
         if (this.$refs) this.$refs.scroll.setScrollPercentage('vertical', 0);
         this.eventDatesHasNext = true;
         this.eventDatesPage = 1;
+        this.eventDates = []; // this is actually quite important
         if (!this.userLocation) {
           await this.loadIpInfo();
           this.loadMore();
@@ -253,40 +229,34 @@ export default {
       ) {
         try {
           await this.loadEventDates();
-          this.eventDatesPage += 1;
         } catch (error) {}
         this.isLoadingDatesInitial = false;
       }
     },
     handleSwipe() {
-      this.showPanelMobile = !this.showPanelMobile;
+      this.showPanel = !this.showPanel;
     },
-    onScrollMainContent(info) {
-      if (
-        this.hasLoaded &&
-        this.eventDates != null &&
-        !this.eventDatesLoading
-      ) {
-        // this.mainContentScrollPosition = info.verticalPosition
-        // this.headerYOffset = info.verticalPosition
-        /*
-        if (info.verticalPercentage > 0) {
-          // slide up mobile bottom panel when user tries to scroll
-          // and to top to stop scroll action
-          if (this.showPanelMobile === false) {
-            this.showPanelMobile = true
-            let interval = setInterval(() => {
-              this.$refs.scroll.setScrollPercentage(0)
-            }, 10)
-            setTimeout(() => {
-              clearInterval(interval)
-            }, 400)
-          }
-        }
-        */
+    handleWheel(event) {
+      console.log(event.deltaY, this.mainContentScrollPosition);
+      if (event.deltaY < 0 && this.mainContentScrollPosition === 0) {
+        // this.showPanel = false;
       }
-      this.mainContentScrollPosition = info.verticalPosition;
+    },
 
+    onScrollMainContent(info) {
+      this.mainContentScrollPosition = info.verticalPosition;
+      if (info.verticalPercentage === 0) {
+        if (!this.$q.platform.has.touch) {
+          setTimeout(() => {
+            // behavior fix for desktop scroll
+            this.enablePanelSwipeDown = true;
+          }, 250);
+        } else {
+          this.enablePanelSwipeDown = true;
+        }
+      } else {
+        this.enablePanelSwipeDown = false;
+      }
       if (info.verticalPercentage === 1) {
         // reached bottom
         this.loadMore();
@@ -297,7 +267,7 @@ export default {
     route: {
       handler: async function (to) {
         if (to.name === 'Explore') {
-          if (!this.eventDates) {
+          if (this.eventDates?.length === 0) {
             if (!this.userLocation) {
               await this.loadIpInfo();
               this.getInitialList();
@@ -314,17 +284,6 @@ export default {
         // if updates are not blocked, update event dates
         this.getInitialList();
       }
-    },
-
-    sidebarPanel(newVal) {
-      /*
-      if (
-        (newVal === 'favorites' || newVal === 'explore') &&
-        this.eventDates?.length === 0
-      ) {
-        this.getInitialList();
-      }
-      */
     },
     currentUser() {
       // load favorites after user logs in
@@ -371,11 +330,12 @@ export default {
   },
   computed: {
     ...mapState(useMainStore, [
-      'sidebarExpanded',
       'sidebarPanel',
       'userLocation',
+      'compactView',
+      'groupEventsByMonth',
     ]),
-    ...mapWritableState(useMainStore, ['showPanelMobile']),
+    ...mapWritableState(useMainStore, ['showPanel', 'enablePanelSwipeDown']),
     ...mapState(useAuthStore, ['currentUser']),
     ...mapState(useMapStore, [
       'mapBounds',
@@ -384,6 +344,7 @@ export default {
       'mapMoving',
     ]),
     ...mapState(useQueryStore, [
+      'eventDatesGroupedByMonth',
       'controlTag',
       'controlDateRange',
       'controlSize',
@@ -394,9 +355,10 @@ export default {
       'eventDatesLoading',
     ]),
     ...mapWritableState(useQueryStore, [
-      'eventDatesGroupedByMonth',
+      'eventDates',
       'eventDatesPage',
       'eventDatesHasNext',
+      'eventDatesLoading',
       'artistsPage',
       'artistsHasNext',
     ]),
@@ -564,6 +526,11 @@ export default {
     }
     :deep(.q-scrollarea__thumb) {
       z-index: 1000;
+    }
+    &.disable-scroll {
+      :deep(.scroll) {
+        overflow-y: hidden !important;
+      }
     }
   }
 

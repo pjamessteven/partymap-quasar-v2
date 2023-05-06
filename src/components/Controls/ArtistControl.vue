@@ -224,6 +224,7 @@ export default {
       }, 1500);
     },
     onScrollMainContent(event) {
+      this.$emit('testing', event.target.scrollTop);
       if (
         event.target.offsetHeight + event.target.scrollTop >=
         event.target.scrollHeight

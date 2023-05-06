@@ -10,20 +10,20 @@
         >
         </DateHeader>
         <div
-          class="ed-card-grid q-pb-sm"
+          class="ed-poster-grid q-pb-sm"
           :style="gridColumns"
           :class="{
             'q-px-md ': $q.screen.gt.xs,
             'q-px-sm  q-mt-': $q.screen.lt.sm,
           }"
         >
-          <EventDateCard
+          <EventDatePoster
             v-for="(date, index) in yearMonth.dates"
             :key="index"
             :event="date[0]"
             :short-date="true"
           >
-          </EventDateCard>
+          </EventDatePoster>
         </div>
       </div>
     </div>
@@ -37,36 +37,36 @@
       </DateHeader>
       -->
       <div
-        class="ed-card-grid q-pb-sm q-mt-sm"
+        class="ed-poster-grid q-pb-sm q-mt-sm"
         :style="gridColumns"
         :class="{
           'q-px-md ': $q.screen.gt.xs,
           'q-px-sm  q-mt-': $q.screen.lt.sm,
         }"
       >
-        <EventDateCard
+        <EventDatePoster
           v-for="(date, index) in eventDates"
           :key="index"
           :event="date[0]"
           :short-date="true"
         >
-        </EventDateCard>
+        </EventDatePoster>
       </div>
     </div>
+
     <div class="row justify-center q-my-lg q-mb-xl">
       <q-spinner-ios
         :color="$q.dark.isActive ? 'white' : 'black'"
         size="2em"
         v-if="
           hasNext &&
-          ((groupByMonth && eventDatesGroupedByMonth?.length > 0) ||
-            (!groupByMonth && eventDates?.length > 0))
+          (eventDatesGroupedByMonth?.length > 0 || eventDates?.length > 0)
         "
       />
       <div
         v-else-if="
           (groupByMonth && eventDatesGroupedByMonth?.length > 0) ||
-          (!groupByMonth && eventDates && eventDates.length > 0)
+          (eventDates && eventDates.length > 0)
         "
         class="t4 chicago q-mt-md"
       >
@@ -75,7 +75,7 @@
       <div
         v-else-if="
           (groupByMonth && eventDatesGroupedByMonth?.length == 0) ||
-          (!groupByMonth && eventDates && eventDates.length > 0)
+          (eventDates && eventDates.length > 0)
         "
         class="t4 chicago q-mt-md"
       >
@@ -90,7 +90,7 @@ import { useMainStore } from 'src/stores/main';
 import { EventDate } from 'src/types/autogen_types';
 import { computed } from 'vue';
 import DateHeader from './DateHeader.vue';
-import EventDateCard from './EventDateCard.vue';
+import EventDatePoster from './EventDatePoster.vue';
 import { useQuasar } from 'quasar';
 
 const $q = useQuasar();
@@ -118,9 +118,13 @@ const props = withDefaults(defineProps<Props>(), {
 const gridColumns = computed(() => {
   if ($q.screen.gt.lg) {
     return `
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         `;
   } else if ($q.screen.gt.sm) {
+    return `
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        `;
+  } else if ($q.screen.gt.xs) {
     return `
         grid-template-columns: repeat(2, minmax(0, 1fr));
         `;
@@ -132,10 +136,10 @@ const gridColumns = computed(() => {
 });
 </script>
 <style lang="scss" scoped>
-.ed-card-grid {
+.ed-poster-grid {
   display: grid;
   grid-gap: 1rem;
-  .ed-card {
+  .ed-poster {
     //max-height: 280px;
     .card {
       height: 100%;

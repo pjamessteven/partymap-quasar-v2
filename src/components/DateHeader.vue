@@ -4,26 +4,24 @@
       class="date-header flex row grow ellipsis t1 chicago"
       :class="$q.screen.gt.xs ? ' q-px-md q-py-md' : 'q-px-sm q-py-md'"
     >
-      Events in {{ dateString }}
-      <q-separator
-        class="grow q-ml-md"
-        v-if="$q.screen.gt.lg && this.sidebarExpanded"
-      />
+      <span v-if="!!altLabel">{{ altLabel }}</span>
+      <span v-else> Events in {{ dateString }}</span>
+      <!--
+      <q-separator class="grow q-ml-md" v-if="$q.screen.gt.lg" />
+      -->
     </div>
     <div class="date-header-shadow" />
   </div>
 </template>
 <script>
 import moment from 'moment-timezone';
-import { mapWritableState } from 'pinia';
-import { useMainStore } from 'src/stores/main';
 
 export default {
   props: {
     date: String,
+    altLabel: String,
   },
   computed: {
-    ...mapWritableState(useMainStore, ['sidebarExpanded']),
     dateString() {
       if (this.date) {
         return '' + moment(this.date).format('MMM YYYY');
@@ -52,16 +50,6 @@ export default {
     //bottom: 4px;
     //padding: 32px 0;
   }
-  /*
-  .date-header-shadow {
-    box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.2);
-    position: absolute;
-    top: 0px;
-    height: 30px;
-    width: 100%;
-    z-index: 3005;
-  }
-  */
 }
 
 .body--light {
