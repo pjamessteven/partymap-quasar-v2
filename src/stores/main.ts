@@ -66,25 +66,28 @@ export const useMainStore = defineStore('main', {
       }
     },
     getFineLocation() {
-      console.log('get fine location');
       if (navigator.geolocation) {
         this.userLocationLoading = true;
         navigator.geolocation.getCurrentPosition(
           async (position) => {
             this.fineLocation = true;
+            // show coords while loading place name
+            if (!this.userLocation) {
+              const unknownCityCoords =
+                position.coords.latitude + ', ' + position.coords.longitude;
+              this.userLocationCity = unknownCityCoords;
+            }
+
             this.userLocation = {
               lat: position.coords.latitude,
               lng: position.coords.longitude,
             };
-            const unknownCityCoords =
-              position.coords.latitude + ', ' + position.coords.longitude;
-
-            //this.userLocationCity = unknownCityCoords;
 
             this.userLocationLoading = false;
+
             try {
               const response: any = await fetch(
-                `https://nominatim.openstreetmap.org/reverse?lat=${this.userLocation.lat}&lon=${this.userLocation.lng}&format=json&addressdetails=1`,
+                `https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json&addressdetails=1`,
                 {
                   method: 'GET',
                   headers: {

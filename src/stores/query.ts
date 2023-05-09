@@ -237,11 +237,15 @@ export const useQueryStore = defineStore('query', {
         });
 
         if (this.userEventDatesPage === 1) {
+          this.userEventDates = response.data.items;
+
           this.userEventDatesGroupedByMonth = groupEventDatesByMonth(
             {},
             response.data.items
           );
         } else {
+          this.userEventDates = this.userEventDates.concat(response.data.items);
+
           this.userEventDatesGroupedByMonth = groupEventDatesByMonth(
             this.userEventDatesGroupedByMonth,
             response.data.items

@@ -125,6 +125,7 @@
                     Top artists:
                   </div>
                   <ArtistsComponent
+                    @wheel.stop
                     v-if="nearbyArtists && nearbyArtists.length > 0"
                     :artists="nearbyArtists"
                     :hasNext="nearbyArtistsHasNext"
@@ -134,20 +135,26 @@
                   <!-- NEARBY EVENTS -->
 
                   <div
-                    class="t1 chicago location-header q-py-sm flex row items-center q-pl-md"
+                    class="t1 chicago location-header q-py-sm flex row items-center justify-between q-pl-md"
                   >
-                    <div class="">
-                      {{ $t('landing_page.events_within') }}
+                    <div class="flex items-center">
+                      <div class="">
+                        {{ $t('landing_page.events_within') }}
+                      </div>
+                      <q-select
+                        emit-value
+                        dense
+                        borderless
+                        map-options
+                        behavior="menu"
+                        class="q-mx-xs radius-select chicago o-050"
+                        v-model="queryRadius"
+                        :options="queryRadiusOptions"
+                      />
                     </div>
-                    <q-select
-                      emit-value
-                      dense
-                      borderless
-                      map-options
-                      behavior="menu"
-                      class="q-mx-xs radius-select chicago o-050"
-                      v-model="queryRadius"
-                      :options="queryRadiusOptions"
+                    <EventDateViewOptions
+                      :show-group-by-month="false"
+                      v-if="$q.screen.gt.xs"
                     />
                   </div>
                   <transition
@@ -215,7 +222,12 @@
                         </div>
                       </div>
                     </div>
+                    <EventDateViewOptions
+                      :show-group-by-month="false"
+                      v-if="$q.screen.gt.xs"
+                    />
                   </div>
+
                   <transition
                     appear
                     enter-active-class="animated fadeIn slower"
@@ -302,7 +314,7 @@ export default {
     ArtistsComponent,
     EventDateList,
     EventDatePosterList,
-    //EventDateViewOptions,
+    EventDateViewOptions,
   },
   data() {
     return {
@@ -420,16 +432,27 @@ export default {
   watch: {
     userLocation: {
       handler: function (newval, oldval) {
-        if (oldval != null) {
-          this.queryRadius = null;
+        if (newval && !oldval) {
           this.loadEverything();
+          return;
+        } else if (newval && oldval) {
+          const userLocationHasSignficantlyChanged =
+            Math.round(newval.lat) !== Math.round(oldval.lat) ||
+            Math.round(newval.lng) !== Math.round(oldval.lng);
+
+          if (userLocationHasSignficantlyChanged) {
+            this.loadEverything();
+          }
         }
       },
+      deep: true,
     },
     queryRadius: {
       handler: function (newval, oldval) {
-        if (oldval != null) {
+        console.log('qq qr', newval, oldval);
+        if (oldval !== null && oldval != newval) {
           this.loadEverything();
+          console.log('qq called', newval, oldval);
         }
       },
     },
@@ -520,7 +543,6 @@ export default {
         window.prerenderReady = true;
       }, 300);
     } else {
-      await this.loadEverything();
       setTimeout(() => {
         window.prerenderReady = true;
       }, 300);

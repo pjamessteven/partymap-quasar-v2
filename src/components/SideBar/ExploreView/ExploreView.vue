@@ -84,11 +84,21 @@
                       Top artists in this area:
                     </div>
                     <ArtistsComponent
+                      @wheel.stop
                       class="artists-component"
                       :artists="artists"
                       :hasNext="artistsHasNext"
                       :loadMore="loadMoreArtists"
                     />
+                  </div>
+                  <div
+                    class="header q-py-md t1 chicago"
+                    :class="
+                      $q.screen.lt.sm ? 'q-pl-sm q-mt-sm' : 'q-pl-md  q-py-md'
+                    "
+                    v-if="!groupEventsByMonth"
+                  >
+                    Upcoming events in this area:
                   </div>
                   <transition
                     appear

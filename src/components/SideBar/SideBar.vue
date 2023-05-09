@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="flex sidebar-wrapper"
-    :class="{ 'prevent-interaction': preventMapInteraction }"
-  >
+  <div class="flex sidebar-wrapper">
     <div
       class="mobile-dismiss-list-background"
       :class="{ expanded: showPanel }"
@@ -10,40 +7,36 @@
 
     <Transition
       appear
-      :enter-active-class="
-        $q.screen.lt.sm ? 'animated ' : 'animated fast slideInUp'
-      "
-      :leave-active-class="
-        $q.screen.lt.sm
-          ? 'animated slideOutDown'
-          : 'animated  fast slideOutDown'
-      "
+      enter-active-class="animated  fadeIn"
+      leave-active-class=""
     >
       <div
         ref="sidebar"
         v-touch-swipe.mouse.up="!showPanel ? handleSwipe : null"
-        v-show="
-          $q.screen.lt.sm ||
-          ($q.screen.gt.md &&
-            ($route.name === 'Explore' || $route.name === 'EventPage')) ||
-          $route.name === 'Explore'
-        "
         class="flex column justify-between no-wrap sidebar"
         :style="computedSidebarWidth"
         id="sidebar"
         elevated
         v-bind:class="{
-          'sidebar-mobile-expanded': showPanel,
-          'sidebar-mobile-hidden': this.$route.name !== 'Explore',
+          'sidebar-mobile-expanded':
+            showPanel && this.$route.name === 'Explore',
+          'sidebar-mobile-hidden':
+            (this.$q.screen.lt.sm || !showPanel) &&
+            this.$route.name !== 'Explore',
         }"
       >
         <MobileSwipeHandle @swipe="onMobileSwipeHandle($event)" />
-
         <div
-          v-touch-swipe.mouse.down="enablePanelSwipeDown ? handleSwipe : null"
+          v-touch-swipe.mouse.down="
+            enablePanelSwipeDown && showPanel ? handleSwipe : null
+          "
           class="sidebar-content flex column no-wrap"
         >
-          <NavigationBar class="nav-bar" v-if="$q.screen.gt.xs" />
+          <NavigationBar
+            @click="togglePanel"
+            class="nav-bar"
+            v-if="$q.screen.gt.xs"
+          />
           <q-tab-panels
             keep-alive
             v-model="sidebarPanel"
@@ -125,14 +118,14 @@ export default {
       if (!this.showPanel && down) {
         this.showPanel = true;
       } else if (this.enablePanelSwipeDown && up) {
-        this.preventMapInteraction = true;
+        this.preventMapZoom = true;
         this.showPanel = false;
 
         setTimeout(() => {
           // wait for animation - stop map from zooming uncontrolably
 
-          this.preventMapInteraction = false;
-        }, 1000);
+          this.preventMapZoom = false;
+        }, 1200);
 
         /* disabled this behavior because it's too confusing
         if (
@@ -162,7 +155,7 @@ export default {
         this.showPanel = true;
       }
     },
-    handleScroll(event) {
+    togglePanel(event) {
       this.showPanel = !this.showPanel;
     },
     onMobileSwipeHandle(direction) {
@@ -200,6 +193,7 @@ export default {
       'enablePanelSwipeDown',
     ]),
     ...mapState(useMapStore, ['mapMoving']),
+    ...mapWritableState(useMapStore, ['preventMapZoom']),
     computedSidebarWidth() {
       if (this.$q.screen.gt.sm) {
         return 'width: 50vw; min-width: 800px';
@@ -289,9 +283,7 @@ export default {
   pointer-events: none;
   justify-content: center;
   display: flex;
-  &.prevent-interaction {
-    pointer-events: all;
-  }
+
   .sidebar {
     position: relative;
     flex-shrink: 0;
@@ -306,15 +298,16 @@ export default {
     border-top-left-radius: 18px;
     border-top-right-radius: 18px;
     transition: all 0.3s ease;
-
     transform: translate3d(0, calc(100% - 276px), 0);
-
+    user-select: none;
     will-change: transform;
     padding-bottom: 73px;
 
     &:hover {
       //transform: translate3d(0, 80px, 0) !important;
+      transform: translate3d(0, calc(100% - 286px), 0);
     }
+
     .menubar {
       position: relative;
       width: 100%;

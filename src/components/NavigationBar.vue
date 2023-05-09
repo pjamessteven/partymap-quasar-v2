@@ -11,6 +11,7 @@
       {{ sidebarPanel }}
     </div>
     <q-tabs
+      @click.stop
       :content-class="$q.screen.gt.lg ? '' : ''"
       v-model="sidebarPanel"
       no-caps

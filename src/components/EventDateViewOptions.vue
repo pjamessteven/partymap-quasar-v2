@@ -1,19 +1,21 @@
 <template>
   <div class="view-options flex justify-center items-center">
     <q-btn-dropdown
-      :label="$q.screen.gt.xs && 'View Options'"
       class="chicago t3"
       flat
-      :dropdown-icon="$q.screen.lt.sm && 'mdi-dots-vertical'"
-      :no-icon-animation="$q.screen.lt.sm"
+      label="View"
+      :dropdown-icon="$q.screen.lt.sm ? 'mdi-dots-vertical' : undefined"
+      no-icon-animation
     >
-      <div class="row no-wrap q-pa-md">
+      <div class="row no-wrap q-pa-md chicago">
         <div class="column">
-          <div class="text-large chicago t3 q-mb-md" v-if="$q.screen.lt.sm">
-            View options
-          </div>
+          <div class="text-large t3 q-mb-md">View options</div>
           <q-toggle v-model="compactView" label="Compact view" />
-          <q-toggle v-model="groupEventsByMonth" label="Group by Month" />
+          <q-toggle
+            v-if="showGroupByMonth"
+            v-model="groupEventsByMonth"
+            label="Group by Month"
+          />
         </div>
       </div>
     </q-btn-dropdown>
@@ -27,7 +29,7 @@ import { useMainStore } from 'src/stores/main';
 export default {
   components: {},
   props: {
-    solid: {
+    showGroupByMonth: {
       type: Boolean,
       default: true,
     },

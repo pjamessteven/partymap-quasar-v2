@@ -3,7 +3,7 @@
     <MenuBar class="menubar" />
     <div class="overlay" :style="computedOverlayStyle" />
     <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
-    <SideBar class="sidebar-component" v-show="$route.name === 'Explore'" />
+    <SideBar class="sidebar-component" />
     <MainMap />
     <router-view
       v-slot="{ Component }"
@@ -15,14 +15,8 @@
       <transition
         appear
         leave
-        :enter-active-class="
-          $q.screen.gt.sm ? 'animated slideInUp fast' : 'animated slideInUp'
-        "
-        :leave-active-class="
-          $q.screen.gt.sm
-            ? 'animated slideOutDown fast'
-            : 'animated slideOutDown'
-        "
+        enter-active-class="animated slideInUp"
+        leave-active-class="animated slideOutDown"
       >
         <component :is="Component" />
       </transition>
@@ -87,7 +81,9 @@ export default {
       background: linear-gradient(
         rgba(0, 0, 0, 0.78) 0px,
         rgba(0, 0, 0, 0.78) 64px,
-        rgba(0, 0, 0, 0.58) 128px
+        rgba(0, 0, 0, 0.58) 128px,
+        rgba(0, 0, 0, 0) calc(100% - 256px),
+        rgba(0, 0, 0, 0.78) 100%
       );
     }
   }
@@ -98,7 +94,9 @@ export default {
       background: linear-gradient(
         rgba(0, 0, 0, 0.68) 0px,
         rgba(0, 0, 0, 0.68) 64px,
-        rgba(0, 0, 0, 0.48) 128px
+        rgba(0, 0, 0, 0.48) 128px,
+        rgba(0, 0, 0, 0) calc(100% - 256px),
+        rgba(0, 0, 0, 0.78) 100%
       );
     }
   }
@@ -143,7 +141,7 @@ export default {
     position: absolute;
     height: 100%;
     width: 100%;
-    z-index: 103;
+    z-index: 105;
     top: 0px;
   }
   .mobile-map-view-router {

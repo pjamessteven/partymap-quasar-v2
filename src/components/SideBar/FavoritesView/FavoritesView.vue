@@ -15,6 +15,7 @@
         :class="{ 'q-mx-sm': $q.screen.lt.sm }"
       >
         <q-scroll-area
+          @wheel.stop
           vertical
           @scroll="onScrollMainContent"
           ref="scroll"
@@ -50,13 +51,13 @@
 -->
               <div class="flex column no-wrap content">
                 <div
-                  class="q-mt-md flex column"
+                  class="q-mt-md flex row no-wrap items-center"
                   :class="$q.screen.gt.xs ? 'q-pl-md' : ''"
                 >
                   <q-scroll-area
                     ref="scroll"
                     horizontal
-                    class="scroll-area"
+                    class="scroll-area grow"
                     :class="$q.screen.lt.sm ? 'q-mb-sm' : ''"
                     :style="$q.screen.gt.xs ? 'height: 54px' : 'height: 44px'"
                     :thumb-style="
@@ -213,9 +214,9 @@
                       </q-btn>
                     </div>
                   </q-scroll-area>
+                  <EventDateViewOptions v-if="$q.screen.gt.xs" />
                 </div>
 
-                <UserProfile :user="user" />
                 <!--
                   TODO: ADD USER ARTIST PROFILE
                 <div
@@ -229,18 +230,27 @@
                 </div>
                 -->
 
-                <transition appear enter-active-class="animated fadeIn">
-                  <div class="flex column" v-show="!isLoadingDatesInitial">
-                    <transition
-                      appear
-                      enter-active-class="animated fadeIn slower"
-                    >
-                      <EventDateList
-                        :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
-                        :hasNext="userEventDatesHasNext"
-                      />
-                    </transition>
-                  </div>
+                <transition appear enter-active-class="animated fadeIn slower">
+                  <EventDateList
+                    v-if="
+                      userEventDates && compactView && !isLoadingDatesInitial
+                    "
+                    :groupByMonth="groupEventsByMonth"
+                    :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
+                    :eventDates="userEventDates"
+                    :hasNext="userEventDatesHasNext"
+                  />
+                </transition>
+                <transition appear enter-active-class="animated fadeIn slower">
+                  <EventDatePosterList
+                    v-if="
+                      userEventDates && !compactView && !isLoadingDatesInitial
+                    "
+                    :groupByMonth="groupEventsByMonth"
+                    :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
+                    :eventDates="userEventDates"
+                    :hasNext="userEventDatesHasNext"
+                  />
                 </transition>
               </div>
             </div>
@@ -265,10 +275,10 @@
 </template>
 <script>
 import _ from 'lodash';
-import ArtistProfile from 'components/ArtistProfile.vue';
-//import UserListItem from 'components/UserListItem.vue';
-
 import EventDateList from 'src/components/EventDateList.vue';
+import EventDatePosterList from 'src/components/EventDatePosterList.vue';
+import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
+
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
 import { useMainStore } from 'src/stores/main';
@@ -279,6 +289,8 @@ export default {
   components: {
     // ArtistProfile,
     EventDateList,
+    EventDatePosterList,
+    EventDateViewOptions,
   },
   props: { showControls: { default: false } },
   mounted() {
@@ -329,7 +341,18 @@ export default {
     },
     onScrollMainContent(info) {
       this.mainContentScrollPosition = info.verticalPosition;
-
+      if (info.verticalPercentage === 0) {
+        if (!this.$q.platform.has.touch) {
+          setTimeout(() => {
+            // behavior fix for desktop scroll
+            this.enablePanelSwipeDown = true;
+          }, 250);
+        } else {
+          this.enablePanelSwipeDown = true;
+        }
+      } else {
+        this.enablePanelSwipeDown = false;
+      }
       if (info.verticalPercentage === 1) {
         // reached bottom
         this.loadMore();
@@ -351,15 +374,19 @@ export default {
     },
   },
   computed: {
-    ...mapState(useMainStore, ['sidebarPanel', 'userLocation']),
-    ...mapWritableState(useMainStore, ['showPanel']),
+    ...mapState(useMainStore, [
+      'sidebarPanel',
+      'userLocation',
+      'compactView',
+      'groupEventsByMonth',
+    ]),
+    ...mapWritableState(useMainStore, ['showPanel', 'enablePanelSwipeDown']),
     ...mapState(useAuthStore, ['currentUser']),
     ...mapState(useMapStore, ['mapBounds', 'blockUpdates']),
-    ...mapState(useQueryStore, [
-      'userEventDatesLoading',
-      'userEventDatesGroupedByMonth',
-    ]),
+    ...mapState(useQueryStore, ['userEventDatesLoading']),
     ...mapWritableState(useQueryStore, [
+      'userEventDatesGroupedByMonth',
+      'userEventDates',
       'userEventDatesPage',
       'userEventDatesHasNext',
     ]),

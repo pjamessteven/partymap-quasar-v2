@@ -131,6 +131,18 @@ export default {
   },
 
   watch: {
+    preventMapZoom: {
+      // we need to prevent map zoom for 300ms or so after user uses mousewheel to hide nav panel
+      // otherwise it zooms uncontrolably
+      handler(newv) {
+        if (newv) {
+          console.log(this.map);
+          this.map.scrollWheelZoom.disable();
+        } else {
+          this.map.scrollWheelZoom.enable();
+        }
+      },
+    },
     windowHeight() {
       this.invalidateMapSize();
     },
@@ -624,6 +636,7 @@ export default {
       'eventDateHoverMarker',
       'mapMoving',
       'blockUpdates',
+      'preventMapZoom',
     ]),
     ...mapWritableState(useMainStore, [
       'mapStyle',

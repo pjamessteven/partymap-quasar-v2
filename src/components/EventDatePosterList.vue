@@ -83,11 +83,11 @@
         v-else-if="
           (groupByMonth &&
             Object.keys(eventDatesGroupedByMonth)?.length == 0) ||
-          (!groupByMonth && eventDates && eventDates.length > 0)
+          (!groupByMonth && eventDates && eventDates.length === 0)
         "
         class="t4 chicago q-mt-md"
       >
-        No results in this area
+        No results
       </div>
     </div>
   </div>
@@ -107,10 +107,10 @@ const mainStore = useMainStore();
 
 interface Props {
   eventDates: [EventDate, string][];
-  eventDatesGroupedByMonth: {
+  eventDatesGroupedByMonth?: {
     [key: number]: [EventDate, string][];
   };
-  groupByMonth: boolean;
+  groupByMonth?: boolean;
   hasNext: boolean;
 }
 
