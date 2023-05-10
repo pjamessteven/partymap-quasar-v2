@@ -96,7 +96,7 @@
                     :class="
                       $q.screen.lt.sm ? 'q-pl-sm q-mt-sm' : 'q-pl-md  q-py-md'
                     "
-                    v-if="!groupEventsByMonth"
+                    v-if="!groupEventsByMonth && eventDates?.length > 0"
                   >
                     Upcoming events in this area:
                   </div>

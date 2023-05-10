@@ -114,7 +114,6 @@ export default {
     onMouseWheel(e) {
       const up = e.direction === 'up';
       const down = e.direction === 'down';
-      console.log(e);
       if (!this.showPanel && down) {
         this.showPanel = true;
       } else if (this.enablePanelSwipeDown && up) {
