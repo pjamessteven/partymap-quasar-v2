@@ -25,7 +25,7 @@
               {{ $t('add_event.i_am_host_msg') }}
             </q-item-label>
           </q-item-section>
-          <q-item-section avatar>
+          <q-item-section avatar v-if="$q.screen.gt.xs">
             <q-icon name="mdi-chevron-right" />
           </q-item-section>
         </q-item>
@@ -38,7 +38,7 @@
               {{ $t('add_event.event_i_know_about_msg') }}
             </q-item-label>
           </q-item-section>
-          <q-item-section avatar>
+          <q-item-section avatar v-if="$q.screen.gt.xs">
             <q-icon name="mdi-chevron-right" />
           </q-item-section>
         </q-item>
@@ -137,6 +137,7 @@ export default {
 @media only screen and (max-width: 600px) {
   .q-dialog-plugin {
     min-width: unset;
+    max-width: 90vw;
   }
 }
 </style>

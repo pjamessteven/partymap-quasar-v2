@@ -1,9 +1,6 @@
 <template>
   <div class="event-page">
-    <div
-      class="flex row no-wrap event-page-content"
-      :style="computedSidebarPadding"
-    >
+    <div class="flex row no-wrap event-page-content">
       <div
         class="flex history-container col-4 col-xs-12 col-sm-6 col-md-5 col-lg-4 col-xl-4"
         v-if="showingHistory"
@@ -50,7 +47,6 @@
                   "
                   class="featured-media"
                   :editing="editing"
-                  @openGallery="showingGalleryDialog = true"
                 />
                 <div class="header-content grow row">
                   <div
@@ -162,7 +158,7 @@
                         class="q-mr-sm q-mt-sm"
                       >
                         <q-btn
-                          :disabled="editing"
+                          :disable="editing"
                           color="grey-3"
                           text-color="black"
                           :label="$t('event.get_tickets')"
@@ -182,6 +178,15 @@
                         :class="$q.screen.gt.sm ? 'q-mt-md' : 'q-mt-lg q-mr-lg'"
                       />
                     </div>
+                    <q-rating
+                      v-if="!!event"
+                      :model-value="event.rating"
+                      size="2em"
+                      :max="5"
+                      readonly
+                      color="primary"
+                      class="q-mt-md"
+                    />
                     <div
                       class="flex row justify-between items-end no-wrap tags-wrapper"
                       :class="$q.screen.gt.sm ? 'q-pt-lg' : 'q-pt-md'"
@@ -203,8 +208,36 @@
                   </div>
                 </div>
               </div>
+              <div
+                class="main-content"
+                :class="$q.screen.gt.sm ? ' q-pa-xl' : ''"
+                v-if="!!event"
+              >
+                <div
+                  v-if="
+                    event &&
+                    (!event.event_dates || event.event_dates.length === 0)
+                  "
+                  class="q-px-xl q-pt-xl q-pb-xl flex row items-center justify-center"
+                >
+                  <div class="t3">
+                    {{
+                      $t('event_dates.this_event_doesnt_have_upcoming_dates')
+                    }}
+                  </div>
+                </div>
+                <div v-else class="flex row no-wrap">
+                  <EventDateSidebarDesktop
+                    v-if="$q.screen.gt.sm"
+                    class="q-mr-xl"
+                  />
+                  <div class="flex column grow">
+                    <EventDates />
 
-              <EventDates v-if="!!event" />
+                    <ReviewsComponent class="q-mt-xl" />
+                  </div>
+                </div>
+              </div>
 
               <!--
             <div class="">
@@ -414,7 +447,10 @@
                         @click="
                           currentUser
                             ? (showingClaimDialog = true)
-                            : $router.push({ name: 'Login' })
+                            : $router.push({
+                                path: '/login',
+                                query: { from: $route.path },
+                              })
                         "
                         clickable
                       >
@@ -536,13 +572,14 @@ import _ from 'lodash';
 import common from 'assets/common';
 import DescriptionComponent from 'components/EventPage/DescriptionComponent.vue';
 import EventDates from 'components/EventPage/EventDates/EventDates.vue';
+import EventDateSidebarDesktop from 'components/EventPage/EventDates/EventDateSidebarDesktop.vue';
 import FeaturedMediaBackground from 'components/EventPage/Gallery/FeaturedMediaBackground.vue';
 import FeaturedMediaComponent from 'components/EventPage/Gallery/FeaturedMediaComponent.vue';
 // import HistoryComponent from 'components/EventPage/Activity/HistoryComponent.vue';
 import NextEventDateSummary from 'components/EventPage/EventDates/NextEventDateSummary.vue';
 // import ReportDialog from './ReportDialog.vue';
 import TagsComponent from 'components/EventPage/Tags/TagsComponent.vue';
-
+import ReviewsComponent from './Reviews/ReviewComponent.vue';
 export default {
   name: 'EventPage',
   meta() {
@@ -573,9 +610,11 @@ export default {
     FeaturedMediaBackground,
     DescriptionComponent,
     NextEventDateSummary,
+    ReviewsComponent,
     //ReportDialog,
     //HistoryComponent,
     EventDates,
+    EventDateSidebarDesktop,
   },
   props: {
     id: {
@@ -614,7 +653,10 @@ export default {
       if (this.currentUser) {
         this.toggleFavorite();
       } else {
-        this.$router.push({ name: 'Login' });
+        this.$router.push({
+          name: 'Login',
+          query: { from: $router.currentRoute.path },
+        });
       }
     },
     deleteEvent() {
@@ -640,11 +682,11 @@ export default {
       var height = window.innerHeight / 3 - 120 // this is the height of the gap between menu bar and top of event card
       var scrollPercentage = info.target.scrollTop / height
       if (scrollPercentage >= 1) {
-        this.menuBarOpacity = 0
+        this.menubarOpacity = 0
       } else {
-        this.menuBarOpacity = 1
+        this.menubarOpacity = 1
       }
-      // this.menuBarOpacity = scrollPercentage * -1 + 1
+      // this.menubarOpacity = scrollPercentage * -1 + 1
       */
       var height = window.innerHeight / 3 - 120; // this is the height of the gap between menu bar and top of event card
       this.scrollPercentage = info.target.scrollTop / height;
@@ -653,16 +695,23 @@ export default {
         if (this.$q.screen.gt.xs) {
           this.overlayOpacity = 1 - this.scrollPercentage * 2;
 
-          // this.menuBarOpacity = (info.target.scrollTop / 100) * -1 + 1;
+          // this.menubarOpacity = (info.target.scrollTop / 100) * -1 + 1;
         } else {
-          // this.menuBarOpacity = ((info.target.scrollTop * 1.5) / 100) * -1 + 1;
-          this.overlayOpacity = 1 - this.scrollPercentage * 2;
+          //this.menubarOpacity = ((info.target.scrollTop * 1.5) / 100) * -1 + 1;
+          //this.menubarOpacity = ((info.target.scrollTop * 1.5) / 100) * 1;
+          console.log(info.target.scrollTop);
+          if (info.target.scrollTop > 64) {
+            this.menubarOpacity = 1;
+          } else {
+            this.menubarOpacity = 0;
+          }
+          this.overlayOpacity = ((info.target.scrollTop * 1.5) / 100) * 1;
         }
       }
       if (this.$q.screen.gt.xs) {
         this.overlayOpacity = this.scrollPercentage * 2;
       } else {
-        this.overlayOpacity = 0;
+        //this.overlayOpacity = this.scrollPercentage * 2;
       }
     },
     share() {
@@ -762,22 +811,12 @@ export default {
     },
   },
   computed: {
-    ...mapState(useMainStore, ['sidebarExpanded']),
     ...mapWritableState(useMainStore, ['menubarOpacity', 'overlayOpacity']),
     ...mapWritableState(useMapStore, ['focusMarker']),
     ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
     ...mapState(useEventStore, ['loadingEvent', 'selectedEventDate']),
     ...mapWritableState(useEventStore, ['event', 'editing']),
 
-    computedSidebarPadding() {
-      if (this.$q.screen.lt.lg) {
-        return 'padding-left: 0px';
-      } else if (this.sidebarExpanded) {
-        return 'padding-left: 736px';
-      } else {
-        return 'padding-left: 370px';
-      }
-    },
     pageViewChars() {
       if (this.event.page_views) {
         var chars = this.event.page_views.toString().split('');
@@ -875,7 +914,7 @@ export default {
     window.prerenderReady = false;
   },
   mounted() {
-    this.menuBarOpacity = 1;
+    this.menubarOpacity = 0;
     this.editing = this.$route.params.editing;
     // clear previous event
     this.load();
@@ -896,7 +935,8 @@ export default {
     setTimeout(() => {
       this.focusMarker = null;
     }, 1500);
-    this.menuBarOpacity = 1;
+    this.menubarOpacity = 0;
+    this.overlayOpacity = 0;
   },
 };
 </script>
@@ -1007,7 +1047,7 @@ a {
           }
 
           .event-dates-component {
-            //border: 1px solid rgba(0, 0, 0, 0.1);
+            //border: 1px solid rgb(230,230,230);
           }
           .header {
             background: $bi-4 !important;

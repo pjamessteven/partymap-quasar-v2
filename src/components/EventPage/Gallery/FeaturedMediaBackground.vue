@@ -29,7 +29,7 @@
         <img
           :key="headerBackground.id + 'else'"
           v-else-if="headerBackground.image_url"
-          :src="headerBackground.thumb_url"
+          :src="headerBackground.thumb_xs_url"
           class="item"
         />
       </transition>

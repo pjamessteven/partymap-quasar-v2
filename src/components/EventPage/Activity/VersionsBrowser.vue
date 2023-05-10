@@ -5,7 +5,7 @@
         flat
         icon="mdi-chevron-left"
         @click="loadMoreRevisions"
-        :disabled="!hasNext"
+        :disable="!hasNext"
         :label="$t('activity.older')"
       />
       <transition appear enter-active-class="animated fadeIn slow">
@@ -14,7 +14,7 @@
           v-model="selectedRevisionIndex"
           color="primary"
           label
-          :disabled="items && items.length == 1"
+          :disable="items && items.length == 1"
           :label-value="
             selectedRevision
               ? $t('activity.revision') +
@@ -40,7 +40,7 @@
         flat
         :label="$t('activity.revert')"
         @click="loadMoreRevisions"
-        :disabled="!hasNext"
+        :disable="!hasNext"
       />
       <q-inner-loading :showing="loading">
         <q-spinner-ios

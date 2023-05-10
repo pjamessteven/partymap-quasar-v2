@@ -5,7 +5,6 @@
       ref="musicBrainzInput"
       :options-conver="false"
       :loading="loadingResults"
-      square
       outlined
       use-input
       menu-anchor="top left"
@@ -59,7 +58,7 @@
           flat
           icon="mdi-minus"
           @click="removeList"
-          :disabled="lists.length === 1"
+          :disable="lists.length === 1"
         />
 
         <q-btn flat icon="mdi-plus">

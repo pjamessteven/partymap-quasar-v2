@@ -79,7 +79,7 @@ export default {
     }
     &.selected {
       .tag-inner-wrapper {
-        // background: rgba(0, 0, 0, 0.1);
+        // background: rgb(230,230,230);
       }
     }
     &.hover {

@@ -29,6 +29,7 @@ interface NearbyState {
   nearbyEventDatesSuccess: boolean;
 
   // global event dates for SEO
+  eventDatesRequestId: number | null;
   eventDates: EventDate[];
   eventDatesHasNext: boolean;
   eventDatesPage: number;
@@ -54,7 +55,9 @@ export const useNearbyStore = defineStore('nearby', {
     nearbyEventDatesHasNext: true,
     nearbyEventDatesPage: 1,
     nearbyEventDatesSuccess: false,
+
     // global event dates for SEO
+    eventDatesRequestId: null,
     eventDates: [],
     eventDatesHasNext: true,
     eventDatesPage: 1,
@@ -64,12 +67,16 @@ export const useNearbyStore = defineStore('nearby', {
   actions: {
     async loadEverything() {
       this.loadingEverything = true;
+
       this.nearbyArtistsPage = 1;
       this.nearbyEventDatesPage = 1;
-      this.nearbyArtistsPage = 1;
+      this.nearbyTagsPage = 1;
+      this.eventDatesPage = 1;
+
       this.nearbyArtists = [];
       this.nearbyTags = [];
       this.nearbyEventDates = [];
+      this.eventDates = [];
 
       // this first request will return the radius
       // needed for the following requests
@@ -77,6 +84,7 @@ export const useNearbyStore = defineStore('nearby', {
 
       // do the following concurrently
       await Promise.all([this.loadNearbyArtists(), this.loadNearbyTags()]);
+      await this.loadEventDates();
 
       this.loadingEverything = false;
     },
@@ -145,7 +153,7 @@ export const useNearbyStore = defineStore('nearby', {
             response.data.items
           );
         }
-        if (this.queryRadius === null && response.data.radius) {
+        if (this.nearbyEventDatesPage === 1 && response.data.radius) {
           // server will calculate a fitting query radius
           // if user has not selected one
           this.queryRadius = response.data.radius;
@@ -163,22 +171,29 @@ export const useNearbyStore = defineStore('nearby', {
     async loadEventDates() {
       const main = useMainStore();
       try {
+        // keep track of request id
+        const requestId = Math.random();
+        this.eventDatesRequestId = requestId;
+
         const response = await getEventDatesRequest({
           date_min: moment().toISOString(),
           date_max: null,
-          location: JSON.stringify(main.userLocation),
           page: this.eventDatesPage,
           per_page: 10,
           distinct: true,
         });
-        if (this.eventDatesPage === 1) {
-          this.eventDates = response.data.items;
+        if (this.eventDatesRequestId === requestId) {
+          if (this.eventDatesPage === 1) {
+            this.eventDates = response.data.items;
+          } else {
+            this.eventDates = this.eventDates.concat(response.data.items);
+          }
+          this.eventDatesHasNext = response.data.has_next;
+          this.eventDatesPage += 1;
+          return;
         } else {
-          this.eventDates = this.eventDates.concat(response.data.items);
+          return;
         }
-        this.eventDatesHasNext = response.data.has_next;
-        this.eventDatesPage += 1;
-        return;
       } catch (error) {
         throw error;
       }

@@ -97,7 +97,7 @@
         @click="updateEvent()"
         color="primary"
         :label="'Finish'"
-        :disabled="
+        :disable="
           !update.date_time ||
           (update.date_time &&
             update.date_time.start &&

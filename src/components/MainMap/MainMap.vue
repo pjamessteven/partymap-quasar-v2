@@ -1,9 +1,16 @@
 <template>
   <div
     style="height: 100%; width: 100%; z-index: 0"
-    :class="mapStyle === 'satellite' ? 'satellite-enabled' : ''"
+    :class="{
+      'satellite-enabled': mapStyle === 'satellite',
+    }"
   >
-    <div ref="map" style="height: 100%; z-index: 0" class="map">
+    <div
+      ref="map"
+      style="height: 100%; z-index: 0"
+      class="map"
+      @wheel="handleWheel"
+    >
       <transition
         appear
         enter-active-class="animated fadeIn"
@@ -124,6 +131,18 @@ export default {
   },
 
   watch: {
+    preventMapZoom: {
+      // we need to prevent map zoom for 300ms or so after user uses mousewheel to hide nav panel
+      // otherwise it zooms uncontrolably
+      handler(newv) {
+        if (newv) {
+          console.log(this.map);
+          this.map.scrollWheelZoom.disable();
+        } else {
+          this.map.scrollWheelZoom.enable();
+        }
+      },
+    },
     windowHeight() {
       this.invalidateMapSize();
     },
@@ -300,6 +319,17 @@ export default {
 
   methods: {
     ...mapActions(useQueryStore, ['loadPoints']),
+    handleWheel(event) {
+      // switch to explore view
+      if (
+        this.sidebarPanel !== 'explore' &&
+        this.sidebarPanel !== 'favorites'
+      ) {
+        this.sidebarPanel = 'explore';
+      }
+      this.showPanel = false;
+      return false;
+    },
     clearMarkersAndLoadPoints() {
       if (this.mapMarkers !== null) {
         this.map?.removeLayer(this.mapMarkers);
@@ -312,18 +342,18 @@ export default {
       this.loadPoints();
     },
     fitBoundsForExplorePage(coords) {
-      // paddingTopLeft is so that the sidebar is considered
+      // padding for desktop panel
       var latlng = L.latLng(coords);
       if (this.$q.screen.gt.xs) {
         this.map.fitBounds(L.latLngBounds(latlng, latlng), {
-          paddingTopLeft: [350, 0],
+          paddingTopLeft: [0, 276],
           animate: true,
           duration: 0.3,
           easeLinearity: 1,
           maxZoom: 10,
         });
       } else {
-        // padding for mobile bottom bar
+        // padding for mobile bottom panel
         this.map.fitBounds(L.latLngBounds(latlng, latlng), {
           paddingTopLeft: [0, -150],
           animate: true,
@@ -374,74 +404,19 @@ export default {
       }
     },
     setBounds(bounds) {
-      /* eslint-disable */
-      var center = null;
-      var $sidebar = document.getElementById('sidebar');
+      const bottomPanelHeight = '276';
 
-      if (this.$q.screen.gt.xs && $sidebar) {
-        // Get the width of the overlapping sidebar if on desktop
-        // so that the bounds exclude the sidebar
-        var deltaX = $sidebar.getBoundingClientRect().width;
-        var pxSw = this.map.getPixelBounds().getBottomLeft();
-        pxSw = pxSw.add(L.point(deltaX, 0)); // add the width of the sidebar
-        var sw = this.map.unproject(pxSw);
-        bounds = L.latLngBounds(sw, this.map.getBounds().getNorthEast()); // bounds without the sidebar
+      var pxSw = this.map.getPixelBounds().getBottomLeft();
 
-        /*
-        use for debugging map viewport
-        var poly = L.polyline([sw, this.map.getBounds().getNorthEast()], {
-          color: 'red'
-        })
-        var markers = [poly]
-        this.focusMarkerLayer = L.featureGroup(markers).addTo(this.map)
-        */
+      pxSw = pxSw.subtract(L.point(0, bottomPanelHeight)); // add the height of the bottom panel
+      var sw = this.map.unproject(pxSw);
+      bounds = L.latLngBounds(sw, this.map.getBounds().getNorthEast()); // bounds without the bottom panel
 
-        // GET THE CENTER OF THE BOUNDS
-        // L.LatLngBounds.getCenter() does a very naïve calculation: it just returns the average of the latitudes of the bounds.
-        // What you expect is the average of the projected latitudes (then unprojected back into a LatLng).
-
-        // project to points
-        var pxNe = this.map.getPixelBounds().getTopRight();
-        // get center
-        var projectedBoundsCenter = L.bounds(pxSw, pxNe).getCenter();
-        // unproject back to latlng
-        center = this.map.unproject(projectedBoundsCenter);
-      } else if (this.$q.screen.lt.sm) {
-        // screen is small, focus on sidebar height (200px)
-        var pxSw = this.map.getPixelBounds().getBottomLeft();
-        pxSw = pxSw.subtract(L.point(0, 200)); // add the height of the bottom 'sidebar'
-        var sw = this.map.unproject(pxSw);
-        bounds = L.latLngBounds(sw, this.map.getBounds().getNorthEast()); // bounds without the bottom 'sidebar'
-
-        // get center
-        // project to points
-        var pxNe = this.map.getPixelBounds().getTopRight();
-        // get center
-        var projectedBoundsCenter = L.bounds(pxSw, pxNe).getCenter();
-        // unproject back to latlng
-        center = this.map.unproject(projectedBoundsCenter);
-        /*
-        // use for debugging map viewport
-        var poly = L.polyline([sw, this.map.getBounds().getNorthEast()], {
-          color: 'red'
-        })
-        var markers = [poly]
-        this.focusMarkerLayer = L.featureGroup(markers).addTo(this.map)
-        */
-      }
       this.mapBounds = bounds;
       this.mapCenter = bounds;
-      /* eslint-enable */
     },
     setMarkerFocusForEventPage(latlng, zoom) {
       this.eventDateHoverLayer.clearLayers();
-
-      // set opacity
-      // this.tileLayer.setOpacity(0.8)
-      // this.map.invalidateSize()
-      // add padding
-      // add marker
-      // this.focusMarker.clearLayers()
 
       var markers = [
         L.marker(latlng, {
@@ -458,13 +433,7 @@ export default {
       var mapContainerHeight = this.windowHeight; // minus menubar
       var paddingBottom = this.windowHeight - mapContainerHeight / 3 + 28;
       var paddingRight = 0;
-      if (this.$q.screen.gt.md) {
-        if (this.sidebarExpanded) {
-          paddingRight = -736;
-        } else {
-          paddingRight = -370;
-        }
-      }
+
       // this.map.flyTo(latlng, zoom)
       this.map.fitBounds(this.focusMarkerLayer.getBounds(), {
         paddingBottomRight: [paddingRight, paddingBottom],
@@ -481,23 +450,25 @@ export default {
       this.initTileLayers();
 
       this.map.on('mousedown', () => {
+        // switch to explore view
         if (
           this.sidebarPanel !== 'explore' &&
           this.sidebarPanel !== 'favorites'
-        )
+        ) {
           this.sidebarPanel = 'explore';
+        }
+        this.showPanel = false;
       });
+
       this.map.on('movestart', () => {
         this.mapMoving = true;
+        this.exploreMapView = {
+          latlng: this.map.getCenter(),
+          zoom: this.map.getZoom(),
+        };
       });
 
       this.map.on('moveend', (event) => {
-        if (
-          this.sidebarPanel !== 'explore' &&
-          this.sidebarPanel !== 'favorites'
-        )
-          this.sidebarPanel = 'explore';
-
         if (!this.blockUpdates) {
           this.exploreMapView = {
             latlng: this.map.getCenter(),
@@ -510,6 +481,7 @@ export default {
       });
       this.map.on('zoomstart', () => {
         this.markersLoaded = false;
+        // switch to explore view handled by wheel event
       });
       this.map.on('zoomend', (event) => {
         if (event.target.getZoom() > 10) {
@@ -527,6 +499,13 @@ export default {
             this.map.removeLayer(this.mapMarkersPermanentTooltip);
             this.map.addLayer(this.mapMarkers);
           }
+        }
+        if (!this.blockUpdates) {
+          this.exploreMapView = {
+            latlng: this.map.getCenter(),
+            zoom: this.map.getZoom(),
+          };
+          this.setBounds(event.target.getBounds());
         }
       });
     },
@@ -657,12 +636,13 @@ export default {
       'eventDateHoverMarker',
       'mapMoving',
       'blockUpdates',
+      'preventMapZoom',
     ]),
     ...mapWritableState(useMainStore, [
       'mapStyle',
-      'sidebarExpanded',
       'userLocation',
       'sidebarPanel',
+      'showPanel',
     ]),
     ...mapState(useQueryStore, [
       'controlDateRange',

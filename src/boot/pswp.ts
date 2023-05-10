@@ -1,4 +1,4 @@
-import { boot } from 'quasar/wrappers';
+/*import { boot } from 'quasar/wrappers';
 import Photoswipe from 'vue-pswipe';
 
 const options = {
@@ -10,3 +10,4 @@ const options = {
 export default boot(({ app }) => {
   app.use(Photoswipe);
 });
+*/

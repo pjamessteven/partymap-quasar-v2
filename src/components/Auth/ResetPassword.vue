@@ -46,7 +46,7 @@
 
       <q-card-section class="flex justify-center q-mb-md">
         <q-btn
-          :disabled="!validation"
+          :disable="!validation"
           :label="$t('auth.reset_password')"
           color="primary"
           v-on:click="resetPassword"
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { passwordResetRequest } from '@/api';
+import { passwordResetRequest } from 'src/api';
 export default {
   name: 'ResetPassword',
   data() {

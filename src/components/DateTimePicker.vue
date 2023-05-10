@@ -15,27 +15,24 @@
           <div class="t2">
             <q-icon name="mdi-clock-outline" left />{{ $t('add.start_time') }}
           </div>
-          <div class="flex row q-mt-sm">
+          <div class="flex row items-center q-mt-sm">
             <q-select
               outlined
-              square
               dense
-              hide-dropdown-icon
               v-model="dt.startHours"
               :options="hours"
-              v-bind:label="$t('add.hour')"
-              class="col-grow"
+              label="hour"
+              class="time-select"
             >
             </q-select>
+            <div class="q-px-xs">:</div>
             <q-select
               outlined
-              square
               dense
-              hide-dropdown-icon
               v-model="dt.startMinutes"
               :options="minutes"
-              v-bind:label="$t('add.minutes')"
-              class="col-grow q-ml-sm"
+              label="min"
+              class="time-select"
             >
             </q-select>
           </div>
@@ -44,26 +41,24 @@
           <div class="t2">
             <q-icon name="mdi-clock-outline" left />{{ $t('add.end_time') }}
           </div>
-          <div class="flex row q-mt-sm">
+          <div class="flex row items-center q-mt-sm">
             <q-select
               outlined
               dense
-              square
-              hide-dropdown-icon
               v-model="dt.endHours"
               :options="hours"
-              v-bind:label="$t('add.hour')"
-              class="col-grow"
+              label="hour"
+              class="time-select"
             />
+            <div class="q-px-xs">:</div>
+
             <q-select
               outlined
               dense
-              square
-              hide-dropdown-icon
               v-model="dt.endMinutes"
               :options="minutes"
-              v-bind:label="$t('add.minutes')"
-              class="col-grow q-ml-sm"
+              label="min"
+              class="time-select"
             />
           </div>
         </div>
@@ -246,7 +241,10 @@ export default {
 }
 .time-box {
   border-radius: 0px;
-  min-width: 200px;
+  min-width: 220px;
+  .time-select {
+    min-width: 90px;
+  }
 }
 
 .vc-container {

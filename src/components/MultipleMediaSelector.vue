@@ -34,10 +34,13 @@
           <source :src="item.base64File" :type="item.mimeType" />
           <q-icon size="1em" name="las la-play" />
         </video>
-        <div class="options flex column justify-between" v-if="!disableCaption">
+        <div
+          class="options q-px-md q-pt-sm flex column justify-between"
+          v-if="!disableCaption"
+        >
           <q-input
+            dense
             autogrow
-            outlined
             v-model="item.caption"
             :label="$t('media_upload.caption')"
             @input="emit"
@@ -52,12 +55,12 @@
         style="width: max-content"
         class="soft-button-shadow"
         color="primary"
-        v-if="singleSelectMode && items.length >= 1 ? false : true"
+        v-if="showSelectButton && !(singleSelectMode && items.length >= 1)"
       />
       <q-btn
         v-if="showUploadButton"
         class="q-ml-sm soft-button-shadow"
-        :disabled="!items || items.length == 0"
+        :disable="!items || items.length == 0"
         :label="$t('media_upload.upload')"
         v-on:click="$emit('upload')"
         color="primary"
@@ -72,6 +75,7 @@ export default {
   props: {
     openDialogOnMount: Boolean,
     showUploadButton: Boolean,
+    showSelectButton: { type: Boolean, default: true },
     singleSelectMode: Boolean,
     disableCaption: Boolean,
   },
@@ -186,13 +190,13 @@ div.file-listing img {
       left: -10px;
       top: -10px;
       z-index: 2;
+      border-radius: 100px !important;
     }
     &:last-child {
       margin-bottom: 0px;
     }
 
     .options {
-      margin: 10px;
       flex-grow: 1;
     }
   }

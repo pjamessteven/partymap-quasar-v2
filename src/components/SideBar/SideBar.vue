@@ -2,67 +2,48 @@
   <div class="flex sidebar-wrapper">
     <div
       class="mobile-dismiss-list-background"
-      :class="{ expanded: $q.screen.lt.sm && showPanelMobile }"
+      :class="{ expanded: showPanel }"
     />
 
     <Transition
       appear
-      :enter-active-class="
-        $q.screen.lt.sm ? 'animated ' : 'animated fast slideInLeft'
-      "
-      :leave-active-class="
-        $q.screen.lt.sm
-          ? 'animated slideOutDown'
-          : 'animated  fast slideOutLeft'
-      "
+      enter-active-class="animated  fadeIn"
+      leave-active-class=""
     >
       <div
-        v-show="
-          $q.screen.lt.sm ||
-          ($q.screen.gt.md &&
-            ($route.name === 'Explore' || $route.name === 'EventPage')) ||
-          $route.name === 'Explore'
-        "
+        ref="sidebar"
+        v-touch-swipe.mouse.up="!showPanel ? handleSwipe : null"
         class="flex column justify-between no-wrap sidebar"
         :style="computedSidebarWidth"
         id="sidebar"
         elevated
         v-bind:class="{
-          'sidebar-mobile-expanded': $q.screen.lt.sm && showPanelMobile,
+          'sidebar-mobile-expanded':
+            showPanel && this.$route.name === 'Explore',
           'sidebar-mobile-hidden':
-            $q.screen.lt.sm && this.$route.name !== 'Explore',
+            (this.$q.screen.lt.sm || !showPanel) &&
+            this.$route.name !== 'Explore',
         }"
       >
-        <MenuBar class="menubar" v-if="$q.screen.gt.xs" />
-
-        <!--
+        <MobileSwipeHandle @swipe="onMobileSwipeHandle($event)" />
         <div
-          class="mobile-dismiss-list q-py-md flex column text-h4 chicago q-pl-md"
-          v-if="$q.screen.lt.sm"
-          @click="handleSwipe"
-          style="text-transform: capitalize"
-          v-touch-swipe="handleSwipe"
+          v-touch-swipe.mouse.down="
+            enablePanelSwipeDown && showPanel ? handleSwipe : null
+          "
+          class="sidebar-content flex column no-wrap"
         >
-          {{ sidebarPanel }}
-        </div>
--->
-        <MobileSwipeHandle
-          @swipe="onMobileSwipeHandle($event)"
-          v-if="$q.screen.lt.sm"
-        />
-
-        <div
-          class="sidebar-content flex column"
-          :class="{
-            'sidebar-desktop-expanded': $q.screen.gt.lg || this.sidebarExpanded,
-          }"
-        >
+          <NavigationBar
+            @click="togglePanel"
+            class="nav-bar"
+            v-if="$q.screen.gt.xs"
+          />
           <q-tab-panels
             keep-alive
             v-model="sidebarPanel"
             :animated="$q.screen.gt.xs"
             class="panels"
             style="height: 100%"
+            ref="panels"
           >
             <q-tab-panel name="nearby">
               <NearbyView />
@@ -86,15 +67,6 @@
               />
             </q-tab-panel>
           </q-tab-panels>
-          <NavigationBar class="nav-bar" v-if="$q.screen.gt.xs" />
-
-          <div
-            class="resizer flex row items-center"
-            ref="resizer"
-            v-if="$q.screen.gt.sm"
-          >
-            <q-icon name="las la-grip-lines-vertical" />
-          </div>
         </div>
       </div>
     </Transition>
@@ -107,90 +79,96 @@ import SearchView from './SearchView/SearchView.vue';
 import FavoritesView from './FavoritesView/FavoritesView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
 import NavigationBar from 'components/NavigationBar.vue';
-import MenuBar from 'components/MenuBar/MenuBar.vue';
 
 import { mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useMapStore } from 'src/stores/map';
 import MobileSwipeHandle from '../MobileSwipeHandle.vue';
+
+import WheelIndicator from 'wheel-indicator';
+
 export default {
   components: {
     ExploreView,
     SearchView,
-    MenuBar,
     NavigationBar,
     NearbyView,
     FavoritesView,
     MobileSwipeHandle,
   },
   async mounted() {
-    if (this.$q.screen.gt.lg) {
-      this.sidebarExpanded = true;
-    }
-    await this.$nextTick();
-    this.$refs.resizer?.addEventListener('mousedown', () => {
-      document.addEventListener('mousemove', this.resize, false);
-      document.addEventListener(
-        'mouseup',
-        () => {
-          document.removeEventListener('mousemove', this.resize, false);
-        },
-        false
-      );
-    });
-    window.addEventListener('resize', () => {
-      if (this.$q.screen.gt.lg) {
-        this.sidebarExpanded = true;
-      } else {
-        this.sidebarExpanded = false;
-      }
+    this.wheelIndicator = new WheelIndicator({
+      elem: this.$refs.sidebar,
+      callback: this.onMouseWheel,
+      preventMouse: false,
     });
   },
   data() {
     return {
       lastx: 0,
+      preventMapInteraction: false,
+      wheelIndicator: null,
     };
   },
   methods: {
-    resize(event) {
-      console.log(this.$refs.psw.pswp);
-      if (event.x > 360 && event.x > this.lastx && !this.sidebarExpanded) {
-        this.sidebarExpanded = true;
-      } else if (
-        event.x < 690 &&
-        event.x < this.lastx &&
-        this.sidebarExpanded
-      ) {
-        this.sidebarExpanded = false;
+    onMouseWheel(e) {
+      const up = e.direction === 'up';
+      const down = e.direction === 'down';
+      if (!this.showPanel && down) {
+        this.showPanel = true;
+      } else if (this.enablePanelSwipeDown && up) {
+        this.preventMapZoom = true;
+        this.showPanel = false;
+
+        setTimeout(() => {
+          // wait for animation - stop map from zooming uncontrolably
+
+          this.preventMapZoom = false;
+        }, 1200);
+
+        /* disabled this behavior because it's too confusing
+        if (
+          this.sidebarPanel !== 'explore' &&
+          this.sidebarPanel !== 'favorites'
+        ) {
+          this.sidebarPanel = 'explore';
+        } */
+        return false;
       }
-      this.lastx = event.x;
     },
+
     hideDialog() {
       this.$router.push({ name: 'Explore' });
     },
     handleSwipe({ evt, ...info }) {
-      if (info.direction === 'down' || info.direction === 'up') {
+      if (info.direction === 'down' && this.showPanel) {
+        this.showPanel = false;
+
         if (
           this.sidebarPanel !== 'explore' &&
           this.sidebarPanel !== 'favorites'
         ) {
           this.sidebarPanel = 'explore';
         }
-        this.showPanelMobile = !this.showPanelMobile;
       } else {
-        evt.preventDefault();
-        evt.stopPropagation();
+        this.showPanel = true;
       }
     },
+    togglePanel(event) {
+      this.showPanel = !this.showPanel;
+    },
     onMobileSwipeHandle(direction) {
+      if (!direction) {
+        this.showPanel = !this.showPanel;
+      }
       if (
-        (this.showPanelMobile && direction === 'down') ||
-        (!this.showPanelMobile && direction === 'up')
+        (this.showPanel && direction === 'down') ||
+        (!this.showPanel && direction === 'up')
       ) {
         if (this.sidebarPanel !== 'explore') {
           this.sidebarPanel = 'explore';
         }
-        this.showPanelMobile = !this.showPanelMobile;
+        this.showPanel = !this.showPanel;
       }
     },
   },
@@ -209,18 +187,19 @@ export default {
   computed: {
     ...mapState(useMainStore, ['userLocation', 'loadingUserLocation']),
     ...mapWritableState(useMainStore, [
-      'sidebarExpanded',
-      'showPanelMobile',
+      'showPanel',
       'sidebarPanel',
+      'enablePanelSwipeDown',
     ]),
     ...mapState(useMapStore, ['mapMoving']),
+    ...mapWritableState(useMapStore, ['preventMapZoom']),
     computedSidebarWidth() {
-      if (this.$q.screen.lt.sm) {
-        return 'width: 100%';
-      } else if (this.sidebarExpanded && this.$q.screen.gt.sm) {
-        return 'width: 800px;';
+      if (this.$q.screen.gt.sm) {
+        return 'width: 50vw; min-width: 800px';
+      } else if (this.$q.screen.gt.xs) {
+        return 'width: 66vw; min-width: 640px; max-width: 100%';
       } else {
-        return 'width: 398px';
+        return 'width: 100%';
       }
     },
   },
@@ -236,23 +215,31 @@ export default {
     background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(10px);
   }
-  .sidebar {
-    background: black;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
-    .mobile-dismiss-list {
-    }
-    :deep(.content) {
-    }
+  .sidebar-wrapper {
+    .sidebar {
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
 
-    :deep(.sidebar-header) {
-      background: black;
-    }
+      :deep(.panels) {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .mobile-dismiss-list {
+      }
+      :deep(.content) {
+      }
 
-    .handle {
-      background: rgba(0, 0, 0, 1);
-    }
-    .nav-bar {
-      background: black;
+      :deep(.sidebar-header) {
+        background: black;
+      }
+
+      .handle {
+        background: rgba(0, 0, 0, 1);
+      }
+
+      .sidebar-content {
+        :deep(.nav-bar) {
+          background: $bi-2;
+        }
+      }
     }
   }
 }
@@ -265,20 +252,25 @@ export default {
     background: rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(10px);
   }
-  .sidebar {
-    background: white;
-    .mobile-dismiss-list {
-      color: white;
-    }
+  .sidebar-wrapper {
+    .sidebar {
+      :deep(.panels) {
+        border-top: 1px solid rgba(0, 0, 0, 0.2);
+      }
+      .menubar {
+        background: white;
+        //border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        //box-shadow: rgba(100, 100, 111, 0.15) 0px 7px 29px 0px;
+      }
+      .mobile-dismiss-list {
+        color: white;
+      }
 
-    :deep(.content) {
-    }
-    :deep(.sidebar-header) {
-      color: $bi-2;
-      background: white;
-    }
-    .nav-bar {
-      background: white;
+      :deep(.sidebar-header) {
+        color: $bi-2;
+
+        background: white;
+      }
     }
   }
 }
@@ -288,81 +280,105 @@ export default {
   height: 100%;
   width: 100%;
   pointer-events: none;
-}
+  justify-content: center;
+  display: flex;
 
-.sidebar {
-  position: relative;
-  flex-shrink: 0;
-  z-index: 500;
-  left: 0px;
-  box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.2);
-  max-height: 100%;
-  transition: width 0.3s;
-  overflow: hidden;
-  height: 100%;
-  pointer-events: all;
-
-  .menubar {
+  .sidebar {
     position: relative;
-    width: 100%;
-  }
-
-  :deep(.scroll-area) {
-    overflow: hidden;
-    .scroll-content {
-      //padding-top: 32px;
-    }
-  }
-
-  :deep(.sidebar-header) {
-    padding-top: 8px;
-    padding-bottom: 16px;
-    color: white;
-    //position: sticky;
-    top: 0px;
-    z-index: 100;
-  }
-  .sidebar-content {
+    flex-shrink: 0;
+    z-index: 500;
+    left: 0px;
+    box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.2);
+    max-height: 100%;
+    transition: width 0.3s;
+    overflow: visible;
     height: 100%;
-    width: 100%;
-    padding-bottom: 72px;
-    &.sidebar-desktop-expanded {
-      padding: 0 16px;
+    pointer-events: all;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    transition: all 0.3s ease;
+    transform: translate3d(0, calc(100% - 276px), 0);
+    user-select: none;
+    will-change: transform;
+    padding-bottom: 73px;
+
+    &:hover {
+      //transform: translate3d(0, 80px, 0) !important;
+      transform: translate3d(0, calc(100% - 286px), 0);
     }
-    :deep(.panels) {
+
+    .menubar {
+      position: relative;
       width: 100%;
     }
-    :deep(.q-tab-panel) {
-      padding: 0px;
+
+    :deep(.scroll-area) {
+      overflow: hidden;
+      .scroll-content {
+        //padding-top: 32px;
+      }
+    }
+
+    :deep(.sidebar-header) {
+      padding-top: 8px;
+      padding-bottom: 16px;
+      color: white;
+      //position: sticky;
+      top: 0px;
+      z-index: 99;
+    }
+    .sidebar-content {
+      height: 100%;
+      width: 100%;
+      position: relative;
+
+      .nav-bar {
+        width: 100%;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        border-top-right-radius: 18px;
+        border-top-left-radius: 18px;
+      }
+      &.sidebar-desktop-expanded {
+        padding: 0 16px;
+      }
+
+      :deep(.q-tab-panel) {
+        padding: 0px;
+        :deep(.panels) {
+        }
+      }
+
+      :deep(.panels) {
+        //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.4);
+
+        -webkit-backface-visibility: hidden;
+        -webkit-transform: translate3d(0, 0, 0);
+        width: 100%;
+      }
+    }
+
+    .mobile-dismiss-list {
+      padding-top: 0px;
+    }
+
+    .swipe-capture-overlay {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 501;
     }
   }
-
-  .mobile-dismiss-list {
-    padding-top: 0px;
+  .sidebar-mobile-expanded {
+    transform: translate3d(0, 80px, 0) !important;
+    .mobile-dismiss-list {
+      height: 200px;
+    }
   }
-  .nav-bar {
-    width: 100%;
-    position: absolute;
-    bottom: 0;
+  .sidebar-mobile-hidden {
+    transform: translate3d(0, calc(100%), 0);
   }
-
-  .resizer {
-    position: absolute;
-    top: 50%;
-    right: 0px;
-    z-index: 5000;
-    cursor: ew-resize;
-    opacity: 0.48;
-  }
-  .swipe-capture-overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 501;
-  }
-}
-
-.sidebar-mobile {
 }
 
 .hover-trigger {
@@ -395,10 +411,7 @@ export default {
 
       :deep(.panels) {
         box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
-        border-top-right-radius: 18px;
-        border-top-left-radius: 18px;
         width: 100%;
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
       }
     }
   }
@@ -411,34 +424,36 @@ export default {
       }
     }
   }
+
   .sidebar-wrapper {
     padding: 0;
+    overflow: hidden;
+
     .sidebar {
       box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
 
       width: 100%;
       background: transparent;
-      transition: all 0.3s ease;
       //margin-top: 48px;
       transform: translate3d(0, calc(100% - 320px), 0);
-      border-top-right-radius: 18px;
-      border-top-left-radius: 18px;
+
       will-change: transform;
       padding-bottom: 73px;
       border-left: none;
       border-right: none;
       overflow: visible;
+
+      :deep(.panels) {
+        border-top-right-radius: 18px;
+        border-top-left-radius: 18px;
+      }
+
       .sidebar-content {
         padding-top: unset;
+        padding-bottom: 64px;
       }
       :deep(.main-content) {
         padding-top: 0px;
-      }
-      :deep(.panels) {
-        //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.4);
-        border-top-right-radius: 18px;
-        border-top-left-radius: 18px;
-        width: 100%;
       }
 
       .lights-wrapper {

@@ -11,6 +11,7 @@
           {{ $t('auth.welcome_back') }}
         </div>
         <q-input
+          ref="login"
           class=""
           outlined
           filled
@@ -91,10 +92,7 @@
           />
         </div>
       </q-card-section>
-
-      <q-inner-loading :showing="loading">
-        <q-spinner-puff size="300px" color="primary" />
-      </q-inner-loading>
+      <InnerLoading v-if="loading" :solid="true" />
     </q-card>
   </div>
 </template>
@@ -103,9 +101,11 @@
 import { API_URL } from 'src/api';
 import { mapActions } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
+import InnerLoading from 'src/components/InnerLoading.vue';
+
 export default {
   name: 'LoginPage',
-  components: {},
+  components: { InnerLoading },
   watch: {},
   data() {
     return {
@@ -122,6 +122,8 @@ export default {
         await this.login(this.identifier, this.password);
         if (this.$route.query.from) {
           this.$router.replace(this.$route.query.from);
+        } else if (this.$route.params.from) {
+          this.$router.replace(this.$route.params.from);
         } else {
           this.$router.push('/');
         }
@@ -140,6 +142,11 @@ export default {
         return API_URL + '/oauth/facebook';
       }
     },
+  },
+  mounted() {
+    setTimeout(() => {
+      this.$refs.login.focus();
+    }, 300);
   },
 };
 </script>

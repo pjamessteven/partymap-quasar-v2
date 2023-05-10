@@ -200,6 +200,7 @@ export default {
       }
     },
     onScrollMainContent(event) {
+      console.log(event.target);
       if (
         event.target.offsetHeight + event.target.scrollTop >=
         event.target.scrollHeight

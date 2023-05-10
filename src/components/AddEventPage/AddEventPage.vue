@@ -13,7 +13,7 @@
     <template v-slot>
       <div
         class="flex row justify-center q-pb-xl"
-        :class="$q.screen.gt.xs ? 'q-px-lg' : ''"
+        :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'"
       >
         <transition
           appear
@@ -570,10 +570,14 @@
         </transition>
       </div>
       <div
-        class="flex row submit-footer"
-        :class="$q.screen.lt.sm ? 'justify-center ' : 'justify-end'"
+        class="flex row submit-footer items-center"
+        :class="$q.screen.lt.sm ? 'justify-center ' : 'justify-between'"
       >
-        <div v-if="!validation" class="t1 q-mb-md">
+        <div
+          v-if="!validation"
+          class="t1 chicago"
+          :class="$q.screen.gt.xs ? 'q-ml-lg' : 'q-mt-lg'"
+        >
           Please fill out all of the required fields
         </div>
         <q-btn
@@ -582,7 +586,7 @@
           color="primary"
           class="soft-button-shadow chicago q-ma-lg"
           label="Submit"
-          :disabled="!validation"
+          :disable="!validation"
           v-on:click="submitEvent"
         />
       </div>
@@ -673,7 +677,10 @@ export default {
       if (this.currentUser) {
         this.event.host = true;
       } else {
-        this.$router.push({ name: 'Login' });
+        this.$router.push({
+          path: '/login',
+          query: { from: this.$route.path },
+        });
       }
     },
     goBack() {
@@ -783,25 +790,16 @@ export default {
 }
 
 .body--dark {
-  .sticky-header {
-    background: black;
-  }
   .hover-option {
     &:hover {
       background: $bi-3;
-      //color: $primary;
     }
   }
 }
 
 .body--light {
-  .sticky-header {
-    background: white;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  }
   .host-options {
     .host-option {
-      border: 1px solid rgba(0, 0, 0, 0);
       color: $t-1;
       &:hover {
         background: $b-3;
@@ -823,12 +821,6 @@ export default {
 
 .hover-option {
   cursor: pointer;
-}
-
-.sticky-header {
-  position: sticky;
-  top: 0px;
-  z-index: 1000;
 }
 
 // sm

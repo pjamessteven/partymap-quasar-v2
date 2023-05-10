@@ -1,6 +1,11 @@
 <template>
-  <div class="flex row menubar" :style="computedStyle">
-    <MenuBarLogo class="logo" v-if="$q.screen.lt.sm" />
+  <div class="flex row menubar">
+    <div
+      class="menubar-background"
+      :style="computedStyle"
+      v-if="$q.screen.lt.sm && this.$route.name === 'EventPage'"
+    />
+    <MenuBarLogo class="logo" />
     <transition
       appear
       enter-active-class="animated fadeIn"
@@ -30,7 +35,7 @@ export default {
   },
   methods: {},
   computed: {
-    ...mapState(useMainStore, ['showSidebar', 'menuBarOpacity']),
+    ...mapState(useMainStore, ['showSidebar', 'menubarOpacity']),
     transparentMenuBar() {
       return (
         this.$route.name === 'EventPage' ||
@@ -40,7 +45,7 @@ export default {
     },
 
     computedStyle() {
-      var opacity = this.menuBarOpacity;
+      var opacity = this.menubarOpacity;
       return `opacity: ${opacity}`;
     },
   },
@@ -87,7 +92,12 @@ export default {
   }
   .menubar {
     z-index: 1;
-
+    .menubar-background {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      background: black;
+    }
     &.search-expanded {
       .logo {
         opacity: 0;

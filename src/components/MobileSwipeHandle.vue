@@ -1,6 +1,7 @@
 <template>
   <div
-    v-touch-swipe.vertical="handleSwipe"
+    @click="this.$emit('swipe', undefined)"
+    v-touch-swipe.mouse.vertical="handleSwipe"
     :class="{ 'solid-bg': solidBg }"
     class="handle-container flex justify-center items-center q-py-md"
   >
@@ -30,7 +31,7 @@ export default {
 .body--dark {
   .handle-container {
     .handle-container-bg {
-      border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.4) !important;
 
       //background: rgba(24, 24, 24, 0.48);
       //backdrop-filter: blur(10px);
@@ -51,13 +52,13 @@ export default {
 .body--light {
   .handle-container {
     .handle-container-bg {
-      border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.4) !important;
 
-      //background: rgba(255, 255, 255, 0.1);
+      //background: rgb(26,26,26);
       //backdrop-filter: blur(10px);
     }
     .handle {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.68);
     }
     &.solid-bg {
       .handle-container-bg {

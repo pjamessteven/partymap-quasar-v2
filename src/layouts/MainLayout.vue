@@ -1,13 +1,9 @@
 <template>
   <div class="main-layout">
-    <MenuBarLogo class="menubar-logo" v-if="$q.screen.gt.xs" />
-    <MenuBar class="menubar" v-if="$q.screen.lt.sm" />
-    <div class="overlay" :style="computedOverlayOpacity" />
+    <MenuBar class="menubar" />
+    <div class="overlay" :style="computedOverlayStyle" />
     <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
-    <SideBar
-      class="sidebar-component"
-      v-show="$q.screen.lt.sm ? $route.name === 'Explore' : true"
-    />
+    <SideBar class="sidebar-component" />
     <MainMap />
     <router-view
       v-slot="{ Component }"
@@ -19,20 +15,14 @@
       <transition
         appear
         leave
-        :enter-active-class="
-          $q.screen.gt.sm ? 'animated slideInUp fast' : 'animated slideInUp'
-        "
-        :leave-active-class="
-          $q.screen.gt.sm
-            ? 'animated slideOutDown fast'
-            : 'animated slideOutDown'
-        "
+        enter-active-class="animated slideInUp"
+        leave-active-class="animated slideOutDown"
       >
         <component :is="Component" />
       </transition>
     </router-view>
 
-    <NavigationBar class="nav-bar" />
+    <NavigationBar class="nav-bar" v-if="$q.screen.lt" />
   </div>
 </template>
 
@@ -54,6 +44,7 @@ export default {
     MenuBarLogo,
     NavigationBar,
   },
+  methods: {},
   beforeRouteUpdate(to, from, next) {
     if (from.name === 'Explore') {
       console.log('blockupdate');
@@ -69,15 +60,15 @@ export default {
     ...mapWritableState(useMainStore, [
       'showSidebar',
       'overlayOpacity',
-      'showPanelMobile',
+      'showPanel',
     ]),
-    computedOverlayOpacity() {
-      if (this.$q.screen.gt.xs) {
-        return `opacity: ${this.overlayOpacity}`;
+    computedOverlayStyle() {
+      if (this.$q.screen.lt.sm && this.$route.name === 'EventPage') {
+        return `opacity: ${this.overlayOpacity}; background: black!important`;
       } else {
-        if (this.showPanelMobile && this.$route.name === 'Explore')
+        if (this.showPanel && this.$route.name === 'Explore')
           return 'opacity: 1';
-        else return 'opacity: 0';
+        else return 'opacity: 0.3';
       }
     },
   },
@@ -87,14 +78,26 @@ export default {
 .body--dark {
   .main-layout {
     .overlay {
-      background: rgba(0, 0, 0, 0.4);
+      background: linear-gradient(
+        rgba(0, 0, 0, 0.78) 0px,
+        rgba(0, 0, 0, 0.78) 64px,
+        rgba(0, 0, 0, 0.58) 128px,
+        rgba(0, 0, 0, 0) calc(100% - 256px),
+        rgba(0, 0, 0, 0.78) 100%
+      );
     }
   }
 }
 .body--light {
   .main-layout {
     .overlay {
-      background: rgba(0, 0, 0, 0.2);
+      background: linear-gradient(
+        rgba(0, 0, 0, 0.68) 0px,
+        rgba(0, 0, 0, 0.68) 64px,
+        rgba(0, 0, 0, 0.48) 128px,
+        rgba(0, 0, 0, 0) calc(100% - 256px),
+        rgba(0, 0, 0, 0.78) 100%
+      );
     }
   }
 }
@@ -103,7 +106,7 @@ export default {
   height: 100%;
   width: 100%;
   position: relative;
-
+  overflow: hidden;
   .overlay {
     z-index: 103;
     position: absolute;
@@ -111,6 +114,7 @@ export default {
     width: 100%;
     pointer-events: none;
     will-change: opacity;
+    transition: opacity 0.3s;
   }
   .menubar {
     width: 100%;
@@ -137,7 +141,7 @@ export default {
     position: absolute;
     height: 100%;
     width: 100%;
-    z-index: 103;
+    z-index: 105;
     top: 0px;
   }
   .mobile-map-view-router {
@@ -162,8 +166,11 @@ export default {
     }
   }
   .main-layout {
+    .main-layout-router {
+      padding-bottom: 72px;
+    }
     .overlay {
-      transition: opacity 0.3s;
+      // transition: opacity 0.3s;
     }
   }
 }

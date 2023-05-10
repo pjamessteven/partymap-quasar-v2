@@ -8,23 +8,18 @@
         ref="scroll"
         horizontal
         class="scroll-area"
-        :style="
-          $q.screen.gt.xs && $q.screen.lt.xl ? 'height: 54px' : 'height: 44px'
-        "
+        :style="$q.screen.gt.xs ? 'height: 54px' : 'height: 44px'"
         :thumb-style="
           $q.screen.gt.xs
             ? { bottom: '0px', height: '4px' }
             : { bottom: '-8px', height: '0px' }
         "
-        v-touch-swipe.vertical="handleSwipe"
       >
         <div
           class="flex row scroll-wrapper tag-controls"
           :class="[
             $q.screen.gt.xs
-              ? $q.screen.lt.xl && !this.sidebarExpanded
-                ? 'q-gutter-sm q-pr-md q-py-xs no-wrap'
-                : 'q-gutter-sm q-pr-md q-py-xs  no-wrap'
+              ? 'q-gutter-sm q-pr-md q-py-xs  no-wrap'
               : 'q-gutter-sm q-px-sm  no-wrap',
           ]"
         >
@@ -56,11 +51,13 @@
             :key="5"
             :showSelectedValue="showSelectedValue"
           />
+          <!--
           <LocalityControl
             v-if="showLocalityControl"
             :key="6"
             :showSelectedValue="showSelectedValue"
           />
+          -->
         </div>
       </q-scroll-area>
       <div class="artist-profile-wrapper" v-if="$q.screen.lt.sm">
@@ -96,7 +93,7 @@ export default {
     ArtistControl,
     TagControl,
     ArtistProfile,
-    LocalityControl,
+    // LocalityControl,
   },
   watch: {
     controlArtist(newVal) {
@@ -130,21 +127,8 @@ export default {
   data() {
     return {};
   },
-  methods: {
-    handleSwipe({ evt, ...info }) {
-      if (
-        (this.showPanelMobile && info.direction === 'down') ||
-        (!this.showPanelMobile && info.direction === 'up')
-      ) {
-        this.showPanelMobile = !this.showPanelMobile;
-      } else {
-        evt.preventDefault();
-        evt.stopPropagation();
-      }
-    },
-  },
   computed: {
-    ...mapWritableState(useMainStore, ['showPanelMobile', 'sidebarExpanded']),
+    ...mapWritableState(useMainStore, ['showPanel']),
     ...mapState(useMainStore, ['mapStyle']),
     ...mapState(useQueryStore, [
       'controlDateRange',

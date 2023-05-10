@@ -30,6 +30,7 @@ const routes: RouteRecordRaw[] = [
         path: '/login',
         name: 'Login',
         component: () => import('src/components/Auth/Login.vue'),
+
         meta: {
           auth: false,
           mapOverlay: true,
@@ -92,8 +93,6 @@ const routes: RouteRecordRaw[] = [
           mapOverlay: true,
         },
       },
-      /*
-
 
       {
         path: '/account',
@@ -102,9 +101,10 @@ const routes: RouteRecordRaw[] = [
           import('src/components/ManageAccountPage/ManageAccountPage.vue'),
         meta: {
           auth: false,
-          mapOverlay: false,
+          mapOverlay: true,
         },
       },
+
       {
         path: '/user/:id',
         name: 'UserPage',
@@ -112,7 +112,7 @@ const routes: RouteRecordRaw[] = [
         props: true,
         meta: {
           auth: false,
-          mapOverlay: false,
+          mapOverlay: true,
         },
       },
       {
@@ -136,9 +136,6 @@ const routes: RouteRecordRaw[] = [
           mapOverlay: true,
         },
       },
-
-
-
       {
         path: '/admin',
         name: 'AdminPage',
@@ -150,7 +147,6 @@ const routes: RouteRecordRaw[] = [
           mapOverlay: false,
         },
       },
-      */
     ],
   },
 

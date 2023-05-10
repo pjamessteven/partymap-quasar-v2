@@ -374,7 +374,7 @@ export interface EventContribution {
   id: string;
   event_id: number;
   text: string;
-  images: AlbumItem[];
+  images: any;
   creator: User;
   created_at: Date;
   score: number;

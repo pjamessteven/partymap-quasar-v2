@@ -68,7 +68,7 @@
       <q-btn
         color="primary"
         @click="postReport"
-        :disabled="
+        :disable="
           !message ||
           message.length === 0 ||
           (email && emailValidation != true) ||

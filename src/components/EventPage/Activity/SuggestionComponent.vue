@@ -157,9 +157,13 @@
 </template>
 
 <script>
-import ArtistListItem from 'components/EventPage/EventDates/Artists/ArtistListItem.vue';
+import ArtistListItem from 'src/components/EventPage/EventDates/Artists/ArtistListItem.vue';
 import common from 'assets/common';
 import { updateSuggestionRequest } from 'src/api';
+
+import { mapActions } from 'pinia';
+import { useEventStore } from 'src/stores/event';
+
 export default {
   components: {
     ArtistListItem,
@@ -173,16 +177,13 @@ export default {
     };
   },
   methods: {
-    selectEventDate(id) {
-      var ed = this.event.event_dates.find((x) => x.id === id);
-      this.selectedEventDate = ed;
-    },
+    ...mapActions(useEventStore, ['reloadEvent']),
     approve() {
       this.loading = true;
       updateSuggestionRequest(this.suggestion.id, { status: 'approved' }).then(
         (response) => {
           if (this.$route.name === 'EventPage') {
-            this.$store.dispatch('currentEvent/loadEvent', this.event.id);
+            this.reloadEvent();
           }
           this.suggestion = response.data;
           this.loading = false;
@@ -201,9 +202,6 @@ export default {
   },
   watch: {},
   computed: {
-    event() {
-      return this.$store.state.currentEvent.event;
-    },
     computedKeys() {
       var keys = Object.keys(this.suggestion.kwargs).filter(
         (key) =>
@@ -214,23 +212,12 @@ export default {
       return keys;
     },
   },
-  selectedEventDate: {
-    get() {
-      return this.$store.state.currentEvent.selectedEventDate;
-    },
-    set(val) {
-      this.$store.commit('currentEvent/setSelectedEventDate', val);
-    },
-  },
-  beforeMount() {},
-  mounted() {},
 
   created() {
     this.dateTimeUTCToLocal = common.dateTimeUTCToLocal;
     this.recurringPatternKebab = common.recurringPatternKebab;
     this.timeAgo = common.timeAgo;
   },
-  unmounted() {},
 };
 </script>
 

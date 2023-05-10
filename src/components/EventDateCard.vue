@@ -17,7 +17,7 @@
       <transition appear enter-active-class="animated fadeIn">
         <div
           class="ed-card"
-          @click="() => onClickCard($event, navigate)"
+          @mousedown="() => onClickCard($event, navigate)"
           @mouseover="setFocusMarker"
           @mouseleave="eventDateHoverMarker = null"
           :class="{
@@ -75,10 +75,17 @@
               <div
                 class="image-container flex justify-center items-center shadow-2xl"
               >
-                <div
-                  class="image-container-background"
-                  :style="computedAvatarStyle()"
-                ></div>
+                <img
+                  :src="imgThumbXsUrl"
+                  class="image not-loaded"
+                  v-show="!loadedImage"
+                />
+                <img
+                  :src="imgThumbUrl"
+                  class="image"
+                  @load="() => (loadedImage = true)"
+                  v-show="loadedImage"
+                />
               </div>
               <div class="flex column ellipsis q-pl-md">
                 <div
@@ -192,25 +199,7 @@
                       }}km)</span
                     >
                   </div>
-                  <!--
-                <div
-                  class=" q-mb-md o-070 ellipsis"
-                  v-if="
-                    event.event.event_tags && event.event.event_tags.length > 0
-                  "
-                  style="max-width: 200px"
-                >
-                  <span
-                    v-for="(t, index) in event.event.event_tags"
-                    :key="index"
-                  >
-                    {{ t.tag
-                    }}<span v-if="index + 1 !== event.event.event_tags.length"
-                      >,</span
-                    >
-                  </span>
-                </div>
-                -->
+
                   <div
                     class="tag-container flex row q-mt-sm no-wrap ellipsis"
                     style="min-height: 31px"
@@ -230,13 +219,6 @@
               </div>
             </div>
           </div>
-          <!--
-    <q-card-section>
-      <div class="tag-container">
-        <span v-for="(et, index) in event.tags" :key="index"  >{{et.label}}</span>
-      </div>
-    </q-card-section>
-      -->
         </div>
       </transition>
     </router-link>
@@ -260,25 +242,23 @@ export default {
       type: Boolean,
     },
   },
+  data() {
+    return {
+      loadedImage: false,
+    };
+  },
   methods: {
     setFocusMarker() {
-      this.eventDateHoverMarker = {
-        lat: this.event.location.lat,
-        lng: this.event.location.lng,
-        name: this.event.name,
-      };
+      if (this.$q.screen.gt.xs)
+        this.eventDateHoverMarker = {
+          lat: this.event.location.lat,
+          lng: this.event.location.lng,
+          name: this.event.name,
+        };
     },
     getBottomBgImgStyle() {
-      var imageUrl = '';
-      if (
-        this.event &&
-        this.event.event.cover_items &&
-        this.event.event.cover_items[0]
-      ) {
-        imageUrl = this.event.event.cover_items[0].thumb_xs_url;
-      }
       if (this.$q.dark.isActive) {
-        return `background-image:  url("${imageUrl}");
+        return `background-image:  url("${this.imgThumbXsUrl}");
         background-size: cover;
         display: inline-block;
         background-position: center;
@@ -286,7 +266,7 @@ export default {
 
         `;
       } else {
-        return `background-image:  url("${imageUrl}");
+        return `background-image:  url("${this.imgThumbXsUrl}");
           background-size: cover;
           display: inline-block;
           background-position: center;
@@ -295,44 +275,7 @@ export default {
           `;
       }
     },
-    computedAvatarStyle() {
-      var imageUrl = '';
-      if (
-        this.event &&
-        this.event.event.cover_items &&
-        this.event.event.cover_items[0]
-      ) {
-        imageUrl = this.event.event.cover_items[0].thumb_xs_url;
-      }
-      return `background-image: url(${imageUrl});
-        background-position: cover`;
-    },
-    getBgImgStyle() {
-      var imageUrl = '';
-      if (
-        this.event &&
-        this.event.event.cover_items &&
-        this.event.event.cover_items[0]
-      ) {
-        imageUrl = this.event.event.cover_items[0].thumb_url;
-      }
-      if (this.$q.dark.isActive) {
-        return `background-image: linear-gradient(0deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.2) 100%), url("${imageUrl}");
-        background-size: cover;
-        display: inline-block;
-        background-position: center;
-        //filter: blur(1px);
 
-        `;
-      } else {
-        return `background-image: linear-gradient(0deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.2) 100%), url("${imageUrl}");
-        background-size: cover;
-        display: inline-block;
-        background-position: center;
-        //filter: blur(1px);
-        `;
-      }
-    },
     onClickCard(event, navigate) {
       // blocking map updates on focusMarker watcher in MainMap.vue
       this.focusMarker = {
@@ -345,6 +288,12 @@ export default {
   },
   computed: {
     ...mapWritableState(useMapStore, ['eventDateHoverMarker', 'focusMarker']),
+    imgThumbUrl() {
+      return this.event?.event?.cover_items?.[0]?.thumb_url;
+    },
+    imgThumbXsUrl() {
+      return this.event?.event?.cover_items?.[0]?.thumb_xxs_url;
+    },
   },
   created() {
     // import common methods
@@ -473,10 +422,14 @@ export default {
   flex-direction: column;
   //min-height: 186px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
 
   &:hover {
+    transform: scale(1.01) translateY(0px);
+
     .card-bottom-content {
       .card-bottom-background-hover-overlay {
         opacity: 1;
@@ -564,21 +517,17 @@ export default {
         overflow: hidden;
         //border-radius: 100%;
         width: 96px;
+        aspect-ratio: 595 / 842;
+
         min-width: 96px;
         border-radius: 9px;
-        .image-container-background {
+        .image {
           height: 100%;
           width: 100%;
-          background-position: center;
-          background-size: cover;
-          transform: scale(1.2);
-          display: flex;
-          flex-grow: 1;
-          justify-content: flex-start;
-          align-items: flex-start;
-          img {
-            width: 100%;
-          }
+          max-height: 100%;
+          max-width: 100%;
+          object-fit: cover;
+          z-index: 2;
         }
       }
     }

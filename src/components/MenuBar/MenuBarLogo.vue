@@ -42,23 +42,13 @@ export default {
   },
   methods: {},
   computed: {
-    ...mapState(useMainStore, ['sidebarExpanded', 'showSearchBox']),
+    ...mapState(useMainStore, ['showSearchBox']),
 
-    hideLogo() {
-      // hide logo when searchbar is expanded on small pane
-      if (
-        this.$route.name === 'Explore' &&
-        !this.sidebarExpanded &&
-        this.showSearchBox
-      ) {
-        return true;
-      } else return false;
-    },
     logoColor() {
       if (
         this.$q.dark.isActive ||
-        (this.$route.name === 'EventPage' && this.$q.screen.lt.lg) ||
-        (this.$route.name === 'Explore' && this.$q.screen.lt.sm) ||
+        this.$route.name === 'EventPage' ||
+        this.$route.name === 'Explore' ||
         (this.$route.meta.mapOverlay &&
           this.$route.name !== 'Explore' &&
           this.$route.name !== 'EventPage' &&

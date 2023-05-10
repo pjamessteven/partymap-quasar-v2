@@ -9,12 +9,8 @@
     }"
   >
     <q-card class="shadow-lg card flex column">
-      <q-inner-loading :showing="loading">
-        <q-spinner-ios
-          :color="$q.dark.isActive ? 'white' : 'black'"
-          size="2em"
-        />
-      </q-inner-loading>
+      <InnerLoading v-if="loading" :solid="true" />
+
       <div
         v-if="artist"
         class="artist-header flex row justify-between items-start no-wrap q-pa-md"
@@ -109,6 +105,7 @@ import { getArtistRequest } from 'src/api';
 
 import _ from 'lodash';
 import ArtistUrl from 'src/components/ArtistUrl.vue';
+import InnerLoading from 'src/components/InnerLoading.vue';
 
 export default {
   name: 'AristProfile',
@@ -136,6 +133,7 @@ export default {
   },
   components: {
     ArtistUrl,
+    InnerLoading,
   },
   data() {
     return {

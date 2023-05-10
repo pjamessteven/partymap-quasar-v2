@@ -8,7 +8,9 @@
       <MobileSwipeHandle @swipe="hide()" :solidBg="true" />
 
       <q-card class="card">
-        <div class="component-wrapper"><component :is="slot" /></div>
+        <div class="component-wrapper">
+          <component :is="slot" />
+        </div>
       </q-card>
     </div>
   </q-dialog>

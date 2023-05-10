@@ -73,35 +73,7 @@
       </div>
     -->
     <!--
-      <q-btn
-        no-caps
-        flat
-        class="flex items-center"
-        @click="showAddEventDialog()"
-        :class="{
-          'q-px-sm ': $q.screen.gt.xs,
-          'light-button': transparentMenuBar
-        }"
-      >
-        <div class="flex items-center row no-wrap">
-          <div
-            class="btn-text chicago text-large q-mr-sm"
-            v-if="$q.screen.gt.md"
-          >
-            QUICK SUBMIT
-          </div>
-          <q-icon name="mdi-plus" v-else />
-        </div>
-        <q-tooltip
-          :content-class="
-            $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
-          "
-          :offset="[10, 10]"
-          content-style="font-size: 16px"
-        >
-          {{ $t("top_controls.quick_submit") }}
-        </q-tooltip>
-      </q-btn>-->
+-->
     <!--
     <div
       class="flex row no-wrap searchbar-wrapper justify-end"
@@ -146,11 +118,43 @@
       />
     </div>
     -->
+
+    <!--
+    <div class="flex items-center">
+      <q-btn
+        no-caps
+        class="add-button flex items-center"
+        @click="showAddEventDialog()"
+        :class="{
+          'light-button': transparentMenuBar,
+        }"
+      >
+        <div class="flex items-center row no-wrap chicago">
+          <div class="q-mr-sm">SUBMIT</div>
+          <q-icon name="mdi-plus" />
+        </div>
+        <q-tooltip
+          :content-class="
+            $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
+          "
+          :offset="[10, 10]"
+          content-style="font-size: 16px"
+        >
+          {{ $t('top_controls.quick_submit') }}
+        </q-tooltip>
+      </q-btn>
+    </div>
+    -->
     <q-btn
       class="button-menu"
-      :class="{}"
       icon="mdi-menu"
       flat
+      :class="{
+        'light-button':
+          $route.name === 'EventPage' ||
+          $route.name === 'Explore' ||
+          ($route.meta.fullscreenLayout === true && this.$q.screen.gt.xs),
+      }"
       style="position: relative"
     >
       <q-menu
@@ -177,7 +181,7 @@
 
 <script>
 import TopControlsMenu from './TopControlsMenu.vue';
-//import AddEventDialog from 'components/dialogs/AddEventPrompt';
+import AddEventDialog from 'components/dialogs/AddEventDialog.vue';
 import { useMainStore } from 'src/stores/main';
 import { useAuthStore } from 'src/stores/auth';
 import { mapState } from 'pinia';
@@ -205,7 +209,6 @@ export default {
     };
   },
   methods: {
-    /*
     showAddEventDialog() {
       this.$q
         .dialog({
@@ -214,7 +217,10 @@ export default {
         })
         .onOk((data) => {
           if (!this.currentUser && data.host) {
-            this.$router.push({ name: 'Login' });
+            this.$router.push({
+              path: '/login',
+              query: { from: this.$route.path },
+            });
           } else if (data.host) {
             this.$router.push({
               name: 'AddEventHost',
@@ -226,30 +232,6 @@ export default {
           }
         });
     },
-    /*
-    toggleSearchBox(value) {
-      if (value === true) {
-        this.showSearchBox = true;
-        this.$refs.search.focus();
-      } else {
-        this.showSearchBox = false;
-        this.query = null;
-      }
-    },
-    search() {
-      this.$store.dispatch('main/getSearchSuggestions', { query: this.query });
-      this.searchLocations();
-    },
-    searchLocations() {
-      const provider = new OpenStreetMapProvider();
-      provider.search({ query: this.query }).then((results) => {
-        var locationSearchResults = results.map((res) => {
-          return { label: res.label, location: { lat: res.y, lon: res.x } };
-        });
-        this.searchLocationResults = locationSearchResults;
-      });
-    },
-    */
   },
   computed: {
     ...mapState(useAuthStore, ['currentUser']),
@@ -259,9 +241,6 @@ export default {
         this.$q.screen.lt.sm &&
         (this.$route.name === 'EventPage' || this.$route.name === 'Explore')
       );
-    },
-    lightMenuIconRoute() {
-      return this.$route.name === 'Explore' || this.$route.name === 'Home';
     },
   },
 };
@@ -276,6 +255,9 @@ export default {
         border-left: 1px solid rgba(255, 255, 255, 0.05);
         border-right: 1px solid rgba(255, 255, 255, 0.05);
       }
+    }
+    .add-button {
+      //backdrop-filter: darken(0.5);
     }
   }
 }
@@ -314,6 +296,14 @@ export default {
 }
 .light-button {
   color: white;
+}
+.add-button {
+  font-size: 1em;
+  background: linear-gradient(45deg, orange, yellow);
+  border: 1px solid darkorange;
+  border-radius: 9px !important;
+  color: black;
+  padding: 4px 6px 4px 12px;
 }
 .searchbar-wrapper {
   pointer-events: all;

@@ -7,7 +7,7 @@
     <div
       class="event-list-inner"
       v-bind:class="{
-        'event-list-expanded': $q.screen.lt.sm && showPanelMobile,
+        'event-list-expanded': $q.screen.lt.sm && showPanel,
       }"
     >
       <div
@@ -15,6 +15,7 @@
         :class="{ 'q-mx-sm': $q.screen.lt.sm }"
       >
         <q-scroll-area
+          @wheel.stop
           vertical
           @scroll="onScrollMainContent"
           ref="scroll"
@@ -25,11 +26,12 @@
           class="scroll-area flex grow"
           :content-style="{
             'will-change': 'scroll-position',
-            'touch-action': showPanelMobile ? 'auto' : 'auto',
+            'touch-action': showPanel ? 'auto' : 'auto',
           }"
         >
           <transition enter-active-class="animated fadeIn">
             <div class="flex column no-wrap scroll-content">
+              <!--
               <div
                 v-if="$q.screen.gt.xs"
                 class="sidebar-header flex column no-wrap items-stretch justify-between ellipsis no-wrap"
@@ -46,16 +48,16 @@
                   <span class="text-h4 chicago">Your events</span>
                 </div>
               </div>
-
+-->
               <div class="flex column no-wrap content">
                 <div
-                  class="q-mt-md flex column"
+                  class="q-mt-md flex row no-wrap items-center"
                   :class="$q.screen.gt.xs ? 'q-pl-md' : ''"
                 >
                   <q-scroll-area
                     ref="scroll"
                     horizontal
-                    class="scroll-area"
+                    class="scroll-area grow"
                     :class="$q.screen.lt.sm ? 'q-mb-sm' : ''"
                     :style="$q.screen.gt.xs ? 'height: 54px' : 'height: 44px'"
                     :thumb-style="
@@ -69,7 +71,7 @@
                       class="flex row scroll-wrapper"
                       :class="[
                         $q.screen.gt.xs
-                          ? $q.screen.lt.xl && !this.sidebarExpanded
+                          ? $q.screen.lt.xl
                             ? 'q-gutter-sm q-pr-md q-py-xs no-wrap'
                             : 'q-gutter-sm q-pr-md q-py-xs  no-wrap'
                           : 'q-gutter-sm q-px-sm  no-wrap',
@@ -173,37 +175,10 @@
                         "
                       >
                         <div class="flex items-center row no-wrap">
-                          <div>Contributed</div>
+                          <div>Contributed/Reviewed</div>
                         </div>
                       </q-btn>
-                    </div>
-                  </q-scroll-area>
-                  <q-scroll-area
-                    ref="scroll"
-                    horizontal
-                    class="scroll-area q-mb-xs"
-                    :style="
-                      $q.screen.gt.xs && $q.screen.lt.xl
-                        ? 'height: 54px'
-                        : 'height: 44px'
-                    "
-                    :thumb-style="
-                      $q.screen.gt.xs
-                        ? { bottom: '0px', height: '4px' }
-                        : { bottom: '-8px', height: '0px' }
-                    "
-                    v-touch-swipe.vertical="handleSwipe"
-                  >
-                    <div
-                      class="flex row scroll-wrapper"
-                      :class="[
-                        $q.screen.gt.xs
-                          ? $q.screen.lt.xl && !this.sidebarExpanded
-                            ? 'q-gutter-sm q-pr-md q-py-xs no-wrap'
-                            : 'q-gutter-sm q-pr-md q-py-xs  no-wrap'
-                          : 'q-gutter-sm q-px-sm  no-wrap',
-                      ]"
-                    >
+                      <div class="separator vertical m" style="height: 32px" />
                       <q-btn
                         no-caps
                         class="button-control flex items-center"
@@ -239,9 +214,9 @@
                       </q-btn>
                     </div>
                   </q-scroll-area>
+                  <EventDateViewOptions v-if="$q.screen.gt.xs" />
                 </div>
 
-                <UserProfile :user="user" />
                 <!--
                   TODO: ADD USER ARTIST PROFILE
                 <div
@@ -255,18 +230,27 @@
                 </div>
                 -->
 
-                <transition appear enter-active-class="animated fadeIn">
-                  <div class="flex column" v-show="!isLoadingDatesInitial">
-                    <EventDateList
-                      :eventDates="userEventDates"
-                      :hasNext="userEventDatesHasNext"
-                      @loaded="
-                        () => {
-                          isLoadingDatesInitial = false;
-                        }
-                      "
-                    />
-                  </div>
+                <transition appear enter-active-class="animated fadeIn slower">
+                  <EventDateList
+                    v-if="
+                      userEventDates && compactView && !isLoadingDatesInitial
+                    "
+                    :groupByMonth="groupEventsByMonth"
+                    :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
+                    :eventDates="userEventDates"
+                    :hasNext="userEventDatesHasNext"
+                  />
+                </transition>
+                <transition appear enter-active-class="animated fadeIn slower">
+                  <EventDatePosterList
+                    v-if="
+                      userEventDates && !compactView && !isLoadingDatesInitial
+                    "
+                    :groupByMonth="groupEventsByMonth"
+                    :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
+                    :eventDates="userEventDates"
+                    :hasNext="userEventDatesHasNext"
+                  />
                 </transition>
               </div>
             </div>
@@ -291,10 +275,10 @@
 </template>
 <script>
 import _ from 'lodash';
-import ArtistProfile from 'components/ArtistProfile.vue';
-//import UserListItem from 'components/UserListItem.vue';
-
 import EventDateList from 'src/components/EventDateList.vue';
+import EventDatePosterList from 'src/components/EventDatePosterList.vue';
+import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
+
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
 import { useMainStore } from 'src/stores/main';
@@ -305,6 +289,8 @@ export default {
   components: {
     // ArtistProfile,
     EventDateList,
+    EventDatePosterList,
+    EventDateViewOptions,
   },
   props: { showControls: { default: false } },
   mounted() {
@@ -344,18 +330,19 @@ export default {
             this.currentUser.username
           );
           this.userEventDatesPage += 1;
+          this.isLoadingDatesInitial = false;
         } catch (error) {
           this.isLoadingDatesInitial = false;
         }
       }
     },
     handleSwipe() {
-      this.showPanelMobile = !this.showPanelMobile;
+      this.showPanel = !this.showPanel;
     },
     onScrollMainContent(info) {
       this.mainContentScrollPosition = info.verticalPosition;
 
-      if (info.verticalPercentage >= 0.99) {
+      if (info.verticalPercentage === 1) {
         // reached bottom
         this.loadMore();
       }
@@ -377,15 +364,17 @@ export default {
   },
   computed: {
     ...mapState(useMainStore, [
-      'sidebarExpanded',
       'sidebarPanel',
       'userLocation',
+      'compactView',
+      'groupEventsByMonth',
     ]),
-    ...mapWritableState(useMainStore, ['showPanelMobile']),
+    ...mapWritableState(useMainStore, ['showPanel', 'enablePanelSwipeDown']),
     ...mapState(useAuthStore, ['currentUser']),
     ...mapState(useMapStore, ['mapBounds', 'blockUpdates']),
     ...mapState(useQueryStore, ['userEventDatesLoading']),
     ...mapWritableState(useQueryStore, [
+      'userEventDatesGroupedByMonth',
       'userEventDates',
       'userEventDatesPage',
       'userEventDatesHasNext',

@@ -192,7 +192,7 @@
         @click="addEventDate"
         color="primary"
         :label="$t('add.add_event_date')"
-        :disabled="
+        :disable="
           !eventDate.date_time ||
           (eventDate.date_time && !eventDate.date_time.end) ||
           !eventDate.location

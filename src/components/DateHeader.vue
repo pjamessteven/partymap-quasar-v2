@@ -1,11 +1,14 @@
 <template>
-  <div class="date-header-wrapper q-m">
+  <div class="date-header-wrapper">
     <div
-      class="date-header flex row grow ellipsis q-py-md t1 chicago"
-      :class="$q.screen.gt.xs ? ' q-px-md' : 'q-px-sm'"
+      class="date-header flex row grow ellipsis t1 chicago"
+      :class="$q.screen.gt.xs ? ' q-px-md q-py-md' : 'q-px-sm q-py-md'"
     >
-      Events in {{ dateString }}
+      <span v-if="!!altLabel">{{ altLabel }}</span>
+      <span v-else> Events in {{ dateString }}</span>
+      <!--
       <q-separator class="grow q-ml-md" v-if="$q.screen.gt.lg" />
+      -->
     </div>
     <div class="date-header-shadow" />
   </div>
@@ -16,6 +19,7 @@ import moment from 'moment-timezone';
 export default {
   props: {
     date: String,
+    altLabel: String,
   },
   computed: {
     dateString() {
@@ -43,19 +47,9 @@ export default {
     display: flex;
     align-items: center;
     //font-size: 1rem;
-    margin-bottom: 4px;
+    //bottom: 4px;
     //padding: 32px 0;
   }
-  /*
-  .date-header-shadow {
-    box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.2);
-    position: absolute;
-    top: 0px;
-    height: 30px;
-    width: 100%;
-    z-index: 3005;
-  }
-  */
 }
 
 .body--light {

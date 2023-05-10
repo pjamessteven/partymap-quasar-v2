@@ -1,7 +1,7 @@
 <template>
   <q-card class="feedback-dialog">
     <q-card-section class="row items-center q-pb-none">
-      <div class="text-h6">{{ $t('feedback.give_feedback') }}</div>
+      <div class="chicago text-h6">{{ $t('feedback.give_feedback') }}</div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>
@@ -39,7 +39,7 @@
         class="soft-button-shadow"
         color="primary"
         @click="postFeedback"
-        :disabled="!feedback || feedback.length === 0"
+        :disable="!feedback || feedback.length === 0"
         :label="$t('feedback.send')"
       />
     </q-card-section>
@@ -90,4 +90,13 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+// sm
+@media only screen and (max-width: 600px) {
+  .feedback-dialog {
+    height: 100vh !important;
+    max-height: unset !important;
+    width: 100%;
+  }
+}
+</style>

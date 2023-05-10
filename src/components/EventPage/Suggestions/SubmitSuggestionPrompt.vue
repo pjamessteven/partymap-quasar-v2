@@ -31,7 +31,7 @@
       <q-card-actions align="right" class="bg-white text-teal">
         <q-btn flat color="primary" label="Cancel" v-close-popup />
         <q-btn
-          :disabled="!hcaptchaToken && !currentUser"
+          :disable="!hcaptchaToken && !currentUser"
           color="primary"
           :label="$t('add.continue')"
           v-on:click="onOKClick()"
