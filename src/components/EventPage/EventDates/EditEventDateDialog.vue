@@ -450,7 +450,11 @@ export default {
     };
   },
   methods: {
-    ...mapActions(useEventStore, ['deleteEventDate', 'updateEventDate']),
+    ...mapActions(useEventStore, [
+      'deleteEventDate',
+      'updateEventDate',
+      'suggestEventDateEdit',
+    ]),
     async deleteEd() {
       if (this.currentUserCanEdit) {
         const progressDialog = this.$q.dialog({
@@ -504,7 +508,7 @@ export default {
     async updateEd() {
       this.loading = true;
 
-      var update = {};
+      let update = {};
       if (this.ed.cancelled !== this.cancelled) {
         update.cancelled = this.cancelled;
       }
@@ -515,9 +519,13 @@ export default {
         update.description_attribute = this.descriptionAttribute;
       }
       if (this.ed.size !== this.size) {
-        this.size = this.size.replace(/,/g, ''); // remove commas
-        this.size = this.size.replace(/./g, ''); // remove dots
-        this.size = this.size.replace(/\s/g, ''); // remove spaces
+        this.size = this.size
+          .split('.')
+          .join('')
+          .split(',')
+          .join('')
+          .split(' ')
+          .join(''); // remove commas, dots and spaces
         update.size = this.size;
       }
       if (this.ed.url !== this.url) {

@@ -18,8 +18,7 @@
         id="sidebar"
         elevated
         v-bind:class="{
-          'sidebar-mobile-expanded':
-            showPanel && this.$route.name === 'Explore',
+          'sidebar-mobile-expanded': showPanel && this.$route.name !== 'Event',
           'sidebar-mobile-hidden':
             (this.$q.screen.lt.sm || !showPanel) &&
             this.$route.name !== 'Explore',

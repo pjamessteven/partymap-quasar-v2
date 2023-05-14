@@ -24,6 +24,8 @@
                 : 'col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12'
             "
           >
+            <MobileSwipeHandle @swipe="onMobileSwipeHandle($event)" />
+
             <div
               class="mobile-dismiss-list q-pt-md flex column"
               v-if="$q.screen.lt.sm"
@@ -580,6 +582,8 @@ import NextEventDateSummary from 'components/EventPage/EventDates/NextEventDateS
 // import ReportDialog from './ReportDialog.vue';
 import TagsComponent from 'components/EventPage/Tags/TagsComponent.vue';
 import ReviewsComponent from './Reviews/ReviewComponent.vue';
+import MobileSwipeHandle from '../MobileSwipeHandle.vue';
+
 export default {
   name: 'EventPage',
   meta() {
@@ -615,6 +619,7 @@ export default {
     //HistoryComponent,
     EventDates,
     EventDateSidebarDesktop,
+    MobileSwipeHandle,
   },
   props: {
     id: {

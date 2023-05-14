@@ -3,14 +3,15 @@
     <q-select
       option-label="name"
       ref="musicBrainzInput"
-      :options-conver="false"
       :loading="loadingResults"
       outlined
       use-input
       menu-anchor="top left"
       menu-self="bottom left"
-      :value="selectValue"
+      v-model="selectValue"
       @update:model-value="onSelectArtist"
+      emit-value
+      map-options
       input-debounce="300"
       :options="results"
       @filter="filterFn"
@@ -20,11 +21,7 @@
         <q-icon name="search" class="q-pa-md" />
       </template>
       <template v-slot:option="scope">
-        <q-item
-          :key="scope.opt.id"
-          v-bind="scope.itemProps"
-          v-on="scope.itemEvents"
-        >
+        <q-item :key="scope.opt.id" v-bind="scope.itemProps">
           <q-item-section>
             <q-item-label>
               {{ scope.opt.name }}
@@ -228,7 +225,7 @@ export default {
       this.artistsList.push(value);
       this.sortArtistList();
       this.results = [];
-      this.$refs.musicBrainzInput.updateInputValue('', true);
+      this.selectValue = '';
     },
     filterFn(val, update, abort) {
       // call abort() at any time if you can't retrieve data somehow
@@ -268,77 +265,66 @@ export default {
       this.sortArtistList();
     },
     async saveChanges() {
-      if (this.mode === 'emit') {
-        /*
-        if (this.selected.indexOf(tag) < 0) {
-          this.selected.push(tag)
-        } else {
-          this.selected.splice(this.selected.indexOf(tag), 1)
-        }
-        this.$emit('valueUpdated', this.selected)
-        */
-      } else {
-        if (this.currentUserCanEdit) {
-          const progressDialog = this.$q.dialog({
-            title: this.$t('edit_event_date.submitting'),
-            color: 'primary',
-            progress: true, // we enable default settings
-            cancel: false,
-            persistent: true, // we want the user to not be able to close it
-            ok: false,
+      if (this.currentUserCanEdit) {
+        const progressDialog = this.$q.dialog({
+          title: this.$t('edit_event_date.submitting'),
+          color: 'primary',
+          progress: true, // we enable default settings
+          cancel: false,
+          persistent: true, // we want the user to not be able to close it
+          ok: false,
+        });
+        try {
+          await this.updateEventDate({
+            add_artists: this.artistsToAdd,
+            remove_artists: this.artistsToDelete,
+            update_artists: this.artistsToUpdate,
           });
-          try {
-            await editEventDate(this.selectedEventDate.id, {
-              add_artists: this.artistsToAdd,
-              remove_artists: this.artistsToDelete,
-              update_artists: this.artistsToUpdate,
-            });
-            this.$emit('hideDialog');
-            window.bus.$emit('closeDialog');
-          } catch (e) {}
+          this.$emit('hideDialog');
+          window.bus.$emit('closeDialog');
+        } catch (e) {}
 
-          progressDialog.hide();
-        } else {
-          this.$q
-            .dialog({
-              parent: this,
-              component: SubmitSuggestionPrompt,
-            })
-            .onOk(async (messageAndToken) => {
-              // make suggestion
-              // suggest edit instead of editing directly
-              const progressDialog = this.$q.dialog({
-                title: this.$t('edit_event_date.submitting'),
-                color: 'primary',
-                progress: true, // we enable default settings
-                cancel: false,
-                persistent: true, // we want the user to not be able to close it
-                ok: false,
-              });
-              try {
-                await this.suggestEventDateEdit({
-                  ...messageAndToken,
-                  ...{
-                    add_artists: this.artistsToAdd,
-                    remove_artists: this.artistsToDelete,
-                    update_artists: this.artistsToUpdate,
-                  },
-                });
-                this.$q
-                  .dialog({
-                    title: this.$t('edit_event_date.submitted'),
-                    message: this.$t('edit_event_date.submitted_msg'),
-                    color: 'primary',
-                    persistent: false, // we want the user to not be able to close it
-                  })
-                  .onDismiss(() => {
-                    this.$emit('hideDialog');
-                    window.bus.$emit('closeDialog');
-                  });
-              } catch (e) {}
-              progressDialog.hide();
+        progressDialog.hide();
+      } else {
+        this.$q
+          .dialog({
+            parent: this,
+            component: SubmitSuggestionPrompt,
+          })
+          .onOk(async (messageAndToken) => {
+            // make suggestion
+            // suggest edit instead of editing directly
+            const progressDialog = this.$q.dialog({
+              title: this.$t('edit_event_date.submitting'),
+              color: 'primary',
+              progress: true, // we enable default settings
+              cancel: false,
+              persistent: true, // we want the user to not be able to close it
+              ok: false,
             });
-        }
+            try {
+              await this.suggestEventDateEdit({
+                ...messageAndToken,
+                ...{
+                  add_artists: this.artistsToAdd,
+                  remove_artists: this.artistsToDelete,
+                  update_artists: this.artistsToUpdate,
+                },
+              });
+              this.$q
+                .dialog({
+                  title: this.$t('edit_event_date.submitted'),
+                  message: this.$t('edit_event_date.submitted_msg'),
+                  color: 'primary',
+                  persistent: false, // we want the user to not be able to close it
+                })
+                .onDismiss(() => {
+                  this.$emit('hideDialog');
+                  window.bus.$emit('closeDialog');
+                });
+            } catch (e) {}
+            progressDialog.hide();
+          });
       }
     },
   },

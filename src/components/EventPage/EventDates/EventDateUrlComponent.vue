@@ -17,9 +17,12 @@
       :class="$q.screen.gt.sm ? 'text-large' : ''"
     >
       <div style="white-space: pre-line" v-if="computedExternalUrl">
-        <a class="link-hover underline" :href="computedExternalUrl">{{
-          selectedEventDate.url
-        }}</a>
+        <a
+          class="link-hover underline"
+          target="_blank"
+          :href="computedExternalUrl"
+          >{{ selectedEventDate.url }}</a
+        >
       </div>
       <div
         v-else

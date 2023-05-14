@@ -167,7 +167,7 @@ export default {
     ...mapActions(useQueryStore, ['loadTagOptions']),
     onShow() {
       // used to stop the ed list refrshing on mobile viewport size change
-      this.blockUpdates = true;
+      // this.blockUpdates = true;
       if (!this.tagOptions || this.tagOptions.length === 0) {
         this.loadInitialList();
       }
@@ -178,9 +178,11 @@ export default {
       // unload additional pages to reduce render load next time the dialog is opened
       this.tagOptions = this.tagOptions.slice(0, this.tagOptionsPerPage);
       this.tagOptionsPage = 2;
+      /*
       setTimeout(() => {
         this.blockUpdates = false;
       }, 1500);
+      */
     },
     loadInitialList() {
       this.tagOptionsPage = 1;

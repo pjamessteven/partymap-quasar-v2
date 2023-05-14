@@ -115,7 +115,7 @@
                   </div>
                 </div>
                 <div
-                  class="flex column card-bottom-text q-mt-xs t2"
+                  class="flex column card-bottom-text q-mt-xs o-070"
                   style="font-weight: 400"
                 >
                   <!--
@@ -191,7 +191,7 @@
                         event.location.name
                       }}
                     </span>
-                    <span v-if="event.distance != null" class="t3 ellipsis"
+                    <span v-if="event.distance != null" class="o-050 ellipsis"
                       >&nbsp;({{
                         Intl.NumberFormat().format(
                           parseInt(Number(event.distance) / 1000)
@@ -359,6 +359,7 @@ export default {
 .body--light {
   .ed-card {
     background: black;
+    color: white;
     //border: 1px solid gray;
     /*
     box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 1px, rgba(0, 0, 0, 0.05) 0px 4px 2px,

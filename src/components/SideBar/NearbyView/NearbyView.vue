@@ -430,6 +430,22 @@ export default {
     },
   },
   watch: {
+    $route: {
+      handler: function (newval) {
+        if (newval.name === 'Explore' && this.sidebarPanel === 'nearby')
+          if (!this.userLocation) {
+            this.loadIpInfo();
+          }
+      },
+    },
+    sidebarPanel: {
+      handler: function (newval) {
+        if (this.$route.name === 'Explore' && newval === 'nearby')
+          if (!this.userLocation) {
+            this.loadIpInfo();
+          }
+      },
+    },
     userLocation: {
       handler: function (newval, oldval) {
         if (newval && !oldval) {
@@ -532,9 +548,10 @@ export default {
   },
 
   async mounted() {
-    if (!this.userLocation) {
-      await this.loadIpInfo();
-    }
+    if (this.$route.name === 'Explore' && this.sidebarPanel === 'nearby')
+      if (!this.userLocation) {
+        await this.loadIpInfo();
+      }
     if (this.$route.query.global_page) {
       // used by hidden pagination for SEO
       this.eventDatesPage = Number(this.$route.query.global_page);

@@ -682,7 +682,7 @@ body {
   border-radius: 4px !important;
 }
 .q-dialog__inner > div {
-  border-radius: 0px !important;
+  // border-radius: 0px !important;
 }
 .q-dialog__inner--minimized > div {
   max-height: 90vh;

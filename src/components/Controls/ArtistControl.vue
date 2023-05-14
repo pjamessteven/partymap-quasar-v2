@@ -206,7 +206,7 @@ export default {
     },
     onShow() {
       // used to stop the ed list refrshing on mobile viewport size change
-      this.blockUpdates = true;
+      //  this.blockUpdates = true;
       if (!this.artistOptions || this.artistOptions.length === 0) {
         this.loadInitialList();
       }
@@ -219,9 +219,11 @@ export default {
         this.artistOptionsPerPage
       );
       this.artistOptionsPage = 2;
+      /*
       setTimeout(() => {
         this.blockUpdates = false;
       }, 1500);
+      */
     },
     onScrollMainContent(event) {
       this.$emit('testing', event.target.scrollTop);

@@ -9,6 +9,7 @@
   >
     <q-item-section avatar>
       <router-link
+        v-if="artist.artist_id || artist.id"
         :to="{
           name: 'ArtistPage',
           params: {
@@ -32,6 +33,9 @@
           />
         </q-avatar>
       </router-link>
+      <q-avatar class="avatar" v-else>
+        <q-icon size="1em" class="t3" name="mdi-account-music-outline" />
+      </q-avatar>
     </q-item-section>
     <q-item-section>
       <div class="flex row justify-between items-center no-wrap">
@@ -55,6 +59,7 @@
                   :class="$q.screen.gt.sm ? 'text-large' : ''"
                 >
                   <router-link
+                    v-if="artist.artist_id || artist.id"
                     :to="{
                       name: 'ArtistPage',
                       params: {
@@ -68,6 +73,7 @@
                   >
                     {{ artist.name }}
                   </router-link>
+                  <span v-else> {{ artist.name }} </span>
                 </span>
                 <div
                   class="q-gutter-xs t4 text-large flex row items-center"

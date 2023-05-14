@@ -56,7 +56,6 @@
                     v-if="$q.screen.gt.xs"
                   />
                 </div>
-
                 <div
                   class="artist-profile-wrapper"
                   v-if="controlArtist.length > 0 && $q.screen.gt.xs"
