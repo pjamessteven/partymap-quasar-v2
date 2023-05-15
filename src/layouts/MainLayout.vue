@@ -92,11 +92,11 @@ export default {
   .main-layout {
     .overlay {
       background: linear-gradient(
-        rgba(0, 0, 0, 0.68) 0px,
-        rgba(0, 0, 0, 0.68) 64px,
-        rgba(0, 0, 0, 0.48) 128px,
+        rgba(0, 0, 0, 0.48) 0px,
+        rgba(0, 0, 0, 0.48) 64px,
+        rgba(0, 0, 0, 0.3) 128px,
         rgba(0, 0, 0, 0) calc(100% - 256px),
-        rgba(0, 0, 0, 0.78) 100%
+        rgba(0, 0, 0, 0.48) 100%
       );
     }
   }
