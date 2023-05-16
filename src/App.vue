@@ -743,6 +743,7 @@ body {
 }
 
 .dialog-page {
+  background: rgba(0, 0, 0, 0.68);
   display: flex;
   flex-direction: column;
   align-items: center;

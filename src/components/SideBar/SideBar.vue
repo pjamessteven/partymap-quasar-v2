@@ -40,7 +40,7 @@
           <q-tab-panels
             keep-alive
             v-model="sidebarPanel"
-            :animated="$q.screen.gt.xs"
+            :animated="false"
             class="panels"
             style="height: 100%"
             ref="panels"

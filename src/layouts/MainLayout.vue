@@ -5,7 +5,10 @@
     <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
     <SideBar class="sidebar-component" />
     <MainMap />
+    <!-- There's two router views because we want different transitions for different pages
+    and we're lazy... -->
     <router-view
+      name="event"
       v-slot="{ Component }"
       class="main-layout-router"
       v-bind:class="{
@@ -17,6 +20,21 @@
         leave
         enter-active-class="animated slideInUp"
         leave-active-class="animated slideOutDown"
+      >
+        <component :is="Component" />
+      </transition>
+    </router-view>
+    <router-view
+      v-slot="{ Component }"
+      class="main-layout-router"
+      v-bind:class="{
+        'mobile-map-view-router': $q.screen.lt.sm,
+      }"
+    >
+      <transition
+        appear
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut"
       >
         <component :is="Component" />
       </transition>

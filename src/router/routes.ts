@@ -9,7 +9,9 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/event/:id/:eventDateId?',
         name: 'EventPage',
-        component: () => import('src/components/EventPage/EventPage.vue'),
+        components: {
+          event: () => import('src/components/EventPage/EventPage.vue'),
+        },
         props: true,
         meta: {
           auth: false,

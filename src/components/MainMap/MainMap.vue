@@ -445,7 +445,7 @@ export default {
     initMap() {
       this.map = L.map(this.$refs.map, this.mapOptions).setView(
         [53.9, 27.6],
-        2
+        3
       );
       this.initTileLayers();
 
