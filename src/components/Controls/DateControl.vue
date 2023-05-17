@@ -37,14 +37,6 @@
             {{ $t('top_controls.select_dates') }}
           </div>
         </div>
-        <!--
-        <i
-          class="q-select__dropdown-icon material-icons q-icon notranslate q-mr-none q-pr-none"
-          :class="{ 'rotate-180': menuShowing }"
-        >
-          arrow_drop_down
-        </i>
-        -->
       </div>
       <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
         <div class="calendar-header flex row items-center" style="">
@@ -256,13 +248,13 @@ export default {
   watch: {
     controlDateRange(newVal) {
       /* eslint-disable */
+
       switch (newVal.value) {
         case null: // all future dates
           this.controlDateRange = {
             start: moment().hour(0).minute(0).seconds(0).toISOString(),
             end: null,
           };
-          this.menuShowing = null;
           break;
         case 'today':
           this.controlDateRange = {
@@ -527,7 +519,6 @@ export default {
           break;
         case 'custom':
           // triggered by watcher on customDateRange
-          this.menuShowing = false;
           break;
         /* eslint-enable */
       }
@@ -561,6 +552,7 @@ export default {
         label: label,
         value: 'custom',
       };
+      this.showing = false;
     },
     getThisWeekendDateRange() {
       const weekendStart = 5; // friday
@@ -674,9 +666,10 @@ export default {
   }
 }
 .calendar-header {
-  //max-width: 582px;
-  min-width: 669px;
-  width: 660px;
+  min-width: 654px;
+  width: 648px;
+  overflow: hidden;
+  border-radius: 18px;
 }
 
 @media only screen and (max-width: 600px) {

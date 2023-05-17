@@ -13,69 +13,72 @@
 
       <div
         v-if="artist"
-        class="artist-header flex row justify-between items-start no-wrap q-pa-md"
+        class="artist-header flex row justify-start items-center no-wrap q-pa-md"
       >
-        <div
-          class="image-container flex justify-center items-center shadow-2xl"
-        >
+        <div class="flex row items-start grow">
           <div
-            class="image-container-background"
-            :style="computedAvatarStyle"
-            v-if="computedImageSrc.length > 0"
+            class="image-container flex justify-center items-start shadow-2xl"
           >
-            <transition appear enter-active-class="animated fadeIn slower">
-            </transition>
-          </div>
-          <div class="" v-else>
-            <q-icon size="2em" class="t3" name="mdi-account-music-outline" />
-          </div>
-        </div>
-        <div class="flex q-ml-md column no-wrap justify-between">
-          <div class="flex-column ellipsis" style="max-width: 200px">
-            <div class="text-h6 chicago ellipsis">
-              {{ computedName }}
-            </div>
             <div
-              class="ellipsis o-070 q-mt-sm"
-              v-if="artist.disambiguation && artist.disambiguation.length > 0"
+              class="image-container-background"
+              :style="computedAvatarStyle"
+              v-if="computedImageSrc.length > 0"
             >
-              {{ artist.disambiguation }}
+              <transition appear enter-active-class="animated fadeIn slower">
+              </transition>
             </div>
+            <div class="" v-else>
+              <q-icon size="2em" class="t3" name="mdi-account-music-outline" />
+            </div>
+          </div>
+          <div class="flex q-ml-md column no-wrap justify-between">
+            <div class="flex-column ellipsis" style="max-width: 200px">
+              <div class="text-h6 chicago ellipsis">
+                {{ computedName }}
+              </div>
+              <div
+                class="ellipsis o-070 q-mt-sm"
+                v-if="artist.disambiguation && artist.disambiguation.length > 0"
+              >
+                {{ artist.disambiguation }}
+              </div>
 
-            <div
-              class="q-mb-md o-070 ellipsis"
-              v-if="artist && artist.tags && artist.tags.length > 0 && !loading"
-              style="max-width: 200px"
-            >
-              <span v-for="(at, index) in artist.tags" :key="index">
-                {{ at.tag
-                }}<span v-if="index + 1 !== artist.tags.length">,</span>
-              </span>
-            </div>
-            <div
-              class="o-070 q-mb-md"
-              v-if="
-                artist &&
-                ((artist.tags && artist.tags.length === 0) || !artist.tags) &&
-                !loading
-              "
-            >
-              No tags for this artist yet.
-            </div>
-            <div
-              v-if="urls && urls.length > 0"
-              class="flex row q-gutter-sm o-070 no-wrap"
-              style="max-width: 100%; overflow-x: auto"
-            >
-              <ArtistUrl
-                style="font-size: 1.2rem"
-                :iconsOnly="true"
-                v-for="(url, index) in urls"
-                :url="url"
-                :key="index"
-              />
-            </div>
-            <!--
+              <div
+                class="q-mb-md o-070 ellipsis"
+                v-if="
+                  artist && artist.tags && artist.tags.length > 0 && !loading
+                "
+                style="max-width: 200px"
+              >
+                <span v-for="(at, index) in artist.tags" :key="index">
+                  {{ at.tag
+                  }}<span v-if="index + 1 !== artist.tags.length">,</span>
+                </span>
+              </div>
+              <div
+                class="o-070 q-mb-md"
+                v-if="
+                  artist &&
+                  ((artist.tags && artist.tags.length === 0) || !artist.tags) &&
+                  !loading
+                "
+              >
+                No tags for this artist yet.
+              </div>
+              <div
+                v-if="urls && urls.length > 0"
+                class="flex row q-gutter-sm o-070 no-wrap"
+                style="max-width: 100%; overflow-x: auto"
+              >
+                <ArtistUrl
+                  style="font-size: 1.2rem"
+                  :iconsOnly="true"
+                  v-for="(url, index) in urls"
+                  :url="url"
+                  :key="index"
+                />
+              </div>
+              <!--
             <div
               class="t3"
               v-if="
@@ -85,7 +88,13 @@
             >
               No description for this artist yet.
             </div>
-          --></div>
+          -->
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-center">
+          <q-icon name="mdi-chevron-right" size="2em"></q-icon>
         </div>
       </div>
       <div class="card-background">
@@ -266,7 +275,7 @@ export default {
   .card {
     &:hover {
       .card-background {
-        opacity: 0.8;
+        opacity: 0.2;
       }
     }
   }

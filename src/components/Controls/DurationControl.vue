@@ -35,7 +35,7 @@
         </div>
       </div>
       <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
-        <div class="q-gutter-xs flex column q-pr-md q-pa-xs">
+        <div class="q-gutter-sm flex column q-pr-md q-pa-xs chicago">
           <q-checkbox
             v-model="controlDuration"
             val="1"

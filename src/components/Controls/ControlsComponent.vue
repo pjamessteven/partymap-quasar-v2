@@ -60,14 +60,6 @@
           -->
         </div>
       </q-scroll-area>
-      <div class="artist-profile-wrapper" v-if="$q.screen.lt.sm">
-        <ArtistProfile
-          :key="controlArtist[0].id"
-          class="artist-profile"
-          v-if="controlArtist.length > 0"
-          :id="controlArtist[0].id"
-        />
-      </div>
     </div>
   </div>
 </template>
@@ -78,7 +70,6 @@ import DateControl from './DateControl.vue';
 import DurationControl from './DurationControl.vue';
 import SizeControl from './SizeControl.vue';
 import TagControl from './TagControl.vue';
-import ArtistProfile from 'src/components/ArtistProfile.vue';
 import LocalityControl from './LocalityControl.vue';
 import { mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
@@ -92,7 +83,6 @@ export default {
     SizeControl,
     ArtistControl,
     TagControl,
-    ArtistProfile,
     // LocalityControl,
   },
   watch: {
@@ -141,34 +131,50 @@ export default {
       'controlRegion',
       'controlLocality',
     ]),
+    dateControlActive() {
+      return !!this.controlDateRange.end;
+    },
+    durationControlActive() {
+      return this.controlDuration.length > 0;
+    },
+    sizeControlActive() {
+      return this.controlSize.length > 0;
+    },
+    artistControlActive() {
+      return this.controlArtist.length > 0;
+    },
+    tagControlActive() {
+      return this.controlTag.length > 0;
+    },
     showDateControl() {
       return (
         !this.showOnlySelected ||
-        (this.showOnlySelected && !!this.controlDateRange.end)
+        (this.showOnlySelected && this.dateControlActive)
       );
     },
+
     showDurationControl() {
       return (
         !this.showOnlySelected ||
-        (this.showOnlySelected && this.controlDuration.length > 0)
+        (this.showOnlySelected && this.durationControlActive)
       );
     },
     showSizeControl() {
       return (
         !this.showOnlySelected ||
-        (this.showOnlySelected && this.controlSize.length > 0)
+        (this.showOnlySelected && this.sizeControlActive)
       );
     },
     showArtistControl() {
       return (
         !this.showOnlySelected ||
-        (this.showOnlySelected && this.controlArtist.length > 0)
+        (this.showOnlySelected && this.artistControlActive)
       );
     },
     showTagControl() {
       return (
         !this.showOnlySelected ||
-        (this.showOnlySelected && this.controlTag.length > 0)
+        (this.showOnlySelected && this.tagControlActive)
       );
     },
     showLocalityControl() {

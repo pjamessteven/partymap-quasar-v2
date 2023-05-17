@@ -12,7 +12,7 @@
         active: controlArtist && controlArtist.length > 0,
       }"
     >
-      <div class="flex row no-wrap">
+      <div class="flex items-center row no-wrap">
         <div
           class="close-icon-wrapper"
           v-if="controlArtist && controlArtist.length > 0"
@@ -25,7 +25,6 @@
         >
           <q-icon style="font-size: 18px" name="mdi-close" />
         </div>
-
         <div class="button-label flex row items-center row no-wrap">
           <i class="las la-music q-mr-sm q-ml-none q-pr-none" />
 
@@ -122,7 +121,7 @@
                   <q-item-section>
                     <div class="flex row justify-between no-wrap">
                       <div class="flex column justify-center no-wrap">
-                        <q-item-label>
+                        <q-item-label class="chicago">
                           {{ artist.name }}
                         </q-item-label>
 

@@ -69,7 +69,7 @@
                     class="q-py-md header q-mt-sm"
                     v-if="nearbyTags && nearbyTags.length > 0"
                   >
-                    <div class="t1 text- chicago q-pl-md">Top tags:</div>
+                    <div class="t1 text- chicago q-pl-md">Explore the map:</div>
                   </div>
                   <div
                     class="q-pl-md q-mb-sm"
@@ -122,7 +122,7 @@
                     class="t1 location-header q-py-md chicago q-pl-md"
                     v-if="nearbyArtists && nearbyArtists.length > 0"
                   >
-                    Top artists:
+                    Top artists near {{ userLocationCity }}:
                   </div>
                   <ArtistsComponent
                     @wheel.stop

@@ -30,7 +30,8 @@
           ref="scroll"
           :thumb-style="{
             right: $q.screen.gt.xs ? '0px' : '-16px',
-            width: $q.screen.gt.xs ? '4px' : '4px',
+            width: $q.screen.gt.xs ? '8px' : '4px',
+            borderRadius: 0,
           }"
           class="scroll-area flex grow"
           :class="!showPanel && 'disable-scroll'"
@@ -57,8 +58,11 @@
                   />
                 </div>
                 <div
-                  class="artist-profile-wrapper"
-                  v-if="controlArtist.length > 0 && $q.screen.gt.xs"
+                  class="artist-profile-wrappe"
+                  :class="
+                    $q.screen.gt.xs ? 'q-px-md q-pb-md q-pt-sm' : 'q-pa-sm'
+                  "
+                  v-if="controlArtist.length > 0"
                 >
                   <ArtistProfile
                     :key="controlArtist[0].id"
@@ -70,7 +74,6 @@
                   class="flex column"
                   v-show="showResults && !isLoadingInitial"
                 >
-                  <!--
                   <div
                     class="flex column artists-wrapper"
                     v-if="noFiltersSelected && artists?.length > 0"
@@ -91,7 +94,6 @@
                       :loadMore="loadMoreArtists"
                     />
                   </div>
-                  -->
                   <div
                     class="header q-py-md t1 chicago"
                     :class="
@@ -175,7 +177,7 @@ export default {
   components: {
     ControlsComponent,
     ArtistProfile,
-    //ArtistsComponent,
+    ArtistsComponent,
     EventDateList,
     EventDatePosterList,
     EventDateViewOptions,
@@ -204,7 +206,6 @@ export default {
   },
   methods: {
     ...mapActions(useQueryStore, [
-      'resetControls',
       'loadEventDates',
       'loadArtists',
       'loadMoreArtists',
@@ -226,13 +227,11 @@ export default {
           this.loadMore();
         }
         // Artist stuff
-        /*
         this.artistsPage = 1;
         this.artistsHasNext = true;
         this.isLoadingArtistsInitial = true;
         await this.loadArtists();
         this.isLoadingArtistsInitial = false;
-        */
       }
     },
     async loadMore() {
@@ -278,21 +277,15 @@ export default {
     },
   },
   watch: {
-    sidebarPanel(newv, oldv) {
-      if (oldv === 'explore' && this.anyQueryFiltersEnabled) {
-        // clear filters when navigating away
-        this.resetControls();
-      }
-    },
     route: {
       handler: async function (to) {
         if (to.name === 'Explore') {
           if (this.eventDates?.length === 0) {
             if (!this.userLocation) {
               await this.loadIpInfo();
-              this.debouncedGetInitalList();
+              this.getInitialList();
             } else {
-              this.debouncedGetInitalList();
+              this.getInitialList();
             }
           }
         }
@@ -311,33 +304,39 @@ export default {
         this.getInitialList();
       }
     },
+    controlTags: {
+      handler() {
+        this.getInitialList();
+      },
+      deep: true,
+    },
     controlDateRange: {
       handler() {
-        this.debouncedGetInitalList();
+        this.getInitialList();
       },
       deep: true,
     },
     controlDuration: {
       handler() {
-        this.debouncedGetInitalList();
+        this.getInitialList();
       },
       deep: true,
     },
     controlSize: {
       handler() {
-        this.debouncedGetInitalList();
+        this.getInitialList();
       },
       deep: true,
     },
     controlArtist: {
       handler() {
-        this.debouncedGetInitalList();
+        this.getInitialList();
       },
       deep: true,
     },
     controlTag: {
       handler() {
-        this.debouncedGetInitalList();
+        this.getInitialList();
       },
       deep: true,
     },
@@ -358,7 +357,6 @@ export default {
       'mapMoving',
     ]),
     ...mapState(useQueryStore, [
-      'anyQueryFiltersEnabled',
       'eventDatesGroupedByMonth',
       'controlTag',
       'controlDateRange',
@@ -524,11 +522,9 @@ export default {
       //background: whitesmoke;
     }
     .artist-profile-wrapper {
-      padding: 16px;
       width: 100%;
 
       .artist-profile {
-        width: 500px;
         max-width: 100%;
         //height: 200px;
         border-radius: 9px !important;

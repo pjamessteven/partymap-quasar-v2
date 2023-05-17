@@ -83,12 +83,6 @@
             v-if="tagOptions && tagOptions.length > 0"
           >
             <q-list>
-              <q-item-label
-                header
-                class="t3 q-pb-sm"
-                v-if="!query || query.length == 0"
-                >{{ $t('top_controls.top_tags_in_area') }}:</q-item-label
-              >
               <div
                 class="flex column"
                 v-for="(tag, index) in tagOptions"
@@ -97,23 +91,27 @@
                 <q-separator v-if="index > 0" />
                 <q-item
                   dense
+                  v-close-popup
                   clickable
                   @click="clickTag(tag)"
                   :active="controlTag?.findIndex((x) => x.tag === tag.tag) > -1"
                 >
                   <div
-                    class="flex row grow justify-between items-center no-wrap"
+                    class="flex row grow justify-between items-center no-wrap q-py-md chicago"
                   >
                     <q-item-label>
                       {{ tag.tag }} &nbsp;<span class="t4"
                         >({{ tag.count }})</span
                       >
                     </q-item-label>
+                    <!--
                     <q-checkbox
+                      @click="clickTag(tag)"
                       :model-value="
                         controlTag?.findIndex((x) => x.tag === tag.tag) > -1
                       "
                     />
+                    -->
                   </div>
                 </q-item>
               </div>

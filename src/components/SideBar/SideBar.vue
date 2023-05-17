@@ -40,9 +40,9 @@
           <q-tab-panels
             keep-alive
             v-model="sidebarPanel"
-            :animated="true"
-            :transition-prev="'fade'"
-            :transition-next="'fade'"
+            :animated="false"
+            :transition-prev="'jump-right'"
+            :transition-next="'jump-left'"
             class="panels"
             style="height: 100%"
             ref="panels"
@@ -197,7 +197,7 @@ export default {
     ...mapWritableState(useMapStore, ['preventMapZoom']),
     computedSidebarWidth() {
       if (this.$q.screen.gt.sm) {
-        return 'width: 50vw; min-width: 800px';
+        return 'width: 50vw; min-width: 854px';
       } else if (this.$q.screen.gt.xs) {
         return 'width: 66vw; min-width: 640px; max-width: 100%';
       } else {
@@ -302,7 +302,7 @@ export default {
     transform: translate3d(0, calc(100% - 276px), 0);
     user-select: none;
     will-change: transform;
-    padding-bottom: 73px;
+    padding-bottom: 64px;
 
     &:hover {
       //transform: translate3d(0, 80px, 0) !important;
@@ -373,7 +373,7 @@ export default {
     }
   }
   .sidebar-mobile-expanded {
-    transform: translate3d(0, 80px, 0) !important;
+    transform: translate3d(0, 64px, 0) !important;
     .mobile-dismiss-list {
       height: 200px;
     }

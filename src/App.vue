@@ -292,7 +292,7 @@ body {
     }
     .q-btn__content {
       .close-icon-wrapper {
-        background: white;
+        background: $b-4;
         color: black;
       }
     }
@@ -430,7 +430,7 @@ body {
 
     .q-btn__content {
       .close-icon-wrapper {
-        background: black;
+        background: $bi-4;
         color: white;
       }
     }
@@ -762,7 +762,7 @@ body {
   .solid-page-inner {
     overflow: auto;
     height: 100%;
-    max-width: 1000px;
+    //max-width: 1000px;
   }
 }
 

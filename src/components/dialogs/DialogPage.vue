@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-    v-if="$q.screen.gt.xs"
+    v-if="$q.screen.gt.xs && false"
     :model-value="true"
     @hide="$router.go(-1)"
     transition-show="jump-up"
