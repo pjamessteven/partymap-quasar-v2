@@ -290,6 +290,12 @@ body {
     &::before {
       box-shadow: none !important;
     }
+    .q-btn__content {
+      .close-icon-wrapper {
+        background: white;
+        color: black;
+      }
+    }
     .q-btn__wrapper {
       &:before {
         box-shadow: none;
@@ -421,6 +427,14 @@ body {
     transition: none;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
+
+    .q-btn__content {
+      .close-icon-wrapper {
+        background: black;
+        color: white;
+      }
+    }
+
     .q-btn__wrapper {
       &:before {
         box-shadow: none;
@@ -627,12 +641,13 @@ body {
 }
 
 .button-control {
-  padding: 6px 12px;
+  padding: 0px;
   font-weight: 400;
   font-family: chicagoflf;
   text-transform: capitalize;
   font-size: normal;
   border-radius: 9px !important;
+  overflow: hidden;
   &.active {
     font-weight: 500;
   }
@@ -641,6 +656,15 @@ body {
     padding: 0;
   }
   .q-btn__content {
+    .close-icon-wrapper {
+      background: white;
+      color: black;
+      height: 100%;
+      padding: 6px 16px 6px 12px;
+    }
+    .button-label {
+      padding: 6px 12px;
+    }
     white-space: nowrap;
     .q-icon {
       margin-right: -6px;

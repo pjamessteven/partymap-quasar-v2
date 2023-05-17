@@ -10,30 +10,32 @@
       class="button-control flex items-center date-control"
       :class="{
         active:
-          showSelectedValue &&
-          controlDateRange &&
-          controlDateRange.value != null,
+          controlDateRangeSelectedOption &&
+          controlDateRangeSelectedOption?.value != null,
       }"
     >
       <div class="flex items-center row no-wrap">
-        <div class="q-mr-sm">
-          <i
-            v-if="
-              showSelectedValue &&
-              controlDateRange &&
-              controlDateRange.value != null
-            "
-            @click.stop="controlDateRange = { value: null }"
-            class="mdi mdi-close-circle"
-          />
-          <i v-else class="las la-calendar" />
+        <div
+          class="close-icon-wrapper"
+          v-if="showSelectedValue && !!controlDateRangeSelectedOption?.value"
+          @click.stop="clearDateRange"
+        >
+          <q-icon style="font-size: 18px" name="mdi-close" />
         </div>
-        <div v-if="showSelectedValue && !!controlDateRangeSelectedOption">
-          {{ controlDateRangeSelectedOption.value }}
-        </div>
-        <div v-else-if="$q.screen.lt.sm">dates</div>
-        <div v-else>
-          {{ $t('top_controls.select_dates') }}
+
+        <div class="button-label flex row items-center row no-wrap">
+          <div v-if="!controlDateRangeSelectedOption?.value" class="q-mr-sm">
+            <i class="las la-calendar" />
+          </div>
+          <div
+            v-if="showSelectedValue && !!controlDateRangeSelectedOption?.value"
+          >
+            {{ controlDateRangeSelectedOption.label }}
+          </div>
+          <div v-else-if="$q.screen.lt.sm">dates</div>
+          <div v-else>
+            {{ $t('top_controls.select_dates') }}
+          </div>
         </div>
         <!--
         <i
@@ -532,20 +534,30 @@ export default {
     },
   },
   methods: {
+    clearDateRange() {
+      this.controlDateRange = { start: moment().toISOString() };
+      this.controlDateRangeSelectedOption = null;
+    },
     onHide() {
       this.showing = false;
     },
     onShow() {
       this.showing = true;
     },
-    onSelectedCustomDateRange() {
+    onSelectedCustomDateRange(value) {
       // set button label
-      var label = this.$t('top_controls.custom');
-      label =
-        moment(this.controlDateRange.start).format('MMM Do YYYY') +
-        " <i class='las la-angle-right'></i> " +
-        moment(this.controlDateRange.end).format('MMM Do YYYY');
-      this.controlDateRange = {
+      let label = this.$t('top_controls.custom');
+
+      const startDate = moment(value.start).format('Do MMM YYYY');
+      const endDate = moment(value.end).format('Do MMM YYYY');
+
+      if (startDate === endDate) {
+        label = startDate;
+      } else {
+        label = startDate + ' - ' + endDate;
+      }
+
+      this.controlDateRangeSelectedOption = {
         label: label,
         value: 'custom',
       };

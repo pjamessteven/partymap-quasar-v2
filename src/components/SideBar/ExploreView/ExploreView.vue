@@ -70,6 +70,7 @@
                   class="flex column"
                   v-show="showResults && !isLoadingInitial"
                 >
+                  <!--
                   <div
                     class="flex column artists-wrapper"
                     v-if="noFiltersSelected && artists?.length > 0"
@@ -90,6 +91,7 @@
                       :loadMore="loadMoreArtists"
                     />
                   </div>
+                  -->
                   <div
                     class="header q-py-md t1 chicago"
                     :class="
@@ -173,7 +175,7 @@ export default {
   components: {
     ControlsComponent,
     ArtistProfile,
-    ArtistsComponent,
+    //ArtistsComponent,
     EventDateList,
     EventDatePosterList,
     EventDateViewOptions,
@@ -202,6 +204,7 @@ export default {
   },
   methods: {
     ...mapActions(useQueryStore, [
+      'resetControls',
       'loadEventDates',
       'loadArtists',
       'loadMoreArtists',
@@ -223,11 +226,13 @@ export default {
           this.loadMore();
         }
         // Artist stuff
+        /*
         this.artistsPage = 1;
         this.artistsHasNext = true;
         this.isLoadingArtistsInitial = true;
         await this.loadArtists();
         this.isLoadingArtistsInitial = false;
+        */
       }
     },
     async loadMore() {
@@ -273,15 +278,21 @@ export default {
     },
   },
   watch: {
+    sidebarPanel(newv, oldv) {
+      if (oldv === 'explore' && this.anyQueryFiltersEnabled) {
+        // clear filters when navigating away
+        this.resetControls();
+      }
+    },
     route: {
       handler: async function (to) {
         if (to.name === 'Explore') {
           if (this.eventDates?.length === 0) {
             if (!this.userLocation) {
               await this.loadIpInfo();
-              this.getInitialList();
+              this.debouncedGetInitalList();
             } else {
-              this.getInitialList();
+              this.debouncedGetInitalList();
             }
           }
         }
@@ -300,39 +311,33 @@ export default {
         this.getInitialList();
       }
     },
-    controlTags: {
-      handler() {
-        this.getInitialList();
-      },
-      deep: true,
-    },
     controlDateRange: {
       handler() {
-        this.getInitialList();
+        this.debouncedGetInitalList();
       },
       deep: true,
     },
     controlDuration: {
       handler() {
-        this.getInitialList();
+        this.debouncedGetInitalList();
       },
       deep: true,
     },
     controlSize: {
       handler() {
-        this.getInitialList();
+        this.debouncedGetInitalList();
       },
       deep: true,
     },
     controlArtist: {
       handler() {
-        this.getInitialList();
+        this.debouncedGetInitalList();
       },
       deep: true,
     },
     controlTag: {
       handler() {
-        this.getInitialList();
+        this.debouncedGetInitalList();
       },
       deep: true,
     },
@@ -353,6 +358,7 @@ export default {
       'mapMoving',
     ]),
     ...mapState(useQueryStore, [
+      'anyQueryFiltersEnabled',
       'eventDatesGroupedByMonth',
       'controlTag',
       'controlDateRange',

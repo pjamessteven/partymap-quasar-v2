@@ -24,7 +24,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('src/components/ArtistPage/ArtistPage.vue'),
         props: true,
         meta: {
-          mapOverlay: false,
+          mapOverlay: true,
         },
       },
 

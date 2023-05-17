@@ -13,23 +13,25 @@
       }"
     >
       <div class="flex items-center row no-wrap">
-        <q-icon
-          style="font-size: 18px"
-          name="mdi-close-circle"
-          class="q-pr-md"
+        <div
+          class="close-icon-wrapper"
+          v-if="controlSize && controlSize.length > 0"
           @click.stop="
             () => {
               controlSize = [];
               menuShowing = false;
             }
           "
-          v-if="controlSize && controlSize.length > 0"
-        />
+        >
+          <q-icon style="font-size: 18px" name="mdi-close" />
+        </div>
 
-        <i class="las la-user-friends q-mr-sm q-ml-none q-pr-none" />
+        <div class="button-label flex row items-center row no-wrap">
+          <i class="las la-user-friends q-mr-sm q-ml-none q-pr-none" />
 
-        <div>
-          {{ $t('top_controls.select_size') }}
+          <div>
+            {{ $t('top_controls.select_size') }}
+          </div>
         </div>
       </div>
       <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">

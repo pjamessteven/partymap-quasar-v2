@@ -40,7 +40,9 @@
           <q-tab-panels
             keep-alive
             v-model="sidebarPanel"
-            :animated="false"
+            :animated="true"
+            :transition-prev="'fade'"
+            :transition-next="'fade'"
             class="panels"
             style="height: 100%"
             ref="panels"

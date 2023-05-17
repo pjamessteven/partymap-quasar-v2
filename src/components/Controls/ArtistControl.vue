@@ -12,35 +12,38 @@
         active: controlArtist && controlArtist.length > 0,
       }"
     >
-      <div class="flex items-center row no-wrap">
-        <q-icon
-          style="font-size: 18px"
-          name="mdi-close-circle"
-          class="q-pr-md"
+      <div class="flex row no-wrap">
+        <div
+          class="close-icon-wrapper"
+          v-if="controlArtist && controlArtist.length > 0"
           @click.stop="
             (event) => {
               controlArtist = [];
               event.preventDefault();
             }
           "
-          v-if="controlArtist && controlArtist.length > 0"
-        />
-        <i class="las la-music q-mr-sm q-ml-none q-pr-none" />
-
-        <div v-if="!controlArtist || controlArtist.length === 0">
-          {{ $t('top_controls.select_artist') }}
+        >
+          <q-icon style="font-size: 18px" name="mdi-close" />
         </div>
-        <div v-else>
-          <span v-for="(artist, index) in controlArtist" :key="index"
-            >{{ artist.name
-            }}<span
-              v-if="
-                index != controlArtist.length - 1 && controlArtist.length > 1
-              "
+
+        <div class="button-label flex row items-center row no-wrap">
+          <i class="las la-music q-mr-sm q-ml-none q-pr-none" />
+
+          <div v-if="!controlArtist || controlArtist.length === 0">
+            {{ $t('top_controls.select_artist') }}
+          </div>
+          <div v-else>
+            <span v-for="(artist, index) in controlArtist" :key="index"
+              >{{ artist.name
+              }}<span
+                v-if="
+                  index != controlArtist.length - 1 && controlArtist.length > 1
+                "
+              >
+                &
+              </span></span
             >
-              &
-            </span></span
-          >
+          </div>
         </div>
       </div>
       <MenuWrapper

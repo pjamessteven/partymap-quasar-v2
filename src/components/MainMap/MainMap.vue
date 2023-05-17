@@ -116,11 +116,11 @@ export default {
     };
   },
   created() {
-    this.debouncedclearMarkersAndLoadPoints = _.debounce(
+    this.debouncedClearMarkersAndLoadPoints = _.debounce(
       this.clearMarkersAndLoadPoints,
-      500,
+      300,
       {
-        leading: true,
+        leading: false,
         trailing: true,
       }
     );
@@ -147,53 +147,53 @@ export default {
       this.invalidateMapSize();
     },
     controlDateRange: {
-      handler(newv, oldv) {
-        this.clearMarkersAndLoadPoints();
+      handler() {
+        this.debouncedClearMarkersAndLoadPoints();
       },
       deep: false,
     },
     controlDuration: {
       handler() {
-        this.clearMarkersAndLoadPoints();
+        this.debouncedClearMarkersAndLoadPoints();
       },
       deep: true,
     },
     controlSize: {
       handler() {
-        this.clearMarkersAndLoadPoints();
+        this.debouncedClearMarkersAndLoadPoints();
       },
       deep: true,
     },
     controlFavorite: {
       handler() {
-        this.clearMarkersAndLoadPoints();
+        this.debouncedClearMarkersAndLoadPoints();
       },
     },
     controlArtist: {
       handler() {
-        this.clearMarkersAndLoadPoints();
+        this.debouncedClearMarkersAndLoadPoints();
       },
       deep: true,
     },
     controlTag: {
       handler() {
-        this.clearMarkersAndLoadPoints();
+        this.debouncedClearMarkersAndLoadPoints();
       },
       deep: true,
     },
     controlCountry: {
       handler() {
-        this.clearMarkersAndLoadPoints();
+        this.debouncedClearMarkersAndLoadPoints();
       },
     },
     controlRegion: {
       handler() {
-        this.clearMarkersAndLoadPoints();
+        this.debouncedClearMarkersAndLoadPoints();
       },
     },
     controlLocality: {
       handler() {
-        this.clearMarkersAndLoadPoints();
+        this.debouncedClearMarkersAndLoadPoints();
       },
     },
     userLocation: {

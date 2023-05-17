@@ -13,22 +13,25 @@
       }"
     >
       <div class="flex items-center row no-wrap">
-        <q-icon
+        <div
+          class="close-icon-wrapper"
+          v-if="controlDuration && controlDuration.length > 0"
           @click.stop="
             () => {
               controlDuration = [];
               menuShowing = false;
             }
           "
-          style="font-size: 18px"
-          name="mdi-close-circle"
-          v-if="controlDuration && controlDuration.length > 0"
-          class="q-pr-md"
-        />
-        <i class="las la-clock q-mr-sm q-ml-none q-pr-none" />
+        >
+          <q-icon style="font-size: 18px" name="mdi-close" />
+        </div>
 
-        <div>
-          {{ $t('top_controls.select_duration') }}
+        <div class="button-label flex row items-center row no-wrap">
+          <i class="las la-clock q-mr-sm q-ml-none q-pr-none" />
+
+          <div>
+            {{ $t('top_controls.select_duration') }}
+          </div>
         </div>
       </div>
       <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">

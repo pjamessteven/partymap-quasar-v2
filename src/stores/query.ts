@@ -22,7 +22,7 @@ import { useMapStore } from './map';
 
 interface QueryState {
   // control main event date query filters
-
+  startDate: string;
   controlDateRange: { start: string; end: string | null };
   controlDateRangeSelectedOption: { value: string; label: string } | null;
   controlFavorites: boolean;
@@ -97,9 +97,14 @@ interface QueryState {
   artistsLoading: boolean;
 }
 
+// when we reset controls we need to reset to this date
+// otherwise it triggers a change when we don't want one
+const startDate = moment().toISOString();
+
 export const useQueryStore = defineStore('query', {
   state: (): QueryState => ({
-    controlDateRange: { start: moment().toISOString(), end: null },
+    startDate,
+    controlDateRange: { start: startDate, end: null },
     controlDateRangeSelectedOption: null, // keep state of dynamic date label
     controlFavorites: false,
     controlDuration: [],
@@ -369,7 +374,7 @@ export const useQueryStore = defineStore('query', {
     },
     resetControls() {
       this.controlDateRange = {
-        start: moment().toISOString(),
+        start: this.startDate,
         end: null,
       };
       this.controlDateRangeSelectedOption = null;

@@ -13,33 +13,35 @@
       "
     >
       <div class="flex items-center row no-wrap">
-        <!--<q-icon left name="las la-calendar " />-->
-        <q-icon
-          style="font-size: 18px"
-          name="mdi-close-circle"
-          class="q-pr-md"
+        <div
+          class="close-icon-wrapper"
+          v-if="controlTag?.length > 0"
           @click.stop="
             () => {
               controlTag = [];
               event.preventDefault();
             }
           "
-          v-if="controlTag?.length > 0"
-        />
-        <i class="las la-tags q-mr-sm q-ml-none q-pr-none" />
-
-        <div v-if="!controlTag || controlTag.length === 0">
-          {{ $t('top_controls.select_tags') }}
+        >
+          <q-icon style="font-size: 18px" name="mdi-close" />
         </div>
-        <div v-else>
-          <span v-for="(tag, index) in controlTag" :key="index"
-            >{{ tag.tag
-            }}<span
-              v-if="index != controlTag.length - 1 && controlTag.length > 1"
+
+        <div class="button-label flex row items-center row no-wrap">
+          <i class="las la-tags q-mr-sm q-ml-none q-pr-none" />
+
+          <div v-if="!controlTag || controlTag.length === 0">
+            {{ $t('top_controls.select_tags') }}
+          </div>
+          <div v-else>
+            <span v-for="(tag, index) in controlTag" :key="index"
+              >{{ tag.tag
+              }}<span
+                v-if="index != controlTag.length - 1 && controlTag.length > 1"
+              >
+                +
+              </span></span
             >
-              +
-            </span></span
-          >
+          </div>
         </div>
 
         <!--
