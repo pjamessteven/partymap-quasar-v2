@@ -212,7 +212,10 @@
                       :location="event.location"
                     />
 
-                    <div class="location-map-wrapper q-mt-md">
+                    <div
+                      class="location-map-wrapper q-mt-md"
+                      v-show="!!event.location"
+                    >
                       <div class="location-map" ref="map" />
                       <div
                         class="location-map-select-msg flex justify-center items-center"
@@ -568,6 +571,7 @@ import SelectTagsComponent from 'components/EventPage/Tags/SelectTagsComponent.v
 import { getEventsRequest } from 'src/api';
 import { useAuthStore } from 'src/stores/auth';
 import { mapState } from 'pinia';
+import { useMapStore } from 'src/stores/map';
 
 export default {
   components: {
@@ -626,6 +630,10 @@ export default {
         },
       },
       mainContentScrollPosition: 0,
+      map: null,
+      tileLayer: null,
+      labelLayer: null,
+      mapMarkers: null,
     };
   },
   methods: {
@@ -704,13 +712,83 @@ export default {
     onScrollMainContent(info) {
       this.mainContentScrollPosition = info.verticalPosition;
     },
+    initMap() {
+      this.map = null;
+      this.map = L.map(this.$refs.map, this.mapOptions);
+      // enable zooming after clicking map
+      this.map.on('click', () => {
+        this.map.scrollWheelZoom.enable();
+      });
+      this.map.on('mouseout', () => {
+        this.map.scrollWheelZoom.disable();
+      });
+
+      // tile layers
+
+      // style specific parameters
+      const detectRetina = this.mapStyle === 'satellite';
+
+      let opacity = 1;
+      if (this.mapStyle === 'toner') opacity = 0.68;
+
+      let filter = [];
+      if (this.mapStyle === 'transport' && this.$q.dark.isActive) {
+        filter = ['saturate:150%', 'brightness:100%'];
+      }
+
+      this.tileLayer = L.tileLayer(this.currentMapTileUrl, {
+        attribution: this.currentMapTileAttribution,
+        detectRetina,
+        filter,
+      });
+      this.tileLayer.setOpacity(opacity);
+      this.tileLayer.addTo(this.map);
+
+      if (this.mapStyle === 'satellite') {
+        // add additional label layer for satellite map
+        this.labelLayer = L.tileLayer(this.labelsMapTileUrl, {
+          detectRetina: false,
+        });
+        this.labelLayer.addTo(this.map);
+        this.labelLayer.setOpacity(0.68);
+      }
+    },
   },
   watch: {
-    location: handler(newv, oldv){
+    eventLocation: {
+      handler(newv) {
+        setTimeout(() => {
+          this.map.invalidateSize();
+        }, 100);
 
-    }
+        if (newv) {
+          const lat = newv.geometry.location.lat();
+          const lng = newv.geometry.location.lng();
+
+          // remove previous marker
+          if (this.markers && this.map.hasLayer(this.markers)) {
+            this.map.removeLayer(this.markers);
+          }
+          // add location preview marker
+          this.map.setView([lat, lng], 12);
+          let marker = L.marker([lat, lng], {
+            icon: this.defaultIcon,
+          });
+          this.markers = L.layerGroup([marker]);
+          this.map.addLayer(this.markers);
+        }
+      },
+      deep: true,
+    },
   },
   computed: {
+    ...mapState(useMapStore, [
+      'currentMapTileAttribution',
+      'currentMapTileUrl',
+      'labelsMapTileUrl',
+      'defaultIcon',
+      'mapStyle',
+    ]),
     ...mapState(useAuthStore, ['currentUser']),
     eventLocation() {
       return this.event.location;
@@ -750,6 +828,9 @@ export default {
         return false;
       }
     },
+  },
+  mounted() {
+    this.initMap();
   },
 };
 </script>
@@ -794,7 +875,7 @@ export default {
 }
 
 .location-map-wrapper {
-  width: 512px;
+  width: 100%;
   height: 256px;
   position: relative;
   overflow: hidden;

@@ -79,7 +79,6 @@ export default {
     },
     getPlaceInformation() {
       if (this.selectedPlace?.place_id) {
-        console.log('getti place is');
         var request = {
           placeId: this.selectedPlace.place_id,
           fields: ['name', 'type', 'address_component', 'geometry'],
@@ -91,9 +90,10 @@ export default {
           loc.description = this.selectedPlace.description;
           loc.place_id = this.selectedPlace.place_id;
           this.location = loc;
-          console.log(loc);
           this.$emit('location', loc);
         });
+      } else {
+        this.$emit('location', null);
       }
     },
   },

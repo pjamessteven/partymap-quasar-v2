@@ -64,24 +64,7 @@ export default {
         worldCopyJump: false,
         preferCanvas: true,
       },
-      defaultIcon: L.divIcon({
-        className: 'marker-icon',
-        iconAnchor: [12, 30],
-        iconSize: [25, 30],
-        tooltipAnchor: [0, -32],
-      }),
-      focusIcon: L.divIcon({
-        className: 'focus-marker-icon',
-        iconAnchor: [29, 49],
-        iconSize: [60, 60],
-        tooltipAnchor: [0, -32],
-      }),
-      focusIconRed: L.divIcon({
-        className: 'focus-marker-icon-red animated flash infinite slower',
-        iconAnchor: [12, 30],
-        iconSize: [25, 30],
-        tooltipAnchor: [0, -32],
-      }),
+
       clusterOptions: {
         chunkedLoading: true,
       },
@@ -600,6 +583,7 @@ export default {
       'currentMapTileAttribution',
       'currentMapTileUrl',
       'labelsMapTileUrl',
+      'defaultIcon',
     ]),
     ...mapWritableState(useMapStore, [
       'mapBounds',
