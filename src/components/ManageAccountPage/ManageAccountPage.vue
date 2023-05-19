@@ -1,6 +1,10 @@
 <template>
   <DialogPage>
-    <template v-slot:title v-if="$q.screen.gt.xs">Manage Account </template>
+    <template v-slot:title>
+      <div :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'">
+        Manage Account
+      </div></template
+    >
     <template v-slot>
       <div class="flex column" :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'">
         <UpdateEmailAddressComponent class="q-mt-md" />

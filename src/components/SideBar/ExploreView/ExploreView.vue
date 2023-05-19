@@ -74,6 +74,7 @@
                   class="flex column"
                   v-show="showResults && !isLoadingInitial"
                 >
+                  <!--
                   <div
                     class="flex column artists-wrapper"
                     v-if="noFiltersSelected && artists?.length > 0"
@@ -94,6 +95,7 @@
                       :loadMore="loadMoreArtists"
                     />
                   </div>
+                  -->
                   <div
                     class="header q-py-md t1 chicago"
                     :class="
@@ -177,7 +179,7 @@ export default {
   components: {
     ControlsComponent,
     ArtistProfile,
-    ArtistsComponent,
+    //ArtistsComponent,
     EventDateList,
     EventDatePosterList,
     EventDateViewOptions,
@@ -227,11 +229,13 @@ export default {
           this.loadMore();
         }
         // Artist stuff
+        /*
         this.artistsPage = 1;
         this.artistsHasNext = true;
         this.isLoadingArtistsInitial = true;
         await this.loadArtists();
         this.isLoadingArtistsInitial = false;
+        */
       }
     },
     async loadMore() {

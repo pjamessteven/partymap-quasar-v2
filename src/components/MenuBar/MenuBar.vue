@@ -3,7 +3,10 @@
     <div
       class="menubar-background"
       :style="computedStyle"
-      v-if="$q.screen.lt.sm && this.$route.name === 'EventPage'"
+      v-if="
+        !$route.meta.mapOverlay ||
+        ($q.screen.lt.sm && this.$route.name === 'EventPage')
+      "
     />
     <MenuBarLogo class="logo" />
     <transition
@@ -45,26 +48,43 @@ export default {
     },
 
     computedStyle() {
-      var opacity = this.menubarOpacity;
-      return `opacity: ${opacity}`;
+      if (this.$q.screen.lt.sm && this.$route.name === 'EventPage') {
+        var opacity = this.menubarOpacity;
+        return `opacity: ${opacity}`;
+      } else if (!this.$route.meta.mapOverlay) {
+        return 'opacity: 1';
+      } else return 'opacity: 0';
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-/*
 .body--dark {
+  .menubar {
+    .menubar-background {
+      background: black;
+    }
+  }
 }
 
 .body--light {
+  .menubar {
+    .menubar-background {
+      background: white;
+    }
+  }
 }
-*/
+
 .menubar {
   //transition: opacity 0.15s;
   height: 62px;
   position: relative;
-
+  .menubar-background {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
   .logo {
     position: absolute;
     opacity: 1;
@@ -92,12 +112,7 @@ export default {
   }
   .menubar {
     z-index: 1;
-    .menubar-background {
-      position: absolute;
-      height: 100%;
-      width: 100%;
-      background: black;
-    }
+
     &.search-expanded {
       .logo {
         opacity: 0;

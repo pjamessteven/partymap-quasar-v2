@@ -1,66 +1,64 @@
 <template>
-  <div :class="this.mapStyle === 'satellite' ? 'satellite-enabled' : ''">
-    <div
-      class="inner-wrapper flex column grow no-wrap"
-      :class="$q.screen.gt.xs ? ' q-pl-md' : ' t2'"
+  <div
+    class="inner-wrapper flex column grow no-wrap"
+    :class="$q.screen.gt.xs ? ' q-pl-md' : ' t2'"
+  >
+    <q-scroll-area
+      ref="scroll"
+      horizontal
+      class="scroll-area"
+      :style="$q.screen.gt.xs ? 'height: 54px' : 'height: 44px'"
+      :thumb-style="
+        $q.screen.gt.xs
+          ? { bottom: '0px', height: '4px' }
+          : { bottom: '-8px', height: '0px' }
+      "
     >
-      <q-scroll-area
-        ref="scroll"
-        horizontal
-        class="scroll-area"
-        :style="$q.screen.gt.xs ? 'height: 54px' : 'height: 44px'"
-        :thumb-style="
+      <div
+        class="flex row scroll-wrapper tag-controls"
+        :class="[
           $q.screen.gt.xs
-            ? { bottom: '0px', height: '4px' }
-            : { bottom: '-8px', height: '0px' }
-        "
+            ? 'q-gutter-sm q-pr-md q-py-xs  no-wrap'
+            : 'q-gutter-sm q-px-sm  no-wrap',
+        ]"
       >
-        <div
-          class="flex row scroll-wrapper tag-controls"
-          :class="[
-            $q.screen.gt.xs
-              ? 'q-gutter-sm q-pr-md q-py-xs  no-wrap'
-              : 'q-gutter-sm q-px-sm  no-wrap',
-          ]"
-        >
-          <DateControl
-            v-if="showDateControl"
-            :key="1"
-            class="flex"
-            :showSelectedValue="showSelectedValue"
-          />
-          <TagControl
-            v-if="showTagControl"
-            :key="2"
-            :showSelectedValue="showSelectedValue"
-            ref="tagControl"
-          />
-          <ArtistControl
-            v-if="showArtistControl"
-            :key="3"
-            :showSelectedValue="showSelectedValue"
-            ref="artistControl"
-          />
-          <SizeControl
-            v-if="showSizeControl"
-            :key="4"
-            :showSelectedValue="showSelectedValue"
-          />
-          <DurationControl
-            v-if="showDurationControl"
-            :key="5"
-            :showSelectedValue="showSelectedValue"
-          />
-          <!--
+        <DateControl
+          v-if="showDateControl"
+          :key="1"
+          class="flex"
+          :showSelectedValue="showSelectedValue"
+        />
+        <TagControl
+          v-if="showTagControl"
+          :key="2"
+          :showSelectedValue="showSelectedValue"
+          ref="tagControl"
+        />
+        <ArtistControl
+          v-if="showArtistControl"
+          :key="3"
+          :showSelectedValue="showSelectedValue"
+          ref="artistControl"
+        />
+        <SizeControl
+          v-if="showSizeControl"
+          :key="4"
+          :showSelectedValue="showSelectedValue"
+        />
+        <DurationControl
+          v-if="showDurationControl"
+          :key="5"
+          :showSelectedValue="showSelectedValue"
+        />
+        <!--
           <LocalityControl
             v-if="showLocalityControl"
             :key="6"
             :showSelectedValue="showSelectedValue"
           />
           -->
-        </div>
-      </q-scroll-area>
-    </div>
+      </div>
+    </q-scroll-area>
   </div>
 </template>
 
@@ -119,7 +117,6 @@ export default {
   },
   computed: {
     ...mapWritableState(useMainStore, ['showPanel']),
-    ...mapState(useMainStore, ['mapStyle']),
     ...mapState(useQueryStore, [
       'controlDateRange',
       'controlFavorites',

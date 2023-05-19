@@ -32,7 +32,7 @@
             </div>
           </div>
           <div class="flex q-ml-md column no-wrap justify-between">
-            <div class="flex-column ellipsis" style="max-width: 200px">
+            <div class="flex-column ellipsis" style="max-width: 280px">
               <div class="text-h6 chicago ellipsis">
                 {{ computedName }}
               </div>
@@ -52,7 +52,7 @@
               >
                 <span v-for="(at, index) in artist.tags" :key="index">
                   {{ at.tag
-                  }}<span v-if="index + 1 !== artist.tags.length">,</span>
+                  }}<span v-if="index + 1 !== artist.tags.length">,&nbsp;</span>
                 </span>
               </div>
               <div
@@ -325,7 +325,8 @@ export default {
       //border-radius: 100%;
       height: 96px;
       width: 96px;
-      border-radius: 9px;
+      border-radius: 100px;
+      aspect-ratio: 1;
       .image-container-background {
         height: 100%;
         width: 100%;

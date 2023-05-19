@@ -47,23 +47,6 @@ export default {
     return {
       markersLoaded: false,
       zoom: 3,
-      position: '',
-      // url: 'http://tile.stamen.com/toner/{z}/{x}/{y}.png',
-      url: '/static/output/{z}/{x}/{y}.webp',
-      tonerLightUrl:
-        'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.png',
-      tonerDarkUrl:
-        'https://stamen-tiles-{s}.a.ssl.fastly.net/tonger/{z}/{x}/{y}{r}.png',
-      osmurl: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}/{r}.png',
-      alturl:
-        'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png ',
-      labelsurl:
-        'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-hybrid/{z}/{x}/{y}.png',
-      satelliteAttribution:
-        'Map tiles by &copy; <a href="http://arcgisonline.com">Esri</a>; and <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
-      stamenAttribution:
-        'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
-      hereAttribution: '&copy; HERE 2019',
       focusMarkerLayer: L.featureGroup(),
       eventDateHoverLayer: L.featureGroup(),
       withPopup: L.latLng(47.41322, -1.219482),
@@ -307,7 +290,7 @@ export default {
         }
       });
     },
-    theme: function () {
+    mapStyle: function () {
       this.initTileLayers();
     },
     points: function () {
@@ -321,13 +304,14 @@ export default {
     ...mapActions(useQueryStore, ['loadPoints']),
     handleWheel(event) {
       // switch to explore view
+      this.showPanel = false;
+
       if (
         this.sidebarPanel !== 'explore' &&
         this.sidebarPanel !== 'favorites'
       ) {
         this.sidebarPanel = 'explore';
       }
-      this.showPanel = false;
       return false;
     },
     clearMarkersAndLoadPoints() {
@@ -425,7 +409,6 @@ export default {
         }).on('click', this.clickMarker),
       ];
 
-      // this.focusMarker.addLayer(marker).addTo(this.map)
       this.focusMarkerLayer.clearLayers();
       this.focusMarkerLayer = L.featureGroup(markers);
       this.focusMarkerLayer.addTo(this.map);
@@ -434,13 +417,11 @@ export default {
       var paddingBottom = this.windowHeight - mapContainerHeight / 3 + 28;
       var paddingRight = 0;
 
-      // this.map.flyTo(latlng, zoom)
       this.map.fitBounds(this.focusMarkerLayer.getBounds(), {
         paddingBottomRight: [paddingRight, paddingBottom],
         animate: true,
         maxZoom: zoom,
       });
-      //  this.map.setView(latlng, zoom)
     },
     initMap() {
       this.map = L.map(this.$refs.map, this.mapOptions).setView(
@@ -510,53 +491,40 @@ export default {
       });
     },
     initTileLayers() {
-      let filter = [];
-
       if (this.tileLayer && this.map?.hasLayer(this.tileLayer)) {
         this.map.removeLayer(this.tileLayer);
       }
       if (this.labelLayer && this.map?.hasLayer(this.labelLayer)) {
         this.map.removeLayer(this.labelLayer);
       }
-      if (this.mapStyle === 'satellite') {
-        this.tileLayer = L.tileLayer(this.theme, {
-          attribution: this.satelliteAttribution,
-          detectRetina: true,
-        });
-        this.tileLayer.setOpacity(this.satelliteMapOpacity);
-        this.tileLayer.addTo(this.map);
-        this.labelLayer = L.tileLayer(
-          'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-hybrid/{z}/{x}/{y}{r}.png',
-          {
-            detectRetina: false,
-          }
-        );
-        this.labelLayer.addTo(this.map);
-        this.labelLayer.setOpacity(this.satelliteLabelLayerOpacity);
-      } else if (this.mapStyle === 'transport') {
-        if (this.$q.dark.isActive) {
-          filter = ['saturate:150%', 'brightness:100%'];
-        }
-        this.tileLayer = L.tileLayer.colorFilter(this.theme, {
-          attribution: this.hereAttribution,
-          filter: filter,
-          detectRetina: false,
-        });
-        this.tileLayer.addTo(this.map);
-        this.tileLayer.setOpacity(1);
-      } else {
-        this.tileLayer = L.tileLayer.colorFilter(this.theme, {
-          attribution: this.stamenAttribution,
-          filter: filter,
-          detectRetina: false,
-        });
-        this.tileLayer.addTo(this.map);
-        this.tileLayer.setOpacity(1);
+
+      // style specific parameters
+      const detectRetina = this.mapStyle === 'satellite';
+
+      let opacity = 1;
+      if (this.mapStyle === 'satellite') opacity = this.satelliteMapOpacity;
+      if (this.mapStyle === 'toner') opacity = this.monochromeMapOpactiy;
+
+      let filter = [];
+      if (this.mapStyle === 'transport' && this.$q.dark.isActive) {
+        filter = ['saturate:150%', 'brightness:100%'];
       }
 
-      if (this.mapStyle === 'highcontrast') {
-        this.tileLayer.setOpacity(this.monochromeMapOpactiy);
-      } else {
+      this.tileLayer = L.tileLayer(this.currentMapTileUrl, {
+        attribution: this.currentMapTileAttribution,
+        detectRetina,
+        filter,
+      });
+      this.tileLayer.setOpacity(opacity);
+      this.tileLayer.addTo(this.map);
+
+      if (this.mapStyle === 'satellite') {
+        // add additional label layer for satellite map
+        this.labelLayer = L.tileLayer(this.labelsMapTileUrl, {
+          detectRetina: false,
+        });
+        this.labelLayer.addTo(this.map);
+        this.labelLayer.setOpacity(this.satelliteLabelLayerOpacity);
       }
     },
     initMarkers() {
@@ -628,6 +596,11 @@ export default {
     },
   },
   computed: {
+    ...mapState(useMapStore, [
+      'currentMapTileAttribution',
+      'currentMapTileUrl',
+      'labelsMapTileUrl',
+    ]),
     ...mapWritableState(useMapStore, [
       'mapBounds',
       'mapCenter',
@@ -637,9 +610,9 @@ export default {
       'mapMoving',
       'blockUpdates',
       'preventMapZoom',
+      'mapStyle',
     ]),
     ...mapWritableState(useMainStore, [
-      'mapStyle',
       'userLocation',
       'sidebarPanel',
       'showPanel',
@@ -656,57 +629,6 @@ export default {
       'loadingPoints',
       'points',
     ]),
-    theme() {
-      // return 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-      // return 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
-      if (this.$q.dark.isActive) {
-        if (this.mapStyle === 'satellite') {
-          return 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
-        } else if (this.mapStyle === 'transport') {
-          /*
-          return (
-            'https://tile.thunderforest.com/transport-dark/{z}/{x}/{y}' +
-            (L.Browser.retina ? '@2x' : '') +
-            '.png?apikey=36760d1b806646ef8deb6947ef09cfe4'
-          )
-          */
-          let style = 'normal.night.transit';
-          let res = L.Browser.retina ? '512' : '256';
-          let ppi = L.Browser.retina ? '&ppi=320' : '';
-          let apiKey = 'cm5lJNNbmnziaiO0058xjeN8-sDkZVVsvPtyVWEN8_w';
-          return `https://2.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/${style}/{z}/{x}/{y}/${res}/png8?apiKey=${apiKey}${ppi}`;
-        } else {
-          return (
-            'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}' +
-            (L.Browser.retina ? '@2x' : '') +
-            '.png'
-          );
-        }
-      } else {
-        if (this.mapStyle === 'satellite') {
-          return 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
-        } else if (this.mapStyle === 'transport') {
-          /*
-          return (
-            'https://tile.thunderforest.com/transport/{z}/{x}/{y}' +
-            (L.Browser.retina ? '@2x' : '') +
-            '.png?apikey=36760d1b806646ef8deb6947ef09cfe4'
-          )
-          */
-          let style = 'normal.day.transit';
-          let res = L.Browser.retina ? '512' : '256';
-          let ppi = L.Browser.retina ? '&ppi=320' : '';
-          let apiKey = 'cm5lJNNbmnziaiO0058xjeN8-sDkZVVsvPtyVWEN8_w';
-          return `https://2.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/${style}/{z}/{x}/{y}/${res}/png8?apiKey=${apiKey}${ppi}`;
-        } else {
-          return (
-            'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}' +
-            (L.Browser.retina ? '@2x' : '') +
-            '.png'
-          );
-        }
-      }
-    },
 
     addingEvent() {
       return this.$route.path === '/add';

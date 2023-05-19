@@ -568,7 +568,7 @@ body {
     border-color: rgb(26, 26, 26);
   }
   .q-field--dark .q-field__control::before {
-    border-color: rgb(26, 26, 26);
+    border-color: rgb(64, 64, 64);
   }
 
   .q-field__control {
@@ -758,11 +758,13 @@ body {
   width: 100%;
   height: 100%;
   padding-top: 60px;
-  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  //overflow: hidden;
   .solid-page-inner {
-    overflow: auto;
+    overflow: visible;
     height: 100%;
-    //max-width: 1000px;
+    max-width: 1000px;
   }
 }
 
@@ -864,8 +866,10 @@ body {
   .solid-page {
     //padding-top: 16px !important;
     padding-bottom: 74px !important;
+    overflow: hidden;
 
     .solid-page-inner {
+      overflow-y: auto;
       position: relative;
     }
   }

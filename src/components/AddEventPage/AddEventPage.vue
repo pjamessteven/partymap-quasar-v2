@@ -1,13 +1,15 @@
 <template>
   <DialogPage>
     <template v-slot:title>
-      <div class="text-h6 chicago" v-if="event.host">
-        {{ $t('add_event.add_your_event') }} &nbsp;<i
-          class="mdi mdi-check-decagram-outline"
-        />
-      </div>
-      <div class="text-h6 chicago" v-else>
-        {{ $t('add_event.add_public_event') }}
+      <div :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'">
+        <div class="chicago" v-if="event.host">
+          {{ $t('add_event.add_your_event') }} &nbsp;<i
+            class="mdi mdi-check-decagram-outline"
+          />
+        </div>
+        <div class="chicago" v-else>
+          {{ $t('add_event.add_public_event') }}
+        </div>
       </div>
     </template>
     <template v-slot>
@@ -119,12 +121,9 @@
                   </div>
                 </div>
 
-                <!-- Event Description (mandatory if host)-->
+                <!-- Event Description (mandatory for both)-->
 
-                <div
-                  class="flex row grow no-wrap items-baseline q-mt-md"
-                  v-if="event.host"
-                >
+                <div class="flex row grow no-wrap items-baseline q-mt-md">
                   <q-icon size="xs" name="las la-align-left" />
                   <div class="flex column grow q-ml-lg">
                     <p class="text-large chicago">
@@ -145,7 +144,7 @@
                       :label="$t('description.summary')"
                       style="padding-bottom: 0px"
                     />
-                    <div class="flex row" v-if="event.host === false">
+                    <div class="flex row q-mt-sm" v-if="event.host === false">
                       <p />
                       <q-option-group
                         v-model="descriptionAttributeOption"
@@ -207,10 +206,21 @@
                     <p class="t3">
                       {{ $t('add.location_caption') }}
                     </p>
+
                     <GoogleLocationComponent
                       v-on:location="event.location = $event"
                       :location="event.location"
                     />
+
+                    <div class="location-map-wrapper q-mt-md">
+                      <div class="location-map" ref="map" />
+                      <div
+                        class="location-map-select-msg flex justify-center items-center"
+                      >
+                        <div class="chicago o-o50">Location preview</div>
+                      </div>
+                    </div>
+
                     <p />
                   </div>
                 </div>
@@ -312,54 +322,7 @@
                     <p />
                   </div>
                 </div>
-                <!-- Event Description -->
 
-                <div class="flex row grow no-wrap items-baseline q-mt-md">
-                  <q-icon size="xs" name="las la-align-left" />
-                  <div class="flex column grow q-ml-lg">
-                    <p class="text-large chicago">
-                      {{ $t('description.summary') }}
-                    </p>
-                    <p class="t3">
-                      {{ $t('description.summary_msg') }}
-                    </p>
-                    <br />
-
-                    <q-input
-                      outlined
-                      autogrow
-                      counter
-                      maxlength="400"
-                      :input-style="{ 'min-height': '50px' }"
-                      color="bg-grey-7"
-                      v-model="event.description"
-                      :label="$t('description.summary')"
-                      style="padding-bottom: 0px"
-                    />
-                    <div v-if="event.host === false">
-                      <p />
-                      <q-option-group
-                        v-model="descriptionAttributeOption"
-                        :options="attributeOptions"
-                        color="primary"
-                      />
-                    </div>
-                    <q-input
-                      v-if="descriptionAttributeOption === 'other'"
-                      dense
-                      outlined
-                      maxlength="200"
-                      class="q-mt-sm"
-                      :input-style="{ 'min-height': '50px' }"
-                      color="bg-grey-7"
-                      v-model="descriptionAttribute"
-                      :label="$t('description.attribute_msg')"
-                      :rules="[(val) => !!val]"
-                      style="padding-bottom: 0px"
-                    />
-                    <p />
-                  </div>
-                </div>
                 <!-- Detailed Description (for next event date) -->
 
                 <div class="flex row grow no-wrap items-baseline q-mt-md">
@@ -630,7 +593,7 @@ export default {
           value: 'self',
         },
         {
-          label: 'This is from the official page linked to below',
+          label: 'This is from the linked event page',
           value: 'official',
         },
         {
@@ -742,9 +705,16 @@ export default {
       this.mainContentScrollPosition = info.verticalPosition;
     },
   },
-  watch: {},
+  watch: {
+    location: handler(newv, oldv){
+
+    }
+  },
   computed: {
     ...mapState(useAuthStore, ['currentUser']),
+    eventLocation() {
+      return this.event.location;
+    },
     validation() {
       if (this.event.host) {
         // don't require URL if host
@@ -821,6 +791,27 @@ export default {
 
 .hover-option {
   cursor: pointer;
+}
+
+.location-map-wrapper {
+  width: 512px;
+  height: 256px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  .location-map {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+  .location-map-select-msg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+  }
 }
 
 // sm

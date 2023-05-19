@@ -173,6 +173,7 @@ import AddEventDialog from 'components/dialogs/AddEventDialog.vue';
 import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
 import { useMainStore } from 'src/stores/main';
+import { useMapStore } from 'src/stores/map';
 
 export default {
   name: 'TopControlsMenu',
@@ -184,7 +185,7 @@ export default {
       mapStyleOptions: [
         { label: this.$t('nav.satellite_map'), value: 'satellite' },
         { label: this.$t('nav.transport_map'), value: 'transport' },
-        { label: this.$t('nav.highcontrast_map'), value: 'highcontrast' },
+        { label: 'Toner', value: 'toner' },
       ],
     };
   },
@@ -214,7 +215,8 @@ export default {
   watch: {},
   computed: {
     ...mapState(useAuthStore, ['currentUser']),
-    ...mapWritableState(useMainStore, ['mapStyle', 'darkMode']),
+    ...mapWritableState(useMainStore, ['darkMode']),
+    ...mapWritableState(useMapStore, ['mapStyle']),
   },
 };
 </script>

@@ -1,10 +1,10 @@
 <template>
   <DialogPage>
     <template v-slot:title>
-      {{ computedName }}
+      <div>{{ computedName }}</div>
     </template>
     <template v-slot>
-      <InnerLoading v-if="loading" :solid="true" />
+      <InnerLoading v-if="true" :solid="true" />
 
       <div class="artist-header flex row justify-between no-wrap">
         <div class="flex column no-wrap" style="width: 100%">
@@ -172,7 +172,7 @@
       </div>
       <transition appear enter-active-class="animated fadeIn slower">
         <div class="q-pb-lg footer" v-if="artist">
-          <div class="t4">
+          <div class="t3">
             Artist info by
             <a
               href="https://musicbrainz.org/"
@@ -192,9 +192,9 @@
               class="link-hover underline"
               target="_blank"
               >Spotify</a
-            >. In the future users will be able to update this page.
+            >.
             <span class="link-hover" @click="refreshArtist">
-              [Refresh info]</span
+              [Fetch latest info]</span
             >
           </div>
         </div>
@@ -399,6 +399,7 @@ export default {
     width: auto;
     position: relative;
     overflow: hidden;
+    aspect-ratio: 1;
     border-radius: 100%;
     .image-container-background {
       height: 100%;
@@ -418,8 +419,6 @@ export default {
   }
 }
 .footer {
-  position: absolute;
-  bottom: 0px;
 }
 @media only screen and (max-width: 1023px) {
   .solid-page {

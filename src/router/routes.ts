@@ -5,6 +5,10 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     name: 'Explore',
     component: () => import('src/layouts/MainLayout.vue'),
+    meta: {
+      auth: false,
+      mapOverlay: true,
+    },
     children: [
       {
         path: '/event/:id/:eventDateId?',
@@ -24,7 +28,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('src/components/ArtistPage/ArtistPage.vue'),
         props: true,
         meta: {
-          mapOverlay: true,
+          mapOverlay: false,
         },
       },
 
@@ -82,7 +86,7 @@ const routes: RouteRecordRaw[] = [
         props: { host: true },
         meta: {
           auth: false,
-          mapOverlay: true,
+          mapOverlay: false,
         },
       },
       {
@@ -92,7 +96,7 @@ const routes: RouteRecordRaw[] = [
         props: { host: false },
         meta: {
           auth: false,
-          mapOverlay: true,
+          mapOverlay: false,
         },
       },
 
@@ -103,7 +107,7 @@ const routes: RouteRecordRaw[] = [
           import('src/components/ManageAccountPage/ManageAccountPage.vue'),
         meta: {
           auth: false,
-          mapOverlay: true,
+          mapOverlay: false,
         },
       },
 
@@ -114,7 +118,7 @@ const routes: RouteRecordRaw[] = [
         props: true,
         meta: {
           auth: false,
-          mapOverlay: true,
+          mapOverlay: false,
         },
       },
       {

@@ -21,6 +21,15 @@
       </q-card-section>
     </q-card>
   </q-dialog>
+  <div v-else-if="$q.screen.gt.xs" class="solid-page">
+    <div class="solid-page-inner">
+      <div class="text-h4 chicago q-my-md">
+        <slot name="title"></slot>
+      </div>
+
+      <slot></slot>
+    </div>
+  </div>
   <div v-else class="solid-page">
     <div class="solid-page-inner">
       <slot></slot>
