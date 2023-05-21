@@ -74,7 +74,7 @@
         name="favorites"
         :icon="
           sidebarPanel === 'favorites'
-            ? 'mdi-account-circle'
+            ? 'mdi-account-circle-outline'
             : 'mdi-account-circle-outline'
         "
         :label="$q.screen.gt.xs ? undefined : 'You'"
@@ -148,12 +148,20 @@ export default {
   computed: {
     ...mapState(useAuthStore, ['currentUser']),
     ...mapWritableState(useMainStore, ['sidebarPanel', 'showPanel']),
-    ...mapState(useMainStore, ['fineLocation', 'userLocationLoading']),
+    ...mapState(useMainStore, [
+      'fineLocation',
+      'userLocationLoading',
+      'userLocationCity',
+      'userLocation',
+    ]),
     ...mapWritableState(useQueryStore, ['controlFavorites']),
     computedPanelName() {
       switch (this.sidebarPanel) {
         case 'nearby':
-          return 'Nearby';
+          if (this.userLocation) {
+            return 'Near ' + this.userLocationCity;
+          }
+          return 'Finding your location...';
         case 'explore':
           return 'Explore Map';
         case 'favorites':
@@ -228,11 +236,13 @@ export default {
       margin: 16px 4px;
       border-radius: 18px;
       transition: all 0.3s;
+      opacity: 1 !important;
+      border: 1px solid transparent;
       &.q-tab--active {
-        opacity: 1 !important;
       }
       &.q-tab--inactive {
-        opacity: 0.3 !important;
+        color: grey;
+        // opacity: 0.3 !important;
       }
     }
   }

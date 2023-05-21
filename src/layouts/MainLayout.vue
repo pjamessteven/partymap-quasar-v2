@@ -91,8 +91,8 @@ export default {
         return `opacity: ${this.overlayOpacity}; background: black!important`;
       } else {
         if (this.showPanel && this.$route.name === 'Explore')
-          return 'opacity: 1';
-        else return 'opacity: 0.3';
+          return 'opacity: 0.5';
+        else return 'opacity: 0';
       }
     },
   },
@@ -102,6 +102,8 @@ export default {
 .body--dark {
   .main-layout {
     .overlay {
+      background: black;
+      /*
       background: linear-gradient(
         rgba(0, 0, 0, 0.78) 0px,
         rgba(0, 0, 0, 0.78) 64px,
@@ -109,19 +111,22 @@ export default {
         rgba(0, 0, 0, 0) calc(100% - 256px),
         rgba(0, 0, 0, 0.78) 100%
       );
+      */
     }
   }
 }
 .body--light {
   .main-layout {
     .overlay {
+      background: black;
+      /*
       background: linear-gradient(
         rgba(0, 0, 0, 0.48) 0px,
         rgba(0, 0, 0, 0.48) 64px,
         rgba(0, 0, 0, 0.3) 128px,
         rgba(0, 0, 0, 0) calc(100% - 256px),
         rgba(0, 0, 0, 0.48) 100%
-      );
+      );*/
     }
   }
 }

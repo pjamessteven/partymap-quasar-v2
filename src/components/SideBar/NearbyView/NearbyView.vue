@@ -31,6 +31,7 @@
                   </div>
                 </div>
                 <div
+                  v-if="$q.screen.lt.sm"
                   class="flex items-center no-wrap chicago t1 q-pl-md"
                   style="width: 100%"
                   :class="
@@ -44,10 +45,7 @@
                     class="ellipsis"
                     :class="$q.screen.gt.xs ? 'q-pa-xs' : ''"
                   >
-                    {{ userLocationCity
-                    }}<span v-if="$q.screen.gt.xs"
-                      >, {{ userLocationCountry }}</span
-                    >
+                    {{ userLocationCity }}
                   </span>
                   <span class="ellipsis" v-else>... </span>
                 </div>

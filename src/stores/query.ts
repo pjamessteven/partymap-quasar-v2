@@ -231,7 +231,7 @@ export const useQueryStore = defineStore('query', {
           query: undefined,
           sort_option: 'date',
           page: this.userEventDatesPage,
-          per_page: 10,
+          per_page: 20,
           distinct: true,
           all_related_to_user: mode === 'all' ? username : undefined,
           following_user: mode === 'following' ? username : undefined,
@@ -304,7 +304,7 @@ export const useQueryStore = defineStore('query', {
           favorites: main.sidebarPanel === 'favorites' ? true : undefined,
           sort_option: 'date',
           page: this.eventDatesPage,
-          per_page: 10,
+          per_page: 20,
           distinct: true,
         });
         if (this.eventDatesRequestId === requestId) {

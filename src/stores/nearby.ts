@@ -143,7 +143,7 @@ export const useNearbyStore = defineStore('nearby', {
           date_max: null,
           radius: this.queryRadius,
           page: this.nearbyEventDatesPage,
-          per_page: 10,
+          per_page: 20,
           distinct: true,
         });
         if (this.nearbyEventDatesPage === 1) {
@@ -179,7 +179,7 @@ export const useNearbyStore = defineStore('nearby', {
           date_min: moment().toISOString(),
           date_max: null,
           page: this.eventDatesPage,
-          per_page: 10,
+          per_page: 20,
           distinct: true,
         });
         if (this.eventDatesRequestId === requestId) {

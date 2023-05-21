@@ -236,7 +236,7 @@ export default {
     ]),
     ...mapWritableState(useMapStore, ['mapStyle']),
   },
-  mounted() {
+  beforeMount() {
     if (!this.compactView && !this.groupEventsByMonth) {
       this.mobilePosterView = true;
     }
