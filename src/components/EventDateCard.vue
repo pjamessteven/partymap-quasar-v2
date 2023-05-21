@@ -18,8 +18,6 @@
         <div
           class="ed-card"
           @mousedown="() => onClickCard($event, navigate)"
-          @mouseover="setFocusMarker"
-          @mouseleave="eventDateHoverMarker = null"
           :class="{
             'animated-shimmer': false,
           }"
@@ -614,8 +612,9 @@ export default {
 
 // sm
 @media only screen and (max-width: 600px) {
-  .card {
-    &:active {
+  .ed-card {
+    &:active,
+    &:hover {
       transform: none;
     }
   }

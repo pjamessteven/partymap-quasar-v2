@@ -68,7 +68,7 @@
                     v-touch-swipe.vertical="handleSwipe"
                   >
                     <div
-                      class="flex row scroll-wrapper"
+                      class="flex row items-center scroll-wrapper"
                       :class="[
                         $q.screen.gt.xs
                           ? $q.screen.lt.xl
@@ -107,6 +107,11 @@
                         "
                       >
                         <div class="flex items-center row no-wrap">
+                          <q-icon
+                            name="mdi-check-circle"
+                            class="q-pr-md"
+                            size="1rem"
+                          />
                           <div>Going</div>
                         </div>
                       </q-btn>
@@ -124,6 +129,11 @@
                         "
                       >
                         <div class="flex items-center row no-wrap">
+                          <q-icon
+                            name="mdi-star-outline"
+                            class="q-pr-md"
+                            size="1rem"
+                          />
                           <div>Interested</div>
                         </div>
                       </q-btn>
@@ -132,53 +142,79 @@
                         no-caps
                         class="button-control flex items-center"
                         :class="{
-                          active: mode === 'hosting',
+                          active:
+                            mode === 'hosting' ||
+                            mode === 'created' ||
+                            mode === 'following',
                         }"
                         @click="
                           () => {
-                            mode = 'hosting';
+                            showingYouMenu = !showingYouMenu;
                           }
                         "
                       >
                         <div class="flex items-center row no-wrap">
-                          <div>Hosting</div>
+                          <q-icon
+                            name="mdi-account-circle-outline"
+                            class="q-pr-md"
+                            size="1rem"
+                          />
+                          <div>You</div>
                         </div>
+                        <MenuWrapper
+                          :showing="showingYouMenu"
+                          @hide="() => (showingYouMenu = false)"
+                          @show="() => (showingYouMenu = true)"
+                          class="menu-wrapper chicago"
+                        >
+                          <q-list>
+                            <q-item
+                              v-close-popup
+                              :active="mode === 'hosting'"
+                              clickable
+                              @click="
+                                () => {
+                                  mode = 'hosting';
+                                }
+                              "
+                            >
+                              <q-item-section> Hosting</q-item-section>
+                            </q-item>
+                            <q-item
+                              v-close-popup
+                              :active="mode === 'created'"
+                              clickable
+                              @click="
+                                () => {
+                                  mode = 'created';
+                                }
+                              "
+                            >
+                              <q-item-section> Created</q-item-section>
+                            </q-item>
+                            <q-item
+                              v-close-popup
+                              :active="mode === 'following'"
+                              clickable
+                              @click="
+                                () => {
+                                  mode = 'following';
+                                }
+                              "
+                            >
+                              <q-item-section>
+                                Contributed/Reviewed
+                              </q-item-section>
+                            </q-item>
+                          </q-list>
+                        </MenuWrapper>
                       </q-btn>
 
-                      <q-btn
-                        no-caps
-                        class="button-control flex items-center"
-                        :class="{
-                          active: mode === 'created',
-                        }"
-                        @click="
-                          () => {
-                            mode = 'created';
-                          }
-                        "
-                      >
-                        <div class="flex items-center row no-wrap">
-                          <div>Created</div>
-                        </div>
-                      </q-btn>
+                      <div
+                        class="separator vertical q-ml-md q-mr-sm"
+                        style="height: 32px"
+                      />
 
-                      <q-btn
-                        no-caps
-                        class="button-control flex items-center"
-                        :class="{
-                          active: mode === 'following',
-                        }"
-                        @click="
-                          () => {
-                            mode = 'following';
-                          }
-                        "
-                      >
-                        <div class="flex items-center row no-wrap">
-                          <div>Contributed/Reviewed</div>
-                        </div>
-                      </q-btn>
-                      <div class="separator vertical m" style="height: 32px" />
                       <q-btn
                         no-caps
                         class="button-control flex items-center"
@@ -192,6 +228,11 @@
                         "
                       >
                         <div class="flex items-center row no-wrap">
+                          <q-icon
+                            name="mdi-clock-time-nine-outline"
+                            class="q-pr-md"
+                            size="1rem"
+                          />
                           <div>Upcoming</div>
                         </div>
                       </q-btn>
@@ -209,12 +250,20 @@
                         "
                       >
                         <div class="flex items-center row no-wrap">
+                          <q-icon
+                            name="mdi-history"
+                            class="q-pr-md"
+                            size="1rem"
+                          />
                           <div>Past</div>
                         </div>
                       </q-btn>
                     </div>
                   </q-scroll-area>
-                  <EventDateViewOptions v-if="$q.screen.gt.xs" />
+                  <EventDateViewOptions
+                    v-if="$q.screen.gt.xs"
+                    class="q-mb-sm"
+                  />
                 </div>
 
                 <!--
@@ -284,6 +333,7 @@ import { useQueryStore } from 'src/stores/query';
 import { useMainStore } from 'src/stores/main';
 import { useAuthStore } from 'src/stores/auth';
 import { mapActions, mapWritableState, mapState } from 'pinia';
+import MenuWrapper from 'src/components/Controls/MenuWrapper.vue';
 
 export default {
   components: {
@@ -291,6 +341,7 @@ export default {
     EventDateList,
     EventDatePosterList,
     EventDateViewOptions,
+    MenuWrapper,
   },
   props: { showControls: { default: false } },
   mounted() {
@@ -298,6 +349,7 @@ export default {
   },
   data() {
     return {
+      showingYouMenu: false,
       tense: 'future',
       mode: 'all',
       mainContentScrollPosition: 0,
@@ -472,23 +524,8 @@ export default {
         }
       }
     }
-    .artists-wrapper {
-      border-radius: 0px;
-      .artists-component {
-        z-index: 2;
-      }
-      //background: whitesmoke;
-    }
-    .artist-profile-wrapper {
-      padding: 16px;
-      width: 100%;
-
-      .artist-profile {
-        width: 500px;
-        max-width: 100%;
-        //height: 200px;
-        border-radius: 9px !important;
-      }
+    .button-control {
+      padding: 0px 12px;
     }
     .scroll-content {
       position: relative;

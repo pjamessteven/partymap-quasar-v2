@@ -287,15 +287,17 @@ export default {
     ...mapActions(useQueryStore, ['loadPoints']),
     handleWheel(event) {
       // switch to explore view
-      this.showPanel = false;
+      if (!this.preventMapZoom) {
+        this.showPanel = false;
 
-      if (
-        this.sidebarPanel !== 'explore' &&
-        this.sidebarPanel !== 'favorites'
-      ) {
-        this.sidebarPanel = 'explore';
+        if (
+          this.sidebarPanel !== 'explore' &&
+          this.sidebarPanel !== 'favorites'
+        ) {
+          this.sidebarPanel = 'explore';
+        }
+        return false;
       }
-      return false;
     },
     clearMarkersAndLoadPoints() {
       if (this.mapMarkers !== null) {

@@ -118,7 +118,7 @@ export default {
       const down = e.direction === 'down';
       if (!this.showPanel && down) {
         this.showPanel = true;
-      } else if (this.enablePanelSwipeDown && up) {
+      } else if (this.enablePanelSwipeDown && up && !this.preventMapZoom) {
         this.preventMapZoom = true;
         this.showPanel = false;
 
@@ -222,7 +222,7 @@ export default {
       border-right: 1px solid rgba(255, 255, 255, 0.1);
 
       :deep(.panels) {
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
       }
       .mobile-dismiss-list {
       }
@@ -423,6 +423,7 @@ export default {
 
       :deep(.panels) {
         //box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
+        border-top: none !important;
       }
     }
   }

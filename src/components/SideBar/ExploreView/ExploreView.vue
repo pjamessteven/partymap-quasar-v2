@@ -97,9 +97,9 @@
                   </div>
                   -->
                   <div
-                    class="header q-py-md t1 chicago"
+                    class="header t1 chicago"
                     :class="
-                      $q.screen.lt.sm ? 'q-pl-sm q-mt-sm' : 'q-pl-md  q-py-md'
+                      $q.screen.lt.sm ? 'q-pl-sm q-py-md' : 'q-pl-md  q-py-md'
                     "
                     v-if="!groupEventsByMonth && eventDates?.length > 0"
                   >
@@ -252,12 +252,6 @@ export default {
     },
     handleSwipe() {
       this.showPanel = !this.showPanel;
-    },
-    handleWheel(event) {
-      console.log(event.deltaY, this.mainContentScrollPosition);
-      if (event.deltaY < 0 && this.mainContentScrollPosition === 0) {
-        // this.showPanel = false;
-      }
     },
 
     onScrollMainContent(info) {

@@ -162,6 +162,7 @@
                     enter-active-class="animated fadeIn slower"
                   >
                     <EventDateList
+                      :class="{ 'q-px-sm': $q.screen.lt.sm }"
                       v-if="nearbyEventDates && compactView"
                       :groupByMonth="false"
                       :eventDates="nearbyEventDates"
@@ -173,6 +174,7 @@
                     enter-active-class="animated fadeIn slower"
                   >
                     <EventDatePosterList
+                      :class="{ 'q-px-sm': $q.screen.lt.sm }"
                       v-if="nearbyEventDates && !compactView"
                       :groupByMonth="false"
                       :eventDates="nearbyEventDates"
@@ -233,6 +235,7 @@
                     enter-active-class="animated fadeIn slower"
                   >
                     <EventDateList
+                      :class="{ 'q-px-sm': $q.screen.lt.sm }"
                       v-if="eventDates && compactView"
                       :groupByMonth="false"
                       :eventDates="eventDates"
@@ -244,6 +247,7 @@
                     enter-active-class="animated fadeIn slower"
                   >
                     <EventDatePosterList
+                      :class="{ 'q-px-sm': $q.screen.lt.sm }"
                       v-if="eventDates && !compactView"
                       :groupByMonth="false"
                       :eventDates="eventDates"

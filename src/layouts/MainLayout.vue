@@ -3,7 +3,13 @@
     <MenuBar class="menubar" />
     <div class="overlay" :style="computedOverlayStyle" />
     <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
-    <SideBar class="sidebar-component" />
+    <Transition
+      appear
+      enter-active-class="animated  slideInUp"
+      leave-active-class="animated slideOutDown"
+    >
+      <SideBar class="sidebar-component" v-show="$route.name === 'Explore'" />
+    </Transition>
     <MainMap />
     <!-- There's two router views because we want different transitions for different pages
     and we're lazy... -->

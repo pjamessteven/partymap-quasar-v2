@@ -18,8 +18,6 @@
         <div
           class="ed-poster"
           @mousedown="() => onClickCard($event, navigate)"
-          @mouseover="setFocusMarker"
-          @mouseleave="eventDateHoverMarker = null"
           :class="{
             'animated-shimmer': false,
           }"
@@ -158,7 +156,7 @@
                       }}
                     </span>
                     <span v-if="event.distance != null" class="o-070 ellipsis"
-                      >({{
+                      >&nbsp;({{
                         Intl.NumberFormat().format(
                           parseInt(Number(event.distance) / 1000)
                         )
@@ -189,8 +187,7 @@
                     class="tag-container flex row q-mt-sm no-wrap ellipsis"
                     style="min-height: 31px"
                     v-if="
-                      event.event.event_tags &&
-                      event.event.event_tags.length > 0
+                      event?.event?.event_tags?.length > 0 && $q.screen.gt.xs
                     "
                   >
                     <Tag

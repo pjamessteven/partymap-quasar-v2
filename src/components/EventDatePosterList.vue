@@ -19,7 +19,7 @@
           :style="gridColumns"
           :class="{
             'q-px-md ': $q.screen.gt.xs,
-            'q-px-sm  q-mt-': $q.screen.lt.sm,
+            'q-px-xs  q-mt-': $q.screen.lt.sm,
           }"
         >
           <EventDatePoster
@@ -42,11 +42,11 @@
       </DateHeader>
       -->
       <div
-        class="ed-poster-grid q-pb-sm q-mt-sm"
+        class="ed-poster-grid q-pb-sm"
         :style="gridColumns"
         :class="{
-          'q-px-md ': $q.screen.gt.xs,
-          'q-px-sm  q-mt-': $q.screen.lt.sm,
+          'q-px-md  q-mt-sm': $q.screen.gt.xs,
+          'q-px-sm q-mt-xs': $q.screen.lt.sm,
         }"
       >
         <EventDatePoster
@@ -137,7 +137,7 @@ const gridColumns = computed(() => {
         `;
   } else {
     return `
-        grid-template-columns: repeat(1, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         `;
   }
 });
@@ -155,6 +155,11 @@ const gridColumns = computed(() => {
         justify-content: space-between;
       }
     }
+  }
+}
+@media only screen and (max-width: 600px) {
+  .ed-poster-grid {
+    grid-gap: 0.5rem;
   }
 }
 </style>

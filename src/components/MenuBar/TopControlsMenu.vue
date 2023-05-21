@@ -132,6 +132,9 @@
     <q-item>
       <q-toggle v-model="darkMode" label="Dark Mode" />
     </q-item>
+    <q-item v-if="$q.screen.lt.sm">
+      <q-toggle v-model="mobilePosterView" label="Grid View" />
+    </q-item>
     <q-separator inset class="q-mb-xs" />
 
     <q-item-label header class="q-pb-none">{{
@@ -180,6 +183,7 @@ export default {
   components: { FeedbackDialog, AboutDialog },
   data() {
     return {
+      mobilePosterView: false,
       showFeedbackDialog: false,
       showAboutDialog: false,
       mapStyleOptions: [
@@ -212,11 +216,30 @@ export default {
         });
     },
   },
-  watch: {},
+  watch: {
+    mobilePosterView(newv, oldv) {
+      if (newv) {
+        this.compactView = false;
+        this.groupEventsByMonth = false;
+      } else {
+        this.compactView = true;
+        this.groupEventsByMonth = true;
+      }
+    },
+  },
   computed: {
     ...mapState(useAuthStore, ['currentUser']),
-    ...mapWritableState(useMainStore, ['darkMode']),
+    ...mapWritableState(useMainStore, [
+      'darkMode',
+      'compactView',
+      'groupEventsByMonth',
+    ]),
     ...mapWritableState(useMapStore, ['mapStyle']),
+  },
+  mounted() {
+    if (!this.compactView && !this.groupEventsByMonth) {
+      this.mobilePosterView = true;
+    }
   },
 };
 </script>

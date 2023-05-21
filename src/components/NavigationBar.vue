@@ -8,7 +8,7 @@
       style="text-transform: capitalize"
       v-if="$q.screen.gt.xs"
     >
-      {{ sidebarPanel }}
+      {{ computedPanelName }}
     </div>
     <q-tabs
       @click.stop
@@ -150,6 +150,19 @@ export default {
     ...mapWritableState(useMainStore, ['sidebarPanel', 'showPanel']),
     ...mapState(useMainStore, ['fineLocation', 'userLocationLoading']),
     ...mapWritableState(useQueryStore, ['controlFavorites']),
+    computedPanelName() {
+      switch (this.sidebarPanel) {
+        case 'nearby':
+          return 'Nearby';
+        case 'explore':
+          return 'Explore Map';
+        case 'favorites':
+          return 'Your Events';
+        case 'search':
+          return 'Search';
+      }
+      return '';
+    },
   },
 };
 </script>

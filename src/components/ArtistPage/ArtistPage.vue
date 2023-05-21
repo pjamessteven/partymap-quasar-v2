@@ -4,7 +4,7 @@
       <div>{{ computedName }}</div>
     </template>
     <template v-slot>
-      <InnerLoading v-if="true" :solid="true" />
+      <InnerLoading v-if="loading" :solid="true" />
 
       <div class="artist-header flex row justify-between no-wrap">
         <div class="flex column no-wrap" style="width: 100%">
@@ -27,7 +27,7 @@
           </div>
 
           <transition appear enter-active-class="animated fadeIn slower">
-            <div class="main-content flex column" v-if="artist">
+            <div class="main-content flex column" v-if="artist && !loading">
               <div
                 class="t1 q-mt-md text-large chicago"
                 v-if="artist && $q.screen.gt.xs"
