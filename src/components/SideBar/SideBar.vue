@@ -197,7 +197,7 @@ export default {
     ...mapWritableState(useMapStore, ['preventMapZoom']),
     computedSidebarWidth() {
       if (this.$q.screen.gt.sm) {
-        return 'width: 66vw; min-width: 854px; max-width: 1280px';
+        return 'width: 50vw; min-width: 854px; max-width: 1280px';
       } else if (this.$q.screen.gt.xs) {
         return 'width: 66vw; min-width: 640px; max-width: 100%';
       } else {

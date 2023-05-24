@@ -42,11 +42,11 @@
       </DateHeader>
       -->
       <div
-        class="ed-poster-grid q-pb-sm"
+        class="ed-poster-grid q-pb-sm q-mt-xs"
         :style="gridColumns"
         :class="{
-          'q-px-md  q-mt-sm': $q.screen.gt.xs,
-          'q-px-sm q-mt-xs': $q.screen.lt.sm,
+          'q-px-md': $q.screen.gt.xs,
+          'q-px-sm ': $q.screen.lt.sm,
         }"
       >
         <EventDatePoster
@@ -75,7 +75,7 @@
           (groupByMonth && Object.keys(eventDatesGroupedByMonth)?.length > 0) ||
           (!groupByMonth && eventDates && eventDates.length > 0)
         "
-        class="t4 chicago q-mt-md"
+        class="t4 inter bold q-mt-md"
       >
         End of results
       </div>
@@ -85,7 +85,7 @@
             Object.keys(eventDatesGroupedByMonth)?.length == 0) ||
           (!groupByMonth && eventDates && eventDates.length === 0)
         "
-        class="t4 chicago q-mt-md"
+        class="t4 inter bold q-mt-md"
       >
         No results
       </div>

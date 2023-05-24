@@ -1,7 +1,7 @@
 <template>
   <div class="date-header-wrapper">
     <div
-      class="date-header flex row grow ellipsis t1 chicago"
+      class="date-header flex row grow ellipsis t1 inter bold"
       :class="$q.screen.gt.xs ? ' q-px-md q-py-md' : 'q-px-sm q-py-md'"
     >
       <span v-if="!!altLabel">{{ altLabel }}</span>

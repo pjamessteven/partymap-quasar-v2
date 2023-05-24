@@ -4,7 +4,7 @@
     :class="$q.screen.gt.sm ? 'justify-between' : ''"
   >
     <div
-      class="q-pa-lg chicago text-h5"
+      class="q-pa-lg inter bolder text-h5"
       style="text-transform: capitalize"
       v-if="$q.screen.gt.xs"
     >
@@ -227,7 +227,6 @@ export default {
     position: absolute;
     right: 12px;
     height: 100%;
-    font-family: chicagoflf;
 
     .q-tab {
       padding-top: 4px;
@@ -266,7 +265,11 @@ export default {
       background: black;
       //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.8);
       border-top: 1px solid rgba(255, 255, 255, 0.1);
-
+      :deep(.q-tabs) {
+        .q-tab {
+          color: white;
+        }
+      }
       //box-shadow: 0px 0px 46px -6px rgb(230,230,230);
     }
   }
@@ -297,17 +300,30 @@ export default {
       width: 100%;
       position: relative;
       right: unset;
+
       .q-tab {
-        padding-top: 12px;
+        padding: 0px;
         opacity: 0.3 !important;
         margin: 0px 0px;
         border-radius: 0px !important;
         transition: all 0.3s;
+        border: none !important;
 
         &.q-tab--active {
           opacity: 1 !important;
           background: unset !important;
-          border: unset !important;
+          .q-tab__label {
+            font-weight: 700;
+          }
+        }
+        &.inactive-tab {
+          opacity: 0.3 !important;
+          .q-tab__label {
+            font-weight: 600 !important;
+          }
+        }
+        .q-tab__label {
+          font-weight: 600;
         }
       }
 

@@ -56,7 +56,7 @@
                   class="ed-poster-header flex row justify-between items-start no-wrap ellipsis"
                 >
                   <div
-                    class="flex row items-baseline no-wrap chicago q-mr-sm ellipsis"
+                    class="flex row items-baseline no-wrap inter bolder q-mr-sm ellipsis"
                   >
                     <span class="ellipsis">{{ event.name }}</span>
                     <q-icon
@@ -137,7 +137,7 @@
                       </span>
                     </div>
                     <q-badge
-                      class="q-my-xs chicago"
+                      class="q-my-xs"
                       color="red"
                       :label="$t('event_date_inline.cancelled')"
                       v-if="event.cancelled"

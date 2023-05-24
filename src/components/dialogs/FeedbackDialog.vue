@@ -1,7 +1,7 @@
 <template>
   <q-card class="feedback-dialog">
     <q-card-section class="row items-center q-pb-none">
-      <div class="chicago text-h6">{{ $t('feedback.give_feedback') }}</div>
+      <div class="inter bolder text-h6">{{ $t('feedback.give_feedback') }}</div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>

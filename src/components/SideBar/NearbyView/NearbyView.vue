@@ -27,12 +27,12 @@
                   :class="$q.screen.gt.xs ? 'q-mt-' : ''"
                 >
                   <div class="q-pr-md ellipsis q-mt-md">
-                    <span class="text-h4 chicago">Near</span>
+                    <span class="text-h4 inter bolder">Near</span>
                   </div>
                 </div>
                 <div
                   v-if="$q.screen.lt.sm"
-                  class="flex items-center no-wrap chicago t1 q-pl-md"
+                  class="flex items-center no-wrap inter bolder t1 q-pl-md"
                   style="width: 100%"
                   :class="
                     $q.screen.gt.xs
@@ -67,7 +67,9 @@
                     class="q-py-md header q-mt-sm"
                     v-if="nearbyTags && nearbyTags.length > 0"
                   >
-                    <div class="t1 text- chicago q-pl-md">Explore the map:</div>
+                    <div class="t1 text- inter bold q-pl-md">
+                      Explore the map:
+                    </div>
                   </div>
                   <div
                     class="q-pl-md q-mb-sm"
@@ -91,7 +93,7 @@
                             )"
                             :key="index"
                             @click="clickTag(tag)"
-                            class="tag t2 text- chicago"
+                            class="tag t2 text- inter semibold"
                             style="text-transform: capitalize"
                           >
                             {{ tag.tag }}
@@ -104,7 +106,7 @@
                             )"
                             :key="index"
                             @click="clickTag(tag)"
-                            class="tag t2 text- chicago"
+                            class="tag t2 text- inter semibold"
                             style="text-transform: capitalize"
                           >
                             {{ tag.tag }}
@@ -117,7 +119,7 @@
                   <!-- artists -->
 
                   <div
-                    class="t1 location-header q-py-md chicago q-pl-md"
+                    class="t1 location-header q-py-md inter bold q-pl-md"
                     v-if="nearbyArtists && nearbyArtists.length > 0"
                   >
                     Top artists near {{ userLocationCity }}:
@@ -133,7 +135,7 @@
                   <!-- NEARBY EVENTS -->
 
                   <div
-                    class="t1 chicago location-header q-py-sm flex row items-center justify-between q-pl-md"
+                    class="t1 inter bold location-header q-py-sm flex row items-center justify-between q-pl-md"
                   >
                     <div class="flex items-center">
                       <div class="">
@@ -145,7 +147,7 @@
                         borderless
                         map-options
                         behavior="menu"
-                        class="q-mx-xs radius-select chicago o-050"
+                        class="q-mx-xs radius-select inter o-050"
                         v-model="queryRadius"
                         :options="queryRadiusOptions"
                       />
@@ -204,7 +206,7 @@
                   <!-- ALL EVENTS -->
 
                   <div
-                    class="location-header flex items-center justify-between no-wrap chicago t1 q-mt- q-py-md q-pl-md"
+                    class="location-header flex items-center justify-between no-wrap inter bold t1 q-mt- q-py-md q-pl-md"
                     :class="$q.screen.lt.sm ? 'q-py-md' : ''"
                     v-touch-swipe="
                       () => {
@@ -217,7 +219,7 @@
 
                     <div class="flex row grow no-wrap ellipsis">
                       <div class="ellipsis flex grow items-center">
-                        <div class="ellipsis t1 chicago" v-if="userLocation">
+                        <div class="ellipsis t1" v-if="userLocation">
                           {{ $t('landing_page.all_upcoming_events') }}:
                         </div>
                       </div>

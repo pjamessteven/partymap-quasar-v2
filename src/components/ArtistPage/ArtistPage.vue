@@ -1,11 +1,9 @@
 <template>
-  <DialogPage>
+  <SolidPage :loading="loading">
     <template v-slot:title>
       <div>{{ computedName }}</div>
     </template>
     <template v-slot>
-      <InnerLoading v-if="loading" :solid="true" />
-
       <div class="artist-header flex row justify-between no-wrap">
         <div class="flex column no-wrap" style="width: 100%">
           <div class="mobile-image-container" v-if="$q.screen.lt.md">
@@ -17,7 +15,7 @@
               <div class="overlay" />
             </div>
             <div class="flex-column mobile-title q-pa-md">
-              <div class="text-h5 chicago">
+              <div class="text-h5 inter bolder">
                 <b>{{ computedName }}</b>
               </div>
               <div class="o-050" v-if="artist">
@@ -29,13 +27,13 @@
           <transition appear enter-active-class="animated fadeIn slower">
             <div class="main-content flex column" v-if="artist && !loading">
               <div
-                class="t1 q-mt-md text-large chicago"
+                class="t1 q-mt-md text-large inter bold"
                 v-if="artist && $q.screen.gt.xs"
               >
                 {{ artist.disambiguation }}
               </div>
               <div
-                class="q-mt-lg q-mb-sm chicago t3"
+                class="q-mt-lg q-mb-sm inter bold t3"
                 v-if="
                   artist && artist.tags && artist.tags.length > 0 && !loading
                 "
@@ -68,7 +66,7 @@
               </div>
 
               <div
-                class="q-mt-lg q-mb-sm chicago t3"
+                class="q-mt-lg q-mb-sm inter bold t3"
                 v-if="computedDescription && computedDescription.length > 0"
               >
                 {{ $t('artists.description') }}:
@@ -103,7 +101,7 @@
               </div>
 
               <div
-                class="q-mt-lg q-mb-sm chicago t3"
+                class="q-mt-lg q-mb-sm inter bold t3"
                 v-if="urls && urls.length > 0"
               >
                 {{ $t('artists.links') }}:
@@ -118,7 +116,7 @@
               </div>
 
               <div class="flex column" v-if="artist" style="max-width: 100%">
-                <div class="q-mt-lg q-mb-md chicago t3">
+                <div class="q-mt-lg q-mb-md inter bold t3">
                   {{ $t('artists.upcoming_events') }}:
                 </div>
                 <div
@@ -146,7 +144,7 @@
                   artist.past_event_dates.length > 0
                 "
               >
-                <div class="q-mt-lg q-mb-md chicago t3">
+                <div class="q-mt-lg q-mb-md inter bold t3">
                   {{ $t('artists.past_events') }}:
                 </div>
                 <div class="flex column" style="max-width: 100%">
@@ -200,7 +198,7 @@
         </div>
       </transition>
     </template>
-  </DialogPage>
+  </SolidPage>
 </template>
 
 <script>
@@ -210,11 +208,10 @@ import _ from 'lodash';
 import ArtistUrl from './ArtistUrl.vue';
 import EventDateCard from 'components/EventDateCard.vue';
 import Tag from 'components/EventPage/Tags/TagComponent.vue';
-import DialogPage from 'components/dialogs/DialogPage.vue';
+import SolidPage from 'components/dialogs/SolidPage.vue';
 
 import { mapState } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
-import InnerLoading from 'src/components/InnerLoading.vue';
 
 export default {
   name: 'ArtistPage',
@@ -241,11 +238,10 @@ export default {
     };
   },
   components: {
-    DialogPage,
+    SolidPage,
     ArtistUrl,
     EventDateCard,
     Tag,
-    InnerLoading,
   },
   data() {
     return {
@@ -421,54 +417,52 @@ export default {
 .footer {
 }
 @media only screen and (max-width: 1023px) {
-  .solid-page {
-    .artist-header {
-      .mobile-image-container {
+  .artist-header {
+    .mobile-image-container {
+      width: 100%;
+      height: 300px;
+      position: relative;
+      overflow: hidden;
+      .mobile-title {
+        position: absolute;
+        bottom: 0px;
+        z-index: 1;
+        color: white;
+      }
+      .image-container-background {
+        height: 100%;
         width: 100%;
-        height: 300px;
-        position: relative;
-        overflow: hidden;
-        .mobile-title {
+        position: absolute;
+        display: flex;
+        flex-grow: 1;
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+        .overlay {
           position: absolute;
-          bottom: 0px;
-          z-index: 1;
-          color: white;
-        }
-        .image-container-background {
           height: 100%;
           width: 100%;
-          position: absolute;
-          display: flex;
-          flex-grow: 1;
-          justify-content: center;
-          align-items: center;
-          z-index: 1;
-          .overlay {
-            position: absolute;
-            height: 100%;
-            width: 100%;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.68));
-          }
-          img {
-            width: 100%;
-          }
+          background: linear-gradient(transparent, rgba(0, 0, 0, 0.68));
+        }
+        img {
+          width: 100%;
         }
       }
-      .main-content {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-
-      .ed-card {
-        max-width: 100%;
-      }
     }
-    .footer {
-      position: relative;
-      margin-top: 128px;
+    .main-content {
       padding-left: 16px;
       padding-right: 16px;
     }
+
+    .ed-card {
+      max-width: 100%;
+    }
+  }
+  .footer {
+    position: relative;
+    margin-top: 128px;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 }
 </style>

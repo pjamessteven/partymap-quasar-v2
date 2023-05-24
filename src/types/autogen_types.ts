@@ -139,6 +139,8 @@ export interface EventDate {
   duration: number;
   size: number;
   artists: EventDateArtist[];
+  user_going: boolean;
+  user_interested: boolean;
 }
 
 export interface MiniEventDate {

@@ -1,14 +1,12 @@
 <template>
   <q-card class="about-dialog">
     <q-card-section class="header row items-center">
-      <div class="chicago text-h6">{{ $t('sidebar.about') }}</div>
+      <div class="inter bolder text-h6">{{ $t('sidebar.about') }}</div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>
 
     <q-card-section class="t2">
-      {{ $t('about.mission') }}
-      <p />
       {{ $t('about.message') }}
       <a class="link-hover underline" href="mailto:info@partymap.com"
         >info@partymap.com</a
@@ -64,23 +62,6 @@
         {{ $t('about.made_in_aotaeroa') }}
       </p>
     </q-card-section>
-    <div class="q-mt-lg q-pb-xl" style="overflow: hidden">
-      <div class="polaroid-container">
-        <div class="image-container" @click="showRigsOut = true">
-          <img
-            src="assets/rigs_out_twisted_2020.jpg"
-            style="width: 100%; height: auto"
-          />
-          <div class="image-overlay" />
-          <div class="image-attribute">
-            Twisted Frequency 2020 by
-            <a href="https://www.lbullphotography.com/" target="_blank"
-              >LB Photography</a
-            >
-          </div>
-        </div>
-      </div>
-    </div>
 
     <q-dialog
       v-model="showPrivacyPolicyDialog"

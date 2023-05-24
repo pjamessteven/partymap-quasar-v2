@@ -1,22 +1,19 @@
 <template>
-  <DialogPage>
+  <SolidPage>
     <template v-slot:title>
-      <div :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'">
-        <div class="chicago" v-if="event.host">
+      <div :class="$q.screen.gt.xs ? 'q-px-lg' : ''">
+        <div v-if="event.host">
           {{ $t('add_event.add_your_event') }} &nbsp;<i
             class="mdi mdi-check-decagram-outline"
           />
         </div>
-        <div class="chicago" v-else>
+        <div v-else>
           {{ $t('add_event.add_public_event') }}
         </div>
       </div>
     </template>
     <template v-slot>
-      <div
-        class="flex row justify-center q-pb-xl"
-        :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'"
-      >
+      <div class="q-pb-xl" :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'">
         <transition
           appear
           enter-active-class="animated fadeIn slow"
@@ -25,7 +22,7 @@
           <div>
             <div
               v-if="event.host"
-              :class="$q.screen.lt.sm ? 'q-pa-md q-mt-md' : 'q-pt-lg'"
+              :class="$q.screen.lt.sm ? ' q-mt-md' : 'q-pt-lg'"
             >
               <div class="t3">
                 {{ $t('report.claim_message') }}
@@ -48,10 +45,7 @@
               </div>
               <br />
             </div>
-            <div
-              v-else
-              :class="$q.screen.lt.sm ? 'q-pa-sm q-mt-sm' : 'q-pt-lg'"
-            >
+            <div v-else :class="$q.screen.lt.sm ? ' q-mt-sm' : 'q-pt-lg'">
               <p class="t3">
                 {{ $t('add_event.event_i_know_about_msg_long') }}
               </p>
@@ -64,7 +58,7 @@
 
             <div class="flex column">
               <div class="sticky-header flex column">
-                <p class="text-large chicago t1 q-mb-md q-mt-md">
+                <p class="text-large inter bolder t1 q-mb-md q-mt-md">
                   {{ $t('add.required_information') }}:
                 </p>
               </div>
@@ -81,7 +75,7 @@
                 <div class="flex row grow no-wrap items-baseline">
                   <q-icon size="xs" name="las la-bullhorn" />
                   <div class="flex column grow q-ml-lg">
-                    <p class="text-large chicago">Event name</p>
+                    <p class="text-large inter bold">Event name</p>
                     <q-input
                       class="grow"
                       style="padding-bottom: 0px"
@@ -126,7 +120,7 @@
                 <div class="flex row grow no-wrap items-baseline q-mt-md">
                   <q-icon size="xs" name="las la-align-left" />
                   <div class="flex column grow q-ml-lg">
-                    <p class="text-large chicago">
+                    <p class="text-large inter bold">
                       {{ $t('description.summary') }}
                     </p>
                     <p class="t3">
@@ -177,7 +171,7 @@
                 >
                   <q-icon size="xs" name="las la-external-link-alt" />
                   <div class="flex column grow q-ml-lg">
-                    <p class="text-large chicago">
+                    <p class="text-large inter bold">
                       {{ $t('add.url') }}
                     </p>
                     <p class="t3">
@@ -200,7 +194,7 @@
                 <div class="flex row grow no-wrap items-baseline q-mt-md">
                   <q-icon size="xs" name="las la-map-marker" />
                   <div class="flex column grow q-ml-lg">
-                    <p class="text-large chicago">
+                    <p class="text-large inter bold">
                       {{ $t('add.location') }}
                     </p>
                     <p class="t3">
@@ -220,7 +214,7 @@
                       <div
                         class="location-map-select-msg flex justify-center items-center"
                       >
-                        <div class="chicago o-o50">Location preview</div>
+                        <div class="inter bold o-o50">Location preview</div>
                       </div>
                     </div>
 
@@ -233,7 +227,7 @@
                 <div class="flex row grow no-wrap items-baseline q-mt-md">
                   <q-icon size="xs" name="las la-calendar-day" />
                   <div class="flex column grow q-ml-lg">
-                    <p class="text-large chicago">Date and Time</p>
+                    <p class="text-large inter bold">Date and Time</p>
                     <p class="t3">
                       {{ $t('add.please_select_date_msg') }}
                       <br />
@@ -253,7 +247,7 @@
                 <div class="flex row grow no-wrap items-baseline q-mt-md">
                   <q-icon size="xs" name="las la-external-link-alt" />
                   <div class="flex column grow q-ml-lg">
-                    <p class="text-large chicago">
+                    <p class="text-large inter bold">
                       {{ $t('add.recurrence') }}
                     </p>
 
@@ -283,7 +277,7 @@
                 >
                   <q-icon size="xs" name="las la-images" />
                   <div class="flex column grow q-ml-lg">
-                    <p class="text-large chicago">Event poster image</p>
+                    <p class="text-large inter bold">Event poster image</p>
                     <p class="t3">Upload an image for this event</p>
                     <MultipleMediaSelector
                       :singleSelectMode="event.host === false"
@@ -297,7 +291,10 @@
               </div>
 
               <div class="sticky-header flex column">
-                <p class="text-large chicago t1 q-mb-md q-mt-md" :class="{}">
+                <p
+                  class="text-large inter bolder t1 q-mb-md q-mt-md"
+                  :class="{}"
+                >
                   {{ $t('add.additional_information') }}:
                 </p>
               </div>
@@ -314,7 +311,7 @@
                 <div class="flex row grow no-wrap items-baseline q-mt-md">
                   <q-icon size="xs" name="las la-tags" />
                   <div class="flex column grow q-ml-lg">
-                    <p class="text-large chicago">Tags</p>
+                    <p class="text-large inter bold">Tags</p>
                     <p class="t3">
                       {{ $t('add.suggested_tags') }}
                     </p>
@@ -331,7 +328,7 @@
                 <div class="flex row grow no-wrap items-baseline q-mt-md">
                   <q-icon size="xs" name="las la-align-left" />
                   <div class="flex column grow q-ml-lg">
-                    <p class="text-large chicago">
+                    <p class="text-large inter bold">
                       {{ $t('description.detailed_description') }}
                     </p>
                     <p class="t3">
@@ -380,7 +377,7 @@
                 >
                   <q-icon size="xs" name="las la-external-link-alt" />
                   <div class="flex column grow q-ml-lg">
-                    <p class="text-large chicago">
+                    <p class="text-large inter bold">
                       {{ $t('add.url') }}
                     </p>
                     <p class="t3">
@@ -426,7 +423,7 @@
                 <div class="flex row grow no-wrap items-baseline q-mt-md">
                   <q-icon size="xs" name="las la-align-left" />
                   <div class="flex column grow q-ml-lg">
-                    <p class="text-large chicago">
+                    <p class="text-large inter bold">
                       {{ $t('add.lineup') }}
                     </p>
                     <div
@@ -458,7 +455,7 @@
                 <div class="flex row grow no-wrap items-baseline q-mt-md">
                   <q-icon size="xs" name="las la-user-friends" />
                   <div class="flex column grow q-ml-lg">
-                    <p class="text-large chicago">
+                    <p class="text-large inter bold">
                       {{ $t('add.size_how_many') }}
                     </p>
                     <p class="t3">
@@ -494,7 +491,7 @@
                 >
                   <q-icon size="xs" name="las la-images" />
                   <div class="flex column grow q-ml-lg">
-                    <p class="text-large chicago">
+                    <p class="text-large inter bold">
                       {{ $t('add.event_poster_image') }}
                     </p>
                     <p class="t3">
@@ -536,12 +533,14 @@
         </transition>
       </div>
       <div
-        class="flex row submit-footer items-center"
-        :class="$q.screen.lt.sm ? 'justify-center ' : 'justify-between'"
+        class="flex submit-footer items-center"
+        :class="
+          $q.screen.lt.sm ? 'column justify-center ' : 'row justify-between'
+        "
       >
         <div
           v-if="!validation"
-          class="t1 chicago"
+          class="t1 inter bold"
           :class="$q.screen.gt.xs ? 'q-ml-lg' : 'q-mt-lg'"
         >
           Please fill out all of the required fields
@@ -550,18 +549,18 @@
           :class="event.host === null ? 'card-disabled' : ''"
           icon-right="mdi-chevron-right"
           color="primary"
-          class="soft-button-shadow chicago q-ma-lg"
+          class="soft-button-shadow inter bold q-ma-lg"
           label="Submit"
           :disable="!validation"
           v-on:click="submitEvent"
         />
       </div>
     </template>
-  </DialogPage>
+  </SolidPage>
 </template>
 
 <script>
-import DialogPage from 'components/dialogs/DialogPage.vue';
+import SolidPage from 'src/components/dialogs/SolidPage.vue';
 import DateTimePicker from 'components/DateTimePicker.vue';
 import GoogleLocationComponent from 'components/GoogleLocationComponent.vue';
 import MultipleMediaSelector from 'components/MultipleMediaSelector.vue';
@@ -575,7 +574,7 @@ import { useMapStore } from 'src/stores/map';
 
 export default {
   components: {
-    DialogPage,
+    SolidPage,
     DateTimePicker,
     RrulePicker,
     MultipleMediaSelector,
@@ -898,8 +897,6 @@ export default {
 // sm
 @media only screen and (max-width: 600px) {
   .solid-page {
-    padding-left: 0px !important;
-    padding-right: 0px !important;
     .q-card {
       box-shadow: none;
     }

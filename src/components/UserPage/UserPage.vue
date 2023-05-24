@@ -1,5 +1,5 @@
 <template>
-  <DialogPage>
+  <SolidPage>
     <template v-slot:title> User profile: {{ id }} </template>
     <template v-slot>
       <InnerLoading v-if="loading" :solid="true" />
@@ -149,19 +149,19 @@
         </div>
       </div>
     </template>
-  </DialogPage>
+  </SolidPage>
 </template>
 
 <script>
 import common from 'assets/common';
 import { mapState } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
-import DialogPage from 'components/dialogs/DialogPage.vue';
+import SolidPage from 'src/components/dialogs/SolidPage.vue';
 import InnerLoading from 'src/components/InnerLoading.vue';
 
 import { getUserRequest, getUserFullProfileRequest } from 'src/api';
 export default {
-  components: { InnerLoading, DialogPage },
+  components: { InnerLoading, SolidPage },
   props: {
     id: {
       default: null,

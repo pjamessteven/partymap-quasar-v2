@@ -31,7 +31,7 @@
         </div>
         <div class="flex q-ml-md column no-wrap justify-between">
           <div class="flex-column ellipsis" style="max-width: 200px">
-            <div class="text-h6 chicago ellipsis">
+            <div class="text-h6 inter bolder ellipsis">
               {{ computedName }}
             </div>
             <div

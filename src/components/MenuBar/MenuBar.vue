@@ -5,7 +5,7 @@
       :style="computedStyle"
       v-if="
         !$route.meta.mapOverlay ||
-        ($q.screen.lt.sm && this.$route.name === 'EventPage')
+        ($q.screen.lt.sm && this.$route.name !== 'Explore')
       "
     />
     <MenuBarLogo class="logo" />
@@ -51,7 +51,10 @@ export default {
       if (this.$q.screen.lt.sm && this.$route.name === 'EventPage') {
         var opacity = this.menubarOpacity;
         return `opacity: ${opacity}`;
-      } else if (!this.$route.meta.mapOverlay) {
+      } else if (
+        !this.$route.meta.mapOverlay ||
+        (this.$q.screen.lt.sm && this.$route.name !== 'Explore')
+      ) {
         return 'opacity: 1';
       } else return 'opacity: 0';
     },

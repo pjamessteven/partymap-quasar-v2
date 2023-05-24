@@ -3,12 +3,13 @@
     <q-card :bordered="$q.screen.gt.sm" class="auth-card">
       <q-card-section
         class="flex column justify-stretch q-px-xl q-pb-sm q-pt-xl"
+        :class="$q.screen.gt.xs ? '' : ''"
       >
         <div
-          class="header t1 chicago text-h6 q-mb-xl"
-          style="text-align: center; text-transform: capitalize"
+          class="header t1 inter bolder text-h6 q-mb-xl"
+          style="text-align: center"
         >
-          {{ $t('auth.welcome_back') }}
+          It's party time.
         </div>
         <q-input
           ref="login"
@@ -30,12 +31,11 @@
           v-model="password"
           @keyup.enter="_login"
         />
-        <div class="flex row grow justify-center items-center q-mt-xl">
+        <div class="flex row grow justify-center items-center q-mt-lg">
           <q-btn
-            outline
-            size="medium"
-            color=""
-            class="soft-button-shadow q-mb-md t1 chicago"
+            size="small"
+            color="primary"
+            class="soft-button-shadow q-mb-md t1 inter bolder"
             v-bind:label="$t('auth.login')"
             type="a"
             @click="_login"
@@ -69,10 +69,11 @@
           {{ $t('auth.only_save_email') }}
         </div>
       -->
+
         <div class="separator" />
         <div class="flex column items-end">
           <q-btn
-            class="q-mt-md t2 chicago"
+            class="q-mt-md t2"
             unelevated
             no-caps
             size="md"
@@ -82,7 +83,7 @@
           />
 
           <q-btn
-            class="t2 chicago"
+            class="t2"
             unelevated
             no-caps
             size="md"
@@ -91,9 +92,42 @@
             @click="$router.push({ name: 'ForgotPassword' })"
           />
         </div>
+        <div class="separator q-mt-md" />
+
+        <div class="t4 q-mt-md" style="text-align: center">
+          We take privacy very seriously and we will never share or sell your
+          information.
+          <div class="q-mt-sm">
+            <a
+              class="link-hover underline"
+              @click="showPrivacyPolicyDialog = true"
+              >{{ $t('about.read_privacy_policy') }}</a
+            >
+            &nbsp;
+            <a
+              class="link-hover underline q-ml-sm"
+              @click="showTermsAndConditionsDialog = true"
+              >{{ $t('about.read_terms_and_conditions') }}</a
+            >
+          </div>
+        </div>
       </q-card-section>
       <InnerLoading v-if="loading" :solid="true" />
     </q-card>
+    <q-dialog
+      v-model="showPrivacyPolicyDialog"
+      transition-show="jump-up"
+      transition-hide="jump-down"
+    >
+      <PrivacyPolicyDialog />
+    </q-dialog>
+    <q-dialog
+      v-model="showTermsAndConditionsDialog"
+      transition-show="jump-up"
+      transition-hide="jump-down"
+    >
+      <TermsAndConditionsDialog />
+    </q-dialog>
   </div>
 </template>
 
@@ -102,16 +136,20 @@ import { API_URL } from 'src/api';
 import { mapActions } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
 import InnerLoading from 'src/components/InnerLoading.vue';
+import TermsAndConditionsDialog from 'src/components/dialogs/AboutDialog/TermsAndConditionsDialog.vue';
+import PrivacyPolicyDialog from 'src/components/dialogs/AboutDialog/PrivacyPolicyDialog.vue';
 
 export default {
   name: 'LoginPage',
-  components: { InnerLoading },
+  components: { InnerLoading, TermsAndConditionsDialog, PrivacyPolicyDialog },
   watch: {},
   data() {
     return {
       identifier: '',
       password: '',
       loading: false,
+      showPrivacyPolicyDialog: false,
+      showTermsAndConditionsDialog: false,
     };
   },
   methods: {

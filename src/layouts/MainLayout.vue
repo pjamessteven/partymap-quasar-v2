@@ -45,8 +45,10 @@
         <component :is="Component" />
       </transition>
     </router-view>
-
-    <NavigationBar class="nav-bar" v-if="$q.screen.lt" />
+    <NavigationBar
+      class="nav-bar"
+      v-show="$q.screen.lt && $route.name === 'Explore'"
+    />
   </div>
 </template>
 
@@ -196,7 +198,7 @@ export default {
   }
   .main-layout {
     .main-layout-router {
-      padding-bottom: 72px;
+      padding-top: 62px;
     }
     .overlay {
       // transition: opacity 0.3s;

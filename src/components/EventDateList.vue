@@ -42,7 +42,7 @@
       </DateHeader>
       -->
       <div
-        class="ed-card-grid q-pb-sm q-mt-sm"
+        class="ed-card-grid q-pb-sm q-mt-xs"
         :style="gridColumns"
         :class="{
           'q-px-md ': $q.screen.gt.xs,
@@ -74,7 +74,7 @@
           (groupByMonth && Object.keys(eventDatesGroupedByMonth)?.length > 0) ||
           (!groupByMonth && eventDates && eventDates.length > 0)
         "
-        class="t4 chicago q-mt-md"
+        class="t4 inter bold q-mt-md"
       >
         End of results
       </div>
@@ -84,7 +84,7 @@
             Object.keys(eventDatesGroupedByMonth)?.length == 0) ||
           (!groupByMonth && eventDates && eventDates.length === 0)
         "
-        class="t4 chicago q-mt-md"
+        class="t4 inter bold q-mt-md"
       >
         No results
       </div>

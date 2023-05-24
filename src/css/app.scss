@@ -1,6 +1,7 @@
 // app global css in SCSS form
 
 @import '/src/css/inter/inter.css';
+@import '/src/css/stratos/stratos.css';
 
 .card {
   border-radius: 0px;
@@ -38,6 +39,32 @@
 
 .chicago {
   font-family: 'chicagoflf';
+}
+
+.inter {
+  font-family: 'Inter';
+  &.semibold {
+    font-weight: 500;
+  }
+  &.bold {
+    font-weight: 600;
+  }
+  &.bolder {
+    font-weight: 800;
+  }
+}
+
+.stratos {
+  font-family: 'stratos';
+  &.bold {
+    font-weight: 600;
+  }
+  &.bolder {
+    font-weight: 800;
+  }
+  &.black {
+    font-weight: 900;
+  }
 }
 
 // declare a class which applies it

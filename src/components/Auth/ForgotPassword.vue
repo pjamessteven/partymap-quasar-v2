@@ -6,7 +6,7 @@
         style="text-align: center"
       >
         <div
-          class="header t1 chicago text-h6 q-mb-lg"
+          class="header t1 inter bolder text-h6 q-mb-lg"
           style="text-align: center; text-transform: "
         >
           {{ $t('auth.forgot_password') }}

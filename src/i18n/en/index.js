@@ -102,7 +102,7 @@ export default {
     password_confirm: 'Confirm password',
     username: 'Username',
     email: 'Email address',
-    identifier: 'Username or Email Address',
+    identifier: 'Username or email',
     // eslint-disable-next-line
     real_name_not_visible: "Your real name won't be shown on the site.",
     only_save_email: 'We only save your email address.',
@@ -832,10 +832,8 @@ export default {
       'Tell us how you would like to verify yourself as the host',
   },
   about: {
-    mission:
-      'PartyMap’s mission is to bring people together and promote off-line social connection by making it easy to discover festivals and events around the world.',
     message:
-      'PartyMap is a community-driven platform for discovering festivals and events around the world. I built it because I wished something like this existed. iOS and Android apps are in the pipeline and I’m planning to translate PartyMap into as many languages as possible. If you speak another language and can help with this, please get in touch! Otherwise, if you have any thoughts, ideas or complaints about PartyMap you can contact me through the feedback form or by email to ',
+      'PartyMap is a community-driven platform for discovering festivals and events around the world. I basically built it because I wished something like this existed. If you have any thoughts, ideas or suggestions about PartyMap then please contact me through the feedback form or by email to ',
     message_2:
       'If your event has been listed by someone and you would like to have it removed, please look for the report button at the bottom of the event page. ',
     message_3:

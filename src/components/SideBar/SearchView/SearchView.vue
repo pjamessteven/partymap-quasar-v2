@@ -12,7 +12,7 @@
     -->
     <div class="content flex column grow q-px-md">
       <div
-        class="chicago text-large t2"
+        class="inter bold text-large t2"
         :class="$q.screen.lt.sm ? 'q-mt-md ' : ' q-mt-lg'"
       >
         Places, events, artists & more:

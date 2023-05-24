@@ -66,9 +66,9 @@ body {
   height: 100%;
   max-height: 100%;
   overflow: hidden;
-  font-family: BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Helvetica, Arial,
-    sans-serif;
+  font-family: Inter, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Helvetica,
+    Arial, sans-serif !important;
   // /font-family: chicagoflf;
   //letter-spacing: unset !important;
   touch-action: none;
@@ -326,10 +326,6 @@ body {
   }
   .overlay-page {
     background: linear-gradient(0deg, white, rgba(255, 255, 255, 0.8));
-  }
-
-  .solid-page {
-    background: white;
   }
 
   .swipe-nav-bar {
@@ -602,10 +598,6 @@ body {
   .overlay-page {
     background: linear-gradient(0deg, black, rgba(0, 0, 0, 0.8));
   }
-
-  .solid-page {
-    background: $bi-1;
-  }
 }
 
 .link-hover {
@@ -642,14 +634,14 @@ body {
 
 .button-control {
   padding: 0px;
-  font-weight: 400;
-  font-family: chicagoflf;
+  font-weight: 500;
+  font-family: Inter;
   text-transform: capitalize;
   font-size: normal;
   border-radius: 9px !important;
   overflow: hidden;
   &.active {
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .q-btn__wrapper {
@@ -749,25 +741,6 @@ body {
   overflow: auto;
 }
 
-.solid-page {
-  height: 100%;
-  overflow: auto;
-  position: relative;
-  z-index: 4000;
-  overflow: auto;
-  width: 100%;
-  height: 100%;
-  padding-top: 60px;
-  display: flex;
-  justify-content: center;
-  //overflow: hidden;
-  .solid-page-inner {
-    overflow: visible;
-    height: 100%;
-    max-width: 1000px;
-  }
-}
-
 .dialog-page {
   background: rgba(0, 0, 0, 0.68);
   display: flex;
@@ -847,12 +820,11 @@ body {
     .auth-card {
       border: none !important;
       box-shadow: none !important;
-      padding-top: 62px;
       margin-top: unset;
       margin-bottom: unset;
       width: 100%;
       height: 100%;
-      border-radius: 0px;
+      border-radius: 0px !important;
       .sticky-card-header {
         flex-grow: 1;
         width: 100%;
@@ -860,17 +832,6 @@ body {
         display: flex;
         text-align: center;
       }
-    }
-  }
-
-  .solid-page {
-    //padding-top: 16px !important;
-    padding-bottom: 74px !important;
-    overflow: hidden;
-
-    .solid-page-inner {
-      overflow-y: auto;
-      position: relative;
     }
   }
 }

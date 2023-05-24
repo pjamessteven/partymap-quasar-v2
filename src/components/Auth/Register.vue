@@ -6,7 +6,7 @@
         style="text-align: center"
       >
         <div
-          class="header t1 chicago text-h6 q-mb-lg"
+          class="header t1 inter bolder text-h6 q-mb-lg"
           style="text-align: center; text-transform: capitalize"
         >
           {{ $t('auth.create') }}
@@ -72,7 +72,7 @@
 
         <q-card-section class="flex justify-center q-mb-md">
           <q-btn
-            class="chicago"
+            class="inter bolder"
             :disable="loading"
             :label="$t('auth.sign_up')"
             outline

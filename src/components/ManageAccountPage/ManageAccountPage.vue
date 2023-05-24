@@ -1,5 +1,5 @@
 <template>
-  <DialogPage>
+  <SolidPage>
     <template v-slot:title>
       <div :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'">
         Manage Account
@@ -13,11 +13,11 @@
         <DeleteAccountComponent class="q-mt-lg q-mb-xl" />
       </div>
     </template>
-  </DialogPage>
+  </SolidPage>
 </template>
 
 <script>
-import DialogPage from 'components/dialogs/DialogPage.vue';
+import SolidPage from 'src/components/dialogs/SolidPage.vue';
 
 import DeleteAccountComponent from './DeleteAccountComponent.vue';
 import UpdateEmailAddressComponent from './UpdateEmailAddressComponent.vue';
@@ -28,7 +28,7 @@ export default {
     UpdatePasswordComponent,
     UpdateEmailAddressComponent,
     DeleteAccountComponent,
-    DialogPage,
+    SolidPage,
     // AccessLevelComponent
   },
   data() {

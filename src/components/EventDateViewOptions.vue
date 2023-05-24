@@ -1,13 +1,13 @@
 <template>
   <div class="view-options flex justify-center items-center">
     <q-btn-dropdown
-      class="chicago t3"
+      class="inter bolder t3"
       flat
       label="View"
       :dropdown-icon="$q.screen.lt.sm ? 'mdi-dots-vertical' : undefined"
       no-icon-animation
     >
-      <div class="row no-wrap q-pa-md chicago">
+      <div class="row no-wrap q-pa-md">
         <div class="column">
           <div class="text-large t3 q-mb-md">View options</div>
           <q-toggle v-model="compactView" label="Compact view" />

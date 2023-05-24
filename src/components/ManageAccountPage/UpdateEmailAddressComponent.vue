@@ -1,7 +1,7 @@
 <template>
   <div class="flex column">
     <div class="sticky-header flex row wrap items-center">
-      <p class="text-large chicago t1 q-mb-md q-mt-md">
+      <p class="text-large inter bolder t1 q-mb-md q-mt-md">
         {{ $t('manage_account.email_address') }}
       </p>
     </div>

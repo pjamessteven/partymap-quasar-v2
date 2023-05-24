@@ -13,7 +13,7 @@
       >
         <div class="flex row wrap items-center">
           <!--  <q-icon left size="1.5em" name="las la-calendar"/> -->
-          <div class="text-large chicago t2 q-pr-md">
+          <div class="text-large inter bolder t2 q-pr-md">
             <span v-if="event.next_date">
               {{ $t('event_dates.upcoming_dates') }}</span
             >

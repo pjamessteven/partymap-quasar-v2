@@ -17,6 +17,7 @@
             <q-btn icon="las la-cloud-download-alt" />
           </div>
           -->
+
     <div
       v-if="
         (event && event.event_dates && event.event_dates.length > 1) || editing
@@ -42,7 +43,9 @@
       v-else-if="selectedEventDate"
       :key="selectedEventDateIndex + 101"
     >
-      <div class="chicago t2 text-large q-pr-md q-mb-md">Event details:</div>
+      <div class="inter bolder t2 text-large q-pr-md q-mb-md">
+        Event details:
+      </div>
 
       <q-list class="q-mb-lg" style="position: relative">
         <div
@@ -93,7 +96,7 @@
         </div>
       </q-list>
       <div
-        class="chicago text-large t2 q-pr-md q-mt-lg"
+        class="inter bolder text-large t2 q-pr-md q-mt-lg"
         v-if="selectedEventDate?.artists?.length > 0"
       >
         {{ $t('event_dates.lineup') }}
@@ -289,6 +292,12 @@ export default {
   width: 100%;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+.interested-buttons {
+  .q-btn {
+    border-radius: 9px !important;
+    opacity: 0.68;
+  }
 }
 @media only screen and (max-width: 1023px) {
   .card {

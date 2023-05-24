@@ -7,7 +7,7 @@
   >
     <q-card class="q-dialog-plugin">
       <q-card-section class="flex items-center sticky-card-header">
-        <div class="text-h6 chicago">
+        <div class="text-h6 inter bolder">
           {{ $t('add_event.please_select_an_option') }}
         </div>
         <q-space />
@@ -17,7 +17,7 @@
       <q-list class="q-py-sm">
         <q-item clickable class="q-pa-md" @click="selectHost(true)">
           <q-item-section>
-            <q-item-label class="text-h6 chicago q-mb-sm">
+            <q-item-label class="text-large inter bold q-mb-sm">
               {{ $t('add_event.i_am_host') }}
               &nbsp;<i class="mdi mdi-check-decagram-outline" />
             </q-item-label>
@@ -29,9 +29,10 @@
             <q-icon name="mdi-chevron-right" />
           </q-item-section>
         </q-item>
+        <q-separator />
         <q-item clickable class="q-pa-md" @click="selectHost(false)">
           <q-item-section>
-            <q-item-label class="text-h6 chicago q-mb-sm">
+            <q-item-label class="text-large inter bold q-mb-sm">
               {{ $t('add_event.event_i_know_about') }}
             </q-item-label>
             <q-item-label class="t3">

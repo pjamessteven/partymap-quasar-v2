@@ -32,6 +32,7 @@ export default {
   .inner-loading {
     &.solid {
       background: white;
+      backdrop-filter: none;
     }
   }
 }
@@ -39,10 +40,13 @@ export default {
   .inner-loading {
     &.solid {
       background: black;
+      backdrop-filter: none;
     }
   }
 }
 .inner-loading {
+  backdrop-filter: blur(20px);
+
   z-index: 2000;
   position: absolute;
   top: 0px;

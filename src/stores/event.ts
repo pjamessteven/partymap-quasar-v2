@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import {
   getEventRequest,
   getEventDateRequest,
-  toggleFavoriteEventRequest,
   deleteEventDateRequest,
   editEventRequest,
   suggestEventEditRequest,
@@ -12,6 +11,8 @@ import {
   updateMediaItemRequest,
   deleteMediaItemRequest,
   submitContributionRequest,
+  toggleEventDateInterestedRequest,
+  toggleEventDateGoingRequest,
 } from 'src/api';
 
 import {
@@ -29,7 +30,7 @@ import { useAuthStore } from './auth';
 interface EventState {
   event: Event | null;
   loadingEvent: boolean;
-  selectedEventDate: EventDate | MiniEventDate | null;
+  selectedEventDate: EventDate | null;
   selectedEventDateIndex: number;
   loadingEventDate: boolean;
   editing: boolean;
@@ -109,20 +110,6 @@ export const useEventStore = defineStore('event', {
         throw e;
       }
     },
-    async toggleFavorite() {
-      if (this.event) {
-        this.event.is_favorited = !this.event.is_favorited;
-        try {
-          await toggleFavoriteEventRequest(this.event.id, {
-            favorited: this.event.is_favorited,
-          });
-        } catch (e) {
-          // revert
-          this.event.is_favorited = !this.event.is_favorited;
-          throw e;
-        }
-      }
-    },
 
     /*
      * EVENT DATES
@@ -166,9 +153,7 @@ export const useEventStore = defineStore('event', {
           this.selectedEventDate?.id,
           payload
         );
-        console.log(this.selectedEventDate);
         this.selectedEventDate = response.data;
-        console.log(this.selectedEventDate);
 
         return response;
       } catch (e) {
@@ -263,6 +248,27 @@ export const useEventStore = defineStore('event', {
         this.reloadEvent();
         return response;
       } catch (e) {
+        throw e;
+      }
+    },
+
+    async toggleInterested(eventDateId: string) {
+      try {
+        if (this.selectedEventDate)
+          this.selectedEventDate.user_interested = true;
+        await toggleEventDateInterestedRequest(eventDateId);
+      } catch (e) {
+        if (this.selectedEventDate)
+          this.selectedEventDate.user_interested = false;
+        throw e;
+      }
+    },
+    async toggleGoing(eventDateId: string) {
+      try {
+        if (this.selectedEventDate) this.selectedEventDate.user_going = true;
+        await toggleEventDateGoingRequest(eventDateId);
+      } catch (e) {
+        if (this.selectedEventDate) this.selectedEventDate.user_going = false;
         throw e;
       }
     },

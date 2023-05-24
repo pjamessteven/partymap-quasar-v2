@@ -97,7 +97,7 @@
                   </div>
                   -->
                   <div
-                    class="header t1 chicago"
+                    class="header t1 inter bold"
                     :class="
                       $q.screen.lt.sm ? 'q-pl-sm q-py-md' : 'q-pl-md  q-py-md'
                     "
@@ -140,7 +140,7 @@
           $q.screen.gt.xs && (isLoadingInitial || (mapMoving && !blockUpdates))
         "
         style="height: 100%; position: absolute; width: 100%; z-index: 500"
-        class="t4 chicago q-mt-md event-date-center flex grow justify-center"
+        class="t4 inter bold q-mt-md event-date-center flex grow justify-center"
       >
         Loading...
       </div>

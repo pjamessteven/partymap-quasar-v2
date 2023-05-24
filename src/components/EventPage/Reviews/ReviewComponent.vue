@@ -1,6 +1,6 @@
 <template>
   <div class="flex column">
-    <div class="chicago text-large t2 q-pr-md q-mb">Reviews:</div>
+    <div class="inter bolder text-large t2 q-pr-md q-mb">Reviews:</div>
     <div class="new-review flex column q-mt-lg grow">
       <div class="flex row items-end">
         <q-input
@@ -34,15 +34,13 @@
         :showSelectButton="false"
         @filesSelected="review.media_items = $event"
       />
-      <div class="chicago t4 q-mt-md" v-show="review.media_items.length > 0">
+      <div class="t4 q-mt-md" v-show="review.media_items.length > 0">
         Please make sure that you have the consent of all people in your photos
         before uploading.
       </div>
       <div class="flex column" v-if="currentUser && review.text.length > 0">
         <div class="flex column items-start">
-          <div class="chicago t2 q-mt-md" v-if="!review.rating">
-            Select a rating
-          </div>
+          <div class="t2 q-mt-md" v-if="!review.rating">Select a rating</div>
           <q-btn
             class="q-mt-md"
             color="primary"
@@ -73,7 +71,7 @@
       </transition>
     </div>
     <div
-      class="no-reviews chicago t4 q-mt-lg"
+      class="no-reviews t4 inter bold text-large q-mt-lg"
       v-if="event?.event_contributions?.length === 0"
     >
       No reviews yet - be the first!
@@ -84,7 +82,7 @@
         :key="index"
         class="flex column q-mt-lg"
       >
-        <div class="flex row t3 chicago items-center">
+        <div class="flex row t3 items-center">
           <RouterLink
             class="link-hover"
             :to="{ name: 'UserPage', params: { id: review.creator.username } }"
