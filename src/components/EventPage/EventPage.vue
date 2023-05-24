@@ -25,8 +25,17 @@
                 : 'col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12'
             "
           >
-            <MobileSwipeHandle @swipe="handleSwipe($event)" />
-            <div class="content">
+            <MobileSwipeHandle
+              @swipe="handleSwipe($event)"
+              class="mobile-swipe-handle"
+            />
+            <div
+              class="content"
+              :class="scrollPercentage >= 1 ? 'mobile-scroll-enable' : ''"
+              v-touch-swipe.mouse.down="
+                scrollPercentage === 0 ? handleSwipe : null
+              "
+            >
               <div class="flex column">
                 <div class="header flex column">
                   <q-inner-loading :showing="loading">
@@ -54,7 +63,7 @@
                         style="position: relative"
                       >
                         <div
-                          class="o-090 text-h4 flex items-baseline flex chicago no-wrap"
+                          class="o-090 text-h4 flex items-baseline flex inter bolder no-wrap"
                           :class="{
                             'q-pt-lg q-pr-xl q-mr-xl': $q.screen.lt.sm,
                           }"
@@ -100,17 +109,24 @@
                         size="2em"
                       />
                       --></div>
-                      <NextEventDateSummary
+
+                      <div
+                        class="flex row justify-between items-center"
                         :class="{
-                          'o-050': editing,
                           'q-mt-md': $q.screen.gt.xs,
                           'q-mt-sm': $q.screen.lt.sm,
                         }"
-                        class=""
-                        v-if="event && selectedEventDate"
-                        :key="selectedEventDate.id"
-                        :ed="selectedEventDate"
-                      />
+                      >
+                        <NextEventDateSummary
+                          :class="{
+                            'o-050': editing,
+                          }"
+                          class=""
+                          v-if="event && selectedEventDate"
+                          :key="selectedEventDate.id"
+                          :ed="selectedEventDate"
+                        />
+                      </div>
 
                       <FeaturedMediaComponent
                         v-if="event?.media_items?.length > 0 && $q.screen.lt.sm"
@@ -121,9 +137,7 @@
 
                       <div
                         v-if="
-                          (computedTicketUrl || computedExternalUrl) &&
-                          event?.host &&
-                          false
+                          (computedTicketUrl || computedExternalUrl) && false
                         "
                         class="event-buttons flex row justify-start items-center wrap"
                         :class="$q.screen.gt.sm ? 'q-mt-lg' : 'q-mt-md'"
@@ -146,7 +160,7 @@
                         <a
                           :href="computedTicketUrl"
                           target="_blank"
-                          v-if="computedTicketUrl && !editing"
+                          v-if="computedTicketUrl && event?.host && !editing"
                           class="q-mr-sm q-mt-sm"
                         >
                           <q-btn
@@ -183,6 +197,7 @@
                         class="q-mt-md"
                       />
                       -->
+
                       <div
                         class="flex row justify-between items-end no-wrap tags-wrapper"
                         :class="$q.screen.gt.sm ? 'q-pt-lg' : 'q-pt-md'"
@@ -228,6 +243,20 @@
                       class="q-mr-xl"
                     />
                     <div class="flex column grow">
+                      <div
+                        class="q-mb-md flex row items-center"
+                        style="margin-left: -16px"
+                      >
+                        <q-btn
+                          flat
+                          size="1rem"
+                          style="opacity: 0.8"
+                          label="Save to your calendar"
+                          icon="mdi-download"
+                          no-caps
+                        ></q-btn>
+                        <InterestedComponent />
+                      </div>
                       <EventDates />
 
                       <ReviewsComponent class="q-mt-xl" />
@@ -580,6 +609,7 @@ import NextEventDateSummary from 'components/EventPage/EventDates/NextEventDateS
 import TagsComponent from 'components/EventPage/Tags/TagsComponent.vue';
 import ReviewsComponent from './Reviews/ReviewComponent.vue';
 import MobileSwipeHandle from '../MobileSwipeHandle.vue';
+import InterestedComponent from './InterestedComponent.vue';
 import WheelIndicator from 'wheel-indicator';
 
 export default {
@@ -618,6 +648,7 @@ export default {
     EventDates,
     EventDateSidebarDesktop,
     MobileSwipeHandle,
+    InterestedComponent,
   },
   props: {
     id: {
@@ -920,14 +951,14 @@ export default {
       }
     },
     computedExternalUrl() {
-      if (this.event?.event_dates?.[0]?.url) {
+      if (this.selectedEventDate?.url) {
         // ensure that there is a protocol prefix
         if (
-          this.event.event_dates[0].url.indexOf('http://') < 0 &&
-          this.event.event_dates[0].url.indexOf('https://') < 0
+          this.selectedEventDate.url.indexOf('http://') < 0 &&
+          this.selectedEventDate.url.indexOf('https://') < 0
         ) {
-          return '//' + this.event.event_dates[0].url;
-        } else return this.event.event_dates[0].url;
+          return '//' + this.selectedEventDate.url;
+        } else return this.selectedEventDate.url;
       } else {
         return null;
       }
@@ -1163,6 +1194,7 @@ a {
             border-top-left-radius: 18px !important;
             border-top-right-radius: 18px !important;
             overflow: hidden;
+            position: relative;
             &.no-margin-top {
               margin-top: 0px;
             }
@@ -1281,26 +1313,38 @@ a {
     }
   }
   .event-page {
-    .scroll-area {
-      height: 100%;
-      .featured-media {
-        overflow: hidden;
-      }
-
-      .main-row {
-        .content-card {
-          margin-top: Max(calc((100vh - 66vh) - 64px), 0px);
-          border: none;
-          min-height: max-content;
-          max-width: 100vw;
-
+    .event-page-content {
+      .scroll-area {
+        height: 100%;
+        .featured-media {
           overflow: hidden;
-
-          .event-dates-component {
+        }
+        .main-row {
+          height: 100%;
+          .content-card {
+            max-height: calc(100% - 66vh);
+            min-height: 100%;
+            margin-top: Max(calc(100% - 66%), 0px);
             border: none;
-          }
-          .header {
-            min-height: 550px;
+            max-width: 100vw;
+
+            overflow: hidden;
+            .content {
+              overflow-y: hidden;
+              &.mobile-scroll-enable {
+                overflow-y: scroll;
+              }
+            }
+            .mobile-swipe-handle {
+              position: sticky;
+              top: 0;
+            }
+            .event-dates-component {
+              border: none;
+            }
+            .header {
+              min-height: 550px;
+            }
           }
         }
       }
