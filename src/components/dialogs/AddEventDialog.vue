@@ -5,8 +5,8 @@
     transition-show="jump-up"
     transition-hide="jump-down"
   >
-    <q-card class="q-dialog-plugin">
-      <q-card-section class="flex items-center sticky-card-header">
+    <q-card class="q-dialog-plugin dialog-card">
+      <q-card-section class="flex items-center dialog-card-header">
         <div class="text-h6 inter bolder">
           {{ $t('add_event.please_select_an_option') }}
         </div>

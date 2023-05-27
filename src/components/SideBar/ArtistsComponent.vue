@@ -59,12 +59,15 @@ function onScrollMainContent(info: {
   horizontalSize: number;
   horizontalContainerSize: number;
   horizontalPosition: number;
+  horizontalPercentage: number;
 }) {
+  /*
   const triggerPositoion =
     info.horizontalSize - info.horizontalContainerSize - 128; // width of loading spinner
-
-  if (info.horizontalPosition >= triggerPositoion) {
-    // reached bottom
+*/
+  if (info.horizontalPercentage == 1) {
+    console.log('load more');
+    // reached end
     props.loadMore();
   }
 }

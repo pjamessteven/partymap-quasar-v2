@@ -133,7 +133,6 @@
                           class="q-ml-xs q-mr-sm"
                           name="las la-redo-alt"
                         />
-                        {{ simplifiedRecurringPattern(event.event.rrule) }}
                       </span>
                     </div>
                     <q-badge
@@ -164,6 +163,24 @@
                     >
                   </div>
                   <!--
+
+                  <div class="ellipsis">
+                    <span
+                      v-if="
+                        event?.event?.event_tags?.length > 0 && $q.screen.gt.xs
+                      "
+                    >
+                      <q-icon name="las la-tag" class="q-mr-sm" />
+                      <span
+                        v-for="(et, index) in event.event.event_tags"
+                        :key="index"
+                        >{{ et.tag
+                        }}<span v-if="event.event.event_tags.length > 1"
+                          >,&nbsp;</span
+                        ></span
+                      >
+                    </span>
+                  </div>
                 <div
                   class=" q-mb-md o-070 ellipsis"
                   v-if="
@@ -181,11 +198,9 @@
                     >
                   </span>
                 </div>
-                -->
-
+              -->
                   <div
                     class="tag-container flex row q-mt-sm no-wrap ellipsis"
-                    style="min-height: 31px"
                     v-if="
                       event?.event?.event_tags?.length > 0 && $q.screen.gt.xs
                     "
@@ -214,9 +229,7 @@ import { mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 
 export default {
-  components: {
-    Tag,
-  },
+  components: { Tag },
   props: {
     event: Object,
     shortDate: {
@@ -526,6 +539,13 @@ export default {
         :deep(.tag) {
           background: transparent !important;
           border: 1px solid rgba(255, 255, 255, 0.2) !important;
+          // font-size: 1em;
+          .tag-inner-wrapper {
+            //padding: 0px 4px;
+            .tag-inner {
+              // padding: 2px;
+            }
+          }
         }
       }
 
@@ -572,12 +592,6 @@ export default {
 
   .event-info {
     z-index: 1;
-    .tag-container {
-      display: flex;
-      flex-direction: row;
-      width: 100%;
-      overflow: hidden;
-    }
   }
 }
 

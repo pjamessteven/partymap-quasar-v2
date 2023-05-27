@@ -1,6 +1,6 @@
 <template>
   <q-card>
-    <q-card-section class="flex items-center sticky-card-header">
+    <q-card-section class="flex items-center dialog-card-header">
       <div class="text-h6">{{ $t('event_dates.set_up_recurring_dates') }}</div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />

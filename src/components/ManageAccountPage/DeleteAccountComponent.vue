@@ -12,7 +12,7 @@
       <div>
         <q-btn
           no-caps
-          class="soft-button-shadow q-mt-lg chicago"
+          class="soft-button-shadow q-mt-lg"
           @click="showDeleteAccountDialog"
           color="red"
           v-bind:label="$t('manage_account.delete_account')"

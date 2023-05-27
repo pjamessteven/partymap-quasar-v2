@@ -97,12 +97,12 @@
                   :active="controlTag?.findIndex((x) => x.tag === tag.tag) > -1"
                 >
                   <div
-                    class="flex row grow justify-between items-center no-wrap q-py-md chicago"
+                    class="flex row grow justify-between items-center no-wrap inter bold q-py-md"
                   >
                     <q-item-label>
-                      {{ tag.tag }} &nbsp;<span class="t4"
-                        >({{ tag.count }})</span
-                      >
+                      {{ tag.tag }} &nbsp;
+                      <!--<span class="t4"
+                        >({{ tag.count }})</span-->
                     </q-item-label>
                     <!--
                     <q-checkbox

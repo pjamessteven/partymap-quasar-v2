@@ -45,7 +45,7 @@
         </div>
 
         <q-btn
-          class="soft-button-shadow chicago"
+          class="soft-button-shadow"
           @click="updatePassword"
           no-caps
           color="primary"

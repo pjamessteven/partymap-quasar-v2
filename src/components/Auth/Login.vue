@@ -31,11 +31,12 @@
           v-model="password"
           @keyup.enter="_login"
         />
-        <div class="flex row grow justify-center items-center q-mt-lg">
+        <div class="flex row grow justify-end items-center q-mt-lg">
           <q-btn
-            size="small"
+            size="medium"
             color="primary"
-            class="soft-button-shadow q-mb-md t1 inter bolder"
+            no-caps
+            class="soft-button-shadow q-mb-md t1 inter bold text-large"
             v-bind:label="$t('auth.login')"
             type="a"
             @click="_login"
@@ -49,7 +50,7 @@
       </q-card-section>
 
       <q-card-section
-        class="flex column justify-center items-end q-pt-lg q-px-lg q-pb-lg bottom-section"
+        class="flex column justify-center items-end q-pt-xs q-px-lg q-pb-lg bottom-section"
       >
         <!--
         <q-btn

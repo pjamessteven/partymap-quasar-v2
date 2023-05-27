@@ -388,7 +388,7 @@ export const useQueryStore = defineStore('query', {
       this.controlRegion = null;
     },
 
-    async loadArtistOptions(query: string) {
+    async loadArtistOptions(query: string | null = null) {
       try {
         this.artistOptionsLoading = true;
         const response = await getArtistsRequest({
@@ -412,7 +412,7 @@ export const useQueryStore = defineStore('query', {
         throw error;
       }
     },
-    async loadTagOptions(query: string) {
+    async loadTagOptions(query: string | null = null) {
       try {
         this.tagOptionsLoading = true;
         const response = await getTagRequest({

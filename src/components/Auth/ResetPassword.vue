@@ -1,7 +1,7 @@
 <template>
   <div class="dialog-page" v-on:click.self="hideDialog">
     <q-card :bordered="$q.screen.gt.sm" class="auth-card">
-      <q-card-section class="row items-center sticky-card-header">
+      <q-card-section class="row items-center">
         <b class="text-large">{{ $t('auth.reset_password') }}</b>
         <q-space />
       </q-card-section>

@@ -35,7 +35,7 @@
           </q-input>
         </div>
         <q-btn
-          class="soft-button-shadow chicago"
+          class="soft-button-shadow"
           @click="updateEmail"
           no-caps
           color="primary"

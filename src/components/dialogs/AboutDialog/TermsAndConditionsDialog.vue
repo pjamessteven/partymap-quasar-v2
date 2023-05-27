@@ -1,11 +1,13 @@
 <template>
-  <q-card class="terms-and-conditions-dialog">
-    <q-card-section class="row items-center sticky-card-header">
-      <div class="text-h6">{{ $t('about.terms_and_conditions') }}</div>
+  <q-card class="terms-and-conditions-dialog dialog-card">
+    <q-card-section class="row items-center dialog-card-header">
+      <div class="text-h6 inter bolder">
+        {{ $t('about.terms_and_conditions') }}
+      </div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>
-    <q-card-section class="t2">
+    <q-card-section class="t2 dialog-card-content">
       <u><b>Welcome to partymap.com!</b></u>
 
       <p />

@@ -1,12 +1,12 @@
 <template>
-  <q-card class="privacy-policy-dialog">
-    <q-card-section class="row items-center sticky-card-header">
-      <div class="text-h6">{{ $t('about.privacy_policy') }}</div>
+  <q-card class="privacy-policy-dialog dialog-card">
+    <q-card-section class="row items-center dialog-card-header">
+      <div class="text-h6 inter bolder">{{ $t('about.privacy_policy') }}</div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>
 
-    <q-card-section class="t2">
+    <q-card-section class="t2 dialog-card-content">
       <u><b>What is this all about?</b></u>
       <p />
       <p>

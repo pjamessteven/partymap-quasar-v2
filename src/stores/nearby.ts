@@ -7,6 +7,7 @@ import {
 } from 'src/api';
 import { Artist, EventDate, Tag } from 'src/types/autogen_types';
 import { useMainStore } from 'src/stores/main';
+import { useQueryStore } from 'src/stores/query';
 
 interface NearbyState {
   loadingEverything: boolean;
@@ -86,6 +87,12 @@ export const useNearbyStore = defineStore('nearby', {
       await Promise.all([this.loadNearbyArtists(), this.loadNearbyTags()]);
       await this.loadEventDates();
 
+      // show global top tags/top artists if there are no few local results
+      if (this.nearbyArtists.length < 6 || this.nearbyTags.length < 10) {
+        const queryStore = useQueryStore();
+        if (this.nearbyArtists.length < 6) await queryStore.loadArtistOptions();
+        if (this.nearbyTags.length < 10) await queryStore.loadTagOptions();
+      }
       this.loadingEverything = false;
     },
     async loadNearbyTags() {
@@ -118,7 +125,7 @@ export const useNearbyStore = defineStore('nearby', {
           date_min: moment().toISOString(),
           date_max: null,
           page: this.nearbyArtistsPage,
-          per_page: 10,
+          per_page: 15,
           location: JSON.stringify(main.userLocation),
           radius: this.queryRadius,
           sort: 'event_count',
@@ -133,7 +140,6 @@ export const useNearbyStore = defineStore('nearby', {
         throw error;
       }
     },
-
     async loadNearbyEventDates() {
       const main = useMainStore();
       try {

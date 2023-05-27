@@ -103,11 +103,18 @@ body {
   font-size: 1rem;
 }
 
-.sticky-card-header {
-  position: sticky;
-  top: 0px;
-  z-index: 100;
-  padding: 18px 18px;
+.dialog-card {
+  display: flex;
+  flex-direction: column;
+  .dialog-card-header {
+    position: relative;
+    top: 0px;
+    z-index: 100;
+    padding: 18px 18px;
+  }
+  .dialog-card-content {
+    overflow-y: auto;
+  }
 }
 
 .sticky-header {
@@ -118,9 +125,11 @@ body {
 
 .body--light {
   /* ... */
-  .sticky-card-header {
-    background: $b-2;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  .dialog-card {
+    .dialog-card-header {
+      background: $b-2;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
   }
 
   .sticky-header {
@@ -341,12 +350,13 @@ body {
   /* ... */
   background: black !important;
   //background: #1a202c!important;
+  .dialog-card {
+    .dialog-card-header {
+      //color: rgba(255, 255, 255, 0.67);
 
-  .sticky-card-header {
-    //color: rgba(255, 255, 255, 0.67);
-
-    background: $bi-2;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+      background: $bi-2;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    }
   }
   .sticky-header {
     background: $bi-1;
@@ -706,9 +716,7 @@ body {
 .q-dialog__inner--minimized {
   padding: 0px;
 }
-.dialog-card {
-  max-width: 1056px !important;
-}
+
 .q-card {
   border-radius: 9px !important;
 }
@@ -825,7 +833,7 @@ body {
       width: 100%;
       height: 100%;
       border-radius: 0px !important;
-      .sticky-card-header {
+      .dialog-card-header {
         flex-grow: 1;
         width: 100%;
         align-items: center;

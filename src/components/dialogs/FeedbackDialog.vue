@@ -1,6 +1,6 @@
 <template>
-  <q-card class="feedback-dialog">
-    <q-card-section class="row items-center q-pb-none">
+  <q-card class="feedback-dialog dialog-card">
+    <q-card-section class="row items-center q-pb-none dialog-card-header">
       <div class="inter bolder text-h6">{{ $t('feedback.give_feedback') }}</div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />

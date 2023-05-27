@@ -1,7 +1,7 @@
 <template>
   <q-card class="add-event-date-dialog">
     <!-- DATE AND TIME -->
-    <q-card-section class="row items-center sticky-card-header">
+    <q-card-section class="row items-center dialog-card-header">
       <div class="text-h6 chicago">
         {{ $t('add_event_date.add_new_event_date') }}
       </div>

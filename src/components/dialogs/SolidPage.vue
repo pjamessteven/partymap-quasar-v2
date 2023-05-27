@@ -8,7 +8,7 @@
         :class="
           $q.screen.gt.xs
             ? 'q-pt-xl q-pb-sm text-h4'
-            : 'q-px-md q-pt-md q-pb-sm text-large'
+            : 'q-px-md q-pt-md q-pb-sm text-h6'
         "
       >
         <slot name="title"></slot>

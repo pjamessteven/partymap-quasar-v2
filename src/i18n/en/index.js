@@ -117,7 +117,7 @@ export default {
     sign_up_with_email: 'Sign up with email address',
     or: 'or',
     sign_up: 'Sign Up',
-    sign_up_for_account: 'Create your profile',
+    sign_up_for_account: 'Create your account',
     account_created: "You're on your way!",
     account_created_msg:
       "We've sent you an account activation email. You'll need to check it out and activate your account before logging in.",
@@ -833,7 +833,7 @@ export default {
   },
   about: {
     message:
-      'PartyMap is a community-driven platform for discovering festivals and events around the world. I basically built it because I wished something like this existed. If you have any thoughts, ideas or suggestions about PartyMap then please contact me through the feedback form or by email to ',
+      'PartyMap is a community-driven platform for discovering festivals and events around the world. I basically built this because I wished something like this existed. If you have any thoughts, ideas or suggestions about PartyMap then please contact me through the feedback form or by email to ',
     message_2:
       'If your event has been listed by someone and you would like to have it removed, please look for the report button at the bottom of the event page. ',
     message_3:

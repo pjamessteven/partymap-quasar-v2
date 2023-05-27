@@ -1,6 +1,6 @@
 <template>
   <q-card class="suggestions-dialog">
-    <q-card-section class="row items-start no-wrap sticky-card-header">
+    <q-card-section class="row items-start no-wrap dialog-card-header">
       <div class="flex column">
         <div class="text-h6">{{ $t('suggestions.improve_this_page') }}</div>
         <div class="t2 q-mt-sm">

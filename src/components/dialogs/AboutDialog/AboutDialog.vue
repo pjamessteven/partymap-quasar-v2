@@ -1,12 +1,12 @@
 <template>
-  <q-card class="about-dialog">
-    <q-card-section class="header row items-center">
+  <q-card class="about-dialog dialog-card">
+    <q-card-section class="header row items-center dialog-card-header">
       <div class="inter bolder text-h6">{{ $t('sidebar.about') }}</div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>
 
-    <q-card-section class="t2">
+    <q-card-section class="t2 dialog-card-content">
       {{ $t('about.message') }}
       <a class="link-hover underline" href="mailto:info@partymap.com"
         >info@partymap.com</a
@@ -52,15 +52,14 @@
           >{{ $t('about.read_terms_and_conditions') }}</a
         >
       </div>
-    </q-card-section>
-
-    <q-card-section
-      class="flex column items-center justify-center q-mb-none q-mt-lg"
-    >
-      <q-icon name="las la-kiwi-bird" size="2em" class="t4" />
-      <p class="t4 q-mt-md">
-        {{ $t('about.made_in_aotaeroa') }}
-      </p>
+      <q-card-section
+        class="flex column items-center justify-center q-mb-none q-mt-lg"
+      >
+        <q-icon name="las la-kiwi-bird" size="2em" class="t4" />
+        <p class="t4 q-mt-md">
+          {{ $t('about.made_in_aotaeroa') }}
+        </p>
+      </q-card-section>
     </q-card-section>
 
     <q-dialog
@@ -83,8 +82,8 @@
       transition-hide="jump-down"
       maximized
     >
-      <q-card class="rigs-out-dialog">
-        <q-card-section class="row items-center sticky-card-header">
+      <q-card class="rigs-out-dialog dialog-card">
+        <q-card-section class="row items-center dialog-card-header">
           <div class="text-h6">rigs_out_twisted_2020.jpg</div>
           <q-space />
           <q-btn icon="close" flat round dense v-close-popup />

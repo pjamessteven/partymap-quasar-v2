@@ -62,76 +62,136 @@
                 </div>
                 <div class="content" v-else>
                   <!-- tags -->
-
-                  <div
-                    class="q-py-md header q-mt-sm"
-                    v-if="nearbyTags && nearbyTags.length > 0"
-                  >
-                    <div class="t1 text- inter bold q-pl-md">
-                      Explore the map:
+                  <div class="flex column" v-if="nearbyTags?.length >= 10">
+                    <div class="q-py-md header q-mt-sm">
+                      <div class="t1 text- inter bold q-pl-md">
+                        Explore the map:
+                      </div>
+                    </div>
+                    <div
+                      class="q-pl-md q-mb-sm"
+                      v-if="nearbyTags && nearbyTags.length > 0"
+                    >
+                      <q-scroll-area
+                        horizontal
+                        class="tag-scroll-area"
+                        style="width: 100%"
+                        :thumb-style="
+                          $q.screen.gt.xs
+                            ? { bottom: '0px', height: '8px' }
+                            : { bottom: '0px', height: '0px' }
+                        "
+                      >
+                        <div class="flex column">
+                          <div class="flex row no-wrap q-gutter-sm">
+                            <div
+                              v-for="(tag, index) in nearbyTags.filter(
+                                (x, i) => i % 2
+                              )"
+                              :key="index"
+                              @click="clickTag(tag)"
+                              class="tag t2 text- inter semibold"
+                              style="text-transform: capitalize"
+                            >
+                              {{ tag.tag }}
+                            </div>
+                          </div>
+                          <div class="flex row no-wrap q-gutter-sm q-pt-sm">
+                            <div
+                              v-for="(tag, index) in nearbyTags.filter(
+                                (x, i) => i % 2 !== 1
+                              )"
+                              :key="index"
+                              @click="clickTag(tag)"
+                              class="tag t2 text- inter semibold"
+                              style="text-transform: capitalize"
+                            >
+                              {{ tag.tag }}
+                            </div>
+                          </div>
+                        </div>
+                      </q-scroll-area>
                     </div>
                   </div>
-                  <div
-                    class="q-pl-md q-mb-sm"
-                    v-if="nearbyTags && nearbyTags.length > 0"
-                  >
-                    <q-scroll-area
-                      horizontal
-                      class="tag-scroll-area"
-                      style="width: 100%"
-                      :thumb-style="
-                        $q.screen.gt.xs
-                          ? { bottom: '0px', height: '8px' }
-                          : { bottom: '0px', height: '0px' }
-                      "
-                    >
-                      <div class="flex column">
-                        <div class="flex row no-wrap q-gutter-sm">
-                          <div
-                            v-for="(tag, index) in nearbyTags.filter(
-                              (x, i) => i % 2
-                            )"
-                            :key="index"
-                            @click="clickTag(tag)"
-                            class="tag t2 text- inter semibold"
-                            style="text-transform: capitalize"
-                          >
-                            {{ tag.tag }}
-                          </div>
-                        </div>
-                        <div class="flex row no-wrap q-gutter-sm q-pt-sm">
-                          <div
-                            v-for="(tag, index) in nearbyTags.filter(
-                              (x, i) => i % 2 !== 1
-                            )"
-                            :key="index"
-                            @click="clickTag(tag)"
-                            class="tag t2 text- inter semibold"
-                            style="text-transform: capitalize"
-                          >
-                            {{ tag.tag }}
-                          </div>
-                        </div>
+                  <!-- Display global tags if there's not many local tags-->
+                  <div class="flex column" v-else-if="tagOptions?.length > 0">
+                    <div class="q-py-md header q-mt-sm">
+                      <div class="t1 text- inter bold q-pl-md">
+                        Explore the map:
                       </div>
-                    </q-scroll-area>
+                    </div>
+                    <div class="q-pl-md q-mb-sm">
+                      <q-scroll-area
+                        horizontal
+                        class="tag-scroll-area"
+                        style="width: 100%"
+                        :thumb-style="
+                          $q.screen.gt.xs
+                            ? { bottom: '0px', height: '8px' }
+                            : { bottom: '0px', height: '0px' }
+                        "
+                      >
+                        <div class="flex column">
+                          <div class="flex row no-wrap q-gutter-sm">
+                            <div
+                              v-for="(tag, index) in tagOptions.filter(
+                                (x, i) => i % 2
+                              )"
+                              :key="index"
+                              @click="clickTag(tag)"
+                              class="tag t2 text- inter semibold"
+                              style="text-transform: capitalize"
+                            >
+                              {{ tag.tag }}
+                            </div>
+                          </div>
+                          <div class="flex row no-wrap q-gutter-sm q-pt-sm">
+                            <div
+                              v-for="(tag, index) in tagOptions.filter(
+                                (x, i) => i % 2 !== 1
+                              )"
+                              :key="index"
+                              @click="clickTag(tag)"
+                              class="tag t2 text- inter semibold"
+                              style="text-transform: capitalize"
+                            >
+                              {{ tag.tag }}
+                            </div>
+                          </div>
+                        </div>
+                      </q-scroll-area>
+                    </div>
                   </div>
 
                   <!-- artists -->
+                  <div class="flex column" v-if="nearbyArtists?.length > 5">
+                    <div class="t1 location-header q-py-md inter bold q-pl-md">
+                      Top artists near {{ userLocationCity }}:
+                    </div>
+                    <ArtistsComponent
+                      @wheel.stop
+                      :artists="nearbyArtists"
+                      :hasNext="nearbyArtistsHasNext"
+                      :loadMore="loadNearbyArtists"
+                    />
+                  </div>
+
+                  <!-- Display global artists if there's not many local artists-->
 
                   <div
-                    class="t1 location-header q-py-md inter bold q-pl-md"
-                    v-if="nearbyArtists && nearbyArtists.length > 0"
+                    class="flex column"
+                    v-else-if="artistOptions?.length > 0"
                   >
-                    Top artists near {{ userLocationCity }}:
+                    <div class="t1 location-header q-py-md inter bold q-pl-md">
+                      Top artists worldwide:
+                    </div>
+                    <ArtistsComponent
+                      @wheel.stop
+                      :artists="artistOptions"
+                      :hasNext="artistOptionsHasNext"
+                      :loadMore="loadArtistOptions"
+                    />
                   </div>
-                  <ArtistsComponent
-                    @wheel.stop
-                    v-if="nearbyArtists && nearbyArtists.length > 0"
-                    :artists="nearbyArtists"
-                    :hasNext="nearbyArtistsHasNext"
-                    :loadMore="loadNearbyArtists"
-                  />
-
                   <!-- NEARBY EVENTS -->
 
                   <div
@@ -374,6 +434,7 @@ export default {
 
   methods: {
     ...mapActions(useMainStore, ['loadIpInfo']),
+    ...mapActions(useQueryStore, ['loadArtistOptions', 'loadTagOptions']),
     ...mapActions(useNearbyStore, [
       'loadEverything',
       'loadNearbyTags',
@@ -493,7 +554,13 @@ export default {
       'fineLocation',
       'compactView',
     ]),
-    ...mapWritableState(useQueryStore, ['controlTag']),
+    ...mapWritableState(useQueryStore, [
+      'controlTag',
+      'tagOptions',
+      'tagOptionsHasNext',
+      'artistOptions',
+      'artistOptionsHasNext',
+    ]),
     ...mapWritableState(useNearbyStore, [
       'queryRadius',
       'eventDates',
@@ -717,9 +784,7 @@ export default {
         // text-transform: lowercase;
       }
     }
-    :deep(.q-scrollarea__content) {
-      width: 100%;
-    }
+
     :deep(.q-scrollarea__thumb) {
       z-index: 1000;
     }
