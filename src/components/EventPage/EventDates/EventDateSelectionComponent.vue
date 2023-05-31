@@ -239,14 +239,17 @@ export default {
       // don't reload the current event
       if (!this.selectedEventDate || this.selectedEventDate.id !== ed.id) {
         // update route
-        this.$router.replace({
+        const route = {
           name: 'EventPage',
           params: {
             eventDateId: ed.id,
             id: this.event.id,
           },
           query: { name: this.event.name.replace(/ /g, '_') },
-        });
+        };
+        const { href } = this.$router.resolve(route);
+        window.history.pushState({}, null, href);
+
         this.loadEventDate(ed.id);
       }
     },

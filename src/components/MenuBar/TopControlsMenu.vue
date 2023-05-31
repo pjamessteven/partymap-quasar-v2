@@ -25,8 +25,8 @@
       v-ripple
       v-on:click="
         $router.push({
-          name: 'Login',
-          query: { from: $router.currentRoute.path },
+          path: '/login',
+          query: { from: $route.path },
         })
       "
       clickable

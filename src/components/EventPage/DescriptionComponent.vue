@@ -31,8 +31,8 @@
 
     <q-dialog
       v-model="showEditingDialog"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <EditDescriptionDialog @closeDialog="showEditingDialog = false" />
     </q-dialog>

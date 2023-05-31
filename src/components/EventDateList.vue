@@ -80,9 +80,10 @@
       </div>
       <div
         v-else-if="
-          (groupByMonth &&
+          ((groupByMonth &&
             Object.keys(eventDatesGroupedByMonth)?.length == 0) ||
-          (!groupByMonth && eventDates && eventDates.length === 0)
+            (!groupByMonth && eventDates && eventDates.length === 0)) &&
+          !loading
         "
         class="t4 inter bold q-mt-md"
       >
@@ -111,6 +112,7 @@ interface Props {
   };
   groupByMonth?: boolean;
   hasNext: boolean;
+  loading: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {

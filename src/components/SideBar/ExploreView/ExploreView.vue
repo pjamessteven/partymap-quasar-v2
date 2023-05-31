@@ -58,7 +58,7 @@
                   />
                 </div>
                 <div
-                  class="artist-profile-wrappe"
+                  class="artist-profile-wrapper"
                   :class="
                     $q.screen.gt.xs ? 'q-px-md q-pb-md q-pt-sm' : 'q-pa-sm'
                   "
@@ -115,6 +115,7 @@
                       :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
                       :eventDates="eventDates"
                       :hasNext="eventDatesHasNext"
+                      :loading="eventDatesLoading"
                     />
                   </transition>
                   <transition
@@ -127,6 +128,7 @@
                       :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
                       :eventDates="eventDates"
                       :hasNext="eventDatesHasNext"
+                      :loading="eventDatesLoading"
                     />
                   </transition>
                 </div>
@@ -369,7 +371,6 @@ export default {
       'eventDates',
       'eventDatesPage',
       'eventDatesHasNext',
-      'eventDatesLoading',
       'artistsPage',
       'artistsHasNext',
     ]),
@@ -521,7 +522,6 @@ export default {
     }
     .artist-profile-wrapper {
       width: 100%;
-
       .artist-profile {
         max-width: 100%;
         //height: 200px;

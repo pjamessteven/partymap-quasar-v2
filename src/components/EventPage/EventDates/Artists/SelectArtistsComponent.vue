@@ -51,14 +51,7 @@
         <q-tab v-for="list in lists" :key="list" :label="list" :name="list" />
       </q-tabs>
       <div class="flex row items-center no-wrap">
-        <q-btn
-          flat
-          icon="mdi-minus"
-          @click="removeList"
-          :disable="lists.length === 1"
-        />
-
-        <q-btn flat icon="mdi-plus">
+        <q-btn flat icon-right="mdi-plus" label="Add Stage">
           <q-menu
             transition-show="jump-down"
             transition-hide="jump-up"
@@ -66,12 +59,7 @@
             self="top right"
           >
             <div class="flex row">
-              <q-input
-                v-model="listToAdd"
-                square
-                filled
-                placeholder="List name"
-              />
+              <q-input v-model="listToAdd" filled placeholder="Stage name" />
               <q-btn @click="addList" label="Add" />
             </div>
           </q-menu>
@@ -114,7 +102,14 @@
         />
       </div>
     </q-list>
-
+    <q-btn
+      v-if="lists?.length > 1"
+      class="q-mt-md"
+      color="red"
+      label="Remove stage"
+      icon="mdi-minus"
+      @click="removeList"
+    />
     <div class="flex row grow justify-end q-mt-lg" v-if="mode !== 'emit'">
       <q-btn
         :label="$t('general.save_changes')"
@@ -182,11 +177,11 @@ export default {
       lists = [...new Set(lists)]; // remove duplicates
 
       if (lists.length === 0) {
-        lists.push('main list');
-      } else if (lists.indexOf('main list') > -1) {
+        lists.push('main stage');
+      } else if (lists.indexOf('main stage') > -1) {
         // move main stage to front of list
-        lists.splice(lists.indexOf('main list'), 1);
-        lists.splice(0, 0, 'main list');
+        lists.splice(lists.indexOf('main stage'), 1);
+        lists.splice(0, 0, 'main stage');
       }
       this.lists = lists;
       this.selectedList = lists[0];
@@ -336,10 +331,10 @@ export default {
     ]),
     ...mapState(useAuthStore, ['currentUser']),
     artistsOfList() {
-      if (this.selectedList === 'main list') {
-        // if main list is selected, show artists with no list('stage') assigned
+      if (this.selectedList === 'main stage') {
+        // if main stage is selected, show artists with no list('stage') assigned
         return this.artistsList.filter(
-          (x) => x.stage === 'main list' || !x.stage
+          (x) => x.stage === 'main stage' || !x.stage
         );
       } else {
         return this.artistsList.filter((x) => x.stage === this.selectedList);
@@ -373,8 +368,8 @@ export default {
       this.loadArtistList();
       this.loadLists();
     } else {
-      this.lists = ['main list'];
-      this.selectedList = 'main list';
+      this.lists = ['main stage'];
+      this.selectedList = 'main stage';
     }
   },
 };

@@ -30,7 +30,6 @@
         {{ $t('suggestions.captcha_required') }}
       </div>
       <q-input
-        square
         outlined
         :input-style="{ 'min-height': '100px' }"
         autogrow
@@ -44,7 +43,6 @@
       />
       <q-input
         outlined
-        square
         color="bg-grey-7"
         v-model="email"
         class="q-mt-md"
@@ -82,7 +80,7 @@
 
 <script>
 import { postReportRequest } from 'src/api';
-import VueHcaptcha from '@hcaptcha/vue-hcaptcha';
+import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 
 import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';

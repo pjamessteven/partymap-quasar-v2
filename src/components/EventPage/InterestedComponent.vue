@@ -1,41 +1,66 @@
 <template>
-  <div class="">
-    <q-btn
-      flat
-      size="1rem"
-      style="opacity: 0.8"
-      label="Interested"
-      icon="mdi-star-outline"
-      icon-right="mdi-chevron-down"
-      no-caps
-    ></q-btn>
-    <!--
-    <q-btn-group outline class="interested-button-group">
-      <q-btn outline icon="mdi-help-circle-outline" no-caps></q-btn>
-      <q-btn outline icon="mdi-star-outline" label="Interested" no-caps></q-btn>
-      <q-btn
-        outline
-        icon="mdi-check-circle-outline"
-        label="Going"
-        no-caps
-      ></q-btn>
-    </q-btn-group>
-    -->
-  </div>
+  <q-btn
+    :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
+    :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
+    flat
+    :size="$q.screen.gt.xs ? '1em' : 'md'"
+    :label="computedLabel"
+    :icon="computedIcon"
+    icon-right="mdi-chevron-down"
+    no-caps
+    @click="() => (showingMenu = !showingMenu)"
+  >
+    <MenuWrapper
+      :showing="showingMenu"
+      @hide="() => (showingMenu = false)"
+      @show="() => (showingMenu = true)"
+      class="menu-wrapper inter bold"
+    >
+      <q-list>
+        <q-item
+          v-close-popup
+          :active="userInterested"
+          clickable
+          @click="toggleInterested()"
+        >
+          <q-item-section avatar>
+            <q-icon :name="userInterested ? 'mdi-star' : 'mdi-star-outline'" />
+          </q-item-section>
+          <q-item-section>Interested</q-item-section>
+        </q-item>
+        <q-item
+          :active="userGoing"
+          v-close-popup
+          clickable
+          @click="toggleGoing()"
+        >
+          <q-item-section avatar>
+            <q-icon
+              :name="
+                userGoing ? 'mdi-check-circle' : 'mdi-check-circle-outline'
+              "
+            />
+          </q-item-section>
+          <q-item-section>Going</q-item-section>
+        </q-item>
+      </q-list>
+    </MenuWrapper>
+  </q-btn>
 </template>
 
 <script>
 import { mapState, mapActions } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
+import MenuWrapper from 'src/components/Controls/MenuWrapper.vue';
 
 export default {
-  components: {},
+  components: { MenuWrapper },
   props: {},
   data() {
     return {
       loading: false,
-      showMoreFields: false,
+      showingMenu: false,
     };
   },
   methods: {
@@ -52,6 +77,24 @@ export default {
       'currentUserIsHost',
     ]),
     ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
+    userGoing() {
+      return this.selectedEventDate.user_going;
+    },
+    userInterested() {
+      return this.selectedEventDate.user_interested;
+    },
+    computedIcon() {
+      if (this.userGoing) {
+        return 'mdi-check-circle';
+      } else if (this.userInterested) {
+        return 'mdi-star';
+      } else return 'mdi-star-outline';
+    },
+    computedLabel() {
+      if (this.selectedEventDate.user_going) {
+        return 'Going';
+      } else return 'Interested';
+    },
   },
 };
 </script>

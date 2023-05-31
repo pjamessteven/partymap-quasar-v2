@@ -25,7 +25,17 @@
             this.$route.name !== 'Explore',
         }"
       >
-        <MobileSwipeHandle @swipe="onMobileSwipeHandle($event)" />
+        <!--
+        <span
+          v-if="$route.name === 'Explore' && sidebarPanel === 'nearby'"
+          class="welcome-message inter bolder text-large q-mb-xl q-mt-lg"
+          >Welcome to the global map of festivals and events!</span
+        >
+        -->
+        <MobileSwipeHandle
+          @swipe="onMobileSwipeHandle($event)"
+          v-if="$q.screen.lt.sm"
+        />
         <div
           v-touch-swipe.mouse.down="
             enablePanelSwipeDown && showPanel ? handleSwipe : null
@@ -128,13 +138,12 @@ export default {
           this.preventMapZoom = false;
         }, 1200);
 
-        /* disabled this behavior because it's too confusing
         if (
           this.sidebarPanel !== 'explore' &&
           this.sidebarPanel !== 'favorites'
         ) {
           this.sidebarPanel = 'explore';
-        } */
+        }
         return false;
       }
     },
@@ -158,6 +167,13 @@ export default {
     },
     togglePanel(event) {
       this.showPanel = !this.showPanel;
+
+      if (
+        this.sidebarPanel !== 'explore' &&
+        this.sidebarPanel !== 'favorites'
+      ) {
+        this.sidebarPanel = 'explore';
+      }
     },
     onMobileSwipeHandle(direction) {
       if (!direction) {
@@ -198,6 +214,8 @@ export default {
     computedSidebarWidth() {
       if (this.$q.screen.gt.lg) {
         return 'width: 66vw; min-width: 854px; max-width: 1280px';
+      } else if (this.$q.screen.gt.md) {
+        return 'width: 66vw; min-width: 854px; max-width: 1024px';
       } else if (this.$q.screen.gt.sm) {
         return 'width: 66vw; min-width: 854px; max-width: 960px';
       } else if (this.$q.screen.gt.xs) {
@@ -306,9 +324,25 @@ export default {
     will-change: transform;
     padding-bottom: 64px;
 
-    &:hover {
+    &.sidebar-mobile-expanded {
+      transform: translate3d(0, 64px, 0);
+      .mobile-dismiss-list {
+        height: 200px;
+      }
+    }
+
+    &:not(.sidebar-mobile-expanded):hover {
       //transform: translate3d(0, 80px, 0) !important;
       transform: translate3d(0, calc(100% - 286px), 0);
+    }
+    &.sidebar-mobile-hidden {
+      transform: translate3d(0, calc(100%), 0);
+    }
+
+    .welcome-message {
+      color: white;
+      text-align: center;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 1);
     }
 
     .menubar {
@@ -357,8 +391,8 @@ export default {
       :deep(.panels) {
         //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.4);
 
-        -webkit-backface-visibility: hidden;
-        -webkit-transform: translate3d(0, 0, 0);
+        //-webkit-backface-visibility: hidden;
+        //-webkit-transform: translate3d(0, 0, 0);
         width: 100%;
       }
     }
@@ -373,15 +407,6 @@ export default {
       height: 100%;
       z-index: 501;
     }
-  }
-  .sidebar-mobile-expanded {
-    transform: translate3d(0, 64px, 0) !important;
-    .mobile-dismiss-list {
-      height: 200px;
-    }
-  }
-  .sidebar-mobile-hidden {
-    transform: translate3d(0, calc(100%), 0);
   }
 }
 

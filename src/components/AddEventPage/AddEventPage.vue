@@ -845,6 +845,10 @@ export default {
       background: $bi-3;
     }
   }
+  .submit-footer {
+    background: $bi-3;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
 }
 
 .body--light {
@@ -869,28 +873,38 @@ export default {
   }
 }
 
-.hover-option {
-  cursor: pointer;
-}
+.solid-page {
+  :deep(.solid-page-inner) {
+    max-width: 768px;
+    .hover-option {
+      cursor: pointer;
+    }
 
-.location-map-wrapper {
-  width: 100%;
-  height: 256px;
-  position: relative;
-  overflow: hidden;
-  border-radius: 18px;
-  .location-map {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-  }
-  .location-map-select-msg {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
+    .location-map-wrapper {
+      width: 100%;
+      height: 256px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      .location-map {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+      .location-map-select-msg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+      }
+    }
+    .upload-component {
+      .bottom-buttons {
+        justify-content: flex-start;
+      }
+    }
   }
 }
 

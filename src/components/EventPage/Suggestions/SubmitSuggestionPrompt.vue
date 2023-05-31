@@ -16,7 +16,6 @@
       <q-card-section>
         <q-input
           type="textarea"
-          square
           outlined
           :label="$t('suggestions.message')"
           v-model="message"

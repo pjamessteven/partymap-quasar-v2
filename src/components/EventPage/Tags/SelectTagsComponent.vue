@@ -5,7 +5,6 @@
       :class="{ 'q-mt-sm': mode === 'updateExisting' }"
       v-bind:label="$t('tags.search_for_tag')"
       v-model="query"
-      square
       debounce="200"
       @update:model-value="queryTags"
       :loading="resultsLoading"

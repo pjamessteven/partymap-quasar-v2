@@ -4,7 +4,7 @@
     :class="editing ? 'editing' : ''"
   >
     <q-btn
-      @click="deleteEventDate"
+      @click="deleteEd"
       size="sm"
       class="delete-button"
       round
@@ -110,8 +110,8 @@ export default {
   },
   watch: {},
   methods: {
-    ...mapActions(useEventStore, 'deleteEventDate'),
-    deleteEventDate() {
+    ...mapActions(useEventStore, ['deleteEventDate']),
+    deleteEd() {
       this.$q
         .dialog({
           title: this.$t('event_dates.delete_event_date'),
@@ -159,7 +159,7 @@ export default {
 .body--dark {
   .ed-inline {
     .delete-button {
-      background-color: $bi-4;
+      background-color: grey;
     }
     .ed-inline-card {
       .line {
@@ -275,6 +275,7 @@ export default {
     right: -10px;
     top: -10px;
     z-index: 2;
+    border-radius: 100px !important;
   }
   .inactive-card {
     box-shadow: none;

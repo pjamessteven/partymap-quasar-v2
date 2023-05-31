@@ -14,7 +14,6 @@
         outlined
         :input-style="{ 'min-height': '100px' }"
         autogrow
-        square
         textarea
         color="bg-grey-7"
         v-model="feedback"
@@ -28,7 +27,6 @@
       <q-input
         outlined
         autogrow
-        square
         color="bg-grey-7"
         v-model="contactEmail"
         :label="$t('feedback.contact_email')"

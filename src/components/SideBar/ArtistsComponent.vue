@@ -18,7 +18,7 @@
     >
       <div
         class="flex row no-wrap q-gutter-md q-pr-xl"
-        :class="$q.screen.lt.sm ? 'q-pl-sm' : 'q-pl-md'"
+        :class="$q.screen.lt.sm ? 'q-pl-md' : 'q-pl-md'"
       >
         <ArtistHead
           v-for="(artist, index) in artists"
@@ -121,7 +121,7 @@ function onScrollMainContent(info: {
 @media only screen and (max-width: 600px) {
   .scroll-area-wrapper {
     .artist-scroll-area {
-      height: 168px;
+      height: 160px;
     }
   }
 }

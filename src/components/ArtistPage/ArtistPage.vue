@@ -1,10 +1,10 @@
 <template>
   <SolidPage :loading="loading">
-    <template v-slot:title>
+    <template v-slot:title v-if="$q.screen.gt.xs">
       <div>{{ computedName }}</div>
     </template>
     <template v-slot>
-      <div class="artist-header flex row justify-between no-wrap">
+      <div class="artist-header flex row justify-between items-start no-wrap">
         <div class="flex column no-wrap" style="width: 100%">
           <div class="mobile-image-container" v-if="$q.screen.lt.md">
             <div class="image-container-background">
@@ -270,8 +270,8 @@ export default {
         );
       } else {
         this.$router.push({
-          name: 'Login',
-          query: { from: $router.currentRoute.path },
+          path: '/login',
+          query: { from: this.$route.path },
         });
       }
     },
@@ -391,22 +391,22 @@ export default {
     //max-width: 400px;
     // max-height: 400px;
     // min-width: 400px;
-    height: 100%;
     width: auto;
     position: relative;
     overflow: hidden;
     aspect-ratio: 1;
     border-radius: 100%;
     .image-container-background {
-      height: 100%;
       width: 100%;
       //position: absolute;
       display: flex;
       flex-grow: 1;
+      object-fit: cover;
       justify-content: center;
       align-items: center;
       img {
         width: 100%;
+        height: auto;
       }
     }
   }
@@ -415,6 +415,10 @@ export default {
   }
 }
 .footer {
+  display: flex;
+  flex-grow: 1;
+  align-items: flex-end;
+  position: relative;
 }
 @media only screen and (max-width: 1023px) {
   .artist-header {
@@ -459,7 +463,6 @@ export default {
     }
   }
   .footer {
-    position: relative;
     margin-top: 128px;
     padding-left: 16px;
     padding-right: 16px;

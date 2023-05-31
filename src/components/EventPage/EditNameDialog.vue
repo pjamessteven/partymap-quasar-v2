@@ -12,7 +12,6 @@
       <q-input
         class="border-radius q-mt-lg"
         counter
-        square
         :maxlength="50"
         outlined
         autogrow

@@ -28,7 +28,7 @@
       <EventDateSelectionComponent :editing="editing" />
     </div>
     <div
-      v-if="loadingEventDate"
+      v-if="loadingEventDate && false"
       style="position: relative; height: 200px; width: 100%"
     >
       <q-inner-loading :showing="true" style="z-index: 10">

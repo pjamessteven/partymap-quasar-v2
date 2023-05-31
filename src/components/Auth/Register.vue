@@ -16,7 +16,6 @@
       <q-form @submit="_register">
         <q-card-section class="form q-px-lg q-pt-none">
           <q-input
-            square
             outlined
             filled
             hide-bottom-space
@@ -29,7 +28,6 @@
           />
 
           <q-input
-            square
             outlined
             filled
             class="q-mt-md"
@@ -42,7 +40,6 @@
           />
 
           <q-input
-            square
             outlined
             filled
             class="q-mt-md"
@@ -55,7 +52,6 @@
             :rules="[(val) => passwordValidation(val)]"
           />
           <q-input
-            square
             outlined
             filled
             class="q-mt-md"

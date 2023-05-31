@@ -36,6 +36,7 @@ export default {
 .body--light {
   .solid-page {
     background: white;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
   }
 }
 .body--dark {

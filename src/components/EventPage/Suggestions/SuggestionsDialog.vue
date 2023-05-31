@@ -101,8 +101,8 @@
     <q-dialog
       :value="editMode === 'name'"
       @hide="editMode = null"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <EditNameDialog @closeDialog="closeDialog()" />
     </q-dialog>
@@ -110,8 +110,8 @@
     <q-dialog
       :value="editMode === 'main_description'"
       @hide="editMode = null"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <EditDescriptionDialog @closeDialog="closeDialog()" />
     </q-dialog>
@@ -119,8 +119,8 @@
     <q-dialog
       :value="editMode === 'tags'"
       @hide="editMode = null"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <SelectTagsDialog @closeDialog="closeDialog()" />
     </q-dialog>
@@ -128,8 +128,8 @@
     <q-dialog
       :value="editMode === 'addEventDate'"
       @hide="editMode = null"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <AddEventDateDialog
         @closeDialog="closeDialog()"
@@ -140,8 +140,8 @@
     <q-dialog
       :value="editMode === 'rrule'"
       @hide="editMode = null"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <EditRruleDialog @closeDialog="closeDialog()" />
     </q-dialog>
@@ -149,8 +149,8 @@
     <q-dialog
       :value="editMode === 'remove_rrule'"
       @hide="editMode = null"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <RemoveRruleDialog @closeDialog="closeDialog()" />
     </q-dialog>
@@ -158,8 +158,8 @@
     <q-dialog
       :value="editMode != null && eventDateToEdit != null"
       @hide="closeDialog"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <EditEventDateDialog
         @closeDialog="closeDialog()"
@@ -171,16 +171,16 @@
     <q-dialog
       :value="editMode === 'media'"
       @hide="closeDialog"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <SuggestNewCoverDialog @closeDialog="closeDialog()" />
     </q-dialog>
     <q-dialog
       :value="editMode === 'artists'"
       @hide="closeDialog"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <SelectArtistsDialog @closeDialog="closeDialog()" />
     </q-dialog>
@@ -239,7 +239,8 @@ export default {
         },
         {
           name: this.$t('suggestions.ed_description'),
-          description: this.$t('suggestions.ed_description_msg'),
+          description:
+            "A detailed description of what's happening on this date",
           mode: 'description',
         },
         {

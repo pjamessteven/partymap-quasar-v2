@@ -164,7 +164,11 @@
                   </div>
 
                   <!-- artists -->
-                  <div class="flex column" v-if="nearbyArtists?.length > 5">
+                  <div
+                    class="flex column"
+                    v-if="nearbyArtists?.length > 5"
+                    :style="$q.screen.gt.xs ? 'margin-top: -16px' : ''"
+                  >
                     <div class="t1 location-header q-py-md inter bold q-pl-md">
                       Top artists near {{ userLocationCity }}:
                     </div>
@@ -227,6 +231,7 @@
                       :groupByMonth="false"
                       :eventDates="nearbyEventDates"
                       :hasNext="nearbyEventDatesHasNext"
+                      :loading="nearbyEventDatesLoading"
                     />
                   </transition>
                   <transition
@@ -239,6 +244,7 @@
                       :groupByMonth="false"
                       :eventDates="nearbyEventDates"
                       :hasNext="nearbyEventDatesHasNext"
+                      :loading="nearbyEventDatesLoading"
                     />
                   </transition>
                   <div
@@ -892,14 +898,9 @@ export default {
         }
       }
     }
-    .artist-scroll-area {
-      height: 164px;
-      width: 100%;
-      mask-image: linear-gradient(to left, transparent 0px, white 64px);
-    }
 
     .tag-scroll-area {
-      height: 84px;
+      height: 96px;
       mask-image: linear-gradient(to left, transparent 0px, white 64px);
       width: 100%;
       .tag {
@@ -967,7 +968,7 @@ export default {
     }
     .main-content {
       .tag-scroll-area {
-        height: 84px;
+        height: 78px;
       }
 
       .header {

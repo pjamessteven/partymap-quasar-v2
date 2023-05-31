@@ -8,7 +8,6 @@
 
       <q-card-section class="form q-px-lg">
         <q-input
-          square
           outlined
           class="q-mt-md"
           hide-bottom-space
@@ -25,7 +24,6 @@
         </q-input>
 
         <q-input
-          square
           outlined
           class="q-mt-md"
           hide-bottom-space

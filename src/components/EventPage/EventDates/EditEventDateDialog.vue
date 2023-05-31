@@ -1,64 +1,32 @@
 <template>
-  <div>
-    <!-- URL -->
+  <!-- URL -->
 
-    <q-card v-if="mode === 'url'" class="edit-card">
-      <q-card-section class="flex column no-wrap top-section">
-        <div class="flex items-start no-wrap justify-start grow">
-          <div class="flex column">
-            <div class="text-h6 card-title q-pr-md">
-              {{ $t('edit_event_date.external_url') }}
-            </div>
-            <div class="t2 q-mb-md q-mt-sm">
-              {{ $t('edit_event_date.external_url_msg') }}
-            </div>
-          </div>
-          <q-btn icon="close" class="q-ml-md" flat round dense v-close-popup />
+  <q-card class="edit-card dialog-card">
+    <q-card-section class="flex column no-wrap top-section dialog-card-header">
+      <div class="flex items-center no-wrap justify-between grow">
+        <div class="text-h6 card-title q-pr-md">
+          {{ modeText[mode]?.title }}
         </div>
+
+        <q-btn icon="close" class="q-ml-md" flat round dense v-close-popup />
+      </div>
+    </q-card-section>
+    <q-card-section class="dialog-card-content">
+      <div v-if="modeText[mode]?.message" class="t2 q-mb-md">
+        {{ modeText[mode].message }}
+      </div>
+
+      <div v-if="mode === 'url'">
         <q-input
           outlined
-          square
           autogrow
           color="bg-grey-7"
           v-model="url"
           :label="$t('add.url')"
         />
-      </q-card-section>
-      <q-card-section>
-        <div class="flex grow justify-end">
-          <q-btn
-            icon="las la-undo"
-            color="primary"
-            no-caps
-            @click="url = ed.url"
-            v-close-popup
-            :label="$t('general.undo')"
-            v-if="url != ed.url"
-          />
-          <q-btn
-            icon="las la-cloud-upload-alt"
-            class="q-ml-sm"
-            color="primary"
-            no-caps
-            square
-            @click="updateEd"
-            v-close-popup
-            :label="$t('general.save_changes')"
-            :disable="url == ed.url"
-          />
-        </div>
-        <q-space />
-      </q-card-section>
-    </q-card>
+      </div>
 
-    <q-card v-if="mode === 'ticketUrl'" class="edit-card">
-      <q-card-section class="flex row justify-between no-wrap top-section">
-        <div class="flex row wrap items-center justify-between grow">
-          <div class="text-h6 card-title q-pr-md">Ticket URL</div>
-          <q-btn icon="close" flat round dense v-close-popup />
-        </div>
-      </q-card-section>
-      <q-card-section>
+      <div v-if="mode === 'ticketUrl'">
         <q-input
           outlined
           autogrow
@@ -66,50 +34,12 @@
           v-model="ticketUrl"
           :label="$t('add.ticketing_url')"
         />
-        <div class="flex grow justify-end q-mt-md">
-          <q-btn
-            icon="las la-undo"
-            color="primary"
-            no-caps
-            @click="ticketUrl = ed.ticket_url"
-            v-close-popup
-            :label="$t('general.undo')"
-            v-if="ticketUrl != ed.ticket_url"
-          />
-          <q-btn
-            icon="las la-cloud-upload-alt"
-            class="q-ml-sm"
-            color="primary"
-            no-caps
-            @click="updateEd"
-            v-close-popup
-            :label="$t('general.save_changes')"
-            :disable="ticketUrl == ed.ticket_url"
-          />
-        </div>
-        <q-space />
-      </q-card-section>
-    </q-card>
+      </div>
 
-    <!-- SIZE -->
-
-    <q-card v-if="mode === 'size'" class="edit-card">
-      <q-card-section class="flex column justify-between no-wrap top-section">
-        <div class="flex row wrap items-start no-wrap justify-start grow">
-          <div class="flex column">
-            <div class="text-h6 card-title q-pr-md">
-              {{ $t('edit_event_date.size') }}
-            </div>
-            <div class="t2 q-mb-md q-mt-sm">
-              {{ $t('edit_event_date.size_msg') }}
-            </div>
-          </div>
-          <q-btn icon="close" class="q-ml-md" flat round dense v-close-popup />
-        </div>
+      <div v-if="mode === 'size'">
         <q-input
           outlined
           autogrow
-          square
           color="bg-grey-7"
           v-model="size"
           :label="$t('add.size')"
@@ -118,223 +48,58 @@
             (val) => Number.isInteger(parseInt(val)) || 'Please input a number',
           ]"
         />
-        <div class="flex grow justify-end q-mt-md">
-          <q-btn
-            icon="las la-undo"
-            color="primary"
-            no-caps
-            @click="size = ed.size"
-            v-close-popup
-            :label="$t('general.undo')"
-            v-if="size != ed.size"
-          />
-          <q-btn
-            icon="las la-cloud-upload-alt"
-            class="q-ml-sm"
-            color="primary"
-            no-caps
-            @click="updateEd"
-            v-close-popup
-            :label="$t('general.save_changes')"
-            :disable="size == ed.size"
-          />
-        </div>
-        <q-space />
-      </q-card-section>
-    </q-card>
-    <!-- DESCRIPTION -->
+      </div>
 
-    <q-card v-if="mode === 'description'" class="edit-card">
-      <q-card-section class="flex column no-wrap top-section">
-        <div
-          class="flex row wrap items-start no-wrap justify-between grow q-mb-md"
-        >
-          <div class="flex column">
-            <div class="text-h6 card-title q-pr-md">
-              {{ $t('edit_event_date.description') }}
-            </div>
-          </div>
-          <q-btn icon="close" class="q-ml-md" flat round dense v-close-popup />
-        </div>
+      <div v-if="mode === 'description'">
         <q-input
           outlined
           autogrow
-          square
           :input-style="{ 'min-height': '100px' }"
           color="bg-grey-7"
           v-model="description"
-          :label="$t('event_dates.description')"
+          label="Detailed description"
         />
         <!-- ATRRIBUTE -->
         <q-input
           v-if="!currentUserIsHost"
-          square
-          dense
           outlined
           maxlength="200"
           class="q-mt-sm"
           :input-style="{ 'min-height': '50px' }"
           color="bg-grey-7"
           v-model="descriptionAttribute"
-          :label="$t('description.attribute_msg_long')"
+          label="Source"
         />
-      </q-card-section>
-      <q-card-section>
-        <div class="flex grow justify-end">
-          <q-btn
-            icon="las la-undo"
-            color="primary"
-            no-caps
-            v-if="description != ed.description"
-            @click="description = ed.description"
-            :label="$t('general.undo')"
-            v-close-popup
-          />
-          <q-btn
-            icon="las la-cloud-upload-alt"
-            color="primary"
-            class="q-ml-sm"
-            no-caps
-            @click="updateEd"
-            :label="$t('general.save_changes')"
-            v-close-popup
-          />
-        </div>
-        <q-space />
-      </q-card-section>
-    </q-card>
+      </div>
 
-    <!-- DATE TIME -->
+      <!-- DATE TIME -->
 
-    <q-card v-if="mode === 'date'" class="edit-card">
-      <q-card-section class="flex column top-section">
-        <div class="flex row wrap items-start no-wrap justify-start grow">
-          <div class="flex column">
-            <div class="text-h6 card-title q-pr-md">
-              {{ $t('edit_event_date.date') }}
-            </div>
-            <div class="t2 q-mb-md q-mt-sm">
-              {{ $t('edit_event_date.date_msg') }}
-            </div>
-          </div>
-          <q-btn icon="close" class="q-ml-md" flat round dense v-close-popup />
-        </div>
-      </q-card-section>
-      <q-card-section v-if="dateTime" class="flex column q-pt-none">
+      <div v-if="mode === 'date'">
         <DateTimePicker
           :value="dateTime"
           :isRange="true"
           @dateRange="dateTime = $event"
           :inlineCalendar="true"
         />
-        <div class="flex grow justify-end q-mt-lg">
-          <q-btn
-            icon="las la-undo"
-            color="primary"
-            no-caps
-            @click="loadDateTime"
-            :label="$t('general.undo')"
-            v-close-popup
-            v-if="dateTimeHasChanged"
-          />
-          <q-btn
-            icon="las la-cloud-upload-alt"
-            color="primary"
-            class="q-ml-sm"
-            no-caps
-            @click="updateEd"
-            :label="$t('general.save_changes')"
-            :disable="!dateTimeHasChanged"
-          />
-        </div>
-      </q-card-section>
-    </q-card>
+      </div>
 
-    <!-- LOCATION -->
+      <!-- LOCATION -->
 
-    <q-card v-if="mode === 'location'" class="eventdate-container edit-card">
-      <q-card-section class="flex column no-wrap top-section">
-        <div class="flex row wrap items-start no-wrap justify-start grow">
-          <div class="flex column">
-            <div class="text-h6 card-title q-pr-md">
-              {{ $t('edit_event_date.location') }}
-            </div>
-            <div class="t2 q-mt-sm">
-              {{ $t('edit_event_date.location_msg') }}
-            </div>
-          </div>
-          <q-btn icon="close" class="q-ml-md" flat round dense v-close-popup />
-        </div>
+      <div v-if="mode === 'location'">
+        <div ref="placesDiv" />
         <GoogleLocationComponent
           class="q-mt-md"
           @location="location = $event"
           :locationProp="location"
         />
-      </q-card-section>
-      <q-card-section>
-        <div class="flex grow justify-end">
-          <q-btn
-            icon="las la-undo"
-            color="primary"
-            no-caps
-            @click="loadLocation"
-            v-close-popup
-            :label="$t('general.undo')"
-            v-if="locationHasChanged"
-          />
-          <q-btn
-            icon="las la-cloud-upload-alt"
-            color="primary"
-            class="q-ml-sm"
-            no-caps
-            @click="updateEd"
-            v-close-popup
-            :label="$t('general.save_changes')"
-            :disable="!locationHasChanged"
-          />
-        </div>
-        <div ref="placesDiv" />
-      </q-card-section>
-    </q-card>
+      </div>
 
-    <!-- EVENT CANCELLED -->
-    <q-card style="width: 300px" class="edit-card" v-if="mode === 'cancel'">
-      <q-card-section v-if="ed.cancelled">
-        <div class="text-h6">
-          Mark this date as 'happening'
-          <p />
-        </div>
-        <span> Only do this if this event date is no longer cancelled. </span>
-      </q-card-section>
-      <q-card-section v-else>
-        <div class="text-h6">
-          Mark this date as cancelled
-          <p />
-        </div>
-        <span v-if="!currentUserIsHost">
-          Please respect our data, only do this if this date has really been
-          cancelled.
-        </span>
-        <span v-else>
-          Only do this if this date has been cancelled. Your event will still
-          show up on PartyMap.
-        </span>
-      </q-card-section>
-      <!--
-      <q-card-section class="q-pt-none">
-        Tell everyone why this event was cancelled:
-        <q-input
-          outlined
-          autogrow
-          :input-style="{ 'min-height': '100px' }"
-          color="bg-grey-7"
-          v-model="description"
-          :label="$t('add.description')"
-          style="padding-bottom: 0px;"
-        />
-      </q-card-section>
-    -->
-      <q-card-actions align="right" class="bg-white text-teal">
+      <!-- EVENT CANCELLED -->
+      <q-card-actions
+        align="right"
+        class="bg-white text-teal"
+        v-if="mode === 'cancel'"
+      >
         <q-btn flat color="primary" label="Cancel" v-close-popup />
         <q-btn
           color="primary"
@@ -343,64 +108,54 @@
           v-close-popup
         />
       </q-card-actions>
-    </q-card>
 
-    <!-- EVENT UNCANCELLED -->
+      <!-- DELETE ED -->
 
-    <q-card style="width: 300px" v-if="mode === 'uncancel'" class="edit-card">
-      <q-card-section>
-        <div class="text-h6">
-          Mark this date as happening
-          <p />
-        </div>
-      </q-card-section>
-
-      <q-card-section class="q-pt-none">
-        This date was previously marked as cancelled. Are you really sure you
-        want to mark is as 'happening'?
-      </q-card-section>
-
-      <q-card-actions align="right" class="bg-white text-teal">
-        <q-btn flat color="primary" label="Cancel" v-close-popup />
-        <q-btn
-          color="primary"
-          label="Continue"
-          v-on:click="toggleCancelEvent"
-          v-close-popup
-        />
-      </q-card-actions>
-    </q-card>
-
-    <!-- DELETE ED -->
-
-    <q-card style="width: 300px" v-if="mode === 'delete'" class="edit-card">
-      <q-card-section>
-        <div class="text-h6">Delete event date</div>
-      </q-card-section>
-
-      <q-card-section class="q-pt-none">
+      <div v-if="mode === 'delete'">
         You are about to delete the event date
         <p />
         <b>{{ localDateTimeLong(ed.start, ed.tz) }}</b>
         <p />
         Are you sure you want to continue?
-      </q-card-section>
 
-      <q-card-actions align="right">
-        <q-btn flat color="primary" label="Cancel" v-close-popup />
+        <q-card-actions align="right">
+          <q-btn flat color="primary" label="Cancel" v-close-popup />
+          <q-btn
+            color="primary"
+            label="Continue"
+            v-on:click="deleteEd"
+            v-close-popup
+          />
+        </q-card-actions>
+      </div>
+    </q-card-section>
+
+    <q-card-section
+      v-if="mode !== 'delete' && mode !== 'cancel'"
+      class="dialog-card-footer"
+    >
+      <div class="flex row justify-end">
         <q-btn
+          flat
+          color="secondary"
+          label="Undo"
+          @click="undo()"
+          :disabled="this.disableSaveButton"
+        />
+        <q-btn
+          :disabled="disableSaveButton"
           color="primary"
-          label="Continue"
-          v-on:click="deleteEd"
+          label="Save changes"
+          v-on:click="updateEd()"
           v-close-popup
         />
-      </q-card-actions>
-    </q-card>
+      </div>
+    </q-card-section>
 
     <q-inner-loading :showing="loading">
       <q-spinner-ios :color="$q.dark.isActive ? 'white' : 'black'" size="2em" />
     </q-inner-loading>
-  </div>
+  </q-card>
 </template>
 
 <script>
@@ -447,6 +202,44 @@ export default {
       location: null,
       locationUnchanged: null,
       loading: false,
+      modeText: {
+        url: {
+          title: this.$t('edit_event_date.external_url'),
+          message: this.$t('edit_event_date.external_url_msg'),
+        },
+        ticketUrl: {
+          title: 'Ticket URL',
+          message: 'A link for users to directly access tickets for this event',
+        },
+        size: {
+          title: 'Size',
+          message: this.$t('edit_event_date.size_msg'),
+        },
+        description: {
+          title: 'Description',
+          message:
+            "A detailed description about what's happening on this date. If you are not the host and you did not write this, please provide a source.",
+        },
+        date: {
+          title: this.$t('edit_event_date.date'),
+          message: this.$t('edit_event_date.date_msg'),
+        },
+        location: {
+          title: this.$t('edit_event_date.location'),
+          message: this.$t('edit_event_date.location_msg'),
+        },
+        cancel: {
+          title: this.ed.cancelled
+            ? 'Mark this date as happening'
+            : 'Mark this date as cancelled',
+          message: this.ed.cancelled
+            ? 'This date was previously marked as cancelled. Are you really sure you want to mark is as happening?'
+            : 'Only do this if this date has been cancelled. The event will still show up on PartyMap. Are you sure you want to mark the event as cancelled?',
+        },
+        delete: {
+          title: 'Delete Event Date',
+        },
+      },
     };
   },
   methods: {
@@ -455,6 +248,10 @@ export default {
       'updateEventDate',
       'suggestEventDateEdit',
     ]),
+    toggleCancelEvent() {
+      this.cancelled = !this.ed.cancelled;
+      this.updateEd();
+    },
     async deleteEd() {
       if (this.currentUserCanEdit) {
         const progressDialog = this.$q.dialog({
@@ -500,10 +297,6 @@ export default {
             });
           });
       }
-    },
-    toggleCancelEvent() {
-      this.cancelled = !this.cancelled;
-      this.updateEd();
     },
     async updateEd() {
       this.loading = true;
@@ -624,6 +417,22 @@ export default {
       this.loadDateTime();
       // load revisions
     },
+    undo() {
+      if (this.mode == 'url') {
+        this.url = this.ed.url;
+      } else if (this.mode === 'ticketUrl') {
+        this.ticketUrl = this.ed.ticketUrl;
+      } else if (this.mode === 'size') {
+        this.size = this.ed.size;
+      } else if (this.mode === 'description') {
+        this.description = this.ed.description;
+        this.descriptionAttribute = this.ed.descriptionAttribute;
+      } else if (this.mode === 'date') {
+        this.loadDateTime();
+      } else if (this.mode === 'location') {
+        this.loadLocation();
+      }
+    },
   },
   watch: {
     ed: {
@@ -633,6 +442,21 @@ export default {
     },
   },
   computed: {
+    disableSaveButton() {
+      if (this.mode === 'url') {
+        return this.url == this.ed.url;
+      } else if (this.mode === 'ticketUrl') {
+        return this.ticketUrl == this.ed.ticketUrl;
+      } else if (this.mode === 'size') {
+        return this.size === this.ed.size;
+      } else if (this.mode === 'description') {
+        return this.description === this.ed.description;
+      } else if (this.mode === 'date') {
+        return !this.dateTimeHasChanged;
+      } else if (this.mode === 'location') {
+        return !this.locationHasChanged;
+      } else return true;
+    },
     ...mapState(useEventStore, [
       'event',
       'currentUserCanEdit',

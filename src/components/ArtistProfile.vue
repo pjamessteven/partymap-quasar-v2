@@ -8,8 +8,8 @@
       },
     }"
   >
-    <q-card class="shadow-lg card flex column">
-      <InnerLoading v-if="loading" :solid="true" />
+    <q-card class="shadow-lg card flex column" style="min-height: 128px">
+      <InnerLoading v-if="loading" :solid="false" />
 
       <div
         v-if="artist"
@@ -17,7 +17,7 @@
       >
         <div class="flex row items-start grow">
           <div
-            class="image-container flex justify-center items-start shadow-2xl"
+            class="image-container flex justify-center items-center shadow-2xl"
           >
             <div
               class="image-container-background"
@@ -94,7 +94,9 @@
         </div>
 
         <div class="flex items-center justify-center">
-          <q-icon name="mdi-chevron-right" size="2em"></q-icon>
+          <span class="q-mr-sm inter bold" v-if="$q.screen.gt.xs"
+            >Full Profile</span
+          ><q-icon name="mdi-chevron-right" size="2em"></q-icon>
         </div>
       </div>
       <div class="card-background">
@@ -270,9 +272,10 @@ export default {
 <style lang="scss">
 .body--dark {
   .image-container {
-    background: $bi-3;
+    background: $bi-4;
   }
   .card {
+    background: $bi-3;
     &:hover {
       .card-background {
         opacity: 0.2;

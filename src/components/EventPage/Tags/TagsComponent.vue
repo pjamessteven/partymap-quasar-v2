@@ -31,8 +31,8 @@
 
     <q-dialog
       v-model="showAddTagDialog"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <q-card class="dialog-card event-page-editing-dialog">
         <q-card-section class="row items-center q-pb-none">

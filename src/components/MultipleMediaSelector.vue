@@ -48,7 +48,7 @@
         </div>
       </div>
     </div>
-    <div class="bottom-buttons flex row grow justify-start">
+    <div class="bottom-buttons flex row grow justify-end q-mt-md">
       <q-btn
         :label="$t('media_upload.add_media')"
         v-on:click="openSelectDialog()"
@@ -142,7 +142,7 @@ export default {
   }
 
   .bottom-buttons {
-    background: $bi-2;
+    //background: $bi-2;
   }
 }
 

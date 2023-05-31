@@ -16,14 +16,12 @@
           class=""
           outlined
           filled
-          square
           v-bind:label="$t('auth.identifier')"
           v-model="identifier"
           @keyup.enter="_login"
         />
         <q-input
           outlined
-          square
           filled
           class="q-mt-md"
           type="password"
@@ -184,7 +182,7 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      this.$refs.login.focus();
+      //this.$refs.login.focus();
     }, 300);
   },
 };

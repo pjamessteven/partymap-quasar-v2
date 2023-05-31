@@ -21,7 +21,7 @@
             :class="{
               'text-white': logoColor === 'light',
             }"
-            >partymap &nbsp;</i
+            >partymap&nbsp;</i
           >
         </div>
       </div>
@@ -42,7 +42,7 @@ export default {
   },
   methods: {},
   computed: {
-    ...mapState(useMainStore, ['showSearchBox']),
+    ...mapState(useMainStore, ['showSearchBox', 'sidebarPanel']),
 
     logoColor() {
       if (

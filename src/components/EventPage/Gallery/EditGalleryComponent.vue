@@ -1,22 +1,20 @@
 <template>
-  <q-card class="edit-gallery" :class="editing ? 'editing' : ''">
+  <q-card class="edit-gallery dialog-card" :class="editing ? 'editing' : ''">
     <q-inner-loading :showing="loading">
       <q-spinner-puff size="300px" color="primary" />
     </q-inner-loading>
     <!-- list view (editing mode) -->
-    <div class="flex column album-list">
-      <div class="flex row no-wrap items-center q-ma-lg">
-        <div class="flex column">
-          <div class="text-h6 card-title q-pr-md">
-            {{ $t('gallery.edit_gallery') }}
-          </div>
-          <div class="q-pr-md t2">
-            {{ $t('gallery.edit_gallery_message') }}
-          </div>
-        </div>
+    <q-card-section class="dialog-card-header">
+      <div class="text-h6 inter bolder card-title q-pr-md">
+        {{ $t('gallery.edit_gallery') }}
       </div>
+    </q-card-section>
+    <div class="flex column album-list">
       <div class="main-content flex column q-pa-md">
-        <div class="flex row justify-end">
+        <div class="q-pr-md t2">
+          {{ $t('gallery.edit_gallery_message') }}
+        </div>
+        <div class="flex row justify-end q-my-md">
           <q-btn
             flat
             class="q-mr-sm"
@@ -46,6 +44,9 @@
           />
         </transition-group>
       </div>
+      <q-card-section class="flex justify-end">
+        <q-btn label="done" color="primary" />
+      </q-card-section>
     </div>
     <q-dialog v-model="showUploadDialog">
       <q-card class="upload-dialog q-pa-md">
@@ -144,7 +145,6 @@ export default {
   .edit-gallery {
     background: $bi-1;
     .main-content {
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
       background: $bi-2;
     }
   }
@@ -155,9 +155,6 @@ export default {
 .body--light {
   .edit-gallery {
     background: $b-1;
-    .main-content {
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
-    }
   }
   .upload-dialog {
     background: $b-1;

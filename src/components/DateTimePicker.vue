@@ -9,6 +9,7 @@
         :model-config="modelConfig"
         keepVisibleOnInput
         :is-inline="inlineCalendar"
+        :min-date="new Date()"
       />
       <div class="flex row wrap q-gutter-md q-mt-sm justify-start">
         <div class="time-box flex column q-pa-sm">
@@ -240,7 +241,7 @@ export default {
   }
 }
 .time-box {
-  border-radius: 0px;
+  border-radius: 9px;
   min-width: 220px;
   .time-select {
     min-width: 90px;
@@ -251,7 +252,7 @@ export default {
   border-right: none;
   border-left: none;
   border-bottom: none;
-  border-radius: 0px;
+  border-radius: 9px;
   border: none;
 }
 @media only screen and (max-width: 1023px) {

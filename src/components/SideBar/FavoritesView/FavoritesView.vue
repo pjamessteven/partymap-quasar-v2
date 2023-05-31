@@ -165,7 +165,7 @@
                           :showing="showingYouMenu"
                           @hide="() => (showingYouMenu = false)"
                           @show="() => (showingYouMenu = true)"
-                          class="menu-wrapper chicago"
+                          class="menu-wrapper inter bold"
                         >
                           <q-list>
                             <q-item
@@ -288,6 +288,7 @@
                     :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
                     :eventDates="userEventDates"
                     :hasNext="userEventDatesHasNext"
+                    :loading="userEventDatesLoading"
                   />
                 </transition>
                 <transition appear enter-active-class="animated fadeIn slower">
@@ -299,6 +300,7 @@
                     :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
                     :eventDates="userEventDates"
                     :hasNext="userEventDatesHasNext"
+                    :loading="userEventDatesLoading"
                   />
                 </transition>
               </div>

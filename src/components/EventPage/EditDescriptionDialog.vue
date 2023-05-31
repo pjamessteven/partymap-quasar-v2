@@ -1,48 +1,44 @@
 <template>
-  <q-card class="edit-card event-page-editing-dialog">
-    <q-card-section class="flex column no-wrap top-section">
-      <div class="flex items-start no-wrap justify-between grow">
-        <div class="flex column">
-          <div class="text-h6 card-title q-pr-md">
-            {{ $t('description.edit_description') }}
-          </div>
-          <div class="t2 q-mb-md q-mt-sm">
-            <div class="t2">
-              {{ $t('description.keep_it_short') }}
-              <br />
-              {{ $t('description.put_more_details_in_event_date') }}
-            </div>
-          </div>
-        </div>
+  <q-card class="edit-card dialog-card">
+    <q-card-section class="flex column no-wrap dialog-card-header">
+      <div class="flex items-center no-wrap justify-between grow">
+        <div class="text-h6 card-title q-pr-md">Update Event Summary</div>
         <q-btn icon="close" class="q-ml-md" flat round dense v-close-popup />
+      </div>
+    </q-card-section>
+    <q-card-section class="dialog-card-content">
+      <div class="t2 q-mb-md">
+        <div class="t2">
+          {{ $t('description.keep_it_short') }}
+          {{ $t('description.put_more_details_in_event_date') }}
+          {{ $t('description.attribute_msg_long') }}
+        </div>
       </div>
       <q-input
         class="border-radius"
         counter
-        square
         maxlength="400"
         outlined
         autogrow
         :input-style="{ 'min-height': '100px' }"
         v-model="description"
         :rules="[(val) => !!val]"
+        label="Event Summary"
       />
       <!-- ATRRIBUTE -->
       <q-input
         v-if="!currentUserIsHost"
-        square
-        dense
         outlined
         maxlength="200"
         class="q-mt-sm"
         :input-style="{ 'min-height': '50px' }"
         color="bg-grey-7"
         v-model="attribute"
-        :label="$t('description.attribute_msg_long')"
+        label="Source"
       />
     </q-card-section>
 
-    <q-card-section class="q-pt-md flex justify-end">
+    <q-card-section class="q-pt-md flex justify-end dialog-card-footer">
       <q-btn
         color="primary"
         :label="$t('description.update')"

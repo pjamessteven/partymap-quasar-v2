@@ -66,6 +66,8 @@ export const useEventStore = defineStore('event', {
       else throw new Error('No current event.');
     },
     async loadEvent(id: number) {
+      const authStore = useAuthStore();
+
       try {
         this.event = null;
         this.loadingEvent = true;
@@ -77,6 +79,9 @@ export const useEventStore = defineStore('event', {
           );
           this.selectedEventDate = this.event?.next_date;
           this.selectedEventDateIndex = index;
+          if (authStore.currentUser && this.selectedEventDate)
+            // bit of a hack, reload date to get going/interested status
+            this.loadEventDate(this.selectedEventDate.id + '');
         } else if (
           this.event?.event_dates &&
           this.event?.event_dates.length > 0
@@ -84,7 +89,7 @@ export const useEventStore = defineStore('event', {
           // no upcoming event, set current event to be the most recent event
           const lastIndex = this.event.event_dates.length - 1;
           this.selectedEventDateIndex = lastIndex;
-          this.selectedEventDate = this.event?.event_dates?.[lastIndex];
+          this.loadEventDate(this.event?.event_dates?.[lastIndex]?.id + '');
         }
         return response;
       } catch (error) {
@@ -120,12 +125,12 @@ export const useEventStore = defineStore('event', {
       const index = this.event?.event_dates?.findIndex(
         (x) => x.id + '' === id + ''
       );
-      if (index && index > -1) {
+      if (index !== undefined && index > -1) {
         this.selectedEventDateIndex = index;
       }
       try {
         const response = await getEventDateRequest(id);
-
+        console.log(index, this.selectedEventDateIndex);
         if (index === this.selectedEventDateIndex) {
           // check that this is the most recent request before setting state
           this.selectedEventDate = response.data;
@@ -139,8 +144,15 @@ export const useEventStore = defineStore('event', {
     },
     async deleteEventDate(id: string) {
       try {
+        let index = this.selectedEventDateIndex;
+        if (this.event && index === this.event?.event_dates?.length - 1) {
+          // if we're deleting the last event date, select the previous one after deletion
+          index -= 1;
+        }
+
         const response = await deleteEventDateRequest(id);
         this.event = response.data;
+        this.loadEventDate(this.event?.event_dates?.[index]?.id + '');
         return response;
       } catch (e) {
         throw e;
@@ -252,21 +264,33 @@ export const useEventStore = defineStore('event', {
       }
     },
 
-    async toggleInterested(eventDateId: string) {
+    async toggleInterested() {
       try {
-        if (this.selectedEventDate)
+        if (this.selectedEventDate) {
+          if (this.selectedEventDate.user_going)
+            this.selectedEventDate.user_going = false;
           this.selectedEventDate.user_interested = true;
-        await toggleEventDateInterestedRequest(eventDateId);
+          await toggleEventDateInterestedRequest(this.selectedEventDate.id);
+        } else {
+          throw new Error('toggleInterested: No event date selected');
+        }
       } catch (e) {
         if (this.selectedEventDate)
           this.selectedEventDate.user_interested = false;
         throw e;
       }
     },
-    async toggleGoing(eventDateId: string) {
+    async toggleGoing() {
       try {
-        if (this.selectedEventDate) this.selectedEventDate.user_going = true;
-        await toggleEventDateGoingRequest(eventDateId);
+        if (this.selectedEventDate) {
+          if (this.selectedEventDate.user_interested)
+            this.selectedEventDate.user_interested = false;
+
+          this.selectedEventDate.user_going = true;
+          await toggleEventDateGoingRequest(this.selectedEventDate.id);
+        } else {
+          throw new Error('toggleGoing: No event date selected');
+        }
       } catch (e) {
         if (this.selectedEventDate) this.selectedEventDate.user_going = false;
         throw e;

@@ -36,13 +36,16 @@
             selectedEventDate.artists && selectedEventDate.artists.length > 0
           "
         >
-          <div class="flex q-ml- q-mt-sm" v-if="stages.length > 1">
+          <div
+            class="flex q-mb-md q-mt-sm artist-tabs"
+            v-if="stages.length > 1"
+          >
             <q-tabs
               v-model="selectedStage"
               inline-label
               shrink
               :active-color="$q.dark.isActive ? 'grey-4' : 'grey-9'"
-              class="t3 q-mb-md"
+              class="t3"
               outside-arrows
               mobile-arrows
             >
@@ -94,8 +97,8 @@
 
     <q-dialog
       v-model="showEditingDialog"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <SelectArtistsDialog
         @hideDialog="hideDialog()"
@@ -230,4 +233,18 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.artist-tabs {
+  width: 100%;
+}
+.body--light {
+  .artist-tabs {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  }
+}
+.body--dark {
+  .artist-tabs {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+}
+</style>

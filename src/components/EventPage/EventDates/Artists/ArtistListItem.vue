@@ -171,8 +171,8 @@
 
     <q-dialog
       v-model="showDateTimeDialog"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <q-card class="q-pa-md flex column">
         <DateTimePicker

@@ -1,114 +1,117 @@
 <template>
-  <q-card>
+  <q-card class="dialog-card">
     <q-card-section class="flex items-center dialog-card-header">
       <div class="text-h6">{{ $t('event_dates.set_up_recurring_dates') }}</div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>
-
-    <q-card-section class="flex column no-wrap q-mt-sm">
-      <div class="flex row wrap items-baseline">
-        <q-icon left size="1em" name="las la-calendar-day" />
-        <div class="flex column">
-          <div class="card-title q-pr-md">
-            {{ $t('add_event_date.date_time_required') }}
+    <div class="dialog-card-content">
+      <q-card-section class="flex column no-wrap q-mt-sm">
+        <div class="flex row wrap items-baseline">
+          <q-icon left size="1em" name="las la-calendar-day" />
+          <div class="flex column">
+            <div class="card-title q-pr-md">
+              {{ $t('add_event_date.date_time_required') }}
+            </div>
+            <p class="t3">
+              {{ $t('event_dates.select_date_time_of_next_event') }}
+            </p>
           </div>
-          <p class="t3">
-            {{ $t('event_dates.select_date_time_of_next_event') }}
-          </p>
         </div>
-      </div>
-      <DateTimePicker
-        @dateRange="update.date_time = $event"
-        :inlineCalendar="true"
-        class="q-ml-lg"
-        :isRange="true"
-      />
-    </q-card-section>
+        <DateTimePicker
+          @dateRange="update.date_time = $event"
+          :inlineCalendar="true"
+          class="q-ml-lg"
+          :isRange="true"
+        />
+      </q-card-section>
 
-    <q-card-section class="flex column justify-between no-wrap">
-      <div class="flex row no-wrap items-baseline">
-        <q-icon left size="1em" name="las la-redo-alt" />
-        <div class="flex column">
-          <div class="card-title q-pr-md">
-            {{ $t('add.recurrence') }}
+      <q-card-section class="flex column justify-between no-wrap">
+        <div class="flex row no-wrap items-baseline">
+          <q-icon left size="1em" name="las la-redo-alt" />
+          <div class="flex column">
+            <div class="card-title q-pr-md">
+              {{ $t('add.recurrence') }}
+            </div>
+            <p class="t3">
+              {{ $t('add.recurrence_caption') }}
+            </p>
           </div>
-          <p class="t3">
-            {{ $t('add.recurrence_caption') }}
-          </p>
         </div>
-      </div>
-      <RrulePicker
-        v-on:updateRrule="update.rrule = $event"
-        :dateTime="update.date_time"
-        :disableOneOff="true"
-        class="q-ml-lg"
-      />
-    </q-card-section>
+        <RrulePicker
+          v-on:updateRrule="update.rrule = $event"
+          :dateTime="update.date_time"
+          :disableOneOff="true"
+          class="q-ml-lg"
+        />
+      </q-card-section>
 
-    <!--LOCATION-->
+      <!--LOCATION-->
 
-    <q-card-section class="flex column justify-between no-wrap">
-      <div class="flex row no-wrap items-baseline">
-        <q-icon left size="1em" name="las la-map-marker" />
-        <div class="flex column">
-          <div class="card-title q-pr-md">
-            {{ $t('add_event_date.location_required') }}
+      <q-card-section class="flex column justify-between no-wrap">
+        <div class="flex row no-wrap items-baseline">
+          <q-icon left size="1em" name="las la-map-marker" />
+          <div class="flex column">
+            <div class="card-title q-pr-md">
+              {{ $t('add_event_date.location_required') }}
+            </div>
+            <p class="t3">
+              {{ $t('add.location_caption') }}
+            </p>
           </div>
-          <p class="t3">
-            {{ $t('add.location_caption') }}
-          </p>
         </div>
-      </div>
-      <GoogleLocationComponent
-        class="q-ml-lg"
-        v-on:location="update.location = $event"
-        :location="update.location"
-      />
-    </q-card-section>
+        <GoogleLocationComponent
+          class="q-ml-lg"
+          v-on:location="update.location = $event"
+          :location="update.location"
+        />
+      </q-card-section>
 
-    <!-- URL -->
+      <!-- URL -->
 
-    <q-card-section class="flex column no-wrap">
-      <div class="flex row no-wrap items-baseline">
-        <q-icon left size="1em" name="las la-external-link-alt" />
-        <div class="flex column">
-          <div class="card-title q-pr-md">
-            {{ $t('add.url') }}
+      <q-card-section class="flex column no-wrap">
+        <div class="flex row no-wrap items-baseline">
+          <q-icon left size="1em" name="las la-external-link-alt" />
+          <div class="flex column">
+            <div class="card-title q-pr-md">
+              {{ $t('add.url') }}
+            </div>
+            <p class="t3">
+              {{ $t('add.url_msg') }}
+            </p>
           </div>
-          <p class="t3">
-            {{ $t('add.url_msg') }}
-          </p>
         </div>
-      </div>
-      <q-input
-        square
-        outlined
-        autogrow
-        class="q-ml-lg"
-        color="bg-grey-7"
-        v-model="update.url"
-        :label="$t('add.url')"
-      />
-    </q-card-section>
+        <q-input
+          outlined
+          autogrow
+          class="q-ml-lg"
+          color="bg-grey-7"
+          v-model="update.url"
+          :label="$t('add.url')"
+        />
+      </q-card-section>
 
-    <q-card-section class="flex row justify-end no-wrap">
-      <q-btn
-        @click="updateEvent()"
-        color="primary"
-        :label="'Finish'"
-        :disable="
-          !update.date_time ||
-          (update.date_time &&
-            update.date_time.start &&
-            !update.date_time.end) ||
-          !update.location
-        "
-      />
-    </q-card-section>
-    <q-inner-loading :showing="loading">
-      <q-spinner-ios :color="$q.dark.isActive ? 'white' : 'black'" size="2em" />
-    </q-inner-loading>
+      <q-card-section class="flex row justify-end no-wrap">
+        <q-btn
+          @click="updateEd()"
+          color="primary"
+          :label="'Finish'"
+          :disable="
+            !update.date_time ||
+            (update.date_time &&
+              update.date_time.start &&
+              !update.date_time.end) ||
+            !update.location
+          "
+        />
+      </q-card-section>
+      <q-inner-loading :showing="loading">
+        <q-spinner-ios
+          :color="$q.dark.isActive ? 'white' : 'black'"
+          size="2em"
+        />
+      </q-inner-loading>
+    </div>
   </q-card>
 </template>
 
@@ -162,7 +165,7 @@ export default {
   },
   methods: {
     ...mapActions(useEventStore, ['updateEvent']),
-    async updateEvent() {
+    async updateEd() {
       if (this.currentUserCanEdit) {
         const progressDialog = this.$q.dialog({
           title: this.$t('event.updating_event'),
@@ -248,12 +251,16 @@ export default {
       'event',
       'currentUserCanEdit',
       'currentUserIsHost',
+      'selectedEventDate',
     ]),
     ...mapState(useAuthStore, ['currentUser']),
   },
 
   created() {
     this.recurringPattern = common.recurringPatternKebab;
+  },
+  mounted() {
+    this.update.url = this.selectedEventDate?.url;
   },
 };
 </script>

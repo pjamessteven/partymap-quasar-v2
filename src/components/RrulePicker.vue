@@ -13,7 +13,6 @@
         option-label="desc"
         map-options
         emit-value
-        square
         outlined
         class="flex grow"
       />
@@ -26,7 +25,6 @@
         option-label="desc"
         map-options
         emit-value
-        square
         class="q-ml-md grow"
         outlined
       />
@@ -352,8 +350,8 @@ export default {
 .body--light {
   .weekly-rrule-text {
     border: 1px solid rgba(0, 0, 0, 0.05);
-    border-radius: 0px;
     background: $b-2;
+    border-radius: 4px;
   }
 }
 </style>

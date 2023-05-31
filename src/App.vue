@@ -111,6 +111,10 @@ body {
     top: 0px;
     z-index: 100;
     padding: 18px 18px;
+    font-weight: 800 !important;
+    .text-h6 {
+      font-weight: 800 !important;
+    }
   }
   .dialog-card-content {
     overflow-y: auto;
@@ -200,9 +204,6 @@ body {
   }
 
   .header {
-    background: white;
-  }
-  .footer {
     background: white;
   }
 
@@ -388,9 +389,6 @@ body {
   }
 
   .header {
-    background: black;
-  }
-  .footer {
     background: black;
   }
 
@@ -628,6 +626,7 @@ body {
 .q-btn {
   font-size: 14px;
   border-radius: 4px !important;
+  font-weight: 500;
   .q-btn__content {
     flex-wrap: nowrap;
   }
@@ -767,7 +766,7 @@ body {
 
 .vc-container {
   //font-family: chicagoflf !important;
-
+  font-family: Inter;
   .on-right {
     // override quasar variable that causes ui artifacts
     margin-left: unset !important;

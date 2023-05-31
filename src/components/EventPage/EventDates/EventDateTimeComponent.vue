@@ -90,8 +90,8 @@
     <q-dialog
       v-model="showEditDialog"
       v-if="editing && selectedEventDate"
-      transition-show="fade"
-      transition-hide="none"
+      transition-show="jump-up"
+      transition-hide="jump-down"
     >
       <EditEventDateDialog :ed="selectedEventDate" mode="date" />
     </q-dialog>
