@@ -76,7 +76,7 @@ export default {
   width: 400px;
 }
 
-@media only (max-width: 1023px) {
+@media only screen and (max-width: 1023px) {
   .form {
     width: 100%;
   }
