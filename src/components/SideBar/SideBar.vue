@@ -48,8 +48,6 @@
             keep-alive
             v-model="sidebarPanel"
             :animated="false"
-            :transition-prev="'jump-right'"
-            :transition-next="'jump-left'"
             class="panels"
             style="height: 100%"
             ref="panels"

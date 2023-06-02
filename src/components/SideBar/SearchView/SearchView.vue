@@ -27,7 +27,7 @@
           rounded
           dense
           outlined
-          class="searchbar-input grow chicago q-mt-sm"
+          class="searchbar-input grow inter bold q-mt-sm"
           v-model="query"
           @keyup.enter="() => $refs.search.blur()"
         >

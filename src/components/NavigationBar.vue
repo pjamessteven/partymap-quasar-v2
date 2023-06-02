@@ -3,11 +3,45 @@
     class="navigation-bar flex row no-wrap"
     :class="$q.screen.gt.sm ? 'justify-between' : ''"
   >
-    <div class="flex items-center">
+    <div class="flex items-center q-pl-lg" v-if="$q.screen.gt.xs">
       <div
-        class="q-py-lg q-pl-lg q-pr-sm inter bolder text-h5"
+        class="flex column justify-center items-center"
+        v-if="sidebarPanel === 'nearby'"
+      >
+        <q-btn
+          flat
+          style="margin-left: -8px"
+          class="q-px-sm q-mr-sm"
+          @click.stop="() => getFineLocation()"
+        >
+          <template v-slot:default>
+            <div v-if="!userLocationLoading" class="flex">
+              <q-icon name="mdi-crosshairs-gps" class="" v-if="fineLocation" />
+              <q-icon name="mdi-crosshairs" class="" v-else />
+            </div>
+            <div v-else style="position: relative" class="flex">
+              <q-icon style="z-index: 1" name="mdi-crosshairs" />
+              <q-icon
+                style="z-index: 2; left: 0px"
+                class="animated infinite flash slowest absolute"
+                name="mdi-crosshairs-gps"
+              />
+            </div>
+            <q-tooltip
+              class=""
+              :content-class="
+                $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
+              "
+              :offset="[10, 10]"
+            >
+              {{ $t('landing_page.improve_location') }}
+            </q-tooltip>
+          </template>
+        </q-btn>
+      </div>
+      <div
+        class="q-py-lg q-pr-sm inter bolder text-h5"
         style="text-transform: capitalize"
-        v-if="$q.screen.gt.xs"
       >
         {{ computedPanelName }}
       </div>
@@ -38,31 +72,14 @@
         name="nearby"
         content-class="tab"
         :ripple="false"
+        :icon="sidebarPanel === 'nearby' ? 'mdi-home' : 'mdi-home-outline'"
         @click="
           () => {
-            getFineLocation();
             backToExplore();
           }
         "
-      >
-        <template v-slot>
-          <div class="flex column justify-center items-center">
-            <div v-if="!userLocationLoading" class="q-tab__icon flex">
-              <q-icon name="mdi-crosshairs-gps" class="" v-if="fineLocation" />
-              <q-icon name="mdi-crosshairs" class="" v-else />
-            </div>
-            <div v-else style="position: relative" class="q-tab__icon flex">
-              <q-icon style="z-index: 1" name="mdi-crosshairs" />
-              <q-icon
-                style="z-index: 2; left: 0px"
-                class="animated infinite flash slowest absolute"
-                name="mdi-crosshairs-gps"
-              />
-            </div>
-            <div v-if="$q.screen.lt.sm" class="q-tab__label">Nearby</div>
-          </div>
-        </template>
-      </q-tab>
+      />
+
       <q-tab
         key="2"
         name="explore"
@@ -114,7 +131,10 @@ export default {
   },
   methods: {
     ...mapActions(useMainStore, ['loadIpInfo', 'getFineLocation']),
-
+    getloc() {
+      console.log('FICl');
+      this.getFineLocation();
+    },
     // go back to explore
     // if the user is on an event or artist page
     backToExplore() {

@@ -51,14 +51,16 @@
                 </div>
 
                 <div
-                  class="flex row justify-center items-center q-py-xl q-mt-xl"
+                  class="flex row justify-center items-center q-py-xl"
                   style="height: 100%; width: 100%; position: absolute"
                   v-if="loadingEverything"
                 >
+                  <!--
                   <q-spinner-ios
                     color="$a.dark.isActive ? 'white' : 'black'"
                     size="2em"
                   />
+                  --><InnerLoading />
                 </div>
                 <div class="content" v-else>
                   <!-- tags -->
@@ -357,7 +359,7 @@ import { useNearbyStore } from 'src/stores/nearby';
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
 import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
-
+import InnerLoading from 'src/components/InnerLoading.vue';
 export default {
   name: 'LandingPage',
   meta() {
@@ -385,6 +387,7 @@ export default {
     EventDateList,
     EventDatePosterList,
     EventDateViewOptions,
+    InnerLoading,
   },
   data() {
     return {

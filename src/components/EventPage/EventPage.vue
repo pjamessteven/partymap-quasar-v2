@@ -39,9 +39,12 @@
             >
               <div class="flex column">
                 <div class="header flex column">
+                  <!--
                   <q-inner-loading :showing="loading">
                     <q-spinner-ios :color="'white'" size="2em" />
                   </q-inner-loading>
+                  -->
+                  <InnerLoading v-if="loading" :solid="false" />
 
                   <FeaturedMediaBackground
                     v-if="
@@ -262,7 +265,7 @@
                             :label="
                               $q.screen.gt.xs ? 'Add to calendar' : undefined
                             "
-                            icon="mdi-calendar-plus-outline"
+                            icon="las la-calendar-plus"
                             no-caps
                             @click="getIcalFile"
                           ></q-btn>
@@ -602,6 +605,7 @@ import ReviewsComponent from './Reviews/ReviewComponent.vue';
 import MobileSwipeHandle from '../MobileSwipeHandle.vue';
 import InterestedComponent from './InterestedComponent.vue';
 import SuggestionsDialog from './Suggestions/SuggestionsDialog.vue';
+import InnerLoading from 'components/InnerLoading.vue';
 import WheelIndicator from 'wheel-indicator';
 
 export default {
@@ -642,6 +646,7 @@ export default {
     MobileSwipeHandle,
     InterestedComponent,
     SuggestionsDialog,
+    InnerLoading,
   },
   props: {
     id: {

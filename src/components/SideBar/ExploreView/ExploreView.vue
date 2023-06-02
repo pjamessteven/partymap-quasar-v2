@@ -153,10 +153,13 @@
         class="event-date-center flex grow justify-center"
         style="height: 100%; position: absolute; width: 100%; z-index: 500"
       >
-        <q-spinner-ios
-          :thickness="1"
-          :color="$q.dark.isActive ? 'white' : 'black'"
-          size="2em"
+        <q-linear-progress
+          class="q-mt-lg"
+          indeterminate
+          size="2px"
+          color="grey-7"
+          rounded
+          style="max-width: 200px"
         />
       </div>
     </div>

@@ -7,7 +7,16 @@
       class="inner-loading flex justify-center items-center"
       :class="solid ? 'solid' : ''"
     >
+      <!--
       <q-spinner-ios color="$a.dark.isActive ? 'white' : 'black'" size="2em" />
+      -->
+      <q-linear-progress
+        indeterminate
+        size="2px"
+        color="grey-7"
+        rounded
+        style="max-width: 200px"
+      />
     </div>
   </transition>
 </template>
@@ -45,8 +54,6 @@ export default {
   }
 }
 .inner-loading {
-  backdrop-filter: blur(20px);
-
   z-index: 2000;
   position: absolute;
   top: 0px;
