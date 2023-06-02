@@ -1,20 +1,20 @@
 <template>
-  <q-card class="suggestions-dialog">
+  <q-card class="suggestions-dialog dialog-card">
     <q-card-section class="row items-start no-wrap dialog-card-header">
       <div class="flex column">
         <div class="text-h6">{{ $t('suggestions.improve_this_page') }}</div>
-        <div class="t2 q-mt-sm">
+        <div class="t2 q-mt-sm" style="font-weight: normal">
           {{ $t('suggestions.improve_this_page_msg') }}
         </div>
       </div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>
-    <q-card-section class="q-px-none q-pt-sm q-pb-sm">
+    <q-card-section class="q-px-none q-pt-sm q-pb-sm dialog-card-content">
       <q-list>
         <div
           class="flex column grow"
-          v-for="(item, index) in qItemSection"
+          v-for="(item, index) in items"
           :key="index"
         >
           <q-item clickable v-ripple @click="editMode = item.mode">
@@ -29,9 +29,11 @@
           </q-item>
         </div>
       </q-list>
+
       <div class="q-px-md">
         <div class="separator q-mt-sm" />
       </div>
+
       <q-list
         v-if="
           event != null &&
@@ -40,66 +42,50 @@
         "
         class="q-mt-sm"
       >
-        <q-item-label header
-          >{{ $t('suggestions.event_dates_msg') }}
-        </q-item-label>
-        <div
-          class="flex column grow"
-          v-for="(ed, index) in eventDates"
-          :key="index"
-        >
-          <q-expansion-item :content-inset-level="1">
-            <template v-slot:header>
-              <div class="flex row grow items-center no-wrap">
-                <q-icon name="las la-calendar" size="1.5em" left />
-                <div class="flex column">
-                  <div>
-                    {{ localDateTimeShort(ed.start_naive, ed.tz) }}
-                  </div>
-                  <div class="">
-                    <span class="t4">
-                      {{ ed.location.description }}
-                    </span>
-                  </div>
+        <q-item-label header>Update the selected date </q-item-label>
+
+        <q-expansion-item :content-inset-level="1">
+          <template v-slot:header>
+            <div class="flex row grow items-center no-wrap">
+              <q-icon name="las la-calendar" size="1.5em" left />
+              <div class="flex column">
+                <div>
+                  {{
+                    localDateTimeShort(
+                      selectedEventDate.start_naive,
+                      selectedEventDate.tz
+                    )
+                  }}
+                </div>
+                <div class="">
+                  <span class="t4">
+                    {{ selectedEventDate?.location?.description }}
+                  </span>
                 </div>
               </div>
-            </template>
-            <q-item
-              clickable
-              v-ripple
-              v-for="(item, index) in eventDate"
-              @click="editEventDate(ed, item.mode)"
-              :key="index"
-            >
-              <q-item-section>
-                <q-item-label>
-                  {{ item.name }}
-                </q-item-label>
-                <q-item-label caption class="t3">
-                  {{ item.description }}
-                </q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-expansion-item>
-        </div>
-        <q-item
-          clickable
-          v-ripple
-          @click="showAllEventDates = true"
-          v-if="!showAllEventDates"
-        >
-          <q-item-section class="flex justify-center items-center t3">
-            <div>
-              {{ $t('suggestions.show_more') }}
             </div>
-            <q-icon name="mdi-chevron-down" />
-          </q-item-section>
-        </q-item>
+          </template>
+          <q-item
+            clickable
+            v-ripple
+            v-for="(item, index) in eventDateFields"
+            @click="dateEditMode = item.mode"
+            :key="index"
+          >
+            <q-item-section>
+              <q-item-label>
+                {{ item.name }}
+              </q-item-label>
+              <q-item-label caption class="t3">
+                {{ item.description }}
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-expansion-item>
       </q-list>
     </q-card-section>
-
     <q-dialog
-      :value="editMode === 'name'"
+      :model-value="editMode === 'name'"
       @hide="editMode = null"
       transition-show="jump-up"
       transition-hide="jump-down"
@@ -108,7 +94,7 @@
     </q-dialog>
 
     <q-dialog
-      :value="editMode === 'main_description'"
+      :model-value="editMode === 'main_description'"
       @hide="editMode = null"
       transition-show="jump-up"
       transition-hide="jump-down"
@@ -117,7 +103,7 @@
     </q-dialog>
 
     <q-dialog
-      :value="editMode === 'tags'"
+      :model-value="editMode === 'tags'"
       @hide="editMode = null"
       transition-show="jump-up"
       transition-hide="jump-down"
@@ -126,7 +112,7 @@
     </q-dialog>
 
     <q-dialog
-      :value="editMode === 'addEventDate'"
+      :model-value="editMode === 'addEventDate'"
       @hide="editMode = null"
       transition-show="jump-up"
       transition-hide="jump-down"
@@ -138,7 +124,7 @@
     </q-dialog>
 
     <q-dialog
-      :value="editMode === 'rrule'"
+      :model-value="editMode === 'rrule'"
       @hide="editMode = null"
       transition-show="jump-up"
       transition-hide="jump-down"
@@ -147,7 +133,7 @@
     </q-dialog>
 
     <q-dialog
-      :value="editMode === 'remove_rrule'"
+      :model-value="editMode === 'remove_rrule'"
       @hide="editMode = null"
       transition-show="jump-up"
       transition-hide="jump-down"
@@ -156,29 +142,29 @@
     </q-dialog>
 
     <q-dialog
-      :value="editMode != null && eventDateToEdit != null"
-      @hide="closeDialog"
+      :model-value="dateEditMode != null"
+      @hide="editmode = null"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <EditEventDateDialog
-        @closeDialog="closeDialog()"
-        :ed="eventDateToEdit"
-        :mode="editMode"
-        :key="editMode"
+        @closeDialog="dateEditMode = null"
+        :ed="selectedEventDate"
+        :mode="dateEditMode"
+        :key="dateEditMode"
       />
     </q-dialog>
     <q-dialog
-      :value="editMode === 'media'"
-      @hide="closeDialog"
+      :model-value="editMode === 'media'"
+      @hide="editmode = null"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <SuggestNewCoverDialog @closeDialog="closeDialog()" />
     </q-dialog>
     <q-dialog
-      :value="editMode === 'artists'"
-      @hide="closeDialog"
+      :model-value="editMode === 'artists'"
+      @hide="editmode = null"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
@@ -188,20 +174,18 @@
 </template>
 
 <script>
-import { postReportRequest } from 'src/api';
-
 import common from 'assets/common';
 
-import AddEventDateDialog from 'src/components/EventPage/EventDates/AddEventDateDialog.vue';
-import EditDescriptionDialog from 'src/components/EventPage/EditDescriptionDialog.vue';
-import EditEventDateDialog from 'src/components/EventPage/EventDates/EditEventDateDialog.vue';
-import EditNameDialog from 'src/components/EventPage/EditNameDialog.vue';
-import EditRruleDialog from 'src/components/EventPage/EventDates/EditRruleDialog.vue';
-import RemoveRruleDialog from 'src/components/EventPage/EventDates/RemoveRruleDialog.vue';
+import AddEventDateDialog from 'components/EventPage/EventDates/AddEventDateDialog.vue';
+import EditDescriptionDialog from 'components/EventPage/EditDescriptionDialog.vue';
+import EditEventDateDialog from 'components/EventPage/EventDates/EditEventDateDialog.vue';
+import EditNameDialog from 'components/EventPage/EditNameDialog.vue';
+import EditRruleDialog from 'components/EventPage/EventDates/EditRruleDialog.vue';
+import RemoveRruleDialog from 'components/EventPage/EventDates/RemoveRruleDialog.vue';
 import SelectArtistsDialog from 'components/EventPage/EventDates/Artists/SelectArtistsDialog.vue';
-import SelectTagsDialog from 'src/components/EventPage/Tags/SelectTagsDialog.vue';
+import SelectTagsDialog from 'components/EventPage/Tags/SelectTagsDialog.vue';
 import SuggestNewCoverDialog from 'components/EventPage/Gallery/SuggestNewCoverDialog.vue';
-import Vue from 'vue';
+//import { Vue } from 'vue';
 
 import { useEventStore } from 'src/stores/event';
 import { mapState } from 'pinia';
@@ -223,10 +207,11 @@ export default {
     return {
       messageAndToken: null,
       editMode: null,
+      dateEditMode: null,
       eventDateToEdit: null,
       addingEventDate: false,
       showAllEventDates: false,
-      eventDate: [
+      eventDateFields: [
         {
           name: this.$t('suggestions.date'),
           description: this.$t('suggestions.date_msg'),
@@ -276,6 +261,7 @@ export default {
     this.localDateTimeShort = common.localDateTimeShort;
     // used to show the add date dialog after removing rrule.
     // regular events wont work because chain of q-dialogs in editrrulecomponent
+    /*
     window.bus = new Vue({});
     window.bus.$on('addDate', (value) => {
       this.messageAndToken = value;
@@ -284,46 +270,22 @@ export default {
     window.bus.$on('closeDialog', () => {
       this.closeDialog();
     });
+    */
   },
   methods: {
-    closeDialog() {
-      this.eventDateToEdit = null;
-      this.editMode = null;
-    },
-    editEventDate(eventDate, mode) {
-      this.eventDateToEdit = eventDate;
+    editEventDate(mode) {
       this.editMode = mode;
-    },
-    postReport() {
-      const progressDialog = this.$q.dialog({
-        title: this.$t('report.sending_report'),
-        color: 'primary',
-        progress: true, // we enable default settings
-        cancel: false,
-        persistent: true, // we want the user to not be able to close it
-        ok: false,
-      });
-      postReportRequest({
-        message: this.message,
-        event_id: this.event.id,
-      }).then(() => {
-        progressDialog.hide();
-        this.$q
-          .dialog({
-            title: this.$t('report.report_sent'),
-            message: this.$t('report.we_will_look_into_this_soon'),
-            color: 'primary',
-            persistent: false, // we want the user to not be able to close it
-          })
-          .onDismiss(() => {
-            this.message = null;
-            this.$emit('closeDialog');
-          });
-      });
     },
   },
   computed: {
-    ...mapState(useEventStore, ['event']),
+    ...mapState(useEventStore, ['event', 'selectedEventDate']),
+    rruleStatus() {
+      if (this.event?.rrule?.separation_count > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     items() {
       return [
         {

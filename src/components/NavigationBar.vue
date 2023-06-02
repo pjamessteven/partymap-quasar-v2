@@ -3,13 +3,16 @@
     class="navigation-bar flex row no-wrap"
     :class="$q.screen.gt.sm ? 'justify-between' : ''"
   >
-    <div
-      class="q-pa-lg inter bolder text-h5"
-      style="text-transform: capitalize"
-      v-if="$q.screen.gt.xs"
-    >
-      {{ computedPanelName }}
+    <div class="flex items-center">
+      <div
+        class="q-py-lg q-pl-lg q-pr-sm inter bolder text-h5"
+        style="text-transform: capitalize"
+        v-if="$q.screen.gt.xs"
+      >
+        {{ computedPanelName }}
+      </div>
     </div>
+
     <q-tabs
       @click.stop
       :content-class="$q.screen.gt.lg ? '' : ''"

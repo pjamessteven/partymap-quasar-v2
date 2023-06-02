@@ -284,6 +284,17 @@ body {
     // background: $b-1;
   }
 
+  .button-light {
+    color: $t-1;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    .q-btn__wrapper {
+      &:before {
+        box-shadow: none;
+      }
+    }
+  }
+
   .button-control {
     color: $t-1;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
@@ -414,6 +425,17 @@ body {
     .vc-day {
       .is-disabled {
         color: rgba(255, 255, 255, 0.2) !important;
+      }
+    }
+  }
+
+  .button-light {
+    color: $ti-1;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
+    .q-btn__wrapper {
+      &:before {
+        box-shadow: none;
       }
     }
   }
@@ -639,6 +661,16 @@ body {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
       rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   }
+}
+
+.button-light {
+  font-weight: 500;
+  font-family: Inter;
+  text-transform: capitalize;
+  border-radius: 9px !important;
+  font-size: normal;
+  padding: 4px 12px !important;
+  white-space: nowrap;
 }
 
 .button-control {

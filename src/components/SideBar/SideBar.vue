@@ -32,10 +32,7 @@
           >Welcome to the global map of festivals and events!</span
         >
         -->
-        <MobileSwipeHandle
-          @swipe="onMobileSwipeHandle($event)"
-          v-if="$q.screen.lt.sm"
-        />
+        <MobileSwipeHandle @swipe="onMobileSwipeHandle($event)" />
         <div
           v-touch-swipe.mouse.down="
             enablePanelSwipeDown && showPanel ? handleSwipe : null

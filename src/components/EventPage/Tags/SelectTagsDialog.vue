@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { mapState } from 'pinia';
+
 import { useEventStore } from 'src/stores/event';
 import SelectTagsComponent from './SelectTagsComponent.vue';
 

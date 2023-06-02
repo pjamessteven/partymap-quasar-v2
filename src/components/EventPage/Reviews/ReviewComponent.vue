@@ -1,6 +1,8 @@
 <template>
   <div class="flex column">
-    <div class="inter bolder text-large t2 q-pr-md q-mb">Reviews:</div>
+    <div class="inter bolder text-large t2 q-pr-md q-mb event-page-header">
+      Reviews:
+    </div>
     <div class="new-review flex column q-mt-lg grow">
       <div class="flex row items-end">
         <q-input

@@ -95,11 +95,7 @@
       </div>
 
       <!-- EVENT CANCELLED -->
-      <q-card-actions
-        align="right"
-        class="bg-white text-teal"
-        v-if="mode === 'cancel'"
-      >
+      <q-card-actions align="right" class="text-teal" v-if="mode === 'cancel'">
         <q-btn flat color="primary" label="Cancel" v-close-popup />
         <q-btn
           color="primary"
@@ -112,13 +108,11 @@
       <!-- DELETE ED -->
 
       <div v-if="mode === 'delete'">
-        You are about to delete the event date
+        Are you sure you want to delete this date?
         <p />
         <b>{{ localDateTimeLong(ed.start, ed.tz) }}</b>
-        <p />
-        Are you sure you want to continue?
 
-        <q-card-actions align="right">
+        <q-card-actions align="right" class="q-mt-md">
           <q-btn flat color="primary" label="Cancel" v-close-popup />
           <q-btn
             color="primary"

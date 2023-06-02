@@ -50,7 +50,7 @@ export default {
     computedStyle() {
       if (this.$q.screen.lt.sm && this.$route.name === 'EventPage') {
         var opacity = this.menubarOpacity;
-        return `opacity: ${opacity}`;
+        return `opacity: ${opacity}; background: black!important`;
       } else if (
         !this.$route.meta.mapOverlay ||
         (this.$q.screen.lt.sm && this.$route.name !== 'Explore')

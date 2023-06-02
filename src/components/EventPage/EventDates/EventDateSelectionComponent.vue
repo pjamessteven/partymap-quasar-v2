@@ -11,24 +11,6 @@
           'q-mb-md': $q.screen.gt.sm,
         }"
       >
-        <div class="flex row wrap items-center">
-          <!--  <q-icon left size="1.5em" name="las la-calendar"/> -->
-          <div class="text-large inter bolder t2 q-pr-md">
-            <span v-if="event.next_date">
-              {{ $t('event_dates.upcoming_dates') }}</span
-            >
-            <span v-else> {{ $t('event_dates.past_dates') }}</span>
-          </div>
-
-          <span class="t3" v-if="rruleStatus && $q.screen.gt.xs">
-            <q-icon left size="1.2em" name="las la-redo-alt" />
-            <span>{{ simplifiedRecurringPattern(event.rrule) }}</span>
-          </span>
-        </div>
-        <span class="t3 q-mt-sm" v-if="rruleStatus && $q.screen.lt.sm">
-          <q-icon left size="1.2em" name="las la-redo-alt" />
-          <span>{{ simplifiedRecurringPattern(event.rrule) }}</span>
-        </span>
         <div
           class="flex row justify-start grow no-wrap schedule-msg-buttons q-mt-md q-pa-md"
           v-if="editing"
@@ -85,7 +67,7 @@
           height: '4px',
         }"
       >
-        <div class="flex q-py-md row no-wrap" :class="editing ? '' : 'q-pl-'">
+        <div class="flex q-py-sm row no-wrap" :class="editing ? '' : 'q-pl-'">
           <EventDate
             v-for="(ed, index) in this.event?.event_dates"
             :key="index"
@@ -190,32 +172,7 @@ export default {
       this.showManageRruleDialog = true;
     },
     async removeRrule() {
-      this.$q
-        .dialog({
-          title: this.$t('event_dates.remove_schedule'),
-          message: this.$t('event_dates.remove_schedule_confirm'),
-          color: 'primary',
-          cancel: true,
-          ok: true,
-          persistent: false, // we want the user to not be able to close it
-        })
-        .onOk(async () => {
-          const progressDialog = this.$q.dialog({
-            title: this.$t('edit_event_date.submitting'),
-            color: 'primary',
-            progress: true, // we enable default settings
-            cancel: false,
-            persistent: true, // we want the user to not be able to close it
-            ok: false,
-          });
-          try {
-            await this.updateEvent({ remove_rrule: true });
-            this.showRemoveRruleWarningDialog = false;
-          } catch (e) {}
-          this.loading = false;
-
-          progressDialog.hide();
-        });
+      this.showRemoveRruleWarningDialog = true;
     },
     getEventDateOpacity(index) {
       var diff;
@@ -307,7 +264,6 @@ export default {
     this.localTime = common.localTime;
     this.localTimeCompact = common.localTimeCompact;
     this.recurringPattern = common.recurringPattern;
-    this.simplifiedRecurringPattern = common.simplifiedRecurringPattern;
     // used to show the add date dialog after removing rrule.
     // regular events wont work because chain of q-dialogs in editrrulecomponent
     /*
@@ -359,7 +315,7 @@ export default {
 }
 
 .event-dates-component {
-  overflow: hidden;
+  //overflow: hidden;
   &.editing {
   }
   .editing-dialog {

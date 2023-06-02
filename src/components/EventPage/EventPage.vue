@@ -222,7 +222,7 @@
                 </div>
                 <div
                   class="main-content"
-                  :class="$q.screen.gt.sm ? ' q-pa-xl' : ''"
+                  :class="$q.screen.gt.sm ? ' q-pa-xl' : 'q-px-md'"
                   v-if="!!event"
                 >
                   <div
@@ -245,7 +245,8 @@
                     />
                     <div class="flex column grow">
                       <div
-                        class="flex items-stretch justify-between no-wrap q-mb-md"
+                        class="flex items-stretch justify-between no-wrap"
+                        :class="$q.screen.lt.sm ? 'q-mt-md q-mb-md' : 'q-mb-lg'"
                       >
                         <div
                           class="action-buttons no-wrap flex items-stretch q-gutter-sm"
@@ -253,29 +254,30 @@
                           <InterestedComponent />
 
                           <q-btn
+                            class="button-light"
                             :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
                             :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
                             flat
                             :size="$q.screen.gt.xs ? '1em' : 'md'"
-                            label="Save to calendar"
-                            icon="mdi-download"
+                            :label="
+                              $q.screen.gt.xs ? 'Add to calendar' : undefined
+                            "
+                            icon="mdi-calendar-plus-outline"
                             no-caps
                             @click="getIcalFile"
                           ></q-btn>
                           <!-- show share button -->
                           <q-btn
+                            class="button-light"
                             :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
                             :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
-                            :label="$t('event.share')"
+                            :label="
+                              $q.screen.gt.xs ? $t('event.share') : undefined
+                            "
                             no-caps
                             :size="$q.screen.gt.xs ? '1em' : 'md'"
                             flat
-                            icon="mdi-share"
-                            :style="
-                              $q.dark.isActive
-                                ? 'border-right: 1px solid rgba(255,255,255,0.05)'
-                                : 'border-right: 1px solid rgba(0,0,0,0.05)'
-                            "
+                            icon="mdi-share-outline"
                             @click="share"
                             v-if="!editing"
                           />
@@ -283,6 +285,7 @@
                           <!-- show EDIT BUTTON if user is host or user is staff and public event -->
                           <q-btn
                             flat
+                            class="button-light"
                             :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
                             :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
                             :label="$t('event.edit_event')"
@@ -293,11 +296,6 @@
                                 : undefined
                             "
                             style="padding-left: 4px"
-                            :style="
-                              $q.dark.isActive
-                                ? 'border-right: 1px solid rgba(255,255,255,0.05)'
-                                : 'border-right: 1px solid rgba(0,0,0,0.05)'
-                            "
                             :size="$q.screen.gt.xs ? '1em' : 'md'"
                             @click="editing = !editing"
                             v-if="currentUserIsHost && !editing"
@@ -316,11 +314,7 @@
                             "
                             :size="$q.screen.gt.xs ? 'md' : 'md'"
                             @click="editing = !editing"
-                            v-else-if="
-                              (currentUserIsHost ||
-                                (currentUserIsStaff && event.host == null)) &&
-                              editing
-                            "
+                            v-if="editing"
                           />
                         </div>
                         <div class="q-gutter-sm">
@@ -329,7 +323,7 @@
                             :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
                             :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
                             icon="mdi-dots-vertical"
-                            class="q-px-sm"
+                            class="q-px-sm button-light"
                             :size="$q.screen.gt.xs ? '1em' : 'md'"
                           >
                             <q-tooltip
@@ -396,7 +390,7 @@
                                 v-close-popup
                                 v-ripple
                                 v-if="!currentUserIsHost && event.host == null"
-                                @click="editing = !editing"
+                                @click="showingSuggestionsDialog = true"
                                 clickable
                               >
                                 <q-item-section avatar>
@@ -575,12 +569,16 @@
           :mode="'claim'"
         />
       </q-dialog>
+
+      <q-dialog v-model="showingSuggestionsDialog">
+        <SuggestionsDialog @closeDialog="showingSuggestionsDialog = false" />
+      </q-dialog>
     </div>
   </div>
 </template>
 
 <script>
-import { deleteEventRequest, fetchEventDateIcsRequest, API_URL } from 'src/api';
+import { deleteEventRequest, API_URL } from 'src/api';
 
 import { useMainStore } from 'src/stores/main';
 import { useAuthStore } from 'src/stores/auth';
@@ -603,6 +601,7 @@ import TagsComponent from 'components/EventPage/Tags/TagsComponent.vue';
 import ReviewsComponent from './Reviews/ReviewComponent.vue';
 import MobileSwipeHandle from '../MobileSwipeHandle.vue';
 import InterestedComponent from './InterestedComponent.vue';
+import SuggestionsDialog from './Suggestions/SuggestionsDialog.vue';
 import WheelIndicator from 'wheel-indicator';
 
 export default {
@@ -642,6 +641,7 @@ export default {
     EventDateSidebarDesktop,
     MobileSwipeHandle,
     InterestedComponent,
+    SuggestionsDialog,
   },
   props: {
     id: {
@@ -673,7 +673,7 @@ export default {
         bottom: null,
       },
       showingHistory: false,
-      // showingSuggestionsDialog: false
+      showingSuggestionsDialog: false,
     };
   },
   methods: {
@@ -776,7 +776,9 @@ export default {
       }
     },
     getIcalFile() {
-      window.open(`${API_URL}/date/${this.selectedEventDate.id}/ics`);
+      window.location.assign(
+        `${API_URL}/date/${this.selectedEventDate.id}/ics`
+      );
     },
     share() {
       if (navigator.share) {
@@ -1039,14 +1041,19 @@ a {
           rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
 
         .main-content {
+          /*
           .action-buttons {
             :deep(.q-btn) {
               background: $bi-3;
             }
-          }
+          }*/
         }
         .content {
           background: black;
+
+          :deep(.event-page-header) {
+            background: black;
+          }
           .bottom-section {
             background: $bi-3;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -1108,11 +1115,13 @@ a {
         .content-card {
           .main-content {
             .action-buttons {
+              /*
               .q-btn {
                 border-radius: 9px !important;
                 box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
                   rgba(0, 0, 0, 0.06) 0px 1px 2px 0px !important;
               }
+              */
             }
           }
           .content {
@@ -1120,6 +1129,10 @@ a {
             box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
               rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
               rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
+
+            :deep(.event-page-header) {
+              background: white;
+            }
 
             .bottom-section {
               background: $b-2;
@@ -1257,6 +1270,13 @@ a {
               }
             }
 
+            :deep(.event-page-header) {
+              position: sticky;
+              top: 0px;
+              padding-bottom: 16px;
+              padding-top: 16px;
+              z-index: 1;
+            }
             .bottom-section {
               position: relative;
               .page-views {

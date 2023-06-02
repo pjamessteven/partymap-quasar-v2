@@ -1,6 +1,6 @@
 <template>
-  <q-card class="feedback-dialog">
-    <q-card-section class="row items-center q-pb-none">
+  <q-card class="feedback-dialog dialog-card">
+    <q-card-section class="row items-center q-pb-none dialog-card-header">
       <div class="text-h6" v-if="mode === 'claim'">
         {{ $t('report.claim_event_page') }}
       </div>
@@ -9,7 +9,7 @@
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>
 
-    <q-card-section class="">
+    <q-card-section class="dialog-card-content">
       <div class="t2" v-if="mode === 'claim'">
         {{ $t('report.claim_message') }}
         <a href="https://www.facebook.com/partymap.official" target="_blank"
@@ -26,9 +26,7 @@
       <div class="t2" v-else>
         {{ $t('report.please_tell_us_your_problem') }}
       </div>
-      <div class="t2 q-mt-xs" v-if="!currentUser">
-        {{ $t('suggestions.captcha_required') }}
-      </div>
+
       <q-input
         outlined
         :input-style="{ 'min-height': '100px' }"

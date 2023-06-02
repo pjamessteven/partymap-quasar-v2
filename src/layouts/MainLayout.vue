@@ -1,6 +1,8 @@
 <template>
   <div class="main-layout">
     <MenuBar class="menubar" />
+    <div class="default-overlay" />
+
     <div class="overlay" :style="computedOverlayStyle" />
     <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
     <Transition
@@ -103,6 +105,14 @@ export default {
 <style lang="scss">
 .body--dark {
   .main-layout {
+    .default-overlay {
+      background: linear-gradient(
+        rgba(0, 0, 0, 0.68),
+        rgba(0, 0, 0, 0.2) 64px,
+        transparent 128px,
+        transparent
+      );
+    }
     .overlay {
       background: black;
       /*
@@ -119,6 +129,14 @@ export default {
 }
 .body--light {
   .main-layout {
+    .default-overlay {
+      background: linear-gradient(
+        rgba(0, 0, 0, 0.68),
+        rgba(0, 0, 0, 0.2) 64px,
+        transparent 128px,
+        transparent
+      );
+    }
     .overlay {
       background: black;
       /*
@@ -138,6 +156,13 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
+  .default-overlay {
+    z-index: 103;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+  }
   .overlay {
     z-index: 103;
     position: absolute;

@@ -37,7 +37,6 @@
         label="Source"
       />
     </q-card-section>
-
     <q-card-section class="q-pt-md flex justify-end dialog-card-footer">
       <q-btn
         color="primary"

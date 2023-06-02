@@ -1,14 +1,14 @@
 <template>
   <div>
-    <q-card style="width: 300px" class="edit-card">
-      <q-card-section>
+    <q-card style="width: 300px" class="edit-card dialog-card">
+      <q-card-section class="dialog-card-header">
         <div class="text-h6">
           {{ $t('edit_event.remove_schedule') }}
-          <p />
         </div>
+      </q-card-section>
+      <q-card-section>
         {{ $t('edit_event.remove_schedule_msg') }}
       </q-card-section>
-
       <q-card-actions align="right" class="bg-white text-teal">
         <q-btn flat color="primary" label="Cancel" v-close-popup />
         <q-btn

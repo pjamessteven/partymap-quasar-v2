@@ -9,7 +9,7 @@
       />
       <div
         class="flex column"
-        :class="$q.screen.gt.xs ? 'text-large' : 'chicago'"
+        :class="$q.screen.gt.xs ? 'text-large' : 'inter bold'"
       >
         <div>
           <span>
@@ -29,7 +29,7 @@
         :left="!alignRight"
         :right="alignRight"
       />
-      <span :class="$q.screen.gt.xs ? 'text-large' : 'chicago'">{{
+      <span :class="$q.screen.gt.xs ? 'text-large' : 'inter bold'">{{
         ed?.location.name
       }}</span>
     </div>

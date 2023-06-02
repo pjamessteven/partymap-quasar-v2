@@ -1,19 +1,15 @@
 <template>
   <q-dialog ref="dialog" @hide="onDialogHide">
-    <q-card class="q-dialog-plugin">
-      <q-card-section>
+    <q-card class="q-dialog-plugin dialog-card">
+      <q-card-section class="dialog-card-header">
         <div class="text-h6">
           {{ $t('suggestions.submit_improvement') }}
-          <p />
-        </div>
-        <div class="t2">
-          {{ $t('suggestions.tell_us_why_improvement_needed') }}
-        </div>
-        <div class="t2" v-if="!currentUser">
-          {{ $t('suggestions.captcha_required') }}
         </div>
       </q-card-section>
-      <q-card-section>
+      <q-card-section class="dialog-card-content">
+        <div class="t2 q-my-md">
+          Optionally tell us why this improvement is needed.
+        </div>
         <q-input
           type="textarea"
           outlined

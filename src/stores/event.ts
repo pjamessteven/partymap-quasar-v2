@@ -51,13 +51,19 @@ export const useEventStore = defineStore('event', {
     currentUserCanEdit: (state) => {
       const authStore = useAuthStore();
       return (
-        state.event?.host?.username === authStore.currentUser?.username ||
-        (authStore.currentUser?.role && authStore.currentUser.role >= 2)
+        (!!state.event?.host?.username &&
+          !!authStore.currentUser?.username &&
+          state.event?.host?.username === authStore.currentUser?.username) ||
+        (authStore.currentUser?.role && authStore.currentUser.role >= 20)
       );
     },
     currentUserIsHost: (state) => {
       const authStore = useAuthStore();
-      return state.event?.host?.username === authStore.currentUser?.username;
+      return (
+        !!state.event?.host?.username &&
+        !!authStore.currentUser?.username &&
+        state.event?.host?.username === authStore.currentUser?.username
+      );
     },
   },
   actions: {

@@ -72,6 +72,7 @@
       />
     </div>
     <Calendar
+      @click.stop
       v-if="
         selectedEventDate != null &&
         (!inline || (inline && expanded && expandable))

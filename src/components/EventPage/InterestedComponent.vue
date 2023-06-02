@@ -1,10 +1,11 @@
 <template>
   <q-btn
+    class="button-light"
     :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
     :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
     flat
     :size="$q.screen.gt.xs ? '1em' : 'md'"
-    :label="computedLabel"
+    :label="$q.screen.gt.xs ? computedLabel : undefined"
     :icon="computedIcon"
     icon-right="mdi-chevron-down"
     no-caps

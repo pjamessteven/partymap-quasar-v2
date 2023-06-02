@@ -19,11 +19,26 @@
           -->
 
     <div
+      class="flex row wrap items-center event-page-header"
+      v-if="event.event_dates.length > 1"
+    >
+      <div class="text-large inter bolder t2 q-pr-md">
+        <span v-if="event.next_date">
+          {{ $t('event_dates.upcoming_dates') }}</span
+        >
+        <span v-else> {{ $t('event_dates.past_dates') }}</span>
+      </div>
+
+      <span class="t3" v-if="rruleStatus && $q.screen.gt.xs">
+        <q-icon left size="1.2em" name="las la-redo-alt" />
+        <span>{{ simplifiedRecurringPattern(event.rrule) }}</span>
+      </span>
+    </div>
+
+    <div
       v-if="
         (event && event.event_dates && event.event_dates.length > 1) || editing
       "
-      class="event-date-selection"
-      :class="$q.screen.gt.xs ? 'q-mt-md q-mb-md' : ''"
     >
       <EventDateSelectionComponent :editing="editing" />
     </div>
@@ -43,8 +58,9 @@
       v-else-if="selectedEventDate"
       :key="selectedEventDateIndex + 101"
     >
-      <div class="inter bolder t2 text-large q-pr-md q-mb-md">
-        Event details:
+      <div class="inter bolder t2 text-large q-pr-md event-page-header">
+        <span v-if="event.event_dates.length > 1">Date details:</span
+        ><span v-else>Event details:</span>
       </div>
 
       <q-list class="q-mb-lg" style="position: relative">
@@ -96,7 +112,7 @@
         </div>
       </q-list>
       <div
-        class="inter bolder text-large t2 q-pr-md q-mt-lg"
+        class="inter bolder text-large t2 q-pr-md q-mt-lg event-page-header"
         v-if="selectedEventDate?.artists?.length > 0"
       >
         {{ $t('event_dates.lineup') }}
@@ -111,6 +127,8 @@
 </template>
 
 <script>
+import common from 'assets/common';
+
 import ArtistsComponent from 'components/EventPage/EventDates/Artists/ArtistsComponent.vue';
 import EventDateAddArtistsComponent from 'components/EventPage/EventDates/EventDateAddArtistsComponent.vue';
 import EventDateCancelledComponent from 'components/EventPage/EventDates/EventDateCancelledComponent.vue';
@@ -158,6 +176,13 @@ export default {
       'currentUserIsHost',
     ]),
     ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
+    rruleStatus() {
+      if (this.event?.rrule?.separation_count > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     informationMissing() {
       if (this.visibleComponents && this.computedComponents) {
         return this.visibleComponents.length < this.computedComponents.length;
@@ -272,21 +297,16 @@ export default {
       return this.event?.host?.username;
     },
   },
+  created() {
+    this.simplifiedRecurringPattern = common.simplifiedRecurringPattern;
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .body--dark {
-  .event-date-selection {
-    // background: $bi-2;
-    // border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  }
 }
 .body--light {
-  .event-date-selection {
-    //background: $b-2;
-    // border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  }
 }
 .contribution {
   width: 100%;

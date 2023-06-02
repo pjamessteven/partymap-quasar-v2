@@ -3,6 +3,7 @@
     <q-select
       outlined
       use-input
+      clearable
       v-model="selectedPlace"
       :label="'Location'"
       :options="autoCompleteResults"
