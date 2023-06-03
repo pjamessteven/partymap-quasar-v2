@@ -96,9 +96,7 @@
                   @click="clickTag(tag)"
                   :active="controlTag?.findIndex((x) => x.tag === tag.tag) > -1"
                 >
-                  <div
-                    class="flex row grow justify-between items-center no-wrap inter bold q-py-md"
-                  >
+                  <div class="inter bold q-py-md">
                     <q-item-label>
                       {{ tag.tag }} &nbsp;
                       <!--<span class="t4"

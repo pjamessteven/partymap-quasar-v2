@@ -296,6 +296,10 @@ export default {
     will-change: transform;
     padding-bottom: 64px;
 
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
+      rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
+      rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
+
     &.sidebar-mobile-expanded {
       transform: translate3d(0, 64px, 0);
       .mobile-dismiss-list {
@@ -305,7 +309,7 @@ export default {
 
     &:not(.sidebar-mobile-expanded):hover {
       //transform: translate3d(0, 80px, 0) !important;
-      transform: translate3d(0, calc(100% - 286px), 0);
+      // transform: translate3d(0, calc(100% - 286px), 0);
     }
     &.sidebar-mobile-hidden {
       transform: translate3d(0, calc(100%), 0);
@@ -344,6 +348,8 @@ export default {
       border-top-left-radius: 18px;
       border-top-right-radius: 18px;
       overflow: hidden;
+      box-shadow: 0px 0px 64px 32px rgba(0, 0, 0, 0.2);
+
       .nav-bar {
         width: 100%;
         position: sticky;
@@ -363,8 +369,6 @@ export default {
       }
 
       :deep(.panels) {
-        //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.4);
-
         //-webkit-backface-visibility: hidden;
         //-webkit-transform: translate3d(0, 0, 0);
         width: 100%;

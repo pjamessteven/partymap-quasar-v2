@@ -22,7 +22,14 @@
           v-close-popup
           :active="userInterested"
           clickable
-          @click="toggleInterested()"
+          @click="
+            currentUser
+              ? toggleInterested()
+              : $router.push({
+                  path: '/login',
+                  query: { from: $route.path },
+                })
+          "
         >
           <q-item-section avatar>
             <q-icon :name="userInterested ? 'mdi-star' : 'mdi-star-outline'" />
@@ -33,7 +40,14 @@
           :active="userGoing"
           v-close-popup
           clickable
-          @click="toggleGoing()"
+          @click="
+            currentUser
+              ? toggleGoing()
+              : $router.push({
+                  path: '/login',
+                  query: { from: $route.path },
+                })
+          "
         >
           <q-item-section avatar>
             <q-icon

@@ -1,5 +1,7 @@
 <template>
-  <q-card class="terms-and-conditions-dialog dialog-card">
+  <q-card
+    class="terms-and-conditions-dialog dialog-card fullscreen-mobile-card"
+  >
     <q-card-section class="row items-center dialog-card-header">
       <div class="text-h6 inter bolder">
         {{ $t('about.terms_and_conditions') }}
@@ -240,7 +242,6 @@ export default {
 
 <style lang="scss">
 .terms-and-conditions-dialog {
-  max-height: 660px !important;
   .header {
     position: sticky;
     top: 0;

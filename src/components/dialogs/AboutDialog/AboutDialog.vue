@@ -1,5 +1,5 @@
 <template>
-  <q-card class="about-dialog dialog-card">
+  <q-card class="about-dialog dialog-card fullscreen-mobile-card">
     <q-card-section class="header row items-center dialog-card-header">
       <div class="inter bolder text-h6">{{ $t('sidebar.about') }}</div>
       <q-space />

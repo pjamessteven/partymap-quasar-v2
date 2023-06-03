@@ -1,5 +1,5 @@
 <template>
-  <q-card class="privacy-policy-dialog dialog-card">
+  <q-card class="privacy-policy-dialog dialog-card fullscreen-mobile-card">
     <q-card-section class="row items-center dialog-card-header">
       <div class="text-h6 inter bolder">{{ $t('about.privacy_policy') }}</div>
       <q-space />

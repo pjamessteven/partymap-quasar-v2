@@ -102,7 +102,6 @@ export default {
       // otherwise it zooms uncontrolably
       handler(newv) {
         if (newv) {
-          console.log(this.map);
           this.map.scrollWheelZoom.disable();
         } else {
           this.map.scrollWheelZoom.enable();
@@ -242,8 +241,7 @@ export default {
             }
             */
             var currentZoom = this.map.getZoom();
-            console.log('BOUNDS MARKER', newval);
-            console.trace('BOUNDS ARKER');
+
             this.setMarkerFocusForEventPage(newval, currentZoom);
           }
         }
@@ -312,8 +310,6 @@ export default {
       // padding for desktop panel
       var latlng = L.latLng(coords);
       if (this.$q.screen.gt.xs) {
-        console.log('BOUNDS 2');
-
         this.map.fitBounds(L.latLngBounds(latlng, latlng), {
           paddingTopLeft: [0, 276],
           animate: true,
@@ -401,7 +397,6 @@ export default {
       var mapContainerHeight = this.windowHeight; // minus menubar
       var paddingBottom = this.windowHeight - mapContainerHeight / 3 + 28;
       var paddingRight = 0;
-      console.log('BOUNDS 1');
       this.map.fitBounds(this.focusMarkerLayer.getBounds(), {
         paddingBottomRight: [paddingRight, paddingBottom],
         animate: true,

@@ -1,5 +1,5 @@
 <template>
-  <q-card class="feedback-dialog dialog-card">
+  <q-card class="feedback-dialog dialog-card fullscreen-mobile-card">
     <q-card-section class="row items-center q-pb-none dialog-card-header">
       <div class="inter bolder text-h6">{{ $t('feedback.give_feedback') }}</div>
       <q-space />

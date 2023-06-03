@@ -4,47 +4,63 @@
     :class="$q.screen.gt.sm ? 'justify-between' : ''"
   >
     <div class="flex items-center q-pl-lg" v-if="$q.screen.gt.xs">
-      <div
-        class="flex column justify-center items-center"
+      <q-btn
         v-if="sidebarPanel === 'nearby'"
+        flat
+        style="margin-left: -8px"
+        class="q-px-sm q-mr-sm"
+        @click.stop="() => getFineLocation()"
       >
-        <q-btn
-          flat
-          style="margin-left: -8px"
-          class="q-px-sm q-mr-sm"
-          @click.stop="() => getFineLocation()"
-        >
-          <template v-slot:default>
-            <div v-if="!userLocationLoading" class="flex">
-              <q-icon name="mdi-crosshairs-gps" class="" v-if="fineLocation" />
-              <q-icon name="mdi-crosshairs" class="" v-else />
-            </div>
-            <div v-else style="position: relative" class="flex">
-              <q-icon style="z-index: 1" name="mdi-crosshairs" />
-              <q-icon
-                style="z-index: 2; left: 0px"
-                class="animated infinite flash slowest absolute"
-                name="mdi-crosshairs-gps"
-              />
-            </div>
-            <q-tooltip
-              class=""
-              :content-class="
-                $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
-              "
-              :offset="[10, 10]"
-            >
-              {{ $t('landing_page.improve_location') }}
-            </q-tooltip>
-          </template>
-        </q-btn>
-      </div>
+        <template v-slot:default>
+          <div v-if="!userLocationLoading" class="flex">
+            <q-icon name="mdi-crosshairs-gps" class="" v-if="fineLocation" />
+            <q-icon name="mdi-crosshairs" class="" v-else />
+          </div>
+          <div v-else style="position: relative" class="flex">
+            <q-icon style="z-index: 1" name="mdi-crosshairs" />
+            <q-icon
+              style="z-index: 2; left: 0px"
+              class="animated infinite flash slowest absolute"
+              name="mdi-crosshairs-gps"
+            />
+          </div>
+          <q-tooltip
+            class=""
+            :content-class="
+              $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
+            "
+            :offset="[10, 10]"
+          >
+            {{ $t('landing_page.improve_location') }}
+          </q-tooltip>
+        </template>
+      </q-btn>
+
       <div
-        class="q-py-lg q-pr-sm inter bolder text-h5"
+        class="q-py-lg q-pr-md inter bolder text-h5"
         style="text-transform: capitalize"
       >
         {{ computedPanelName }}
       </div>
+      <q-btn
+        v-if="sidebarPanel === 'explore'"
+        flat
+        style="margin-left: -8px"
+        class="q-px-sm q-m-sm"
+        @click.stop="() => getFineLocation()"
+      >
+        <template v-slot:default>
+          <q-tooltip
+            class=""
+            :content-class="
+              $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
+            "
+            :offset="[10, 10]"
+          >
+            {{ $t('landing_page.improve_location') }}
+          </q-tooltip>
+        </template>
+      </q-btn>
     </div>
 
     <q-tabs

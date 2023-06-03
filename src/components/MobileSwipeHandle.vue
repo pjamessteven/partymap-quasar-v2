@@ -58,7 +58,7 @@ export default {
       //backdrop-filter: blur(10px);
     }
     .handle {
-      background: rgba(255, 255, 255, 0.68);
+      background: rgba(255, 255, 255, 1);
     }
     &.solid-bg {
       .handle-container-bg {

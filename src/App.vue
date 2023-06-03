@@ -850,11 +850,19 @@ body {
       }
     }
   }
-  .q-dialog {
-    .menu {
-      //font-family: chicagoflf;
+  .q-card {
+    &.fullscreen-mobile-card {
+      border: none !important;
+      box-shadow: none !important;
+      margin-top: unset;
+      margin-bottom: unset;
+      width: 100%;
+      height: 100%;
+      max-height: unset !important;
+      border-radius: 0px !important;
     }
   }
+
   .dialog-page {
     .auth-card {
       border: none !important;

@@ -198,7 +198,7 @@ export default {
     position: absolute;
     height: 100%;
     width: 100%;
-    z-index: 1000;
+    z-index: 105;
     top: 0px;
   }
   .mobile-map-view-router {

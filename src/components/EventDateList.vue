@@ -74,7 +74,7 @@
           (groupByMonth && Object.keys(eventDatesGroupedByMonth)?.length > 0) ||
           (!groupByMonth && eventDates && eventDates.length > 0)
         "
-        class="t4 inter bold q-mt-md"
+        class="t3 inter bold q-mt-md"
       >
         End of results
       </div>
@@ -85,9 +85,12 @@
             (!groupByMonth && eventDates && eventDates.length === 0)) &&
           !loading
         "
-        class="t4 inter bold q-mt-md"
+        class="t3 inter bold"
+        :class="$q.screen.lt.sm ? 'q-mt-lg' : ''"
       >
-        No results
+        No results<span v-if="$route.name === 'Explore'"
+          >&nbsp;in this area</span
+        >
       </div>
     </div>
   </div>

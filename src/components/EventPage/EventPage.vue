@@ -26,7 +26,6 @@
             "
           >
             <MobileSwipeHandle
-              v-if="$q.screen.lt.sm"
               @swipe="handleSwipe($event)"
               class="mobile-swipe-handle"
             />
@@ -225,7 +224,7 @@
                 </div>
                 <div
                   class="main-content"
-                  :class="$q.screen.gt.sm ? ' q-pa-xl' : 'q-px-md'"
+                  :class="$q.screen.gt.sm ? ' q-pa-xl' : ''"
                   v-if="!!event"
                 >
                   <div
@@ -249,7 +248,11 @@
                     <div class="flex column grow">
                       <div
                         class="flex items-stretch justify-between no-wrap"
-                        :class="$q.screen.lt.sm ? 'q-mt-md q-mb-md' : 'q-mb-lg'"
+                        :class="
+                          $q.screen.lt.sm
+                            ? 'q-mt-md q-mb-md q-px-md'
+                            : 'q-mb-lg'
+                        "
                       >
                         <div
                           class="action-buttons no-wrap flex items-stretch q-gutter-sm"
@@ -326,7 +329,7 @@
                             :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
                             :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
                             icon="mdi-dots-vertical"
-                            class="q-px-sm button-light"
+                            class="q-px-sm"
                             :size="$q.screen.gt.xs ? '1em' : 'md'"
                           >
                             <q-tooltip
@@ -467,10 +470,19 @@
                           </q-btn>
                         </div>
                       </div>
+                      <div
+                        v-if="$q.screen.lt.sm"
+                        class="separator"
+                        :class="$q.screen.lt.sm ? 'q-mb-sm' : 'q-mb-md'"
+                      />
+                      <div
+                        class="flex column"
+                        :class="$q.screen.lt.sm ? 'q-px-md ' : ''"
+                      >
+                        <EventDates />
 
-                      <EventDates />
-
-                      <ReviewsComponent class="q-mt-xl" />
+                        <ReviewsComponent class="q-mt-xl" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -953,7 +965,6 @@ export default {
       if (this.event?.name) {
         return this.event.name;
       } else if (this.$route.query.name) {
-        return null;
         return this.$route.query.name.replace(/_/g, ' ');
       } else {
         return null;
@@ -1047,10 +1058,6 @@ a {
 
     .scroll-area {
       .content-card {
-        box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
-          rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
-          rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
-
         .main-content {
           /*
           .action-buttons {
@@ -1224,10 +1231,15 @@ a {
 
           pointer-events: all;
           padding-bottom: 0px;
+          box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
+            rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
+            rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
           .content {
             height: 100%;
             border-top-left-radius: 18px !important;
             border-top-right-radius: 18px !important;
+            box-shadow: 0px 0px 64px 32px rgba(0, 0, 0, 0.2) !important;
+
             overflow: hidden;
             position: relative;
             &.no-margin-top {
@@ -1241,7 +1253,7 @@ a {
               transition: flex-grow 1s;
               max-height: min-content;
               background: #fafafa;
-              border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+              border-bottom: 1px solid #1a1a1a;
               min-height: Min(66vh, 440px);
               .q-inner-loading {
                 background: none;

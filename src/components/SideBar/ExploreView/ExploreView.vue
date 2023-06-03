@@ -16,7 +16,7 @@
     <div class="touch-overlay" v-touch-swipe.vertical="handleSwipe" />
     <div
       class="event-list-inner"
-      v-bind:class="{
+      :class="{
         'event-list-expanded': $q.screen.lt.sm && showPanel,
       }"
     >
@@ -69,12 +69,12 @@
                     :id="controlArtist[0].id"
                   />
                 </div>
-
-                <div
-                  class="flex column"
-                  v-show="showResults && !isLoadingInitial"
-                >
-                  <!--
+                <transition appear enter-active-class="animated fadeIn slow">
+                  <div
+                    class="flex column"
+                    v-show="showResults && !isLoadingInitial"
+                  >
+                    <!--
                   <div
                     class="flex column artists-wrapper"
                     v-if="noFiltersSelected && artists?.length > 0"
@@ -96,19 +96,15 @@
                     />
                   </div>
                   -->
-                  <div
-                    class="header t1 inter bold"
-                    :class="
-                      $q.screen.lt.sm ? 'q-pl-sm q-py-md' : 'q-pl-md  q-py-md'
-                    "
-                    v-if="!groupEventsByMonth && eventDates?.length > 0"
-                  >
-                    Upcoming events in this area:
-                  </div>
-                  <transition
-                    appear
-                    enter-active-class="animated fadeIn slower"
-                  >
+                    <div
+                      class="header t1 inter bold"
+                      :class="
+                        $q.screen.lt.sm ? 'q-pl-sm q-py-md' : 'q-pl-md  q-py-md'
+                      "
+                      v-if="!groupEventsByMonth && eventDates?.length > 0"
+                    >
+                      Upcoming events in this area:
+                    </div>
                     <EventDateList
                       v-if="showResults && compactView"
                       :groupByMonth="groupEventsByMonth"
@@ -117,11 +113,7 @@
                       :hasNext="eventDatesHasNext"
                       :loading="eventDatesLoading"
                     />
-                  </transition>
-                  <transition
-                    appear
-                    enter-active-class="animated fadeIn slower"
-                  >
+
                     <EventDatePosterList
                       v-if="showResults && !compactView"
                       :groupByMonth="groupEventsByMonth"
@@ -130,8 +122,8 @@
                       :hasNext="eventDatesHasNext"
                       :loading="eventDatesLoading"
                     />
-                  </transition>
-                </div>
+                  </div>
+                </transition>
               </div>
             </div>
           </transition>
@@ -191,7 +183,7 @@ export default {
   },
   props: { showControls: { default: false } },
   mounted() {
-    if (!this.blockUpdates) {
+    if (!this.blockUpdates && this.eventDates.length === 0) {
       this.getInitialList();
       // watcher on map bounds triggers inital load i think
     }
