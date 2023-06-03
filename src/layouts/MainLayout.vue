@@ -7,8 +7,12 @@
     <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
     <Transition
       appear
-      enter-active-class="animated  slideInUp"
-      leave-active-class="animated slideOutDown"
+      :enter-active-class="
+        $q.screen.gt.xs ? 'animated  slideInUp' : 'animated slideInUp'
+      "
+      :leave-active-class="
+        $q.screen.gt.xs ? 'animated slideOutDown' : undefined
+      "
     >
       <SideBar class="sidebar-component" v-show="$route.name === 'Explore'" />
     </Transition>
@@ -24,8 +28,6 @@
       }"
     >
       <transition
-        appear
-        leave
         enter-active-class="animated slideInUp"
         leave-active-class="animated slideOutDown"
       >
@@ -75,7 +77,6 @@ export default {
   methods: {},
   beforeRouteUpdate(to, from, next) {
     if (from.name === 'Explore') {
-      console.log('blockupdate');
       this.blockUpdates = true;
       // blockUpdates is re-enabled in Map.vue at map.
     }
@@ -197,7 +198,7 @@ export default {
     position: absolute;
     height: 100%;
     width: 100%;
-    z-index: 105;
+    z-index: 1000;
     top: 0px;
   }
   .mobile-map-view-router {

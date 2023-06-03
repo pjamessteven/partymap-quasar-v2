@@ -819,7 +819,10 @@ export default {
         this.loading = false;
         // add name to url if not already there
         var queryString = '?name=' + response.data.name.replace(/ /g, '_');
-        if (window.location.pathname.indexOf(queryString) === -1) {
+        if (
+          window.location.pathname.indexOf(queryString) === -1 &&
+          this.$route.name === 'EventPage'
+        ) {
           this.$router.replace({
             path: this.$route.path,
             query: { name: response.data.name.replace(/ /g, '_') },
@@ -840,7 +843,8 @@ export default {
           (response.data.next_date &&
             response.data.next_date.id === eventDateId)
         ) {
-          if (!this.focusMarker) {
+          if (!this.focusMarker && this.$route.name === 'EventPage') {
+            // // weird but necessary
             // only do this if focusedlatlng not already set before mounting this component
             // (by eventdatecard)
             this.focusMarker = {
@@ -857,7 +861,8 @@ export default {
 
           const eventDateResponse = await this.loadEventDate(id);
 
-          if (!this.focusMarker) {
+          if (!this.focusMarker && this.$route.name === 'EventPage') {
+            // weird but necessary
             // only do this if focusedlatlng not already set before mounting this component
             // (by eventdatecard)
             this.focusMarker = {
@@ -948,6 +953,7 @@ export default {
       if (this.event?.name) {
         return this.event.name;
       } else if (this.$route.query.name) {
+        return null;
         return this.$route.query.name.replace(/_/g, ' ');
       } else {
         return null;

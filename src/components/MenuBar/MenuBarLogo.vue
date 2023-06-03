@@ -21,8 +21,8 @@
             :class="{
               'text-white': logoColor === 'light',
             }"
-            >partymap&nbsp;</i
-          >
+            >partymap&nbsp; {{ blockUpdates }}
+          </i>
         </div>
       </div>
     </transition>
@@ -32,6 +32,7 @@
 <script>
 import { useMainStore } from 'src/stores/main';
 import { mapState } from 'pinia';
+import { useMapStore } from 'src/stores/map';
 
 export default {
   name: 'MenuBarLogo',
@@ -42,6 +43,8 @@ export default {
   },
   methods: {},
   computed: {
+    ...mapState(useMapStore, ['blockUpdates']),
+
     ...mapState(useMainStore, ['showSearchBox', 'sidebarPanel']),
 
     logoColor() {

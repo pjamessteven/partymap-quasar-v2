@@ -71,6 +71,7 @@
         key="1"
         name="nearby"
         content-class="tab"
+        :label="$q.screen.gt.xs ? undefined : 'Home'"
         :ripple="false"
         :icon="sidebarPanel === 'nearby' ? 'mdi-home' : 'mdi-home-outline'"
         @click="

@@ -209,16 +209,15 @@ export default {
               this.eventDateHoverLayer.clearLayers();
               this.map.removeLayer(this.eventDateHoverLayer);
             }
+
             // restore previous map view
-            this.$nextTick(() => {
-              this.map.invalidateSize();
-              if (this.exploreMapView) {
-                this.map.setView(
-                  this.exploreMapView.latlng,
-                  this.exploreMapView.zoom
-                );
-              }
-            });
+            //this.map.invalidateSize();
+            if (this.exploreMapView) {
+              this.map.setView(
+                this.exploreMapView.latlng,
+                this.exploreMapView.zoom
+              );
+            }
             // possible performance issue
             if (this.mapMarkers) {
               this.map.addLayer(this.mapMarkers);
@@ -243,10 +242,9 @@ export default {
             }
             */
             var currentZoom = this.map.getZoom();
-            this.setMarkerFocusForEventPage(
-              newval,
-              currentZoom < 4 ? 4 : currentZoom
-            );
+            console.log('BOUNDS MARKER', newval);
+            console.trace('BOUNDS ARKER');
+            this.setMarkerFocusForEventPage(newval, currentZoom);
           }
         }
       },
@@ -314,6 +312,8 @@ export default {
       // padding for desktop panel
       var latlng = L.latLng(coords);
       if (this.$q.screen.gt.xs) {
+        console.log('BOUNDS 2');
+
         this.map.fitBounds(L.latLngBounds(latlng, latlng), {
           paddingTopLeft: [0, 276],
           animate: true,
@@ -401,7 +401,7 @@ export default {
       var mapContainerHeight = this.windowHeight; // minus menubar
       var paddingBottom = this.windowHeight - mapContainerHeight / 3 + 28;
       var paddingRight = 0;
-
+      console.log('BOUNDS 1');
       this.map.fitBounds(this.focusMarkerLayer.getBounds(), {
         paddingBottomRight: [paddingRight, paddingBottom],
         animate: true,

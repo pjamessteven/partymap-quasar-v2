@@ -310,16 +310,10 @@
       </div>
       <div
         v-touch-swipe="handleSwipe"
-        class="event-date-center flex grow justify-center q-pt-lg"
-        style="height: 100%; position: absolute; width: 100%"
+        class="event-date-center flex grow justify-center"
+        style="height: 100%; position: absolute; width: 100%; margin-top: 0px"
       >
-        <q-spinner-ios
-          :thickness="1"
-          :color="$q.dark.isActive ? 'white' : 'black'"
-          size="2em"
-          v-if="isLoadingDatesInitial"
-          v-touch-swipe="handleSwipe"
-        />
+        <InnerLoading v-if="isLoadingDatesInitial" :solid="false" />
       </div>
     </div>
   </div>
@@ -336,6 +330,7 @@ import { useMainStore } from 'src/stores/main';
 import { useAuthStore } from 'src/stores/auth';
 import { mapActions, mapWritableState, mapState } from 'pinia';
 import MenuWrapper from 'src/components/Controls/MenuWrapper.vue';
+import InnerLoading from 'src/components/InnerLoading.vue';
 
 export default {
   components: {
@@ -344,6 +339,7 @@ export default {
     EventDatePosterList,
     EventDateViewOptions,
     MenuWrapper,
+    InnerLoading,
   },
   props: { showControls: { default: false } },
   mounted() {

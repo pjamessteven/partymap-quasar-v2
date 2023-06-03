@@ -5,78 +5,58 @@
       :class="{ expanded: showPanel }"
     />
 
-    <Transition
-      appear
-      enter-active-class="animated  fadeIn"
-      leave-active-class=""
+    <div
+      ref="sidebar"
+      v-touch-swipe.mouse.up="!showPanel ? handleSwipe : null"
+      class="flex column justify-between no-wrap sidebar"
+      :style="computedSidebarWidth"
+      id="sidebar"
+      v-bind:class="{
+        'sidebar-mobile-expanded': showPanel && $route.name !== 'EventPage',
+      }"
     >
-      <div
-        ref="sidebar"
-        v-touch-swipe.mouse.up="!showPanel ? handleSwipe : null"
-        class="flex column justify-between no-wrap sidebar"
-        :style="computedSidebarWidth"
-        id="sidebar"
-        elevated
-        v-bind:class="{
-          'sidebar-mobile-expanded':
-            showPanel && this.$route.name !== 'EventPage',
-          'sidebar-mobile-hidden':
-            (this.$q.screen.lt.sm || !showPanel) &&
-            this.$route.name !== 'Explore',
-        }"
-      >
-        <!--
+      <!--
         <span
           v-if="$route.name === 'Explore' && sidebarPanel === 'nearby'"
           class="welcome-message inter bolder text-large q-mb-xl q-mt-lg"
           >Welcome to the global map of festivals and events!</span
         >
         -->
-        <MobileSwipeHandle @swipe="onMobileSwipeHandle($event)" />
-        <div
-          v-touch-swipe.mouse.down="
-            enablePanelSwipeDown && showPanel ? handleSwipe : null
-          "
-          class="sidebar-content flex column no-wrap"
-        >
-          <NavigationBar
-            @click="togglePanel"
-            class="nav-bar"
-            v-if="$q.screen.gt.xs"
+      <MobileSwipeHandle @swipe="onMobileSwipeHandle($event)" />
+      <div
+        v-touch-swipe.mouse.down="
+          enablePanelSwipeDown && showPanel ? handleSwipe : null
+        "
+        class="sidebar-content flex column no-wrap"
+      >
+        <NavigationBar
+          @click="togglePanel"
+          class="nav-bar"
+          v-if="$q.screen.gt.xs"
+        />
+        <div style="height: 100%; width: 100%" class="sidebar-content-inner">
+          <NearbyView
+            style="height: 100%; width: 100%"
+            v-if="sidebarPanel === 'nearby'"
           />
-          <q-tab-panels
-            keep-alive
-            v-model="sidebarPanel"
-            :animated="false"
-            class="panels"
-            style="height: 100%"
-            ref="panels"
-          >
-            <q-tab-panel name="nearby">
-              <NearbyView />
-            </q-tab-panel>
 
-            <q-tab-panel name="explore">
-              <ExploreView
-                style="position: absolute; height: 100%; width: 100%"
-              />
-            </q-tab-panel>
+          <ExploreView
+            style="height: 100%; width: 100%"
+            v-if="sidebarPanel === 'explore'"
+          />
 
-            <q-tab-panel name="favorites">
-              <FavoritesView
-                style="position: absolute; height: 100%; width: 100%"
-              />
-            </q-tab-panel>
+          <FavoritesView
+            style="height: 100%; width: 100%"
+            v-if="sidebarPanel === 'favorites'"
+          />
 
-            <q-tab-panel name="search">
-              <SearchView
-                style="position: absolute; height: 100%; width: 100%"
-              />
-            </q-tab-panel>
-          </q-tab-panels>
+          <SearchView
+            style="height: 100%; width: 100%"
+            v-show="sidebarPanel === 'search'"
+          />
         </div>
       </div>
-    </Transition>
+    </div>
   </div>
 </template>
 
@@ -234,16 +214,6 @@ export default {
   }
   .sidebar-wrapper {
     .sidebar {
-      border-right: 1px solid rgba(255, 255, 255, 0.1);
-
-      :deep(.panels) {
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
-      }
-      .mobile-dismiss-list {
-      }
-      :deep(.content) {
-      }
-
       :deep(.sidebar-header) {
         background: black;
       }
@@ -253,9 +223,13 @@ export default {
       }
 
       .sidebar-content {
+        background: black;
         :deep(.nav-bar) {
           background: $bi-2;
         }
+      }
+      .sidebar-content-inner {
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
       }
     }
   }
@@ -271,7 +245,10 @@ export default {
   }
   .sidebar-wrapper {
     .sidebar {
-      :deep(.panels) {
+      .sidebar-content {
+        background: white;
+      }
+      .sidebar-content-inner {
         border-top: 1px solid rgba(0, 0, 0, 0.2);
       }
       .menubar {
@@ -364,7 +341,9 @@ export default {
       height: 100%;
       width: 100%;
       position: relative;
-
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+      overflow: hidden;
       .nav-bar {
         width: 100%;
         position: sticky;
