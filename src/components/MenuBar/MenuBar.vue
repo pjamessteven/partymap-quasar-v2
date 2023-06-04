@@ -3,10 +3,7 @@
     <div
       class="menubar-background"
       :style="computedStyle"
-      v-if="
-        !$route.meta.mapOverlay ||
-        ($q.screen.lt.sm && this.$route.name !== 'Explore')
-      "
+      v-if="!$route.meta.mapOverlay || this.$route.name !== 'Explore'"
     />
     <MenuBarLogo
       class="logo"
@@ -85,15 +82,15 @@ export default {
           ) {
             return 'Back to results';
           } else if (this.sidebarPanel === 'nearby') {
-            return 'Back';
+            return 'Back to home';
           } else if (this.sidebarPanel === 'favorites') {
-            return 'Back';
+            return 'Back to your events';
           } else return null;
         } else if (
           previousRoute.name === 'EventPage' ||
           previousRoute.name === 'ArtistPage'
         ) {
-          return previousRoute.query.name.replace(/_/g, ' ');
+          return 'Back to ' + previousRoute.query.name.replace(/_/g, ' ');
         } else return previousRoute.meta['friendlyName'];
       } else return null;
     },
@@ -106,7 +103,7 @@ export default {
     },
 
     computedStyle() {
-      if (this.$q.screen.lt.sm && this.$route.name === 'EventPage') {
+      if (this.$route.name === 'EventPage') {
         var opacity = this.menubarOpacity;
         return `opacity: ${opacity}; background: black!important`;
       } else if (
@@ -137,6 +134,7 @@ export default {
   .menubar {
     .menubar-background {
       background: black;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
   }
 }
@@ -145,6 +143,7 @@ export default {
   .menubar {
     .menubar-background {
       background: white;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
   }
 }
@@ -154,9 +153,12 @@ export default {
   height: 62px;
   position: relative;
   .menubar-background {
+    will-change: opacity;
+
     position: absolute;
     height: 100%;
     width: 100%;
+    transition: opacity 0.3s ease;
   }
   .logo {
     position: absolute;
@@ -171,6 +173,7 @@ export default {
     transition: opacity 0.3s ease;
     pointer-events: all;
     min-height: 62px;
+    border-radius: 0px !important;
   }
 }
 // sm
@@ -181,6 +184,9 @@ export default {
   .body--dark {
     .menubar {
       border-top: 1px solid rgba(255, 255, 255, 0.1);
+      .menubar-background {
+        border-bottom: none;
+      }
     }
   }
   .body--light {
@@ -189,6 +195,9 @@ export default {
       //border-top: none;
       //border-bottom: none;
       box-shadow: none;
+      .menubar-background {
+        border-bottom: none;
+      }
     }
   }
   .menubar {

@@ -11,11 +11,12 @@
       </div>
       <div class="scroll-area flex grow" @scroll="onScrollMainContent">
         <div class="row flex grow main-row no-wrap justify-center">
+          <!--
           <div
             class="clickable-background"
             @click="$router.push({ name: 'Explore' })"
           />
-
+-->
           <div
             ref="contentcard"
             class="content-card flex column no-wrap"
@@ -26,6 +27,7 @@
             "
           >
             <MobileSwipeHandle
+              v-if="$q.screen.lt.sm"
               @swipe="handleSwipe($event)"
               class="mobile-swipe-handle"
             />
@@ -510,12 +512,11 @@
                 v-if="!!event"
                 class="bottom-section flex"
                 :class="{
-                  'column reverse q-gutter-lg justify-center items-center no-wrap q-pa-md q-pb-xl q-mt-md':
+                  'column reverse q-gutter-lg justify-center items-center no-wrap q-pa-md q-pb-xl ':
                     $q.screen.lt.sm,
                   'row justify-between items-center': $q.screen.gt.xs,
                   'q-pa-xl': $q.screen.gt.sm,
                   'q-pa-md': $q.screen.gt.xs && $q.screen.lt.md,
-                  'q-mt-xl': $q.screen.gt.xs,
                 }"
               >
                 <div
@@ -746,43 +747,33 @@ export default {
       }
     },
     onScrollMainContent(info) {
-      // window height
-      /*
-      var height = window.innerHeight / 3 - 120 // this is the height of the gap between menu bar and top of event card
-      var scrollPercentage = info.target.scrollTop / height
-      if (scrollPercentage >= 1) {
-        this.menubarOpacity = 0
-      } else {
-        this.menubarOpacity = 1
-      }
-      // this.menubarOpacity = scrollPercentage * -1 + 1
-      */
       var height = window.innerHeight / 3 - 120; // this is the height of the gap between menu bar and top of event card
       this.scrollPercentage = info.target.scrollTop / height;
-      if (this.$q.screen.lt.lg) {
-        // menubar should always show on large screens (when sidebar is open)
-        if (this.$q.screen.gt.xs) {
-          this.overlayOpacity = 1 - this.scrollPercentage * 2;
-
-          // this.menubarOpacity = (info.target.scrollTop / 100) * -1 + 1;
+      // menubar should always show on large screens (when sidebar is open)c
+      if (this.$q.screen.lt.sm) {
+        //this.menubarOpacity = ((info.target.scrollTop * 1.5) / 100) * -1 + 1;
+        //this.menubarOpacity = ((info.target.scrollTop * 1.5) / 100) * 1;
+        console.log(info.target.scrollTop);
+        if (info.target.scrollTop > 64) {
+          this.menubarOpacity = 1;
         } else {
-          //this.menubarOpacity = ((info.target.scrollTop * 1.5) / 100) * -1 + 1;
-          //this.menubarOpacity = ((info.target.scrollTop * 1.5) / 100) * 1;
-          console.log(info.target.scrollTop);
-          if (info.target.scrollTop > 64) {
-            this.menubarOpacity = 1;
-          } else {
-            this.menubarOpacity = 0;
-          }
-          this.overlayOpacity = ((info.target.scrollTop * 1.5) / 100) * 1;
+          this.menubarOpacity = 0;
         }
-      }
-      if (this.$q.screen.gt.xs) {
-        this.overlayOpacity = this.scrollPercentage * 2;
+        this.overlayOpacity = ((info.target.scrollTop * 1.5) / 100) * 1;
       } else {
-        //this.overlayOpacity = this.scrollPercentage * 2;
+        if (
+          info.target.scrollTop >
+          window.innerHeight - window.innerHeight * 0.66 - 196
+        ) {
+          this.overlayOpacity = 1;
+          this.menubarOpacity = 1;
+        } else {
+          this.overlayOpacity = 0;
+          this.menubarOpacity = 0;
+        }
+        //this.overlayOpacity = ((info.target.scrollTop * 0.5) / 100) * 1;
       }
-      console.log(this.scrollPercentage);
+
       if (this.scrollPercentage === 0) {
         setTimeout(() => {
           // behavior fix for desktop scroll
@@ -1072,6 +1063,9 @@ a {
           :deep(.event-page-header) {
             background: black;
           }
+          .main-content {
+            border: 1px solid #181818 !important;
+          }
           .bottom-section {
             background: $bi-3;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -1109,7 +1103,6 @@ a {
       }
       .content-card {
         overflow: hidden;
-
         .header {
           background: $bi-2 !important;
           :deep(.tag) {
@@ -1196,6 +1189,7 @@ a {
 }
 
 .event-page {
+  pointer-events: none;
   .event-page-overlay {
     background: rgba(0, 0, 0, 0.5);
     width: 100%;
@@ -1226,7 +1220,7 @@ a {
         .content-card {
           margin-top: Max(calc((100vh - 66vh) - 64px), 0px);
           max-width: 1024px;
-          border: none !important;
+          //border: none !important;
           min-height: 100vh;
 
           pointer-events: all;

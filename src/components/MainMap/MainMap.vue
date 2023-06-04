@@ -165,14 +165,14 @@ export default {
       handler: function (newval) {
         this.fitBoundsForExplorePage(newval);
         // wait for animation
-        setTimeout(
-          () =>
-            (this.exploreMapView = {
+        setTimeout(() => {
+          if (!this.blockUpdates) {
+            this.exploreMapView = {
               latlng: this.map.getCenter(),
               zoom: this.map.getZoom(),
-            }),
-          500
-        );
+            };
+          }
+        }, 500);
       },
     },
     route: {
@@ -247,7 +247,9 @@ export default {
               zoom: this.map.getZoom(),
             };
             var currentZoom = this.map.getZoom();
-
+            if (currentZoom <= 4) {
+              currentZoom = 4;
+            }
             this.setMarkerFocusForEventPage(newval, currentZoom);
           }
         }
@@ -468,8 +470,8 @@ export default {
             this.mapMarkersPermanentTooltip &&
             this.map?.hasLayer(this.mapMarkersPermanentTooltip)
           ) {
-            this.map.removeLayer(this.mapMarkersPermanentTooltip);
-            this.map.addLayer(this.mapMarkers);
+            this.map?.removeLayer(this.mapMarkersPermanentTooltip);
+            this.map?.addLayer(this.mapMarkers);
           }
         }
         if (!this.blockUpdates) {

@@ -101,8 +101,16 @@ export default {
       'showPanel',
     ]),
     computedOverlayStyle() {
-      if (this.$q.screen.lt.sm && this.$route.name === 'EventPage') {
-        return `opacity: ${this.overlayOpacity}; background: black!important`;
+      if (this.$route.name === 'EventPage') {
+        if (this.$q.screen.lt.sm) {
+          return `opacity: ${this.overlayOpacity}; background: black!important`;
+        } else {
+          if (this.$q.dark.isActive) {
+            return `opacity: ${this.overlayOpacity}; background: black!important`;
+          } else {
+            return `opacity: ${this.overlayOpacity}; background: grey!important`;
+          }
+        }
       } else {
         if (this.showPanel && this.$route.name === 'Explore')
           return 'opacity: 0.5';
