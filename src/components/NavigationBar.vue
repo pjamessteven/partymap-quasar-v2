@@ -90,11 +90,6 @@
         :label="$q.screen.gt.xs ? undefined : 'Home'"
         :ripple="false"
         :icon="sidebarPanel === 'nearby' ? 'mdi-home' : 'mdi-home-outline'"
-        @click="
-          () => {
-            backToExplore();
-          }
-        "
       />
 
       <q-tab
@@ -104,7 +99,6 @@
         :label="$q.screen.gt.xs ? undefined : 'Explore'"
         content-class="tab"
         :ripple="false"
-        @click="backToExplore"
       />
       <q-tab
         key="3"
@@ -117,7 +111,6 @@
         :label="$q.screen.gt.xs ? undefined : 'You'"
         content-class="tab"
         :ripple="false"
-        @click="backToExplore"
       />
       <q-tab
         key="4"
@@ -126,7 +119,6 @@
         :label="$q.screen.gt.xs ? undefined : 'Search'"
         content-class="tab"
         :ripple="false"
-        @click="backToExplore"
       />
     </q-tabs>
   </div>
@@ -148,17 +140,6 @@ export default {
   },
   methods: {
     ...mapActions(useMainStore, ['loadIpInfo', 'getFineLocation']),
-    getloc() {
-      console.log('FICl');
-      this.getFineLocation();
-    },
-    // go back to explore
-    // if the user is on an event or artist page
-    backToExplore() {
-      if (this.$route.name !== 'explore') {
-        this.$router.push({ name: 'Explore' });
-      }
-    },
   },
   watch: {
     sidebarPanel(to, from) {

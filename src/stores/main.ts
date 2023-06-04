@@ -6,15 +6,14 @@ import NodeGeocoder from 'node-geocoder';
 //import HttpsAdapter from 'node-geocoder/lib/httpadapter/fetchadapter';
 import { Notify } from 'quasar';
 import { Screen } from 'quasar';
+import { RouteLocationNormalizedLoaded } from 'vue-router';
 interface MainStoreState {
   darkMode: boolean;
-  mapStyle: 'satellite' | 'transport' | 'high_contrast';
   showSidebar: boolean;
   showSearchBox: boolean;
   sidebarPanel: string;
   showPanel: boolean;
   enablePanelSwipeDown: boolean;
-
   menubarOpacity: number;
   overlayOpacity: number;
   ipInfo: IpInfo | null;
@@ -25,11 +24,11 @@ interface MainStoreState {
   fineLocation: boolean;
   groupEventsByMonth: boolean;
   compactView: boolean;
+  routerHistory: RouteLocationNormalizedLoaded[];
 }
 export const useMainStore = defineStore('main', {
   state: (): MainStoreState => ({
     darkMode: false,
-    mapStyle: 'satellite',
     showSidebar: true,
     showSearchBox: false, // for menubar search
     sidebarPanel: 'nearby',
@@ -45,6 +44,7 @@ export const useMainStore = defineStore('main', {
     fineLocation: false,
     groupEventsByMonth: Screen.lt.sm,
     compactView: Screen.lt.sm,
+    routerHistory: [],
   }),
   actions: {
     darkModeToggle() {

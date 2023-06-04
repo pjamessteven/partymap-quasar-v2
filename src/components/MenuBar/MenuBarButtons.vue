@@ -1,159 +1,11 @@
 <template>
   <div class="menubar-content flex row justify-end items-stretch grow no-wrap">
-    <!--
-      <div
-        class="flex row items-center q-mx-md"
-        v-if="currentUser && $q.screen.gt.xs"
-      >
-        <q-item
-          style="min-height: unset;"
-          class="user-indicator q-pl-sm q-pr-md q-py-xs "
-          clickable
-          v-on:click="
-            $router.push({
-              name: 'UserPage',
-              params: { id: currentUser.username }
-            })
-          "
-        >
-          <div class="flex row items-center align-center no-wrap ">
-            <q-avatar size="sm" color="primary" icon="las la-user"> </q-avatar>
-
-            <div class="username text-subtitle1 q-ml-sm">
-              {{ currentUser.username }}
-            </div>
-          </div>
-        </q-item>
-      </div>
-
-      <div class="flex row no-wrap searchbar-wrapper justify-end">
-        <q-input
-          borderless
-          ref="search"
-          dense
-          debounce="300"
-          class="searchbar-input "
-          :placeholder="$t('search.search_box_text')"
-          v-model="query"
-          bg-color="transparent"
-          @keyup.enter="search"
-          @focus="onFocusInput"
-          @blur="onBlurInput"
-        >
-          <template v-slot:prepend>
-            <q-icon name="mdi-magnify" class="q-my-md" />
-          </template>
-        </q-input>
-
-        <q-btn
-          :class="{
-            'q-px-sm ': $q.screen.gt.xs
-          }"
-          v-if="showSearchBox"
-          icon="mdi-close"
-          flat
-          v-on:click="toggleSearchBox(false)"
-        />
-        <q-btn
-          v-else
-          :class="{
-            'q-px-sm ': $q.screen.gt.xs,
-            'light-button':
-              $route.name === 'EventPage' ||
-              $route.name === 'Explore'
-          }"
-          icon="mdi-magnify"
-          flat
-          v-on:click="toggleSearchBox(true)"
-        />
-      </div>
-
-      <div class="flex row items-center separator-wrapper">
-        <div class="item-separator" />
-      </div>
-    -->
-    <!--
--->
-    <!--
-    <div
-      class="flex row no-wrap searchbar-wrapper justify-end"
-      :class="showSearchBox ? 'searchbar-expanded' : ''"
-    >
-      <q-input
-        borderless
-        ref="search"
-        dense
-        debounce="300"
-        class="searchbar-input "
-        :placeholder="$t('search.search_box_text')"
-        v-model="query"
-        bg-color="transparent"
-        @keyup.enter="search"
-        @focus="onFocusInput"
-        @blur="onBlurInput"
-      >
-        <template v-slot:prepend>
-          <q-icon name="mdi-magnify" class="q-my-md" />
-        </template>
-      </q-input>
-
-      <q-btn
-        :class="{
-          'q-px-sm ': $q.screen.gt.xs
-        }"
-        v-if="showSearchBox"
-        icon="mdi-close"
-        flat
-        v-on:click="toggleSearchBox(false)"
-      />
-      <q-btn
-        v-else
-        :class="{
-          'q-px-sm ': $q.screen.gt.xs,
-          'light-button': transparentMenuBar
-        }"
-        icon="mdi-magnify"
-        flat
-        v-on:click="toggleSearchBox(true)"
-      />
-    </div>
-    -->
-
-    <!--
-    <div class="flex items-center">
-      <q-btn
-        no-caps
-        class="add-button flex items-center"
-        @click="showAddEventDialog()"
-        :class="{
-          'light-button': transparentMenuBar,
-        }"
-      >
-        <div class="flex items-center row no-wrap chicago">
-          <div class="q-mr-sm">SUBMIT</div>
-          <q-icon name="mdi-plus" />
-        </div>
-        <q-tooltip
-          :content-class="
-            $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
-          "
-          :offset="[10, 10]"
-          content-style="font-size: 16px"
-        >
-          {{ $t('top_controls.quick_submit') }}
-        </q-tooltip>
-      </q-btn>
-    </div>
-    -->
     <q-btn
       class="button-menu"
       icon="mdi-menu"
       flat
       :class="{
-        'light-button':
-          $route.name === 'EventPage' ||
-          $route.name === 'Explore' ||
-          ($route.meta.fullscreenLayout === true && this.$q.screen.gt.xs),
+        'light-button': color === 'white',
       }"
       style="position: relative"
     >
@@ -194,7 +46,6 @@ export default {
   props: {
     color: {
       type: String,
-      default: 'light',
     },
   },
   watch: {},
@@ -297,66 +148,4 @@ export default {
 .light-button {
   color: white;
 }
-.add-button {
-  font-size: 1em;
-  background: linear-gradient(45deg, orange, yellow);
-  border: 1px solid darkorange;
-  border-radius: 9px !important;
-  color: black;
-  padding: 4px 6px 4px 12px;
-}
-.searchbar-wrapper {
-  pointer-events: all;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  width: auto;
-  //flex-grow: 1;
-  .searchbar-input {
-    width: 0px;
-    opacity: 0;
-    transition: all 0.3s ease;
-
-    :deep(.q-field__control) {
-      height: 100%;
-      font-size: 1rem;
-      border: none;
-      padding-left: 18px;
-      .q-field__marginal {
-        height: 100%;
-      }
-      .q-field__label {
-        top: 12px;
-      }
-    }
-  }
-  &.searchbar-expanded {
-    z-index: 3000;
-    .searchbar-input {
-      opacity: 1;
-      width: 250px;
-    }
-  }
-}
-
-/*
-@media only screen and (max-width: 600px) {
-  .menubar-content {
-    .separator-wrapper {
-      display: none;
-    }
-    .button-locate {
-      display: none;
-    }
-    .button-menu {
-      display: none;
-    }
-    .searchbar-wrapper {
-      .searchbar-input {
-        opacity: 1;
-        width: calc(100vw - 56px) !important;
-      }
-    }
-  }
-}
-*/
 </style>

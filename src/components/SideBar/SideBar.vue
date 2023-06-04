@@ -12,7 +12,8 @@
       :style="computedSidebarWidth"
       id="sidebar"
       v-bind:class="{
-        'sidebar-mobile-expanded': showPanel && $route.name !== 'EventPage',
+        'sidebar-mobile-expanded': showPanel,
+        'sidebar-mobile-hidden': $q.screen.lt.sm && $route.name === 'EventPage',
       }"
     >
       <!--
@@ -187,9 +188,7 @@ export default {
     ...mapState(useMapStore, ['mapMoving']),
     ...mapWritableState(useMapStore, ['preventMapZoom']),
     computedSidebarWidth() {
-      if (this.$q.screen.gt.lg) {
-        return 'width: 66vw; min-width: 854px; max-width: 1280px';
-      } else if (this.$q.screen.gt.md) {
+      if (this.$q.screen.gt.md) {
         return 'width: 66vw; min-width: 854px; max-width: 1024px';
       } else if (this.$q.screen.gt.sm) {
         return 'width: 66vw; min-width: 854px; max-width: 960px';
@@ -310,9 +309,6 @@ export default {
     &:not(.sidebar-mobile-expanded):hover {
       //transform: translate3d(0, 80px, 0) !important;
       // transform: translate3d(0, calc(100% - 286px), 0);
-    }
-    &.sidebar-mobile-hidden {
-      transform: translate3d(0, calc(100%), 0);
     }
 
     .welcome-message {
@@ -451,14 +447,24 @@ export default {
       border-right: none;
       overflow: visible;
 
-      :deep(.panels) {
-        border-top-right-radius: 18px;
-        border-top-left-radius: 18px;
+      &.sidebar-mobile-expanded {
+        transform: translate3d(0, 80px, 0);
+        .mobile-dismiss-list {
+          height: 200px;
+        }
+      }
+      &.sidebar-mobile-hidden {
+        transform: translate3d(0, calc(100%), 0);
       }
 
       .sidebar-content {
         padding-top: unset;
         padding-bottom: 64px;
+        .sidebar-content-inner {
+          border-top-left-radius: 18px;
+          border-top-right-radius: 18px;
+          overflow: hidden;
+        }
       }
       :deep(.main-content) {
         padding-top: 0px;
@@ -497,16 +503,6 @@ export default {
         transform: translate3d(0, 0, 0) !important;
       }
     }
-  }
-
-  .sidebar-mobile-expanded {
-    transform: translate3d(0, 80px, 0) !important;
-    .mobile-dismiss-list {
-      height: 200px;
-    }
-  }
-  .sidebar-mobile-hidden {
-    transform: translate3d(0, calc(100%), 0);
   }
 }
 </style>

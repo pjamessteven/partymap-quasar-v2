@@ -164,6 +164,15 @@ export default {
     userLocation: {
       handler: function (newval) {
         this.fitBoundsForExplorePage(newval);
+        // wait for animation
+        setTimeout(
+          () =>
+            (this.exploreMapView = {
+              latlng: this.map.getCenter(),
+              zoom: this.map.getZoom(),
+            }),
+          500
+        );
       },
     },
     route: {
@@ -233,13 +242,10 @@ export default {
           this.blockUpdates = true;
           // save current map view so we can return to it
           if (newval.lat && newval.lng) {
-            /*
-            moved to route watcher
-            this.previousMapView = {
+            this.exploreMapView = {
               latlng: this.map.getCenter(),
-              zoom: currentZoom
-            }
-            */
+              zoom: this.map.getZoom(),
+            };
             var currentZoom = this.map.getZoom();
 
             this.setMarkerFocusForEventPage(newval, currentZoom);
@@ -306,6 +312,7 @@ export default {
       }
       this.loadPoints();
     },
+
     fitBoundsForExplorePage(coords) {
       // padding for desktop panel
       var latlng = L.latLng(coords);
@@ -338,16 +345,17 @@ export default {
         lat: data.lat,
         lng: data.lng,
       };
-      this.$router.push({
-        name: 'EventPage',
-        params: {
-          id: data.events[0].event_id,
-          eventDateId: data.events[0].event_date_id,
-        },
-        query: {
-          name: data.events[0].name.replace(/ /g, '_'),
-        },
-      });
+      if (data.events[0])
+        this.$router.push({
+          name: 'EventPage',
+          params: {
+            id: data.events[0].event_id,
+            eventDateId: data.events[0].event_date_id,
+          },
+          query: {
+            name: data.events[0].name.replace(/ /g, '_'),
+          },
+        });
     },
     clickMarker(e) {
       var marker = e.target;
@@ -422,19 +430,22 @@ export default {
       });
 
       this.map.on('movestart', () => {
-        this.mapMoving = true;
+        /*
         this.exploreMapView = {
           latlng: this.map.getCenter(),
           zoom: this.map.getZoom(),
         };
+        */
+        this.mapMoving = true;
       });
 
       this.map.on('moveend', (event) => {
         if (!this.blockUpdates) {
+          /*
           this.exploreMapView = {
             latlng: this.map.getCenter(),
             zoom: this.map.getZoom(),
-          };
+          };*/
           this.setBounds(event.target.getBounds());
         }
 

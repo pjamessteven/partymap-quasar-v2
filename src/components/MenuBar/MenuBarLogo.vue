@@ -11,7 +11,7 @@
       <div class="logo q-pa-md row no-wrap items-center" v-if="!hideLogo">
         <img
           src="~assets/marker-dark.png"
-          v-if="logoColor === 'light'"
+          v-if="color === 'white'"
           class="logo-image"
         />
         <img src="~assets/marker-light.png" class="logo-image" v-else />
@@ -19,7 +19,7 @@
           <i
             class="q-ml-sm text-large logo-text"
             :class="{
-              'text-white': logoColor === 'light',
+              'text-white': color === 'white',
             }"
             >partymap&nbsp;</i
           >
@@ -35,6 +35,11 @@ import { mapState } from 'pinia';
 
 export default {
   name: 'MenuBarLogo',
+  props: {
+    color: {
+      type: String,
+    },
+  },
   components: {},
   watch: {},
   data() {
@@ -43,22 +48,6 @@ export default {
   methods: {},
   computed: {
     ...mapState(useMainStore, ['showSearchBox', 'sidebarPanel']),
-
-    logoColor() {
-      if (
-        this.$q.dark.isActive ||
-        this.$route.name === 'EventPage' ||
-        this.$route.name === 'Explore' ||
-        (this.$route.meta.mapOverlay &&
-          this.$route.name !== 'Explore' &&
-          this.$route.name !== 'EventPage' &&
-          this.$q.screen.gt.xs)
-      ) {
-        return 'light';
-      } else {
-        return 'dark';
-      }
-    },
   },
 };
 </script>

@@ -835,7 +835,7 @@ export default {
           window.location.pathname.indexOf(queryString) === -1 &&
           this.$route.name === 'EventPage'
         ) {
-          this.$router.replace({
+          this.$router.resolve({
             path: this.$route.path,
             query: { name: response.data.name.replace(/ /g, '_') },
           });
@@ -1234,6 +1234,8 @@ a {
           box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
             rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
             rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
+          border-top-left-radius: 18px !important;
+          border-top-right-radius: 18px !important;
           .content {
             height: 100%;
             border-top-left-radius: 18px !important;

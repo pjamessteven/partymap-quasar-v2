@@ -8,13 +8,18 @@
     <Transition
       appear
       :enter-active-class="
-        $q.screen.gt.xs ? 'animated  slideInUp' : 'animated slideInUp'
+        $q.screen.gt.xs ? 'animated  slideInUp' : 'animated fadeIn'
       "
       :leave-active-class="
         $q.screen.gt.xs ? 'animated slideOutDown' : undefined
       "
     >
-      <SideBar class="sidebar-component" v-show="$route.name === 'Explore'" />
+      <SideBar
+        class="sidebar-component"
+        v-show="
+          $q.screen.lt.sm || ($q.screen.gt.xs && $route.name !== 'EventPage')
+        "
+      />
     </Transition>
     <MainMap />
     <!-- There's two router views because we want different transitions for different pages
@@ -76,9 +81,13 @@ export default {
   },
   methods: {},
   beforeRouteUpdate(to, from, next) {
+    console.log('route', this.$router.options.history);
     if (from.name === 'Explore') {
       this.blockUpdates = true;
       // blockUpdates is re-enabled in Map.vue at map.
+    }
+    if (to.name === 'Explore') {
+      setTimeout(() => (this.blockUpdates = false), 500);
     }
     this.$nextTick(() => {
       next();

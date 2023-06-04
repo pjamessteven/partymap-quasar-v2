@@ -6,6 +6,7 @@ import {
 } from 'vue-router';
 
 import routes from './routes';
+import { useMainStore } from 'stores/main';
 
 /*
  * If not building with SSR mode, you can
@@ -23,7 +24,17 @@ const createHistory = process.env.SERVER
   : createWebHashHistory;
 
 const Router = createRouter({
-  scrollBehavior: () => ({ left: 0, top: 0 }),
+  scrollBehavior(to, from, savedPosition) {
+    console.log('router history', to, from);
+    const main = useMainStore();
+    const fromHistory = Boolean(savedPosition);
+    if (fromHistory && main.routerHistory.length > 0) {
+      main.routerHistory.splice(-1, 1);
+    } else {
+      main.routerHistory.push(from);
+    }
+    return savedPosition || { left: 0, top: 0 };
+  },
   routes,
 
   // Leave this as is and make changes in quasar.conf.js instead!

@@ -285,7 +285,7 @@ export default {
       var queryString = '?name=' + response.data.name.replace(/ /g, '_');
 
       if (window.location.pathname.indexOf(queryString) === -1) {
-        this.$router.replace({
+        this.$router.resolve({
           path: this.$route.path,
           query: { name: response.data.name.replace(/ /g, '_') },
         });
