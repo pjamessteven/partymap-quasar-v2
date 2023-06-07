@@ -41,7 +41,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: true,
-          friendlyName: 'Login',
+          noBackNavigation: true,
         },
       },
       {

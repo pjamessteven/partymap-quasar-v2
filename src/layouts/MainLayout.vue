@@ -17,7 +17,7 @@
       <SideBar
         class="sidebar-component"
         v-show="
-          $q.screen.lt.sm || ($q.screen.gt.xs && $route.name !== 'EventPage')
+          $q.screen.lt.sm || ($q.screen.gt.xs && $route.name == 'Explore')
         "
       />
     </Transition>
@@ -106,9 +106,9 @@ export default {
           return `opacity: ${this.overlayOpacity}; background: black!important`;
         } else {
           if (this.$q.dark.isActive) {
-            return `opacity: ${this.overlayOpacity}; background: black!important`;
+            return `opacity: ${this.overlayOpacity}; background: #242424!important`;
           } else {
-            return `opacity: ${this.overlayOpacity}; background: grey!important`;
+            return `opacity: ${this.overlayOpacity}; background: #fafafa!important`;
           }
         }
       } else {

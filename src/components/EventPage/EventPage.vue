@@ -1,5 +1,8 @@
 <template>
-  <div class="event-page">
+  <div
+    class="event-page"
+    :class="{ 'pointer-events': this.overlayOpacity === 1 }"
+  >
     <div class="flex row no-wrap event-page-content">
       <div
         class="flex history-container col-4 col-xs-12 col-sm-6 col-md-5 col-lg-4 col-xl-4"
@@ -20,17 +23,20 @@
           <div
             ref="contentcard"
             class="content-card flex column no-wrap"
-            :class="
-              showingHistory
-                ? 'col-12 no-margin-top'
-                : 'col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12'
-            "
+            :class="{
+              'col-12 no-margin-top': showingHistory,
+              'col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12':
+                !showingHistory,
+              shadow: this.overlayOpacity === 0,
+            }"
           >
+            <!--
             <MobileSwipeHandle
               v-if="$q.screen.lt.sm"
               @swipe="handleSwipe($event)"
               class="mobile-swipe-handle"
             />
+            -->
             <div
               class="content"
               :class="scrollPercentage >= 1 ? 'mobile-scroll-enable' : ''"
@@ -614,8 +620,8 @@ import FeaturedMediaComponent from 'components/EventPage/Gallery/FeaturedMediaCo
 import NextEventDateSummary from 'components/EventPage/EventDates/NextEventDateSummary.vue';
 import ReportDialog from './ReportDialog.vue';
 import TagsComponent from 'components/EventPage/Tags/TagsComponent.vue';
-import ReviewsComponent from './Reviews/ReviewComponent.vue';
-import MobileSwipeHandle from '../MobileSwipeHandle.vue';
+import ReviewsComponent from './Reviews/ReviewsComponent.vue';
+//import MobileSwipeHandle from '../MobileSwipeHandle.vue';
 import InterestedComponent from './InterestedComponent.vue';
 import SuggestionsDialog from './Suggestions/SuggestionsDialog.vue';
 import InnerLoading from 'components/InnerLoading.vue';
@@ -656,7 +662,7 @@ export default {
     //HistoryComponent,
     EventDates,
     EventDateSidebarDesktop,
-    MobileSwipeHandle,
+    // MobileSwipeHandle,
     InterestedComponent,
     SuggestionsDialog,
     InnerLoading,
@@ -1125,6 +1131,8 @@ a {
       .main-row {
         .content-card {
           .main-content {
+            border: 1px solid $b-4 !important;
+
             .action-buttons {
               /*
               .q-btn {
@@ -1137,9 +1145,6 @@ a {
           }
           .content {
             background: white;
-            box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
-              rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
-              rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
 
             :deep(.event-page-header) {
               background: white;
@@ -1190,6 +1195,9 @@ a {
 
 .event-page {
   pointer-events: none;
+  &.pointer-events {
+    pointer-events: all;
+  }
   .event-page-overlay {
     background: rgba(0, 0, 0, 0.5);
     width: 100%;
@@ -1225,16 +1233,19 @@ a {
 
           pointer-events: all;
           padding-bottom: 0px;
-          box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
-            rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
-            rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
+
           border-top-left-radius: 18px !important;
           border-top-right-radius: 18px !important;
+          &.shadow {
+            box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
+              rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
+              rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
+          }
           .content {
             height: 100%;
             border-top-left-radius: 18px !important;
             border-top-right-radius: 18px !important;
-            box-shadow: 0px 0px 64px 32px rgba(0, 0, 0, 0.2) !important;
+            //box-shadow: 0px 0px 64px 32px rgba(0, 0, 0, 0.2) !important;
 
             overflow: hidden;
             position: relative;

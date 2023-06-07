@@ -31,15 +31,7 @@
         :plugins="flickingPlugins"
         :options="flickingOptions"
       >
-        <div
-          v-for="(item, index) in items"
-          class="item-wrapper"
-          :key="index"
-          @mouseleave="
-            clickedImage = null;
-            hoveringImage = false;
-          "
-        >
+        <div v-for="(item, index) in items" class="item-wrapper" :key="index">
           <div class="item-wrapper-inner" ref="itemWrapperInner">
             <div class="hover-overlay" @click="currentItemIndex = index"></div>
             <video

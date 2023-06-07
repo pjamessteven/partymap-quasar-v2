@@ -1,146 +1,90 @@
 <template>
-  <div class="flex column">
-    <div class="inter bolder text-large t2 q-pr-md q-mb event-page-header">
-      Reviews:
+  <div class="review flex column q-mt-md">
+    <div class="flex row t3 items-center">
+      <RouterLink
+        class="link-hover"
+        :to="{ name: 'UserPage', params: { id: review.creator.username } }"
+        >{{ review.creator.username }}</RouterLink
+      >&nbsp;({{ timeAgo(review.created_at) }})
     </div>
-    <div class="new-review flex column q-mt-lg grow">
-      <div class="flex row items-end">
-        <q-input
-          label="Share your experience!"
-          rounded
-          autogrow
-          class="grow"
-          v-model="review.text"
-        ></q-input>
-
-        <q-btn
-          class="q-my-sm q-ml-md"
-          flat
-          icon="mdi-camera-plus-outline"
-          @click="$refs.mediaSelector.openSelectDialog()"
-        />
-      </div>
-
-      <q-rating
-        v-model="review.rating"
-        size="2em"
-        :max="5"
-        color="primary"
-        class="q-mt-md"
-      />
-      <MultipleMediaSelector
-        v-show="review.media_items.length > 0"
-        class="media-select q-mt-lg"
-        ref="mediaSelector"
-        :showUploadButton="false"
-        :showSelectButton="false"
-        @filesSelected="review.media_items = $event"
-      />
-      <div class="t4 q-mt-md" v-show="review.media_items.length > 0">
-        Please make sure that you have the consent of all people in your photos
-        before uploading.
-      </div>
-      <div class="flex column" v-if="currentUser && review.text.length > 0">
-        <div class="flex column items-start">
-          <div class="t2 q-mt-md" v-if="!review.rating">Select a rating</div>
-          <q-btn
-            class="q-mt-md"
-            color="primary"
-            :disabled="!review.rating"
-            @click="handleSubmitReview"
-            >Submit review</q-btn
-          >
-        </div>
-      </div>
-      <q-btn
-        class="q-mt-md"
-        v-if="!currentUser && review.text.length > 0"
-        color="primary"
-        @click="
-          $router.push({
-            path: '/login',
-            query: { from: $route.path },
-          })
-        "
-        >Login to post reviews</q-btn
-      >
-      <transition
-        appear
-        enter-active-class="animated fadeIn"
-        leave-active-class="animated fadeOut"
-      >
-        <InnerLoading v-if="loading" class="loading" />
-      </transition>
+    <q-rating
+      :model-value="review.rating"
+      size="1rem"
+      :max="5"
+      readonly
+      color="primary"
+      class="q-my-sm"
+    />
+    <div>
+      {{ review.text }}
     </div>
-    <div
-      class="no-reviews t4 inter bold text-large q-mt-lg"
-      v-if="event?.event_contributions?.length === 0"
+    <q-scroll-area
+      horizontal
+      class="media-scroll-area q-mt-md"
+      style="width: 100%; height: 148px"
+      v-if="review.media_items?.length > 0"
     >
-      No reviews yet - be the first!
-    </div>
-    <div v-else class="q-mt-sm">
-      <div
-        v-for="(review, index) in event.event_contributions"
-        :key="index"
-        class="flex column q-mt-lg"
-      >
-        <div class="flex row t3 items-center">
-          <RouterLink
-            class="link-hover"
-            :to="{ name: 'UserPage', params: { id: review.creator.username } }"
-            >{{ review.creator.username }}</RouterLink
-          >&nbsp;({{ timeAgo(review.created_at) }})
-        </div>
-        <q-rating
-          :model-value="review.rating"
-          size="1rem"
-          :max="5"
-          readonly
-          color="primary"
-          class="q-my-sm"
-        />
-        <div>
-          {{ review.text }}
+      <div class="flex row grow no-wrap items-start">
+        <div
+          v-for="(item, index) in review.media_items"
+          class="item-wrapper"
+          :key="index"
+        >
+          <div class="item-wrapper-inner" ref="itemWrapperInner">
+            <div
+              class="hover-overlay"
+              @click="currentMediaItemIndex = index"
+            ></div>
+            <video
+              v-if="item.v_low_url && item.v_low_url.length > 0"
+              class="video"
+              loop
+              muted
+              :poster="item.poster_url"
+            >
+              <source
+                :src="item.v_low_url"
+                type="video/webm"
+                class="image-thumb"
+              />
+            </video>
+            <img :src="item.thumb_xs_url" v-else />
+          </div>
         </div>
       </div>
-    </div>
+    </q-scroll-area>
+    <GalleryDialog
+      v-if="review.media_items?.length > 0"
+      :open="currentMediaItemIndex != null"
+      :items="review.media_items"
+      :showThumbnails="true"
+      :currentItemIndex="currentMediaItemIndex"
+      @onClose="currentMediaItemIndex = null"
+    />
   </div>
 </template>
 
 <script>
-import MultipleMediaSelector from 'components/MultipleMediaSelector.vue';
-import InnerLoading from 'src/components/InnerLoading.vue';
-
-import { mapState, mapActions } from 'pinia';
-import { useEventStore } from 'src/stores/event';
-import { useAuthStore } from 'src/stores/auth';
 import common from 'src/assets/common';
+import GalleryDialog from 'components/EventPage/Gallery/GalleryDialog.vue';
 
 export default {
-  components: { MultipleMediaSelector, InnerLoading },
+  components: {
+    //InnerLoading
+    GalleryDialog,
+  },
   props: {
-    showing: { type: Boolean, default: false },
+    review: { type: Object },
   },
   data() {
     return {
-      dialog: null,
-      review: { media_items: [], text: '', rating: undefined },
+      currentMediaItemIndex: null,
       loading: false,
     };
   },
   watch: {},
-  computed: {
-    ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
-    ...mapState(useEventStore, ['event', 'selectedEventDate']),
-  },
-  methods: {
-    ...mapActions(useEventStore, ['addReview']),
-    async handleSubmitReview() {
-      this.loading = true;
-      await this.addReview(this.review);
-      this.loading = false;
-    },
-  },
+  computed: {},
+  methods: {},
   created() {
     this.timeAgo = common.timeAgo;
   },
@@ -149,30 +93,85 @@ export default {
 
 <style lang="scss" scoped>
 .body--dark {
-  .new-review {
-    background: $bi-2;
-    border: 1px solid (rgba(255, 255, 255, 0.05));
+  :not(:last-child).review {
+    //border-left: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 16px;
   }
 }
 .body--light {
-  .new-review {
-    background: $b-2;
-    border: 1px solid (rgba(0, 0, 0, 0.05));
+  :not(:last-child).review {
+    //border-left: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 16px;
   }
 }
 
-.new-review {
+:not(:last-child).review {
+  //border-left: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 16px;
+}
+
+.item-wrapper {
   position: relative;
-  border-radius: 4px;
-  padding: 16px;
-  height: auto;
-  padding-top: 4px;
-  overflow: none;
-  transition: height 0.3s ease;
+  margin-right: 16px;
+  height: 128px;
+  width: 128px;
+  overflow: visible;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+
+  .item-wrapper-inner {
+    max-height: 100%;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+
+    img,
+    video {
+      max-height: 100%;
+      max-width: 100%;
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hover-overlay {
+      z-index: 1;
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      /*
+          background: linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0.2),
+            rgba(0, 0, 0, 0.8)
+          );
+          transition: opacity 0.3s;
+          */
+      &:hover {
+        opacity: 1;
+      }
+      .las {
+        font-size: 3rem;
+        color: white;
+      }
+    }
+  }
 }
-.media-select {
-  margin-left: -16px;
-}
+
 :deep(.q-field--filled .q-field__control) {
   //border-radius: 100px !important;
 }

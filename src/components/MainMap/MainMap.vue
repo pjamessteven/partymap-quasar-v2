@@ -53,12 +53,16 @@ export default {
       withTooltip: L.latLng(47.41422, -1.250482),
       currentZoom: 11.5,
       mapOptions: {
-        zoom: 2,
+        zoom: 1,
         zoomControl: true,
-        minZoom: 2,
+        minZoom: 4,
         maxBounds: L.latLngBounds(
-          L.latLng(-89.98155760646617, -Infinity),
-          L.latLng(89.99346179538875, Infinity)
+          // L.latLng(-89.98155760646617, -Infinity),
+          // L.latLng(89.99346179538875, Infinity)
+          [
+            [-90, -180],
+            [90, 180],
+          ]
         ),
         maxBoundsViscosity: 0.5,
         worldCopyJump: false,
@@ -507,6 +511,12 @@ export default {
         attribution: this.currentMapTileAttribution,
         detectRetina,
         filter,
+        updateWhenZooming: false,
+        noWrap: true,
+        bounds: [
+          [-90, -180],
+          [90, 180],
+        ],
       });
       this.tileLayer.setOpacity(opacity);
       this.tileLayer.addTo(this.map);
@@ -515,10 +525,17 @@ export default {
         // add additional label layer for satellite map
         this.labelLayer = L.tileLayer(this.labelsMapTileUrl, {
           detectRetina: false,
+          updateWhenZooming: false,
+          noWrap: true,
+          bounds: [
+            [-90, -180],
+            [90, 180],
+          ],
         });
         this.labelLayer.addTo(this.map);
         this.labelLayer.setOpacity(this.satelliteLabelLayerOpacity);
       }
+      this.map.fitWorld();
     },
     initMarkers() {
       this.markersLoaded = false;

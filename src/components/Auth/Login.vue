@@ -11,40 +11,43 @@
         >
           It's party time.
         </div>
-        <q-input
-          ref="login"
-          class=""
-          outlined
-          filled
-          v-bind:label="$t('auth.identifier')"
-          v-model="identifier"
-          @keyup.enter="_login"
-        />
-        <q-input
-          outlined
-          filled
-          class="q-mt-md"
-          type="password"
-          v-bind:label="$t('auth.password')"
-          v-model="password"
-          @keyup.enter="_login"
-        />
-        <div class="flex row grow justify-end items-center q-mt-lg">
-          <q-btn
-            size="medium"
-            color="primary"
-            no-caps
-            class="soft-button-shadow q-mb-md t1 inter bold text-large"
-            v-bind:label="$t('auth.login')"
-            type="a"
-            @click="_login"
+        <div class="flex column o-animated" :class="{ 'o-000': loading }">
+          <q-input
+            ref="login"
+            class=""
+            outlined
+            filled
+            v-bind:label="$t('auth.identifier')"
+            v-model="identifier"
+            @keyup.enter="_login"
           />
-          <!--
+          <q-input
+            outlined
+            filled
+            class="q-mt-md"
+            type="password"
+            v-bind:label="$t('auth.password')"
+            v-model="password"
+            @keyup.enter="_login"
+          />
+          <div class="flex row grow justify-end items-center q-mt-lg">
+            <q-btn
+              size="medium"
+              color="primary"
+              no-caps
+              class="soft-button-shadow q-mb-md t1 inter bold text-large"
+              v-bind:label="$t('auth.login')"
+              type="a"
+              @click="_login"
+            />
+            <!--
           <div class="link-hover t2 text-large" @click="login">
             {{ $t('auth.login') }}
             <q-icon right name="mdi-chevron-right" />
           </div>
-        --></div>
+        -->
+          </div>
+        </div>
       </q-card-section>
 
       <q-card-section
@@ -69,8 +72,11 @@
         </div>
       -->
 
-        <div class="separator" />
-        <div class="flex column items-end">
+        <div class="separator o-animated" :class="{ 'o-000': loading }" />
+        <div
+          class="flex column items-end o-animated"
+          :class="{ 'o-000': loading }"
+        >
           <q-btn
             class="q-mt-md t2"
             unelevated
@@ -111,7 +117,7 @@
           </div>
         </div>
       </q-card-section>
-      <InnerLoading v-if="loading" :solid="true" />
+      <InnerLoading v-if="loading" :solid="false" />
     </q-card>
     <q-dialog
       v-model="showPrivacyPolicyDialog"

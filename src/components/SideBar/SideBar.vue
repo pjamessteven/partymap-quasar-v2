@@ -155,15 +155,11 @@ export default {
       if (!direction) {
         this.showPanel = !this.showPanel;
       }
-      if (
-        (this.showPanel && direction === 'down') ||
-        (!this.showPanel && direction === 'up')
-      ) {
-        if (this.sidebarPanel !== 'explore') {
-          this.sidebarPanel = 'explore';
-        }
-        this.showPanel = !this.showPanel;
+
+      if (this.sidebarPanel !== 'explore') {
+        this.sidebarPanel = 'explore';
       }
+      this.showPanel = !this.showPanel;
     },
   },
   watch: {

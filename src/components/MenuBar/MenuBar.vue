@@ -59,6 +59,22 @@ export default {
     back() {
       this.$router.go(-1);
     },
+    getPreviousRouteName(previousRoute) {
+      if (previousRoute.name === 'Explore') {
+        if (this.sidebarPanel === 'explore' || this.sidebarPanel === 'search') {
+          return 'Back to results';
+        } else if (this.sidebarPanel === 'nearby') {
+          return 'Back to home';
+        } else if (this.sidebarPanel === 'favorites') {
+          return 'Back to your events';
+        } else return null;
+      } else if (
+        previousRoute.name === 'EventPage' ||
+        previousRoute.name === 'ArtistPage'
+      ) {
+        return 'Back to ' + previousRoute.query.name.replace(/_/g, ' ');
+      } else return previousRoute.meta['friendlyName'];
+    },
   },
   computed: {
     ...mapState(useMainStore, [
@@ -75,23 +91,7 @@ export default {
       if (previousRoute) {
         if (previousRoute.meta?.noBackNavigation) {
           return null;
-        } else if (previousRoute.name === 'Explore') {
-          if (
-            this.sidebarPanel === 'explore' ||
-            this.sidebarPanel === 'search'
-          ) {
-            return 'Back to results';
-          } else if (this.sidebarPanel === 'nearby') {
-            return 'Back to home';
-          } else if (this.sidebarPanel === 'favorites') {
-            return 'Back to your events';
-          } else return null;
-        } else if (
-          previousRoute.name === 'EventPage' ||
-          previousRoute.name === 'ArtistPage'
-        ) {
-          return 'Back to ' + previousRoute.query.name.replace(/_/g, ' ');
-        } else return previousRoute.meta['friendlyName'];
+        } else return this.getPreviousRouteName(previousRoute);
       } else return null;
     },
     transparentMenuBar() {
@@ -105,7 +105,15 @@ export default {
     computedStyle() {
       if (this.$route.name === 'EventPage') {
         var opacity = this.menubarOpacity;
-        return `opacity: ${opacity}; background: black!important`;
+        if (this.$q.screen.gt.xs) {
+          if (this.$q.dark.isActive) {
+            return `opacity: ${opacity}; background: black!important`;
+          } else {
+            return `opacity: ${opacity}; background: white!important`;
+          }
+        } else {
+          return `opacity: ${opacity}; background: black!important`;
+        }
       } else if (
         !this.$route.meta.mapOverlay ||
         (this.$q.screen.lt.sm && this.$route.name !== 'Explore')
@@ -115,6 +123,13 @@ export default {
     },
     iconColor() {
       if (
+        this.$route.name === 'EventPage' &&
+        this.$q.screen.gt.xs &&
+        this.menubarOpacity === 1 &&
+        !this.$q.dark.isActive
+      ) {
+        return 'black';
+      } else if (
         this.$q.dark.isActive ||
         this.$route.name === 'EventPage' ||
         this.$route.name === 'Explore' ||
