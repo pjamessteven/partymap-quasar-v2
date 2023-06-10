@@ -24,7 +24,7 @@
 
 <script>
 import { mapWritableState, mapState, mapActions } from 'pinia';
-
+import { toRaw } from 'vue';
 import { useMapStore } from 'stores/map.ts';
 import { useMainStore } from 'stores/main.ts';
 import { useQueryStore } from 'src/stores/query';
@@ -55,13 +55,14 @@ export default {
       mapOptions: {
         zoom: 1,
         zoomControl: true,
-        minZoom: 4,
+        minZoom: 2,
+        maxZoom: 14,
         maxBounds: L.latLngBounds(
           // L.latLng(-89.98155760646617, -Infinity),
           // L.latLng(89.99346179538875, Infinity)
           [
             [-90, -180],
-            [90, 180],
+            [90, 220],
           ]
         ),
         maxBoundsViscosity: 0.5,
@@ -72,7 +73,7 @@ export default {
       clusterOptions: {
         chunkedLoading: true,
       },
-      map: null,
+      map: null, // when accessing this.map, we need to use toRaw() to avoid vue3 proxy which causes issues ()
       tileLayer: null,
       labelLayer: null,
       mapMarkers: null,
@@ -184,15 +185,15 @@ export default {
         if (this.map) {
           if (to.name === 'EventPage') {
             // enter event page
-            if (this.mapMarkers && this.map.hasLayer(this.mapMarkers)) {
-              this.map.removeLayer(this.mapMarkers);
+            if (this.mapMarkers && this.map.hasLayer(toRaw(this.mapMarkers))) {
+              this.map.removeLayer(toRaw(this.mapMarkers));
             }
             if (
               this.eventDateHoverLayer &&
-              this.map.hasLayer(this.eventDateHoverLayer)
+              this.map.hasLayer(toRaw(this.eventDateHoverLayer))
             ) {
               this.eventDateHoverLayer.clearLayers();
-              this.map.removeLayer(this.eventDateHoverLayer);
+              this.map.removeLayer(toRaw(this.eventDateHoverLayer));
             }
             // this.eventDateHoverLayer.clearLayers()
           } else if (to.name === 'Explore') {
@@ -209,17 +210,17 @@ export default {
 
             if (
               this.focusMarkerLayer &&
-              this.map.hasLayer(this.focusMarkerLayer)
+              this.map.hasLayer(toRaw(this.focusMarkerLayer))
             ) {
               this.focusMarkerLayer.clearLayers();
-              this.map.removeLayer(this.focusMarkerLayer);
+              this.map.removeLayer(toRaw(this.focusMarkerLayer));
             }
             if (
               this.eventDateHoverLayer &&
-              this.map.hasLayer(this.eventDateHoverLayer)
+              this.map.hasLayer(toRaw(this.eventDateHoverLayer))
             ) {
               this.eventDateHoverLayer.clearLayers();
-              this.map.removeLayer(this.eventDateHoverLayer);
+              this.map.removeLayer(toRaw(this.eventDateHoverLayer));
             }
 
             // restore previous map view
@@ -232,7 +233,7 @@ export default {
             }
             // possible performance issue
             if (this.mapMarkers) {
-              this.map.addLayer(this.mapMarkers);
+              this.map.addLayer(toRaw(this.mapMarkers));
             } else {
               this.clearMarkersAndLoadPoints();
             }
@@ -271,7 +272,7 @@ export default {
         ];
         this.eventDateHoverLayer = L.featureGroup(markers)
           .bindTooltip(newv.name, { direction: 'top', permanent: true })
-          .addTo(this.map);
+          .addTo(toRaw(this.map));
       }
     },
     mapMoving: function (newv) {
@@ -309,11 +310,11 @@ export default {
     },
     clearMarkersAndLoadPoints() {
       if (this.mapMarkers !== null) {
-        this.map?.removeLayer(this.mapMarkers);
+        this.map?.removeLayer(toRaw(this.mapMarkers));
         this.mapMarkers.clearLayers();
       }
       if (this.mapMarkersPermanentTooltip !== null) {
-        this.map?.removeLayer(this.mapMarkersPermanentTooltip);
+        this.map?.removeLayer(toRaw(this.mapMarkersPermanentTooltip));
         this.mapMarkersPermanentTooltip.clearLayers();
       }
       this.loadPoints();
@@ -376,7 +377,9 @@ export default {
           // to the more appropriate "parent" name)
 
           // props forwarded to component
-          data: marker.data,
+          componentProps: {
+            data: marker.data,
+          },
         });
       } else {
         this.showEventPageForMarker(marker.data);
@@ -395,7 +398,8 @@ export default {
       this.mapCenter = bounds;
     },
     setMarkerFocusForEventPage(latlng, zoom) {
-      this.eventDateHoverLayer.clearLayers();
+      this.mapMarkers.remove();
+      this.mapMarkersPermanentTooltip.remove();
 
       var markers = [
         L.marker(latlng, {
@@ -406,12 +410,12 @@ export default {
 
       this.focusMarkerLayer.clearLayers();
       this.focusMarkerLayer = L.featureGroup(markers);
-      this.focusMarkerLayer.addTo(this.map);
+      this.focusMarkerLayer.addTo(toRaw(this.map));
       // var paddingBottom = this.windowHeight - (this.windowHeight / 2 - 120)
       var mapContainerHeight = this.windowHeight; // minus menubar
       var paddingBottom = this.windowHeight - mapContainerHeight / 3 + 28;
       var paddingRight = 0;
-      this.map.fitBounds(this.focusMarkerLayer.getBounds(), {
+      this.map.fitBounds(toRaw(this.focusMarkerLayer).getBounds(), {
         paddingBottomRight: [paddingRight, paddingBottom],
         animate: true,
         maxZoom: zoom,
@@ -464,19 +468,12 @@ export default {
       this.map.on('zoomend', (event) => {
         if (event.target.getZoom() > 10) {
           // show markers with tooltips at a certain zoom level
-          if (this.mapMarkers && this.map?.hasLayer(this.mapMarkers)) {
-            this.map.removeLayer(this.mapMarkers);
-            this.map.addLayer(this.mapMarkersPermanentTooltip);
-          }
+          this.mapMarkers.remove();
+          this.mapMarkersPermanentTooltip.addTo(toRaw(this.map));
         } else {
           // remove markers with tooltips
-          if (
-            this.mapMarkersPermanentTooltip &&
-            this.map?.hasLayer(this.mapMarkersPermanentTooltip)
-          ) {
-            this.map?.removeLayer(this.mapMarkersPermanentTooltip);
-            this.map?.addLayer(this.mapMarkers);
-          }
+          this.mapMarkersPermanentTooltip.remove();
+          this.mapMarkers.addTo(toRaw(this.map));
         }
         if (!this.blockUpdates) {
           this.exploreMapView = {
@@ -488,11 +485,11 @@ export default {
       });
     },
     initTileLayers() {
-      if (this.tileLayer && this.map?.hasLayer(this.tileLayer)) {
-        this.map.removeLayer(this.tileLayer);
+      if (this.tileLayer && this.map?.hasLayer(toRaw(this.tileLayer))) {
+        this.map.removeLayer(toRaw(this.tileLayer));
       }
-      if (this.labelLayer && this.map?.hasLayer(this.labelLayer)) {
-        this.map.removeLayer(this.labelLayer);
+      if (this.labelLayer && this.map?.hasLayer(toRaw(this.labelLayer))) {
+        this.map.removeLayer(toRaw(this.labelLayer));
       }
 
       // style specific parameters
@@ -512,27 +509,25 @@ export default {
         detectRetina,
         filter,
         updateWhenZooming: false,
-        noWrap: true,
         bounds: [
           [-90, -180],
           [90, 180],
         ],
       });
       this.tileLayer.setOpacity(opacity);
-      this.tileLayer.addTo(this.map);
+      this.tileLayer.addTo(toRaw(this.map));
 
       if (this.mapStyle === 'satellite') {
         // add additional label layer for satellite map
         this.labelLayer = L.tileLayer(this.labelsMapTileUrl, {
           detectRetina: false,
           updateWhenZooming: false,
-          noWrap: true,
           bounds: [
             [-90, -180],
             [90, 180],
           ],
         });
-        this.labelLayer.addTo(this.map);
+        this.labelLayer.addTo(toRaw(this.map));
         this.labelLayer.setOpacity(this.satelliteLabelLayerOpacity);
       }
       this.map.fitWorld();
@@ -583,7 +578,8 @@ export default {
 
           let marker = L.marker([this.points[i].lat, this.points[i].lng], {
             icon: this.defaultIcon,
-          }).bindTooltip(toolTipHtml, { direction: 'top' });
+          }).bindTooltip(toolTipHtml, { direction: 'top', permanent: true });
+
           marker.on('click', this.clickMarker);
           marker.data = this.points[i];
           markers.push(marker);
@@ -601,7 +597,7 @@ export default {
         this.mapMarkers.addLayers(markers);
         this.mapMarkersPermanentTooltip.addLayers(tooltipMarkers);
         this.markersLoaded = true;
-        this.map.addLayer(this.mapMarkers);
+        this.mapMarkers.addTo(toRaw(this.map));
       }
     },
   },

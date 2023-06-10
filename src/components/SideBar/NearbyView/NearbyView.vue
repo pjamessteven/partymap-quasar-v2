@@ -693,6 +693,8 @@ export default {
     if (this.$route.name === 'Explore' && this.sidebarPanel === 'nearby')
       if (!this.userLocation) {
         await this.loadIpInfo();
+      } else {
+        if (this.eventDates.length === 0) this.loadEverything();
       }
     if (this.$route.query.global_page) {
       // used by hidden pagination for SEO

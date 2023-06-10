@@ -1,6 +1,6 @@
 <template>
   <q-dialog ref="dialog">
-    <q-card class="q-dialog-plugin">
+    <q-card class="q-dialog-plugin dialog-card">
       <q-list bordered separator v-if="data && data.events">
         <q-item-label header
           >{{ $t('event.events_at') }} {{ data.name }}</q-item-label
