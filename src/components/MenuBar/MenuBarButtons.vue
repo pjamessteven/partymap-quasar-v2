@@ -1,5 +1,23 @@
 <template>
   <div class="menubar-content flex row justify-end items-stretch grow no-wrap">
+    <transition
+      enter-active-class="animated fadeIn"
+      leave-active-class="animated fadeOut"
+    >
+      <div
+        class="items-center flex justify-center q-mr-md"
+        v-if="$route.name === 'Explore' && $q.screen.gt.xs"
+      >
+        <q-btn
+          color="primary"
+          class="inter bold"
+          no-caps
+          @click="showAddEventDialog"
+          >Submit Event</q-btn
+        >
+      </div>
+    </transition>
+
     <q-btn
       class="button-menu"
       icon="mdi-menu"
@@ -129,6 +147,9 @@ export default {
   width: 368px;
   //pointer-events: all;
 }
+.q-btn {
+  pointer-events: all;
+}
 .logo {
   position: absolute;
   opacity: 1;
@@ -141,7 +162,7 @@ export default {
 .user-indicator {
   border-radius: 100px;
 }
-.q-btn {
+.button-menu {
   border-radius: 0px !important;
   pointer-events: all;
 }

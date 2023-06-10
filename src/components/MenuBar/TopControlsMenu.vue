@@ -103,7 +103,7 @@
         <q-icon name="las la-plus-square" />
       </q-item-section>
       <q-item-section>
-        <q-item-label>{{ $t('sidebar.add_event') }}</q-item-label>
+        <q-item-label>Submit event</q-item-label>
       </q-item-section>
     </q-item>
 

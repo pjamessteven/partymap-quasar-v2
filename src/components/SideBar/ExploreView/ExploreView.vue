@@ -3,6 +3,7 @@
     class="event-list-vertical shadow-0 main-content"
     style="height: 100%; width: 100%; position: relative; overflow: hidden"
   >
+    <!--
     <q-linear-progress
       indeterminate
       size="2px"
@@ -13,6 +14,7 @@
         $q.screen.gt.xs && (isLoadingInitial || (mapMoving && !blockUpdates))
       "
     />
+    -->
     <div class="touch-overlay" v-touch-swipe.vertical="handleSwipe" />
     <div
       class="event-list-inner"
@@ -139,11 +141,13 @@
         Loading...
       </div>
       <div
-        v-if="
-          ($q.screen.lt.sm && isLoadingInitial) || (mapMoving && !blockUpdates)
-        "
+        v-if="isLoadingInitial || (mapMoving && !blockUpdates)"
         class="event-date-center flex grow justify-center"
-        style="height: 100%; position: absolute; width: 100%; z-index: 500"
+        :style="
+          $q.screen.lt.sm
+            ? 'height: 100%; position: absolute; width: 100%; z-index: 500'
+            : 'height: 220px; position: absolute; width: 100%; z-index: 500'
+        "
       >
         <q-linear-progress
           class="q-mt-lg"
@@ -298,12 +302,6 @@ export default {
       if (this.sidebarPanel === 'favorites') {
         this.getInitialList();
       }
-    },
-    controlTags: {
-      handler() {
-        this.getInitialList();
-      },
-      deep: true,
     },
     controlDateRange: {
       handler() {

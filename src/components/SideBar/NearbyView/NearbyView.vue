@@ -19,119 +19,116 @@
                 'will-change': 'scroll-position',
               }"
             >
-              <div class="flex column scroll-content q-mt-">
-                <div
-                  class="flex q-mx-md q-mt-lg q-pa-md message"
-                  @click="showMessage = !showMessage"
-                >
-                  <div class="flex justify-between grow items-center no-wrap">
-                    <span class="inter bold"
-                      >Welcome to PartyMap, the global map of festivals and
-                      events!</span
-                    >
-                    <q-icon
-                      :name="
-                        !showMessage ? 'mdi-chevron-down' : 'mdi-chevron-up'
-                      "
-                    />
-                  </div>
-                  <div v-if="showMessage">
-                    <p />
-                    PartyMap is a community-driven platform. Anyone can add an
-                    event that they know about, as long as the information is
-                    already public on the internet. Anyone can also suggest
-                    changes to an event if the information is out of date. No
-                    account needed!
-                    <p />
-                    If you have any thoughts, ideas or suggestions, feel free to
-                    contact me through the feedback form or by email to
-                    <a @click.stop href="mailto:info@partymap.com"
-                      >info@partymap.com</a
-                    >
-
-                    <p />
-                    Enjoy - Pete
-                  </div>
+              <div
+                v-if="$q.screen.lt.sm"
+                class="sidebar-header flex column grow no-wrap items-stretch justify-between ellipsis no-wrap q-pl-md"
+                style="width: 100%"
+                :class="$q.screen.gt.xs ? 'q-mt-' : ''"
+              >
+                <div class="q-pr-md ellipsis q-mt-md">
+                  <span class="text-h4 inter bolder">Near</span>
                 </div>
-
-                <div
-                  v-if="$q.screen.lt.sm"
-                  class="sidebar-header flex column grow no-wrap items-stretch justify-between ellipsis no-wrap q-pl-md"
-                  style="width: 100%"
-                  :class="$q.screen.gt.xs ? 'q-mt-' : ''"
+              </div>
+              <div
+                v-if="$q.screen.lt.sm"
+                class="flex items-center no-wrap inter bolder t1 q-pl-md q-mt-"
+                style="width: 100%"
+                :class="
+                  $q.screen.gt.xs
+                    ? 'text-h4 q-mt-lg q-mb-sm'
+                    : 'text-h4 justify-between'
+                "
+              >
+                <span
+                  v-if="userLocation"
+                  class="ellipsis"
+                  :class="$q.screen.gt.xs ? 'q-pa-xs' : ''"
                 >
-                  <div class="q-pr-md ellipsis q-mt-md">
-                    <span class="text-h4 inter bolder">Near</span>
-                  </div>
-                </div>
-                <div
-                  v-if="$q.screen.lt.sm"
-                  class="flex items-center no-wrap inter bolder t1 q-pl-md"
-                  style="width: 100%"
-                  :class="
-                    $q.screen.gt.xs
-                      ? 'text-h4 q-mt-lg q-mb-sm'
-                      : 'text-h4 justify-between'
-                  "
+                  {{ userLocationCity }}
+                </span>
+                <span class="ellipsis" v-else>... </span>
+                <q-btn
+                  flat
+                  style="margin-left: -8px"
+                  class="q-px-sm q-mr-md"
+                  @click.stop="() => getFineLocation()"
                 >
-                  <span
-                    v-if="userLocation"
-                    class="ellipsis"
-                    :class="$q.screen.gt.xs ? 'q-pa-xs' : ''"
-                  >
-                    {{ userLocationCity }}
-                  </span>
-                  <span class="ellipsis" v-else>... </span>
-                  <q-btn
-                    flat
-                    style="margin-left: -8px"
-                    class="q-px-sm q-mr-md"
-                    @click.stop="() => getFineLocation()"
-                  >
-                    <template v-slot:default>
-                      <div v-if="!userLocationLoading" class="flex">
-                        <q-icon
-                          name="mdi-crosshairs-gps"
-                          class=""
-                          v-if="fineLocation"
-                        />
-                        <q-icon name="mdi-crosshairs" class="" v-else />
-                      </div>
-                      <div v-else style="position: relative" class="flex">
-                        <q-icon style="z-index: 1" name="mdi-crosshairs" />
-                        <q-icon
-                          style="z-index: 2; left: 0px"
-                          class="animated infinite flash slowest absolute"
-                          name="mdi-crosshairs-gps"
-                        />
-                      </div>
-                      <q-tooltip
+                  <template v-slot:default>
+                    <div v-if="!userLocationLoading" class="flex">
+                      <q-icon
+                        name="mdi-crosshairs-gps"
                         class=""
-                        :content-class="
-                          $q.dark.isActive
-                            ? 'bg-black text-white'
-                            : 'bg-white text-black'
-                        "
-                        :offset="[10, 10]"
-                      >
-                        {{ $t('landing_page.improve_location') }}
-                      </q-tooltip>
-                    </template>
-                  </q-btn>
+                        v-if="fineLocation"
+                      />
+                      <q-icon name="mdi-crosshairs" class="" v-else />
+                    </div>
+                    <div v-else style="position: relative" class="flex">
+                      <q-icon style="z-index: 1" name="mdi-crosshairs" />
+                      <q-icon
+                        style="z-index: 2; left: 0px"
+                        class="animated infinite flash slowest absolute"
+                        name="mdi-crosshairs-gps"
+                      />
+                    </div>
+                    <q-tooltip
+                      class=""
+                      :content-class="
+                        $q.dark.isActive
+                          ? 'bg-black text-white'
+                          : 'bg-white text-black'
+                      "
+                      :offset="[10, 10]"
+                    >
+                      {{ $t('landing_page.improve_location') }}
+                    </q-tooltip>
+                  </template>
+                </q-btn>
+              </div>
+
+              <div
+                class="flex q-pa-md q-mt-lg message"
+                :class="$q.screen.gt.xs ? 'q-mx-md ' : ''"
+                @click="showMessage = !showMessage"
+              >
+                <div class="flex justify-between grow items-center no-wrap">
+                  <span class="inter bold t1"
+                    >Welcome to PartyMap, the global map of festivals and
+                    events!</span
+                  >
+                  <q-icon
+                    :name="!showMessage ? 'mdi-chevron-down' : 'mdi-chevron-up'"
+                  />
                 </div>
                 <div
-                  class="flex row justify-center items-center q-py-xl"
-                  style="height: 100%; width: 100%; position: absolute"
-                  v-if="loadingEverything || !computedSidebarPanelReady"
+                  v-if="showMessage"
+                  class="flex column items-start justify-start"
                 >
-                  <!--
+                  <p />
+                  PartyMap is a community-driven platform. Anyone can submit an
+                  event that they know about, as long as the information is
+                  already public on the internet. Anyone can also suggest
+                  changes to an event if the information is out of date. No
+                  account needed!
+
+                  <p />
+                  Enjoy - Pete
+                </div>
+              </div>
+
+              <div
+                class="flex row justify-center items-center q-py-xl q-mt-lg"
+                style="height: 100%; width: 100%; position: absolute; top: 0px"
+                v-if="loadingEverything || !computedSidebarPanelReady"
+              >
+                <!--
                   <q-spinner-ios
                     color="$a.dark.isActive ? 'white' : 'black'"
                     size="2em"
                   />
                   --><InnerLoading :solid="false" />
-                </div>
+              </div>
 
+              <div class="flex column scroll-content q-mt-">
                 <transition appear enter-active-class="animated fadeIn slow">
                   <div
                     class="content"
@@ -759,9 +756,7 @@ export default {
     }
     .main-content {
       .message {
-        background: rgba(200, 100, 0, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 9px;
+        background: $bi-3;
       }
       .banner {
         //background: $bi-2;
@@ -805,8 +800,9 @@ export default {
     }
     .main-content {
       .message {
-        background: rgba(200, 100, 0, 0.2);
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        // background: rgba(200, 100, 0, 0.2);
+        background: $b-3;
+        //border: 1px solid rgba(0, 0, 0, 0.1);
       }
       .banner {
         //background: white;
@@ -1083,6 +1079,9 @@ export default {
       }
     }
     .main-content {
+      .message {
+        border-radius: 0px;
+      }
       .tag-scroll-area {
         height: 78px;
       }

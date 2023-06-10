@@ -45,7 +45,7 @@
 
           <ExploreView
             style="height: 100%; width: 100%"
-            v-if="sidebarPanel === 'explore'"
+            v-show="sidebarPanel === 'explore'"
           />
 
           <FavoritesView
