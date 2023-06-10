@@ -756,7 +756,7 @@ export default {
     }
     .main-content {
       .message {
-        background: $bi-3;
+        background: $bi-2;
       }
       .banner {
         //background: $bi-2;
@@ -802,7 +802,6 @@ export default {
       .message {
         // background: rgba(200, 100, 0, 0.2);
         background: $b-3;
-        //border: 1px solid rgba(0, 0, 0, 0.1);
       }
       .banner {
         //background: white;

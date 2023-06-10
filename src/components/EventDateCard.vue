@@ -515,10 +515,9 @@ export default {
         position: relative;
         overflow: hidden;
         //border-radius: 100%;
-        width: 96px;
+        width: 86px;
         aspect-ratio: 595 / 842;
-
-        min-width: 96px;
+        min-width: 86px;
         border-radius: 9px;
         .image {
           height: 100%;
