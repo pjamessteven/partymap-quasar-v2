@@ -102,17 +102,6 @@ export default {
   },
 
   watch: {
-    preventMapZoom: {
-      // we need to prevent map zoom for 300ms or so after user uses mousewheel to hide nav panel
-      // otherwise it zooms uncontrolably
-      handler(newv) {
-        if (newv) {
-          this.map.scrollWheelZoom.disable();
-        } else {
-          this.map.scrollWheelZoom.enable();
-        }
-      },
-    },
     windowHeight() {
       this.invalidateMapSize();
     },
@@ -186,18 +175,24 @@ export default {
           if (to.name === 'EventPage') {
             // enter event page
             if (this.mapMarkers && this.map.hasLayer(toRaw(this.mapMarkers))) {
-              this.map.removeLayer(toRaw(this.mapMarkers));
+              this.mapMarkers.remove();
             }
             if (
               this.eventDateHoverLayer &&
               this.map.hasLayer(toRaw(this.eventDateHoverLayer))
             ) {
               this.eventDateHoverLayer.clearLayers();
-              this.map.removeLayer(toRaw(this.eventDateHoverLayer));
+              this.eventDateHoverLayer.remove();
             }
             // this.eventDateHoverLayer.clearLayers()
           } else if (to.name === 'Explore') {
-            // this.setBounds(this.map.getBounds());
+            // restore previous map view
+            if (this.exploreMapView) {
+              this.map.setView(
+                this.exploreMapView.latlng,
+                this.exploreMapView.zoom
+              );
+            }
 
             // restore default opacity
             if (this.mapStyle === 'satellite') {
@@ -213,27 +208,19 @@ export default {
               this.map.hasLayer(toRaw(this.focusMarkerLayer))
             ) {
               this.focusMarkerLayer.clearLayers();
-              this.map.removeLayer(toRaw(this.focusMarkerLayer));
+              this.focusMarkerLayer.remove();
             }
             if (
               this.eventDateHoverLayer &&
               this.map.hasLayer(toRaw(this.eventDateHoverLayer))
             ) {
               this.eventDateHoverLayer.clearLayers();
-              this.map.removeLayer(toRaw(this.eventDateHoverLayer));
+              this.eventDateHoverLayer.remove();
             }
 
-            // restore previous map view
-            //this.map.invalidateSize();
-            if (this.exploreMapView) {
-              this.map.setView(
-                this.exploreMapView.latlng,
-                this.exploreMapView.zoom
-              );
-            }
             // possible performance issue
             if (this.mapMarkers) {
-              this.map.addLayer(toRaw(this.mapMarkers));
+              this.mapMarkers.addTo(toRaw(this.map));
             } else {
               this.clearMarkersAndLoadPoints();
             }
@@ -251,6 +238,7 @@ export default {
               latlng: this.map.getCenter(),
               zoom: this.map.getZoom(),
             };
+
             var currentZoom = this.map.getZoom();
             if (currentZoom <= 4) {
               currentZoom = 4;
@@ -295,6 +283,10 @@ export default {
   methods: {
     ...mapActions(useQueryStore, ['loadPoints']),
     handleWheel(event) {
+      if (this.preventMapZoom) {
+        event.stopImmediatePropagation();
+        return false;
+      }
       // switch to explore view
       if (!this.preventMapZoom) {
         this.showPanel = false;
@@ -399,7 +391,7 @@ export default {
     },
     setMarkerFocusForEventPage(latlng, zoom) {
       this.mapMarkers.remove();
-      this.mapMarkersPermanentTooltip.remove();
+      //this.mapMarkersPermanentTooltip.remove();
 
       var markers = [
         L.marker(latlng, {
@@ -466,6 +458,7 @@ export default {
         // switch to explore view handled by wheel event
       });
       this.map.on('zoomend', (event) => {
+        /*
         if (event.target.getZoom() > 10) {
           // show markers with tooltips at a certain zoom level
           this.mapMarkers.remove();
@@ -475,11 +468,13 @@ export default {
           this.mapMarkersPermanentTooltip.remove();
           this.mapMarkers.addTo(toRaw(this.map));
         }
+        */
         if (!this.blockUpdates) {
+          /*
           this.exploreMapView = {
             latlng: this.map.getCenter(),
             zoom: this.map.getZoom(),
-          };
+          };*/
           this.setBounds(event.target.getBounds());
         }
       });
@@ -539,15 +534,16 @@ export default {
         // this.map.locate({setView: true, maxZoom: 17});
         // Leaflet.markercluster
         this.mapMarkers = L.markerClusterGroup({ chunkedLoading: true });
+        /*
         this.mapMarkersPermanentTooltip = L.markerClusterGroup({
           chunkedLoading: true,
         });
-
+*/
         var markers = [];
         var tooltipMarkers = [];
         for (let i = 0; i < this.points.length; i++) {
           var toolTipHtml = '';
-
+          var toolTipString = '';
           // show list of events for location in toolTip
           // if there are more than one
           var eventIds = [];
@@ -555,6 +551,7 @@ export default {
             if (eventIds.indexOf(this.points[i].events[j].event_id) === -1) {
               eventIds.push(this.points[i].events[j].event_id);
               toolTipHtml = toolTipHtml + this.points[i].events[j].name;
+              toolTipString = toolTipString + this.points[i].events[j].name;
               if (
                 this.points[i].events[j + 1] ||
                 this.points[i].events[j - 1]
@@ -563,6 +560,7 @@ export default {
                   // not last element
                   // toolTipHtml = toolTipHtml + '<ul>'
                   toolTipHtml = toolTipHtml + '<br/>';
+                  toolTipString = toolTipString + ', ';
                 }
                 /* if (this.points[i].events[j + 1] || this.points[i].events[j - 1]) {
                 // toolTipHtml = toolTipHtml + '</li>'
@@ -578,12 +576,14 @@ export default {
 
           let marker = L.marker([this.points[i].lat, this.points[i].lng], {
             icon: this.defaultIcon,
-          }).bindTooltip(toolTipHtml, { direction: 'top', permanent: true });
+            title: toolTipString,
+            alt: toolTipString,
+          }); //.bindTooltip(toolTipHtml, { direction: 'top', permanent: false });
 
           marker.on('click', this.clickMarker);
           marker.data = this.points[i];
           markers.push(marker);
-
+          /*
           let tooltipMarker = L.marker(
             [this.points[i].lat, this.points[i].lng],
             {
@@ -593,9 +593,10 @@ export default {
           tooltipMarker.on('click', this.clickMarker);
           tooltipMarker.data = this.points[i];
           tooltipMarkers.push(tooltipMarker);
+          */
         }
         this.mapMarkers.addLayers(markers);
-        this.mapMarkersPermanentTooltip.addLayers(tooltipMarkers);
+        // this.mapMarkersPermanentTooltip.addLayers(tooltipMarkers);
         this.markersLoaded = true;
         this.mapMarkers.addTo(toRaw(this.map));
       }
@@ -828,6 +829,13 @@ export default {
 @import 'leaflet.markercluster/dist/MarkerCluster.css';
 @import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 
+.map {
+  cursor: grab;
+  &.disable-interaction {
+    pointer-events: none !important;
+    cursor: default;
+  }
+}
 /*
 /deep/.leaflet-marker-pane:before {
   content: '';

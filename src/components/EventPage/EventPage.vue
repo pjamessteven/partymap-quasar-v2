@@ -740,7 +740,7 @@ export default {
           // wait for animation - stop map from zooming uncontrolably
 
           this.preventMapZoom = false;
-        }, 1500);
+        }, 1000);
 
         /* disabled this behavior because it's too confusing
         if (
@@ -1022,9 +1022,6 @@ export default {
   },
   beforeUnmount() {
     this.mapOverlay = false;
-    setTimeout(() => {
-      this.focusMarker = null;
-    }, 1500);
     this.menubarOpacity = 0;
     this.overlayOpacity = 0;
   },

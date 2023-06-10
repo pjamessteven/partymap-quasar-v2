@@ -9,7 +9,6 @@
       ref="sidebar"
       v-touch-swipe.mouse.up="!showPanel ? handleSwipe : null"
       class="flex column justify-between no-wrap sidebar"
-      :style="computedSidebarWidth"
       id="sidebar"
       v-bind:class="{
         'sidebar-mobile-expanded': showPanel,
@@ -23,7 +22,10 @@
           >Welcome to the global map of festivals and events!</span
         >
         -->
-      <MobileSwipeHandle @swipe="onMobileSwipeHandle($event)" />
+      <MobileSwipeHandle
+        @swipe="onMobileSwipeHandle($event)"
+        v-if="$q.screen.lt.sm"
+      />
       <div
         v-touch-swipe.mouse.down="
           enablePanelSwipeDown && showPanel ? handleSwipe : null
@@ -112,7 +114,7 @@ export default {
           // wait for animation - stop map from zooming uncontrolably
 
           this.preventMapZoom = false;
-        }, 1200);
+        }, 1000);
 
         if (
           this.sidebarPanel !== 'explore' &&
@@ -183,17 +185,6 @@ export default {
     ]),
     ...mapState(useMapStore, ['mapMoving']),
     ...mapWritableState(useMapStore, ['preventMapZoom']),
-    computedSidebarWidth() {
-      if (this.$q.screen.gt.md) {
-        return 'width: 66vw; min-width: 854px; max-width: 1024px';
-      } else if (this.$q.screen.gt.sm) {
-        return 'width: 66vw; min-width: 854px; max-width: 960px';
-      } else if (this.$q.screen.gt.xs) {
-        return 'width: 66vw; min-width: 640px; max-width: 100%';
-      } else {
-        return 'width: 100%';
-      }
-    },
   },
 };
 </script>
@@ -289,14 +280,14 @@ export default {
     transform: translate3d(0, calc(100% - 276px), 0);
     user-select: none;
     will-change: transform;
-    padding-bottom: 64px;
+    padding-bottom: 96px;
 
     box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
       rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
       rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
 
     &.sidebar-mobile-expanded {
-      transform: translate3d(0, 64px, 0);
+      transform: translate3d(0, 96px, 0);
       .mobile-dismiss-list {
         height: 200px;
       }
@@ -397,6 +388,45 @@ export default {
       height: 40px;
       width: 1px;
       margin-left: 2px;
+    }
+  }
+}
+
+/*
+      if (this.$q.screen.gt.md) {
+        return 'width: 66vw; min-width: 854px; max-width: 1024px';
+      } else if (this.$q.screen.gt.sm) {
+        return 'width: 66vw; min-width: 854px; max-width: 960px';
+      } else if (this.$q.screen.gt.xs) {
+        return 'width: 66vw; min-width: 640px; max-width: 100%';
+      } else {
+        return 'width: 100%';
+      }
+      */
+
+@media only screen and (min-width: 600px) {
+  .sidebar-wrapper {
+    .sidebar {
+      width: 90vw;
+    }
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .sidebar-wrapper {
+    .sidebar {
+      width: 66vw;
+      min-width: 920px;
+      max-width: 1024px;
+    }
+  }
+}
+
+@media only screen and (min-width: 1080px) {
+  .sidebar-wrapper {
+    .sidebar {
+      width: 66vw;
+      max-width: 1280px;
     }
   }
 }

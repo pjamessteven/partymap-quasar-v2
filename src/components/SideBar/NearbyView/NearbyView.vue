@@ -21,6 +21,40 @@
             >
               <div class="flex column scroll-content q-mt-">
                 <div
+                  class="flex q-mx-md q-mt-lg q-pa-md message"
+                  @click="showMessage = !showMessage"
+                >
+                  <div class="flex justify-between grow items-center no-wrap">
+                    <span class="inter bold"
+                      >Welcome to PartyMap, the global map of festivals and
+                      events!</span
+                    >
+                    <q-icon
+                      :name="
+                        !showMessage ? 'mdi-chevron-down' : 'mdi-chevron-up'
+                      "
+                    />
+                  </div>
+                  <div v-if="showMessage">
+                    <p />
+                    PartyMap is a community-driven platform. Anyone can add an
+                    event that they know about, as long as the information is
+                    already public on the internet. Anyone can also suggest
+                    changes to an event if the information is out of date. No
+                    account needed!
+                    <p />
+                    If you have any thoughts, ideas or suggestions, feel free to
+                    contact me through the feedback form or by email to
+                    <a @click.stop href="mailto:info@partymap.com"
+                      >info@partymap.com</a
+                    >
+
+                    <p />
+                    Enjoy - Pete
+                  </div>
+                </div>
+
+                <div
                   v-if="$q.screen.lt.sm"
                   class="sidebar-header flex column grow no-wrap items-stretch justify-between ellipsis no-wrap q-pl-md"
                   style="width: 100%"
@@ -97,6 +131,7 @@
                   />
                   --><InnerLoading :solid="false" />
                 </div>
+
                 <transition appear enter-active-class="animated fadeIn slow">
                   <div
                     class="content"
@@ -436,7 +471,7 @@ export default {
   data() {
     return {
       sidebarPanelReady: false,
-
+      showMessage: false,
       scrollPosition: 0,
       queryRadiusOptions: [
         {
@@ -723,6 +758,11 @@ export default {
       background: black;
     }
     .main-content {
+      .message {
+        background: rgba(200, 100, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 9px;
+      }
       .banner {
         //background: $bi-2;
         .banner-background {
@@ -764,6 +804,10 @@ export default {
       background: white;
     }
     .main-content {
+      .message {
+        background: rgba(200, 100, 0, 0.2);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
       .banner {
         //background: white;
 
@@ -922,6 +966,11 @@ export default {
   .main-content {
     width: 100%;
     height: 100%;
+
+    .message {
+      border-radius: 9px;
+      cursor: pointer;
+    }
 
     .mobile-hide-wrapper {
       position: sticky;

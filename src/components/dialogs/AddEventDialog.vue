@@ -17,7 +17,7 @@
       <q-list class="q-py-sm">
         <q-item clickable class="q-pa-md" @click="selectHost(true)">
           <q-item-section>
-            <q-item-label class="text-h6 inter bold q-mb-sm">
+            <q-item-label class="text-large inter bold q-mb-sm">
               {{ $t('add_event.i_am_host') }}
               &nbsp;<i class="mdi mdi-check-decagram-outline" />
             </q-item-label>
@@ -32,7 +32,7 @@
         <q-separator />
         <q-item clickable class="q-pa-md" @click="selectHost(false)">
           <q-item-section>
-            <q-item-label class="text-h6 inter bold q-mb-sm">
+            <q-item-label class="text-large inter bold q-mb-sm">
               {{ $t('add_event.event_i_know_about') }}
             </q-item-label>
             <q-item-label class="t3">

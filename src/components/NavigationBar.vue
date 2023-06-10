@@ -35,7 +35,15 @@
           </q-tooltip>
         </template>
       </q-btn>
-
+      <q-icon
+        v-if="sidebarPanel === 'explore' && $q.screen.gt.xs"
+        flat
+        style="margin-left: -8px"
+        size="2rem"
+        class="q-px-sm q-mr-sm"
+        :class="{ 'rotate-180': showPanel }"
+        name="mdi-chevron-up"
+      />
       <div
         class="q-py-lg q-pr-md inter bolder text-h5"
         style="text-transform: capitalize"

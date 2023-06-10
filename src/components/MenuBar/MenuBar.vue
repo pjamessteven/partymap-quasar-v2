@@ -43,13 +43,11 @@ import MenuBarLogo from './MenuBarLogo.vue';
 import MenuBarButtons from './MenuBarButtons.vue';
 import { useMainStore } from 'stores/main';
 import { mapState, mapWritableState } from 'pinia';
-// import SearchPopup from './SearchPopup'
 export default {
   name: 'MenuBar',
   components: {
     MenuBarLogo,
     MenuBarButtons,
-    // SearchPopup
   },
 
   data() {
@@ -112,14 +110,14 @@ export default {
             return `opacity: ${opacity}; background: white!important`;
           }
         } else {
-          return `opacity: ${opacity}; background: black!important`;
+          return `opacity: ${opacity}; background: black!important;`;
         }
       } else if (
         !this.$route.meta.mapOverlay ||
         (this.$q.screen.lt.sm && this.$route.name !== 'Explore')
       ) {
-        return 'opacity: 1';
-      } else return 'opacity: 0';
+        return 'opacity: 1;  border: none!important';
+      } else return 'opacity: 0;';
     },
     iconColor() {
       if (

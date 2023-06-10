@@ -42,11 +42,13 @@
       </div>
       <div class="flex column" v-if="currentUser && review.text.length > 0">
         <div class="flex column items-start">
-          <div class="t2 q-mt-md" v-if="!review.rating">Select a rating</div>
+          <div class="t2 q-mt-md" v-if="review.rating === 0">
+            Select a rating
+          </div>
           <q-btn
             class="q-mt-md"
             color="primary"
-            :disabled="!review.rating"
+            :disabled="review.rating === 0"
             @click="handleSubmitReview"
             >Submit review</q-btn
           >
@@ -105,7 +107,7 @@ export default {
   data() {
     return {
       dialog: null,
-      review: { media_items: [], text: '', rating: undefined },
+      review: { media_items: [], text: '', rating: 0 },
       loading: false,
     };
   },
