@@ -54,7 +54,12 @@
         -->
       </div>
 
-      <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
+      <MenuWrapper
+        :showing="showing"
+        @hide="onHide()"
+        @show="onShow()"
+        class="menu-wrapper"
+      >
         <div class="sticky-input">
           <q-input
             debounce="500"
@@ -96,7 +101,7 @@
                   @click="clickTag(tag)"
                   :active="controlTag?.findIndex((x) => x.tag === tag.tag) > -1"
                 >
-                  <div class="inter bold q-py-md">
+                  <div class="q-py-md">
                     <q-item-label>
                       {{ tag.tag }} &nbsp;
                       <!--<span class="t4"

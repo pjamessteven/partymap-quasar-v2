@@ -10,7 +10,10 @@
       </div>
     </div>
     -->
-    <div class="content flex column grow q-px-md">
+    <div
+      class="content flex column grow q-px-md"
+      :class="$q.screen.gt.xs ? 'q-px-lg' : ''"
+    >
       <div
         class="inter bold text-large t2"
         :class="$q.screen.lt.sm ? 'q-mt-md ' : ' q-mt-lg'"

@@ -9,12 +9,13 @@
         v-if="$route.name === 'Explore' && $q.screen.gt.xs"
       >
         <q-btn
-          color="primary"
-          class="inter bold"
+          color="primary shadow-xl"
+          class="inter bold submit-button"
           no-caps
           @click="showAddEventDialog"
-          >Submit Event</q-btn
         >
+          Submit <q-icon name="mdi-plus" class="q-ml-sm" size="1rem" />
+        </q-btn>
       </div>
     </transition>
 
@@ -149,6 +150,11 @@ export default {
 }
 .q-btn {
   pointer-events: all;
+}
+
+.submit-button {
+  border-radius: 100px !important;
+  overflow: hidden;
 }
 .logo {
   position: absolute;

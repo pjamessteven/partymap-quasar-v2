@@ -24,7 +24,7 @@
     >
       <div
         class="flex column grow no-wrap"
-        :class="{ 'q-mx-sm': $q.screen.lt.sm }"
+        :class="{ 'q-mx-sm': $q.screen.lt.sm, 'q-mx-sm': $q.screen.gt.xs }"
       >
         <q-scroll-area
           vertical

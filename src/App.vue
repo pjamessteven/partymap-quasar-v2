@@ -722,6 +722,9 @@ body {
   //font-family: chicagoflf;
   //text-transform: lowercase;
 }
+.menu-wrapper {
+  max-height: 500px;
+}
 
 .q-menu--dark {
   box-shadow: none;

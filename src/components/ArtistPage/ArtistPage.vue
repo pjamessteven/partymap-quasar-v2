@@ -160,7 +160,7 @@
           </transition>
         </div>
 
-        <div class="image-container q-ma-lg" v-if="$q.screen.gt.sm">
+        <div class="image-container q-ma-lg q-ml-xl" v-if="$q.screen.gt.sm">
           <div class="image-container-background">
             <transition appear enter-active-class="animated fadeIn slower">
               <img :src="computedImageSrc" v-if="computedImageSrc" />
@@ -169,7 +169,7 @@
         </div>
       </div>
       <transition appear enter-active-class="animated fadeIn slower">
-        <div class="q-pb-lg footer" v-if="artist">
+        <div class="q-pb-lg q-mt-xl footer" v-if="artist">
           <div class="t3">
             Artist info by
             <a
@@ -463,7 +463,6 @@ export default {
     }
   }
   .footer {
-    margin-top: 128px;
     padding-left: 16px;
     padding-right: 16px;
   }

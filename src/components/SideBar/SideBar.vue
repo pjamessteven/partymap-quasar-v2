@@ -318,7 +318,7 @@ export default {
 
     :deep(.sidebar-header) {
       padding-top: 8px;
-      padding-bottom: 16px;
+      padding-bottom: 8px;
       color: white;
       //position: sticky;
       top: 0px;

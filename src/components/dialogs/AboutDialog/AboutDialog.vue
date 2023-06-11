@@ -12,7 +12,10 @@
         >info@partymap.com</a
       >
       <p />
-
+      PartyMap would not have been possible without the amazing open source
+      communtiy. Many thanks to the creators and contributors of Vue, Python,
+      Flask, SQLAlchemy, the Quasar framework, Leaflet, Open Street Map, Stamen
+      Design and HERE/Nokia. And many thanks to you for submitting your events!
       <p />
       {{ $t('about.message_3') }}
       <a
@@ -167,10 +170,5 @@ export default {
 }
 // sm
 @media only screen and (max-width: 600px) {
-  .about-dialog {
-    height: 100vh !important;
-    max-height: unset !important;
-    width: 100%;
-  }
 }
 </style>

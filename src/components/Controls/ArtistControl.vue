@@ -121,7 +121,7 @@
                   <q-item-section>
                     <div class="flex row justify-between no-wrap">
                       <div class="flex column justify-center no-wrap">
-                        <q-item-label class="inter bold">
+                        <q-item-label>
                           {{ artist.name }}
                         </q-item-label>
 

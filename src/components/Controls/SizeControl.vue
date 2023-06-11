@@ -36,7 +36,7 @@
       </div>
       <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
         <div
-          class="q-gutter-sm flex column q-pr-md q-pa-xs inter bold"
+          class="q-gutter-sm flex column q-pr-md q-pa-xs"
           :class="$q.screen.lt.sm ? 'q-py-sm' : ''"
         >
           <q-checkbox

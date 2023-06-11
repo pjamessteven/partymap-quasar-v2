@@ -2,10 +2,10 @@
   <div class="landing-page flex column no-wrap">
     <div class="main-content flex row justify-center">
       <transition enter-active-class="">
-        <div class="flex column grow no-wrap" style="width: 100%">
+        <div class="flex column grow no-wrap">
           <div
             class="flex column grow no-wrap"
-            style="height: 100%; width: 100%"
+            style="height: 100%; width: 100%; max-width: 100%"
           >
             <q-scroll-area
               @scroll="onScroll"
@@ -17,403 +17,439 @@
               class="scroll-area flex grow"
               :content-style="{
                 'will-change': 'scroll-position',
+                width: '100%',
+              }"
+              content-active-style="{
+                'width': '100%'
               }"
             >
-              <div
-                v-if="$q.screen.lt.sm"
-                class="sidebar-header flex column grow no-wrap items-stretch justify-between ellipsis no-wrap q-pl-md"
-                style="width: 100%"
-                :class="$q.screen.gt.xs ? 'q-mt-' : ''"
-              >
-                <div class="q-pr-md ellipsis q-mt-md">
-                  <span class="text-h4 inter bolder">Near</span>
-                </div>
-              </div>
-              <div
-                v-if="$q.screen.lt.sm"
-                class="flex items-center no-wrap inter bolder t1 q-pl-md q-mt-"
-                style="width: 100%"
-                :class="
-                  $q.screen.gt.xs
-                    ? 'text-h4 q-mt-lg q-mb-sm'
-                    : 'text-h4 justify-between'
-                "
-              >
-                <span
-                  v-if="userLocation"
-                  class="ellipsis"
-                  :class="$q.screen.gt.xs ? 'q-pa-xs' : ''"
+              <div class="scroll-stuff flex column">
+                <div
+                  v-if="$q.screen.lt.sm"
+                  class="sidebar-header flex column grow no-wrap items-stretch justify-between ellipsis no-wrap q-pl-md"
+                  style="width: 100%"
+                  :class="$q.screen.gt.xs ? 'q-mt-' : ''"
                 >
-                  {{ userLocationCity }}
-                </span>
-                <span class="ellipsis" v-else>... </span>
-                <q-btn
-                  flat
-                  style="margin-left: -8px"
-                  class="q-px-sm q-mr-md"
-                  @click.stop="() => getFineLocation()"
-                >
-                  <template v-slot:default>
-                    <div v-if="!userLocationLoading" class="flex">
-                      <q-icon
-                        name="mdi-crosshairs-gps"
-                        class=""
-                        v-if="fineLocation"
-                      />
-                      <q-icon name="mdi-crosshairs" class="" v-else />
-                    </div>
-                    <div v-else style="position: relative" class="flex">
-                      <q-icon style="z-index: 1" name="mdi-crosshairs" />
-                      <q-icon
-                        style="z-index: 2; left: 0px"
-                        class="animated infinite flash slowest absolute"
-                        name="mdi-crosshairs-gps"
-                      />
-                    </div>
-                    <q-tooltip
-                      class=""
-                      :content-class="
-                        $q.dark.isActive
-                          ? 'bg-black text-white'
-                          : 'bg-white text-black'
-                      "
-                      :offset="[10, 10]"
-                    >
-                      {{ $t('landing_page.improve_location') }}
-                    </q-tooltip>
-                  </template>
-                </q-btn>
-              </div>
-
-              <div
-                class="flex q-pa-md q-mt-lg message"
-                :class="$q.screen.gt.xs ? 'q-mx-md ' : ''"
-                @click="showMessage = !showMessage"
-              >
-                <div class="flex justify-between grow items-center no-wrap">
-                  <span class="inter bold t1"
-                    >Welcome to PartyMap, the global map of festivals and
-                    events!</span
-                  >
-                  <q-icon
-                    :name="!showMessage ? 'mdi-chevron-down' : 'mdi-chevron-up'"
-                  />
+                  <div class="q-pr-md ellipsis q-mt-md">
+                    <span class="text-h4 inter bolder">Near</span>
+                  </div>
                 </div>
                 <div
-                  v-if="showMessage"
-                  class="flex column items-start justify-start"
+                  v-if="$q.screen.lt.sm"
+                  class="flex items-center no-wrap inter bolder t1 q-pl-md q-mt-"
+                  style="width: 100%"
+                  :class="
+                    $q.screen.gt.xs
+                      ? 'text-h4 q-mt-mc q-mb-sm'
+                      : 'text-h4 justify-between'
+                  "
                 >
-                  <p />
-                  PartyMap is a community-driven platform. Anyone can submit an
-                  event that they know about, as long as the information is
-                  already public on the internet. Anyone can also suggest
-                  changes to an event if the information is out of date. No
-                  account needed!
-
-                  <p />
-                  Enjoy - Pete
+                  <span
+                    v-if="userLocation"
+                    class="ellipsis"
+                    :class="$q.screen.gt.xs ? 'q-pa-xs' : ' q-mr-lg'"
+                  >
+                    {{ userLocationCity }}awejrtinselrijbtselirjbh
+                  </span>
+                  <span class="ellipsis" v-else>... </span>
+                  <q-btn
+                    flat
+                    style="margin-left: -8px"
+                    class="q-px-sm q-mr-md"
+                    @click.stop="() => getFineLocation()"
+                  >
+                    <template v-slot:default>
+                      <div v-if="!userLocationLoading" class="flex">
+                        <q-icon
+                          name="mdi-crosshairs-gps"
+                          class=""
+                          v-if="fineLocation"
+                        />
+                        <q-icon name="mdi-crosshairs" class="" v-else />
+                      </div>
+                      <div v-else style="position: relative" class="flex">
+                        <q-icon style="z-index: 1" name="mdi-crosshairs" />
+                        <q-icon
+                          style="z-index: 2; left: 0px"
+                          class="animated infinite flash slowest absolute"
+                          name="mdi-crosshairs-gps"
+                        />
+                      </div>
+                      <q-tooltip
+                        class=""
+                        :content-class="
+                          $q.dark.isActive
+                            ? 'bg-black text-white'
+                            : 'bg-white text-black'
+                        "
+                        :offset="[10, 10]"
+                      >
+                        {{ $t('landing_page.improve_location') }}
+                      </q-tooltip>
+                    </template>
+                  </q-btn>
                 </div>
-              </div>
 
-              <div
-                class="flex row justify-center items-center q-py-xl q-mt-lg"
-                style="height: 100%; width: 100%; position: absolute; top: 0px"
-                v-if="loadingEverything || !computedSidebarPanelReady"
-              >
-                <!--
+                <div
+                  class="flex q-py-md q-mt-sm message"
+                  :class="$q.screen.gt.xs ? 'q-mx-lg' : 'q-mx-md'"
+                  @click="showMessage = !showMessage"
+                >
+                  <div class="flex justify-between grow items-center no-wrap">
+                    <span class="inter bold t2"
+                      >Welcome to PartyMap, the global map of festivals and
+                      events!</span
+                    >
+                    <q-icon
+                      class="q-ml-md"
+                      size="1.5rem"
+                      :name="
+                        !showMessage ? 'mdi-chevron-down' : 'mdi-chevron-up'
+                      "
+                    />
+                  </div>
+                  <div
+                    v-if="showMessage"
+                    class="flex column items-start justify-start t1"
+                  >
+                    <p />
+                    PartyMap is a community-driven platform for finding parties
+                    and festivals. Yeah, this is basically an app in your
+                    browser &#128526;
+                    <p />
+                    Anyone can submit an event that they know about, as long as
+                    the information is already public on the internet. Anyone
+                    can also suggest changes to an event if the information is
+                    out of date. No account needed!
+
+                    <p />
+                    Enjoy - Pete
+                  </div>
+                </div>
+
+                <div
+                  class="flex row justify-center items-center q-py-xl q-mt-lg"
+                  style="
+                    height: 100%;
+                    width: 100%;
+                    position: absolute;
+                    top: 0px;
+                  "
+                  v-if="loadingEverything || !computedSidebarPanelReady"
+                >
+                  <!--
                   <q-spinner-ios
                     color="$a.dark.isActive ? 'white' : 'black'"
                     size="2em"
                   />
                   --><InnerLoading :solid="false" />
-              </div>
+                </div>
 
-              <div class="flex column scroll-content q-mt-">
-                <transition appear enter-active-class="animated fadeIn slow">
-                  <div
-                    class="content"
-                    v-if="computedSidebarPanelReady && !loadingEverything"
-                  >
-                    <!-- tags -->
-                    <div class="flex column" v-if="nearbyTags?.length >= 10">
-                      <div class="q-py-md header q-mt-sm">
-                        <div class="t1 text- inter bold q-pl-md">
-                          Explore the map:
-                        </div>
-                      </div>
-                      <div
-                        class="q-pl-md q-mb-sm"
-                        v-if="nearbyTags && nearbyTags.length > 0"
-                      >
-                        <q-scroll-area
-                          horizontal
-                          class="tag-scroll-area"
-                          style="width: 100%"
-                          :thumb-style="
-                            $q.screen.gt.xs
-                              ? { bottom: '0px', height: '8px' }
-                              : { bottom: '0px', height: '0px' }
-                          "
+                <div class="flex column scroll-content q-mt-">
+                  <transition appear enter-active-class="animated fadeIn slow">
+                    <div
+                      class="content"
+                      v-if="computedSidebarPanelReady && !loadingEverything"
+                    >
+                      <!-- tags -->
+                      <div class="flex column" v-if="nearbyTags?.length >= 10">
+                        <div
+                          class="q-py-md header q-mt-sm"
+                          :class="$q.screen.gt.xs ? 'q-pl-lg' : 'q-pl-md'"
                         >
-                          <div class="flex column">
-                            <div class="flex row no-wrap q-gutter-sm">
-                              <div
-                                v-for="(tag, index) in nearbyTags.filter(
-                                  (x, i) => i % 2
-                                )"
-                                :key="index"
-                                @click="clickTag(tag)"
-                                class="tag t2 text- inter semibold"
-                                style="text-transform: capitalize"
-                              >
-                                {{ tag.tag }}
-                              </div>
-                            </div>
-                            <div class="flex row no-wrap q-gutter-sm q-pt-sm">
-                              <div
-                                v-for="(tag, index) in nearbyTags.filter(
-                                  (x, i) => i % 2 !== 1
-                                )"
-                                :key="index"
-                                @click="clickTag(tag)"
-                                class="tag t2 text- inter semibold"
-                                style="text-transform: capitalize"
-                              >
-                                {{ tag.tag }}
-                              </div>
-                            </div>
+                          <div class="t1 text- inter bold">
+                            Explore the map:
                           </div>
-                        </q-scroll-area>
-                      </div>
-                    </div>
-                    <!-- Display global tags if there's not many local tags-->
-                    <div class="flex column" v-else-if="tagOptions?.length > 0">
-                      <div class="q-py-md header q-mt-sm">
-                        <div class="t1 text- inter bold q-pl-md">
-                          Explore the map:
                         </div>
-                      </div>
-                      <div class="q-pl-md q-mb-sm">
-                        <q-scroll-area
-                          horizontal
-                          class="tag-scroll-area"
-                          style="width: 100%"
-                          :thumb-style="
-                            $q.screen.gt.xs
-                              ? { bottom: '0px', height: '8px' }
-                              : { bottom: '0px', height: '0px' }
-                          "
+                        <div
+                          class="q-mb-sm"
+                          :class="$q.screen.gt.xs ? 'q-pl-lg' : 'q-pl-md'"
+                          v-if="nearbyTags && nearbyTags.length > 0"
                         >
-                          <div class="flex column">
-                            <div class="flex row no-wrap q-gutter-sm">
-                              <div
-                                v-for="(tag, index) in tagOptions.filter(
-                                  (x, i) => i % 2
-                                )"
-                                :key="index"
-                                @click="clickTag(tag)"
-                                class="tag t2 text- inter semibold"
-                                style="text-transform: capitalize"
-                              >
-                                {{ tag.tag }}
+                          <q-scroll-area
+                            horizontal
+                            class="tag-scroll-area"
+                            style="width: 100%"
+                            :thumb-style="
+                              $q.screen.gt.xs
+                                ? { bottom: '0px', height: '8px' }
+                                : { bottom: '0px', height: '0px' }
+                            "
+                          >
+                            <div class="flex column">
+                              <div class="flex row no-wrap q-gutter-sm">
+                                <div
+                                  v-for="(tag, index) in nearbyTags.filter(
+                                    (x, i) => i % 2
+                                  )"
+                                  :key="index"
+                                  @click="clickTag(tag)"
+                                  class="tag t2 text- inter semibold"
+                                  style="text-transform: capitalize"
+                                >
+                                  {{ tag.tag }}
+                                </div>
+                              </div>
+                              <div class="flex row no-wrap q-gutter-sm q-pt-sm">
+                                <div
+                                  v-for="(tag, index) in nearbyTags.filter(
+                                    (x, i) => i % 2 !== 1
+                                  )"
+                                  :key="index"
+                                  @click="clickTag(tag)"
+                                  class="tag t2 text- inter semibold"
+                                  style="text-transform: capitalize"
+                                >
+                                  {{ tag.tag }}
+                                </div>
                               </div>
                             </div>
-                            <div class="flex row no-wrap q-gutter-sm q-pt-sm">
-                              <div
-                                v-for="(tag, index) in tagOptions.filter(
-                                  (x, i) => i % 2 !== 1
-                                )"
-                                :key="index"
-                                @click="clickTag(tag)"
-                                class="tag t2 text- inter semibold"
-                                style="text-transform: capitalize"
-                              >
-                                {{ tag.tag }}
-                              </div>
-                            </div>
-                          </div>
-                        </q-scroll-area>
-                      </div>
-                    </div>
-
-                    <!-- artists -->
-                    <div
-                      class="flex column"
-                      v-if="nearbyArtists?.length > 5"
-                      :style="$q.screen.gt.xs ? 'margin-top: -16px' : ''"
-                    >
-                      <div
-                        class="t1 location-header q-py-md inter bold q-pl-md"
-                      >
-                        Top artists near {{ userLocationCity }}:
-                      </div>
-                      <ArtistsComponent
-                        @wheel.stop
-                        :artists="nearbyArtists"
-                        :hasNext="nearbyArtistsHasNext"
-                        :loadMore="loadNearbyArtists"
-                      />
-                    </div>
-
-                    <!-- Display global artists if there's not many local artists-->
-
-                    <div
-                      class="flex column"
-                      v-else-if="artistOptions?.length > 0"
-                    >
-                      <div
-                        class="t1 location-header q-py-md inter bold q-pl-md"
-                      >
-                        Top artists worldwide:
-                      </div>
-                      <ArtistsComponent
-                        @wheel.stop
-                        :artists="artistOptions"
-                        :hasNext="artistOptionsHasNext"
-                        :loadMore="loadArtistOptions"
-                      />
-                    </div>
-                    <!-- NEARBY EVENTS -->
-
-                    <div
-                      class="t1 inter bold location-header q-py-sm flex row items-center justify-between q-pl-md"
-                    >
-                      <div class="flex items-center">
-                        <div class="">
-                          {{ $t('landing_page.events_within') }}
+                          </q-scroll-area>
                         </div>
-                        <q-select
-                          emit-value
-                          dense
-                          borderless
-                          map-options
-                          behavior="menu"
-                          class="q-mx-xs radius-select inter o-050"
-                          v-model="queryRadius"
-                          :options="queryRadiusOptions"
+                      </div>
+                      <!-- Display global tags if there's not many local tags-->
+                      <div
+                        class="flex column"
+                        v-else-if="tagOptions?.length > 0"
+                      >
+                        <div class="q-py-md header q-mt-sm">
+                          <div class="t1 text- inter bold q-pl-md">
+                            Explore the map:
+                          </div>
+                        </div>
+                        <div class="q-pl-md q-mb-sm">
+                          <q-scroll-area
+                            horizontal
+                            class="tag-scroll-area"
+                            style="width: 100%"
+                            :thumb-style="
+                              $q.screen.gt.xs
+                                ? { bottom: '0px', height: '8px' }
+                                : { bottom: '0px', height: '0px' }
+                            "
+                          >
+                            <div class="flex column">
+                              <div class="flex row no-wrap q-gutter-sm">
+                                <div
+                                  v-for="(tag, index) in tagOptions.filter(
+                                    (x, i) => i % 2
+                                  )"
+                                  :key="index"
+                                  @click="clickTag(tag)"
+                                  class="tag t2 text- inter semibold"
+                                  style="text-transform: capitalize"
+                                >
+                                  {{ tag.tag }}
+                                </div>
+                              </div>
+                              <div class="flex row no-wrap q-gutter-sm q-pt-sm">
+                                <div
+                                  v-for="(tag, index) in tagOptions.filter(
+                                    (x, i) => i % 2 !== 1
+                                  )"
+                                  :key="index"
+                                  @click="clickTag(tag)"
+                                  class="tag t2 text- inter semibold"
+                                  style="text-transform: capitalize"
+                                >
+                                  {{ tag.tag }}
+                                </div>
+                              </div>
+                            </div>
+                          </q-scroll-area>
+                        </div>
+                      </div>
+
+                      <!-- artists -->
+                      <div
+                        class="flex column"
+                        v-if="nearbyArtists?.length > 5"
+                        :style="$q.screen.gt.xs ? 'margin-top: -16px' : ''"
+                      >
+                        <div
+                          class="t1 location-header q-py-md inter bold"
+                          :class="$q.screen.gt.xs ? 'q-pl-lg' : 'q-pl-md'"
+                        >
+                          Top artists near {{ userLocationCity }}:
+                        </div>
+                        <ArtistsComponent
+                          :class="$q.screen.gt.xs ? 'q-pl-sm' : ''"
+                          @wheel.stop
+                          :artists="nearbyArtists"
+                          :hasNext="nearbyArtistsHasNext"
+                          :loadMore="loadNearbyArtists"
                         />
                       </div>
-                      <EventDateViewOptions
-                        :show-group-by-month="false"
-                        v-if="$q.screen.gt.xs"
-                      />
-                    </div>
-                    <transition
-                      appear
-                      enter-active-class="animated fadeIn slower"
-                    >
-                      <EventDateList
-                        :class="{ 'q-px-sm': $q.screen.lt.sm }"
-                        v-if="nearbyEventDates && compactView"
-                        :groupByMonth="false"
-                        :eventDates="nearbyEventDates"
-                        :hasNext="nearbyEventDatesHasNext"
-                        :loading="nearbyEventDatesLoading"
-                      />
-                    </transition>
-                    <transition
-                      appear
-                      enter-active-class="animated fadeIn slower"
-                    >
-                      <EventDatePosterList
-                        :class="{ 'q-px-sm': $q.screen.lt.sm }"
-                        v-if="nearbyEventDates && !compactView"
-                        :groupByMonth="false"
-                        :eventDates="nearbyEventDates"
-                        :hasNext="nearbyEventDatesHasNext"
-                        :loading="nearbyEventDatesLoading"
-                      />
-                    </transition>
-                    <div
-                      class="flex justify-center items-center q-my-lg"
-                      v-if="nearbyEventDatesHasNext"
-                    >
-                      <q-spinner-ios
-                        color="$a.dark.isActive ? 'white' : 'black'"
-                        size="2em"
-                      />
-                    </div>
 
-                    <div
-                      v-if="
-                        nearbyEventDatesSuccess && nearbyEventDates.length === 0
-                      "
-                      class="t4"
-                      :class="{
-                        'q-pl-lg': $q.screen.gt.xs,
-                        'q-pl-md': $q.screen.lt.sm,
-                      }"
-                    >
-                      {{ $t('landing_page.no_events_in_area') }}
-                    </div>
-                    <!-- ALL EVENTS -->
+                      <!-- Display global artists if there's not many local artists-->
 
-                    <div
-                      class="location-header flex items-center justify-between no-wrap inter bold t1 q-mt- q-py-md q-pl-md"
-                      :class="$q.screen.lt.sm ? 'q-py-md' : ''"
-                      v-touch-swipe="
-                        () => {
-                          sidebarPanel = 'explore';
-                        }
-                      "
-                      v-if="eventDates && eventDates.length > 0"
-                    >
-                      <!--<div class="separator" /> -->
+                      <div
+                        class="flex column"
+                        v-else-if="artistOptions?.length > 0"
+                      >
+                        <div
+                          class="t1 location-header q-py-md inter bold"
+                          :class="$q.screen.gt.xs ? 'q-pl-lg' : 'q-pl-md'"
+                        >
+                          Top artists worldwide:
+                        </div>
+                        <ArtistsComponent
+                          :class="$q.screen.gt.xs ? 'q-pl-sm' : ''"
+                          @wheel.stop
+                          :artists="artistOptions"
+                          :hasNext="artistOptionsHasNext"
+                          :loadMore="loadArtistOptions"
+                        />
+                      </div>
+                      <!-- NEARBY EVENTS -->
 
-                      <div class="flex row grow no-wrap ellipsis">
-                        <div class="ellipsis flex grow items-center">
-                          <div class="ellipsis t1" v-if="userLocation">
-                            {{ $t('landing_page.all_upcoming_events') }}:
+                      <div
+                        class="t1 inter bold location-header q-py-sm flex row items-center justify-between"
+                        :class="$q.screen.gt.xs ? 'q-pl-lg' : 'q-pl-md'"
+                      >
+                        <div class="flex items-center">
+                          <div class="">
+                            {{ $t('landing_page.events_within') }}
+                          </div>
+                          <q-select
+                            emit-value
+                            dense
+                            borderless
+                            map-options
+                            behavior="menu"
+                            class="q-mx-xs radius-select inter o-050"
+                            v-model="queryRadius"
+                            :options="queryRadiusOptions"
+                          />
+                        </div>
+                        <EventDateViewOptions
+                          :show-group-by-month="false"
+                          v-if="$q.screen.gt.xs"
+                        />
+                      </div>
+                      <transition
+                        appear
+                        enter-active-class="animated fadeIn slower"
+                      >
+                        <EventDateList
+                          class="q-mx-sm"
+                          v-if="nearbyEventDates && compactView"
+                          :groupByMonth="false"
+                          :eventDates="nearbyEventDates"
+                          :hasNext="nearbyEventDatesHasNext"
+                          :loading="nearbyEventDatesLoading"
+                        />
+                      </transition>
+                      <transition
+                        appear
+                        enter-active-class="animated fadeIn slower"
+                      >
+                        <EventDatePosterList
+                          class="q-mx-sm"
+                          v-if="nearbyEventDates && !compactView"
+                          :groupByMonth="false"
+                          :eventDates="nearbyEventDates"
+                          :hasNext="nearbyEventDatesHasNext"
+                          :loading="nearbyEventDatesLoading"
+                        />
+                      </transition>
+                      <div
+                        class="flex justify-center items-center q-my-lg"
+                        v-if="nearbyEventDatesHasNext"
+                      >
+                        <q-spinner-ios
+                          color="$a.dark.isActive ? 'white' : 'black'"
+                          size="2em"
+                        />
+                      </div>
+
+                      <div
+                        v-if="
+                          nearbyEventDatesSuccess &&
+                          nearbyEventDates.length === 0
+                        "
+                        class="t4"
+                        :class="{
+                          'q-pl-lg': $q.screen.gt.xs,
+                          'q-pl-md': $q.screen.lt.sm,
+                        }"
+                      >
+                        {{ $t('landing_page.no_events_in_area') }}
+                      </div>
+                      <!-- ALL EVENTS -->
+
+                      <div
+                        class="location-header flex items-center justify-between no-wrap inter bold t1 q-mt- q-py-md"
+                        :class="$q.screen.lt.sm ? 'q-py-md' : ''"
+                        v-touch-swipe="
+                          () => {
+                            sidebarPanel = 'explore';
+                          }
+                        "
+                        v-if="eventDates && eventDates.length > 0"
+                      >
+                        <!--<div class="separator" /> -->
+
+                        <div
+                          class="flex row grow no-wrap ellipsis"
+                          :class="$q.screen.gt.xs ? 'q-pl-lg' : 'q-pl-md'"
+                        >
+                          <div class="ellipsis flex grow items-center">
+                            <div class="ellipsis t1" v-if="userLocation">
+                              {{ $t('landing_page.all_upcoming_events') }}:
+                            </div>
                           </div>
                         </div>
+                        <EventDateViewOptions
+                          :show-group-by-month="false"
+                          v-if="$q.screen.gt.xs"
+                        />
                       </div>
-                      <EventDateViewOptions
-                        :show-group-by-month="false"
-                        v-if="$q.screen.gt.xs"
-                      />
-                    </div>
 
-                    <transition
-                      appear
-                      enter-active-class="animated fadeIn slower"
-                    >
-                      <EventDateList
-                        :class="{ 'q-px-sm': $q.screen.lt.sm }"
-                        v-if="eventDates && compactView"
-                        :groupByMonth="false"
-                        :eventDates="eventDates"
-                        :hasNext="eventDatesHasNext"
-                      />
-                    </transition>
-                    <transition
-                      appear
-                      enter-active-class="animated fadeIn slower"
-                    >
-                      <EventDatePosterList
-                        :class="{ 'q-px-sm': $q.screen.lt.sm }"
-                        v-if="eventDates && !compactView"
-                        :groupByMonth="false"
-                        :eventDates="eventDates"
-                        :hasNext="eventDatesHasNext && !nearbyEventDatesHasNext"
-                      />
-                    </transition>
-
-                    <div
-                      class="flex row justify-center q-mt-md"
-                      style="opacity: 0"
-                    >
-                      <a
-                        v-for="i in eventDatesPageNumbers"
-                        :key="i"
-                        class="link-hover q-mr-xs t3"
-                        @click="loadEventDatePage(i)"
-                        :class="i === eventDatesPage ? 'text-primary' : ''"
+                      <transition
+                        appear
+                        enter-active-class="animated fadeIn slower"
                       >
-                        [{{ i }}]
-                      </a>
+                        <EventDateList
+                          class="q-mx-sm"
+                          v-if="eventDates && compactView"
+                          :groupByMonth="false"
+                          :eventDates="eventDates"
+                          :hasNext="eventDatesHasNext"
+                        />
+                      </transition>
+                      <transition
+                        appear
+                        enter-active-class="animated fadeIn slower"
+                      >
+                        <EventDatePosterList
+                          class="q-mx-sm"
+                          v-if="eventDates && !compactView"
+                          :groupByMonth="false"
+                          :eventDates="eventDates"
+                          :hasNext="
+                            eventDatesHasNext && !nearbyEventDatesHasNext
+                          "
+                        />
+                      </transition>
+
+                      <div
+                        class="flex row justify-center q-mt-md"
+                        style="opacity: 0"
+                      >
+                        <a
+                          v-for="i in eventDatesPageNumbers"
+                          :key="i"
+                          class="link-hover q-mr-xs t3"
+                          @click="loadEventDatePage(i)"
+                          :class="i === eventDatesPage ? 'text-primary' : ''"
+                        >
+                          [{{ i }}]
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                </transition>
+                  </transition>
+                </div>
               </div>
             </q-scroll-area>
           </div>
@@ -756,7 +792,7 @@ export default {
     }
     .main-content {
       .message {
-        background: $bi-2;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       }
       .banner {
         //background: $bi-2;
@@ -801,7 +837,8 @@ export default {
     .main-content {
       .message {
         // background: rgba(200, 100, 0, 0.2);
-        background: $b-3;
+        //background: $b-2;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       }
       .banner {
         //background: white;
@@ -884,10 +921,10 @@ export default {
   .scroll-area {
     height: 100%;
     overflow: hidden;
-    .scroll-content {
-      .sidebar-header {
-        padding-bottom: 8px;
-      }
+
+    .scroll-stuff {
+      max-width: 100vw;
+
       .location-header {
         position: sticky;
         top: 0px;
@@ -963,7 +1000,7 @@ export default {
     height: 100%;
 
     .message {
-      border-radius: 9px;
+      //border-radius: 9px;
       cursor: pointer;
     }
 
@@ -1080,6 +1117,8 @@ export default {
     .main-content {
       .message {
         border-radius: 0px;
+        border-left: none !important;
+        border-right: none !important;
       }
       .tag-scroll-area {
         height: 78px;

@@ -217,10 +217,14 @@ export default {
     //border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     :deep(.q-tabs) {
+      color: $ti-4 !important;
+
       .q-tab {
         &.q-tab--active {
-          background: $bi-3;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          //background: $bi-3;
+          color: $ti-1 !important;
+
+          border: 1px solid rgba(255, 255, 255, 0.2);
         }
       }
     }
@@ -232,9 +236,12 @@ export default {
     background: white;
     :deep(.q-tabs) {
       .q-tab {
+        color: $t-4 !important;
+
         &.q-tab--active {
-          background: #fafafa;
+          // background: #fafafa;
           border: 1px solid rgba(0, 0, 0, 0.1);
+          color: $t-1 !important;
         }
       }
     }
@@ -295,6 +302,8 @@ export default {
       //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.8);
       border-top: 1px solid rgba(255, 255, 255, 0.1);
       :deep(.q-tabs) {
+        color: $ti-2 !important;
+
         .q-tab {
           color: white;
         }
@@ -310,6 +319,7 @@ export default {
       :deep(.q-tabs) {
         .q-tab {
           color: black;
+          color: $t-1 !important;
         }
       }
     }

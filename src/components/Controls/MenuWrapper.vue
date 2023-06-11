@@ -8,8 +8,8 @@
     @show="onShow()"
     @scroll="onScroll($event)"
     :model-value="showing"
-    anchor="top middle"
-    self="bottom middle"
+    anchor="top left"
+    self="bottom left"
     :offset="[0, 8]"
     style="min-width: 300px !important; display: flex; flex-direction: column"
   >
