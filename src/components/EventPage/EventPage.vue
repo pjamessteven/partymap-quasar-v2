@@ -278,7 +278,7 @@
                             :label="
                               $q.screen.gt.xs ? 'Add to calendar' : undefined
                             "
-                            icon="las la-calendar-plus"
+                            icon="mdi-download"
                             no-caps
                             @click="getIcalFile"
                           ></q-btn>
@@ -293,7 +293,7 @@
                             no-caps
                             :size="$q.screen.gt.xs ? '1em' : 'md'"
                             flat
-                            icon="mdi-share-outline"
+                            icon="mdi-share"
                             @click="share"
                             v-if="!editing"
                           />

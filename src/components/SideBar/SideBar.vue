@@ -107,7 +107,12 @@ export default {
       const down = e.direction === 'down';
       if (!this.showPanel && down) {
         this.showPanel = true;
-      } else if (this.enablePanelSwipeDown && up && !this.preventMapZoom) {
+      } else if (
+        this.enablePanelSwipeDown &&
+        up &&
+        !this.preventMapZoom &&
+        this.sidebarPanel === 'explore'
+      ) {
         this.preventMapZoom = true;
         this.showPanel = false;
 

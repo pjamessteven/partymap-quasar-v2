@@ -91,12 +91,12 @@
 
                 <div
                   class="flex q-mt-sm message"
-                  :class="
-                    $q.screen.gt.xs ? 'q-mx-lg q-py-md ' : 'q-mx-md q-py-md '
-                  "
+                  :class="$q.screen.gt.xs ? 'q-mx-lg  ' : 'q-mx-md '"
                   @click="showMessage = !showMessage"
                 >
-                  <div class="flex justify-between grow items-center no-wrap">
+                  <div
+                    class="flex justify-between grow items-center no-wrap location-header q-py-md"
+                  >
                     <span
                       class="inter bold"
                       :class="$q.screen.gt.xs ? ' t1 text-large' : 't3'"
@@ -115,11 +115,10 @@
                     v-if="showMessage"
                     class="flex column items-start justify-start t2 q-mt-sm"
                   >
-                    <p />
                     PartyMap is a community-driven platform for finding parties
                     and festivals around the world. Yeah, this is basically an
                     app in your browser &#128526; PartyMap is a work in
-                    progress... More features are in the pipeline!
+                    progress... More features are coming soon!
                     <p />
                     Anyone can submit an event that they know about, as long as
                     the information is already public on the internet. Anyone
@@ -129,8 +128,9 @@
                     <p />
 
                     Much love to my people around the world - Pete
-                    <div class="flex q-gutter-md q-mt-md q-mb-sm">
+                    <div class="flex q-gutter-md q-mt-md q-mb-lg">
                       <div
+                        @click.stop
                         class="appstore-wrapper flex items-center q-py-sm q-px-md"
                       >
                         <q-icon
@@ -141,6 +141,7 @@
                         PartyMap on the App Store
                       </div>
                       <div
+                        @click.stop
                         class="appstore-wrapper flex items-center q-py-sm q-px-md"
                       >
                         <q-icon
@@ -181,7 +182,7 @@
                       <!-- tags -->
                       <div class="flex column" v-if="nearbyTags?.length >= 10">
                         <div
-                          class="q-py-md header"
+                          class="q-py-md location-header"
                           :class="
                             $q.screen.gt.xs
                               ? 'q-pl-lg q-mt-sm text-large'

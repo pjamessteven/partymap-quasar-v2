@@ -175,7 +175,7 @@ export default {
     },
     moveToDate(date) {
       const calendar = this.$refs.calendar;
-      calendar.focusDate(date);
+      calendar.move(date);
     },
   },
   computed: {
