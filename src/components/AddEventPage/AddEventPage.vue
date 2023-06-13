@@ -52,7 +52,7 @@
               <p />
               <p class="t3">
                 Please do not upload copyrighted content to Partymap. If you do
-                it may be removed from the website.
+                it will be removed from the website.
               </p>
             </div>
 

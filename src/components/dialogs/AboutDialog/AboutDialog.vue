@@ -7,6 +7,8 @@
     </q-card-section>
 
     <q-card-section class="t2 dialog-card-content">
+      Nau mai, haere mai!
+      <p />
       {{ $t('about.message') }}
       <a class="link-hover underline" href="mailto:info@partymap.com"
         >info@partymap.com</a
@@ -14,8 +16,9 @@
       <p />
       PartyMap would not have been possible without the amazing open source
       communtiy. Many thanks to the creators and contributors of Vue, Python,
-      Flask, SQLAlchemy, the Quasar framework, Leaflet, Open Street Map, Stamen
-      Design and HERE/Nokia. And many thanks to you for submitting your events!
+      Flask, SQLAlchemy, PostgreSQL, PostGIS, the Quasar framework, Leaflet,
+      Open Street Map, Stamen Design and HERE/Nokia. And many thanks to you for
+      submitting your events!
       <p />
       {{ $t('about.message_3') }}
       <a
@@ -121,6 +124,30 @@ export default {
     };
   },
   methods: {},
+  watch: {
+    route() {
+      this.showTermsAndConditionsDialog = false;
+      this.showPrivacyPolicyDialog = false;
+    },
+    showPrivacyPolicyDialog(newv) {
+      if (newv) {
+        window.history.pushState({}, '');
+      }
+    },
+    showTermsAndConditionsDialog(newv) {
+      if (newv) {
+        window.history.pushState({}, '');
+      }
+    },
+  },
+  mounted() {
+    window.history.pushState({}, '');
+  },
+  computed: {
+    route() {
+      return this.$route;
+    },
+  },
 };
 </script>
 

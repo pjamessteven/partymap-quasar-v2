@@ -81,6 +81,19 @@ export default {
       this.$emit('hide');
     },
   },
+  watch: {
+    route() {
+      this.hide();
+    },
+  },
+  computed: {
+    route() {
+      return this.$route;
+    },
+  },
+  mounted() {
+    window.history.pushState({}, '');
+  },
 };
 </script>
 

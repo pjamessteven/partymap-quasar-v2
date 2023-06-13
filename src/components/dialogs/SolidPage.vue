@@ -42,7 +42,7 @@ export default {
 }
 .body--dark {
   .solid-page {
-    background: $bi-1;
+    background: black;
   }
 }
 .solid-page {

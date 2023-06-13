@@ -302,7 +302,7 @@ export default {
       }
     }
     &.satellite-enabled {
-      :deep(button-control) {
+      :deep(.button-control) {
         background: rgba(255, 255, 255, 0.68);
         box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
       }

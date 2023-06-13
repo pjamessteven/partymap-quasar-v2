@@ -85,6 +85,19 @@ export default {
       });
     },
   },
+  watch: {
+    route() {
+      this.$emit('closeDialog');
+    },
+  },
+  mounted() {
+    window.history.pushState({}, '');
+  },
+  computed: {
+    route() {
+      return this.$route;
+    },
+  },
 };
 </script>
 

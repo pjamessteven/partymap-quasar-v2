@@ -22,10 +22,7 @@
         'event-list-expanded': $q.screen.lt.sm && showPanel,
       }"
     >
-      <div
-        class="flex column grow no-wrap"
-        :class="{ 'q-mx-sm': $q.screen.lt.sm, 'q-mx-sm': $q.screen.gt.xs }"
-      >
+      <div class="flex column grow no-wrap q-mx-sm">
         <q-scroll-area
           vertical
           @scroll="onScrollMainContent"
@@ -101,7 +98,9 @@
                     <div
                       class="header t1 inter bold"
                       :class="
-                        $q.screen.lt.sm ? 'q-pl-sm q-py-md' : 'q-pl-md  q-py-md'
+                        $q.screen.lt.sm
+                          ? 'q-pl-sm q-py-md'
+                          : 'q-pl-md  q-py-md text-large'
                       "
                       v-if="!groupEventsByMonth && eventDates?.length > 0"
                     >
@@ -141,7 +140,7 @@
         Loading...
       </div>
       <div
-        v-if="isLoadingInitial || (mapMoving && !blockUpdates)"
+        v-if="(isLoadingInitial || (mapMoving && !blockUpdates)) && !showPanel"
         class="event-date-center flex grow justify-center"
         :style="
           $q.screen.lt.sm
@@ -155,7 +154,7 @@
           size="2px"
           color="grey-7"
           rounded
-          style="max-width: 200px"
+          :style="$q.screen.gt.xs ? 'max-width: 200px' : 'max-width: 120px'"
         />
       </div>
     </div>
@@ -186,11 +185,14 @@ export default {
     EventDateViewOptions,
   },
   props: { showControls: { default: false } },
-  mounted() {
-    if (!this.blockUpdates && this.eventDates.length === 0) {
+  beforeCreate() {
+    this.eventDatesLoading = true;
+    setTimeout(() => {
       this.getInitialList();
-      // watcher on map bounds triggers inital load i think
-    }
+    }, 300);
+    // watcher on map bounds triggers inital load i think
+  },
+  mounted() {
     setTimeout(() => {
       this.hasLoaded = true;
     }, 500);
@@ -345,9 +347,9 @@ export default {
     ...mapState(useAuthStore, ['currentUser']),
     ...mapState(useMapStore, [
       'mapBounds',
-      'showResults',
       'blockUpdates',
       'mapMoving',
+      'showResults',
     ]),
     ...mapState(useQueryStore, [
       'eventDatesGroupedByMonth',
@@ -358,7 +360,6 @@ export default {
       'controlArtist',
       'artists',
       'artistsHasNext',
-      'eventDatesLoading',
     ]),
     ...mapWritableState(useQueryStore, [
       'eventDates',
@@ -366,6 +367,7 @@ export default {
       'eventDatesHasNext',
       'artistsPage',
       'artistsHasNext',
+      'eventDatesLoading',
     ]),
     noFiltersSelected() {
       return (

@@ -81,7 +81,6 @@ export default {
   },
   methods: {},
   beforeRouteUpdate(to, from, next) {
-    console.log('route', this.$router.options.history);
     if (from.name === 'Explore') {
       this.blockUpdates = true;
       // blockUpdates is re-enabled in Map.vue at map.
@@ -95,6 +94,7 @@ export default {
   },
   computed: {
     ...mapWritableState(useMapStore, ['blockUpdates']),
+
     ...mapWritableState(useMainStore, [
       'showSidebar',
       'overlayOpacity',

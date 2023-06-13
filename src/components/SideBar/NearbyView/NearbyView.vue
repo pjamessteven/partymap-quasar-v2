@@ -28,7 +28,6 @@
                   v-if="$q.screen.lt.sm"
                   class="sidebar-header flex column grow no-wrap items-stretch justify-between ellipsis no-wrap q-pl-md"
                   style="width: 100%"
-                  :class="$q.screen.gt.xs ? 'q-mt-' : ''"
                 >
                   <div class="q-pr-md ellipsis q-mt-md">
                     <span class="text-h4 inter bolder">Near</span>
@@ -49,7 +48,7 @@
                     class="ellipsis"
                     :class="$q.screen.gt.xs ? 'q-pa-xs' : ' q-mr-lg'"
                   >
-                    {{ userLocationCity }}awejrtinselrijbtselirjbh
+                    {{ userLocationCity }}
                   </span>
                   <span class="ellipsis" v-else>... </span>
                   <q-btn
@@ -91,12 +90,16 @@
                 </div>
 
                 <div
-                  class="flex q-py-md q-mt-sm message"
-                  :class="$q.screen.gt.xs ? 'q-mx-lg' : 'q-mx-md'"
+                  class="flex q-mt-sm message"
+                  :class="
+                    $q.screen.gt.xs ? 'q-mx-lg q-py-md ' : 'q-mx-md q-py-md '
+                  "
                   @click="showMessage = !showMessage"
                 >
                   <div class="flex justify-between grow items-center no-wrap">
-                    <span class="inter bold t2"
+                    <span
+                      class="inter bold"
+                      :class="$q.screen.gt.xs ? ' t1 text-large' : 't3'"
                       >Welcome to PartyMap, the global map of festivals and
                       events!</span
                     >
@@ -110,12 +113,13 @@
                   </div>
                   <div
                     v-if="showMessage"
-                    class="flex column items-start justify-start t1"
+                    class="flex column items-start justify-start t2 q-mt-sm"
                   >
                     <p />
                     PartyMap is a community-driven platform for finding parties
-                    and festivals. Yeah, this is basically an app in your
-                    browser &#128526;
+                    and festivals around the world. Yeah, this is basically an
+                    app in your browser &#128526; PartyMap is a work in
+                    progress... More features are in the pipeline!
                     <p />
                     Anyone can submit an event that they know about, as long as
                     the information is already public on the internet. Anyone
@@ -123,12 +127,35 @@
                     out of date. No account needed!
 
                     <p />
-                    Enjoy - Pete
+
+                    Much love to my people around the world - Pete
+                    <div class="flex q-gutter-md q-mt-md q-mb-sm">
+                      <div
+                        class="appstore-wrapper flex items-center q-py-sm q-px-md"
+                      >
+                        <q-icon
+                          name="mdi-apple"
+                          size="1.5rem"
+                          class="q-mr-sm"
+                        />
+                        PartyMap on the App Store
+                      </div>
+                      <div
+                        class="appstore-wrapper flex items-center q-py-sm q-px-md"
+                      >
+                        <q-icon
+                          name="mdi-google-play"
+                          size="1.5rem"
+                          class="q-mr-sm"
+                        />
+                        PartyMap on Google Play
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 <div
-                  class="flex row justify-center items-center q-py-xl q-mt-lg"
+                  class="flex row justify-center items-center q-py-xl q-mt-xl"
                   style="
                     height: 100%;
                     width: 100%;
@@ -154,8 +181,12 @@
                       <!-- tags -->
                       <div class="flex column" v-if="nearbyTags?.length >= 10">
                         <div
-                          class="q-py-md header q-mt-sm"
-                          :class="$q.screen.gt.xs ? 'q-pl-lg' : 'q-pl-md'"
+                          class="q-py-md header"
+                          :class="
+                            $q.screen.gt.xs
+                              ? 'q-pl-lg q-mt-sm text-large'
+                              : 'q-pl-md'
+                          "
                         >
                           <div class="t1 text- inter bold">
                             Explore the map:
@@ -212,7 +243,10 @@
                         class="flex column"
                         v-else-if="tagOptions?.length > 0"
                       >
-                        <div class="q-py-md header q-mt-sm">
+                        <div
+                          class="q-py-md header q-mt-sm"
+                          :class="$q.screen.gt.xs ? ' text-large' : ''"
+                        >
                           <div class="t1 text- inter bold q-pl-md">
                             Explore the map:
                           </div>
@@ -268,7 +302,9 @@
                       >
                         <div
                           class="t1 location-header q-py-md inter bold"
-                          :class="$q.screen.gt.xs ? 'q-pl-lg' : 'q-pl-md'"
+                          :class="
+                            $q.screen.gt.xs ? 'q-pl-lg text-large' : 'q-pl-md'
+                          "
                         >
                           Top artists near {{ userLocationCity }}:
                         </div>
@@ -289,7 +325,9 @@
                       >
                         <div
                           class="t1 location-header q-py-md inter bold"
-                          :class="$q.screen.gt.xs ? 'q-pl-lg' : 'q-pl-md'"
+                          :class="
+                            $q.screen.gt.xs ? 'q-pl-lg text-large' : 'q-pl-md'
+                          "
                         >
                           Top artists worldwide:
                         </div>
@@ -305,7 +343,9 @@
 
                       <div
                         class="t1 inter bold location-header q-py-sm flex row items-center justify-between"
-                        :class="$q.screen.gt.xs ? 'q-pl-lg' : 'q-pl-md'"
+                        :class="
+                          $q.screen.gt.xs ? 'q-pl-lg text-large' : 'q-pl-md'
+                        "
                       >
                         <div class="flex items-center">
                           <div class="">
@@ -380,7 +420,7 @@
 
                       <div
                         class="location-header flex items-center justify-between no-wrap inter bold t1 q-mt- q-py-md"
-                        :class="$q.screen.lt.sm ? 'q-py-md' : ''"
+                        :class="$q.screen.lt.sm ? 'q-py-md' : 'text-large'"
                         v-touch-swipe="
                           () => {
                             sidebarPanel = 'explore';
@@ -714,7 +754,7 @@ export default {
     computedSidebarPanelReady() {
       if (this.$q.screen.lt.sm) {
         return this.sidebarPanelReady;
-      } else return true;
+      } else return this.sidebarPanelReady;
     },
     computedGridColumns() {
       if (this.$q.screen.gt.lg) {
@@ -750,7 +790,7 @@ export default {
   },
 
   async mounted() {
-    if (this.$q.screen.lt.sm) {
+    if (this.$q.screen.lt.sm || true) {
       setTimeout(() => {
         this.sidebarPanelReady = true;
       }, 300);
@@ -793,6 +833,14 @@ export default {
     .main-content {
       .message {
         border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        .appstore-wrapper {
+          //background: $bi-3;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 9px;
+          &:hover {
+            background: $bi-2;
+          }
+        }
       }
       .banner {
         //background: $bi-2;
@@ -839,6 +887,14 @@ export default {
         // background: rgba(200, 100, 0, 0.2);
         //background: $b-2;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        .appstore-wrapper {
+          //background: $b-2;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          border-radius: 9px;
+          &:hover {
+            background: $b-2;
+          }
+        }
       }
       .banner {
         //background: white;
@@ -1087,6 +1143,15 @@ export default {
   }
 }
 
+@media only screen and (min-width: 1920px) {
+  .tag-scroll-area {
+    margin-bottom: 16px;
+    .tag {
+      font-size: 1rem;
+    }
+  }
+}
+
 @media (max-width: 600px) {
   .landing-page {
     .map-gap {
@@ -1121,7 +1186,7 @@ export default {
         border-right: none !important;
       }
       .tag-scroll-area {
-        height: 78px;
+        height: 84px;
       }
 
       .header {

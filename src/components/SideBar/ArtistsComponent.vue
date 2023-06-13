@@ -118,6 +118,14 @@ function onScrollMainContent(info: {
   }
 }
 
+@media only screen and (min-width: 1920px) {
+  .scroll-area-wrapper {
+    .artist-scroll-area {
+      height: 186px;
+    }
+  }
+}
+
 @media only screen and (max-width: 600px) {
   .scroll-area-wrapper {
     .artist-scroll-area {

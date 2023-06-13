@@ -75,7 +75,7 @@
       </transition>
     </div>
     <div
-      class="no-reviews t4 inter bold text-large q-mt-lg"
+      class="no-reviews t3 inter text-large q-mt-lg"
       v-if="event?.event_contributions?.length === 0"
     >
       No reviews yet - be the first!

@@ -262,7 +262,6 @@ export default {
   :deep(.q-tabs) {
     position: absolute;
     right: 12px;
-    height: 100%;
 
     .q-tab {
       padding-top: 4px;
@@ -271,6 +270,7 @@ export default {
       margin: 16px 4px;
       border-radius: 18px;
       transition: all 0.3s;
+
       opacity: 1 !important;
       border: 1px solid transparent;
       &.q-tab--active {
@@ -339,20 +339,22 @@ export default {
       width: 100%;
       position: relative;
       right: unset;
-
+      //height: 64px;
       .q-tab {
-        padding: 0px;
+        min-height: 68px;
+        padding: 0px !important;
         opacity: 0.3 !important;
         margin: 0px 0px;
         border-radius: 0px !important;
         transition: all 0.3s;
         border: none !important;
-
         &.q-tab--active {
           opacity: 1 !important;
           background: unset !important;
+          font-weight: 600 !important;
+
           .q-tab__label {
-            font-weight: 700;
+            font-weight: 600 !important;
           }
         }
         &.inactive-tab {
@@ -362,7 +364,8 @@ export default {
           }
         }
         .q-tab__label {
-          font-weight: 600;
+          // font-weight: 600;
+          font-size: 0.9em !important;
         }
       }
 

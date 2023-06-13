@@ -9,7 +9,7 @@
           class="header t1 inter bolder text-h6 q-mb-xl"
           style="text-align: center"
         >
-          It's party time.
+          It's party time &#128526;
         </div>
         <div class="flex column o-animated" :class="{ 'o-000': loading }">
           <q-input

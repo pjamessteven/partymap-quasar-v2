@@ -58,6 +58,7 @@
                 v-if="artist && artist.tags"
               >
                 <Tag
+                  class="tag"
                   v-for="(at, index) in artist.tags"
                   :key="index"
                   :value="at.tag"
@@ -384,7 +385,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .artist-header {
   position: relative;
   .image-container {
@@ -413,6 +414,10 @@ export default {
   .ed-card {
     max-width: 400px;
   }
+}
+.tag {
+  pointer-events: none;
+  cursor: unset;
 }
 .footer {
   display: flex;

@@ -62,7 +62,7 @@
                   />
                   <div class="header-content grow row">
                     <div
-                      class="flex column justify-start items-stretch col-6 col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"
+                      class="flex column justify-start items-stretch col-6 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6"
                       :class="{
                         'q-pa-xl': $q.screen.gt.xs,
                         'q-pa-lg': $q.screen.lt.md && $q.screen.gt.xs,
@@ -140,10 +140,10 @@
                       </div>
 
                       <FeaturedMediaComponent
-                        v-if="event?.media_items?.length > 0 && $q.screen.lt.sm"
+                        v-if="event?.media_items?.length > 0 && $q.screen.lt.md"
                         :editing="editing"
                         class="q-mt-lg"
-                        :items="!!event?.media_items ? event.media_items : null"
+                        :item="event?.media_items?.[0]"
                       />
 
                       <div
@@ -218,14 +218,13 @@
                       </div>
                     </div>
                     <div
-                      class="flex column no-wrap justify-center q-py-xl col-6 col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"
-                      v-if="$q.screen.gt.xs"
+                      class="flex column no-wrap justify-center q-py-xl q-pr-xl col-6 col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"
+                      v-if="$q.screen.gt.sm"
                     >
                       <FeaturedMediaComponent
-                        @featuredMediaHeight="bottomImagePadding = $event"
                         v-if="!!event"
                         :editing="editing"
-                        :items="event?.media_items"
+                        :item="event?.media_items?.[0]"
                       />
                     </div>
                   </div>
@@ -251,16 +250,19 @@
                   <div v-else class="flex row no-wrap">
                     <EventDateSidebarDesktop
                       v-if="$q.screen.gt.sm"
-                      class="q-mr-xl"
+                      class="q-mr-lg"
                     />
-                    <div class="flex column grow">
+                    <div
+                      class="flex column grow"
+                      :class="{ 'q-pl-lg': $q.screen.gt.sm }"
+                    >
                       <div
                         class="flex items-stretch justify-between no-wrap"
-                        :class="
-                          $q.screen.lt.sm
-                            ? 'q-mt-md q-mb-md q-px-md'
-                            : 'q-mb-lg'
-                        "
+                        :class="{
+                          'q-mt-md q-mb-md q-px-md ': $q.screen.lt.sm,
+                          'q-px-xl q-my-lg': $q.screen.gt.xs && $q.screen.lt.md,
+                          'q-mb-lg': $q.screen.gt.sm,
+                        }"
                       >
                         <div
                           class="action-buttons no-wrap flex items-stretch q-gutter-sm"
@@ -485,11 +487,14 @@
                       />
                       <div
                         class="flex column"
-                        :class="$q.screen.lt.sm ? 'q-px-md ' : ''"
+                        :class="{
+                          'q-px-md ': $q.screen.lt.sm,
+                          'q-px-xl': $q.screen.gt.xs && $q.screen.lt.md,
+                        }"
                       >
                         <EventDates />
 
-                        <ReviewsComponent class="q-mt-xl" />
+                        <ReviewsComponent class="q-mt-m q-mb-xl" />
                       </div>
                     </div>
                   </div>
@@ -518,16 +523,15 @@
                 v-if="!!event"
                 class="bottom-section flex"
                 :class="{
-                  'column reverse q-gutter-lg justify-center items-center no-wrap q-pa-md q-pb-xl ':
-                    $q.screen.lt.sm,
+                  'column reverse no-wrap q-pa-md q-py-lg ': $q.screen.lt.sm,
                   'row justify-between items-center': $q.screen.gt.xs,
                   'q-pa-xl': $q.screen.gt.sm,
-                  'q-pa-md': $q.screen.gt.xs && $q.screen.lt.md,
+                  'q-px-xl q-py-xl': $q.screen.gt.xs && $q.screen.lt.md,
                 }"
               >
                 <div
                   class="flex column"
-                  :class="$q.screen.gt.xs ? 'items-start' : 'items-center'"
+                  :class="$q.screen.gt.xs ? 'items-start' : ''"
                 >
                   <div class="t4">{{ event.page_views }} page views</div>
                   <div class="t4 flex column items-start no-wrap q-mt-xs">
@@ -1053,12 +1057,11 @@ a {
     .scroll-area {
       .content-card {
         .main-content {
-          /*
           .action-buttons {
             :deep(.q-btn) {
-              background: $bi-3;
+              background: $bi-2;
             }
-          }*/
+          }
         }
         .content {
           background: black;

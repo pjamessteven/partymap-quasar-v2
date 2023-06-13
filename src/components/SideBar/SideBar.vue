@@ -45,7 +45,7 @@
 
           <ExploreView
             style="height: 100%; width: 100%"
-            v-show="sidebarPanel === 'explore'"
+            v-if="sidebarPanel === 'explore'"
           />
 
           <FavoritesView
@@ -69,11 +69,12 @@ import SearchView from './SearchView/SearchView.vue';
 import FavoritesView from './FavoritesView/FavoritesView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
 import NavigationBar from 'components/NavigationBar.vue';
+import MobileSwipeHandle from '../MobileSwipeHandle.vue';
 
 import { mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useMapStore } from 'src/stores/map';
-import MobileSwipeHandle from '../MobileSwipeHandle.vue';
+import { useQueryStore } from 'src/stores/query';
 
 import WheelIndicator from 'wheel-indicator';
 
@@ -175,6 +176,13 @@ export default {
         this.view = 'nearby';
       }
     },
+    sidebarPanel(newVal, oldVal) {
+      if (oldVal === 'explore') {
+        this.eventDates = [];
+        this.eventDatesGroupedByMonth = {};
+        this.eventDatesLoading = true;
+      }
+    },
   },
   computed: {
     ...mapState(useMainStore, ['userLocation', 'loadingUserLocation']),
@@ -185,6 +193,11 @@ export default {
     ]),
     ...mapState(useMapStore, ['mapMoving']),
     ...mapWritableState(useMapStore, ['preventMapZoom']),
+    ...mapWritableState(useQueryStore, [
+      'eventDates',
+      'eventDatesGroupedByMonth',
+      'eventDatesLoading',
+    ]),
   },
 };
 </script>
@@ -274,20 +287,20 @@ export default {
     overflow: visible;
     height: 100%;
     pointer-events: all;
-    border-top-left-radius: 18px;
-    border-top-right-radius: 18px;
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
     transition: all 0.3s ease;
     transform: translate3d(0, calc(100% - 276px), 0);
     user-select: none;
     will-change: transform;
-    padding-bottom: 96px;
+    padding-bottom: 72px;
 
     box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
       rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
       rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
 
     &.sidebar-mobile-expanded {
-      transform: translate3d(0, 96px, 0);
+      transform: translate3d(0, 72px, 0);
       .mobile-dismiss-list {
         height: 200px;
       }
@@ -431,6 +444,18 @@ export default {
   }
 }
 
+@media only screen and (min-width: 1920px) {
+  .sidebar-wrapper {
+    .sidebar {
+      padding-bottom: 128px;
+      transform: translate3d(0, calc(100% - 354px), 0);
+
+      &.sidebar-mobile-expanded {
+        transform: translate3d(0, 128px, 0);
+      }
+    }
+  }
+}
 @media only screen and (max-width: 600px) {
   .body--dark {
     .hover-indicator-line {

@@ -103,7 +103,7 @@
         <q-icon name="las la-plus-square" />
       </q-item-section>
       <q-item-section>
-        <q-item-label>Submit event</q-item-label>
+        <q-item-label>Add event</q-item-label>
       </q-item-section>
     </q-item>
 
@@ -226,8 +226,15 @@ export default {
         this.groupEventsByMonth = true;
       }
     },
+    route() {
+      this.showAboutDialog = false;
+      this.showFeedbackDialog = false;
+    },
   },
   computed: {
+    route() {
+      return this.$route;
+    },
     ...mapState(useAuthStore, ['currentUser']),
     ...mapWritableState(useMainStore, [
       'darkMode',

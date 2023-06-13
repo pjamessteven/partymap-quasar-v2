@@ -185,6 +185,20 @@ a {
   color: unset;
   text-decoration: none;
 }
+
+@media only screen and (min-width: 1920px) {
+  .artist-head-wrapper {
+    transition: all 0.3s ease;
+    background-color: white;
+    border-radius: 9px;
+    width: 144px;
+    height: 168px;
+    max-width: 144px;
+    position: relative;
+    overflow: hidden;
+  }
+}
+
 @media only screen and (max-width: 600px) {
   /*
   .artist-head-wrapper {

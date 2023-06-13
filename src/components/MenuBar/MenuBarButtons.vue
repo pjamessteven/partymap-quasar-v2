@@ -14,7 +14,7 @@
           no-caps
           @click="showAddEventDialog"
         >
-          Submit <q-icon name="mdi-plus" class="q-ml-sm" size="1rem" />
+          Add Event <q-icon name="mdi-plus" class="q-ml-sm" size="1rem" />
         </q-btn>
       </div>
     </transition>
@@ -153,7 +153,7 @@ export default {
 }
 
 .submit-button {
-  border-radius: 100px !important;
+  //border-radius: 100px !important;
   overflow: hidden;
 }
 .logo {
@@ -174,5 +174,10 @@ export default {
 }
 .light-button {
   color: white;
+}
+@media only screen and (min-width: 1920px) {
+  .submit-button {
+    font-size: 1rem;
+  }
 }
 </style>

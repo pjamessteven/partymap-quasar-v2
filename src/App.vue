@@ -371,7 +371,7 @@ body {
     }
   }
   .sticky-header {
-    background: $bi-1;
+    background: black;
     border-bottom: 1px solid rgb(30, 30, 30);
   }
   .t1 {
@@ -837,8 +837,18 @@ body {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
+@media only screen and (min-width: 1920px) {
+  .button-control {
+    font-size: 1rem;
+  }
+}
+
 // sm
 @media only screen and (max-width: 600px) {
+  html {
+    // font-size: 0.9rem !important;
+  }
+
   .body--dark {
     .q-dialog {
       .menu {
@@ -883,6 +893,9 @@ body {
         text-align: center;
       }
     }
+  }
+  .button-control {
+    font-size: 0.9em;
   }
 }
 </style>

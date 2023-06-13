@@ -112,14 +112,14 @@
         </div>
       </q-list>
       <div
-        class="inter bolder text-large t2 q-pr-md q-mt-lg event-page-header"
+        class="inter bolder text-large t2 q-pr-md q-mt-md event-page-header"
         v-if="selectedEventDate?.artists?.length > 0"
       >
         {{ $t('event_dates.lineup') }}
       </div>
       <ArtistsComponent
         :editing="editing"
-        class=""
+        class="q-mb-lg"
         v-if="selectedEventDate?.artists?.length > 0"
       />
     </div>

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="selectedEventDate"
-    class="flex row items-start no-wrap ed-inline-card editing-outline q-mt-md"
+    class="flex row items-start no-wrap ed-inline-card editing-outline"
     :class="[editing ? 'editing q-px-md' : '']"
     @click="editing ? (showEditingDialog = true) : null"
   >
@@ -36,10 +36,7 @@
             selectedEventDate.artists && selectedEventDate.artists.length > 0
           "
         >
-          <div
-            class="flex q-mb-md q-mt-sm artist-tabs"
-            v-if="stages.length > 1"
-          >
+          <div class="flex q-mb-md q-mt- artist-tabs" v-if="stages.length > 1">
             <q-tabs
               v-model="selectedStage"
               inline-label

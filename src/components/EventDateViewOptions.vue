@@ -1,7 +1,7 @@
 <template>
   <div class="view-options flex justify-center items-center">
     <q-btn-dropdown
-      class="inter bolder t3"
+      class="inter bold t3"
       flat
       label="View"
       :dropdown-icon="$q.screen.lt.sm ? 'mdi-dots-vertical' : undefined"

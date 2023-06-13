@@ -15,10 +15,10 @@
       :class="$q.screen.gt.xs ? 'q-px-lg' : ''"
     >
       <div
-        class="inter bold text-large t2"
-        :class="$q.screen.lt.sm ? 'q-mt-md ' : ' q-mt-lg'"
+        class="inter bold t1"
+        :class="$q.screen.lt.sm ? 'q-mt-md ' : ' q-mt-lg  text-large'"
       >
-        Places, events, artists & more:
+        Search for events, places, artists & more:
       </div>
       <div
         class="flex row no-wrap searchbar-wrapper justify-stretch q-mt-sm q-mb-md"
