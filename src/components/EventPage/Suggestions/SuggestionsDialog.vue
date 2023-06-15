@@ -273,6 +273,9 @@ export default {
     */
   },
   methods: {
+    closeDialog() {
+      this.$emit('closeDialog');
+    },
     editEventDate(mode) {
       this.editMode = mode;
     },

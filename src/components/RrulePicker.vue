@@ -33,7 +33,7 @@
       v-if="
         dateTime && dateTime.start && recurringType === 1 && separationCount > 0
       "
-      class="q-pt-md"
+      class="q-pt-md flex columnn"
     >
       <div class="weekly-rrule-text q-pa-sm t3">
         <span v-if="separationCount === 1">{{ $t('add.every') }} </span>
@@ -45,10 +45,30 @@
         </span>
       </div>
     </div>
-    <div v-if="recurringType === 2 && separationCount > 0" class="q-pt-md t2">
+    <div
+      v-if="recurringType === 2 && separationCount > 0"
+      class="q-gutter-sm flex column t2 q-mt-md"
+    >
       <q-radio
-        v-model="absoluteDate"
-        :val="true"
+        v-model="dateMode"
+        val="relative"
+        :label="
+          separationCount == 1
+            ? ordinalNumberFormatterLong(occuranceOfDateInMonth) +
+              ' ' +
+              selectedWeekday +
+              ' ' +
+              $t('add.of_every_month')
+            : ordinalNumberFormatterLong(occuranceOfDateInMonth) +
+              ' ' +
+              selectedWeekday +
+              ' ' +
+              $t('add.of_every_second_month')
+        "
+      />
+      <q-radio
+        v-model="dateMode"
+        val="absolute"
         :label="
           separationCount == 1
             ? ordinalNumberFormatterShort(selectedDate) +
@@ -63,49 +83,20 @@
               $t('add.of_every_second_month')
         "
       />
+
       <q-radio
-        v-model="absoluteDate"
-        :val="false"
-        :label="
-          separationCount == 1
-            ? ordinalNumberFormatterLong(occuranceOfDateInMonth) +
-              ' ' +
-              selectedWeekday +
-              ' ' +
-              $t('add.of_every_month')
-            : ordinalNumberFormatterLong(occuranceOfDateInMonth) +
-              ' ' +
-              selectedWeekday +
-              ' ' +
-              $t('add.of_every_second_month')
-        "
+        v-model="dateMode"
+        val="rough"
+        label="Roughly every month (Confirm exact dates later)"
       />
     </div>
-    <div v-if="recurringType === 3 && separationCount > 0" class="q-pt-md t2">
+    <div
+      v-if="recurringType === 3 && separationCount > 0"
+      class="q-pt-md t2 q-gutter-sm flex column"
+    >
       <q-radio
-        v-model="absoluteDate"
-        :val="true"
-        :label="
-          separationCount == 1
-            ? ordinalNumberFormatterShort(selectedDate) +
-              ' ' +
-              $t('add.day_of') +
-              ' ' +
-              selectedMonth +
-              ' ' +
-              $t('add.every_year')
-            : ordinalNumberFormatterShort(selectedDate) +
-              ' ' +
-              $t('add.day_of') +
-              ' ' +
-              selectedMonth +
-              ' ' +
-              $t('add.every_second_year')
-        "
-      />
-      <q-radio
-        v-model="absoluteDate"
-        :val="false"
+        v-model="dateMode"
+        val="relative"
         :label="
           separationCount == 1
             ? ordinalNumberFormatterLong(occuranceOfDateInMonth) +
@@ -127,6 +118,32 @@
               '  ' +
               $t('add.every_second_year')
         "
+      />
+      <q-radio
+        v-model="dateMode"
+        val="absolute"
+        :label="
+          separationCount == 1
+            ? ordinalNumberFormatterShort(selectedDate) +
+              ' ' +
+              $t('add.day_of') +
+              ' ' +
+              selectedMonth +
+              ' ' +
+              $t('add.every_year')
+            : ordinalNumberFormatterShort(selectedDate) +
+              ' ' +
+              $t('add.day_of') +
+              ' ' +
+              selectedMonth +
+              ' ' +
+              $t('add.every_second_year')
+        "
+      />
+      <q-radio
+        v-model="dateMode"
+        val="rough"
+        label="Every year during this month (Confirm exact dates later)"
       />
     </div>
   </div>
@@ -140,7 +157,7 @@ export default {
   props: ['dateTime', 'disableOneOff'],
   data() {
     return {
-      absoluteDate: false,
+      dateMode: 'relative',
       recurringType: 1,
       separationCount: this.disableOneOff ? 1 : 0,
       separationCountOptions: [
@@ -193,11 +210,15 @@ export default {
         dayOfMonth: this.dayOfMonth,
         dayOfWeek: this.dayOfWeek,
         monthOfYear: this.monthOfYear,
+        exact: this.dateMode !== 'rough',
       };
       this.$emit('updateRrule', r);
     },
   },
   computed: {
+    absoluteDate() {
+      return this.dateMode !== 'relative';
+    },
     occuranceOfDateInMonth() {
       if (this.dateTime && this.dateTime.start) {
         const startDate = this.dateTime.start;

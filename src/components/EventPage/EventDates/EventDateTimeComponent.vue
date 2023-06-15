@@ -69,12 +69,7 @@
           v-else
         >
           <div class="t2">
-            <span
-              v-if="
-                selectedEventDate.end_naive &&
-                selectedEventDate.start_naive != selectedEventDate.end_naive
-              "
-            >
+            <span>
               {{
                 monthYear(selectedEventDate.start_naive, selectedEventDate.tz)
               }}

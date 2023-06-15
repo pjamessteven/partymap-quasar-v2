@@ -94,7 +94,7 @@
       transition-show="fade-in"
       transition-hide=""
     >
-      <EditRruleDialog v-on:closeDialog="showManageRruleDialog = false" />
+      <EditRruleDialog @closeDialog="showManageRruleDialog = false" />
     </q-dialog>
     <q-dialog
       v-model="showAddEventDateDialog"
