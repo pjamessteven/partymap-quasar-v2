@@ -140,7 +140,7 @@ import EventDateTimeComponent from 'components/EventPage/EventDates/EventDateTim
 import EventDateUrlComponent from 'components/EventPage/EventDates/EventDateUrlComponent.vue';
 import EventDateTicketUrlComponent from 'components/EventPage/EventDates/EventDateTicketUrlComponent.vue';
 
-import { mapState } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
 
@@ -164,8 +164,23 @@ export default {
       showMoreFields: false,
     };
   },
-  methods: {},
-  watch: {},
+  methods: {
+    ...mapActions(useEventStore, ['loadEvent', 'toggleFavorite']),
+  },
+  watch: {
+    selectedEventDate: {
+      // reload event when date status changes
+      handler(newv, oldv) {
+        if (
+          newv.id === oldv.id &&
+          newv.date_confirmed !== oldv.date_confirmed
+        ) {
+          this.loadEvent(this.event.id);
+        }
+      },
+      deep: true,
+    },
+  },
   computed: {
     ...mapState(useEventStore, [
       'event',
@@ -206,13 +221,17 @@ export default {
             editing: this.editing,
             expandable: this.$q.screen.lt.md,
             inline: true,
+            showMoreFields: this.showMoreFields,
           },
           active: true,
           visible: true, // date is always shown
         },
         {
           type: 'EventDateCancelledComponent',
-          propsData: { editing: this.editing },
+          propsData: {
+            editing: this.editing,
+            showMoreFields: this.showMoreFields,
+          },
           active: this.editing || eventDate.cancelled, // only active if host is editing
           visible:
             eventDate.cancelled ||
@@ -225,6 +244,7 @@ export default {
             editing: this.editing,
             expandable: this.$q.screen.lt.md,
             inline: true,
+            showMoreFields: this.showMoreFields,
           },
           active: true,
           visible: true, // location always shown
@@ -232,7 +252,10 @@ export default {
 
         {
           type: 'EventDateSizeComponent',
-          propsData: { editing: this.editing },
+          propsData: {
+            editing: this.editing,
+            showMoreFields: this.showMoreFields,
+          },
           active: eventDate.size != null && eventDate.size > 0,
           visible:
             eventDate.size != null ||
@@ -241,7 +264,10 @@ export default {
         },
         {
           type: 'EventDateUrlComponent',
-          propsData: { editing: this.editing },
+          propsData: {
+            editing: this.editing,
+            showMoreFields: this.showMoreFields,
+          },
           active: eventDate.url != null && eventDate.url.length > 0,
           visible:
             (eventDate.url != null && eventDate.url.length > 0) ||
@@ -250,7 +276,10 @@ export default {
         },
         {
           type: 'EventDateTicketUrlComponent',
-          propsData: { editing: this.editing },
+          propsData: {
+            editing: this.editing,
+            showMoreFields: this.showMoreFields,
+          },
           active:
             eventDate.ticket_url != null && eventDate.ticket_url.length > 0,
           visible:
@@ -260,7 +289,10 @@ export default {
         },
         {
           type: 'EventDateDescriptionComponent',
-          propsData: { editing: this.editing },
+          propsData: {
+            editing: this.editing,
+            showMoreFields: this.showMoreFields,
+          },
           active:
             eventDate.description != null && eventDate.description.length > 0,
           visible:
@@ -271,14 +303,18 @@ export default {
         },
         {
           type: 'EventDateAddArtistsComponent',
-          propsData: { editing: this.editing },
+          propsData: {
+            editing: this.editing,
+            showMoreFields: this.showMoreFields,
+          },
           active: false,
           visible:
             ((eventDate.artists == null ||
               (eventDate.artists && eventDate.artists.length === 0)) &&
               !this.eventHasHost &&
               this.showMoreFields) ||
-            this.editing,
+            this.editing ||
+            this.showMoreFields,
         },
       ];
 

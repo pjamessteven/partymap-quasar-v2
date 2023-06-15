@@ -212,6 +212,11 @@ export default {
     var m = moment.tz(t, tz);
     return m.format('dddd') + ', ' + m.format('lll');
   },
+  monthYear: function (t, tz) {
+    moment.locale(locale);
+    var m = moment.tz(t, tz);
+    return m.format('MMMM') + ' ' + m.format('YYYY');
+  },
   localDateWithWeekday: function (t, tz) {
     moment.locale(locale);
     var m = moment.tz(t, tz);

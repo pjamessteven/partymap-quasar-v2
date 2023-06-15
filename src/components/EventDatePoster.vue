@@ -27,7 +27,6 @@
               class="card-bottom-background"
               :style="getBottomBgImgStyle()"
             />
-            <div class="card-bottom-background-hover-overlay" />
             <div class="card-bottom-foreground flex column no-wrap">
               <div
                 class="image-container flex justify-center items-center shadow-2xl"
@@ -99,29 +98,38 @@
           </div>
 -->
                   <span>
-                    <q-icon name="las la-clock" class="q-mr-sm" />{{
+                    <q-icon name="las la-clock" class="q-mr-sm" />
+                    <q-badge
+                      v-if="event.cancelled"
+                      class="q-my-xs"
+                      color="red"
+                      :label="$t('event_date_inline.cancelled')"
+                    />
+                    <span v-else-if="event.date_confirmed">{{
                       relativeHumanTime(
                         event.start_naive,
                         event.end_naive,
                         event.tz
                       )
-                    }}
+                    }}</span>
+
+                    <q-badge
+                      v-else
+                      class="q-my-xs"
+                      color="white"
+                      text-color="black"
+                      label="Date TBC"
+                    />
                   </span>
                   <div class="flex row items-center no-wrap ellipsis">
                     <q-icon name="las la-calendar" class="q-mr-sm" />
-                    <div
-                      v-if="!event.cancelled"
-                      class="flex row no-wrap ellipsis"
-                    >
-                      <span>
-                        {{
-                          localDateWithWeekday(event.start_naive, event.tz)
-                        }} </span
-                      ><!--
-              <span v-else>
-                {{ localDay(event.start_naive, event.tz) }}
-                {{ localDayOfMonth(event.start_naive, event.tz) }}</span
-              >-->
+                    <div class="flex row no-wrap ellipsis">
+                      <span v-if="event.date_confirmed">
+                        {{ localDateWithWeekday(event.start_naive, event.tz) }}
+                      </span>
+                      <span v-else>
+                        {{ monthYear(event.start_naive, event.tz) }}
+                      </span>
                       <span
                         v-if="
                           event.event.rrule &&
@@ -135,12 +143,6 @@
                         />
                       </span>
                     </div>
-                    <q-badge
-                      class="q-my-xs"
-                      color="red"
-                      :label="$t('event_date_inline.cancelled')"
-                      v-if="event.cancelled"
-                    />
                   </div>
                   <div class="ellipsis">
                     <span v-if="event.location && event.location.locality">
@@ -339,6 +341,7 @@ export default {
     this.relativeHumanTime = common.relativeHumanTime;
     this.localDateWithWeekday = common.localDateWithWeekday;
     this.timeZoneAbbreviention = common.timeZoneAbbreviention;
+    this.monthYear = common.monthYear;
     this.simplifiedRecurringPattern = common.simplifiedRecurringPattern;
     this.localDayOfMonth = localDayOfMonth;
     this.localDay = common.localDay;
@@ -349,21 +352,15 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .ed-poster {
-    border: none !important;
-    background: $bi-1;
-    //blue background-color: #0b0e13;
-    .card-top-content {
-    }
     .card-bottom-content {
+      transition: opacity 0.3s;
+      background: $bi-1;
       border-top: 1px solid (rgba(255, 255, 255, 0.2));
       border-left: 1px solid rgba(255, 255, 255, 0.1);
       border-right: 1px solid rgba(255, 255, 255, 0.1);
       .card-bottom-background {
         background: $bi-3;
         opacity: 0.4;
-      }
-      .card-bottom-background-hover-overlay {
-        background: rgba(255, 255, 255, 0.2);
       }
       .card-bottom-foreground {
         background: linear-gradient(
@@ -373,10 +370,7 @@ export default {
       }
     }
     .card-background {
-      //border: 1px solid #181818;
-
-      background: $bi-4;
-      opacity: 0.8;
+      background: white;
       transition: opacity 0.2s ease;
     }
     &:first-child {
@@ -397,32 +391,22 @@ export default {
 
 .body--light {
   .ed-poster {
-    background: black;
-    //border: 1px solid gray;
-    /*
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 1px, rgba(0, 0, 0, 0.05) 0px 4px 2px,
-      rgba(0, 0, 0, 0.05) 0px 8px 4px, rgba(0, 0, 0, 0.05) 0px 16px 8px,
-      rgba(0, 0, 0, 0.05) 0px 32px 16px;
-*/
     box-shadow: rgba(0, 0, 0, 0.12) 0px 3px 8px;
     font-smooth: always;
-    //box-shadow: 0 4px 10px rgba(220, 220, 220, 0.5) !important;
 
     .card-background {
-      //background: #181818;
       opacity: 0.8;
       transition: opacity 0.2s ease;
     }
-    .card-top-content {
-    }
-    .card-bottom-content {
-      border-top: 1px solid (rgba(255, 255, 255, 0.2));
 
+    .card-bottom-content {
+      transition: opacity 0.3s;
+      border-top: 1px solid (rgba(255, 255, 255, 0.2));
       color: white !important;
       background: linear-gradient(
         0deg,
-        rgba(255, 255, 255, 0.8) 0%,
-        rgba(255, 255, 255, 1) 80%
+        rgba(0, 0, 0, 0.8) 0%,
+        rgba(0, 0, 0, 1) 80%
       );
 
       .card-bottom-background {
@@ -430,23 +414,15 @@ export default {
         z-index: 0;
         background: white;
         transition: opacity 0.2s ease;
-        //opacity: 1;
       }
-      .card-bottom-background-hover-overlay {
-        background: rgba(255, 255, 255, 0.2);
-      }
+
       .card-bottom-foreground {
         background: linear-gradient(rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.3));
         z-index: 1;
-
-        .card-bottom-text {
-          // opacity: 0.68 !important;
-        }
       }
     }
     &:first-child {
       margin-top: 0px;
-      //border: 1px solid rgba(0,0,0,0);
     }
 
     .event-info {
@@ -455,38 +431,34 @@ export default {
 }
 
 .ed-poster {
+  background: white;
+  border: none !important;
+
   border-radius: 9px;
   direction: ltr;
   display: flex;
   flex-direction: column;
-  //min-height: 186px;
   cursor: pointer;
   transition: all 0.2s ease;
   overflow: hidden;
+
   -webkit-backface-visibility: hidden;
   -webkit-transform: translate3d(0, 0, 0);
+
+  &:hover {
+    transform: scale(1.01) translateY(0px);
+
+    .card-bottom-content {
+      opacity: 0.9;
+    }
+  }
 
   .card-bottom-foreground {
     .image-container {
       transition: transform 0.2s;
     }
   }
-  &:hover {
-    .card-bottom-foreground {
-      .image-container {
-        //transform: scale(1.02) translateY(0px);
-      }
-    }
-    .card-bottom-content {
-      .card-bottom-background-hover-overlay {
-        opacity: 1;
-      }
-    }
-  }
 
-  &:active {
-    //  transform: scale(0.98);
-  }
   position: relative;
 
   .card-top-content {
@@ -500,36 +472,22 @@ export default {
       width: 100%;
       height: 100%;
       z-index: 2;
-      // transform: scale(1.5);
     }
   }
   .card-bottom-content {
     position: relative;
-    //color: white;
-    //background: black;
 
     .card-bottom-background {
       border-radius: 9px;
       overflow: hidden;
-      //border: 1px solid #181818;
       z-index: 0;
       filter: blur(12px);
       transform: rotate(180deg) scaleX(-1) scale(2);
-      //mask-image: linear-gradient(to top, transparent 0%, white 64px);
       position: absolute;
       height: 100%;
       width: 100%;
-      //opacity: 0.4;
-      transition: opacity 0.2s ease;
     }
-    .card-bottom-background-hover-overlay {
-      z-index: 1;
-      position: absolute;
-      height: 100%;
-      width: 100%;
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
+
     .card-bottom-foreground {
       border-radius: 9px;
       overflow: hidden;
@@ -539,27 +497,17 @@ export default {
         :deep(.tag) {
           background: transparent !important;
           border: 1px solid rgba(255, 255, 255, 0.2) !important;
-          // font-size: 1em;
-          .tag-inner-wrapper {
-            //padding: 0px 4px;
-            .tag-inner {
-              // padding: 2px;
-            }
-          }
         }
       }
 
       .ed-poster-header {
-        //font-size: 1rem;
         max-width: 100%;
         opacity: 1;
-        //color: white !important;
         z-index: 2;
       }
       .card-bottom-text {
         position: relative;
         z-index: 2;
-        //color: white !important;
         font-size: small;
       }
       .image-container {

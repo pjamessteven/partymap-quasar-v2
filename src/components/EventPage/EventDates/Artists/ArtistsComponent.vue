@@ -93,6 +93,7 @@
     </div>
 
     <q-dialog
+      v-if="editing || showMoreFields"
       v-model="showEditingDialog"
       transition-show="jump-up"
       transition-hide="jump-down"
@@ -139,6 +140,7 @@ export default {
   },
   props: {
     editing: Boolean,
+    showMoreFields: Boolean,
   },
   methods: {
     loadStages() {

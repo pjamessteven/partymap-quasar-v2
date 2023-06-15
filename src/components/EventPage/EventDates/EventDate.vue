@@ -25,11 +25,15 @@
           class="flex column t2"
           :class="$q.screen.gt.sm ? 'text-large items-start' : 'items-center'"
         >
-          <div class="t2">
+          <div class="t2" v-if="ed.date_confirmed">
             <span>{{ localDay(ed.start_naive, null) }}</span>
           </div>
+          <q-badge v-else class="q-my-xs" label="Date TBC" />
           <div class="t2" style="text-align: center">
-            <span>{{ localDate(ed.start_naive, null) }}</span>
+            <span v-if="ed.date_confirmed">{{
+              localDate(ed.start_naive, null)
+            }}</span>
+            <span v-else>{{ monthYear(ed.start_naive, null) }}</span>
           </div>
         </div>
       </div>
@@ -148,6 +152,7 @@ export default {
     this.relativeHumanTime = common.relativeHumanTime;
     this.localTime = common.localTime;
     this.localDate = common.localDate;
+    this.monthYear = common.monthYear;
     this.localDay = common.localDay;
     this.localTimeCompact = common.localTimeCompact;
     this.timeZoneAbbreviention = common.timeZoneAbbreviention;

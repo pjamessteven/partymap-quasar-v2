@@ -16,13 +16,24 @@
       class="flex column q-ml-md t2"
       :class="$q.screen.gt.sm ? 'text-large' : ''"
     >
-      <div style="white-space: pre-line" v-if="computedExternalUrl">
+      <div
+        class="flex column"
+        style="white-space: pre-line"
+        v-if="computedExternalUrl"
+      >
         <a
           class="link-hover underline"
           target="_blank"
           :href="computedExternalUrl"
           >{{ selectedEventDate.url }}</a
         >
+        <div
+          class="t4 link-hover underline q-mt-sm"
+          v-if="showMoreFields"
+          @click="showEditingDialog = true"
+        >
+          Change URL
+        </div>
       </div>
       <div
         v-else
@@ -36,6 +47,7 @@
       </div>
     </div>
     <q-dialog
+      v-if="editing || showMoreFields"
       v-model="showEditingDialog"
       transition-show="jump-up"
       transition-hide="jump-down"
@@ -62,6 +74,7 @@ export default {
   },
   props: {
     editing: Boolean,
+    showMoreFields: Boolean,
   },
   methods: {},
   computed: {

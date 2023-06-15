@@ -17,12 +17,16 @@
       <div
         v-if="selectedEventDate.cancelled"
         @click="showEditingDialog = true"
-        class="flex items-center"
+        class="flex items-start column"
       >
         <q-badge color="red" :label="$t('event_date_inline.cancelled')" />
-        <u class="t4 q-ml-sm" v-if="editing">{{
-          $t('event_date_inline.mark_date_as_happening')
-        }}</u>
+        <u
+          class="t4 q-mt-sm link-hover underline"
+          style="cursor: pointer"
+          v-if="editing || showMoreFields"
+          @click="showEditingDialog = true"
+          >Mark as happening</u
+        >
       </div>
       <div
         v-else
@@ -36,6 +40,7 @@
       </div>
     </div>
     <q-dialog
+      v-if="editing || showMoreFields"
       v-model="showEditingDialog"
       transition-show="jump-up"
       transition-hide="jump-down"
@@ -61,6 +66,7 @@ export default {
   },
   props: {
     editing: Boolean,
+    showMoreFields: Boolean,
   },
   methods: {},
   computed: {

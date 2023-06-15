@@ -379,6 +379,7 @@
                           :eventDates="nearbyEventDates"
                           :hasNext="nearbyEventDatesHasNext"
                           :loading="nearbyEventDatesLoading"
+                          :disableEndOfResultsMessage="true"
                         />
                       </transition>
                       <transition
@@ -392,6 +393,7 @@
                           :eventDates="nearbyEventDates"
                           :hasNext="nearbyEventDatesHasNext"
                           :loading="nearbyEventDatesLoading"
+                          :disableEndOfResultsMessage="true"
                         />
                       </transition>
                       <div

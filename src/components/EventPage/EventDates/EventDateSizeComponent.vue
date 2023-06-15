@@ -14,20 +14,24 @@
       class="flex column q-ml-md t2"
       :class="$q.screen.gt.sm ? 'text-large' : ''"
     >
-      <div v-if="selectedEventDate.size">
+      <div v-if="selectedEventDate.size" class="flex column">
         ~{{ selectedEventDate.size.toLocaleString('en-US') }}&nbsp;{{
           $t('event_date_inline.size_people')
         }}
+        <div
+          class="t4 link-hover underline q-mt-sm"
+          v-if="showMoreFields"
+          @click="showEditingDialog = true"
+        >
+          Change size
+        </div>
       </div>
       <div
         v-else
-        class="t4"
+        class="t4 link-hover underline"
         @click="showEditingDialog = true"
-        style="cursor: pointer"
       >
-        <span>
-          <u>{{ $t('event_date_inline.add_size') }}</u>
-        </span>
+        {{ $t('event_date_inline.add_size') }}
       </div>
     </div>
     <q-dialog
@@ -57,6 +61,7 @@ export default {
   },
   props: {
     editing: Boolean,
+    showMoreFields: Boolean,
   },
   methods: {},
   computed: {

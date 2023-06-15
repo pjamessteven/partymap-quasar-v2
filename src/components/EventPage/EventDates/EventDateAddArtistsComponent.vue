@@ -14,10 +14,15 @@
       class="flex column q-ml-md t2"
       :class="$q.screen.gt.sm ? 'text-large' : ''"
     >
-      <div class="t4" @click="showEditingDialog = true" style="cursor: pointer">
-        <span>
-          <u>{{ $t('event_date_inline.add_lineup') }}</u>
+      <div
+        class="t4 link-hover underline"
+        @click="showEditingDialog = true"
+        style="cursor: pointer"
+      >
+        <span v-if="selectedEventDate.artists?.length === 0">
+          {{ $t('event_date_inline.add_lineup') }}
         </span>
+        <span v-else> Edit the lineup </span>
       </div>
     </div>
     <q-dialog
@@ -49,6 +54,7 @@ export default {
   },
   props: {
     editing: Boolean,
+    showMoreFields: Boolean,
   },
   methods: {
     hideDialog() {

@@ -269,7 +269,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .body--dark {
   .image-container {
     background: $bi-4;

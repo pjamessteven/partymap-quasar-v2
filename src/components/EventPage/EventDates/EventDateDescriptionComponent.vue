@@ -19,35 +19,40 @@
       class="flex column q-ml-md t2"
       :class="$q.screen.gt.sm ? 'text-large' : ''"
     >
-      <div
-        v-if="
-          selectedEventDate.description &&
-          selectedEventDate.description.length > 0
-        "
-      >
-        <span
-          v-if="
-            selectedEventDate.description_attribute &&
-            selectedEventDate.description_attribute.length > 0
-          "
-          >"</span
-        ><span
-          style="white-space: pre-line"
-          v-html="selectedEventDate.description"
-        ></span
-        ><span
-          v-if="
-            selectedEventDate.description_attribute &&
-            selectedEventDate.description_attribute.length > 0
-          "
-          >"
-          <a
-            class="link-hover o-050"
-            target="_blank"
-            :href="computedAttributeUrl"
-            >[source]</a
+      <div class="flex column" v-if="selectedEventDate.description?.length > 0">
+        <div>
+          <span
+            v-if="
+              selectedEventDate.description_attribute &&
+              selectedEventDate.description_attribute.length > 0
+            "
+            >"</span
+          ><span
+            style="white-space: pre-line"
+            v-html="selectedEventDate.description"
           ></span
+          ><span
+            v-if="
+              selectedEventDate.description_attribute &&
+              selectedEventDate.description_attribute.length > 0
+            "
+            >"
+            <a
+              class="link-hover o-050"
+              target="_blank"
+              :href="computedAttributeUrl"
+              >[source]</a
+            ></span
+          >
+        </div>
+
+        <div
+          class="t4 link-hover underline q-mt-md flex"
+          v-if="showMoreFields"
+          @click="showEditingDialog = true"
         >
+          Edit description
+        </div>
       </div>
       <div
         v-else
@@ -61,6 +66,7 @@
       </div>
     </div>
     <q-dialog
+      v-if="editing || showMoreFields"
       v-model="showEditingDialog"
       transition-show="jump-up"
       transition-hide="jump-down"
@@ -88,6 +94,7 @@ export default {
   },
   props: {
     editing: Boolean,
+    showMoreFields: Boolean,
   },
   methods: {},
   computed: {

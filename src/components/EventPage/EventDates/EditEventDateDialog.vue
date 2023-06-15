@@ -216,7 +216,8 @@ export default {
         },
         date: {
           title: this.$t('edit_event_date.date'),
-          message: this.$t('edit_event_date.date_msg'),
+          message:
+            'Double click a date to select a single day, or select a range if the event happens over multiple days. Time is in 24hr format.',
         },
         location: {
           title: this.$t('edit_event_date.location'),

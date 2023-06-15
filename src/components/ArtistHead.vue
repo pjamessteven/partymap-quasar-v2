@@ -10,7 +10,7 @@
   >
     <div class="artist-head-wrapper flex column justify-start items-center">
       <div class="card-bottom-background" :style="getBgImgStyle()" />
-      <div class="card-bottom-background-hover-overlay" />
+      <div class="card-bottom-background-underlay" />
       <div class="artist-head flex column no-wrap">
         <div class="artist-head-background shadow-2xl">
           <img
@@ -75,50 +75,43 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .artist-head-wrapper {
-    background: $bi-3;
+    overflow: hidden;
+    border: 1px solid black;
     .card-bottom-background {
-      opacity: 0.48;
+      background: $bi-3;
+      filter: blur(12px) brightness(68%);
     }
     .artist-head {
-    }
-    .artist-head-background {
-      opacity: 0.8;
-    }
-    &:hover {
-      .artist-head-background {
-        opacity: 1;
-      }
     }
   }
 }
 .body--light {
   .artist-head-wrapper {
-    background: $b-3;
-
-    .artist-head {
-      //      box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
-      //        rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-    }
     &:hover {
-      .artist-head {
-        //background: $b-4;
-      }
-      .artist-head-background {
-        opacity: 1;
-      }
+      opacity: 0.9;
     }
   }
 }
 
 .artist-head-wrapper {
   transition: all 0.3s ease;
-  background-color: white;
   border-radius: 9px;
   width: 128px;
   height: 156px;
   max-width: 128px;
   position: relative;
   overflow: hidden;
+  transition: opacity 0.3s;
+  &:hover {
+    transform: scale(1.01) translateY(0px);
+
+    .card-bottom-background {
+      opacity: 0.9;
+    }
+    .artist-head {
+      filter: brightness(120%);
+    }
+  }
   .card-bottom-background {
     border-radius: 9px;
     overflow: hidden;
@@ -133,14 +126,15 @@ export default {
     //opacity: 0.4;
     transition: opacity 0.2s ease;
   }
-  .card-bottom-background-hover-overlay {
-    z-index: 1;
+  .card-bottom-background-underlay {
+    z-index: -1;
     position: absolute;
     height: 100%;
     width: 100%;
-    opacity: 0;
-    background: rgba(255, 255, 255, 0.1);
-    transition: opacity 0.2s;
+    opacity: 1;
+    background: white;
+    border-radius: 9px;
+    //background: white;
   }
   .artist-head {
     padding: 16px;
@@ -169,11 +163,7 @@ export default {
       }
     }
   }
-  &:hover {
-    .card-bottom-background-hover-overlay {
-      opacity: 1;
-    }
-  }
+
   .artist-name {
     color: white;
     z-index: 10;
@@ -189,7 +179,6 @@ a {
 @media only screen and (min-width: 1920px) {
   .artist-head-wrapper {
     transition: all 0.3s ease;
-    background-color: white;
     border-radius: 9px;
     width: 144px;
     height: 168px;

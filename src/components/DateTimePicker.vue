@@ -71,6 +71,7 @@
 <script>
 import { DatePicker } from 'v-calendar';
 import moment from 'moment-timezone';
+import _ from 'lodash';
 export default {
   components: {
     DatePicker,
@@ -117,13 +118,14 @@ export default {
     dt: {
       handler(newVal) {
         if (this.isRange) {
-          var start = newVal.date.start;
-          var end = newVal.date.end;
+          var start = _.cloneDeep(newVal.date.start);
+          var end = _.cloneDeep(newVal.date.end);
           if (start && end) {
             var startHours = 0;
             var startMinutes = 0;
             var endHours = 0;
             var endMinutes = 0;
+            console.log('test', newVal);
 
             if (start && newVal.startHours != null) {
               startHours = Number(newVal.startHours);
@@ -140,6 +142,16 @@ export default {
             if (end && newVal.endMinutes != null) {
               endMinutes = Number(newVal.endMinutes);
               end.setMinutes(endMinutes);
+            }
+            if (
+              newVal.endHours === null &&
+              newVal.date.start.getTime() === newVal.date.end.getTime()
+            ) {
+              // make end date the exact same if end date/end time not selected
+              console.log('test2');
+              end.setHours(startHours);
+              end.setMinutes(startMinutes);
+              console.log(start, end);
             }
 
             start = moment(start)
@@ -159,7 +171,7 @@ export default {
         }
         if (!this.isRange && newVal.date) {
           // emit single date with time included. used by event date artists component for lineup times
-          var dt = newVal.date;
+          var dt = _.cloneDeep(newVal.date);
 
           var hours = 0;
           var mins = 0;

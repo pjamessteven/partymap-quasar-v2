@@ -15,14 +15,13 @@
           :size="$q.screen.gt.sm ? '2em' : '1.5rem'"
         />
 
-        <div class="flex column q-ml-md">
-          <div class="t2" :class="$q.screen.gt.sm ? 'text-large' : ''">
-            <span
-              v-if="
-                selectedEventDate.end_naive &&
-                selectedEventDate.start_naive != selectedEventDate.end_naive
-              "
-            >
+        <div
+          class="flex column q-ml-md"
+          :class="$q.screen.gt.sm ? 'text-large' : ''"
+          v-if="selectedEventDate?.date_confirmed"
+        >
+          <div class="t2">
+            <span v-if="selectedEventDate.start_naive">
               {{
                 localDateTimeLong(
                   selectedEventDate.start_naive,
@@ -55,6 +54,40 @@
                 selectedEventDate.tz
               )
             }}</span>
+          </div>
+          <div
+            class="t4 link-hover underline q-mt-sm"
+            v-if="showMoreFields"
+            @click.stop="showEditDialog = true"
+          >
+            Change date
+          </div>
+        </div>
+        <div
+          class="flex column q-ml-md"
+          :class="$q.screen.gt.sm ? 'text-large' : ''"
+          v-else
+        >
+          <div class="t2">
+            <span
+              v-if="
+                selectedEventDate.end_naive &&
+                selectedEventDate.start_naive != selectedEventDate.end_naive
+              "
+            >
+              {{
+                monthYear(selectedEventDate.start_naive, selectedEventDate.tz)
+              }}
+            </span>
+
+            <span class="t4"> (Exact date to be confirmed) </span>
+          </div>
+          <div
+            class="t4 link-hover underline q-mt-sm"
+            v-if="showMoreFields"
+            @click.stop="showEditDialog = true"
+          >
+            Confirm exact date
           </div>
         </div>
       </div>
@@ -90,7 +123,7 @@
     />
     <q-dialog
       v-model="showEditDialog"
-      v-if="editing && selectedEventDate"
+      v-if="editing || showMoreFields"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
@@ -144,6 +177,7 @@ export default {
     editing: Boolean,
     inline: Boolean, // desktop and mobile (only show text, no calendar)
     expandable: Boolean, // mobile only
+    showMoreFields: Boolean,
   },
   methods: {
     expand() {
@@ -306,6 +340,7 @@ export default {
     this.localDateLong = common.localDateLong;
     this.localTimeCompact = common.localTimeCompact;
     this.timeZoneAbbreviention = common.timeZoneAbbreviention;
+    this.monthYear = common.monthYear;
     this.recurringPattern = common.recurringPattern;
   },
 };

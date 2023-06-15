@@ -1059,7 +1059,6 @@ a {
         .main-content {
           .action-buttons {
             :deep(.q-btn) {
-              background: $bi-2;
             }
           }
         }

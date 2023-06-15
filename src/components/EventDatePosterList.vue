@@ -70,28 +70,31 @@
             (!groupByMonth && eventDates?.length > 0))
         "
       />
-      <div
-        v-else-if="
-          (groupByMonth && Object.keys(eventDatesGroupedByMonth)?.length > 0) ||
-          (!groupByMonth && eventDates && eventDates.length > 0)
-        "
-        class="t3 inter bold q-mt-md"
-      >
-        End of results
-      </div>
-      <div
-        v-else-if="
-          ((groupByMonth &&
-            Object.keys(eventDatesGroupedByMonth)?.length == 0) ||
-            (!groupByMonth && eventDates && eventDates.length === 0)) &&
-          !loading
-        "
-        :class="$q.screen.lt.sm ? 'q-mt-lg' : ''"
-        class="t3 inter bold"
-      >
-        No results<span v-if="$route.name === 'Explore'"
-          >&nbsp;in this area</span
+      <div v-else-if="!disableEndOfResultsMessage">
+        <div
+          v-if="
+            (groupByMonth &&
+              Object.keys(eventDatesGroupedByMonth)?.length > 0) ||
+            (!groupByMonth && eventDates && eventDates.length > 0)
+          "
+          class="t3 inter bold q-mt-md"
         >
+          End of results
+        </div>
+        <div
+          v-else-if="
+            ((groupByMonth &&
+              Object.keys(eventDatesGroupedByMonth)?.length == 0) ||
+              (!groupByMonth && eventDates && eventDates.length === 0)) &&
+            !loading
+          "
+          :class="$q.screen.lt.sm ? 'q-mt-lg' : ''"
+          class="t3 inter bold"
+        >
+          No results<span v-if="$route.name === 'Explore'"
+            >&nbsp;in this area</span
+          >
+        </div>
       </div>
     </div>
   </div>
@@ -117,6 +120,7 @@ interface Props {
   groupByMonth?: boolean;
   hasNext: boolean;
   loading: boolean;
+  disableEndOfResultsMessage: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {

@@ -23,24 +23,27 @@
     />
 
     <div class="item-wrapper">
-      <div class="item-wrapper-inner" ref="itemWrapperInner">
-        <div class="hover-overlay" @click="showFullscreen = true"></div>
+      <div
+        class="item-wrapper-inner"
+        ref="itemWrapperInner"
+        @click="showFullscreen = true"
+      >
         <video
-          v-if="item.v_low_url && item.v_low_url.length > 0"
+          v-if="item?.v_low_url && item?.v_low_url.length > 0"
           class="video"
           autoplay
           loop
           muted
-          :poster="item.poster_url + noCache"
+          :poster="item?.poster_url + noCache"
         >
           <source
-            :src="item.v_low_url + noCache"
+            :src="item?.v_low_url + noCache"
             type="video/webm"
             class="image-thumb"
           />
         </video>
-        <img :src="item.thumb_xs_url" v-if="!loaded" />
-        <img v-show="loaded" :src="item.thumb_url" @load="loaded = true" />
+        <img :src="item?.thumb_xs_url" v-if="!loaded" />
+        <img v-show="loaded" :src="item?.thumb_url" @load="loaded = true" />
       </div>
     </div>
     <q-dialog v-model="showEditDialog">
@@ -98,6 +101,7 @@ export default {
 
 <style lang="scss" scoped>
 .featured-media-component {
+  position: relative;
   width: 100%;
   height: 100%;
   max-width: 100%;
@@ -121,7 +125,6 @@ export default {
   .item-wrapper {
     position: relative;
     height: 100%;
-    width: 100%;
     max-height: 100%;
     overflow: visible;
     display: flex;
@@ -130,51 +133,28 @@ export default {
     align-items: center;
 
     .item-wrapper-inner {
-      max-height: 100%;
       height: 100%;
-      width: 100%;
+      max-height: 100%;
       position: relative;
       display: flex;
       justify-content: center;
       align-content: center;
       align-items: center;
-
+      // background: white;
       img,
       video {
         cursor: pointer;
 
         max-height: 100%;
         max-width: 100%;
-        height: 100%;
         width: 100%;
         object-fit: contain;
         display: block;
         filter: drop-shadow(1px 2px 78px rgba(0, 0, 0, 0.48));
-      }
-
-      .hover-overlay {
-        z-index: 1;
-        position: absolute;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        /*
-          background: linear-gradient(
-            90deg,
-            rgba(0, 0, 0, 0.2),
-            rgba(0, 0, 0, 0.8)
-          );
-          transition: opacity 0.3s;
-          */
+        transition: opacity 0.3s;
+        opacity: 1;
         &:hover {
-          opacity: 1;
-        }
-        .las {
-          font-size: 3rem;
-          color: white;
+          opacity: 0.9;
         }
       }
     }
@@ -190,7 +170,6 @@ export default {
 
     .item-wrapper {
       position: relative;
-      width: 100%;
       max-height: 100%;
       max-width: 100%;
       overflow: visible;

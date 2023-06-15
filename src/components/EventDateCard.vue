@@ -65,8 +65,6 @@
               class="card-bottom-background"
               :style="getBottomBgImgStyle()"
             />
-            <div class="card-bottom-background-hover-overlay" />
-            <!--:style="getBottomBgImgStyle()" /> -->
             <div
               class="card-bottom-foreground flex row no-wrap q-px-md q-py-md"
             >
@@ -133,29 +131,38 @@
           </div>
 -->
                   <span>
-                    <q-icon name="las la-clock" class="q-mr-sm" />{{
+                    <q-icon name="las la-clock" class="q-mr-sm" />
+                    <q-badge
+                      v-if="event.cancelled"
+                      class="q-my-xs"
+                      color="red"
+                      :label="$t('event_date_inline.cancelled')"
+                    />
+                    <span v-else-if="event.date_confirmed">{{
                       relativeHumanTime(
                         event.start_naive,
                         event.end_naive,
                         event.tz
                       )
-                    }}
+                    }}</span>
+
+                    <q-badge
+                      v-else
+                      class="q-my-xs"
+                      color="white"
+                      text-color="black"
+                      label="Date TBC"
+                    />
                   </span>
                   <div class="flex row items-center no-wrap ellipsis">
                     <q-icon name="las la-calendar" class="q-mr-sm" />
-                    <div
-                      v-if="!event.cancelled"
-                      class="flex row no-wrap ellipsis"
-                    >
-                      <span>
-                        {{
-                          localDateWithWeekday(event.start_naive, event.tz)
-                        }} </span
-                      ><!--
-              <span v-else>
-                {{ localDay(event.start_naive, event.tz) }}
-                {{ localDayOfMonth(event.start_naive, event.tz) }}</span
-              >-->
+                    <div class="flex row no-wrap ellipsis">
+                      <span v-if="event.date_confirmed">
+                        {{ localDateWithWeekday(event.start_naive, event.tz) }}
+                      </span>
+                      <span v-else>
+                        {{ monthYear(event.start_naive, event.tz) }}
+                      </span>
                       <span
                         v-if="
                           event.event.rrule &&
@@ -170,12 +177,6 @@
                         {{ simplifiedRecurringPattern(event.event.rrule) }}
                       </span>
                     </div>
-                    <q-badge
-                      class="q-my-xs inter bold"
-                      color="red"
-                      :label="$t('event_date_inline.cancelled')"
-                      v-if="event.cancelled"
-                    />
                   </div>
                   <div class="">
                     <span v-if="event.location && event.location.locality">
@@ -297,6 +298,7 @@ export default {
     // import common methods
     this.relativeHumanTime = common.relativeHumanTime;
     this.localDateWithWeekday = common.localDateWithWeekday;
+    this.monthYear = common.monthYear;
     this.timeZoneAbbreviention = common.timeZoneAbbreviention;
     this.simplifiedRecurringPattern = common.simplifiedRecurringPattern;
     this.localDayOfMonth = localDayOfMonth;
@@ -309,10 +311,6 @@ export default {
 .body--dark {
   .ed-card {
     border: none !important;
-    background: $bi-1;
-    //blue background-color: #0b0e13;
-    .card-top-content {
-    }
     .card-bottom-content {
       border-top: 1px solid (rgba(255, 255, 255, 0.2));
       border-left: 1px solid rgba(255, 255, 255, 0.1);
@@ -321,19 +319,15 @@ export default {
         background: $bi-3;
         opacity: 0.4;
       }
-      .card-bottom-background-hover-overlay {
-        background: rgba(255, 255, 255, 0.1);
-      }
+
       .card-bottom-foreground {
         background: linear-gradient(
-          rgba(36, 36, 36, 0.3),
+          rgba(36, 36, 36, 0.4),
           rgba(36, 36, 36, 0.5)
         );
       }
     }
     .card-background {
-      //border: 1px solid #181818;
-
       background: $bi-4;
       opacity: 0.8;
       transition: opacity 0.2s ease;
@@ -356,17 +350,10 @@ export default {
 
 .body--light {
   .ed-card {
-    background: black;
     color: white;
-    //border: 1px solid gray;
-    /*
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 1px, rgba(0, 0, 0, 0.05) 0px 4px 2px,
-      rgba(0, 0, 0, 0.05) 0px 8px 4px, rgba(0, 0, 0, 0.05) 0px 16px 8px,
-      rgba(0, 0, 0, 0.05) 0px 32px 16px;
-*/
+
     box-shadow: rgba(0, 0, 0, 0.12) 0px 3px 8px;
     font-smooth: always;
-    //box-shadow: 0 4px 10px rgba(220, 220, 220, 0.5) !important;
 
     .card-background {
       //background: #181818;
@@ -390,23 +377,15 @@ export default {
         z-index: 0;
         background: white;
         transition: opacity 0.2s ease;
-        //opacity: 1;
       }
-      .card-bottom-background-hover-overlay {
-        background: rgba(255, 255, 255, 0.1);
-      }
+
       .card-bottom-foreground {
         background: linear-gradient(rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.3));
         z-index: 1;
-
-        .card-bottom-text {
-          // opacity: 0.68 !important;
-        }
       }
     }
     &:first-child {
       margin-top: 0px;
-      //border: 1px solid rgba(0,0,0,0);
     }
 
     .event-info {
@@ -419,20 +398,17 @@ export default {
   direction: ltr;
   display: flex;
   flex-direction: column;
-  //min-height: 186px;
   cursor: pointer;
   transition: all 0.2s ease;
   overflow: hidden;
   -webkit-backface-visibility: hidden;
   -webkit-transform: translate3d(0, 0, 0);
+  background: white;
 
   &:hover {
     transform: scale(1.01) translateY(0px);
-
     .card-bottom-content {
-      .card-bottom-background-hover-overlay {
-        opacity: 1;
-      }
+      opacity: 0.9;
     }
   }
 
@@ -474,14 +450,7 @@ export default {
       //opacity: 0.4;
       transition: opacity 0.2s ease;
     }
-    .card-bottom-background-hover-overlay {
-      z-index: 1;
-      position: absolute;
-      height: 100%;
-      width: 100%;
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
+
     .card-bottom-foreground {
       border-radius: 9px;
       overflow: hidden;

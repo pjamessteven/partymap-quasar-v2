@@ -30,11 +30,11 @@
           class="item-wrapper"
           :key="index"
         >
-          <div class="item-wrapper-inner" ref="itemWrapperInner">
-            <div
-              class="hover-overlay"
-              @click="currentMediaItemIndex = index"
-            ></div>
+          <div
+            class="item-wrapper-inner"
+            ref="itemWrapperInner"
+            @click="currentMediaItemIndex = index"
+          >
             <video
               v-if="item.v_low_url && item.v_low_url.length > 0"
               class="video"
@@ -132,41 +132,21 @@ export default {
     justify-content: center;
     align-content: center;
     align-items: center;
+    background: white;
 
     img,
     video {
+      cursor: pointer;
       max-height: 100%;
       max-width: 100%;
       height: 100%;
       width: 100%;
       object-fit: cover;
       display: block;
-    }
-
-    .hover-overlay {
-      z-index: 1;
-      position: absolute;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      cursor: pointer;
-      /*
-          background: linear-gradient(
-            90deg,
-            rgba(0, 0, 0, 0.2),
-            rgba(0, 0, 0, 0.8)
-          );
-          transition: opacity 0.3s;
-          */
+      opacity: 1;
+      transition: opacity 0.3s;
       &:hover {
-        opacity: 1;
-      }
-      .las {
-        font-size: 3rem;
-        color: white;
+        opacity: 0.8;
       }
     }
   }
