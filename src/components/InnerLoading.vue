@@ -12,7 +12,7 @@
       -->
       <q-linear-progress
         indeterminate
-        size="2px"
+        size="4px"
         color="grey-7"
         rounded
         :style="$q.screen.gt.xs ? 'max-width: 200px' : 'max-width: 120px'"

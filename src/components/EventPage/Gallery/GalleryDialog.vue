@@ -29,6 +29,7 @@
         >
           <q-linear-progress
             class="linear-progress"
+            size="4px"
             indeterminate
             v-if="!loaded.includes(index)"
           />

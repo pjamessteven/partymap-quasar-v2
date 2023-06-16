@@ -8,7 +8,7 @@
         v-if="sidebarPanel === 'nearby'"
         flat
         style="margin-left: -8px"
-        class="q-px-sm q-mr-sm"
+        class="q-px-sm q-mr-md"
         @click.stop="() => getFineLocation()"
       >
         <template v-slot:default>
@@ -40,7 +40,7 @@
         flat
         style="margin-left: -8px"
         size="2rem"
-        class="q-px-sm q-mr-sm"
+        class="q-px-sm q-mr-md"
         :class="{ 'rotate-180': showPanel }"
         name="mdi-chevron-up"
       />
@@ -221,7 +221,7 @@ export default {
 
       .q-tab {
         &.q-tab--active {
-          //background: $bi-3;
+          background: $bi-3;
           color: $ti-1 !important;
 
           border: 1px solid rgba(255, 255, 255, 0.2);
@@ -239,7 +239,7 @@ export default {
         color: $t-4 !important;
 
         &.q-tab--active {
-          // background: #fafafa;
+          background: $b-2;
           border: 1px solid rgba(0, 0, 0, 0.1);
           color: $t-1 !important;
         }

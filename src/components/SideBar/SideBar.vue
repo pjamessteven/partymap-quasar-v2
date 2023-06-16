@@ -295,17 +295,17 @@ export default {
     border-top-left-radius: 9px;
     border-top-right-radius: 9px;
     transition: all 0.3s ease;
-    transform: translate3d(0, calc(100% - 276px), 0);
+    transform: translate3d(0, calc(100% - 234px), 0);
     user-select: none;
     will-change: transform;
-    padding-bottom: 72px;
+    padding-bottom: 96px;
 
     box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
       rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
       rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
 
     &.sidebar-mobile-expanded {
-      transform: translate3d(0, 72px, 0);
+      transform: translate3d(0, 96px, 0);
       .mobile-dismiss-list {
         height: 200px;
       }
@@ -453,7 +453,7 @@ export default {
   .sidebar-wrapper {
     .sidebar {
       padding-bottom: 128px;
-      transform: translate3d(0, calc(100% - 354px), 0);
+      transform: translate3d(0, calc(100% - 298px), 0);
 
       &.sidebar-mobile-expanded {
         transform: translate3d(0, 128px, 0);
@@ -495,7 +495,7 @@ export default {
       width: 100%;
       background: transparent;
       //margin-top: 48px;
-      transform: translate3d(0, calc(100% - 320px), 0);
+      transform: translate3d(0, calc(100% - 248px), 0);
 
       will-change: transform;
       padding-bottom: 73px;
