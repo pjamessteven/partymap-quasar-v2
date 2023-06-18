@@ -151,8 +151,8 @@
         <q-linear-progress
           class="linear-progress"
           indeterminate
-          size="4px"
-          color="grey-7"
+          size="2px"
+          :color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
           rounded
           :style="$q.screen.gt.xs ? 'max-width: 200px' : 'max-width: 120px'"
         />
@@ -604,7 +604,7 @@ export default {
   }
 }
 
-@media only screen and (min-width: 1920px) {
+@media only screen and (min-width: 1921px) {
   .linear-progress {
     margin-top: 32px;
   }

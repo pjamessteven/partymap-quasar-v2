@@ -12,8 +12,8 @@
       -->
       <q-linear-progress
         indeterminate
-        size="4px"
-        color="grey-7"
+        size="2px"
+        :color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
         rounded
         :style="$q.screen.gt.xs ? 'max-width: 200px' : 'max-width: 120px'"
       />

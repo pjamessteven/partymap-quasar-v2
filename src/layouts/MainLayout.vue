@@ -54,6 +54,10 @@
         <component :is="Component" />
       </transition>
     </router-view>
+    <NavigationBar
+      class="nav-bar"
+      v-show="$q.screen.lt && $route.name === 'Explore'"
+    />
   </div>
 </template>
 

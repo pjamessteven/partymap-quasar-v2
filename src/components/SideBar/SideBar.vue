@@ -32,7 +32,11 @@
         "
         class="sidebar-content flex column no-wrap"
       >
-        <NavigationBar @click="togglePanel" class="nav-bar" />
+        <NavigationBar
+          @click="togglePanel"
+          class="nav-bar"
+          v-if="$q.screen.gt.xs"
+        />
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
           <NearbyView
             style="height: 100%; width: 100%"
@@ -464,12 +468,12 @@ export default {
   .sidebar-wrapper {
     .sidebar {
       width: 66vw;
-      max-width: 1280px;
+      max-width: 1024px;
     }
   }
 }
 
-@media only screen and (min-width: 1920px) {
+@media only screen and (min-width: 1921px) {
   .sidebar-wrapper {
     .sidebar {
       padding-bottom: 128px;

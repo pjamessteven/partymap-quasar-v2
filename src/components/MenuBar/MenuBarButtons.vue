@@ -19,8 +19,8 @@
         </q-btn>
       </div>
     </transition>
--->
     <q-btn
+
       icon="mdi-magnify"
       @click="() => (sidebarPanel = 'search')"
       :class="{
@@ -30,6 +30,8 @@
       flat
     >
     </q-btn>
+    -->
+
     <q-btn
       class="button-menu"
       icon="mdi-menu"

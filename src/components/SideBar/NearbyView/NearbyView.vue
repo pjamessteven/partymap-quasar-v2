@@ -24,9 +24,8 @@
               }"
             >
               <div class="scroll-stuff flex column">
-                <!--
                 <div
-                  class="flex column mobile-location-header text-h4 inter bolder q-pl-md q-pt-md q-"
+                  class="flex column mobile-location-header text-h4 inter bolder q-pl-md q-mt-lg q-"
                   style="width: 100%"
                   v-if="$q.screen.lt.sm"
                 >
@@ -79,7 +78,6 @@
                     </q-btn>
                   </div>
                 </div>
--->
                 <div
                   class="flex message"
                   :class="$q.screen.gt.xs ? 'q-mx-lg q-mt-sm  ' : 'q-mx-md  '"
@@ -145,23 +143,16 @@
                   </div>
                 </div>
                 <div
-                  v-if="$q.screen.lt.md"
-                  class="nav-button-container flex row no-wrap q-px-md inter bold t1"
+                  class="nav-button-container flex row no-wrap q-px-md inter bold t1 q-mt-md"
                   :class="{
-                    'q-mt-md q-mb-sm': $q.screen.lt.sm,
-                    'q-mb-md text-large q-mt-xs q-mb-sm q-px-lg q-gutter-md':
-                      $q.screen.gt.xs,
+                    'q-mb-sm': $q.screen.lt.sm,
+                    'q-mb-md text-large q-px-lg ': $q.screen.gt.xs,
                   }"
                 >
                   <div
                     flat
                     @click.stop="showAddEventDialog()"
-                    class="nav-button flex items-center justify-between"
-                    :class="{
-                      'q-px-md q-py-sm': $q.screen.lt.xl,
-                      'q-px-lg q-py-md': $q.screen.gt.lg,
-                      'q-mr-sm': $q.screen.lt.sm,
-                    }"
+                    class="nav-button flex items-center justify-between q-mr-sm q-px-md q-py-sm"
                   >
                     <span v-if="$q.screen.lt.sm">Add</span
                     ><span v-else>Add an event</span>
@@ -174,11 +165,7 @@
 
                   <div
                     @click.stop="() => (sidebarPanel = 'explore')"
-                    class="nav-button flex items-center justify-between"
-                    :class="{
-                      'q-px-md q-py-sm': $q.screen.lt.xl,
-                      'q-px-lg q-py-md': $q.screen.gt.lg,
-                    }"
+                    class="nav-button flex items-center justify-between q-mr-sm q-px-md q-py-sm"
                   >
                     Explore the map
                     <q-icon
@@ -188,6 +175,9 @@
                       :class="{ 'q-ml-md': $q.screen.gt.xs }"
                     />
                   </div>
+                </div>
+                <div class="q-px-lg" v-if="$q.screen.gt.xs && false">
+                  <q-separator />
                 </div>
 
                 <div
@@ -275,7 +265,7 @@
                           class="q-py-md location-header"
                           :class="
                             $q.screen.gt.xs
-                              ? 'q-pl-lg q-mt-sm text-large'
+                              ? 'q-pl-lg q-mt- text-large'
                               : 'q-pl-md'
                           "
                         >
@@ -971,6 +961,9 @@ export default {
       .nav-button-container {
         .nav-button {
           background: $bi-3;
+          &:hover {
+            background: $bi-4;
+          }
         }
       }
       .banner {
@@ -1032,6 +1025,9 @@ export default {
       .nav-button-container {
         .nav-button {
           background: $b-3;
+          &:hover {
+            background: $b-4;
+          }
           &.primary {
             background: $primary;
             color: white;
@@ -1210,6 +1206,7 @@ export default {
         flex-grow: 0;
         flex-basis: 1;
         max-height: 56px;
+        transition: all 0.3s;
         //dth: 264px;
       }
     }
@@ -1320,7 +1317,7 @@ export default {
   }
   .nav-button-container {
     .nav-button {
-      max-height: 64px;
+      // max-height: 64px;
       //dth: 264px;
     }
   }

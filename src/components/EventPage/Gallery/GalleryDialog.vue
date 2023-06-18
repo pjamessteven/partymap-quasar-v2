@@ -29,7 +29,8 @@
         >
           <q-linear-progress
             class="linear-progress"
-            size="4px"
+            size="2px"
+            :color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
             indeterminate
             v-if="!loaded.includes(index)"
           />
