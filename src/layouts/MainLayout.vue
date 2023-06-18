@@ -23,7 +23,7 @@
     </Transition>
     <MainMap />
     <!-- There's two router views because we want different transitions for different pages
-    and we're lazy... -->
+  and we're lazy... -->
     <router-view
       name="event"
       v-slot="{ Component }"
@@ -54,10 +54,6 @@
         <component :is="Component" />
       </transition>
     </router-view>
-    <NavigationBar
-      class="nav-bar"
-      v-show="$q.screen.lt && $route.name === 'Explore'"
-    />
   </div>
 </template>
 
@@ -108,7 +104,7 @@ export default {
           if (this.$q.dark.isActive) {
             return `opacity: ${this.overlayOpacity}; background: #242424!important`;
           } else {
-            return `opacity: ${this.overlayOpacity}; background: #fafafa!important`;
+            return `opacity: ${this.overlayOpacity}; background: #f5f5f5!important`;
           }
         }
       } else {

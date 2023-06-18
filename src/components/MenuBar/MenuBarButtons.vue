@@ -1,5 +1,6 @@
 <template>
   <div class="menubar-content flex row justify-end items-stretch grow no-wrap">
+    <!--
     <transition
       enter-active-class="animated fadeIn"
       leave-active-class="animated fadeOut"
@@ -18,7 +19,17 @@
         </q-btn>
       </div>
     </transition>
-
+-->
+    <q-btn
+      icon="mdi-magnify"
+      @click="() => (sidebarPanel = 'search')"
+      :class="{
+        'light-button': color === 'white',
+        'q-mr-md': $q.screen.gt.xs,
+      }"
+      flat
+    >
+    </q-btn>
     <q-btn
       class="button-menu"
       icon="mdi-menu"
@@ -52,10 +63,9 @@
 
 <script>
 import TopControlsMenu from './TopControlsMenu.vue';
-import AddEventDialog from 'components/dialogs/AddEventDialog.vue';
 import { useMainStore } from 'src/stores/main';
 import { useAuthStore } from 'src/stores/auth';
-import { mapState } from 'pinia';
+import { mapState, mapWritableState } from 'pinia';
 
 export default {
   name: 'MenuBarButtons',
@@ -78,34 +88,11 @@ export default {
       ],
     };
   },
-  methods: {
-    showAddEventDialog() {
-      this.$q
-        .dialog({
-          parent: this,
-          component: AddEventDialog,
-        })
-        .onOk((data) => {
-          if (!this.currentUser && data.host) {
-            this.$router.push({
-              path: '/login',
-              query: { from: this.$route.path },
-            });
-          } else if (data.host) {
-            this.$router.push({
-              name: 'AddEventHost',
-            });
-          } else {
-            this.$router.push({
-              name: 'AddEventPublic',
-            });
-          }
-        });
-    },
-  },
+
   computed: {
     ...mapState(useAuthStore, ['currentUser']),
     ...mapState(useMainStore, ['menubarOpacity']),
+    ...mapWritableState(useMainStore, ['sidebarPanel']),
     transparentMenuBar() {
       return (
         this.$q.screen.lt.sm &&

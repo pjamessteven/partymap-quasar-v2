@@ -894,6 +894,7 @@ body {
       }
     }
   }
+
   .button-control {
     font-size: 0.9em;
   }

@@ -30,7 +30,10 @@
           }"
         >
           <transition enter-active-class="animated fadeIn">
-            <div class="flex column no-wrap scroll-content">
+            <div
+              class="flex column no-wrap scroll-content"
+              :class="$q.screen.lt.sm ? 'q-px-sm' : ''"
+            >
               <!--
               <div
                 v-if="$q.screen.gt.xs"
@@ -58,7 +61,6 @@
                     ref="scroll"
                     horizontal
                     class="scroll-area grow"
-                    :class="$q.screen.lt.sm ? 'q-mb-sm' : ''"
                     :style="$q.screen.gt.xs ? 'height: 54px' : 'height: 44px'"
                     :thumb-style="
                       $q.screen.gt.xs

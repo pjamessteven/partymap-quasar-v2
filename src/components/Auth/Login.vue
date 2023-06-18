@@ -143,6 +143,7 @@ import { useAuthStore } from 'src/stores/auth';
 import InnerLoading from 'src/components/InnerLoading.vue';
 import TermsAndConditionsDialog from 'src/components/dialogs/AboutDialog/TermsAndConditionsDialog.vue';
 import PrivacyPolicyDialog from 'src/components/dialogs/AboutDialog/PrivacyPolicyDialog.vue';
+import { useQueryStore } from 'src/stores/query';
 
 export default {
   name: 'LoginPage',
@@ -158,11 +159,13 @@ export default {
     };
   },
   methods: {
+    ...mapActions(useQueryStore, ['loadUserEventDates']),
     ...mapActions(useAuthStore, ['login']),
     async _login() {
       this.loading = true;
       try {
         await this.login(this.identifier, this.password);
+        this.loadUserEventDates('all', 'future');
         if (this.$route.query.from) {
           this.$router.replace(this.$route.query.from);
         } else if (this.$route.params.from) {

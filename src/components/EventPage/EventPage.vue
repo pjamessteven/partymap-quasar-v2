@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="event-page"
-    :class="{ 'pointer-events': this.overlayOpacity === 1 }"
-  >
+  <div class="event-page">
     <div class="flex row no-wrap event-page-content">
       <div
         class="flex history-container col-4 col-xs-12 col-sm-6 col-md-5 col-lg-4 col-xl-4"
@@ -14,12 +11,11 @@
       </div>
       <div class="scroll-area flex grow" @scroll="onScrollMainContent">
         <div class="row flex grow main-row no-wrap justify-center">
-          <!--
           <div
+            v-if="scrollPercentage === 0"
             class="clickable-background"
             @click="$router.push({ name: 'Explore' })"
           />
--->
           <div
             ref="contentcard"
             class="content-card flex column no-wrap"
@@ -30,13 +26,11 @@
               shadow: this.overlayOpacity === 0,
             }"
           >
-            <!--
             <MobileSwipeHandle
               v-if="$q.screen.lt.sm"
               @swipe="handleSwipe($event)"
               class="mobile-swipe-handle"
             />
-            -->
             <div
               class="content"
               :class="scrollPercentage >= 1 ? 'mobile-scroll-enable' : ''"
@@ -625,7 +619,7 @@ import NextEventDateSummary from 'components/EventPage/EventDates/NextEventDateS
 import ReportDialog from './ReportDialog.vue';
 import TagsComponent from 'components/EventPage/Tags/TagsComponent.vue';
 import ReviewsComponent from './Reviews/ReviewsComponent.vue';
-//import MobileSwipeHandle from '../MobileSwipeHandle.vue';
+import MobileSwipeHandle from '../MobileSwipeHandle.vue';
 import InterestedComponent from './InterestedComponent.vue';
 import SuggestionsDialog from './Suggestions/SuggestionsDialog.vue';
 import InnerLoading from 'components/InnerLoading.vue';
@@ -666,7 +660,7 @@ export default {
     //HistoryComponent,
     EventDates,
     EventDateSidebarDesktop,
-    // MobileSwipeHandle,
+    MobileSwipeHandle,
     InterestedComponent,
     SuggestionsDialog,
     InnerLoading,
@@ -1193,10 +1187,7 @@ a {
 }
 
 .event-page {
-  pointer-events: none;
-  &.pointer-events {
-    pointer-events: all;
-  }
+  pointer-events: all;
   .event-page-overlay {
     background: rgba(0, 0, 0, 0.5);
     width: 100%;

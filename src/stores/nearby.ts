@@ -8,6 +8,7 @@ import {
 import { Artist, EventDate, Tag } from 'src/types/autogen_types';
 import { useMainStore } from 'src/stores/main';
 import { useQueryStore } from 'src/stores/query';
+import { useAuthStore } from './auth';
 
 interface NearbyState {
   loadingEverything: boolean;
@@ -67,6 +68,9 @@ export const useNearbyStore = defineStore('nearby', {
   getters: {},
   actions: {
     async loadEverything() {
+      const authStore = useAuthStore();
+      const queryStore = useQueryStore();
+
       this.loadingEverything = true;
 
       this.nearbyArtistsPage = 1;
@@ -84,8 +88,14 @@ export const useNearbyStore = defineStore('nearby', {
       await this.loadNearbyEventDates();
 
       // do the following concurrently
-      await Promise.all([this.loadNearbyArtists(), this.loadNearbyTags()]);
-      await this.loadEventDates();
+      await Promise.all([
+        this.loadNearbyArtists(),
+        this.loadNearbyTags(),
+        this.loadEventDates(),
+        authStore.currentUser
+          ? queryStore.loadUserEventDates('all', 'future')
+          : undefined,
+      ]);
 
       // show global top tags/top artists if there are no few local results
       if (this.nearbyArtists.length < 6 || this.nearbyTags.length < 10) {

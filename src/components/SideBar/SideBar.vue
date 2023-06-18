@@ -32,11 +32,7 @@
         "
         class="sidebar-content flex column no-wrap"
       >
-        <NavigationBar
-          @click="togglePanel"
-          class="nav-bar"
-          v-if="$q.screen.gt.xs"
-        />
+        <NavigationBar @click="togglePanel" class="nav-bar" />
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
           <NearbyView
             style="height: 100%; width: 100%"
@@ -70,7 +66,7 @@ import FavoritesView from './FavoritesView/FavoritesView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
 import NavigationBar from 'components/NavigationBar.vue';
 import MobileSwipeHandle from '../MobileSwipeHandle.vue';
-
+import { useAuthStore } from 'src/stores/auth';
 import { mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useMapStore } from 'src/stores/map';
@@ -181,15 +177,37 @@ export default {
         this.view = 'nearby';
       }
     },
-    sidebarPanel(newVal, oldVal) {
-      if (oldVal === 'explore') {
+
+    sidebarPanel(to, from) {
+      if (to === 'explore') {
         this.eventDates = [];
         this.eventDatesGroupedByMonth = {};
         this.eventDatesLoading = true;
+        this.showPanel = false;
+      }
+      if (to === 'search') {
+        this.showPanel = true;
+      }
+      if (to === 'nearby') {
+        this.showPanel = true;
+        this.enablePanelSwipeDown = true;
+      }
+      if (to === 'favorites') {
+        if (this.currentUser) {
+          this.controlFavorites = true;
+          this.showPanel = true;
+        } else {
+          this.sidebarPanel = from;
+
+          this.$router.push({ name: 'Login' });
+        }
+      } else if (from === 'favorites') {
+        this.controlFavorites = false;
       }
     },
   },
   computed: {
+    ...mapState(useAuthStore, ['currentUser']),
     ...mapState(useMainStore, ['userLocation', 'loadingUserLocation']),
     ...mapWritableState(useMainStore, [
       'showPanel',
@@ -304,6 +322,8 @@ export default {
       rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
       rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
 
+    .sidebar-content-inner {
+    }
     &.sidebar-mobile-expanded {
       transform: translate3d(0, 96px, 0);
       .mobile-dismiss-list {
@@ -515,10 +535,7 @@ export default {
 
       .sidebar-content {
         padding-top: unset;
-        padding-bottom: 64px;
         .sidebar-content-inner {
-          border-top-left-radius: 18px;
-          border-top-right-radius: 18px;
           overflow: hidden;
         }
       }

@@ -17,6 +17,7 @@ import {
 } from 'src/types/autogen_types';
 import { useMainStore } from './main';
 import { useMapStore } from './map';
+import { useAuthStore } from './auth';
 
 // TODO: improve interface
 
@@ -209,7 +210,15 @@ export const useQueryStore = defineStore('query', {
         throw error;
       }
     },
-    async loadUserEventDates(mode: string, tense: string, username: string) {
+    async loadUserEventDates(
+      mode: string,
+      tense: string,
+      username?: string | undefined
+    ) {
+      if (!username) {
+        const authStore = useAuthStore();
+        const username = authStore.currentUser?.username;
+      }
       try {
         this.userEventDatesLoading = true;
         const response = await getEventDatesRequest({

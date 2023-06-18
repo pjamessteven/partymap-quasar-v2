@@ -25,7 +25,7 @@
           <div class="card-bottom-content flex column">
             <div
               class="card-bottom-background"
-              :style="getBottomBgImgStyle()"
+              :style="!hideInfo ? getBottomBgImgStyle() : undefined"
             />
             <div class="card-bottom-foreground flex column no-wrap">
               <div
@@ -50,7 +50,7 @@
                   v-show="loadedImage"
                 />
               </div>
-              <div class="flex column ellipsis q-pa-md">
+              <div class="flex column ellipsis q-pa-md" v-if="!hideInfo">
                 <div
                   class="ed-poster-header flex row justify-between items-start no-wrap ellipsis"
                 >
@@ -238,6 +238,7 @@ export default {
       default: false,
       type: Boolean,
     },
+    hideInfo: Boolean,
   },
   data() {
     return {
