@@ -19,19 +19,35 @@
         </q-btn>
       </div>
     </transition>
+        -->
+    <!--
     <q-btn
-
+      v-if="$q.screen.lt.sm"
       icon="mdi-magnify"
       @click="() => (sidebarPanel = 'search')"
       :class="{
         'light-button': color === 'white',
-        'q-mr-md': $q.screen.gt.xs,
       }"
       flat
     >
     </q-btn>
-    -->
 
+    <div class="flex items-center" v-else>
+      <q-btn
+        no-caps
+        size="medium"
+        label="Seach"
+        icon="mdi-magnify"
+        @click="() => (sidebarPanel = 'search')"
+        :class="{
+          'light-button': color === 'white',
+        }"
+        class="inter bold desktop-search-button q-pl-md q-pr-lg"
+        flat
+      >
+      </q-btn>
+    </div>
+-->
     <q-btn
       class="button-menu"
       icon="mdi-menu"
@@ -140,6 +156,9 @@ export default {
 .q-btn {
   pointer-events: all;
 }
+.desktop-search-button {
+  border-radius: 100px !important;
+}
 
 .submit-button {
   //border-radius: 100px !important;
@@ -163,10 +182,5 @@ export default {
 }
 .light-button {
   color: white;
-}
-@media only screen and (min-width: 1920px) {
-  .submit-button {
-    font-size: 1rem;
-  }
 }
 </style>

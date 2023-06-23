@@ -8,7 +8,7 @@
         v-if="sidebarPanel === 'nearby'"
         flat
         style="margin-left: -8px"
-        class="q-px-sm q-mr-md"
+        class="q-pa-md q-mr-sm"
         @click.stop="() => getFineLocation()"
       >
         <template v-slot:default>
@@ -40,7 +40,7 @@
         flat
         style="margin-left: -8px"
         size="2rem"
-        class="q-px-sm q-mr-md"
+        class="q-px-sm q-mr-sm"
         :class="{ 'rotate-180': showPanel }"
         name="mdi-chevron-up"
       />
@@ -59,10 +59,10 @@
       >
         <template v-slot:default>
           <q-tooltip
-            class=""
             :content-class="
               $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
             "
+            class="text-large"
             :offset="[10, 10]"
           >
             {{ $t('landing_page.improve_location') }}
@@ -103,18 +103,23 @@
       <q-tab
         key="2"
         name="explore"
-        icon="mdi-map-search"
+        :icon="
+          sidebarPanel === 'explore'
+            ? 'mdi-map-search'
+            : 'mdi-map-search-outline'
+        "
         :label="$q.screen.gt.xs ? undefined : 'Explore'"
         content-class="tab"
         :ripple="false"
       />
+
       <q-tab
         key="3"
         name="favorites"
         :icon="
-          sidebarPanel === 'favorites'
-            ? 'mdi-account-circle-outline'
-            : 'mdi-account-circle-outline'
+          sidebarPanel === 'profile'
+            ? 'mdi-calendar-star'
+            : 'mdi-calendar-star-outline'
         "
         :label="$q.screen.gt.xs ? undefined : 'You'"
         content-class="tab"
@@ -123,7 +128,7 @@
       <q-tab
         key="4"
         name="search"
-        icon="mdi-magnify"
+        :icon="sidebarPanel === 'search' ? 'mdi-magnify' : 'mdi-magnify'"
         :label="$q.screen.gt.xs ? undefined : 'Search'"
         content-class="tab"
         :ripple="false"
@@ -192,9 +197,11 @@ export default {
           }
           return 'Finding your location...';
         case 'explore':
-          return 'Explore Map';
+          return 'Explore';
         case 'favorites':
-          return 'Your Events';
+          return 'Your Calendar';
+        case 'profile':
+          return 'Your profile';
         case 'search':
           return 'Search';
       }
@@ -221,10 +228,10 @@ export default {
 
       .q-tab {
         &.q-tab--active {
-          background: $bi-3;
+          background: $bi-4;
           color: $ti-1 !important;
 
-          border: 1px solid rgba(255, 255, 255, 0.2);
+          //border: 1px solid rgba(255, 255, 255, 0.2);
         }
       }
     }
@@ -239,8 +246,8 @@ export default {
         color: $t-4 !important;
 
         &.q-tab--active {
-          background: $b-2;
-          border: 1px solid rgba(0, 0, 0, 0.1);
+          background: $b-3;
+          //border: 1px solid rgba(0, 0, 0, 0.1);
           color: $t-1 !important;
         }
       }
@@ -298,7 +305,8 @@ export default {
 @media only screen and (max-width: 600px) {
   .body--dark {
     .navigation-bar {
-      background: black;
+      //background: black;
+      background: $bi-3;
       //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.8);
       border-top: 1px solid rgba(255, 255, 255, 0.1);
       :deep(.q-tabs) {
@@ -314,8 +322,10 @@ export default {
   .body--light {
     .navigation-bar {
       background: white;
-      //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.1);;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.1);
+      border-top: 1px solid $b-4;
+      box-shadow: rgba(100, 100, 111, 0.25) 0px 7px 29px 0px;
+
       :deep(.q-tabs) {
         .q-tab {
           color: black;

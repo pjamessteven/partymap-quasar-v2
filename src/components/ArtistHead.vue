@@ -176,7 +176,7 @@ a {
   text-decoration: none;
 }
 
-@media only screen and (min-width: 1920px) {
+@media only screen and (min-width: 1921px) {
   .artist-head-wrapper {
     transition: all 0.3s ease;
     border-radius: 9px;

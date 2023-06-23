@@ -18,11 +18,18 @@
         class="flex row file-preview no-wrap"
         :key="key"
       >
-        <q-btn @click="removeFile(key)" size="sm" class="delete-button" round>
+        <q-btn
+          @click="removeFile(key)"
+          size="sm"
+          class="delete-button"
+          round
+          v-if="!avatarMode"
+        >
           <q-icon size="1em" name="las la-times" />
         </q-btn>
         <img
           class="preview"
+          :class="{ avatar: avatarMode }"
           :src="item.base64File"
           v-if="item.mimeType.indexOf('image') > -1"
         />
@@ -50,7 +57,7 @@
     </div>
     <div class="bottom-buttons flex row grow justify-end q-mt-md">
       <q-btn
-        :label="$t('media_upload.add_media')"
+        :label="label ? label : $t('media_upload.add_media')"
         v-on:click="openSelectDialog()"
         style="width: max-content"
         class="soft-button-shadow"
@@ -78,6 +85,8 @@ export default {
     showSelectButton: { type: Boolean, default: true },
     singleSelectMode: Boolean,
     disableCaption: Boolean,
+    label: String,
+    avatarMode: Boolean,
   },
   data() {
     return {
@@ -90,6 +99,7 @@ export default {
     },
     removeFile(key) {
       this.items.splice(key, 1);
+      this.emit();
     },
     openSelectDialog() {
       this.$refs.files.click();
@@ -110,6 +120,7 @@ export default {
                 fileName: reader.fileName,
                 mimeType: reader.mimeType,
               });
+              this.emit();
             },
             false
           );
@@ -118,7 +129,6 @@ export default {
           reader.readAsDataURL(file);
         }
       }
-      this.emit();
     },
   },
   mounted() {
@@ -172,7 +182,6 @@ div.file-listing img {
 
 .file-previews {
   .file-preview {
-    border: 1px solid;
     border-radius: 10px;
     margin-bottom: 10px;
     position: relative;
@@ -184,6 +193,11 @@ div.file-listing img {
       height: 150px;
       border-radius: 4px;
       object-fit: cover;
+      &.avatar {
+        border-radius: 100%;
+        overflow: hidden;
+        border: none;
+      }
     }
     .delete-button {
       position: absolute;

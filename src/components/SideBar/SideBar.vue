@@ -45,7 +45,7 @@
 
           <ExploreView
             style="height: 100%; width: 100%"
-            v-if="sidebarPanel === 'explore'"
+            v-show="sidebarPanel === 'explore'"
           />
 
           <FavoritesView
@@ -184,9 +184,11 @@ export default {
 
     sidebarPanel(to, from) {
       if (to === 'explore') {
+        /*
         this.eventDates = [];
         this.eventDatesGroupedByMonth = {};
         this.eventDatesLoading = true;
+        */
         this.showPanel = false;
       }
       if (to === 'search') {
@@ -196,7 +198,7 @@ export default {
         this.showPanel = true;
         this.enablePanelSwipeDown = true;
       }
-      if (to === 'favorites') {
+      if (to === 'favorites' || to === 'profile') {
         if (this.currentUser) {
           this.controlFavorites = true;
           this.showPanel = true;

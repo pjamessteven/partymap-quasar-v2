@@ -25,7 +25,7 @@
           <div class="card-bottom-content flex column">
             <div
               class="card-bottom-background"
-              :style="!hideInfo ? getBottomBgImgStyle() : undefined"
+              :style="getBottomBgImgStyle()"
             />
             <div class="card-bottom-foreground flex column no-wrap">
               <div
@@ -50,6 +50,59 @@
                   v-show="loadedImage"
                 />
               </div>
+              <div class="flex column ellipsis q-pa-sm" v-if="hideInfo">
+                <div
+                  class="ed-poster-header flex row justify-between items-start no-wrap ellipsis"
+                >
+                  <div
+                    class="flex row items-baseline no-wrap inter bolder q-mr-sm ellipsis"
+                  >
+                    <span class="ellipsis">{{ event.name }}</span>
+                    <q-icon
+                      class="q-ml-xs o-080"
+                      name="mdi-check-decagram"
+                      v-if="event.event.host"
+                    >
+                      <q-tooltip
+                        :content-class="
+                          $q.dark.isActive
+                            ? 'bg-black text-white'
+                            : 'bg-white text-black'
+                        "
+                        :offset="[10, 10]"
+                        content-style="font-size: 16px"
+                      >
+                        {{ $t('event.official_page') }}
+                      </q-tooltip></q-icon
+                    >
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <q-icon name="las la-clock" class="q-mr-xs" />
+                  <q-badge
+                    v-if="event.cancelled"
+                    class="q-my-xs"
+                    color="red"
+                    :label="$t('event_date_inline.cancelled')"
+                  />
+                  <span v-else-if="event.date_confirmed">{{
+                    relativeHumanTime(
+                      event.start_naive,
+                      event.end_naive,
+                      event.tz
+                    )
+                  }}</span>
+
+                  <q-badge
+                    v-else
+                    class="q-my-xs o-050"
+                    color="white"
+                    text-color="black"
+                    label="Date TBC"
+                  />
+                </div>
+              </div>
+
               <div class="flex column ellipsis q-pa-md" v-if="!hideInfo">
                 <div
                   class="ed-poster-header flex row justify-between items-start no-wrap ellipsis"
@@ -77,6 +130,7 @@
                     >
                   </div>
                 </div>
+
                 <div
                   class="flex column card-bottom-text q-mt-xs o-080"
                   style="font-weight: 400"
@@ -353,9 +407,10 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .ed-poster {
+    background: $bi-1;
+
     .card-bottom-content {
       transition: opacity 0.3s;
-      background: $bi-1;
       border-top: 1px solid (rgba(255, 255, 255, 0.2));
       border-left: 1px solid rgba(255, 255, 255, 0.1);
       border-right: 1px solid rgba(255, 255, 255, 0.1);
@@ -394,6 +449,11 @@ export default {
   .ed-poster {
     box-shadow: rgba(0, 0, 0, 0.12) 0px 3px 8px;
     font-smooth: always;
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.8) 0%,
+      rgba(0, 0, 0, 1) 80%
+    );
 
     .card-background {
       opacity: 0.8;
@@ -404,11 +464,6 @@ export default {
       transition: opacity 0.3s;
       border-top: 1px solid (rgba(255, 255, 255, 0.2));
       color: white !important;
-      background: linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.8) 0%,
-        rgba(0, 0, 0, 1) 80%
-      );
 
       .card-bottom-background {
         opacity: 0.68;

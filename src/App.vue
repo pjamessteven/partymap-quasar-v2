@@ -295,6 +295,17 @@ body {
     }
   }
 
+  .nav-button {
+    background: $b-3;
+    &:hover {
+      background: $b-4;
+    }
+    &.primary {
+      background: $primary;
+      color: white;
+    }
+  }
+
   .button-control {
     color: $t-1;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
@@ -323,6 +334,8 @@ body {
       }
     }
     &.active {
+      border: 1px solid rgba(0, 0, 0, 0.1);
+
       background: $b-3 !important;
       // font-weight: bold;
       //border: 1px solid rgba(0, 0, 0, 0.48);
@@ -440,6 +453,13 @@ body {
     }
   }
 
+  .nav-button {
+    background: $bi-3;
+    &:hover {
+      background: $bi-4;
+    }
+  }
+
   .button-control {
     background: black;
     color: $ti-1;
@@ -467,6 +487,8 @@ body {
       }
     }
     &.active {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
       background: $bi-3 !important;
       //color: $t-1 !important;
       // font-weight: bold;
@@ -663,6 +685,17 @@ body {
   }
 }
 
+.nav-button {
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 9px;
+  flex-grow: 0;
+  flex-basis: 1;
+  max-height: 56px;
+  transition: all 0.3s;
+  //dth: 264px;
+}
+
 .button-light {
   font-weight: 500;
   font-family: Inter;
@@ -682,7 +715,7 @@ body {
   border-radius: 9px !important;
   overflow: hidden;
   &.active {
-    font-weight: 600;
+    // font-weight: 600;
   }
 
   .q-btn__wrapper {
@@ -693,10 +726,10 @@ body {
       background: white;
       color: black;
       height: 100%;
-      padding: 6px 16px 6px 12px;
+      padding: 4px 16px 4px 12px;
     }
     .button-label {
-      padding: 6px 12px;
+      padding: 0px 12px;
     }
     white-space: nowrap;
     .q-icon {
@@ -837,7 +870,7 @@ body {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
-@media only screen and (min-width: 1920px) {
+@media only screen and (min-width: 1921px) {
   .button-control {
     font-size: 1rem;
   }
@@ -896,6 +929,12 @@ body {
   }
 
   .button-control {
+    font-size: 0.9em;
+  }
+  .nav-button {
+    font-size: 0.9em;
+  }
+  .tag {
     font-size: 0.9em;
   }
 }

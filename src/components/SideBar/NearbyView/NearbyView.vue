@@ -143,10 +143,10 @@
                   </div>
                 </div>
                 <div
-                  class="nav-button-container flex row no-wrap q-px-md inter bold t1 q-mt-md"
+                  class="nav-button-container flex row no-wrap q-px-md t1 q-mt-md"
                   :class="{
                     'q-mb-sm': $q.screen.lt.sm,
-                    'q-mb-md text-large q-px-lg ': $q.screen.gt.xs,
+                    'q-mb-md text-large inter bold q-px-lg ': $q.screen.gt.xs,
                   }"
                 >
                   <div
@@ -158,7 +158,7 @@
                     ><span v-else>Add an event</span>
                     <q-icon
                       name="mdi-plus"
-                      size="1.5rem"
+                      size="1rem"
                       :class="{ 'q-ml-md': $q.screen.gt.xs }"
                     />
                   </div>
@@ -170,7 +170,7 @@
                     Explore the map
                     <q-icon
                       name="mdi-chevron-right"
-                      size="1.5rem"
+                      size="1rem"
                       class="q-ml-md"
                       :class="{ 'q-ml-md': $q.screen.gt.xs }"
                     />
@@ -181,12 +181,12 @@
                 </div>
 
                 <div
-                  class="flex row justify-center items-center q-py-xl q-mt-xl"
-                  style="
-                    height: 100%;
-                    width: 100%;
-                    position: absolute;
-                    top: 0px;
+                  class="flex row justify-center items-center"
+                  :class="$q.screen.gt.xs ? 'q-mt-' : 'q-mt-xl q-py-xl'"
+                  :style="
+                    $q.screen.gt.xs
+                      ? 'height: 100%; width: 100%; position: absolute; top: 0px;'
+                      : 'margin-top: 350px'
                   "
                   v-if="loadingEverything || !computedSidebarPanelReady"
                 >
@@ -212,9 +212,7 @@
                         <div
                           class="q-py-md location-header flex justify-between"
                           :class="
-                            $q.screen.gt.xs
-                              ? 'q-px-lg q-mt-sm text-large'
-                              : 'q-px-md'
+                            $q.screen.gt.xs ? 'q-px-lg text-large' : 'q-px-md'
                           "
                         >
                           <div class="t1 text- inter bold">
@@ -257,6 +255,15 @@
                               />
                             </div>
                           </q-scroll-area>
+                        </div>
+                        <div
+                          :class="
+                            $q.screen.lt.sm
+                              ? 'q-px-md q-mt-md'
+                              : 'q-px-lg q-mt-sm q-mb-sm'
+                          "
+                        >
+                          <q-separator />
                         </div>
                       </div>
                       <!-- tags -->
@@ -958,14 +965,6 @@ export default {
           }
         }
       }
-      .nav-button-container {
-        .nav-button {
-          background: $bi-3;
-          &:hover {
-            background: $bi-4;
-          }
-        }
-      }
       .banner {
         //background: $bi-2;
         .banner-background {
@@ -1022,18 +1021,7 @@ export default {
           }
         }
       }
-      .nav-button-container {
-        .nav-button {
-          background: $b-3;
-          &:hover {
-            background: $b-4;
-          }
-          &.primary {
-            background: $primary;
-            color: white;
-          }
-        }
-      }
+
       .banner {
         //background: white;
 
@@ -1199,17 +1187,7 @@ export default {
       //border-radius: 9px;
       cursor: pointer;
     }
-    .nav-button-container {
-      .nav-button {
-        cursor: pointer;
-        border-radius: 9px;
-        flex-grow: 0;
-        flex-basis: 1;
-        max-height: 56px;
-        transition: all 0.3s;
-        //dth: 264px;
-      }
-    }
+
     .mobile-hide-wrapper {
       position: sticky;
       top: 0px;
@@ -1254,8 +1232,8 @@ export default {
     }
 
     .user-event-scroll-area {
-      height: 232px;
-      margin-bottom: -16px;
+      height: 288px;
+      margin-bottom: -8px;
       mask-image: linear-gradient(
         to left,
         transparent 0px,
@@ -1308,7 +1286,7 @@ export default {
   }
 }
 
-@media only screen and (min-width: 1920px) {
+@media only screen and (min-width: 1921px) {
   .tag-scroll-area {
     margin-bottom: 16px;
     .tag {
@@ -1365,6 +1343,13 @@ export default {
       }
       .tag-scroll-area {
         height: 84px;
+      }
+      .user-event-scroll-area {
+        mask-image: unset;
+        height: 252px;
+        :deep(.ed-poster) {
+          width: 128px;
+        }
       }
 
       .header {

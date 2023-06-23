@@ -251,9 +251,9 @@
                       :class="{ 'q-pl-lg': $q.screen.gt.sm }"
                     >
                       <div
-                        class="flex items-stretch justify-between no-wrap"
+                        class="flex items-stretch justify-between no-wrap action-buttons-wrapper"
                         :class="{
-                          'q-mt-md q-mb-md q-px-md ': $q.screen.lt.sm,
+                          'q-py-md q-px-md ': $q.screen.lt.sm,
                           'q-px-xl q-my-lg': $q.screen.gt.xs && $q.screen.lt.md,
                           'q-mb-lg': $q.screen.gt.sm,
                         }"
@@ -270,7 +270,7 @@
                             flat
                             :size="$q.screen.gt.xs ? '1em' : 'md'"
                             :label="
-                              $q.screen.gt.xs ? 'Add to calendar' : undefined
+                              $q.screen.gt.xs ? 'Save to device' : undefined
                             "
                             icon="mdi-download"
                             no-caps
@@ -1366,6 +1366,12 @@ a {
 }
 
 @media only screen and (max-width: 600px) {
+  .body--light {
+    .action-buttons-wrapper {
+      background: $b-2;
+      //box-shadow: rgba(100, 100, 111, 0.25) 0px 7px 29px 0px;
+    }
+  }
   .body--dark {
     .event-page {
       .scroll-area {
@@ -1373,6 +1379,9 @@ a {
           border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
         }
       }
+    }
+    .action-buttons-wrapper {
+      background: $bi-3;
     }
   }
   .event-page {

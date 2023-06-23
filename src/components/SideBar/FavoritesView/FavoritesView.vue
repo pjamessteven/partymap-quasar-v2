@@ -32,7 +32,7 @@
           <transition enter-active-class="animated fadeIn">
             <div
               class="flex column no-wrap scroll-content"
-              :class="$q.screen.lt.sm ? 'q-px-sm' : ''"
+              :class="$q.screen.lt.sm ? 'q-px-sm ' : ''"
             >
               <!--
               <div
@@ -52,6 +52,15 @@
                 </div>
               </div>
 -->
+
+              <CurrentUserProfile
+                :class="{
+                  'q-mt-lg q-mb-lg q-px-md': $q.screen.gt.xs,
+                  'q-mx-sm  q-my-md q-mb-md': $q.screen.lt.sm,
+                }"
+              />
+              <q-separator />
+
               <div class="flex column no-wrap content">
                 <div
                   class="q-mt-md flex row no-wrap items-center"
@@ -157,11 +166,11 @@
                       >
                         <div class="flex items-center row no-wrap">
                           <q-icon
-                            name="mdi-account-circle-outline"
+                            name="mdi-dots-vertical"
                             class="q-pr-md"
                             size="1rem"
                           />
-                          <div>You</div>
+                          <div>More</div>
                         </div>
                         <MenuWrapper
                           :showing="showingYouMenu"
@@ -263,6 +272,7 @@
                     </div>
                   </q-scroll-area>
                   <EventDateViewOptions
+                    :showGroupByMonth="false"
                     v-if="$q.screen.gt.xs"
                     class="q-mb-sm"
                   />
@@ -286,7 +296,7 @@
                     v-if="
                       userEventDates && compactView && !isLoadingDatesInitial
                     "
-                    :groupByMonth="groupEventsByMonth"
+                    :groupByMonth="true"
                     :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
                     :eventDates="userEventDates"
                     :hasNext="userEventDatesHasNext"
@@ -298,7 +308,7 @@
                     v-if="
                       userEventDates && !compactView && !isLoadingDatesInitial
                     "
-                    :groupByMonth="groupEventsByMonth"
+                    :groupByMonth="true"
                     :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
                     :eventDates="userEventDates"
                     :hasNext="userEventDatesHasNext"
@@ -325,6 +335,7 @@ import _ from 'lodash';
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
 import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
+import CurrentUserProfile from './CurrentUserProfile.vue';
 
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
@@ -342,6 +353,7 @@ export default {
     EventDateViewOptions,
     MenuWrapper,
     InnerLoading,
+    CurrentUserProfile,
   },
   props: { showControls: { default: false } },
   mounted() {

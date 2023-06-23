@@ -88,7 +88,6 @@
             !loading
           "
           class="t3 inter bold"
-          :class="$q.screen.lt.sm ? 'q-mt-lg' : ''"
         >
           No results<span v-if="$route.name === 'Explore'"
             >&nbsp;in this area</span
