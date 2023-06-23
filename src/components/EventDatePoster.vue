@@ -22,34 +22,27 @@
             'animated-shimmer': false,
           }"
         >
-          <div class="card-bottom-content flex column">
+          <div class="ed-poster-content flex column no-wrap">
             <div
-              class="card-bottom-background"
-              :style="getBottomBgImgStyle()"
-            />
-            <div class="card-bottom-foreground flex column no-wrap">
+              class="image-container flex justify-center items-center shadow-2xl"
+            >
+              <img
+                :src="imgThumbXsUrl"
+                class="image not-loaded"
+                v-show="!loadedImage"
+              />
+              <img
+                :src="imgThumbUrl"
+                class="image"
+                @load="() => (loadedImage = true)"
+                v-show="loadedImage"
+              />
+            </div>
+            <div class="card-bottom-content">
               <div
-                class="image-container flex justify-center items-center shadow-2xl"
-              >
-                <!--
-
-                <div
-                  class="image-container-bg"
-                  :style="getImageContainerBgStyle()"
-                ></div>
-                -->
-                <img
-                  :src="imgThumbXsUrl"
-                  class="image not-loaded"
-                  v-show="!loadedImage"
-                />
-                <img
-                  :src="imgThumbUrl"
-                  class="image"
-                  @load="() => (loadedImage = true)"
-                  v-show="loadedImage"
-                />
-              </div>
+                class="card-bottom-background"
+                :style="getBottomBgImgStyle()"
+              />
               <div class="flex column ellipsis q-pa-sm" v-if="hideInfo">
                 <div
                   class="ed-poster-header flex row justify-between items-start no-wrap ellipsis"
@@ -189,43 +182,6 @@
                       }}km)</span
                     >
                   </div>
-                  <!--
-
-                  <div class="ellipsis">
-                    <span
-                      v-if="
-                        event?.event?.event_tags?.length > 0 && $q.screen.gt.xs
-                      "
-                    >
-                      <q-icon name="las la-tag" class="q-mr-sm" />
-                      <span
-                        v-for="(et, index) in event.event.event_tags"
-                        :key="index"
-                        >{{ et.tag
-                        }}<span v-if="event.event.event_tags.length > 1"
-                          >,&nbsp;</span
-                        ></span
-                      >
-                    </span>
-                  </div>
-                <div
-                  class=" q-mb-md o-070 ellipsis"
-                  v-if="
-                    event.event.event_tags && event.event.event_tags.length > 0
-                  "
-                  style="max-width: 200px"
-                >
-                  <span
-                    v-for="(t, index) in event.event.event_tags"
-                    :key="index"
-                  >
-                    {{ t.tag
-                    }}<span v-if="index + 1 !== event.event.event_tags.length"
-                      >,</span
-                    >
-                  </span>
-                </div>
-              -->
                   <div
                     class="tag-container flex row q-mt-sm no-wrap ellipsis"
                     v-if="
@@ -378,22 +334,22 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .ed-poster {
-    background: $bi-1;
-
-    .card-bottom-content {
+    .ed-poster-content {
       transition: opacity 0.3s;
-      border-top: 1px solid (rgba(255, 255, 255, 0.2));
-      border-left: 1px solid rgba(255, 255, 255, 0.1);
-      border-right: 1px solid rgba(255, 255, 255, 0.1);
-      .card-bottom-background {
-        background: $bi-3;
-        opacity: 0.4;
+
+      background: linear-gradient(rgba(18, 18, 18, 0.8), rgba(18, 18, 18, 0.8));
+      .image-container {
+        border-top: 1px solid (rgba(255, 255, 255, 0.1));
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        border-top-right-radius: 9px;
+        border-top-left-radius: 9px;
       }
-      .card-bottom-foreground {
-        background: linear-gradient(
-          rgba(36, 36, 36, 0.3),
-          rgba(36, 36, 36, 0.5)
-        );
+      .card-bottom-content {
+        .card-bottom-background {
+          background: $bi-3;
+          opacity: 0.4;
+        }
       }
     }
     .card-background {
@@ -426,25 +382,23 @@ export default {
       transition: opacity 0.2s ease;
     }
 
-    .card-bottom-content {
+    .ed-poster-content {
       transition: opacity 0.3s;
       color: white !important;
-
-      .card-bottom-background {
-        opacity: 0.68;
-        z-index: 0;
-        background: white;
-        transition: opacity 0.2s ease;
+      background: linear-gradient(rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.3));
+      z-index: 1;
+      .card-bottom-content {
         background: linear-gradient(
           0deg,
           rgba(0, 0, 0, 0.8) 0%,
           rgba(0, 0, 0, 1) 80%
         );
-      }
-
-      .card-bottom-foreground {
-        background: linear-gradient(rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.3));
-        z-index: 1;
+        .card-bottom-background {
+          opacity: 0.68;
+          z-index: 0;
+          background: white;
+          transition: opacity 0.2s ease;
+        }
       }
     }
     &:first-child {
@@ -474,75 +428,72 @@ export default {
   &:hover {
     // transform: scale(1.01) translateY(0px);
 
-    .card-bottom-content {
+    .ed-poster-content {
       opacity: 0.9;
     }
   }
-
-  .card-bottom-foreground {
-    .image-container {
-      transition: transform 0.2s;
-    }
+  .image-container {
+    transition: transform 0.2s;
   }
 
   position: relative;
 
-  .card-bottom-content {
+  .ed-poster-content {
     position: relative;
+    z-index: 1;
+    width: 100%;
 
-    .card-bottom-background {
-      z-index: 0;
-      filter: blur(12px);
-      transform: rotate(180deg) scaleX(-1) scale(2);
-      position: absolute;
-      height: 100%;
-      width: 100%;
-    }
+    .card-bottom-content {
+      .card-bottom-background {
+        z-index: 0;
+        filter: blur(12px);
+        transform: rotate(180deg) scaleX(-1) scale(2);
+        position: absolute;
+        height: 100%;
+        width: 100%;
+      }
 
-    .card-bottom-foreground {
-      z-index: 1;
-      width: 100%;
       .tag-container {
         :deep(.tag) {
           background: transparent !important;
           border: 1px solid rgba(255, 255, 255, 0.2) !important;
         }
       }
+    }
 
-      .ed-poster-header {
-        max-width: 100%;
-        opacity: 1;
-        z-index: 2;
-      }
-      .card-bottom-text {
-        position: relative;
-        z-index: 2;
-        font-size: small;
-      }
-      .image-container {
-        aspect-ratio: 595 / 842;
+    .ed-poster-header {
+      max-width: 100%;
+      opacity: 1;
+      z-index: 2;
+    }
+    .card-bottom-text {
+      position: relative;
+      z-index: 2;
+      font-size: small;
+    }
+    .image-container {
+      aspect-ratio: 595 / 842;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      border-radius: 0px;
+      box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+        rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+        rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+      .image-container-bg {
+        position: absolute;
+        height: 100%;
         width: 100%;
-        position: relative;
-        overflow: hidden;
-        border-radius: 0px;
-        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-          rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-          rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-        .image-container-bg {
-          position: absolute;
-          height: 100%;
-          width: 100%;
-          z-index: 1;
-          transform: scale(1.2);
-        }
-        .image {
-          height: 100%;
-          width: 100%;
-          max-height: 100%;
-          max-width: 100%;
-          object-fit: cover;
-          z-index: 2;
-        }
+        z-index: 1;
+        transform: scale(1.2);
+      }
+      .image {
+        height: 100%;
+        width: 100%;
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: cover;
+        z-index: 2;
       }
     }
   }

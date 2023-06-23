@@ -103,8 +103,6 @@ export default {
   overflow: hidden;
   transition: opacity 0.3s;
   &:hover {
-    transform: scale(1.01) translateY(0px);
-
     .card-bottom-background {
       opacity: 0.9;
     }

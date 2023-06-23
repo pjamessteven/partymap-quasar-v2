@@ -406,7 +406,7 @@ export default {
   background: white;
 
   &:hover {
-    transform: scale(1.01) translateY(0px);
+    //transform: scale(1.01) translateY(0px);
     .card-bottom-content {
       opacity: 0.9;
     }
@@ -433,6 +433,7 @@ export default {
   }
   .card-bottom-content {
     position: relative;
+    transition: opacity 0.3s ease;
     //color: white;
     //background: black;
 
