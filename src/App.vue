@@ -931,9 +931,7 @@ body {
   .button-control {
     font-size: 0.9em;
   }
-  .nav-button {
-    font-size: 0.9em;
-  }
+
   .tag {
     font-size: 0.9em;
   }

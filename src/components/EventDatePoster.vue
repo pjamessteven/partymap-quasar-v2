@@ -92,14 +92,7 @@
                       event.tz
                     )
                   }}</span>
-
-                  <q-badge
-                    v-else
-                    class="q-my-xs o-050"
-                    color="white"
-                    text-color="black"
-                    label="Date TBC"
-                  />
+                  <span v-else>Date TBC</span>
                 </div>
               </div>
 
@@ -135,22 +128,6 @@
                   class="flex column card-bottom-text q-mt-xs o-080"
                   style="font-weight: 400"
                 >
-                  <!--
-
-          <div class="flex row items-center ">
-            <q-badge
-              class="q-my-xs"
-              color="red"
-              :label="$t('event_date_inline.cancelled')"
-              v-if="event.cancelled"
-            />
-            <span v-if="!event.cancelled">
-              <q-icon name="las la-clock" class="q-mr-sm" />{{
-                relativeHumanTime(event.start_naive, event.end_naive, event.tz)
-              }}
-            </span>
-          </div>
--->
                   <span>
                     <q-icon name="las la-clock" class="q-mr-sm" />
                     <q-badge
@@ -167,13 +144,7 @@
                       )
                     }}</span>
 
-                    <q-badge
-                      v-else
-                      class="q-my-xs"
-                      color="white"
-                      text-color="black"
-                      label="Date TBC"
-                    />
+                    <span v-else>Date TBC</span>
                   </span>
                   <div class="flex row items-center no-wrap ellipsis">
                     <q-icon name="las la-calendar" class="q-mr-sm" />
@@ -449,11 +420,6 @@ export default {
   .ed-poster {
     box-shadow: rgba(0, 0, 0, 0.12) 0px 3px 8px;
     font-smooth: always;
-    background: linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0.8) 0%,
-      rgba(0, 0, 0, 1) 80%
-    );
 
     .card-background {
       opacity: 0.8;
@@ -462,7 +428,6 @@ export default {
 
     .card-bottom-content {
       transition: opacity 0.3s;
-      border-top: 1px solid (rgba(255, 255, 255, 0.2));
       color: white !important;
 
       .card-bottom-background {
@@ -470,6 +435,11 @@ export default {
         z-index: 0;
         background: white;
         transition: opacity 0.2s ease;
+        background: linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.8) 0%,
+          rgba(0, 0, 0, 1) 80%
+        );
       }
 
       .card-bottom-foreground {
@@ -502,7 +472,7 @@ export default {
   -webkit-transform: translate3d(0, 0, 0);
 
   &:hover {
-    transform: scale(1.01) translateY(0px);
+    // transform: scale(1.01) translateY(0px);
 
     .card-bottom-content {
       opacity: 0.9;
@@ -517,25 +487,10 @@ export default {
 
   position: relative;
 
-  .card-top-content {
-    position: relative;
-    height: 140px;
-
-    .card-background {
-      border: none;
-      overflow: hidden;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      z-index: 2;
-    }
-  }
   .card-bottom-content {
     position: relative;
 
     .card-bottom-background {
-      border-radius: 9px;
-      overflow: hidden;
       z-index: 0;
       filter: blur(12px);
       transform: rotate(180deg) scaleX(-1) scale(2);
@@ -545,8 +500,6 @@ export default {
     }
 
     .card-bottom-foreground {
-      border-radius: 9px;
-      overflow: hidden;
       z-index: 1;
       width: 100%;
       .tag-container {

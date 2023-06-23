@@ -117,19 +117,23 @@
         key="3"
         name="favorites"
         :icon="
-          sidebarPanel === 'profile'
+          sidebarPanel === 'favorites'
             ? 'mdi-calendar-star'
             : 'mdi-calendar-star-outline'
         "
-        :label="$q.screen.gt.xs ? undefined : 'You'"
+        :label="$q.screen.gt.xs ? undefined : 'Calendar'"
         content-class="tab"
         :ripple="false"
       />
       <q-tab
         key="4"
-        name="search"
-        :icon="sidebarPanel === 'search' ? 'mdi-magnify' : 'mdi-magnify'"
-        :label="$q.screen.gt.xs ? undefined : 'Search'"
+        name="profile"
+        :icon="
+          sidebarPanel === 'profile'
+            ? 'mdi-account-circle'
+            : 'mdi-account-circle-outline'
+        "
+        :label="$q.screen.gt.xs ? undefined : 'You'"
         content-class="tab"
         :ripple="false"
       />

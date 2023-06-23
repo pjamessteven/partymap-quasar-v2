@@ -45,7 +45,7 @@
 
           <ExploreView
             style="height: 100%; width: 100%"
-            v-show="sidebarPanel === 'explore'"
+            v-if="sidebarPanel === 'explore'"
           />
 
           <FavoritesView
@@ -183,12 +183,12 @@ export default {
     },
 
     sidebarPanel(to, from) {
-      if (to === 'explore') {
-        /*
+      if (from === 'explore') {
         this.eventDates = [];
         this.eventDatesGroupedByMonth = {};
         this.eventDatesLoading = true;
-        */
+      }
+      if (to === 'explore') {
         this.showPanel = false;
       }
       if (to === 'search') {
@@ -242,6 +242,9 @@ export default {
   }
   .sidebar-wrapper {
     .sidebar {
+      border: 1px solid $bi-4;
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
       :deep(.sidebar-header) {
         background: black;
       }
@@ -277,7 +280,7 @@ export default {
         background: white;
       }
       .sidebar-content-inner {
-        border-top: 1px solid rgba(0, 0, 0, 0.2);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
       }
       .menubar {
         background: white;
@@ -492,6 +495,7 @@ export default {
     .hover-indicator-line {
     }
     .sidebar {
+      border: none !important;
       box-shadow: none;
 
       :deep(.panels) {

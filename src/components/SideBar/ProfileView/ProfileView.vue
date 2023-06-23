@@ -53,6 +53,14 @@
               </div>
 -->
 
+              <CurrentUserProfile
+                :class="{
+                  'q-mt-lg q-mb-lg q-px-md': $q.screen.gt.xs,
+                  'q-mx-sm  q-my-md q-mb-md': $q.screen.lt.sm,
+                }"
+              />
+              <q-separator />
+
               <div class="flex column no-wrap content">
                 <div
                   class="q-mt-md flex row no-wrap items-center"
@@ -62,7 +70,7 @@
                     ref="scroll"
                     horizontal
                     class="scroll-area grow"
-                    :style="$q.screen.gt.xs ? 'height: 48px' : 'height: 38px'"
+                    :style="$q.screen.gt.xs ? 'height: 54px' : 'height: 44px'"
                     :thumb-style="
                       $q.screen.gt.xs
                         ? { bottom: '2px', height: '4px' }
@@ -327,6 +335,7 @@ import _ from 'lodash';
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
 import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
+import CurrentUserProfile from './CurrentUserProfile.vue';
 
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
@@ -344,6 +353,7 @@ export default {
     EventDateViewOptions,
     MenuWrapper,
     InnerLoading,
+    CurrentUserProfile,
   },
   props: { showControls: { default: false } },
   mounted() {
