@@ -19,7 +19,6 @@
         </q-btn>
       </div>
     </transition>
-        -->
     <q-btn
       v-if="$q.screen.lt.sm"
       icon="mdi-magnify"
@@ -46,6 +45,7 @@
       >
       </q-btn>
     </div>
+        -->
 
     <q-btn
       class="button-menu"

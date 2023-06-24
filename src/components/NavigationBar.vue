@@ -127,6 +127,15 @@
       />
       <q-tab
         key="4"
+        name="search"
+        :icon="sidebarPanel === 'search' ? 'mdi-magnify' : 'mdi-magnify'"
+        :label="$q.screen.gt.xs ? undefined : 'Search'"
+        content-class="tab"
+        :ripple="false"
+      />
+      <!--
+      <q-tab
+        key="4"
         name="profile"
         :icon="
           sidebarPanel === 'profile'
@@ -136,7 +145,7 @@
         :label="$q.screen.gt.xs ? undefined : 'You'"
         content-class="tab"
         :ripple="false"
-      />
+      />-->
     </q-tabs>
   </div>
 </template>
@@ -158,31 +167,7 @@ export default {
   methods: {
     ...mapActions(useMainStore, ['loadIpInfo', 'getFineLocation']),
   },
-  watch: {
-    sidebarPanel(to, from) {
-      if (to === 'explore') {
-        this.showPanel = false;
-      }
-      if (to === 'search') {
-        this.showPanel = true;
-      }
-      if (to === 'nearby') {
-        this.showPanel = true;
-      }
-      if (to === 'favorites') {
-        if (this.currentUser) {
-          this.controlFavorites = true;
-          this.showPanel = true;
-        } else {
-          this.sidebarPanel = from;
 
-          this.$router.push({ name: 'Login' });
-        }
-      } else if (from === 'favorites') {
-        this.controlFavorites = false;
-      }
-    },
-  },
   computed: {
     ...mapState(useAuthStore, ['currentUser']),
     ...mapWritableState(useMainStore, ['sidebarPanel', 'showPanel']),

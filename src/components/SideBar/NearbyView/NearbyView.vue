@@ -185,7 +185,7 @@
                   :class="$q.screen.gt.xs ? 'q-mt-' : 'q-mt-xl q-py-xl'"
                   :style="
                     $q.screen.gt.xs
-                      ? 'height: 100%; width: 100%; position: absolute; top: 0px;'
+                      ? 'height: 100%; width: 100%; position: absolute; top: 0px; pointer-events: none'
                       : 'margin-top: 350px'
                   "
                   v-if="loadingEverything || !computedSidebarPanelReady"

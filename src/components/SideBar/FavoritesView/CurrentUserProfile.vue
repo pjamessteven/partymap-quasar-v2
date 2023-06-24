@@ -12,10 +12,14 @@
               class="editing-overlay flex justify-center items-center"
               v-if="editing"
             >
-              <q-icon name="mdi-upload-outline" class="text-white" size="2em" />
+              <q-icon
+                name="mdi-account-outline"
+                class="text-white"
+                size="2em"
+              />
             </div>
             <img
-              v-if="currentUser.avatar.thumb_url"
+              v-if="currentUser?.avatar?.thumb_url"
               :src="currentUser.avatar.thumb_url"
             />
             <q-icon
@@ -64,7 +68,6 @@
               <span v-if="currentUser.description">
                 {{ currentUser.description }}
               </span>
-              <span class="t4" v-else>No description</span>
             </div>
             <q-input
               v-else
@@ -81,7 +84,7 @@
               @click.stop="() => (editing = !editing)"
               class="nav-button flex items-center justify-between q-mr-sm"
             >
-              <span>Edit</span>
+              <span>Edit Profile</span>
               <q-icon
                 name="mdi-square-edit-outline"
                 :size="$q.screen.gt.xs ? '1rem' : '1rem'"
@@ -286,7 +289,8 @@ export default {
   .profile-view {
     .avatar-wrapper {
       .avatar {
-        background: $bi-3;
+        background: $bi-2;
+        border: 1px solid $bi-3;
       }
     }
   }
@@ -296,7 +300,8 @@ export default {
   .profile-view {
     .avatar-wrapper {
       .avatar {
-        background: $b-3;
+        background: $b-2;
+        border: 1px solid $b-3;
       }
     }
   }
@@ -310,8 +315,8 @@ export default {
   .avatar-wrapper {
     .avatar {
       border-radius: 100px;
-      width: 150px;
-      height: 150px;
+      width: 128px;
+      height: 128px;
       overflow: hidden;
       position: relative;
       img {

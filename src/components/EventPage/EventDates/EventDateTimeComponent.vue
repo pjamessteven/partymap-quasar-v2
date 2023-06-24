@@ -75,7 +75,7 @@
               }}
             </span>
 
-            <span class="t4"> (Exact date to be confirmed) </span>
+            <span class="t4"> (Exact date TBC) </span>
           </div>
           <div
             class="t4 link-hover underline q-mt-sm"

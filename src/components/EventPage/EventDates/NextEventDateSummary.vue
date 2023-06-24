@@ -25,13 +25,7 @@
             {{ localDay(ed?.start_naive, ed.tz) }}
             {{ localDate(ed?.start_naive, ed.tz) }}
           </span>
-          <q-badge
-            v-else
-            class="q-my-xs o-050"
-            color="white"
-            text-color="black"
-            label="Date TBC"
-          />
+          <span v-else>Date TBC</span>
           <!--
           <span class="t3">
             [{{ timeZoneAbbreviention(ed.event_start, ed.tz) }}]
