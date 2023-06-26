@@ -34,7 +34,6 @@
               class="flex column no-wrap scroll-content"
               :class="$q.screen.lt.sm ? 'q-px-sm ' : ''"
             >
-              <!--
               <CurrentUserProfile
                 :class="{
                   'q-mt-lg q-mb-lg q-px-md': $q.screen.gt.xs,
@@ -42,7 +41,7 @@
                 }"
               />
               <q-separator />
--->
+
               <div class="flex column no-wrap content">
                 <div
                   class="q-mt-md flex row no-wrap items-center"
@@ -317,7 +316,7 @@ import _ from 'lodash';
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
 import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
-//import CurrentUserProfile from './CurrentUserProfile.vue';
+import CurrentUserProfile from './CurrentUserProfile.vue';
 
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
@@ -335,7 +334,7 @@ export default {
     EventDateViewOptions,
     MenuWrapper,
     InnerLoading,
-    // CurrentUserProfile,
+    CurrentUserProfile,
   },
   props: { showControls: { default: false } },
   mounted() {

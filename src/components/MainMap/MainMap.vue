@@ -932,7 +932,7 @@ canvas {
   :deep(.leaflet-top) {
     top: unset;
     transform: unset;
-    bottom: 348px;
+    bottom: 268px;
   }
 }
 </style>

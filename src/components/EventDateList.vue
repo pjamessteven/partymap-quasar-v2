@@ -58,8 +58,9 @@
         </EventDateCard>
       </div>
     </div>
-    <div class="row justify-center q-my-lg q-mb-xl">
+    <div class="row justify-center">
       <q-spinner-ios
+        class="q-my-lg q-mb-xl"
         :color="$q.dark.isActive ? 'white' : 'black'"
         size="2em"
         v-if="
@@ -69,7 +70,7 @@
             (!groupByMonth && eventDates?.length > 0))
         "
       />
-      <div v-else-if="!disableEndOfResultsMessage">
+      <div v-else-if="!disableEndOfResultsMessage" class="q-my-lg q-mb-xl">
         <div
           v-if="
             (groupByMonth &&
@@ -118,7 +119,7 @@ interface Props {
   groupByMonth?: boolean;
   hasNext: boolean;
   loading: boolean;
-  disableEndOfResultsMessage: boolean;
+  disableEndOfResultsMessage?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {

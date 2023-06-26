@@ -87,6 +87,9 @@ export default {
 }
 .body--light {
   .artist-head-wrapper {
+    .card-bottom-background {
+      background: $b-4;
+    }
     &:hover {
       opacity: 0.9;
     }

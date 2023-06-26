@@ -13,6 +13,7 @@
         </div>
         <div class="flex column o-animated" :class="{ 'o-000': loading }">
           <q-input
+            autocapitalize="off"
             ref="login"
             class=""
             outlined

@@ -38,6 +38,7 @@
           v-if="$q.screen.gt.xs"
         />
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
+          <div class="sidebar-content-inner-shadow" />
           <NearbyView
             style="height: 100%; width: 100%"
             v-if="sidebarPanel === 'nearby'"
@@ -242,11 +243,12 @@ export default {
   }
   .sidebar-wrapper {
     .sidebar {
-      border: 1px solid $bi-4;
+      //border: 1px solid $bi-4;
       border-top-left-radius: 18px;
       border-top-right-radius: 18px;
+
       :deep(.sidebar-header) {
-        background: black;
+        // background: black;
       }
 
       .handle {
@@ -254,13 +256,19 @@ export default {
       }
 
       .sidebar-content {
-        background: black;
+        background: $bi-2;
+        //background: rgba(18, 18, 18, 0.68);
+        background: rgba(0, 0, 0, 0.4);
+
+        backdrop-filter: blur(10px);
+        color: white;
+
         :deep(.nav-bar) {
-          background: $bi-2;
         }
       }
       .sidebar-content-inner {
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        background: black;
       }
     }
   }
@@ -277,10 +285,16 @@ export default {
   .sidebar-wrapper {
     .sidebar {
       .sidebar-content {
-        background: white;
-      }
-      .sidebar-content-inner {
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        background: rgba(100, 100, 100, 0.2);
+        backdrop-filter: blur(10px);
+        color: white;
+        .sidebar-content-inner {
+          background: white;
+          border-top: 1px solid rgba(0, 0, 0, 0.1);
+          .sidebar-content-inner-shadow {
+            box-shadow: inset rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+          }
+        }
       }
       .menubar {
         background: white;
@@ -319,22 +333,37 @@ export default {
     overflow: visible;
     height: 100%;
     pointer-events: all;
-    border-top-left-radius: 9px;
-    border-top-right-radius: 9px;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
     transition: all 0.3s ease;
     transform: translate3d(0, calc(100% - 234px), 0);
     user-select: none;
     will-change: transform;
-    padding-bottom: 96px;
+    padding-bottom: 64px;
 
     box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
       rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
       rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
-
-    .sidebar-content-inner {
+    .sidebar-content {
+      .sidebar-content-inner {
+        border-top-left-radius: 18px;
+        border-top-right-radius: 18px;
+        overflow: hidden;
+        isolation: isolate;
+        .sidebar-content-inner-shadow {
+          position: absolute;
+          height: 100%;
+          width: 100%;
+          z-index: 1;
+          pointer-events: none;
+          border-top-left-radius: 18px;
+          border-top-right-radius: 18px;
+        }
+      }
     }
+
     &.sidebar-mobile-expanded {
-      transform: translate3d(0, 96px, 0);
+      transform: translate3d(0, 64px, 0);
       .mobile-dismiss-list {
         height: 200px;
       }
@@ -379,7 +408,6 @@ export default {
       border-top-right-radius: 18px;
       overflow: hidden;
       box-shadow: 0px 0px 64px 32px rgba(0, 0, 0, 0.2);
-
       .nav-bar {
         width: 100%;
         position: sticky;
@@ -497,7 +525,9 @@ export default {
     .sidebar {
       border: none !important;
       box-shadow: none;
-
+      .sidebar-content {
+        background: black;
+      }
       :deep(.panels) {
         box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
         width: 100%;
@@ -507,7 +537,9 @@ export default {
   .body--light {
     .sidebar {
       box-shadow: none;
-
+      .sidebar-content {
+        background: white;
+      }
       :deep(.panels) {
         //box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
         border-top: none !important;
@@ -544,9 +576,15 @@ export default {
       }
 
       .sidebar-content {
+        backdrop-filter: unset !important;
         padding-top: unset;
+        background: none !important;
         .sidebar-content-inner {
           overflow: hidden;
+
+          .sidebar-content-inner-shadow {
+            display: none;
+          }
         }
       }
       :deep(.main-content) {

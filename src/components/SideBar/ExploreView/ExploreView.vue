@@ -22,7 +22,7 @@
         'event-list-expanded': $q.screen.lt.sm && showPanel,
       }"
     >
-      <div class="flex column grow no-wrap q-mx-sm">
+      <div class="flex column grow no-wrap">
         <q-scroll-area
           vertical
           @scroll="onScrollMainContent"
@@ -39,7 +39,7 @@
           }"
         >
           <transition enter-active-class="animated fadeIn">
-            <div class="flex column no-wrap scroll-content">
+            <div class="flex column no-wrap scroll-content q-px-xs">
               <div class="flex column no-wrap content">
                 <div class="flex row no-wrap">
                   <ControlsComponent

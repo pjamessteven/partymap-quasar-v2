@@ -17,6 +17,7 @@
         <q-card-section class="form q-px-lg q-pt-none">
           <q-input
             outlined
+            autocapitalize="off"
             filled
             hide-bottom-space
             v-bind:label="$t('auth.username')"
@@ -30,6 +31,7 @@
           <q-input
             outlined
             filled
+            autocapitalize="off"
             class="q-mt-md"
             hide-bottom-space
             v-bind:label="$t('auth.email')"

@@ -22,99 +22,58 @@
             'animated-shimmer': false,
           }"
         >
-          <!--
-      <q-tooltip
-        v-if="$q.screen.gt.xs"
-        :content-class="
-          $q.dark.isActive
-            ? 'bg-black text-white'
-            : 'bg-white text-black tooltip'
-        "
-        :offset="[-128, -56]"
-        anchor="top right"
-        self="top left"
-        content-style="font-size: 14px"
-        max-width="300px"
-      >
-        <div class="flex column">
-          <div>
-            {{ event.event.description }}
-          </div>
-          <div
-            class="tag-container flex row q-gutter-xs q-mt-xs q-mb-sm"
-            style="min-height: 31px"
-            v-if="event.event.event_tags && event.event.event_tags.length > 0"
-          >
-            <Tag
-              v-for="(et, index) in event.event.event_tags"
-              :key="index"
-              :value="et.tag"
-            ></Tag>
-          </div>
-        </div>
-      </q-tooltip>
-  -->
-          <!--
-        <div class="card-top-content  flex column justify-end">
-          <div class="card-background" :style="getBgImgStyle()" />
-
-        </div>
-  -->
-          <div class="card-bottom-content flex column">
+          <div class="ed-card-content flex row no-wrap q-pa-md">
             <div
               class="card-bottom-background"
               :style="getBottomBgImgStyle()"
             />
             <div
-              class="card-bottom-foreground flex row no-wrap q-px-md q-py-md"
+              class="image-container flex justify-center items-center shadow-2xl"
             >
+              <img
+                :src="imgThumbXsUrl"
+                class="image not-loaded"
+                v-show="!loadedImage"
+              />
+              <img
+                :src="imgThumbUrl"
+                class="image"
+                @load="() => (loadedImage = true)"
+                v-show="loadedImage"
+              />
+            </div>
+            <div class="flex column ellipsis q-pl-md">
               <div
-                class="image-container flex justify-center items-center shadow-2xl"
+                class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
               >
-                <img
-                  :src="imgThumbXsUrl"
-                  class="image not-loaded"
-                  v-show="!loadedImage"
-                />
-                <img
-                  :src="imgThumbUrl"
-                  class="image"
-                  @load="() => (loadedImage = true)"
-                  v-show="loadedImage"
-                />
-              </div>
-              <div class="flex column ellipsis q-pl-md">
                 <div
-                  class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
+                  class="flex row items-baseline no-wrap inter bold q-mr-sm ellipsis"
                 >
-                  <div
-                    class="flex row items-baseline no-wrap inter bold q-mr-sm ellipsis"
+                  <span class="ellipsis">{{ event.name }}</span>
+                  <q-icon
+                    class="q-ml-sm o-080"
+                    name="mdi-check-decagram"
+                    v-if="event.event.host"
                   >
-                    <span class="ellipsis">{{ event.name }}</span>
-                    <q-icon
-                      class="q-ml-sm o-080"
-                      name="mdi-check-decagram"
-                      v-if="event.event.host"
+                    <q-tooltip
+                      :content-class="
+                        $q.dark.isActive
+                          ? 'bg-black text-white'
+                          : 'bg-white text-black'
+                      "
+                      :offset="[10, 10]"
+                      content-style="font-size: 16px"
                     >
-                      <q-tooltip
-                        :content-class="
-                          $q.dark.isActive
-                            ? 'bg-black text-white'
-                            : 'bg-white text-black'
-                        "
-                        :offset="[10, 10]"
-                        content-style="font-size: 16px"
-                      >
-                        {{ $t('event.official_page') }}
-                      </q-tooltip></q-icon
-                    >
-                  </div>
+                      {{ $t('event.official_page') }}
+                    </q-tooltip></q-icon
+                  >
                 </div>
-                <div
-                  class="flex column card-bottom-text q-mt-xs o-070"
-                  style="font-weight: 400"
-                >
-                  <!--
+              </div>
+              <div
+                class="flex column grow justify-between card-bottom-text q-mt-xs o-070"
+                style="font-weight: 400"
+              >
+                <!--
 
           <div class="flex row items-center ">
             <q-badge
@@ -130,6 +89,7 @@
             </span>
           </div>
 -->
+                <div class="flex column">
                   <span>
                     <q-icon name="las la-clock" class="q-mr-sm" />
                     <q-badge
@@ -146,13 +106,7 @@
                       )
                     }}</span>
 
-                    <q-badge
-                      v-else
-                      class="q-my-xs"
-                      color="white"
-                      text-color="black"
-                      label="Date TBC"
-                    />
+                    <span v-else>Date TBC</span>
                   </span>
                   <div class="flex row items-center no-wrap ellipsis">
                     <q-icon name="las la-calendar" class="q-mr-sm" />
@@ -198,23 +152,21 @@
                       }}km)</span
                     >
                   </div>
-
-                  <div
-                    class="tag-container flex row q-mt-sm no-wrap ellipsis"
-                    style="min-height: 31px"
-                    v-if="
-                      event.event.event_tags &&
-                      event.event.event_tags.length > 0
-                    "
-                  >
-                    <Tag
-                      class="q-mr-xs"
-                      v-for="(et, index) in event.event.event_tags"
-                      :key="index"
-                      :value="et.tag"
-                    ></Tag>
-                  </div>
                 </div>
+              </div>
+              <div
+                class="tag-container flex row q-mt-sm no-wrap ellipsis"
+                style="min-height: 31px"
+                v-if="
+                  event.event.event_tags && event.event.event_tags.length > 0
+                "
+              >
+                <Tag
+                  class="q-mr-xs"
+                  v-for="(et, index) in event.event.event_tags"
+                  :key="index"
+                  :value="et.tag"
+                ></Tag>
               </div>
             </div>
           </div>
@@ -310,21 +262,13 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .ed-card {
-    border: none !important;
-    .card-bottom-content {
-      border-top: 1px solid (rgba(255, 255, 255, 0.2));
-      border-left: 1px solid rgba(255, 255, 255, 0.1);
-      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    outline: 1px solid (rgba(255, 255, 255, 0.1));
+
+    .ed-card-content {
+      background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9));
       .card-bottom-background {
         background: $bi-3;
         opacity: 0.4;
-      }
-
-      .card-bottom-foreground {
-        background: linear-gradient(
-          rgba(36, 36, 36, 0.4),
-          rgba(36, 36, 36, 0.5)
-        );
       }
     }
     .card-background {
@@ -360,28 +304,17 @@ export default {
       opacity: 0.8;
       transition: opacity 0.2s ease;
     }
-    .card-top-content {
-    }
-    .card-bottom-content {
+    .ed-card-content {
       border-top: 1px solid (rgba(255, 255, 255, 0.2));
+      background: black;
 
       color: white !important;
-      background: linear-gradient(
-        0deg,
-        rgba(255, 255, 255, 0.8) 0%,
-        rgba(255, 255, 255, 1) 80%
-      );
 
       .card-bottom-background {
         opacity: 0.68;
         z-index: 0;
         background: white;
         transition: opacity 0.2s ease;
-      }
-
-      .card-bottom-foreground {
-        background: linear-gradient(rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.3));
-        z-index: 1;
       }
     }
     &:first-child {
@@ -407,7 +340,7 @@ export default {
 
   &:hover {
     //transform: scale(1.01) translateY(0px);
-    .card-bottom-content {
+    .ed-card-content {
       opacity: 0.9;
     }
   }
@@ -417,21 +350,7 @@ export default {
   }
   position: relative;
 
-  .card-top-content {
-    position: relative;
-    height: 140px;
-
-    .card-background {
-      border: none;
-      overflow: hidden;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      z-index: 2;
-      // transform: scale(1.5);
-    }
-  }
-  .card-bottom-content {
+  .ed-card-content {
     position: relative;
     transition: opacity 0.3s ease;
     //color: white;
@@ -452,51 +371,45 @@ export default {
       transition: opacity 0.2s ease;
     }
 
-    .card-bottom-foreground {
-      border-radius: 9px;
-      overflow: hidden;
-      z-index: 1;
-      width: 100%;
-      .tag-container {
-        :deep(.tag) {
-          background: transparent !important;
-          border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        }
+    .tag-container {
+      :deep(.tag) {
+        background: transparent !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
       }
+    }
 
-      .ed-card-header {
-        //font-size: 1rem;
-        max-width: 100%;
-        opacity: 1;
-        //color: white !important;
-        z-index: 2;
-      }
-      .card-bottom-text {
-        position: relative;
-        z-index: 2;
-        //color: white !important;
-        font-size: small;
-      }
-      .image-container {
-        //max-width: 400px;
-        // max-height: 400px;
-        // min-width: 400px;
+    .ed-card-header {
+      //font-size: 1rem;
+      max-width: 100%;
+      opacity: 1;
+      //color: white !important;
+      z-index: 2;
+    }
+    .card-bottom-text {
+      position: relative;
+      z-index: 2;
+      //color: white !important;
+      font-size: small;
+    }
+    .image-container {
+      //max-width: 400px;
+      // max-height: 400px;
+      // min-width: 400px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      //border-radius: 100%;
+      width: 86px;
+      aspect-ratio: 595 / 842;
+      min-width: 90px;
+      border-radius: 9px;
+      .image {
+        height: 100%;
         width: 100%;
-        position: relative;
-        overflow: hidden;
-        //border-radius: 100%;
-        width: 86px;
-        aspect-ratio: 595 / 842;
-        min-width: 86px;
-        border-radius: 9px;
-        .image {
-          height: 100%;
-          width: 100%;
-          max-height: 100%;
-          max-width: 100%;
-          object-fit: cover;
-          z-index: 2;
-        }
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: cover;
+        z-index: 2;
       }
     }
   }

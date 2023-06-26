@@ -13,7 +13,7 @@
               v-if="editing"
             >
               <q-icon
-                name="mdi-account-outline"
+                name="mdi-account-arrow-up-outline"
                 class="text-white"
                 size="2em"
               />
@@ -24,7 +24,7 @@
             />
             <q-icon
               v-else-if="!editing"
-              name="mdi-account-box-outline"
+              name="mdi-account-outline"
               class="t4"
               size="2em"
             />
@@ -298,6 +298,9 @@ export default {
 
 .body--light {
   .profile-view {
+    .nav-button {
+      color: $t-1;
+    }
     .avatar-wrapper {
       .avatar {
         background: $b-2;

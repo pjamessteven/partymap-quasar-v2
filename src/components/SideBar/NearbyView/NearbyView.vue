@@ -93,7 +93,7 @@
                       events!</span
                     >
                     <q-icon
-                      class="q-ml-md"
+                      class="q-ml-md t1"
                       size="1.5rem"
                       :name="
                         !showMessage ? 'mdi-chevron-down' : 'mdi-chevron-up'
@@ -259,7 +259,7 @@
                         <div
                           :class="
                             $q.screen.lt.sm
-                              ? 'q-px-md q-mt-md'
+                              ? 'q-px-md q-mt-s'
                               : 'q-px-lg q-mt-sm q-mb-sm'
                           "
                         >
@@ -509,25 +509,20 @@
                       <!-- ALL EVENTS -->
 
                       <div
-                        class="location-header flex items-center justify-between no-wrap inter bold t1 q-mt- q-py-md"
-                        :class="$q.screen.lt.sm ? 'q-py-md' : 'text-large'"
-                        v-touch-swipe="
-                          () => {
-                            sidebarPanel = 'explore';
-                          }
+                        class="t1 inter bold location-header q-py-md flex row items-center justify-between"
+                        :class="
+                          $q.screen.gt.xs ? 'q-pl-sm text-large' : 'q-pl-sm'
                         "
                         v-if="eventDates && eventDates.length > 0"
                       >
                         <!--<div class="separator" /> -->
 
                         <div
-                          class="flex row grow no-wrap ellipsis"
-                          :class="$q.screen.gt.xs ? 'q-pl-lg' : 'q-pl-md'"
+                          class="flex"
+                          :class="$q.screen.gt.xs ? 'q-pl-md' : 'q-pl-sm'"
                         >
-                          <div class="ellipsis flex grow items-center">
-                            <div class="ellipsis t1" v-if="userLocation">
-                              {{ $t('landing_page.all_upcoming_events') }}:
-                            </div>
+                          <div class="ellipsis t1" v-if="userLocation">
+                            {{ $t('landing_page.all_upcoming_events') }}:
                           </div>
                         </div>
                         <EventDateViewOptions
@@ -1006,6 +1001,7 @@ export default {
       background: white;
     }
     .mobile-location-header {
+      color: $t-1;
     }
     .main-content {
       .message {
@@ -1111,9 +1107,11 @@ export default {
       }
       .location-header {
         position: sticky;
-        top: 0px;
+
+        top: -1px;
         z-index: 100;
         width: 100%;
+
         // text-transform: lowercase;
       }
     }
@@ -1346,7 +1344,7 @@ export default {
       }
       .user-event-scroll-area {
         mask-image: unset;
-        height: 252px;
+        height: 256px;
         :deep(.ed-poster) {
           width: 128px;
         }
