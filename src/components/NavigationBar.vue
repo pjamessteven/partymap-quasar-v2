@@ -211,14 +211,14 @@ export default {
   }
   .navigation-bar {
     //border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    //border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
     :deep(.q-tabs) {
       .q-tab {
         color: $ti-4 !important;
 
         &.q-tab--active {
-          // background: $b-3;
-          border: 1px solid rgba(255, 255, 255, 0.3);
+          background: $bi-4;
+          //border: 1px solid rgba(255, 255, 255, 0.3);
           color: white !important;
         }
       }
@@ -231,12 +231,12 @@ export default {
     //background: white;
     :deep(.q-tabs) {
       .q-tab {
-        color: $ti-4 !important;
+        color: $t-4 !important;
 
         &.q-tab--active {
-          // background: $b-3;
+          background: $b-3;
           border: 1px solid rgba(255, 255, 255, 0.3);
-          color: white !important;
+          color: black !important;
         }
       }
     }

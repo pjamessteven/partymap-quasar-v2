@@ -87,7 +87,7 @@
       <q-radio
         v-model="dateMode"
         val="rough"
-        label="Roughly every month (Confirm exact dates later)"
+        label="Roughly every month (Confirm future dates later)"
       />
     </div>
     <div

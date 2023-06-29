@@ -6,8 +6,7 @@
     <q-scroll-area
       ref="scroll"
       horizontal
-      class="scroll-area"
-      :style="$q.screen.gt.xs ? 'height: 44px' : 'height: 36px'"
+      class="control-scroll-area"
       :thumb-style="
         $q.screen.gt.xs
           ? { bottom: '0px', height: '4px' }
@@ -311,7 +310,7 @@ export default {
 }
 
 .inner-wrapper {
-  .scroll-area {
+  .control-scroll-area {
     mask-image: linear-gradient(
       to left,
       transparent 0%,
@@ -332,9 +331,9 @@ export default {
     }
   }
 
-  .scroll-area {
+  .control-scroll-area {
+    height: 44px;
     width: 100%;
-    //height: 48px;
     overflow-y: hidden;
     :deep(.select-control-wrapper) {
       border-radius: 50px;
@@ -377,7 +376,8 @@ export default {
     .artist-profile-wrapper {
       width: 100%;
     }
-    .scroll-area {
+    .control-scroll-area {
+      height: 36px;
       overflow-y: hidden !important;
       mask-image: linear-gradient(
         to left,

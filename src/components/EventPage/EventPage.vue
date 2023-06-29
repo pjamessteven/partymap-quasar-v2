@@ -699,7 +699,11 @@ export default {
     };
   },
   methods: {
-    ...mapActions(useEventStore, ['loadEvent', 'toggleFavorite']),
+    ...mapActions(useEventStore, [
+      'loadEvent',
+      'toggleFavorite',
+      'loadEventDate',
+    ]),
     toggleFavorite() {
       if (this.currentUser) {
         this.toggleFavorite();
@@ -729,7 +733,7 @@ export default {
     },
     onMouseWheel(e) {
       const up = e.direction === 'up';
-      if (this.enableSwipeDown && up && !q.screen.lt.sm) {
+      if (this.enableSwipeDown && up && !this.$q.screen.lt.sm) {
         this.preventMapZoom = true;
 
         this.$router.go(-1);
@@ -850,7 +854,10 @@ export default {
           (response.data.next_date &&
             response.data.next_date.id === eventDateId)
         ) {
+          console.log(1);
           if (!this.focusMarker && this.$route.name === 'EventPage') {
+            console.log(2);
+
             // // weird but necessary
             // only do this if focusedlatlng not already set before mounting this component
             // (by eventdatecard)
@@ -864,12 +871,15 @@ export default {
           (!response.data.next_date ||
             response.data.next_date.id !== eventDateId)
         ) {
+          console.log(3);
+
           // if navigating to specific date, load it
 
-          const eventDateResponse = await this.loadEventDate(id);
+          const eventDateResponse = await this.loadEventDate(eventDateId);
 
           if (!this.focusMarker && this.$route.name === 'EventPage') {
             // weird but necessary
+            console.log(4);
             // only do this if focusedlatlng not already set before mounting this component
             // (by eventdatecard)
             this.focusMarker = {

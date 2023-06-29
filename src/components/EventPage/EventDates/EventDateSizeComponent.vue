@@ -2,8 +2,8 @@
   <div
     v-if="selectedEventDate != null"
     class="flex row items-center no-wrap ed-inline-card editing-outline"
-    :class="[editing ? 'editing q-px-md' : '']"
-    @click="editing ? (showEditingDialog = true) : null"
+    :class="[editing || showMoreFields ? 'editing q-px-md' : '']"
+    @click="editing || showMoreFields ? (showEditingDialog = true) : null"
   >
     <q-icon
       :size="$q.screen.gt.sm ? '2em' : '1.5rem'"
@@ -18,13 +18,6 @@
         ~{{ selectedEventDate.size.toLocaleString('en-US') }}&nbsp;{{
           $t('event_date_inline.size_people')
         }}
-        <div
-          class="t4 link-hover underline q-mt-sm"
-          v-if="showMoreFields"
-          @click="showEditingDialog = true"
-        >
-          Change size
-        </div>
       </div>
       <div
         v-else

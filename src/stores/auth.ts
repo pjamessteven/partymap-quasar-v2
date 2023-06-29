@@ -5,6 +5,7 @@ import {
   logoutRequest,
   registerRequest,
   editUserRequest,
+  passwordResetRequest,
 } from 'src/api';
 import { PrivateUser } from 'src/types/autogen_types';
 
@@ -66,6 +67,21 @@ export const useAuthStore = defineStore('auth', {
         this.currentUser = null;
       } catch (error) {
         throw error;
+      }
+    },
+    async resetPassword(
+      token: string,
+      password: string,
+      passwordConfirm: string
+    ) {
+      try {
+        const response = await passwordResetRequest(token, {
+          password: password,
+          password_confirm: passwordConfirm,
+        });
+        this.currentUser = response.data;
+      } catch (e) {
+        throw e;
       }
     },
     async editUser(payload: any) {

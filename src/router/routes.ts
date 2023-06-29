@@ -121,7 +121,7 @@ const routes: RouteRecordRaw[] = [
       },
 
       {
-        path: '/user/:id',
+        path: '/user/:username',
         name: 'UserPage',
         component: () => import('src/components/UserPage/UserPage.vue'),
         props: true,

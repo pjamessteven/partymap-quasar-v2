@@ -567,7 +567,7 @@ import MultipleMediaSelector from 'components/MultipleMediaSelector.vue';
 import RrulePicker from 'components/RrulePicker.vue';
 import SelectArtistsComponent from 'components/EventPage/EventDates/Artists/SelectArtistsComponent.vue';
 import SelectTagsComponent from 'components/EventPage/Tags/SelectTagsComponent.vue';
-import { getEventsRequest } from 'src/api';
+import { getEventsRequest, addEventRequest } from 'src/api';
 import { useAuthStore } from 'src/stores/auth';
 import { mapState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
@@ -657,7 +657,7 @@ export default {
       this.$router.push({ name: 'Explore' });
       this.showSidebar = true;
     },
-    submitEvent() {
+    async submitEvent() {
       const progressDialog = this.$q.dialog({
         title: this.$t('add.uploading_event'),
         color: 'primary',
@@ -678,35 +678,30 @@ export default {
         this.event.next_event_date_description_attribute =
           this.detailedDescriptionAttribute;
       }
-
-      this.$store
-        .dispatch('main/addEvent', this.event)
-        .then((response) => {
-          progressDialog.hide();
-          this.$q
-            .dialog({
-              title: this.$t('add.pending_moderation'),
-              message: this.$t('add.pending_moderation_msg'),
-              color: 'primary',
-              persistent: false, // we want the user to not be able to close it
-            })
-            .onDismiss(() => {
-              this.$emit('closeDialog');
-              // go to event page
-              this.$router.push({
-                name: 'EventPage',
-                params: {
-                  id: response.data.id,
-                },
-                query: {
-                  name: response.data.name.replace(/ /g, '_'),
-                },
-              });
+      try {
+        const response = await addEventRequest(this.event);
+        this.$q
+          .dialog({
+            title: this.$t('add.pending_moderation'),
+            message: this.$t('add.pending_moderation_msg'),
+            color: 'primary',
+            persistent: false, // we want the user to not be able to close it
+          })
+          .onDismiss(() => {
+            this.$emit('closeDialog');
+            // go to event page
+            this.$router.push({
+              name: 'EventPage',
+              params: {
+                id: response.data.id,
+              },
+              query: {
+                name: response.data.name.replace(/ /g, '_'),
+              },
             });
-        })
-        .catch(() => {
-          progressDialog.hide();
-        });
+          });
+      } catch {}
+      progressDialog.hide();
     },
     onScrollMainContent(info) {
       this.mainContentScrollPosition = info.verticalPosition;

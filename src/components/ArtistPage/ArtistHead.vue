@@ -69,24 +69,7 @@ export default {
       }
     },
   },
-  computed: {
-    selectedDateRange: {
-      get() {
-        return this.$store.state.main.selectedDateRange;
-      },
-      set(val) {
-        this.$store.commit('main/setSelectedDateRange', val);
-      },
-    },
-    sortMethod: {
-      get() {
-        return this.$store.state.main.sortMethod;
-      },
-      set(val) {
-        this.$store.commit('main/setSortMethod', val);
-      },
-    },
-  },
+  computed: {},
   created() {},
 
   unmounted() {},

@@ -34,7 +34,8 @@
               class="flex column no-wrap scroll-content"
               :class="$q.screen.lt.sm ? 'q-px-sm ' : ''"
             >
-              <CurrentUserProfile
+              <UserProfile
+                :username="username"
                 :class="{
                   'q-mt-lg q-mb-lg q-px-md': $q.screen.gt.xs,
                   'q-mx-sm  q-my-md q-mb-md': $q.screen.lt.sm,
@@ -316,7 +317,7 @@ import _ from 'lodash';
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
 import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
-import CurrentUserProfile from './CurrentUserProfile.vue';
+import UserProfile from './UserProfile.vue';
 
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
@@ -334,9 +335,14 @@ export default {
     EventDateViewOptions,
     MenuWrapper,
     InnerLoading,
-    CurrentUserProfile,
+    UserProfile,
   },
-  props: { showControls: { default: false } },
+  props: {
+    showControls: { default: false },
+    username: {
+      default: null,
+    },
+  },
   mounted() {
     this.getInitialList();
   },
@@ -372,7 +378,7 @@ export default {
           await this.loadUserEventDates(
             this.mode,
             this.tense,
-            this.currentUser.username
+            this.username || this.currentUser.username
           );
           this.userEventDatesPage += 1;
           this.isLoadingDatesInitial = false;
@@ -424,10 +430,6 @@ export default {
       'userEventDatesPage',
       'userEventDatesHasNext',
     ]),
-
-    route() {
-      return this.$route;
-    },
   },
   created() {
     this.debouncedOnScrollMainContent = _.debounce(

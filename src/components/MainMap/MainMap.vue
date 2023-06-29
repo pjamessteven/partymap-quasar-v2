@@ -390,7 +390,7 @@ export default {
       this.mapCenter = bounds;
     },
     setMarkerFocusForEventPage(latlng, zoom) {
-      this.mapMarkers.remove();
+      this.mapMarkers?.remove();
       //this.mapMarkersPermanentTooltip.remove();
 
       var markers = [

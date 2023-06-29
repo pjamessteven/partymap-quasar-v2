@@ -18,10 +18,7 @@
                 size="2em"
               />
             </div>
-            <img
-              v-if="currentUser?.avatar?.thumb_url"
-              :src="currentUser.avatar.thumb_url"
-            />
+            <img v-if="user?.avatar?.thumb_url" :src="user.avatar.thumb_url" />
             <q-icon
               v-else-if="!editing"
               name="mdi-account-outline"
@@ -37,18 +34,16 @@
               class="inter bold t1"
               :class="$q.screen.lt.sm ? ' ' : ' text-h6'"
             >
-              @{{ currentUser.username
+              @{{ user.username
               }}<q-icon
                 name="mdi-check-decagram"
-                v-if="currentUser.hosted_events?.length > 0"
+                v-if="user.hosted_events?.length > 0"
                 class="q-ml-sm"
-              /><span v-if="currentUser.alias">
-                -&nbsp;{{ currentUser.alias }}
-              </span>
+              /><span v-if="user.alias"> -&nbsp;{{ user.alias }} </span>
             </div>
             <q-input
               v-if="editing"
-              v-model="username"
+              v-model="user.username"
               label="Username"
               maxlength="80"
             />
@@ -65,20 +60,20 @@
               class="inter t3 q-mt-sm"
               :class="$q.screen.lt.sm ? '' : '  text-large'"
             >
-              <span v-if="currentUser.description">
-                {{ currentUser.description }}
+              <span v-if="user.description">
+                {{ user.description }}
               </span>
             </div>
             <q-input
               v-else
-              v-model="description"
+              v-model="user.description"
               label="A little bit about yourself"
               maxlength="1000"
               counter
             />
           </div>
 
-          <div class="action-buttons flex row q-mt-md">
+          <div class="action-buttons flex row q-mt-md" v-if="!username">
             <div
               v-if="!editing"
               @click.stop="() => (editing = !editing)"
@@ -96,7 +91,7 @@
             </div>
             <div
               v-if="!editing"
-              @click.stop="showAddEventDialog()"
+              @click.stop="share()"
               class="nav-button flex items-center justify-between q-mr-sm"
             >
               <span v-if="$q.screen.lt.sm">Share</span><span v-else>Share</span>
@@ -184,13 +179,18 @@
         </q-card-section>
       </q-card>
     </q-dialog>
+    <input
+      :value="computedUrl"
+      ref="copyProfileUrlInput"
+      style="display: none"
+    />
   </div>
 </template>
 
 <script>
 import _ from 'lodash';
 import { toRaw } from 'vue';
-
+import { getUserRequest } from 'src/api';
 import MultipleMediaSelector from 'components/MultipleMediaSelector.vue';
 import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useSearchStore } from 'src/stores/search';
@@ -198,30 +198,54 @@ import { useMainStore } from 'src/stores/main';
 import { useAuthStore } from 'src/stores/auth';
 export default {
   components: { MultipleMediaSelector },
+  props: {
+    username: { type: String, default: undefined },
+  },
   data() {
     return {
       editing: false,
-      avatar: null,
       showAvatarDialog: false,
-      username: null,
-      alias: null,
-      description: null,
+      user: {
+        avatar: null,
+        username: null,
+        alias: null,
+        description: null,
+      },
     };
   },
   methods: {
     ...mapActions(useAuthStore, ['editUser']),
-    loadUserDetails() {
-      this.username = this.currentUser.username;
-      this.alias = this.currentUser.alias;
-      this.description = this.currentUser.description;
-      this.editing = false;
+    share() {
+      if (navigator.share) {
+        navigator.share({
+          title: this.username + "'s Calendar'",
+          text: 'Check out ' + this.user.username + "'s calendar on PartyMap",
+          url: this.computedUrl,
+        });
+      } else {
+        // copy url to clipboard
+        var copyText = this.$refs.copyProfileUrlInput;
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+        /* Copy the text inside the text field */
+        document.execCommand('copy');
+
+        /* Alert the copied text */
+        this.$q.notify('Copied link to clipboard');
+      }
+    },
+    loadCurrentUserDetails() {
+      this.user = this.currentUser;
+      this.user.editing = false;
     },
     selectFile(event) {
       const file = toRaw(event)?.[0];
       if (file) {
-        this.avatar = file;
+        this.user.avatar = file;
       } else {
-        this.avatar = null;
+        this.user.avatar = null;
       }
     },
     selectAvatar() {
@@ -238,7 +262,7 @@ export default {
         ok: false,
       });
       try {
-        await this.editUser({ avatar: this.avatar });
+        await this.editUser({ avatar: this.user.avatar });
       } catch {}
       progressDialog.hide();
       this.showAvatarDialog = false;
@@ -267,18 +291,29 @@ export default {
     ...mapState(useAuthStore, ['currentUser']),
     computedChanges() {
       return {
-        description: this.description || undefined,
-        alias: this.alias || undefined,
+        description: this.user.description || undefined,
+        alias: this.user.alias || undefined,
         username:
-          this.username !== this.currentUser.username
-            ? this.username
+          this.user.username !== this.currentUser.username
+            ? this.user.username
             : undefined,
       };
     },
+    computedUrl() {
+      if (this.user?.username) {
+        return 'https://partymap.com/user/' + this.user.username;
+      } else {
+        return '';
+      }
+    },
   },
-  mounted() {
+  async mounted() {
     if (this.currentUser) {
-      this.loadUserDetails();
+      this.loadCurrentUserDetails();
+    } else if (this.username) {
+      getUserRequest(this.username).then((response) => {
+        this.user = response.data;
+      });
     }
   },
 };

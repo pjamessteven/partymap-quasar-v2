@@ -36,6 +36,8 @@
 
 <script>
 import InnerLoading from 'src/components/InnerLoading.vue';
+import { useAuthStore } from 'src/stores/auth';
+import { mapActions, mapState } from 'pinia';
 
 export default {
   name: 'SetUsername',
@@ -54,35 +56,24 @@ export default {
     };
   },
   methods: {
-    setUsername() {
+    ...mapActions(useAuthStore, ['editUser']),
+    async setUsername() {
       this.loading = true;
-      this.$store.dispatch('main/editUser', { username: this.username }).then(
-        (response) => {
-          this.$q.notify(this.$t('auth.welcome') + ', ' + this.username + '!');
-          this.loading = false;
-          this.$router.push('/');
-        },
-        (error) => {
-          this.loading = false;
-          if (error.response.data.error.code === 'USERNAME_TAKEN') {
-            this.username_taken = true;
-          }
+      try {
+        await this.editUser({ username: this.username });
+        this.$q.notify(this.$t('auth.welcome') + ', ' + this.username + '!');
+        this.loading = false;
+        this.$router.push('/');
+      } catch (error) {
+        this.loading = false;
+        if (error.response.data.error.code === 'USERNAME_TAKEN') {
+          this.username_taken = true;
         }
-      );
+      }
     },
   },
   computed: {
-    settingsState: {
-      get() {
-        return this.$store.state.main.settings;
-      },
-      set(val) {
-        this.$store.commit('main/updateSettings', val);
-      },
-    },
-    currentUser() {
-      return this.$store.state.main.currentUser;
-    },
+    ...mapState(useAuthStore, ['currentUser']),
     usernameValidation() {
       if (this.username_taken) {
         return this.$t('errors.username_already_registered');
@@ -94,9 +85,6 @@ export default {
         return this.$t('auth.username_letters_and_numbers');
       } else return true;
     },
-  },
-  beforeMount() {
-    this.$store.dispatch('main/loadEventAttributes');
   },
 };
 </script>

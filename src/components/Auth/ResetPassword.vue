@@ -47,7 +47,7 @@
           :disable="!validation"
           :label="$t('auth.reset_password')"
           color="primary"
-          v-on:click="resetPassword"
+          v-on:click="reset"
         />
       </q-card-section>
     </q-card>
@@ -55,7 +55,9 @@
 </template>
 
 <script>
-import { passwordResetRequest } from 'src/api';
+import { mapActions, mapState, mapWritableState } from 'pinia';
+import { useAuthStore } from 'src/stores/auth';
+
 export default {
   name: 'ResetPassword',
   data() {
@@ -65,7 +67,9 @@ export default {
     };
   },
   methods: {
-    resetPassword() {
+    ...mapActions(useAuthStore, ['resetPassword']),
+
+    async reset() {
       const progressDialog = this.$q.dialog({
         title: this.$t('edit_event_date.submitting'),
         color: 'primary',
@@ -74,32 +78,26 @@ export default {
         persistent: true, // we want the user to not be able to close it
         ok: false,
       });
-      passwordResetRequest(this.$route.params.token, {
-        password: this.password,
-        password_confirm: this.password_confirm,
-      }).then(
-        (response) => {
-          this.$store.commit('main/setCurrentUser', response.data);
-          this.$store.commit('main/setAuthenticated', true);
-          progressDialog.hide();
-          this.$q
-            .dialog({
-              title: this.$t('auth.success'),
-              message:
-                this.$t('auth.your_pw_has_been_reset_and_logged_in_as') +
-                ' ' +
-                response.data.username,
-              color: 'primary',
-              cancel: false,
-            })
-            .onDismiss(() => {
-              this.$router.push({ name: 'Explore' });
-            });
-        },
-        () => {
-          progressDialog.hide();
-        }
-      );
+      try {
+        await this.resetPassword(
+          this.$route.params.token,
+          this.password,
+          this.password_confirm
+        );
+        progressDialog.hide();
+        this.$q
+          .dialog({
+            title: this.$t('auth.success'),
+            message: 'Your password has been reset and you are now logged in.',
+            color: 'primary',
+            cancel: false,
+          })
+          .onDismiss(() => {
+            this.$router.push({ name: 'Explore' });
+          });
+      } catch {
+        progressDialog.hide();
+      }
     },
     hideDialog() {
       this.$router.push({ name: 'Explore' });

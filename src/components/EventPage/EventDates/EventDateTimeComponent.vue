@@ -1,8 +1,11 @@
 <template>
   <div
     class="flex column no-wrap calendar editing-outline"
-    :class="[inline ? 'inline' : '', editing ? 'editing q-px-md' : '']"
-    @click="editing ? (showEditDialog = true) : expand()"
+    :class="[
+      inline ? 'inline' : '',
+      editing || showMoreFields ? 'editing q-px-md' : '',
+    ]"
+    @click="editing || showMoreFields ? (showEditDialog = true) : expand()"
   >
     <div
       class="flex row no-wrap grow items-center justify-between"
@@ -55,13 +58,6 @@
               )
             }}</span>
           </div>
-          <div
-            class="t4 link-hover underline q-mt-sm"
-            v-if="showMoreFields"
-            @click.stop="showEditDialog = true"
-          >
-            Change date
-          </div>
         </div>
         <div
           class="flex column q-ml-md"
@@ -74,15 +70,12 @@
                 monthYear(selectedEventDate.start_naive, selectedEventDate.tz)
               }}
             </span>
-
-            <span class="t4"> (Exact date TBC) </span>
-          </div>
-          <div
-            class="t4 link-hover underline q-mt-sm"
-            v-if="showMoreFields"
-            @click.stop="showEditDialog = true"
-          >
-            Confirm exact date
+            &nbsp;
+            <span
+              class="t4 link-hover underline"
+              @click.stop="showEditDialog = true"
+              >(Confirm exact date)
+            </span>
           </div>
         </div>
       </div>
@@ -118,7 +111,6 @@
     />
     <q-dialog
       v-model="showEditDialog"
-      v-if="editing || showMoreFields"
       transition-show="jump-up"
       transition-hide="jump-down"
     >

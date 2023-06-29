@@ -68,15 +68,18 @@
           v-for="(component, index) in visibleComponents"
           :key="component.type"
           class="flex column"
-          :class="editing ? 'q-gutter-sm' : ''"
+          :class="editing || showMoreFields ? 'q-gutter-sm' : ''"
         >
-          <q-separator v-if="index > 0" />
+          <q-separator v-if="index > 0 && !editing && !showMoreFields" />
 
           <component
             :is="component.type"
             v-bind="component.propsData"
             class="q-py-md"
-            :class="{ 'q-pl-md': $q.screen.gt.xs }"
+            :class="{
+              'q-pl-md': $q.screen.gt.xs,
+              'q-my-sm': editing || showMoreFields,
+            }"
           >
           </component>
         </div>
@@ -90,7 +93,7 @@
           "
           class="flex row items-center no-wrap link-hover ed-inline-card editing-outline q-py-md"
           :class="{ 'q-pl-md': $q.screen.gt.xs }"
-          @click="showMoreFields = !showMoreFields"
+          @click="addMissingInformation()"
           style="cursor: pointer"
         >
           <q-icon
@@ -140,7 +143,7 @@ import EventDateTimeComponent from 'components/EventPage/EventDates/EventDateTim
 import EventDateUrlComponent from 'components/EventPage/EventDates/EventDateUrlComponent.vue';
 import EventDateTicketUrlComponent from 'components/EventPage/EventDates/EventDateTicketUrlComponent.vue';
 
-import { mapActions, mapState } from 'pinia';
+import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
 
@@ -166,6 +169,9 @@ export default {
   },
   methods: {
     ...mapActions(useEventStore, ['loadEvent', 'toggleFavorite']),
+    addMissingInformation() {
+      this.showMoreFields = !this.showMoreFields;
+    },
   },
   watch: {
     selectedEventDate: {

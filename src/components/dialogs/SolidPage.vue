@@ -4,7 +4,7 @@
 
     <div class="solid-page-inner flex column no-wrap">
       <div
-        v-if="$q.screen.gt.xs"
+        v-if="$q.screen.gt.xs && $slots.title"
         class="inter bolder"
         :class="
           $q.screen.gt.xs

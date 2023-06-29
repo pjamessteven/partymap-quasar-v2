@@ -258,10 +258,10 @@ export default {
       .sidebar-content {
         background: $bi-2;
         //background: rgba(18, 18, 18, 0.68);
-        background: rgba(0, 0, 0, 0.4);
+        //background: rgba(0, 0, 0, 0.4);
 
-        backdrop-filter: blur(10px);
-        color: white;
+        //backdrop-filter: blur(10px);
+        //color: white;
 
         :deep(.nav-bar) {
         }
@@ -285,9 +285,9 @@ export default {
   .sidebar-wrapper {
     .sidebar {
       .sidebar-content {
-        background: rgba(100, 100, 100, 0.2);
-        backdrop-filter: blur(10px);
-        color: white;
+        //background: rgba(100, 100, 100, 0.2);
+        //backdrop-filter: blur(10px);
+        background: white;
         .sidebar-content-inner {
           background: white;
           border-top: 1px solid rgba(0, 0, 0, 0.1);
@@ -483,6 +483,10 @@ export default {
   .sidebar-wrapper {
     .sidebar {
       width: 90vw;
+      padding-bottom: 96px;
+      &.sidebar-mobile-expanded {
+        transform: translate3d(0, 96px, 0);
+      }
     }
   }
 }
@@ -493,6 +497,11 @@ export default {
       width: 66vw;
       min-width: 920px;
       max-width: 1024px;
+      padding-bottom: 64px;
+
+      &.sidebar-mobile-expanded {
+        transform: translate3d(0, 64px, 0);
+      }
     }
   }
 }
@@ -509,6 +518,7 @@ export default {
 @media only screen and (min-width: 1921px) {
   .sidebar-wrapper {
     .sidebar {
+      max-width: 1280px;
       padding-bottom: 128px;
       transform: translate3d(0, calc(100% - 298px), 0);
 

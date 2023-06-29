@@ -28,7 +28,7 @@
           <div class="t2" v-if="ed.date_confirmed">
             <span>{{ localDay(ed.start_naive, null) }}</span>
           </div>
-          <q-badge v-else class="q-my-xs" label="Date TBC" />
+          <span v-else class="t2">Date TBC</span>
           <div class="t2" style="text-align: center">
             <span v-if="ed.date_confirmed">{{
               localDate(ed.start_naive, null)
