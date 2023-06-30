@@ -42,6 +42,7 @@
             <div class="flex column no-wrap scroll-content q-px-xs">
               <div class="flex column no-wrap content">
                 <div class="flex row no-wrap">
+                  <!--
                   <ControlsComponent
                     class="controls-component grow"
                     :class="{
@@ -51,10 +52,7 @@
                     :showSelectedValue="true"
                     :showOnlySelected="false"
                   />
-                  <EventDateViewOptions
-                    :class="$q.screen.lt.sm && 'q-mt-sm '"
-                    v-if="$q.screen.gt.xs"
-                  />
+                  -->
                 </div>
                 <div
                   class="artist-profile-wrapper"
@@ -96,7 +94,7 @@
                   </div>
                   -->
                     <div
-                      class="header t1 inter bold"
+                      class="header t1 inter bold justify-between flex items-center"
                       :class="
                         $q.screen.lt.sm
                           ? 'q-pl-sm q-py-md'
@@ -104,7 +102,8 @@
                       "
                       v-if="!groupEventsByMonth && eventDates?.length > 0"
                     >
-                      Upcoming events in this area:
+                      <span>Upcoming events in this area:</span>
+                      <EventDateViewOptions v-if="$q.screen.gt.xs" />
                     </div>
                     <EventDateList
                       v-if="showResults && compactView"
@@ -177,7 +176,7 @@ import { mapActions, mapWritableState, mapState } from 'pinia';
 
 export default {
   components: {
-    ControlsComponent,
+    //ControlsComponent,
     ArtistProfile,
     //ArtistsComponent,
     EventDateList,

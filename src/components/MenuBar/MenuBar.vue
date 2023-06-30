@@ -1,5 +1,5 @@
 <template>
-  <div class="flex row menubar">
+  <div class="flex row menubar justify-between">
     <div
       class="menubar-background"
       :style="computedStyle"
@@ -27,7 +27,7 @@
         v-if="previousRouteName && this.$route.name !== 'Explore'"
       />
     </transition>
-
+    <SearchComponent />
     <transition
       appear
       enter-active-class="animated fadeIn"
@@ -41,6 +41,7 @@
 <script>
 import MenuBarLogo from './MenuBarLogo.vue';
 import MenuBarButtons from './MenuBarButtons.vue';
+import SearchComponent from 'src/components/SearchComponent.vue';
 import { useMainStore } from 'stores/main';
 import { mapState, mapWritableState } from 'pinia';
 export default {
@@ -48,6 +49,7 @@ export default {
   components: {
     MenuBarLogo,
     MenuBarButtons,
+    SearchComponent,
   },
 
   data() {
@@ -165,6 +167,7 @@ export default {
   //transition: opacity 0.15s;
   height: 62px;
   position: relative;
+
   .menubar-background {
     will-change: opacity;
 
@@ -174,7 +177,6 @@ export default {
     transition: opacity 0.3s ease;
   }
   .logo {
-    position: absolute;
     opacity: 1;
     transition: opacity 0.3s ease;
     pointer-events: all;

@@ -346,8 +346,8 @@ export default {
       rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
     .sidebar-content {
       .sidebar-content-inner {
-        //border-top-left-radius: 18px;
-        //border-top-right-radius: 18px;
+        border-top-left-radius: 18px;
+        border-top-right-radius: 18px;
         overflow: hidden;
         isolation: isolate;
         .sidebar-content-inner-shadow {
@@ -356,8 +356,8 @@ export default {
           width: 100%;
           z-index: 1;
           pointer-events: none;
-          //border-top-left-radius: 18px;
-          //border-top-right-radius: 18px;
+          border-top-left-radius: 18px;
+          border-top-right-radius: 18px;
         }
       }
     }
@@ -497,10 +497,10 @@ export default {
       width: 66vw;
       min-width: 920px;
       max-width: 1024px;
-      padding-bottom: 64px;
+      padding-bottom: 96px;
 
       &.sidebar-mobile-expanded {
-        transform: translate3d(0, 64px, 0);
+        transform: translate3d(0, 96px, 0);
       }
     }
   }

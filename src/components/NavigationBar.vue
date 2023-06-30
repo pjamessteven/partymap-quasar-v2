@@ -50,27 +50,8 @@
       >
         {{ computedPanelName }}
       </div>
-      <q-btn
-        v-if="sidebarPanel === 'explore'"
-        flat
-        style="margin-left: -8px"
-        class="q-px-sm q-m-sm"
-        @click.stop="() => getFineLocation()"
-      >
-        <template v-slot:default>
-          <q-tooltip
-            :content-class="
-              $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
-            "
-            class="text-large"
-            :offset="[10, 10]"
-          >
-            {{ $t('landing_page.improve_location') }}
-          </q-tooltip>
-        </template>
-      </q-btn>
     </div>
-
+    <!--
     <q-tabs
       @click.stop
       :content-class="$q.screen.gt.lg ? '' : ''"
@@ -133,7 +114,6 @@
         content-class="tab"
         :ripple="false"
       />
-      <!--
       <q-tab
         key="4"
         name="profile"
@@ -145,8 +125,8 @@
         :label="$q.screen.gt.xs ? undefined : 'You'"
         content-class="tab"
         :ripple="false"
-      />-->
-    </q-tabs>
+      />
+    </q-tabs>-->
   </div>
 </template>
 <script>
@@ -186,7 +166,11 @@ export default {
           }
           return 'Finding your location...';
         case 'explore':
-          return 'Explore';
+          if (this.showPanel) {
+            return 'Hide results';
+          } else {
+            return 'Show results';
+          }
         case 'favorites':
           return 'Your Calendar';
         case 'profile':

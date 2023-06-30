@@ -1,5 +1,5 @@
 <template>
-  <div class="menubar-content flex row justify-end items-stretch grow no-wrap">
+  <div class="menubar-content flex row justify-end items-stretch no-wrap">
     <!--
     <transition
       enter-active-class="animated fadeIn"
@@ -148,10 +148,6 @@ export default {
   }
 }
 
-.menubar-content {
-  width: 368px;
-  //pointer-events: all;
-}
 .q-btn {
   pointer-events: all;
 }
