@@ -113,7 +113,7 @@ export default {
         }
       } else {
         if (this.showPanel && this.$route.name === 'Explore')
-          return 'opacity: 0.5';
+          return 'opacity: 0.3';
         else return 'opacity: 0';
       }
     },
