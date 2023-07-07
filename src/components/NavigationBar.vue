@@ -1,6 +1,6 @@
 <template>
   <div
-    class="navigation-bar flex row no-wrap"
+    class="navigation-bar flex row no-wrap items-center"
     :class="$q.screen.gt.sm ? 'justify-between' : ''"
   >
     <div class="flex items-center q-pl-lg" v-if="$q.screen.gt.xs">
@@ -9,11 +9,15 @@
         flat
         style="margin-left: -8px"
         class="q-pa-md q-mr-sm"
-        @click.stop="() => getFineLocation()"
+        @click.stop="() => clickLocation()"
       >
         <template v-slot:default>
           <div v-if="!userLocationLoading" class="flex">
-            <q-icon name="mdi-crosshairs-gps" class="" v-if="fineLocation" />
+            <q-icon
+              name="mdi-crosshairs-gps"
+              class=""
+              v-if="fineLocation && sidebarPanel === 'nearby'"
+            />
             <q-icon name="mdi-crosshairs" class="" v-else />
           </div>
           <div v-else style="position: relative" class="flex">
@@ -25,6 +29,7 @@
             />
           </div>
           <q-tooltip
+            style="font-size: 1em !important"
             class=""
             :content-class="
               $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
@@ -36,25 +41,24 @@
         </template>
       </q-btn>
       <q-icon
-        v-if="sidebarPanel === 'explore' && $q.screen.gt.xs"
+        v-else-if="sidebarPanel === 'explore'"
         flat
-        style="margin-left: -8px"
         size="2rem"
-        class="q-px-sm q-mr-sm"
+        class="q-py-md q-mr-md q-p"
         :class="{ 'rotate-180': showPanel }"
         name="mdi-chevron-up"
       />
       <div
-        class="q-py-lg q-pr-md inter bolder text-h5"
+        class="q-py-lg q-pr-md inter bolder text-h6"
         style="text-transform: capitalize"
       >
         {{ computedPanelName }}
       </div>
     </div>
-    <!--
+
     <q-tabs
+      v-if="$q.screen.lt.sm"
       @click.stop
-      :content-class="$q.screen.gt.lg ? '' : ''"
       v-model="sidebarPanel"
       no-caps
       :indicator-color="
@@ -106,14 +110,7 @@
         content-class="tab"
         :ripple="false"
       />
-      <q-tab
-        key="4"
-        name="search"
-        :icon="sidebarPanel === 'search' ? 'mdi-magnify' : 'mdi-magnify'"
-        :label="$q.screen.gt.xs ? undefined : 'Search'"
-        content-class="tab"
-        :ripple="false"
-      />
+      <!--
       <q-tab
         key="4"
         name="profile"
@@ -125,8 +122,8 @@
         :label="$q.screen.gt.xs ? undefined : 'You'"
         content-class="tab"
         :ripple="false"
-      />
-    </q-tabs>-->
+      />-->
+    </q-tabs>
   </div>
 </template>
 <script>
@@ -146,6 +143,11 @@ export default {
   },
   methods: {
     ...mapActions(useMainStore, ['loadIpInfo', 'getFineLocation']),
+    clickLocation() {
+      this.getFineLocation();
+      this.sidebarPanel = 'nearby';
+      this.showPanel = true;
+    },
   },
 
   computed: {
@@ -162,17 +164,23 @@ export default {
       switch (this.sidebarPanel) {
         case 'nearby':
           if (this.userLocation) {
-            return 'Near ' + this.userLocationCity;
+            'Near ' + this.userLocationCity + ', ' + this.userLocationCountry;
           }
           return 'Finding your location...';
         case 'explore':
           if (this.showPanel) {
-            return 'Hide results';
+            return 'Show map';
           } else {
             return 'Show results';
           }
         case 'favorites':
-          return 'Your Calendar';
+          if (this.currentUser?.alias) {
+            return (
+              this.currentUser?.alias + ' - @' + this.currentUser?.username
+            );
+          } else {
+            return '@' + this.currentUser?.username;
+          }
         case 'profile':
           return 'Your profile';
         case 'search':
@@ -239,7 +247,6 @@ export default {
   //height: 62px;
   position: relative;
   :deep(.q-tabs) {
-    position: absolute;
     right: 12px;
 
     .q-tab {

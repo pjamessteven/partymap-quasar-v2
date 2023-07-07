@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100%">
     <q-btn
       @click="
         () => {
@@ -83,7 +83,7 @@
                 header
                 class="t3 q-pb-sm"
                 v-if="!query || query.length == 0"
-                >{{ $t('top_controls.top_artists_in_area') }}:</q-item-label
+                >Top artists worldwide:</q-item-label
               >
 
               <div
@@ -91,7 +91,9 @@
                 v-for="(artist, index) in artistOptions"
                 :key="index"
               >
-                <q-separator v-if="index > 0" />
+                <div class="q-px-md">
+                  <q-separator v-if="index > 0" />
+                </div>
                 <q-item
                   :active="
                     controlArtist.findIndex((x) => x.id == artist.id) > -1

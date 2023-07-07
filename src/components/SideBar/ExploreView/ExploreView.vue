@@ -144,7 +144,7 @@
         :style="
           $q.screen.lt.sm
             ? 'height: 100%; position: absolute; width: 100%; z-index: 500'
-            : 'height: 220px; position: absolute; width: 100%; z-index: 500'
+            : 'height: 160px; position: absolute; width: 100%; z-index: 500'
         "
       >
         <q-linear-progress

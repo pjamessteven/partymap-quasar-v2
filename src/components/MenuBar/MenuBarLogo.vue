@@ -1,6 +1,7 @@
 <template>
   <router-link
     :to="{ name: 'Explore' }"
+    @click="() => (sidebarPanel = 'nearby')"
     style="color: unset; text-decoration: none"
   >
     <transition
@@ -31,7 +32,7 @@
 
 <script>
 import { useMainStore } from 'src/stores/main';
-import { mapState } from 'pinia';
+import { mapWritableState } from 'pinia';
 
 export default {
   name: 'MenuBarLogo',
@@ -47,7 +48,7 @@ export default {
   },
   methods: {},
   computed: {
-    ...mapState(useMainStore, ['showSearchBox', 'sidebarPanel']),
+    ...mapWritableState(useMainStore, ['showSearchBox', 'sidebarPanel']),
   },
 };
 </script>

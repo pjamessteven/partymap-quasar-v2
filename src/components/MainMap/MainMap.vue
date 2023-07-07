@@ -102,6 +102,9 @@ export default {
   },
 
   watch: {
+    darkMode() {
+      this.initTileLayers();
+    },
     windowHeight() {
       this.invalidateMapSize();
     },
@@ -525,7 +528,7 @@ export default {
         this.labelLayer.addTo(toRaw(this.map));
         this.labelLayer.setOpacity(this.satelliteLabelLayerOpacity);
       }
-      this.map.fitWorld();
+      //this.map.fitWorld();
     },
     initMarkers() {
       this.markersLoaded = false;
@@ -624,6 +627,7 @@ export default {
       'userLocation',
       'sidebarPanel',
       'showPanel',
+      'darkMode',
     ]),
     ...mapState(useQueryStore, [
       'controlDateRange',

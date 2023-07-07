@@ -1,7 +1,7 @@
 <template>
   <div
     class="inner-wrapper flex column grow no-wrap"
-    :class="$q.screen.gt.xs ? ' q-pl-md' : ' t2'"
+    :class="$q.screen.gt.xs ? ' ' : ' t2'"
   >
     <q-scroll-area
       ref="scroll"
@@ -13,42 +13,58 @@
           : { bottom: '-8px', height: '0px' }
       "
     >
-      <div
-        class="flex row scroll-wrapper tag-controls"
-        :class="[
-          $q.screen.gt.xs
-            ? 'q-gutter-sm q-pr-md q-py-xs  no-wrap'
-            : 'q-gutter-sm q-px-sm  no-wrap',
-        ]"
-      >
+      <div class="flex row scroll-wrapper items-center justify-start no-wrap">
         <DateControl
           v-if="showDateControl"
           :key="1"
-          class="flex"
           :showSelectedValue="showSelectedValue"
         />
+        <div class="separator vertical" />
         <TagControl
           v-if="showTagControl"
           :key="2"
           :showSelectedValue="showSelectedValue"
           ref="tagControl"
         />
+        <div class="separator vertical" />
+
         <ArtistControl
           v-if="showArtistControl"
           :key="3"
           :showSelectedValue="showSelectedValue"
           ref="artistControl"
         />
+        <div class="separator vertical" />
+
         <SizeControl
           v-if="showSizeControl"
           :key="4"
           :showSelectedValue="showSelectedValue"
         />
+        <div class="separator vertical" />
+
         <DurationControl
           v-if="showDurationControl"
           :key="5"
           :showSelectedValue="showSelectedValue"
         />
+        <q-input
+          ref="search"
+          clearable
+          @clear="clearSearchResults"
+          dense
+          rounded
+          outlined
+          class="searchbar-input inter bold"
+          v-model="query"
+          @keyup.enter="() => $refs.search.blur()"
+          @update:model-value="onInput()"
+          label="Search places, events and more"
+        >
+          <template v-slot:prepend>
+            <q-icon name="mdi-magnify" class="q-my-md" />
+          </template>
+        </q-input>
         <!--
           <LocalityControl
             v-if="showLocalityControl"
@@ -58,6 +74,11 @@
           -->
       </div>
     </q-scroll-area>
+    <div class="search-button-wrapper q-ml-md flex items-center justify-center">
+      <div class="search-button">
+        <q-icon name="mdi-magnify" size="large"></q-icon>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -71,6 +92,7 @@ import LocalityControl from './LocalityControl.vue';
 import { mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useQueryStore } from 'src/stores/query';
+import { useSearchStore } from 'src/stores/search';
 
 export default {
   name: 'ControlsComponent',
@@ -83,6 +105,10 @@ export default {
     // LocalityControl,
   },
   watch: {
+    query() {
+      this.sidebarPanel = 'search';
+      this.showPanel = true;
+    },
     controlArtist(newVal) {
       if (newVal && newVal.length > 0 && this.$q.screen.lt.sm) {
         this.$refs.scroll.setScrollPosition(
@@ -115,7 +141,8 @@ export default {
     return {};
   },
   computed: {
-    ...mapWritableState(useMainStore, ['showPanel']),
+    ...mapWritableState(useSearchStore, ['query']),
+    ...mapWritableState(useMainStore, ['showPanel', 'sidebarPanel']),
     ...mapState(useQueryStore, [
       'controlDateRange',
       'controlFavorites',
@@ -189,58 +216,27 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .inner-wrapper {
-    // background: black;
-    // border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    .msg {
-      color: $ti-3;
-      font-weight: bold;
-      text-shadow: 1px 1px 2px black;
-      display: none;
+    .separator {
+      border-color: $bi-4;
     }
-    :deep(.select-control-wrapper) {
-      background: transparent;
-      color: rgba(255, 255, 255, 0.68);
-      text-shadow: 1px 1px 2px black;
-      background: rgba(48, 48, 48, 0.68);
+    :deep(.button-control) {
+      // background: black;
+      color: $ti-1;
 
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      .q-btn__content {
+        .close-icon-wrapper {
+          background: $bi-4;
+          color: white;
+        }
+      }
+
       .q-btn__wrapper {
         &:before {
           box-shadow: none;
         }
       }
       &.active {
-        //background: white !important;
-        color: $t-1 !important;
-        // font-weight: bold;
-        text-shadow: none !important;
-        border: 1px solid rgba(0, 0, 0, 1);
-      }
-    }
-
-    :deep(.tag) {
-      background: rgba(48, 48, 48, 0.68);
-      color: rgba(255, 255, 255, 0.68);
-      text-shadow: 1px 1px 2px black;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 2px 0px;
-      &.selected {
-        opacity: 1;
-        color: $t-1 !important;
-        background: white !important;
-        border: 1px solid rgba(0, 0, 0, 1);
-        text-shadow: none !important;
-
-        .tag-inner-wrapper {
-          opacity: 1;
-          .tag-inner {
-            font-weight: bold;
-          }
-        }
-      }
-
-      &:hover {
-        background: $bi-4;
+        background: $bi-3 !important;
       }
     }
   }
@@ -251,117 +247,126 @@ export default {
   $item-inactive-border: 1px solid rgba(255, 255, 255, 0.2);
 
   .inner-wrapper {
-    // border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    //border-left: 1px solid rgba(0, 0, 0, 0.05);
-    .separator-vertical {
-      background: rgba(0, 0, 0, 0.1) !important;
-      width: 1px;
+    .separator {
+      border-color: $b-4;
     }
-    .msg {
-      color: $t-3;
-      font-weight: bold;
-      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.2);
-      display: none;
-    }
-    :deep(.select-control-wrapper) {
-      background: rgba(255, 255, 255, 0.48);
-      color: $t-3;
-      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.48);
 
-      box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
-
+    :deep(.button-control) {
+      color: $t-1;
+      text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
+      /*
+      box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
+      background: rgba(255, 255, 255, 0.9);
       border: 1px solid rgba(255, 255, 255, 0.2);
+      */
+      //background: $b-2;
+      transition: none;
+      //box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
+      //box-shadow: none !important;
+      &::before {
+        box-shadow: none !important;
+      }
+      .q-btn__content {
+        .close-icon-wrapper {
+          background: $b-4;
+          color: black;
+        }
+      }
       .q-btn__wrapper {
         &:before {
           box-shadow: none;
         }
       }
       &.active {
-        background: white !important;
-        color: $t-1 !important;
-        // font-weight: bold;
-        border: 1px solid rgba(255, 255, 255, 0);
-      }
-    }
-
-    :deep(.tag) {
-      background: rgba(255, 255, 255, 0.48);
-      color: $t-3;
-      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.48);
-      box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      &.selected {
-        color: black !important;
-        background: white !important;
-        .tag-inner-wrapper {
-          .tag-inner {
-            font-weight: bold;
-          }
-        }
-      }
-    }
-    &.satellite-enabled {
-      :deep(.button-control) {
-        background: rgba(255, 255, 255, 0.68);
-        box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
+        background: $b-3 !important;
       }
     }
   }
 }
 
 .inner-wrapper {
+  width: 100%;
+  position: relative;
   .control-scroll-area {
+    height: 48px;
+    width: 100%;
+
     mask-image: linear-gradient(
       to left,
       transparent 0%,
-      white 64px,
-      white calc(100% - 20px),
+      transparent 64px,
+      white 96px,
+      white calc(100% - 64px),
       white 100%
     );
     overflow-y: hidden;
-  }
-  .artist-profile-wrapper {
-    padding-left: 16px;
-    padding-right: 16px;
-    .artist-profile {
-      width: 500px;
-      max-width: 100%;
-      //height: 200px;
-      border-radius: 9px !important;
-    }
-  }
 
-  .control-scroll-area {
-    height: 44px;
-    width: 100%;
-    overflow-y: hidden;
-    :deep(.select-control-wrapper) {
-      border-radius: 50px;
-      font-weight: 400;
-      padding: 0px 12px;
-    }
-
-    :deep(.tag) {
-      border-radius: 50px;
-
-      .tag-inner-wrapper {
-        padding: 0px 8px;
-        text-transform: capitalize;
-      }
-    }
     &.disable-scroll {
       overflow: visible;
       height: 200px;
       .scroll-wrapper {
         padding: 4px;
-        :deep(.tag) {
-          //height: 42px;
-        }
+      }
+    }
+
+    .scroll-wrapper {
+      height: 48px;
+      padding-right: 64px;
+      .searchbar-input {
+        margin-left: 16px;
+        width: 300px;
       }
     }
   }
+  .separator {
+    height: 16px;
+    border-left: 1px solid;
+  }
+  :deep(.button-control) {
+    height: 100%;
+    padding: 0px;
+    font-weight: 500;
+    font-family: Inter;
+    text-transform: capitalize;
+    font-size: normal;
+    border-radius: 0px !important;
+    box-shadow: none !important;
+    overflow: hidden;
 
-  width: 100%;
+    &.active {
+      // font-weight: 600;
+    }
+
+    .q-btn__wrapper {
+      padding: 0;
+    }
+    .q-btn__content {
+      .close-icon-wrapper {
+        background: white;
+        color: black;
+        height: 100%;
+        padding: 4px 16px 4px 12px;
+      }
+      .button-label {
+        padding: 0px 12px;
+      }
+      white-space: nowrap;
+      .q-icon {
+        margin-right: -6px;
+      }
+    }
+  }
+  .search-button-wrapper {
+    position: absolute;
+    right: 16px;
+    height: 100%;
+    .search-button {
+      padding: 4px 6px;
+      border-radius: 100%;
+      background: lightgrey;
+      color: black;
+    }
+  }
 }
 
 @media only screen and (max-width: 600px) {
@@ -372,10 +377,6 @@ export default {
 
   .inner-wrapper {
     mask-image: none;
-
-    .artist-profile-wrapper {
-      width: 100%;
-    }
     .control-scroll-area {
       height: 36px;
       overflow-y: hidden !important;

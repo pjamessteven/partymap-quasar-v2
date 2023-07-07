@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100%">
     <q-btn
       no-caps
       @click="
@@ -7,7 +7,7 @@
           showing = !showing;
         }
       "
-      class="button-control flex items-center date-control"
+      class="button-control flex items-center"
       :class="{
         active:
           controlDateRangeSelectedOption &&
@@ -657,6 +657,9 @@ export default {
 .body--light {
 }
 
+.button-control {
+  padding-left: 8px !important;
+}
 .date-picker {
   border-radius: 0px !important;
   border: none !important;

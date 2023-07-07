@@ -59,7 +59,7 @@
         >
       </div>
       <q-card-section
-        class="flex column items-center justify-center q-mb-none q-mt-lg"
+        class="flex column items-center justify-center q-pb-none q-mt-lg"
       >
         <q-icon name="las la-kiwi-bird" size="2em" class="t4" />
         <p class="t4 q-mt-md">
@@ -153,7 +153,7 @@ export default {
 
 <style lang="scss">
 .about-dialog {
-  max-height: 660px !important;
+  max-height: 680px !important;
   .header {
     position: sticky;
     top: 0;

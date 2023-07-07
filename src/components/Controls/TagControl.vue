@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100%">
     <q-btn
       no-caps
       class="button-control flex items-center"
@@ -88,12 +88,21 @@
             v-if="tagOptions && tagOptions.length > 0"
           >
             <q-list>
+              <q-item-label
+                header
+                class="t3 q-pb-sm inter"
+                v-if="!query || query.length == 0"
+                >Top tags worldwide:</q-item-label
+              >
+
               <div
                 class="flex column"
                 v-for="(tag, index) in tagOptions"
                 :key="index"
               >
-                <q-separator v-if="index > 0" />
+                <div class="q-px-md">
+                  <q-separator v-if="index > 0" />
+                </div>
                 <q-item
                   dense
                   v-close-popup

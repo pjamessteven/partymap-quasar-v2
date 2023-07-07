@@ -64,7 +64,6 @@
                           />
                         </div>
                         <q-tooltip
-                          class=""
                           :content-class="
                             $q.dark.isActive
                               ? 'bg-black text-white'
@@ -89,8 +88,8 @@
                     <span
                       class="inter bold"
                       :class="$q.screen.gt.xs ? ' t1 text-large' : 't3'"
-                      >Welcome to PartyMap, the global map of festivals and
-                      events!</span
+                      >Welcome to PartyMap, the global directory of festivals
+                      and events!</span
                     >
                     <q-icon
                       class="q-ml-md t1"
@@ -142,6 +141,7 @@
                     </div>
                   </div>
                 </div>
+                <!--
                 <div
                   class="nav-button-container flex row no-wrap q-px-md t1 q-mt-md"
                   :class="{
@@ -176,6 +176,7 @@
                     />
                   </div>
                 </div>
+                -->
                 <div class="q-px-lg" v-if="$q.screen.gt.xs && false">
                   <q-separator />
                 </div>

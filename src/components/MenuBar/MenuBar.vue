@@ -10,6 +10,55 @@
       :color="iconColor"
       v-if="!previousRouteName || this.$route.name === 'Explore'"
     />
+    <div
+      class="tab-wrapper"
+      v-if="$route.name === 'Explore' && $q.screen.gt.xs"
+    >
+       
+      <!--<div class="separator vertical" />-->
+      <q-tabs
+        class="tabs inter bolder"
+        :class="{
+          'light-button': iconColor === 'white',
+        }"
+        @click.stop
+        :content-class="$q.screen.gt.lg ? '' : ''"
+        v-model="sidebarPanel"
+        no-caps
+        :active-class="
+          $q.screen.lt.sm
+            ? $route.name === 'Explore'
+              ? undefined
+              : 'inactive-tab'
+            : 'active-tab'
+        "
+        indicator-color="transparent"
+      >
+        <q-tab
+          key="1"
+          name="nearby"
+          content-class="tab"
+          :label="$q.screen.gt.xs && false ? undefined : 'Nearby'"
+          :ripple="false"
+        />
+
+        <q-tab
+          key="2"
+          name="explore"
+          :label="$q.screen.gt.xs && false ? undefined : 'Explore'"
+          content-class="tab"
+          :ripple="false"
+        />
+
+        <q-tab
+          key="3"
+          name="favorites"
+          :label="$q.screen.gt.xs && false ? undefined : 'Calendar'"
+          content-class="tab"
+          :ripple="false"
+        />
+      </q-tabs>
+    </div>
     <transition
       appear
       enter-active-class="animated fadeIn slow"
@@ -27,13 +76,12 @@
         v-if="previousRouteName && this.$route.name !== 'Explore'"
       />
     </transition>
-    <SearchComponent />
     <transition
       appear
       enter-active-class="animated fadeIn"
       leave-active-class="animated fadeOut"
     >
-      <MenuBarButtons :color="iconColor" />
+      <MenuBarButtons :color="iconColor" class="right-buttons" />
     </transition>
   </div>
 </template>
@@ -41,7 +89,6 @@
 <script>
 import MenuBarLogo from './MenuBarLogo.vue';
 import MenuBarButtons from './MenuBarButtons.vue';
-import SearchComponent from 'src/components/SearchComponent.vue';
 import { useMainStore } from 'stores/main';
 import { mapState, mapWritableState } from 'pinia';
 export default {
@@ -49,7 +96,6 @@ export default {
   components: {
     MenuBarLogo,
     MenuBarButtons,
-    SearchComponent,
   },
 
   data() {
@@ -81,15 +127,20 @@ export default {
       'showSidebar',
       'menubarOpacity',
       'routerHistory',
-      'sidebarPanel',
+      'showPanel',
     ]),
+    ...mapWritableState(useMainStore, ['sidebarPanel']),
+
     ...mapWritableState(useMainStore, ['routerHistory']),
 
     previousRouteName() {
       if (this.routerHistory.length == 0) return null;
       const previousRoute = this.routerHistory[this.routerHistory.length - 1];
       if (previousRoute) {
-        if (previousRoute.meta?.noBackNavigation) {
+        if (
+          previousRoute.meta?.noBackNavigation &&
+          this.sidebarPanel !== 'explore'
+        ) {
           return null;
         } else return this.getPreviousRouteName(previousRoute);
       } else return null;
@@ -123,10 +174,14 @@ export default {
     },
     iconColor() {
       if (
-        this.$route.name === 'EventPage' &&
-        this.$q.screen.gt.xs &&
-        this.menubarOpacity === 1 &&
-        !this.$q.dark.isActive
+        (this.$route.name === 'EventPage' &&
+          this.$q.screen.gt.xs &&
+          this.menubarOpacity === 1 &&
+          !this.$q.dark.isActive) ||
+        (this.$q.screen.gt.xs &&
+          this.showPanel &&
+          this.$route.name === 'Explore' &&
+          !this.$q.dark.isActive)
       ) {
         return 'black';
       } else if (
@@ -151,6 +206,28 @@ export default {
       background: black;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
+    .tab-wrapper {
+      :deep(.q-tabs) {
+        .q-tab {
+          .q-tab__label {
+            // text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+          }
+          &.q-tab--active {
+            color: white;
+          }
+          &.q-tab--inactive {
+            color: $ti-2;
+          }
+          &:before,
+          &:after {
+            background-color: white;
+          }
+        }
+      }
+      .separator {
+        border-color: $bi-4;
+      }
+    }
   }
 }
 
@@ -160,6 +237,41 @@ export default {
       background: white;
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
+    .tab-wrapper {
+      :deep(.q-tabs) {
+        &.light-button {
+          .q-tab {
+            .q-tab__label {
+              // text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+            }
+            &.q-tab--active {
+              color: white;
+            }
+            &.q-tab--inactive {
+              color: $ti-2;
+            }
+            &:before,
+            &:after {
+              background-color: white;
+            }
+          }
+        }
+        .q-tab {
+          .q-tab__label {
+          }
+          &.q-tab--active {
+            color: black;
+          }
+          &:before,
+          &:after {
+            background-color: black;
+          }
+        }
+      }
+      .separator {
+        border-color: grey;
+      }
+    }
   }
 }
 
@@ -167,6 +279,7 @@ export default {
   //transition: opacity 0.15s;
   height: 62px;
   position: relative;
+  transition: height 0.3s ease;
 
   .menubar-background {
     will-change: opacity;
@@ -182,6 +295,96 @@ export default {
     pointer-events: all;
     min-height: 62px;
   }
+  .tab-wrapper {
+    pointer-events: all;
+    position: absolute;
+    left: 150px;
+    top: 0px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    .separator {
+      height: 24px;
+      margin-right: 12px;
+    }
+
+    :deep(.q-tabs) {
+      .q-tab {
+        //padding-top: 4px;
+        //padding-bottom: 4px;
+        padding: 2px;
+        margin: 4px;
+        //margin: 4px 4px;
+        //border-radius: 64px;
+        transition: all 0.3s;
+        color: white;
+        background: none !important;
+
+        opacity: 1 !important;
+        border: 1px solid transparent;
+        $duration: 0.4s;
+        $outDuration: 0.1s;
+        $distance: 10px;
+        $easeOutBack: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+        &:before,
+        &:after {
+          content: '';
+          position: absolute;
+          bottom: 2px;
+          left: 0;
+          right: 0;
+          height: 1px;
+          //background-color: black;
+        }
+        &:before {
+          opacity: 0;
+          transform: translateY(-$distance);
+          transition: transform 0s $easeOutBack, opacity 0s;
+        }
+        &:after {
+          opacity: 0;
+          transform: translateY($distance/2);
+          transition: transform $duration $easeOutBack, opacity $duration;
+        }
+
+        .q-focus-helper {
+          display: none;
+        }
+        .q-tab__label {
+          font-weight: 500 !important;
+        }
+        &.q-tab--active {
+          background: none !important;
+        }
+        &.q-tab--inactive {
+          color: grey;
+          // opacity: 0.3 !important;
+        }
+        &:hover {
+          background: none;
+          background: none !important;
+        }
+
+        &:hover,
+        &.q-tab--active {
+          &:before,
+          &:after {
+            opacity: 1;
+            transform: translateY(0);
+          }
+          &:before {
+            transition: transform $duration $easeOutBack, opacity $duration;
+          }
+          &:after {
+            transition: transform 0s $duration $easeOutBack,
+              opacity 0s $duration;
+          }
+        }
+      }
+    }
+  }
+
   .back-button {
     position: absolute;
     opacity: 1;
@@ -189,6 +392,11 @@ export default {
     pointer-events: all;
     min-height: 62px;
     border-radius: 0px !important;
+  }
+  .right-buttons {
+    position: absolute;
+    right: 0px;
+    height: 100%;
   }
 }
 // sm

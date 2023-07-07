@@ -22,6 +22,21 @@
       />
     </Transition>
     <MainMap />
+
+    <transition
+      appear
+      enter-active-class="animated fadeIn"
+      leave-active-class="animated fadeOut"
+    >
+      <SearchComponent
+        v-if="
+          ($q.screen.gt.sm && $route.name === 'Explore') ||
+          (sidebarPanel === 'explore' &&
+            $route.name === 'Explore' &&
+            !showPanel)
+        "
+      />
+    </transition>
     <!-- There's two router views because we want different transitions for different pages
   and we're lazy... -->
     <router-view
@@ -65,6 +80,7 @@
 import MainMap from 'components/MainMap/MainMap.vue';
 import SideBar from 'components/SideBar/SideBar.vue';
 import MenuBar from 'components/MenuBar/MenuBar.vue';
+import SearchComponent from 'src/components/Search/SearchComponent.vue';
 import MenuBarLogo from 'src/components/MenuBar/MenuBarLogo.vue';
 import NavigationBar from 'src/components/NavigationBar.vue';
 import { mapWritableState } from 'pinia';
@@ -78,6 +94,7 @@ export default {
     MenuBar,
     MenuBarLogo,
     NavigationBar,
+    SearchComponent,
   },
   methods: {},
   beforeRouteUpdate(to, from, next) {
@@ -99,6 +116,7 @@ export default {
       'showSidebar',
       'overlayOpacity',
       'showPanel',
+      'sidebarPanel',
     ]),
     computedOverlayStyle() {
       if (this.$route.name === 'EventPage') {
@@ -113,7 +131,7 @@ export default {
         }
       } else {
         if (this.showPanel && this.$route.name === 'Explore')
-          return 'opacity: 0.3';
+          return 'opacity: 1; pointer-events: all';
         else return 'opacity: 0';
       }
     },
@@ -126,7 +144,7 @@ export default {
     .default-overlay {
       background: linear-gradient(
         rgba(0, 0, 0, 0.68),
-        rgba(0, 0, 0, 0.5) 64px,
+        rgba(0, 0, 0, 0.6) 62px,
         transparent 128px,
         transparent
       );
@@ -150,13 +168,14 @@ export default {
     .default-overlay {
       background: linear-gradient(
         rgba(0, 0, 0, 0.68),
-        rgba(0, 0, 0, 0.5) 64px,
+        rgba(0, 0, 0, 0.6) 62px,
         transparent 128px,
         transparent
       );
     }
     .overlay {
-      background: black;
+      background: white;
+      //background: linear-gradient(transparent 5%, white 15%);
       /*
       background: linear-gradient(
         rgba(0, 0, 0, 0.48) 0px,
@@ -174,6 +193,7 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
+
   .default-overlay {
     z-index: 103;
     position: absolute;
@@ -190,6 +210,7 @@ export default {
     will-change: opacity;
     transition: opacity 0.3s;
   }
+
   .menubar {
     width: 100%;
     min-height: 62px !important;

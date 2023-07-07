@@ -172,6 +172,13 @@ export default {
     },
   },
   watch: {
+    route(newv, oldv) {
+      if (newv.name === 'Explore' && oldv.name === 'Explore') {
+        // simulate route change back to nearby view
+        this.sidebarPanel = 'nearby';
+        this.showPanel = true;
+      }
+    },
     mapMoving() {
       if (this.view === 'nearby' && !this.loadingUserLocation) {
         this.view = 'explore';
@@ -191,6 +198,8 @@ export default {
       }
       if (to === 'explore') {
         this.showPanel = false;
+        if (from === 'nearby') {
+        }
       }
       if (to === 'search') {
         this.showPanel = true;
@@ -228,6 +237,9 @@ export default {
       'eventDatesGroupedByMonth',
       'eventDatesLoading',
     ]),
+    route() {
+      return this.$route;
+    },
   },
 };
 </script>
@@ -243,7 +255,8 @@ export default {
   }
   .sidebar-wrapper {
     .sidebar {
-      //border: 1px solid $bi-4;
+      border-left: 1px solid $bi-4;
+      border-right: 1px solid $bi-4;
       border-top-left-radius: 18px;
       border-top-right-radius: 18px;
 
@@ -284,6 +297,8 @@ export default {
   }
   .sidebar-wrapper {
     .sidebar {
+      box-shadow: rgb(38, 57, 77) 0px 8px 30px -10px;
+
       .sidebar-content {
         //background: rgba(100, 100, 100, 0.2);
         //backdrop-filter: blur(10px);
@@ -292,7 +307,8 @@ export default {
           background: white;
           border-top: 1px solid rgba(0, 0, 0, 0.1);
           .sidebar-content-inner-shadow {
-            box-shadow: inset rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            //box-shadow: inset rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            box-shadow: inset rgba(100, 100, 111, 0.1) 0px 7px 29px 0px;
           }
         }
       }
@@ -327,7 +343,10 @@ export default {
     flex-shrink: 0;
     z-index: 500;
     left: 0px;
-    box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.2);
+    //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.3);
+    //box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    //  rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    //box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     max-height: 100%;
     transition: width 0.3s;
     overflow: visible;
@@ -336,14 +355,13 @@ export default {
     border-top-left-radius: 18px;
     border-top-right-radius: 18px;
     transition: all 0.3s ease;
-    transform: translate3d(0, calc(100% - 234px), 0);
+    transform: translate3d(0, calc(100% - 226px), 0);
     user-select: none;
     will-change: transform;
     padding-bottom: 64px;
-
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
-      rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
-      rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
+    //box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
+    //  rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
+    //  rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
     .sidebar-content {
       .sidebar-content-inner {
         border-top-left-radius: 18px;
@@ -407,7 +425,7 @@ export default {
       border-top-left-radius: 18px;
       border-top-right-radius: 18px;
       overflow: hidden;
-      box-shadow: 0px 0px 64px 32px rgba(0, 0, 0, 0.2);
+      //box-shadow: 0px 0px 64px 32px rgba(0, 0, 0, 0.2);
       .nav-bar {
         width: 100%;
         position: sticky;

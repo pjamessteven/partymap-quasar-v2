@@ -12,7 +12,7 @@ export default {
   components: {},
   meta: {
     // meta tags
-    title: 'PartyMap | The Global Map of Festivals and Events',
+    title: 'PartyMap | The Global Directory of Festivals and Events',
     meta: {
       viewport: {
         name: 'viewport',
@@ -306,42 +306,6 @@ body {
     }
   }
 
-  .button-control {
-    color: $t-1;
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
-    /*
-      box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      */
-    //background: $b-2;
-    transition: none;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    //box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
-    //box-shadow: none !important;
-    &::before {
-      box-shadow: none !important;
-    }
-    .q-btn__content {
-      .close-icon-wrapper {
-        background: $b-4;
-        color: black;
-      }
-    }
-    .q-btn__wrapper {
-      &:before {
-        box-shadow: none;
-      }
-    }
-    &.active {
-      border: 1px solid rgba(0, 0, 0, 0.1);
-
-      background: $b-3 !important;
-      // font-weight: bold;
-      //border: 1px solid rgba(0, 0, 0, 0.48);
-    }
-  }
-
   .separator {
     border-color: rgba(0, 0, 0, 0.1);
   }
@@ -457,42 +421,6 @@ body {
     background: $bi-3;
     &:hover {
       background: $bi-4;
-    }
-  }
-
-  .button-control {
-    background: black;
-    color: $ti-1;
-    //text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
-    /*
-      box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      */
-    // background: rgba(255, 255, 255, 0.68);
-    transition: none;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
-
-    .q-btn__content {
-      .close-icon-wrapper {
-        background: $bi-4;
-        color: white;
-      }
-    }
-
-    .q-btn__wrapper {
-      &:before {
-        box-shadow: none;
-      }
-    }
-    &.active {
-      border: 1px solid rgba(255, 255, 255, 0.1);
-
-      background: $bi-3 !important;
-      //color: $t-1 !important;
-      // font-weight: bold;
-      //border: 1px solid rgba(255, 255, 255, 0.8);
     }
   }
 
@@ -706,38 +634,6 @@ body {
   white-space: nowrap;
 }
 
-.button-control {
-  padding: 0px;
-  font-weight: 500;
-  font-family: Inter;
-  text-transform: capitalize;
-  font-size: normal;
-  border-radius: 9px !important;
-  overflow: hidden;
-  &.active {
-    // font-weight: 600;
-  }
-
-  .q-btn__wrapper {
-    padding: 0;
-  }
-  .q-btn__content {
-    .close-icon-wrapper {
-      background: white;
-      color: black;
-      height: 100%;
-      padding: 4px 16px 4px 12px;
-    }
-    .button-label {
-      padding: 0px 12px;
-    }
-    white-space: nowrap;
-    .q-icon {
-      margin-right: -6px;
-    }
-  }
-}
-
 .q-menu {
   border-radius: 9px !important;
   //max-height: 100vh !important;
@@ -920,10 +816,6 @@ body {
         text-align: center;
       }
     }
-  }
-
-  .button-control {
-    font-size: 0.9em;
   }
 
   .tag {
