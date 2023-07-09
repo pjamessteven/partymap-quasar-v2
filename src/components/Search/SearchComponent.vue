@@ -168,7 +168,7 @@ export default {
   }
 }
 .search-component {
-  z-index: 1000;
+  z-index: 4000;
   position: absolute;
   top: 24px;
   width: 100%;
@@ -182,11 +182,7 @@ export default {
     z-index: 1000;
     width: 100%;
     justify-content: center;
-    &:hover {
-      .controls-wrapper-inner {
-        background: rgba(255, 255, 255, 0.1);
-      }
-    }
+
     .location {
       opacity: 0;
       transition: opacity 0.3s ease;
@@ -222,8 +218,9 @@ export default {
     width: 100%;
     display: flex;
     justify-content: center;
-    top: 64px;
+    top: 72px;
     left: unset;
+    padding: 0 8px;
   }
 }
 </style>

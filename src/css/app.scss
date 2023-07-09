@@ -143,13 +143,11 @@
 @media only screen and (max-width: 600px) {
   .component-wrapper {
     .sticky-input {
-      padding-left: 16px;
-      padding-right: 16px;
     }
     .control-menu {
       max-height: 400px;
-      padding-left: 16px;
-      padding-right: 16px;
+      padding-left: 0px;
+      padding-right: 0px;
     }
   }
 }

@@ -2,7 +2,12 @@
   <div
     @click="this.$emit('swipe', undefined)"
     v-touch-swipe.mouse.vertical="handleSwipe"
-    :class="{ 'solid-bg': solidBg }"
+    :class="{
+      'solid-bg': solidBg,
+      'dark-handle':
+        $route.name === 'Explore' && showPanel && !$q.dark.isActive,
+      'no-border': $route.name === 'Explore' && showPanel && $q.dark.isActive,
+    }"
     class="handle-container flex justify-center items-center q-py-md"
   >
     <div class="handle-container-bg" />
@@ -11,6 +16,9 @@
 </template>
 
 <script>
+import { mapState, mapWritableState } from 'pinia';
+import { useMainStore } from 'src/stores/main';
+
 export default {
   props: ['solidBg'],
 
@@ -18,6 +26,9 @@ export default {
     return {
       menuShowing: false,
     };
+  },
+  computed: {
+    ...mapWritableState(useMainStore, ['showPanel']),
   },
   methods: {
     handleSwipe({ ...info }) {
@@ -31,7 +42,7 @@ export default {
 .body--dark {
   .handle-container {
     .handle-container-bg {
-      border-top: 1px solid rgba(255, 255, 255, 0.4) !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.4);
 
       //background: rgba(24, 24, 24, 0.48);
       //backdrop-filter: blur(10px);
@@ -52,7 +63,7 @@ export default {
 .body--light {
   .handle-container {
     .handle-container-bg {
-      border-top: 1px solid rgba(255, 255, 255, 0.4) !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.4);
 
       //background: rgb(26,26,26);
       //backdrop-filter: blur(10px);
@@ -77,6 +88,16 @@ export default {
   width: 100%;
   height: 16px;
   pointer-events: all;
+  &.no-border {
+    .handle-container-bg {
+      border-top: none;
+    }
+  }
+  &.dark-handle {
+    .handle {
+      background: rgba(0, 0, 0, 0.2);
+    }
+  }
 
   .handle-container-bg {
     overflow: hidden;

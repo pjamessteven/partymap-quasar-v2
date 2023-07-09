@@ -12,7 +12,10 @@
       id="sidebar"
       v-bind:class="{
         'sidebar-mobile-expanded': showPanel,
+        'sidebar-mobile-expanded-fullscreen': sidebarPanel === 'favorites',
         'sidebar-mobile-hidden': $q.screen.lt.sm && $route.name === 'EventPage',
+        'sidebar-mobile-shadow':
+          $q.screen.lt.sm && sidebarPanel === 'explore' && !showPanel,
       }"
     >
       <!--
@@ -22,10 +25,12 @@
           >Welcome to the global map of festivals and events!</span
         >
         -->
+      <!--
       <MobileSwipeHandle
         @swipe="onMobileSwipeHandle($event)"
-        v-if="$q.screen.lt.sm"
+        v-show="$q.screen.lt.sm && sidebarPanel === 'explore'"
       />
+      -->
       <div
         v-touch-swipe.mouse.down="
           enablePanelSwipeDown && showPanel ? handleSwipe : null
@@ -86,7 +91,7 @@ export default {
     NavigationBar,
     NearbyView,
     FavoritesView,
-    MobileSwipeHandle,
+    //MobileSwipeHandle,
   },
   async mounted() {
     this.wheelIndicator = new WheelIndicator({
@@ -557,20 +562,21 @@ export default {
         background: black;
       }
       :deep(.panels) {
-        box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
         width: 100%;
       }
     }
   }
   .body--light {
-    .sidebar {
-      box-shadow: none;
-      .sidebar-content {
-        background: white;
-      }
-      :deep(.panels) {
-        //box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
-        border-top: none !important;
+    .sidebar-wrapper {
+      .sidebar {
+        box-shadow: none;
+        .sidebar-content {
+          background: white;
+        }
+        :deep(.panels) {
+          //box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
+          border-top: none !important;
+        }
       }
     }
   }
@@ -578,25 +584,44 @@ export default {
   .sidebar-wrapper {
     padding: 0;
     overflow: hidden;
-
+    box-shadow: none;
     .sidebar {
-      box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
+      box-shadow: none;
 
       width: 100%;
       background: transparent;
       //margin-top: 48px;
-      transform: translate3d(0, calc(100% - 248px), 0);
+      transform: translate3d(0, calc(100% - 228px), 0);
 
       will-change: transform;
-      padding-bottom: 73px;
+      padding-bottom: 68px;
       border-left: none;
       border-right: none;
       overflow: visible;
-
+      border-top-left-radius: 0px;
+      border-top-right-radius: 0px;
+      &.sidebar-mobile-shadow {
+      }
       &.sidebar-mobile-expanded {
-        transform: translate3d(0, 80px, 0);
+        transform: translate3d(0, 128px, 0);
+        //padding-bottom: 128px;
+
         .mobile-dismiss-list {
           height: 200px;
+        }
+      }
+      &.sidebar-mobile-expanded-fullscreen {
+        transform: translate3d(0, 0px, 0);
+        // padding-bottom: 68px;
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+        .sidebar-content {
+          border-top-left-radius: 0px;
+          border-top-right-radius: 0px;
+          .sidebar-content-inner {
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+          }
         }
       }
       &.sidebar-mobile-hidden {
@@ -607,8 +632,10 @@ export default {
         backdrop-filter: unset !important;
         padding-top: unset;
         background: none !important;
+
         .sidebar-content-inner {
           overflow: hidden;
+          border-top: none !important;
 
           .sidebar-content-inner-shadow {
             display: none;

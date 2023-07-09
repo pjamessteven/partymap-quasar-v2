@@ -27,7 +27,7 @@
             }"
           >
             <MobileSwipeHandle
-              v-if="$q.screen.lt.sm"
+              v-if="$q.screen.lt.sm && false"
               @swipe="handleSwipe($event)"
               class="mobile-swipe-handle"
             />

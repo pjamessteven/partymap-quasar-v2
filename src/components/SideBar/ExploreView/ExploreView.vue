@@ -15,6 +15,15 @@
       "
     />
     -->
+    <q-icon
+      @click="() => (showPanel = !showPanel)"
+      v-if="$q.screen.lt.sm"
+      flat
+      size="1.5rem"
+      class="q-pa-md q-mr-xs mobile-panel-button t2"
+      :class="{ 'rotate-180': showPanel }"
+      name="mdi-chevron-up"
+    />
     <div class="touch-overlay" v-touch-swipe.vertical="handleSwipe" />
     <div
       class="event-list-inner"
@@ -39,8 +48,20 @@
           }"
         >
           <transition enter-active-class="animated fadeIn">
-            <div class="flex column no-wrap scroll-content q-px-xs">
+            <div class="flex column no-wrap scroll-content q-px-sm">
               <div class="flex column no-wrap content">
+                <div
+                  class="header t1 inter bold justify-between flex items-center"
+                  :class="
+                    $q.screen.lt.sm
+                      ? 'q-pl-sm q-py-md'
+                      : 'q-pl-md  q-py-md text-large'
+                  "
+                  v-if="$q.screen.lt.sm && (isLoadingInitial || !showResults)"
+                >
+                  <span>Searching in this area...</span>
+                </div>
+
                 <div class="flex row no-wrap">
                   <!--
                   <ControlsComponent
@@ -616,6 +637,13 @@ export default {
   }
 
   .event-list-vertical {
+    .mobile-panel-button {
+      position: absolute;
+      right: 0px;
+      top: 0px;
+      z-index: 5000;
+      pointer-events: all;
+    }
     .event-list-inner {
       .artists-component {
         height: 178px;
@@ -630,6 +658,8 @@ export default {
         }
         .scroll-content {
           //margin-top: -24px;
+          position: relative;
+
           .header {
             display: sticky;
             top: 0px;

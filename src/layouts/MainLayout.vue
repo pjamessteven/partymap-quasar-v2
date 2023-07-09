@@ -29,11 +29,10 @@
       leave-active-class="animated fadeOut"
     >
       <SearchComponent
-        v-if="
+        v-show="
           ($q.screen.gt.sm && $route.name === 'Explore') ||
-          (sidebarPanel === 'explore' &&
-            $route.name === 'Explore' &&
-            !showPanel)
+          (sidebarPanel === 'explore' && $route.name === 'Explore') ||
+          (sidebarPanel === 'nearby' && $route.name === 'Explore')
         "
       />
     </transition>
@@ -249,14 +248,14 @@ export default {
   .body--dark {
     .main-layout {
       .overlay {
-        background: rgba(0, 0, 0, 0.68);
+        background: black;
       }
     }
   }
   .body--light {
     .main-layout {
       .overlay {
-        background: rgba(0, 0, 0, 0.68);
+        background: white;
       }
     }
   }

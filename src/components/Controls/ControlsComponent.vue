@@ -14,12 +14,60 @@
       "
     >
       <div class="flex row scroll-wrapper items-center justify-start no-wrap">
+        <q-btn
+          style="padding-left: 8px"
+          no-caps
+          @click="
+            () => {
+              showing = !showing;
+            }
+          "
+          class="button-control flex items-center"
+          :class="{
+            active: sidebarPanel === 'search',
+          }"
+        >
+          <div class="flex items-center row no-wrap">
+            <div class="button-label flex row items-center row no-wrap">
+              <div class="q-mr-sm">
+                <i class="mdi mdi-magnify" />
+              </div>
+              <div>everything</div>
+            </div>
+          </div>
+        </q-btn>
+        <div class="separator vertical" />
+
         <DateControl
           v-if="showDateControl"
           :key="1"
           :showSelectedValue="showSelectedValue"
         />
         <div class="separator vertical" />
+        <q-btn
+          no-caps
+          @click="
+            () => {
+              showing = !showing;
+            }
+          "
+          class="button-control flex items-center"
+          :class="{
+            active: sidebarPanel === 'search',
+          }"
+        >
+          <div class="flex items-center row no-wrap">
+            <div class="button-label flex row items-center row no-wrap">
+              <div class="q-mr-sm">
+                <i class="las la-map-marker" />
+              </div>
+              <div>Places</div>
+            </div>
+          </div>
+        </q-btn>
+
+        <div class="separator vertical" />
+
         <TagControl
           v-if="showTagControl"
           :key="2"
@@ -378,20 +426,12 @@ export default {
   .inner-wrapper {
     mask-image: none;
     .control-scroll-area {
-      height: 36px;
+      height: 48px;
       overflow-y: hidden !important;
-      mask-image: linear-gradient(
-        to left,
-        transparent 0%,
-        white 20px,
-        white calc(100% - 20px),
-        white calc(100% - 8px),
-        transparent 100%
-      );
 
       .scroll-wrapper {
         overflow-y: hidden;
-        padding-left: 8px;
+        padding-left: 0px;
         padding-right: 24px;
       }
     }

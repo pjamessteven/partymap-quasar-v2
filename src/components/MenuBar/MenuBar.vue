@@ -181,8 +181,7 @@ export default {
           this.$q.screen.gt.xs &&
           this.menubarOpacity === 1 &&
           !this.$q.dark.isActive) ||
-        (this.$q.screen.gt.xs &&
-          this.showPanel &&
+        (this.showPanel &&
           this.$route.name === 'Explore' &&
           !this.$q.dark.isActive)
       ) {

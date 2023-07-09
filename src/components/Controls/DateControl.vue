@@ -39,7 +39,7 @@
         </div>
       </div>
       <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
-        <div class="calendar-header flex row items-center" style="">
+        <div class="calendar-header flex row items-start" style="">
           <q-list dense style="min-width: 100px" v-if="$q.screen.gt.xs">
             <q-item-label header class="q-pb-md">{{
               $t('top_controls.shortcuts')
@@ -658,7 +658,6 @@ export default {
 }
 
 .button-control {
-  padding-left: 8px !important;
 }
 .date-picker {
   border-radius: 0px !important;
@@ -672,7 +671,12 @@ export default {
   min-width: 654px;
   width: 648px;
   overflow: hidden;
-  border-radius: 18px;
+  border-radius: 9px;
+  .date-picker {
+    height: 274px;
+    flex-grow: 1;
+    border-radius: 18px;
+  }
 }
 
 @media only screen and (max-width: 600px) {
@@ -697,6 +701,7 @@ export default {
     justify-content: start;
 
     .date-picker {
+      height: 296px;
       margin-top: 8px;
       border-radius: 0px !important;
       border-top-right-radius: 0px !important;

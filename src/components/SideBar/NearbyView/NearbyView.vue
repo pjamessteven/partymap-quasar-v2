@@ -142,6 +142,7 @@
                   </div>
                 </div>
                 <div
+                  v-if="$q.screen.gt.xs"
                   class="nav-button-container flex row no-wrap q-px-md t1 q-mt-md"
                   :class="{
                     'q-mb-sm': $q.screen.lt.sm,
@@ -1303,6 +1304,7 @@ export default {
 
 @media (max-width: 600px) {
   .landing-page {
+    //padding-top: 124px;
     .map-gap {
       height: 150px;
       //font-size: 8pt;

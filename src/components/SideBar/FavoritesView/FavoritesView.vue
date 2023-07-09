@@ -602,6 +602,8 @@ export default {
   }
 
   .event-list-vertical {
+    padding-top: 64px !important;
+
     .event-list-inner {
       .artists-component {
         height: 178px;
