@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="selectedEventDate != null"
+    v-if="!!selectedEventDate"
     class="flex row items-center no-wrap ed-inline-card editing-outline"
     :class="[editing || showMoreFields ? 'editing q-px-md' : '']"
     @click="editing || showMoreFields ? (showEditingDialog = true) : null"

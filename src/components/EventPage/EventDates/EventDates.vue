@@ -55,7 +55,7 @@
     </div>
     <div
       class="flex column"
-      v-else-if="selectedEventDate"
+      v-else-if="!!selectedEventDate"
       :key="selectedEventDateIndex + 101"
     >
       <div class="inter bolder t2 text-large q-pr-md event-page-header">
@@ -220,6 +220,7 @@ export default {
     },
     computedComponents() {
       var eventDate = this.selectedEventDate;
+      if (!eventDate) return [];
       var components = [
         {
           type: 'EventDateTimeComponent',

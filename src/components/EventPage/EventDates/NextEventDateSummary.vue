@@ -25,7 +25,7 @@
             {{ localDay(ed?.start_naive, ed.tz) }}
             {{ localDate(ed?.start_naive, ed.tz) }}
           </span>
-          <span v-else>Date TBC</span>
+          <span v-else>Date to be confirmed</span>
           <!--
           <span class="t3">
             [{{ timeZoneAbbreviention(ed.event_start, ed.tz) }}]

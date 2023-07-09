@@ -9,7 +9,7 @@
       enter-active-class="animated fadeIn"
       leave-active-class="animated fadeOut"
     >
-      <div class="logo q-pa-md row no-wrap items-center" v-if="!hideLogo">
+      <div class="logo q-pa-md row no-wrap items-center">
         <img
           src="~assets/marker-dark.png"
           v-if="color === 'white'"

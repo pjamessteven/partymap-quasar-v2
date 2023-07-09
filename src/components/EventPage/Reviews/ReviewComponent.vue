@@ -3,7 +3,10 @@
     <div class="flex row t3 items-center">
       <RouterLink
         class="link-hover"
-        :to="{ name: 'UserPage', params: { id: review.creator.username } }"
+        :to="{
+          name: 'UserPage',
+          params: { username: review.creator.username },
+        }"
         >{{ review.creator.username }}</RouterLink
       >&nbsp;({{ timeAgo(review.created_at) }})
     </div>

@@ -564,7 +564,7 @@
                         class="link-hover underline"
                         :to="{
                           name: 'UserPage',
-                          params: { id: event.transaction.user.username },
+                          params: { username: event.transaction.user.username },
                         }"
                       >
                         {{ event.transaction.user.username }}

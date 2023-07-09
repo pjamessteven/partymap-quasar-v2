@@ -29,7 +29,7 @@
         class="q-mt-md"
       />
       <MultipleMediaSelector
-        v-show="review.media_items.length > 0"
+        v-show="review.media_items?.length > 0"
         class="media-select q-mt-lg"
         ref="mediaSelector"
         :showUploadButton="false"

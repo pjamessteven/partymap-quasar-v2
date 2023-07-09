@@ -8,14 +8,13 @@
     <MenuBarLogo
       class="logo"
       :color="iconColor"
-      v-if="!previousRouteName || this.$route.name === 'Explore'"
+      v-if="!previousRouteName || this.$q.screen.gt.xs"
     />
     <div
       class="tab-wrapper"
       v-if="$route.name === 'Explore' && $q.screen.gt.xs"
     >
        
-      <!--<div class="separator vertical" />-->
       <q-tabs
         class="tabs inter bolder"
         :class="{
@@ -64,17 +63,21 @@
       enter-active-class="animated fadeIn slow"
       leave-active-class="animated fadeOut"
     >
-      <q-btn
-        class="back-button inter bold"
-        :style="$q.screen.gt.xs ? 'font-size: 1rem !important' : ''"
-        flat
-        icon="mdi-chevron-left"
-        :label="previousRouteName"
-        :color="iconColor"
-        no-caps
-        @click="back()"
+      <div
+        class="back-button-wrapper flex items-center no-wrap"
         v-if="previousRouteName && this.$route.name !== 'Explore'"
-      />
+      >
+        <div class="separator vertical" v-if="$q.screen.gt.xs" />
+        <q-btn
+          class="back-button"
+          flat
+          icon="mdi-chevron-left"
+          :label="previousRouteName"
+          :color="iconColor"
+          no-caps
+          @click="back()"
+        />
+      </div>
     </transition>
     <transition
       appear
@@ -110,7 +113,7 @@ export default {
         if (this.sidebarPanel === 'explore' || this.sidebarPanel === 'search') {
           return 'Back to results';
         } else if (this.sidebarPanel === 'nearby') {
-          return 'Back to home';
+          return 'Back home';
         } else if (this.sidebarPanel === 'favorites') {
           return 'Back to your events';
         } else return null;
@@ -290,6 +293,7 @@ export default {
     transition: opacity 0.3s ease;
   }
   .logo {
+    z-index: 1;
     opacity: 1;
     transition: opacity 0.3s ease;
     pointer-events: all;
@@ -303,10 +307,6 @@ export default {
     height: 62px;
     display: flex;
     align-items: center;
-    .separator {
-      height: 24px;
-      margin-right: 12px;
-    }
 
     :deep(.q-tabs) {
       .q-tab {
@@ -385,14 +385,21 @@ export default {
     }
   }
 
-  .back-button {
+  .back-button-wrapper {
     position: absolute;
-    opacity: 1;
-    transition: opacity 0.3s ease;
-    pointer-events: all;
-    min-height: 62px;
-    border-radius: 0px !important;
+    left: 150px;
+    .separator {
+      height: 24px;
+    }
+    .back-button {
+      opacity: 1;
+      transition: opacity 0.3s ease;
+      pointer-events: all;
+      min-height: 62px;
+      border-radius: 0px !important;
+    }
   }
+
   .right-buttons {
     position: absolute;
     right: 0px;
@@ -425,7 +432,12 @@ export default {
   }
   .menubar {
     z-index: 1;
+    .back-button-wrapper {
+      left: 0px;
 
+      .back-button {
+      }
+    }
     &.search-expanded {
       .logo {
         opacity: 0;

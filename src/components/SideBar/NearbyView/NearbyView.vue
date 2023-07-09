@@ -34,7 +34,7 @@
                   </div>
                   <div
                     class="flex items-center no-wrap justify-between"
-                    style="width: 100%; margin-top: "
+                    style="width: 100%"
                   >
                     <span v-if="userLocation" class="ellipsis q-mr-sm">
                       {{ userLocationCity }}
@@ -141,14 +141,14 @@
                     </div>
                   </div>
                 </div>
-                <!--
                 <div
                   class="nav-button-container flex row no-wrap q-px-md t1 q-mt-md"
                   :class="{
                     'q-mb-sm': $q.screen.lt.sm,
-                    'q-mb-md text-large inter bold q-px-lg ': $q.screen.gt.xs,
+                    'q-mb-sm text-large inter bold q-px-lg ': $q.screen.gt.xs,
                   }"
                 >
+                  <!--
                   <div
                     flat
                     @click.stop="showAddEventDialog()"
@@ -162,12 +162,13 @@
                       :class="{ 'q-ml-md': $q.screen.gt.xs }"
                     />
                   </div>
-
+-->
                   <div
                     @click.stop="() => (sidebarPanel = 'explore')"
                     class="nav-button flex items-center justify-between q-mr-sm q-px-md q-py-sm"
                   >
-                    Explore the map
+                    Explore the map &nbsp;&#128527;
+
                     <q-icon
                       name="mdi-chevron-right"
                       size="1rem"
@@ -176,7 +177,6 @@
                     />
                   </div>
                 </div>
-                -->
                 <div class="q-px-lg" v-if="$q.screen.gt.xs && false">
                   <q-separator />
                 </div>
@@ -851,6 +851,7 @@ export default {
       'queryRadius',
       'eventDates',
       'eventDatesPage',
+      'eventDatesLoading',
     ]),
     ...mapState(useNearbyStore, [
       'loadingEverything',

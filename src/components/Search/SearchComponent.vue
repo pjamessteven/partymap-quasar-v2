@@ -210,6 +210,13 @@ export default {
     z-index: 1000;
   }
 }
+
+@media only screen and (min-width: 1921px) {
+  .search-component {
+    top: 32px;
+  }
+}
+
 @media only screen and (max-width: 1024px) {
   .search-component {
     width: 100%;

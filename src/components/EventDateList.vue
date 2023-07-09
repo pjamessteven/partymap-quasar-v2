@@ -118,7 +118,7 @@ interface Props {
   };
   groupByMonth?: boolean;
   hasNext: boolean;
-  loading: boolean;
+  loading?: boolean;
   disableEndOfResultsMessage?: boolean;
 }
 

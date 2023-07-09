@@ -158,15 +158,19 @@ export default {
       'userLocationLoading',
       'userLocationCity',
       'userLocation',
+      'userLocationCountry',
     ]),
     ...mapWritableState(useQueryStore, ['controlFavorites']),
     computedPanelName() {
       switch (this.sidebarPanel) {
         case 'nearby':
-          if (this.userLocation) {
-            'Near ' + this.userLocationCity + ', ' + this.userLocationCountry;
+          if (this.userLocationCity) {
+            return (
+              'Near ' + this.userLocationCity + ', ' + this.userLocationCountry
+            );
+          } else {
+            return 'Finding your location...';
           }
-          return 'Finding your location...';
         case 'explore':
           if (this.showPanel) {
             return 'Show map';

@@ -93,10 +93,10 @@ export default {
     ]),
     ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
     userGoing() {
-      return this.selectedEventDate.user_going;
+      return this.selectedEventDate?.user_going;
     },
     userInterested() {
-      return this.selectedEventDate.user_interested;
+      return this.selectedEventDate?.user_interested;
     },
     computedIcon() {
       if (this.userGoing) {
@@ -106,7 +106,7 @@ export default {
       } else return 'mdi-star-outline';
     },
     computedLabel() {
-      if (this.selectedEventDate.user_going) {
+      if (this.selectedEventDate?.user_going) {
         return 'Going';
       } else return 'Interested';
     },

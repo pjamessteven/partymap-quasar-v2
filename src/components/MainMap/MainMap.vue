@@ -174,7 +174,7 @@ export default {
     },
     route: {
       handler: function (to) {
-        if (this.map) {
+        if (toRaw(this.map)) {
           if (to.name === 'EventPage') {
             // enter event page
             if (this.mapMarkers && this.map.hasLayer(toRaw(this.mapMarkers))) {
