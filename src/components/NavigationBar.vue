@@ -3,12 +3,12 @@
     class="navigation-bar flex row no-wrap items-center"
     :class="$q.screen.gt.sm ? 'justify-between' : ''"
   >
-    <div class="flex items-center q-pl-lg" v-if="$q.screen.gt.xs">
+    <div class="flex items-center q-pl-lg q-py-md" v-if="$q.screen.gt.xs">
       <q-btn
         v-if="sidebarPanel === 'nearby'"
         flat
-        style="margin-left: -8px"
-        class="q-pa-md q-mr-sm"
+        style="margin-left: -12px"
+        class="q-mr-"
         @click.stop="() => clickLocation()"
       >
         <template v-slot:default>
@@ -44,18 +44,31 @@
         v-else-if="sidebarPanel === 'explore'"
         flat
         size="2rem"
-        class="q-py-md q-mr-md q-p"
+        class="q-mr-md q-p"
         :class="{ 'rotate-180': showPanel }"
         name="mdi-chevron-up"
       />
       <div
-        class="q-py-lg q-pr-md inter bolder text-h6"
-        style="text-transform: capitalize"
+        class="q-pr-md inter bolder"
+        style="text-transform: capitalize; font-size: 1.1rem"
       >
         {{ computedPanelName }}
       </div>
     </div>
+    <div
+      v-if="sidebarPanel === 'nearby' && $q.screen.gt.xs"
+      @click.stop="() => (sidebarPanel = 'explore')"
+      class="nav-button flex items-center justify-between q-mr-sm q-px-md q-py-sm"
+    >
+      Explore the map
 
+      <q-icon
+        name="mdi-chevron-right"
+        size="1rem"
+        class="q-ml-md"
+        :class="{ 'q-ml-md': $q.screen.gt.xs }"
+      />
+    </div>
     <q-tabs
       v-if="$q.screen.lt.sm"
       @click.stop

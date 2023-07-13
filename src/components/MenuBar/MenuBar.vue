@@ -5,11 +5,7 @@
       :style="computedStyle"
       v-if="!$route.meta.mapOverlay || this.$route.name !== 'Explore'"
     />
-    <MenuBarLogo
-      class="logo"
-      :color="iconColor"
-      v-if="!previousRouteName || this.$q.screen.gt.xs"
-    />
+    <MenuBarLogo class="logo" :color="iconColor" v-if="!previousRouteName" />
     <div
       class="tab-wrapper"
       v-if="$route.name === 'Explore' && $q.screen.gt.xs"
@@ -386,7 +382,7 @@ export default {
 
   .back-button-wrapper {
     position: absolute;
-    left: 150px;
+    left: 0px;
     .separator {
       height: 24px;
     }

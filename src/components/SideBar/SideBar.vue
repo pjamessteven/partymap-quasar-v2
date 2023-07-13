@@ -1,10 +1,11 @@
 <template>
   <div class="flex sidebar-wrapper">
+    <!--
     <div
       class="mobile-dismiss-list-background"
       :class="{ expanded: showPanel }"
     />
-
+-->
     <div
       ref="sidebar"
       v-touch-swipe.mouse.up="!showPanel ? handleSwipe : null"
@@ -302,18 +303,25 @@ export default {
   }
   .sidebar-wrapper {
     .sidebar {
-      box-shadow: rgb(38, 57, 77) 0px 8px 30px -10px;
+      //box-shadow: rgb(38, 57, 77) 0px 8px 30px -10px;
+      box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px,
+        rgba(0, 0, 0, 0.15) 0px 7px 20px 3px,
+        rgba(0, 0, 0, 0.1) 0px -3px 0px inset;
 
+      //box-shadow: rgba(50, 50, 105, 0.15) 0px 0px 5px 0px,
+      //  rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+      //border: 1px solid rgba(0, 0, 0, 0.1);
       .sidebar-content {
         //background: rgba(100, 100, 100, 0.2);
         //backdrop-filter: blur(10px);
         background: white;
         .sidebar-content-inner {
           background: white;
-          border-top: 1px solid rgba(0, 0, 0, 0.1);
           .sidebar-content-inner-shadow {
             //box-shadow: inset rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-            box-shadow: inset rgba(100, 100, 111, 0.1) 0px 7px 29px 0px;
+            // heavy box-shadow: inset rgba(100, 100, 111, 0.1) 0px 7px 29px 0px;
+            box-shadow: inset rgba(100, 100, 100, 0.1) 0px 8px 10px -5px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
           }
         }
       }
@@ -553,16 +561,23 @@ export default {
 }
 @media only screen and (max-width: 600px) {
   .body--dark {
-    .hover-indicator-line {
-    }
-    .sidebar {
-      border: none !important;
-      box-shadow: none;
-      .sidebar-content {
-        background: black;
+    .sidebar-wrapper {
+      .hover-indicator-line {
       }
-      :deep(.panels) {
-        width: 100%;
+      .sidebar {
+        border: none;
+        box-shadow: none;
+        border-top: 1px solid transparent;
+
+        &.sidebar-mobile-shadow {
+          border-top: 1px solid $bi-4;
+        }
+        .sidebar-content {
+          background: black;
+        }
+        :deep(.panels) {
+          width: 100%;
+        }
       }
     }
   }
@@ -570,6 +585,7 @@ export default {
     .sidebar-wrapper {
       .sidebar {
         box-shadow: none;
+
         .sidebar-content {
           background: white;
         }
@@ -598,12 +614,13 @@ export default {
       border-left: none;
       border-right: none;
       overflow: visible;
-      border-top-left-radius: 0px;
-      border-top-right-radius: 0px;
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
       &.sidebar-mobile-shadow {
+        //box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
       }
       &.sidebar-mobile-expanded {
-        transform: translate3d(0, 128px, 0);
+        transform: translate3d(0, 120px, 0);
         //padding-bottom: 128px;
 
         .mobile-dismiss-list {

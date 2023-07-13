@@ -79,20 +79,23 @@
                 </div>
                 <div
                   class="flex message"
-                  :class="$q.screen.gt.xs ? 'q-mx-lg q-mt-sm  ' : 'q-mx-md  '"
+                  :class="
+                    $q.screen.gt.xs ? 'q-mx-lg q-mt-sm  q-mb-sm ' : 'q-mx-md  '
+                  "
                   @click="showMessage = !showMessage"
                 >
                   <div
                     class="flex justify-between grow items-center no-wrap location-header q-py-md"
                   >
                     <span
-                      class="inter bold"
-                      :class="$q.screen.gt.xs ? ' t1 text-large' : 't3'"
+                      class="inter"
+                      :class="$q.screen.gt.xs ? ' t1 bold ' : 't3'"
                       >Welcome to PartyMap, the global directory of festivals
                       and events!</span
                     >
                     <q-icon
-                      class="q-ml-md t1"
+                      class="q-ml-md"
+                      :class="$q.screen.gt.xs ? ' t1 ' : 't3'"
                       size="1.5rem"
                       :name="
                         !showMessage ? 'mdi-chevron-down' : 'mdi-chevron-up'
@@ -142,7 +145,7 @@
                   </div>
                 </div>
                 <div
-                  v-if="$q.screen.gt.xs"
+                  v-if="$q.screen.gt.xs && false"
                   class="nav-button-container flex row no-wrap q-px-md t1 q-mt-md"
                   :class="{
                     'q-mb-sm': $q.screen.lt.sm,
@@ -163,7 +166,6 @@
                       :class="{ 'q-ml-md': $q.screen.gt.xs }"
                     />
                   </div>
--->
                   <div
                     @click.stop="() => (sidebarPanel = 'explore')"
                     class="nav-button flex items-center justify-between q-mr-sm q-px-md q-py-sm"
@@ -177,6 +179,7 @@
                       :class="{ 'q-ml-md': $q.screen.gt.xs }"
                     />
                   </div>
+                  -->
                 </div>
                 <div class="q-px-lg" v-if="$q.screen.gt.xs && false">
                   <q-separator />
@@ -213,15 +216,13 @@
                       >
                         <div
                           class="q-py-md location-header flex justify-between"
-                          :class="
-                            $q.screen.gt.xs ? 'q-px-lg text-large' : 'q-px-md'
-                          "
+                          :class="$q.screen.gt.xs ? 'q-px-lg text-' : 'q-px-md'"
                         >
-                          <div class="t1 text- inter bold">
+                          <div class="t1 text- inter semibold">
                             Your upcoming events:
                           </div>
                           <div
-                            class="link-hover t3 inter bold"
+                            class="link-hover t3 inter semibold"
                             @click="() => (sidebarPanel = 'favorites')"
                           >
                             View all <q-icon name="mdi-chevron-right" />
@@ -273,18 +274,18 @@
                         <div
                           class="q-py-md location-header"
                           :class="
-                            $q.screen.gt.xs
-                              ? 'q-pl-lg q-mt- text-large'
-                              : 'q-pl-md'
+                            $q.screen.gt.xs ? 'q-pl-lg q-mt- text-' : 'q-pl-md'
                           "
                         >
-                          <div class="t1 text- inter bold">
+                          <div class="t1 text- inter semibold">
                             Top tags in your area:
                           </div>
                         </div>
                         <div
-                          class="q-mb-sm"
-                          :class="$q.screen.gt.xs ? 'q-pl-lg' : 'q-pl-md'"
+                          class=""
+                          :class="
+                            $q.screen.gt.xs ? 'q-pl-lg q-mb-sm' : 'q-pl-md'
+                          "
                           v-if="nearbyTags && nearbyTags.length > 0"
                         >
                           <q-scroll-area
@@ -334,14 +335,16 @@
                         v-else-if="tagOptions?.length > 0"
                       >
                         <div
-                          class="q-py-md header q-mt-sm"
-                          :class="$q.screen.gt.xs ? ' text-large' : ''"
+                          class="q-py-md location-header"
+                          :class="
+                            $q.screen.gt.xs ? 'q-pl-lg q-mt- text-' : 'q-pl-md'
+                          "
                         >
-                          <div class="t1 text- inter bold q-pl-md">
+                          <div class="t1 text- inter semibold">
                             Top tags around the world:
                           </div>
                         </div>
-                        <div class="q-pl-md q-mb-sm">
+                        <div :class="$q.screen.gt.xs ? 'q-pl-lg' : 'q-pl-md'">
                           <q-scroll-area
                             horizontal
                             class="tag-scroll-area"
@@ -391,10 +394,8 @@
                         :style="$q.screen.gt.xs ? 'margin-top: -16px' : ''"
                       >
                         <div
-                          class="t1 location-header q-py-md inter bold"
-                          :class="
-                            $q.screen.gt.xs ? 'q-pl-lg text-large' : 'q-pl-md'
-                          "
+                          class="t1 location-header q-py-md inter semibold"
+                          :class="$q.screen.gt.xs ? 'q-pl-lg text-' : 'q-pl-md'"
                         >
                           Artists playing nearby:
                         </div>
@@ -414,10 +415,8 @@
                         v-else-if="artistOptions?.length > 0"
                       >
                         <div
-                          class="t1 location-header q-py-md inter bold"
-                          :class="
-                            $q.screen.gt.xs ? 'q-pl-lg text-large' : 'q-pl-md'
-                          "
+                          class="t1 location-header q-py-md inter semibold"
+                          :class="$q.screen.gt.xs ? 'q-pl-lg text-' : 'q-pl-md'"
                         >
                           Top artists worldwide:
                         </div>
@@ -432,10 +431,8 @@
                       <!-- NEARBY EVENTS -->
 
                       <div
-                        class="t1 inter bold location-header q-py-sm flex row items-center justify-between"
-                        :class="
-                          $q.screen.gt.xs ? 'q-pl-lg text-large' : 'q-pl-md'
-                        "
+                        class="t1 inter semibold location-header q-py-sm flex row items-center justify-between"
+                        :class="$q.screen.gt.xs ? 'q-pl-lg text-' : 'q-pl-md'"
                       >
                         <div class="flex items-center">
                           <div class="">
@@ -511,10 +508,8 @@
                       <!-- ALL EVENTS -->
 
                       <div
-                        class="t1 inter bold location-header q-py-md flex row items-center justify-between"
-                        :class="
-                          $q.screen.gt.xs ? 'q-pl-sm text-large' : 'q-pl-sm'
-                        "
+                        class="t1 inter semibold location-header q-py-md flex row items-center justify-between"
+                        :class="$q.screen.gt.xs ? 'q-pl-sm text-' : 'q-pl-sm'"
                         v-if="eventDates && eventDates.length > 0"
                       >
                         <!--<div class="separator" /> -->
@@ -1248,7 +1243,7 @@ export default {
       }
     }
     .tag-scroll-area {
-      height: 96px;
+      height: 90px;
       mask-image: linear-gradient(to left, transparent 0px, white 64px);
       width: 100%;
       .tag {
@@ -1289,9 +1284,9 @@ export default {
 
 @media only screen and (min-width: 1921px) {
   .tag-scroll-area {
-    margin-bottom: 16px;
+    // margin-bottom: 16px;
     .tag {
-      font-size: 1rem;
+      //font-size: 1rem;
     }
   }
   .nav-button-container {

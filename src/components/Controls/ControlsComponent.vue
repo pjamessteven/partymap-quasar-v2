@@ -15,13 +15,13 @@
     >
       <div class="flex row scroll-wrapper items-center justify-start no-wrap">
         <q-btn
-          style="padding-left: 8px"
           no-caps
           @click="
             () => {
               showing = !showing;
             }
           "
+          style="padding-left: 8px"
           class="button-control flex items-center"
           :class="{
             active: sidebarPanel === 'search',
@@ -96,6 +96,8 @@
           :key="5"
           :showSelectedValue="showSelectedValue"
         />
+        <div class="separator vertical" />
+
         <q-input
           ref="search"
           clearable
@@ -426,13 +428,33 @@ export default {
   .inner-wrapper {
     mask-image: none;
     .control-scroll-area {
-      height: 48px;
+      height: 44px;
       overflow-y: hidden !important;
-
+      mask-image: linear-gradient(
+        to left,
+        transparent 0%,
+        transparent 48px,
+        white 96px,
+        white calc(100% - 64px),
+        white 100%
+      );
       .scroll-wrapper {
+        height: 44px;
         overflow-y: hidden;
         padding-left: 0px;
         padding-right: 24px;
+      }
+    }
+    .search-button-wrapper {
+      position: absolute;
+      right: 8px;
+      height: 100%;
+    }
+    :deep(.button-control) {
+      .button-label {
+        :first-child {
+          //display: none
+        }
       }
     }
   }

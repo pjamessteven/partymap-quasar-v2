@@ -250,6 +250,16 @@ export default {
       .overlay {
         background: black;
       }
+      .default-overlay {
+        background: linear-gradient(
+          rgba(0, 0, 0, 0.68),
+          rgba(0, 0, 0, 0.6) 62px,
+          transparent 128px,
+          transparent calc(100% - 274px),
+          rgba(0, 0, 0, 0.68) calc(100% - 200px),
+          rgba(0, 0, 0, 0.68) 100%
+        );
+      }
     }
   }
   .body--light {
@@ -257,12 +267,23 @@ export default {
       .overlay {
         background: white;
       }
+      .default-overlay {
+        background: linear-gradient(
+          rgba(0, 0, 0, 0.68),
+          rgba(0, 0, 0, 0.6) 62px,
+          transparent 128px,
+          transparent calc(100% - 274px),
+          rgba(0, 0, 0, 0.68) calc(100% - 200px),
+          rgba(0, 0, 0, 0.68) 100%
+        );
+      }
     }
   }
   .main-layout {
     .main-layout-router {
       padding-top: 62px;
     }
+
     .overlay {
       // transition: opacity 0.3s;
     }

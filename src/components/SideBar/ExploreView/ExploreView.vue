@@ -51,11 +51,9 @@
             <div class="flex column no-wrap scroll-content q-px-sm">
               <div class="flex column no-wrap content">
                 <div
-                  class="header t1 inter bold justify-between flex items-center"
+                  class="header t1 inter justify-between flex items-center"
                   :class="
-                    $q.screen.lt.sm
-                      ? 'q-pl-sm q-py-md'
-                      : 'q-pl-md  q-py-md text-large'
+                    $q.screen.lt.sm ? 'q-pl-sm q-py-md' : 'q-pl-md  q-py-md '
                   "
                   v-if="$q.screen.lt.sm && (isLoadingInitial || !showResults)"
                 >
@@ -115,11 +113,11 @@
                   </div>
                   -->
                     <div
-                      class="header t1 inter bold justify-between flex items-center"
+                      class="header t1 inter semibold justify-between flex items-center"
                       :class="
                         $q.screen.lt.sm
                           ? 'q-pl-sm q-py-md'
-                          : 'q-pl-md  q-py-md text-large'
+                          : 'q-pl-md  q-pt-md q-pb-sm '
                       "
                       v-if="!groupEventsByMonth && eventDates?.length > 0"
                     >
@@ -155,7 +153,7 @@
           $q.screen.gt.xs && (isLoadingInitial || (mapMoving && !blockUpdates))
         "
         style="height: 100%; position: absolute; width: 100%; z-index: 500"
-        class="t4 inter bold q-mt-md event-date-center flex grow justify-center"
+        class="t4 inter semibold q-mt-md event-date-center flex grow justify-center"
       >
         Loading...
       </div>
@@ -637,10 +635,11 @@ export default {
   }
 
   .event-list-vertical {
+    margin-top: 4px;
     .mobile-panel-button {
       position: absolute;
       right: 0px;
-      top: 0px;
+      top: -4px;
       z-index: 5000;
       pointer-events: all;
     }

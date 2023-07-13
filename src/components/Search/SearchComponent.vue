@@ -146,7 +146,7 @@ export default {
     color: $t-1;
   }
   .controls-wrapper-inner {
-    box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
 
     background: white;
     color: $t-1;
@@ -218,9 +218,20 @@ export default {
     width: 100%;
     display: flex;
     justify-content: center;
-    top: 72px;
+    top: 68px;
     left: unset;
-    padding: 0 8px;
+    padding: 0 16px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .body--light {
+  }
+  .body--dark {
+    .controls-wrapper-inner {
+      border: 1px solid $bi-3;
+      background: $bi-2;
+    }
   }
 }
 </style>

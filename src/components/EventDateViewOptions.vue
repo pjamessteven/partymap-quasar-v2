@@ -1,15 +1,16 @@
 <template>
   <div class="view-options flex justify-center items-center">
     <q-btn-dropdown
-      class="inter bold t3"
+      class="inter semibold t2"
       flat
+      no-caps
       label="View"
       :dropdown-icon="$q.screen.lt.sm ? 'mdi-dots-vertical' : undefined"
       no-icon-animation
     >
-      <div class="row no-wrap q-pa-md">
+      <div class="row no-wrap q-pa-sm">
         <div class="column">
-          <div class="text-large t3 q-mb-md">View options</div>
+          <div class="t3 q-ma-sm">View options</div>
           <q-toggle v-model="compactView" label="Compact view" />
           <q-toggle
             v-if="showGroupByMonth"
