@@ -60,6 +60,22 @@
     </div>
 
     <div class="row justify-center">
+      <q-linear-progress
+        class="q-my-xl q-mb-xl"
+        v-if="
+          hasNext &&
+          ((groupByMonth &&
+            Object.keys(eventDatesGroupedByMonth)?.length > 0) ||
+            (!groupByMonth && eventDates?.length > 0))
+        "
+        indeterminate
+        size="2px"
+        :color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
+        rounded
+        :style="$q.screen.gt.xs ? 'max-width: 200px' : 'max-width: 120px'"
+      />
+      <!--
+
       <q-spinner-ios
         class="q-my-lg q-mb-xl"
         :color="$q.dark.isActive ? 'white' : 'black'"
@@ -71,6 +87,7 @@
             (!groupByMonth && eventDates?.length > 0))
         "
       />
+            -->
       <div v-else-if="!disableEndOfResultsMessage" class="q-my-lg q-mb-xl">
         <div
           v-if="
@@ -78,7 +95,7 @@
               Object.keys(eventDatesGroupedByMonth)?.length > 0) ||
             (!groupByMonth && eventDates && eventDates.length > 0)
           "
-          class="t3 inter bold q-mt-md"
+          class="t4 inter semibold q-mt-md"
         >
           End of results
         </div>
@@ -89,8 +106,8 @@
               (!groupByMonth && eventDates && eventDates.length === 0)) &&
             !loading
           "
-          :class="$q.screen.lt.sm ? 'q-mt-xl' : ''"
-          class="t3 inter bold"
+          :class="$q.screen.lt.sm ? 'q-mt-xl' : 'q-mt-xl'"
+          class="t4 inter semibold"
         >
           No results<span v-if="$route.name === 'Explore'"
             >&nbsp;in this area</span

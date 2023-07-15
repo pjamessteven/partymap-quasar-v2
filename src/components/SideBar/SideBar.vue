@@ -15,8 +15,7 @@
         'sidebar-mobile-expanded': showPanel,
         'sidebar-mobile-expanded-fullscreen': sidebarPanel === 'favorites',
         'sidebar-mobile-hidden': $q.screen.lt.sm && $route.name === 'EventPage',
-        'sidebar-mobile-shadow':
-          $q.screen.lt.sm && sidebarPanel === 'explore' && !showPanel,
+        'sidebar-mobile-shadow': sidebarPanel === 'explore' && !showPanel,
       }"
     >
       <!--
@@ -41,7 +40,7 @@
         <NavigationBar
           @click="togglePanel"
           class="nav-bar"
-          v-if="$q.screen.gt.xs"
+          v-if="$q.screen.gt.xs && false"
         />
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
           <div class="sidebar-content-inner-shadow" />
@@ -261,11 +260,12 @@ export default {
   }
   .sidebar-wrapper {
     .sidebar {
-      border-left: 1px solid $bi-4;
-      border-right: 1px solid $bi-4;
-      border-top-left-radius: 18px;
-      border-top-right-radius: 18px;
+      border: 1px solid transparent;
 
+      &.sidebar-mobile-shadow {
+        border: 1px solid $bi-4;
+        border-bottom: none;
+      }
       :deep(.sidebar-header) {
         // background: black;
       }
@@ -286,7 +286,7 @@ export default {
         }
       }
       .sidebar-content-inner {
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        //border-top: 1px solid rgba(255, 255, 255, 0.1);
         background: black;
       }
     }
@@ -304,13 +304,16 @@ export default {
   .sidebar-wrapper {
     .sidebar {
       //box-shadow: rgb(38, 57, 77) 0px 8px 30px -10px;
-      box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px,
-        rgba(0, 0, 0, 0.15) 0px 7px 20px 3px,
-        rgba(0, 0, 0, 0.1) 0px -3px 0px inset;
+      //box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px,
+      // rgba(0, 0, 0, 0.15) 0px 7px 20px 3px,
+      // rgba(0, 0, 0, 0.1) 0px -3px 0px inset;
 
       //box-shadow: rgba(50, 50, 105, 0.15) 0px 0px 5px 0px,
       //  rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
       //border: 1px solid rgba(0, 0, 0, 0.1);
+      &.sidebar-mobile-shadow {
+        box-shadow: 0px 0px 32px 16px rgba(0, 0, 0, 0.4);
+      }
       .sidebar-content {
         //background: rgba(100, 100, 100, 0.2);
         //backdrop-filter: blur(10px);
@@ -320,8 +323,8 @@ export default {
           .sidebar-content-inner-shadow {
             //box-shadow: inset rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
             // heavy box-shadow: inset rgba(100, 100, 111, 0.1) 0px 7px 29px 0px;
-            box-shadow: inset rgba(100, 100, 100, 0.1) 0px 8px 10px -5px;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            //box-shadow: inset rgba(100, 100, 100, 0.1) 0px 8px 10px -5px;
+            // border-top: 1px solid rgba(0, 0, 0, 0.1);
           }
         }
       }
@@ -514,9 +517,9 @@ export default {
   .sidebar-wrapper {
     .sidebar {
       width: 90vw;
-      padding-bottom: 96px;
+      padding-bottom: 134px;
       &.sidebar-mobile-expanded {
-        transform: translate3d(0, 96px, 0);
+        transform: translate3d(0, 134px, 0);
       }
     }
   }
@@ -569,9 +572,6 @@ export default {
         box-shadow: none;
         border-top: 1px solid transparent;
 
-        &.sidebar-mobile-shadow {
-          border-top: 1px solid $bi-4;
-        }
         .sidebar-content {
           background: black;
         }

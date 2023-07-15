@@ -17,7 +17,7 @@
       <div class="flex items-center row no-wrap">
         <div
           class="close-icon-wrapper"
-          v-if="showSelectedValue && !!controlDateRangeSelectedOption?.value"
+          v-if="!!controlDateRangeSelectedOption?.value"
           @click.stop="clearDateRange"
         >
           <q-icon style="font-size: 18px" name="mdi-close" />
@@ -27,9 +27,7 @@
           <div v-if="!controlDateRangeSelectedOption?.value" class="q-mr-sm">
             <i class="las la-calendar" />
           </div>
-          <div
-            v-if="showSelectedValue && !!controlDateRangeSelectedOption?.value"
-          >
+          <div v-if="!!controlDateRangeSelectedOption?.value">
             {{ controlDateRangeSelectedOption.label }}
           </div>
           <div v-else-if="$q.screen.lt.sm">dates</div>

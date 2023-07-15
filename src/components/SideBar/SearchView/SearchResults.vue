@@ -15,14 +15,6 @@
           :key="index"
           v-for="(result, index) in searchResults"
         >
-          <q-item-section>
-            <q-item-label
-              style="text-transform: capitalize"
-              class="flex items-center"
-            >
-              {{ result.result }}
-            </q-item-label>
-          </q-item-section>
           <q-item-section avatar>
             <q-icon
               v-if="result.type === 'event'"
@@ -40,6 +32,14 @@
               name="las la-tag"
             />
           </q-item-section>
+          <q-item-section>
+            <q-item-label
+              style="text-transform: capitalize"
+              class="flex items-center"
+            >
+              {{ result.result }}
+            </q-item-label>
+          </q-item-section>
         </q-item>
         <q-item
           clickable
@@ -47,13 +47,13 @@
           :key="index + 30"
           v-for="(result, index) in searchLocationResults.slice(0, 3)"
         >
+          <q-item-section avatar>
+            <q-icon class="t3" name="las la-map-marker" />
+          </q-item-section>
           <q-item-section>
             <q-item-label style="text-transform: capitalize">
               {{ result.label }}
             </q-item-label>
-          </q-item-section>
-          <q-item-section avatar>
-            <q-icon class="t3" name="las la-map-marker" />
           </q-item-section>
         </q-item>
       </q-list>
@@ -112,11 +112,13 @@ export default {
       }
     },
     clickLocationResult(location) {
+      console.log;
       this.userLocation = {
         lat: parseFloat(location.location.lat),
         lng: parseFloat(location.location.lng),
       };
       this.userLocationCity = location.label.split(',')[0];
+      this.userLocationCountry = location.label.split(',').pop();
       this.fineLocation = false;
       this.sidebarPanel = 'nearby';
     },
@@ -125,6 +127,7 @@ export default {
     ...mapWritableState(useMainStore, [
       'userLocation',
       'userLocationCity',
+      'userLocationCountry',
       'sidebarPanel',
       'fineLocation',
     ]),

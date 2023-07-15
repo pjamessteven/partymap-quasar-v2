@@ -5,7 +5,11 @@
       :style="computedStyle"
       v-if="!$route.meta.mapOverlay || this.$route.name !== 'Explore'"
     />
-    <MenuBarLogo class="logo" :color="iconColor" v-if="!previousRouteName" />
+    <MenuBarLogo
+      class="logo"
+      :color="iconColor"
+      v-if="!previousRouteName || this.$route.name === 'Explore'"
+    />
     <div
       class="tab-wrapper"
       v-if="$route.name === 'Explore' && $q.screen.gt.xs"

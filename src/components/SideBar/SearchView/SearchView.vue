@@ -15,29 +15,10 @@
       :class="$q.screen.gt.xs ? 'q-px-lg' : ''"
     >
       <div
-        class="inter bold t1"
-        :class="$q.screen.lt.sm ? 'q-mt-md ' : ' q-mt-lg  text-large'"
+        class="inter bolder t1"
+        :class="$q.screen.lt.sm ? 'q-mt-md q-my-md' : ' q-my-lg  text-h6'"
       >
-        Search for events, places, artists & more:
-      </div>
-      <div
-        class="flex row no-wrap searchbar-wrapper justify-stretch q-mt-sm q-mb-md"
-      >
-        <q-input
-          ref="search"
-          clearable
-          @clear="clearSearchResults"
-          rounded
-          dense
-          outlined
-          class="searchbar-input grow inter bold q-mt-sm"
-          v-model="query"
-          @keyup.enter="() => $refs.search.blur()"
-        >
-          <template v-slot:prepend>
-            <q-icon name="mdi-magnify" class="q-my-md" />
-          </template>
-        </q-input>
+        Search results
       </div>
       <SearchResults
         class="q-pb-md"
@@ -87,16 +68,6 @@ export default {
       this.searchResults = [];
       this.locationSearchResults = [];
     },
-    autofocusInput() {
-      // don't auto focus input on mobile
-      // because it's annoying when the keyboard pops up without being summoned
-      if (this.$q.screen.gt.xs) {
-        // use timeout to wait until tab transition finishes
-        setTimeout(() => {
-          this.$refs.search.focus();
-        }, 300);
-      }
-    },
   },
   watch: {
     query() {
@@ -104,19 +75,10 @@ export default {
         this.clearSearchResults();
       } else this.debouncedSearch();
     },
-    sidebarPanel(newVal, oldVal) {
-      if (newVal === 'search') {
-        // switched to search tab
-        this.autofocusInput();
-      }
-    },
   },
   computed: {
     ...mapWritableState(useSearchStore, ['query']),
     ...mapState(useMainStore, ['sidebarPanel']),
-  },
-  mounted() {
-    this.autofocusInput();
   },
   created() {
     this.debouncedSearch = _.debounce(this.search, 300, {

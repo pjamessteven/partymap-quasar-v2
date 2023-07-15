@@ -1,7 +1,7 @@
 <template>
   <div class="view-options flex justify-center items-center">
     <q-btn-dropdown
-      class="inter semibold t2"
+      class="inter semibold t3"
       flat
       no-caps
       label="View"

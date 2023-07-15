@@ -7,8 +7,8 @@
       <q-btn
         v-if="sidebarPanel === 'nearby'"
         flat
-        style="margin-left: -12px"
-        class="q-mr-"
+        style="margin-left: -4px"
+        class="q-mr-sm"
         @click.stop="() => clickLocation()"
       >
         <template v-slot:default>
@@ -49,8 +49,8 @@
         name="mdi-chevron-up"
       />
       <div
-        class="q-pr-md inter bolder"
-        style="text-transform: capitalize; font-size: 1.1rem"
+        class="q-pr-md inter bolder text-h5"
+        style="text-transform: capitalize"
       >
         {{ computedPanelName }}
       </div>

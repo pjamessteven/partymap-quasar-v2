@@ -1,8 +1,10 @@
 <template>
   <div class="date-header-wrapper">
     <div
-      class="date-header flex row grow ellipsis t1 inter semibold"
-      :class="$q.screen.gt.xs ? ' q-px-md q-py-md' : 'q-px-sm q-ml-xs q-py-md'"
+      class="date-header flex row no-wrap justify-between grow ellipsis inter semibold"
+      :class="
+        $q.screen.gt.xs ? ' q-px-md q-py-md t3' : 'q-px-sm q-ml-xs q-py-md t2'
+      "
     >
       <span v-if="!!altLabel">{{ altLabel }}</span>
       <span v-else> Events in {{ dateString }}</span>
@@ -21,6 +23,7 @@ export default {
     date: String,
     altLabel: String,
   },
+  components: {},
   computed: {
     dateString() {
       if (this.date) {

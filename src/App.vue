@@ -171,7 +171,7 @@ body {
     border: 1px solid rgba(0, 0, 0, 0.05);
   }
   .q-separator {
-    height: 1px;
+    height: 0px;
     background: none;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
   }

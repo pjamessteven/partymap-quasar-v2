@@ -11,8 +11,9 @@
               @scroll="onScroll"
               vertical
               :thumb-style="{
+                marginTop: '12px',
                 right: $q.screen.gt.xs ? '0px' : '0px',
-                width: $q.screen.gt.xs ? '4px' : '4px',
+                width: $q.screen.gt.xs ? '8px' : '4px',
               }"
               class="scroll-area flex grow"
               :content-style="{
@@ -25,25 +26,39 @@
             >
               <div class="scroll-stuff flex column">
                 <div
-                  class="flex column mobile-location-header text-h4 inter bolder q-pl-md q-mt-lg q-"
+                  class="flex column mobile-location-header q-mt-lg"
                   style="width: 100%"
-                  v-if="$q.screen.lt.sm"
+                  :class="{
+                    'q-px-lg q-pt- q-mb-sm': $q.screen.gt.xs,
+                    'q-px-lg q-pt-lg q-mb-sm': $q.screen.gt.sm,
+                    'q-px-md   ': $q.screen.lt.sm,
+                  }"
                 >
-                  <div class="ellipsis">
+                  <div class="ellipsis text-h4 inter bolder">
                     <span class="">Near</span>
                   </div>
                   <div
-                    class="flex items-center no-wrap justify-between"
+                    class="flex items-center no-wrap"
+                    :class="{ 'justify-between': $q.screen.lt.sm }"
                     style="width: 100%"
                   >
-                    <span v-if="userLocation" class="ellipsis q-mr-sm">
-                      {{ userLocationCity }}
+                    <span
+                      v-if="userLocation"
+                      class="ellipsis q-mr-sm text-h4 inter bolder"
+                    >
+                      {{ userLocationCity
+                      }}<span v-if="$q.screen.gt.xs"
+                        >, {{ userLocationCountry }}</span
+                      >
                     </span>
-                    <span class="ellipsis" v-else>... </span>
+                    <span class="ellipsis text-h4 inter bolder" v-else
+                      >...
+                    </span>
                     <q-btn
+                      v-if="$q.screen.lt.sm"
                       flat
-                      style="margin-left: -8px"
                       class="q-pa-md"
+                      :class="{ 'q-ml-md': $q.screen.lt.sm }"
                       @click.stop="() => getFineLocation()"
                     >
                       <template v-slot:default>
@@ -64,6 +79,7 @@
                           />
                         </div>
                         <q-tooltip
+                          style="font-size: 1em !important"
                           :content-class="
                             $q.dark.isActive
                               ? 'bg-black text-white'
@@ -79,28 +95,45 @@
                 </div>
                 <div
                   class="flex message"
-                  :class="
-                    $q.screen.gt.xs ? 'q-mx-lg q-mt-sm  q-mb-sm ' : 'q-mx-md  '
-                  "
+                  :class="$q.screen.gt.xs ? 'q-mx-lg  q-mb-sm ' : 'q-mx-md  '"
                   @click="showMessage = !showMessage"
                 >
                   <div
-                    class="flex justify-between grow items-center no-wrap location-header q-py-md"
+                    class="flex grow no-wrap location-header inter q-pb-md t3"
+                    :class="{
+                      'justify-between q-pt-sm items-center': $q.screen.lt.md,
+                      'bold items-end': $q.screen.gt.xs,
+                    }"
                   >
                     <span
-                      class="inter"
-                      :class="$q.screen.gt.xs ? ' t1 bold ' : 't3'"
                       >Welcome to PartyMap, the global directory of festivals
                       and events!</span
                     >
                     <q-icon
                       class="q-ml-md"
-                      :class="$q.screen.gt.xs ? ' t1 ' : 't3'"
                       size="1.5rem"
                       :name="
                         !showMessage ? 'mdi-chevron-down' : 'mdi-chevron-up'
                       "
                     />
+                    <div
+                      class="flex grow justify-end items-center"
+                      v-if="$q.screen.gt.sm"
+                    >
+                      <div
+                        @click.stop="() => (sidebarPanel = 'explore')"
+                        class="nav-button flex items-center justify-between q-px-md q-py-sm text- t2"
+                      >
+                        Explore the map
+
+                        <q-icon
+                          name="mdi-chevron-right"
+                          size="1.2rem"
+                          class="q-ml-sm"
+                          :class="{ 'q-ml-sm': $q.screen.gt.xs }"
+                        />
+                      </div>
+                    </div>
                   </div>
                   <div
                     v-if="showMessage"
@@ -128,7 +161,10 @@
                           size="1.5rem"
                           class="q-mr-sm"
                         />
-                        PartyMap on the App Store
+                        <!--PartyMap on the App Store-->
+                        <span style="text-decoration: italic"
+                          >Coming soon...</span
+                        >
                       </div>
                       <div
                         @click.stop
@@ -139,7 +175,9 @@
                           size="1.5rem"
                           class="q-mr-sm"
                         />
-                        PartyMap on Google Play
+                        <span style="text-decoration: italic"
+                          >Coming soon...</span
+                        >
                       </div>
                     </div>
                   </div>
@@ -294,7 +332,7 @@
                             style="width: 100%"
                             :thumb-style="
                               $q.screen.gt.xs
-                                ? { bottom: '0px', height: '8px' }
+                                ? { bottom: '0px', height: '0px' }
                                 : { bottom: '0px', height: '0px' }
                             "
                           >
@@ -351,7 +389,7 @@
                             style="width: 100%"
                             :thumb-style="
                               $q.screen.gt.xs
-                                ? { bottom: '0px', height: '8px' }
+                                ? { bottom: '0px', height: '0px' }
                                 : { bottom: '0px', height: '0px' }
                             "
                           >
@@ -508,9 +546,10 @@
                       <!-- ALL EVENTS -->
 
                       <div
-                        class="t1 inter semibold location-header q-py-md flex row items-center justify-between"
+                        class="t1 inter semibold location-header flex row items-center justify-between"
                         :class="$q.screen.gt.xs ? 'q-pl-sm text-' : 'q-pl-sm'"
                         v-if="eventDates && eventDates.length > 0"
+                        style="height: 56px"
                       >
                         <!--<div class="separator" /> -->
 

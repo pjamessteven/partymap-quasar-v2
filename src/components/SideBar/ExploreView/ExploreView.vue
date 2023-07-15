@@ -3,6 +3,33 @@
     class="event-list-vertical shadow-0 main-content"
     style="height: 100%; width: 100%; position: relative; overflow: hidden"
   >
+    <div
+      @click="() => (showPanel = !showPanel)"
+      style="pointer-events: all; cursor: pointer"
+      class="flex items-center justify-between q-pl-lg q-pr-md q-pt-md explore-header"
+      v-if="$q.screen.gt.xs"
+    >
+      <div class="flex items-center q-my-xs show-map">
+        <q-icon
+          flat
+          size="2rem"
+          class="q-mr-md"
+          :class="{ 'rotate-180': showPanel }"
+          name="mdi-chevron-up"
+        />
+        <div class="q-pr-md inter bolder text-h6">
+          <span v-if="!showPanel">Show results</span>
+          <span v-else>Show map</span>
+        </div>
+      </div>
+    </div>
+    <div
+      :class="{ 'q-px-lg': showPanel }"
+      v-if="$q.screen.gt.xs && false"
+      style="margin-top: -3spx"
+    >
+      <q-separator />
+    </div>
     <!--
     <q-linear-progress
       indeterminate
@@ -31,6 +58,13 @@
         'event-list-expanded': $q.screen.lt.sm && showPanel,
       }"
     >
+      <div class="inner-shadow" v-if="!showPanel && false" />
+
+      <EventDateViewOptions
+        v-if="$q.screen.gt.xs && !isLoadingInitial && showResults"
+        class="view-options"
+      />
+
       <div class="flex column grow no-wrap">
         <q-scroll-area
           vertical
@@ -51,7 +85,7 @@
             <div class="flex column no-wrap scroll-content q-px-sm">
               <div class="flex column no-wrap content">
                 <div
-                  class="header t1 inter justify-between flex items-center"
+                  class="header t2 inter semibold justify-between flex items-center"
                   :class="
                     $q.screen.lt.sm ? 'q-pl-sm q-py-md' : 'q-pl-md  q-py-md '
                   "
@@ -113,17 +147,17 @@
                   </div>
                   -->
                     <div
-                      class="header t1 inter semibold justify-between flex items-center"
+                      class="header inter semibold justify-between flex items-center"
                       :class="
                         $q.screen.lt.sm
-                          ? 'q-pl-sm q-py-md'
-                          : 'q-pl-md  q-pt-md q-pb-sm '
+                          ? 'q-pl-sm q-py-md '
+                          : 'q-pl-md  q-pt-md q-py-md t3'
                       "
                       v-if="!groupEventsByMonth && eventDates?.length > 0"
                     >
                       <span>Upcoming events in this area:</span>
-                      <EventDateViewOptions v-if="$q.screen.gt.xs" />
                     </div>
+
                     <EventDateList
                       v-if="showResults && compactView"
                       :groupByMonth="groupEventsByMonth"
@@ -181,8 +215,7 @@
 <script>
 import _ from 'lodash';
 import ArtistProfile from 'components/ArtistProfile.vue';
-import ArtistsComponent from './../ArtistsComponent.vue';
-import ControlsComponent from 'src/components/Controls/ControlsComponent.vue';
+
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
 import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
@@ -202,7 +235,6 @@ export default {
     EventDatePosterList,
     EventDateViewOptions,
   },
-  props: { showControls: { default: false } },
   beforeCreate() {
     this.eventDatesLoading = true;
     setTimeout(() => {
@@ -493,14 +525,36 @@ export default {
   //z-index: 3000;
   position: absolute;
   pointer-events: none;
-  .controls-component {
+
+  .explore-header {
+    &:hover {
+      .show-map {
+      }
+    }
   }
+
   .event-list-inner {
     pointer-events: all;
     display: flex;
     flex-direction: column;
     height: 100%;
     transition: all 0.3s;
+    position: relative;
+    .inner-shadow {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      z-index: 1;
+      pointer-events: none;
+      box-shadow: inset rgba(100, 100, 100, 0.1) 0px 8px 10px -5px;
+    }
+
+    .view-options {
+      position: absolute;
+      right: 4px;
+      top: 8px;
+      z-index: 100;
+    }
 
     .date-header-bg {
       // only useful for light theme
@@ -578,6 +632,13 @@ export default {
   }
   .event-list-vertical {
     pointer-events: none;
+    .explore-header {
+      &:hover {
+        .show-map {
+        }
+      }
+    }
+
     .controls-component {
       background: black;
 

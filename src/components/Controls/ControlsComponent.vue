@@ -4,6 +4,7 @@
     :class="$q.screen.gt.xs ? ' ' : ' t2'"
   >
     <q-scroll-area
+      v-if="!searchbarShowing"
       ref="scroll"
       horizontal
       class="control-scroll-area"
@@ -18,7 +19,7 @@
           no-caps
           @click="
             () => {
-              showing = !showing;
+              searchbarShowing = true;
             }
           "
           style="padding-left: 8px"
@@ -38,11 +39,8 @@
         </q-btn>
         <div class="separator vertical" />
 
-        <DateControl
-          v-if="showDateControl"
-          :key="1"
-          :showSelectedValue="showSelectedValue"
-        />
+        <DateControl v-if="showDateControl" :key="1" />
+        <!--
         <div class="separator vertical" />
         <q-btn
           no-caps
@@ -65,56 +63,20 @@
             </div>
           </div>
         </q-btn>
-
+-->
         <div class="separator vertical" />
 
-        <TagControl
-          v-if="showTagControl"
-          :key="2"
-          :showSelectedValue="showSelectedValue"
-          ref="tagControl"
-        />
+        <TagControl v-if="showTagControl" :key="2" ref="tagControl" />
         <div class="separator vertical" />
 
-        <ArtistControl
-          v-if="showArtistControl"
-          :key="3"
-          :showSelectedValue="showSelectedValue"
-          ref="artistControl"
-        />
+        <ArtistControl v-if="showArtistControl" :key="3" ref="artistControl" />
         <div class="separator vertical" />
 
-        <SizeControl
-          v-if="showSizeControl"
-          :key="4"
-          :showSelectedValue="showSelectedValue"
-        />
+        <SizeControl v-if="showSizeControl" :key="4" />
         <div class="separator vertical" />
 
-        <DurationControl
-          v-if="showDurationControl"
-          :key="5"
-          :showSelectedValue="showSelectedValue"
-        />
-        <div class="separator vertical" />
+        <DurationControl v-if="showDurationControl" :key="5" />
 
-        <q-input
-          ref="search"
-          clearable
-          @clear="clearSearchResults"
-          dense
-          rounded
-          outlined
-          class="searchbar-input inter bold"
-          v-model="query"
-          @keyup.enter="() => $refs.search.blur()"
-          @update:model-value="onInput()"
-          label="Search places, events and more"
-        >
-          <template v-slot:prepend>
-            <q-icon name="mdi-magnify" class="q-my-md" />
-          </template>
-        </q-input>
         <!--
           <LocalityControl
             v-if="showLocalityControl"
@@ -124,9 +86,32 @@
           -->
       </div>
     </q-scroll-area>
+    <div class="searchbar-wrapper" v-if="searchbarShowing">
+      <q-input
+        ref="search"
+        clearable
+        borderless
+        @clear="clearSearch()"
+        class="searchbar-input inter bold"
+        v-model="query"
+        @keyup.enter="() => $refs.search.blur()"
+        placeholder="Search places, events and more"
+      >
+        <template v-slot:prepend>
+          <q-icon name="mdi-magnify" class="q-my-md" />
+        </template>
+      </q-input>
+    </div>
     <div class="search-button-wrapper q-ml-md flex items-center justify-center">
-      <div class="search-button">
+      <div
+        class="search-button"
+        v-if="!searchbarShowing"
+        @click="() => (searchbarShowing = true)"
+      >
         <q-icon name="mdi-magnify" size="large"></q-icon>
+      </div>
+      <div class="search-button" v-else @click="clearSearch()">
+        <q-icon name="mdi-close" size="large"></q-icon>
       </div>
     </div>
   </div>
@@ -155,9 +140,12 @@ export default {
     // LocalityControl,
   },
   watch: {
-    query() {
-      this.sidebarPanel = 'search';
-      this.showPanel = true;
+    sidebarPanel(newv, oldv) {
+      // so we can return to previous sidebar panel after triggering search
+      this.previousSidebarPanel = oldv;
+    },
+    query(newv) {
+      if (newv?.length > 0) this.sidebarPanel = 'search';
     },
     controlArtist(newVal) {
       if (newVal && newVal.length > 0 && this.$q.screen.lt.sm) {
@@ -188,7 +176,24 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      searchbarShowing: false,
+      previousSidebarPanel: '',
+      previousShowPanel: '',
+    };
+  },
+  methods: {
+    clearSearch() {
+      this.query = null;
+      this.searchbarShowing = false;
+      if (this.sidebarPanel === 'search') {
+        // hide results and restore previous sidebar state
+        this.sidebarPanel = this.previousSidebarPanel;
+        if (this.sidebarPanel === 'explore') {
+          this.showPanel = false;
+        }
+      }
+    },
   },
   computed: {
     ...mapWritableState(useSearchStore, ['query']),
@@ -337,6 +342,9 @@ export default {
 .inner-wrapper {
   width: 100%;
   position: relative;
+  height: 48px;
+  border-radius: 48px;
+  overflow: hidden;
   .control-scroll-area {
     height: 48px;
     width: 100%;
@@ -362,15 +370,28 @@ export default {
     .scroll-wrapper {
       height: 48px;
       padding-right: 64px;
-      .searchbar-input {
-        margin-left: 16px;
-        width: 300px;
+    }
+  }
+
+  .searchbar-wrapper {
+    padding-left: 18px;
+    padding-right: 18px;
+
+    .searchbar-input {
+      margin-top: -4px;
+      :deep(.q-field__inner) {
+        .q-field__control::before {
+          border-color: transparent;
+          border: none;
+        }
       }
     }
   }
   .separator {
     height: 16px;
     border-left: 1px solid;
+    margin-left: -1px;
+    margin-right: -1px;
   }
   :deep(.button-control) {
     height: 100%;
@@ -394,8 +415,11 @@ export default {
       .close-icon-wrapper {
         background: white;
         color: black;
-        height: 100%;
+        height: 48px;
         padding: 4px 16px 4px 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
       .button-label {
         padding: 0px 12px;

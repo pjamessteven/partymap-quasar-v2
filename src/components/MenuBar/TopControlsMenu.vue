@@ -135,6 +135,7 @@
     <q-item v-if="$q.screen.lt.sm">
       <q-toggle v-model="mobilePosterView" label="Grid View" />
     </q-item>
+
     <q-separator inset class="q-mb-xs" />
 
     <q-item-label header class="q-pb-none">{{

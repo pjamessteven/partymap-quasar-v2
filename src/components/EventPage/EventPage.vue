@@ -40,11 +40,6 @@
             >
               <div class="flex column">
                 <div class="header flex column">
-                  <!--
-                  <q-inner-loading :showing="loading">
-                    <q-spinner-ios :color="'white'" size="2em" />
-                  </q-inner-loading>
-                  -->
                   <InnerLoading v-if="loading" :solid="false" />
 
                   <FeaturedMediaBackground

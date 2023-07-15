@@ -1,77 +1,81 @@
 <template>
   <div class="search-component flex row items-center">
-    <!--
-    <div class="location-button-wrapper q-mr-sm">
-      <q-icon
-        flat
-        class="q-pa-sm"
-        @click.stop="() => getFineLocation()"
-        size="1.5em"
-      >
-        <template v-slot:default>
-          <div v-if="!userLocationLoading" class="flex">
-            <q-icon name="mdi-crosshairs-gps" class="" v-if="fineLocation" />
-            <q-icon name="mdi-crosshairs" class="" v-else />
-          </div>
-          <div v-else style="position: relative" class="flex">
-            <q-icon style="z-index: 1" name="mdi-crosshairs" />
-            <q-icon
-              style="z-index: 2; left: 0px"
-              class="animated infinite flash slowest absolute"
-              name="mdi-crosshairs-gps"
-            />
-          </div>
-          <q-tooltip
-            class=""
-            :content-class="
-              $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
-            "
-            :offset="[10, 10]"
-          >
-            {{ $t('landing_page.improve_location') }}
-          </q-tooltip>
-        </template>
-      </q-icon>
-    </div>
-    -->
     <div
       class="controls-wrapper flex no-wrap"
       @click="() => (showSearch = !showSearch)"
     >
       <div class="controls-wrapper-inner">
         <ControlsComponent />
-      </div>
 
-      <!--
-      <q-btn
-        :class="{ 'show-location': sidebarPanel === 'explore' }"
-        flat
-        round
-        class="q-pa-sm q-ml-md location"
-        @click.stop="() => clickLocation()"
-        :color="iconColor"
-      >
-        <template v-slot:default>
-          <div v-if="!userLocationLoading" class="flex">
-            <q-icon
-              name="mdi-crosshairs-gps"
-              class=""
-              v-if="fineLocation && sidebarPanel === 'nearby'"
-              size="1.5rem"
-            />
-            <q-icon name="mdi-crosshairs" class="" v-else size="1.5rem" />
-          </div>
-          <div v-else style="position: relative" class="flex">
-            <q-icon style="z-index: 1" name="mdi-crosshairs" />
-            <q-icon
-              style="z-index: 2; left: 0px"
-              class="animated infinite flash slowest absolute"
-              name="mdi-crosshairs-gps"
-            />
-          </div>
-        </template>
-      </q-btn>
-      -->
+        <div class="location-button-wrapper q-mr-sm">
+          <q-btn
+            :class="{ 'show-location': sidebarPanel === 'explore' }"
+            flat
+            round
+            class="q-pa-sm q-ml-md location"
+            @click.stop="() => clickLocation()"
+            :color="iconColor"
+          >
+            <template v-slot:default>
+              <div v-if="!userLocationLoading" class="flex">
+                <q-icon
+                  name="mdi-crosshairs-gps"
+                  class=""
+                  v-if="fineLocation && sidebarPanel === 'nearby'"
+                  size="1.3rem"
+                />
+                <q-icon name="mdi-crosshairs" class="" v-else size="1.3rem" />
+              </div>
+              <div v-else style="position: relative" class="flex">
+                <q-icon style="z-index: 1" name="mdi-crosshairs" />
+                <q-icon
+                  style="z-index: 2; left: 0px"
+                  class="animated infinite flash slowest absolute"
+                  name="mdi-crosshairs-gps"
+                />
+              </div>
+            </template>
+          </q-btn>
+          <!--
+          <q-icon
+            flat
+            class="q-pa-sm"
+            @click.stop="() => getFineLocation()"
+            size="1rem"
+          >
+            <template v-slot:default>
+              <div v-if="!userLocationLoading" class="flex">
+                <q-icon
+                  name="mdi-crosshairs-gps"
+                  class=""
+                  v-if="fineLocation"
+                />
+                <q-icon name="mdi-crosshairs" class="" v-else />
+              </div>
+              <div v-else style="position: relative" class="flex">
+                <q-icon style="z-index: 1" name="mdi-crosshairs" />
+                <q-icon
+                  style="z-index: 2; left: 0px"
+                  class="animated infinite flash slowest absolute"
+                  name="mdi-crosshairs-gps"
+                />
+              </div>
+              <q-tooltip
+                class=""
+                :content-class="
+                  $q.dark.isActive
+                    ? 'bg-black text-white'
+                    : 'bg-white text-black'
+                "
+                :offset="[10, 10]"
+              >
+                {{ $t('landing_page.improve_location') }}
+              </q-tooltip>
+            </template>
+          </q-icon>
+          -->
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -90,10 +94,7 @@ export default {
   },
   methods: {
     ...mapActions(useMainStore, ['loadIpInfo', 'getFineLocation']),
-    onInput() {
-      this.sidebarPanel = 'search';
-      this.showPanel = true;
-    },
+
     clickLocation() {
       this.getFineLocation();
     },
@@ -129,8 +130,8 @@ export default {
       'userLocation',
     ]),
     iconColor() {
-      if (this.showPanel && !this.$q.dark.isActive) {
-        return 'darkgrey';
+      if (this.showPanel || this.$q.dark.isActive) {
+        return 'grey';
       } else {
         return 'white';
       }
@@ -175,36 +176,39 @@ export default {
   display: flex;
   justify-content: center;
   pointer-events: none;
-  .location-button-wrapper {
-    border-radius: 24px;
-  }
+
   .controls-wrapper {
     z-index: 1000;
     width: 100%;
     justify-content: center;
+    position: relative;
 
-    .location {
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      &.show-location {
-        opacity: 1;
-      }
-    }
     .controls-wrapper-inner {
       pointer-events: all;
 
-      overflow: hidden;
       transition: all 0.3s;
       cursor: pointer;
       width: 500px;
       height: 100%;
       border-radius: 48px;
       backdrop-filter: blur(10px);
+
+      .location-button-wrapper {
+        position: absolute;
+        right: -64px;
+        top: 4px;
+        border-radius: 24px;
+        background: transparent;
+      }
     }
   }
   .search-dialog {
     z-index: 1000;
   }
+}
+
+.animated.slowest {
+  animation-duration: calc(var(--animate-duration) * 10);
 }
 
 @media only screen and (min-width: 1921px) {
@@ -218,7 +222,7 @@ export default {
     width: 100%;
     display: flex;
     justify-content: center;
-    top: 68px;
+    top: 78px;
     left: unset;
     padding: 0 16px;
   }
@@ -232,6 +236,9 @@ export default {
       border: 1px solid $bi-3;
       background: $bi-2;
     }
+  }
+  .search-component {
+    top: 68px;
   }
 }
 </style>
