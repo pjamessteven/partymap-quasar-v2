@@ -72,7 +72,7 @@
                     >
                       <q-btn
                         no-caps
-                        class="button-control flex items-center"
+                        class="button-plain flex items-center"
                         :class="{
                           active: mode === 'all',
                         }"
@@ -89,7 +89,7 @@
 
                       <q-btn
                         no-caps
-                        class="button-control flex items-center"
+                        class="button-plain flex items-center"
                         :class="{
                           active: mode === 'going',
                         }"
@@ -111,7 +111,7 @@
 
                       <q-btn
                         no-caps
-                        class="button-control flex items-center"
+                        class="button-plain flex items-center"
                         :class="{
                           active: mode === 'interested',
                         }"
@@ -133,7 +133,7 @@
 
                       <q-btn
                         no-caps
-                        class="button-control flex items-center"
+                        class="button-plain flex items-center"
                         :class="{
                           active:
                             mode === 'hosting' ||
@@ -210,7 +210,7 @@
 
                       <q-btn
                         no-caps
-                        class="button-control flex items-center"
+                        class="button-plain flex items-center"
                         :class="{
                           active: tense === 'future',
                         }"
@@ -232,7 +232,7 @@
 
                       <q-btn
                         no-caps
-                        class="button-control flex items-center"
+                        class="button-plain flex items-center"
                         :class="{
                           active: tense === 'past',
                         }"
@@ -518,9 +518,6 @@ export default {
           border-radius: 9px;
         }
       }
-    }
-    .button-control {
-      padding: 0px 12px;
     }
     .scroll-content {
       position: relative;

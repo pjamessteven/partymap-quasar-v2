@@ -32,7 +32,8 @@
         v-show="
           ($q.screen.gt.sm && $route.name === 'Explore') ||
           (sidebarPanel === 'explore' && $route.name === 'Explore') ||
-          (sidebarPanel === 'nearby' && $route.name === 'Explore')
+          (sidebarPanel === 'nearby' && $route.name === 'Explore') ||
+          (sidebarPanel === 'search' && $route.name === 'Explore')
         "
       />
     </transition>

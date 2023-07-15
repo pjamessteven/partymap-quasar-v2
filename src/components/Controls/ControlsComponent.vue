@@ -89,8 +89,8 @@
     <div class="searchbar-wrapper" v-if="searchbarShowing">
       <q-input
         ref="search"
-        clearable
         borderless
+        autofocus
         @clear="clearSearch()"
         class="searchbar-input inter bold"
         v-model="query"
@@ -452,7 +452,7 @@ export default {
   .inner-wrapper {
     mask-image: none;
     .control-scroll-area {
-      height: 44px;
+      //height: 44px;
       overflow-y: hidden !important;
       mask-image: linear-gradient(
         to left,
@@ -463,7 +463,7 @@ export default {
         white 100%
       );
       .scroll-wrapper {
-        height: 44px;
+        //height: 44px;
         overflow-y: hidden;
         padding-left: 0px;
         padding-right: 24px;
