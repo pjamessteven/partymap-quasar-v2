@@ -632,6 +632,8 @@ export default {
   }
   .event-list-vertical {
     pointer-events: none;
+    background: black;
+
     .explore-header {
       &:hover {
         .show-map {
@@ -667,6 +669,7 @@ export default {
     }
   }
   .event-list-vertical {
+    background: white;
     .event-list-inner {
       //background: white;
     }

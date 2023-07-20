@@ -641,10 +641,6 @@ export default {
       'loadingPoints',
       'points',
     ]),
-
-    addingEvent() {
-      return this.$route.path === '/add';
-    },
     route() {
       return this.$route;
     },

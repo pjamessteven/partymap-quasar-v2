@@ -112,7 +112,6 @@ export default {
       }
     },
     clickLocationResult(location) {
-      console.log;
       this.userLocation = {
         lat: parseFloat(location.location.lat),
         lng: parseFloat(location.location.lng),

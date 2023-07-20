@@ -275,7 +275,7 @@ export default {
       }
 
       .sidebar-content {
-        background: $bi-2;
+        // background: $bi-2;
         //background: rgba(18, 18, 18, 0.68);
         //background: rgba(0, 0, 0, 0.4);
 
@@ -287,7 +287,7 @@ export default {
       }
       .sidebar-content-inner {
         //border-top: 1px solid rgba(255, 255, 255, 0.1);
-        background: black;
+        // background: black;
       }
     }
   }
@@ -317,9 +317,9 @@ export default {
       .sidebar-content {
         //background: rgba(100, 100, 100, 0.2);
         //backdrop-filter: blur(10px);
-        background: white;
+        // background: white;
         .sidebar-content-inner {
-          background: white;
+          // background: white;
           .sidebar-content-inner-shadow {
             //box-shadow: inset rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
             // heavy box-shadow: inset rgba(100, 100, 111, 0.1) 0px 7px 29px 0px;
