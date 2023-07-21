@@ -6,7 +6,7 @@
     >
       <div class="controls-wrapper-inner">
         <ControlsComponent />
-
+        <!--
         <div class="location-button-wrapper q-mr-sm">
           <q-btn
             :class="{ 'show-location': sidebarPanel === 'explore' }"
@@ -36,7 +36,8 @@
               </div>
             </template>
           </q-btn>
-          <!--
+          -->
+        <!--
           <q-icon
             flat
             class="q-pa-sm"
@@ -74,7 +75,6 @@
             </template>
           </q-icon>
           -->
-        </div>
       </div>
     </div>
   </div>

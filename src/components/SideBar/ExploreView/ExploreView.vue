@@ -6,21 +6,24 @@
     <div
       @click="() => (showPanel = !showPanel)"
       style="pointer-events: all; cursor: pointer"
-      class="flex items-center justify-between q-pl-lg q-pr-md q-pt-md explore-header"
+      class="inter bolder text-h5 flex items-center justify-between q-pl-lg q-pr-md q-pt-md explore-header"
       v-if="$q.screen.gt.xs"
     >
-      <div class="flex items-center q-my-xs show-map">
+      <div>Explore Events</div>
+
+      <div class="flex items-center q-my-sm show-map">
+        <!--
+        <div class="q-pr-md">
+          <span v-if="!showPanel">Show Results</span>
+          <span v-else>Show Map</span>
+        </div>\-->
         <q-icon
           flat
-          size="2rem"
           class="q-mr-md"
+          size="2rem"
           :class="{ 'rotate-180': showPanel }"
           name="mdi-chevron-up"
         />
-        <div class="q-pr-md inter bolder text-h6">
-          <span v-if="!showPanel">Show results</span>
-          <span v-else>Show map</span>
-        </div>
       </div>
     </div>
     <div
@@ -551,7 +554,7 @@ export default {
 
     .view-options {
       position: absolute;
-      right: 4px;
+      right: -12px;
       top: 8px;
       z-index: 100;
     }

@@ -102,6 +102,11 @@ export default {
   },
 
   watch: {
+    sidebarPanel(newv) {
+      if (newv === 'explore' || newv === 'nearby') {
+        this.fitBoundsForExplorePage(this.userLocation);
+      }
+    },
     darkMode() {
       this.initTileLayers();
     },
@@ -319,13 +324,23 @@ export default {
       // padding for desktop panel
       var latlng = L.latLng(coords);
       if (this.$q.screen.gt.xs) {
-        this.map.fitBounds(L.latLngBounds(latlng, latlng), {
-          paddingTopLeft: [0, 276],
-          animate: true,
-          duration: 0.3,
-          easeLinearity: 1,
-          maxZoom: 10,
-        });
+        if (this.sidebarPanel === 'explore') {
+          this.map.fitBounds(L.latLngBounds(latlng, latlng), {
+            paddingTopLeft: [0, -128],
+            animate: true,
+            duration: 0.3,
+            easeLinearity: 1,
+            maxZoom: 10,
+          });
+        } else {
+          this.map.fitBounds(L.latLngBounds(latlng, latlng), {
+            paddingTopLeft: [0, -(this.windowHeight / 3) - 128],
+            animate: true,
+            duration: 0.3,
+            easeLinearity: 1,
+            maxZoom: 10,
+          });
+        }
       } else {
         // padding for mobile bottom panel
         this.map.fitBounds(L.latLngBounds(latlng, latlng), {

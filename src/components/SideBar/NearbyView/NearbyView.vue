@@ -27,6 +27,57 @@
             >
               <div class="scroll-stuff flex column">
                 <div
+                  v-if="$q.screen.gt.xs"
+                  class="q-px-md q-pt-md q-pb- flex items-center"
+                >
+                  <q-btn
+                    flat
+                    class="q-pa-md q-mr-xs"
+                    @click.stop="() => getFineLocation()"
+                  >
+                    <template v-slot:default>
+                      <div v-if="!userLocationLoading" class="flex">
+                        <q-icon
+                          name="mdi-crosshairs-gps"
+                          class=""
+                          v-if="fineLocation"
+                        />
+                        <q-icon name="mdi-crosshairs" class="" v-else />
+                      </div>
+                      <div v-else style="position: relative" class="flex">
+                        <q-icon style="z-index: 1" name="mdi-crosshairs" />
+                        <q-icon
+                          style="z-index: 2; left: 0px"
+                          class="animated infinite flash slowest absolute"
+                          name="mdi-crosshairs-gps"
+                        />
+                      </div>
+                      <q-tooltip
+                        style="font-size: 1em !important"
+                        :content-class="
+                          $q.dark.isActive
+                            ? 'bg-black text-white'
+                            : 'bg-white text-black'
+                        "
+                        :offset="[10, 10]"
+                      >
+                        {{ $t('landing_page.improve_location') }}
+                      </q-tooltip>
+                    </template>
+                  </q-btn>
+                  <span
+                    v-if="userLocation"
+                    class="ellipsis q-mr-sm text-h5 inter bolder"
+                  >
+                    Near&nbsp;{{ userLocationCity
+                    }}<span v-if="$q.screen.gt.xs"
+                      >, {{ userLocationCountry }}</span
+                    >
+                  </span>
+                  <span class="ellipsis text-h4 inter bolder" v-else>... </span>
+                </div>
+                <div
+                  v-if="$q.screen.lt.sm"
                   class="flex column mobile-location-header q-mt-sm"
                   style="width: 100%"
                   :class="{
@@ -96,14 +147,14 @@
                 </div>
                 <div
                   class="flex message"
-                  :class="$q.screen.gt.xs ? 'q-mx-lg  q-mb-sm ' : 'q-mx-md  '"
+                  :class="$q.screen.gt.xs ? 'q-mx-lg  q-mb-sm q ' : 'q-mx-md  '"
                   @click="showMessage = !showMessage"
                 >
                   <div
                     class="flex grow no-wrap inter q-pb-md t3"
                     :class="{
                       'justify-between q-pt-sm items-center': $q.screen.lt.md,
-                      'bold items-end': $q.screen.gt.xs,
+                      ' items-end': $q.screen.gt.xs,
                     }"
                   >
                     <span
@@ -487,6 +538,7 @@
                           />
                         </div>
                         <EventDateViewOptions
+                          style="margin-right: -24px"
                           :show-group-by-month="false"
                           v-if="$q.screen.gt.xs"
                         />
@@ -561,6 +613,7 @@
                           </div>
                         </div>
                         <EventDateViewOptions
+                          style="margin-right: -24px"
                           :show-group-by-month="false"
                           v-if="$q.screen.gt.xs"
                         />
@@ -996,17 +1049,6 @@ export default {
           }
         }
       }
-      .banner {
-        //background: $bi-2;
-        .banner-background {
-          .banner-video {
-            opacity: 0.48;
-          }
-        }
-      }
-      .header {
-        // background: black;
-      }
 
       .tag-scroll-area {
         .tag {
@@ -1054,19 +1096,6 @@ export default {
         }
       }
 
-      .banner {
-        //background: white;
-
-        .tile-background {
-          filter: invert(1);
-          opacity: 0.2;
-        }
-        .banner-background {
-          .banner-video {
-            opacity: 0.68;
-          }
-        }
-      }
       .header {
         background: white;
       }

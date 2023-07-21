@@ -2,10 +2,11 @@
   <div class="view-options flex justify-center items-center">
     <q-btn-dropdown
       class="inter semibold t3"
-      flat
       no-caps
-      label="View"
-      :dropdown-icon="$q.screen.lt.sm ? 'mdi-dots-vertical' : undefined"
+      @click.stop
+      flat
+      label="View Options"
+      :dropdown-icon="$q.screen.lt.sm && false ? 'mdi-dots-horizontal' : 'none'"
       no-icon-animation
     >
       <div class="row no-wrap q-pa-sm">

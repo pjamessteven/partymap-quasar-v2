@@ -17,7 +17,7 @@
         'sidebar-mobile-nearby': sidebarPanel === 'nearby' && $q.screen.gt.xs,
         'sidebar-mobile-expanded-fullscreen': sidebarPanel === 'favorites',
         'sidebar-mobile-hidden': $q.screen.lt.sm && $route.name === 'EventPage',
-        'sidebar-mobile-shadow': !showPanel,
+        'sidebar-mobile-shadow': !showPanel && $q.screen.gt.xs,
       }"
     >
       <!--
@@ -230,8 +230,10 @@ export default {
         this.showPanel = true;
       }
       if (to === 'nearby') {
-        //this.showPanel = true;
-        //this.enablePanelSwipeDown = true;
+        if (this.$q.screen.lt.sm) {
+          this.showPanel = true;
+          this.enablePanelSwipeDown = true;
+        }
       }
       if (to === 'favorites' || to === 'profile') {
         if (this.currentUser) {
@@ -339,7 +341,7 @@ export default {
         //backdrop-filter: blur(10px);
         background: white;
         .sidebar-content-inner {
-          // background: white;
+          background: white;
           .sidebar-content-inner-shadow {
             //box-shadow: inset rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
             // heavy box-shadow: inset rgba(100, 100, 111, 0.1) 0px 7px 29px 0px;
@@ -634,7 +636,7 @@ export default {
       transform: translate3d(0, calc(100% - 228px), 0);
 
       will-change: transform;
-      padding-bottom: 68px;
+      padding-bottom: 188px;
       border-left: none;
       border-right: none;
       overflow: visible;

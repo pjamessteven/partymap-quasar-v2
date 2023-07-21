@@ -1,6 +1,7 @@
 <template>
   <div>
     <router-link
+      v-touch-swipe.mouse.up.prevent
       v-slot="{ navigate }"
       :custom="true"
       :to="{
