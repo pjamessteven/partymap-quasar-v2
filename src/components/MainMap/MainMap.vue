@@ -104,7 +104,8 @@ export default {
   watch: {
     sidebarPanel(newv) {
       if (newv === 'explore' || newv === 'nearby') {
-        this.fitBoundsForExplorePage(this.userLocation);
+        if (this.userLocation.lat)
+          this.fitBoundsForExplorePage(this.userLocation);
       }
     },
     darkMode() {

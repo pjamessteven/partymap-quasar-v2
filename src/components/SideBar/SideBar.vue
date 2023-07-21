@@ -1,11 +1,5 @@
 <template>
   <div class="flex sidebar-wrapper">
-    <!--
-    <div
-      class="mobile-dismiss-list-background"
-      :class="{ expanded: showPanel }"
-    />
--->
     <div
       ref="sidebar"
       v-touch-swipe.mouse.up="!showPanel ? handleSwipe : null"
@@ -276,10 +270,7 @@ export default {
   .hover-indicator-line {
     background: rgba(255, 255, 255, 0.2);
   }
-  .mobile-dismiss-list-background {
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-  }
+
   .sidebar-wrapper {
     .sidebar {
       border: 1px solid transparent;
@@ -319,10 +310,6 @@ export default {
   .hover-indicator-line {
     background: rgba(0, 0, 0, 0.2);
   }
-  .mobile-dismiss-list-background {
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-  }
   .sidebar-wrapper {
     .sidebar {
       //box-shadow: rgb(38, 57, 77) 0px 8px 30px -10px;
@@ -354,9 +341,6 @@ export default {
         background: white;
         //border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         //box-shadow: rgba(100, 100, 111, 0.15) 0px 7px 29px 0px;
-      }
-      .mobile-dismiss-list {
-        color: white;
       }
 
       :deep(.sidebar-header) {
@@ -424,9 +408,6 @@ export default {
 
     &.sidebar-mobile-expanded {
       transform: translate3d(0, 64px, 0);
-      .mobile-dismiss-list {
-        height: 200px;
-      }
     }
 
     &:not(.sidebar-mobile-expanded):hover {
@@ -492,11 +473,6 @@ export default {
         width: 100%;
       }
     }
-
-    .mobile-dismiss-list {
-      padding-top: 0px;
-    }
-
     .swipe-capture-overlay {
       position: absolute;
       width: 100%;
@@ -648,10 +624,6 @@ export default {
       &.sidebar-mobile-expanded {
         transform: translate3d(0, 120px, 0);
         //padding-bottom: 128px;
-
-        .mobile-dismiss-list {
-          height: 200px;
-        }
       }
       &.sidebar-mobile-expanded-fullscreen {
         transform: translate3d(0, 0px, 0);
@@ -695,31 +667,6 @@ export default {
         .lights-image {
           width: 100%;
         }
-      }
-
-      .mobile-dismiss-list {
-        height: 100px;
-        will-change: height;
-        justify-content: flex-end;
-        transition: all 0.3s;
-      }
-    }
-    .mobile-dismiss-list-background {
-      display: none;
-      transition: all 0.2s ease;
-      width: 100%;
-      z-index: 1;
-      height: 200px;
-      //margin-top: 48px;
-      transform: translate3d(0, calc(100% + 240px), 0);
-      //border-top-right-radius: 18px;
-      //border-top-left-radius: 18px;
-      position: absolute;
-      //top: calc(100% - 320px);
-
-      will-change: transform;
-      &.expanded {
-        transform: translate3d(0, 0, 0) !important;
       }
     }
   }

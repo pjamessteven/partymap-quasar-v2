@@ -15,7 +15,8 @@
         <!--
         <div class="q-pr-md">
           <span v-if="!showPanel">Show Results</span>
-          <span v-else>Show Map</span>
+          <
+            span v-else>Show Map</span>
         </div>\-->
         <q-icon
           flat
@@ -33,18 +34,7 @@
     >
       <q-separator />
     </div>
-    <!--
-    <q-linear-progress
-      indeterminate
-      size="2px"
-      color="grey-7"
-      rounded
-      style="position: absolute; z-index: 3000"
-      v-if="
-        $q.screen.gt.xs && (isLoadingInitial || (mapMoving && !blockUpdates))
-      "
-    />
-    -->
+
     <q-icon
       @click="() => (showPanel = !showPanel)"
       v-if="$q.screen.lt.sm"
@@ -55,12 +45,7 @@
       name="mdi-chevron-up"
     />
     <div class="touch-overlay" v-touch-swipe.vertical="handleSwipe" />
-    <div
-      class="event-list-inner"
-      :class="{
-        'event-list-expanded': $q.screen.lt.sm && showPanel,
-      }"
-    >
+    <div class="event-list-inner">
       <div class="inner-shadow" v-if="!showPanel && false" />
 
       <EventDateViewOptions
@@ -608,7 +593,7 @@ export default {
     }
     &.disable-scroll {
       :deep(.scroll) {
-        overflow-y: hidden !important;
+        overflow: hidden !important;
       }
     }
   }

@@ -235,25 +235,6 @@ export default {
           name: this.event.name,
         };
     },
-    getImageContainerBgStyle() {
-      if (this.$q.dark.isActive) {
-        return `background-image:  url("${this.imgThumbXsUrl}");
-        background-size: cover;
-        display: inline-block;
-        background-position: center;
-        filter: blur(20px);
-
-        `;
-      } else {
-        return `background-image:  url("${this.imgThumbXsUrl}");
-          background-size: cover;
-          display: inline-block;
-          background-position: center;
-          filter: blur(20px);
-
-          `;
-      }
-    },
     getBottomBgImgStyle() {
       if (this.$q.dark.isActive) {
         return `background-image:  url("${this.imgThumbXsUrl}");
@@ -422,8 +403,8 @@ export default {
   transition: all 0.2s ease;
   overflow: hidden;
 
-  -webkit-backface-visibility: hidden;
-  -webkit-transform: translate3d(0, 0, 0);
+  //-webkit-backface-visibility: hidden;
+  //-webkit-transform: translate3d(0, 0, 0);
 
   &:hover {
     // transform: scale(1.01) translateY(0px);
