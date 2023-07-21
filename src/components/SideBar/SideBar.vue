@@ -9,13 +9,15 @@
     <div
       ref="sidebar"
       v-touch-swipe.mouse.up="!showPanel ? handleSwipe : null"
+      @click="() => (showPanel = true)"
       class="flex column justify-between no-wrap sidebar"
       id="sidebar"
       v-bind:class="{
         'sidebar-mobile-expanded': showPanel,
+        'sidebar-mobile-nearby': sidebarPanel === 'nearby' && $q.screen.gt.xs,
         'sidebar-mobile-expanded-fullscreen': sidebarPanel === 'favorites',
         'sidebar-mobile-hidden': $q.screen.lt.sm && $route.name === 'EventPage',
-        'sidebar-mobile-shadow': sidebarPanel === 'explore' && !showPanel,
+        'sidebar-mobile-shadow': !showPanel,
       }"
     >
       <!--
@@ -42,7 +44,11 @@
           class="nav-bar"
           v-if="$q.screen.gt.xs && false"
         />
-        <div style="height: 100%; width: 100%" class="sidebar-content-inner">
+        <div
+          style="height: 100%; width: 100%"
+          class="sidebar-content-inner"
+          @wheel="handleWheel"
+        >
           <div class="sidebar-content-inner-shadow" />
           <NearbyView
             style="height: 100%; width: 100%"
@@ -105,20 +111,26 @@ export default {
       lastx: 0,
       preventMapInteraction: false,
       wheelIndicator: null,
+      pointerEvents: 'pointer-events: none;',
     };
   },
   methods: {
+    handleWheel(event) {
+      // safari behavior fix
+      if (
+        this.pointerEvents === 'pointer-events: none;' &&
+        this.$q.platform.is.safari
+      ) {
+        event.preventDefault();
+        return false;
+      }
+    },
     onMouseWheel(e) {
       const up = e.direction === 'up';
       const down = e.direction === 'down';
       if (!this.showPanel && down) {
         this.showPanel = true;
-      } else if (
-        this.enablePanelSwipeDown &&
-        up &&
-        !this.preventMapZoom &&
-        this.sidebarPanel === 'explore'
-      ) {
+      } else if (this.enablePanelSwipeDown && up && !this.preventMapZoom) {
         this.preventMapZoom = true;
         this.showPanel = false;
 
@@ -130,7 +142,8 @@ export default {
 
         if (
           this.sidebarPanel !== 'explore' &&
-          this.sidebarPanel !== 'favorites'
+          this.sidebarPanel !== 'favorites' &&
+          this.$q.screen.lt.sm
         ) {
           this.sidebarPanel = 'explore';
         }
@@ -177,6 +190,13 @@ export default {
     },
   },
   watch: {
+    showPanel(newv) {
+      if (newv === true) {
+        setTimeout(() => (this.pointerEvents = 'pointer-events: all;'), 350);
+      } else {
+        this.pointerEvents = 'pointer-events: none;';
+      }
+    },
     route(newv, oldv) {
       if (newv.name === 'Explore' && oldv.name === 'Explore') {
         // simulate route change back to nearby view
@@ -210,8 +230,8 @@ export default {
         this.showPanel = true;
       }
       if (to === 'nearby') {
-        this.showPanel = true;
-        this.enablePanelSwipeDown = true;
+        //this.showPanel = true;
+        //this.enablePanelSwipeDown = true;
       }
       if (to === 'favorites' || to === 'profile') {
         if (this.currentUser) {
@@ -261,7 +281,7 @@ export default {
   .sidebar-wrapper {
     .sidebar {
       border: 1px solid transparent;
-
+      background: black;
       &.sidebar-mobile-shadow {
         border: 1px solid $bi-4;
         border-bottom: none;
@@ -317,7 +337,7 @@ export default {
       .sidebar-content {
         //background: rgba(100, 100, 100, 0.2);
         //backdrop-filter: blur(10px);
-        // background: white;
+        background: white;
         .sidebar-content-inner {
           // background: white;
           .sidebar-content-inner-shadow {
@@ -394,6 +414,10 @@ export default {
           border-top-right-radius: 18px;
         }
       }
+    }
+
+    &.sidebar-mobile-nearby {
+      transform: translate3d(0, calc(100% - 66vh), 0);
     }
 
     &.sidebar-mobile-expanded {

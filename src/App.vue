@@ -336,10 +336,6 @@ body {
     &:hover {
       background: $b-4;
     }
-    &.primary {
-      background: $primary;
-      color: white;
-    }
   }
 
   .separator {
@@ -693,6 +689,10 @@ body {
   flex-basis: 1;
   max-height: 56px;
   transition: all 0.3s;
+  &.primary {
+    background: $primary;
+    color: white;
+  }
   //dth: 264px;
 }
 

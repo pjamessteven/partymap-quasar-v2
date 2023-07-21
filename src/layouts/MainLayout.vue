@@ -22,13 +22,7 @@
       />
     </Transition>
     <MainMap />
-    <transition
-      appear
-      enter-active-class="animated fadeIn"
-      leave-active-class="animated fadeOut"
-    >
-      <MinimalOverlayMap v-if="sidebarPanel === 'nearby'" />
-    </transition>
+
     <transition
       appear
       enter-active-class="animated fadeIn"
@@ -89,7 +83,6 @@ import MenuBar from 'components/MenuBar/MenuBar.vue';
 import SearchComponent from 'src/components/Search/SearchComponent.vue';
 import MenuBarLogo from 'src/components/MenuBar/MenuBarLogo.vue';
 import NavigationBar from 'src/components/NavigationBar.vue';
-import MinimalOverlayMap from 'src/components/MinimalOverlayMap.vue';
 import { mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import { useMainStore } from 'src/stores/main';
@@ -102,7 +95,6 @@ export default {
     MenuBarLogo,
     NavigationBar,
     SearchComponent,
-    MinimalOverlayMap,
   },
   methods: {},
   beforeRouteUpdate(to, from, next) {

@@ -91,7 +91,7 @@ export default {
         this.map.fitBounds(L.latLngBounds(latlng, latlng), {
           paddingTopLeft: [512, 0],
           animate: false,
-          maxZoom: 14,
+          maxZoom: 12,
         });
       } else {
         // padding for mobile bottom panel
@@ -138,6 +138,7 @@ export default {
       if (this.$q.dark.isActive) {
         filter = ['saturate:150%', 'brightness:100%'];
       }
+      filter = ['contrast: 0%'];
 
       this.tileLayer = L.tileLayer(this.labelsMapTileUrl, {
         attribution: this.labelsMapTileAttribution,
@@ -209,9 +210,9 @@ export default {
       background: linear-gradient(transparent, transparent 50%, white);
     }
     .map {
-      filter: invert(1);
+      //filter: invert(1);
       opacity: 0.1;
-      background: black;
+      background: grey;
     }
   }
 }
@@ -220,7 +221,7 @@ export default {
   top: 0px;
   left: 0px;
   width: 100%;
-  height: 232px;
+  height: 300px;
   z-index: 103;
   display: flex;
   justify-content: center;
@@ -233,24 +234,12 @@ export default {
     z-index: 104;
   }
   .map {
-    width: 66vw;
+    width: 100%;
     pointer-events: none !important;
     cursor: default;
   }
 }
 
-@media only screen and (min-width: 1024px) {
-  .map {
-    max-width: 1024px;
-    min-width: 920px;
-  }
-}
-
-@media only screen and (min-width: 1921px) {
-  .map {
-    max-width: 1280px;
-  }
-}
 @media only screen and (max-width: 1024px) {
   .map {
     width: 100%;

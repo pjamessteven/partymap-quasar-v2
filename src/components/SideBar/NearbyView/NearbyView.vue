@@ -15,6 +15,7 @@
                 right: $q.screen.gt.xs ? '0px' : '0px',
                 width: $q.screen.gt.xs ? '8px' : '4px',
               }"
+              :class="!showPanel && 'disable-scroll'"
               class="scroll-area flex grow"
               :content-style="{
                 'will-change': 'scroll-position',
@@ -26,7 +27,7 @@
             >
               <div class="scroll-stuff flex column">
                 <div
-                  class="flex column mobile-location-header q-mt-lg"
+                  class="flex column mobile-location-header q-mt-sm"
                   style="width: 100%"
                   :class="{
                     'q-px-lg q-pt- q-mb-sm': $q.screen.gt.xs,
@@ -99,7 +100,7 @@
                   @click="showMessage = !showMessage"
                 >
                   <div
-                    class="flex grow no-wrap location-header inter q-pb-md t3"
+                    class="flex grow no-wrap inter q-pb-md t3"
                     :class="{
                       'justify-between q-pt-sm items-center': $q.screen.lt.md,
                       'bold items-end': $q.screen.gt.xs,
@@ -439,7 +440,6 @@
                         </div>
                         <ArtistsComponent
                           :class="$q.screen.gt.xs ? 'q-pl-sm' : ''"
-                          @wheel.stop
                           :artists="nearbyArtists"
                           :hasNext="nearbyArtistsHasNext"
                           :loadMore="loadNearbyArtists"
@@ -460,7 +460,6 @@
                         </div>
                         <ArtistsComponent
                           :class="$q.screen.gt.xs ? 'q-pl-sm' : ''"
-                          @wheel.stop
                           :artists="artistOptions"
                           :hasNext="artistOptionsHasNext"
                           :loadMore="loadArtistOptions"
@@ -1137,6 +1136,11 @@ export default {
     height: 100%;
     overflow: hidden;
 
+    &.disable-scroll {
+      :deep(.scroll) {
+        overflow-y: hidden !important;
+      }
+    }
     .scroll-stuff {
       max-width: 100vw;
 

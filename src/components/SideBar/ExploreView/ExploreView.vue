@@ -632,7 +632,6 @@ export default {
   }
   .event-list-vertical {
     pointer-events: none;
-    background: black;
 
     .explore-header {
       &:hover {
@@ -705,7 +704,6 @@ export default {
       right: 0px;
       top: -4px;
       z-index: 5000;
-      pointer-events: all;
     }
     .event-list-inner {
       .artists-component {
