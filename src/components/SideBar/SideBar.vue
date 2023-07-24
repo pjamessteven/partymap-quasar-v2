@@ -211,9 +211,11 @@ export default {
 
     sidebarPanel(to, from) {
       if (from === 'explore') {
+        /*
         this.eventDates = [];
         this.eventDatesGroupedByMonth = {};
         this.eventDatesLoading = true;
+        */
       }
       if (to === 'explore') {
         this.showPanel = false;
@@ -322,7 +324,7 @@ export default {
 
       //box-shadow: rgba(50, 50, 105, 0.15) 0px 0px 5px 0px,
       //  rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
-      //border: 1px solid rgba(0, 0, 0, 0.1);
+
       &.sidebar-mobile-shadow {
         box-shadow: 0px 0px 32px 16px rgba(0, 0, 0, 0.4);
       }

@@ -102,8 +102,11 @@ export default {
   },
 
   watch: {
-    sidebarPanel(newv) {
-      if (newv === 'explore' || newv === 'nearby') {
+    sidebarPanel(newv, oldv) {
+      if (
+        (newv === 'explore' && oldv === 'nearby') ||
+        (newv === 'nearby' && oldv === 'explore')
+      ) {
         if (this.userLocation.lat)
           this.fitBoundsForExplorePage(this.userLocation);
       }

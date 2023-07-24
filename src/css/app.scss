@@ -1,7 +1,6 @@
 // app global css in SCSS form
 
 @import '/src/css/inter/inter.css';
-@import '/src/css/stratos/stratos.css';
 
 .card {
   border-radius: 0px;
@@ -25,20 +24,6 @@
 .q-btn-group {
   border-radius: 9px;
   border: none !important;
-}
-
-@font-face {
-  font-family: open-sans;
-  src: url(./Open_Sans/OpenSans-Regular.ttf);
-}
-
-@font-face {
-  font-family: chicagoflf;
-  src: url(./chicagoflf/ChicagoFLF.woff);
-}
-
-.chicago {
-  font-family: 'chicagoflf';
 }
 
 .inter {
@@ -68,9 +53,6 @@
 }
 
 // declare a class which applies it
-.my-font {
-  font-family: 'customfont';
-}
 
 .sans-serif {
   font-family: sans-serif;
