@@ -12,6 +12,10 @@
     -->
     <div
       class="content flex column grow q-px-md"
+      v-if="
+        (searchResults.length > 0 || locationSearchResults.length > 0) &&
+        !loading
+      "
       :class="$q.screen.gt.xs ? 'q-px-lg' : ''"
     >
       <div
@@ -21,17 +25,19 @@
         Search results
       </div>
       <SearchResults
+        v-if="!loading"
         class="q-pb-md"
         :search-results="searchResults"
         :search-location-results="locationSearchResults"
       />
     </div>
+    <InnerLoading v-if="loading" :solid="false" />
   </div>
 </template>
 
 <script>
 import _ from 'lodash';
-
+import InnerLoading from 'src/components/InnerLoading.vue';
 import SearchResults from './SearchResults.vue';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import { getSearchSuggestionsRequest } from 'src/api';
@@ -39,16 +45,18 @@ import { mapState, mapWritableState } from 'pinia';
 import { useSearchStore } from 'src/stores/search';
 import { useMainStore } from 'src/stores/main';
 export default {
-  components: { SearchResults },
+  components: { SearchResults, InnerLoading },
   data() {
     return {
       searchResults: [],
       locationSearchResults: [],
+      loading: false,
     };
   },
   methods: {
     async search() {
       if (this.query?.length > 0) {
+        this.loading = true;
         const provider = new OpenStreetMapProvider();
 
         const [searchResultsResponse, locationSearchResponse] =
@@ -56,12 +64,12 @@ export default {
             getSearchSuggestionsRequest({ query: this.query }),
             provider.search({ query: this.query }),
           ]);
-
         this.searchResults = searchResultsResponse.data.results;
         this.locationSearchResults = locationSearchResponse.map((res) => ({
           label: res.label,
           location: { lat: res.y, lng: res.x },
         }));
+        this.loading = false;
       }
     },
     clearSearchResults() {

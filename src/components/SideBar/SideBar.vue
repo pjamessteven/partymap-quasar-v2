@@ -3,7 +3,6 @@
     <div
       ref="sidebar"
       v-touch-swipe.mouse.up="!showPanel ? handleSwipe : null"
-      @click="() => (showPanel = true)"
       class="flex column justify-between no-wrap sidebar"
       id="sidebar"
       v-bind:class="{
@@ -154,7 +153,8 @@ export default {
 
         if (
           this.sidebarPanel !== 'explore' &&
-          this.sidebarPanel !== 'favorites'
+          this.sidebarPanel !== 'favorites' &&
+          this.$q.screen.lt.sm
         ) {
           this.sidebarPanel = 'explore';
         }
@@ -226,6 +226,9 @@ export default {
       if (to === 'nearby') {
         if (this.$q.screen.lt.sm) {
           this.showPanel = true;
+          this.enablePanelSwipeDown = true;
+        } else {
+          this.showPanel = false;
           this.enablePanelSwipeDown = true;
         }
       }
@@ -374,20 +377,24 @@ export default {
     overflow: visible;
     height: 100%;
     pointer-events: all;
-    border-top-left-radius: 18px;
-    border-top-right-radius: 18px;
+    //border-top-left-radius: 18px;
+    //border-top-right-radius: 18px;
     transition: all 0.3s ease;
     transform: translate3d(0, calc(100% - 226px), 0);
     user-select: none;
     will-change: transform;
     padding-bottom: 64px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
     //box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
     //  rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
     //  rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
     .sidebar-content {
+      border-top-left-radius: 0px;
+      border-top-right-radius: 0px;
       .sidebar-content-inner {
-        border-top-left-radius: 18px;
-        border-top-right-radius: 18px;
+        //border-top-left-radius: 18px;
+        //border-top-right-radius: 18px;
         overflow: hidden;
         isolation: isolate;
         .sidebar-content-inner-shadow {
@@ -396,8 +403,8 @@ export default {
           width: 100%;
           z-index: 1;
           pointer-events: none;
-          border-top-left-radius: 18px;
-          border-top-right-radius: 18px;
+          // border-top-left-radius: 18px;
+          // border-top-right-radius: 18px;
         }
       }
     }
@@ -445,8 +452,7 @@ export default {
       height: 100%;
       width: 100%;
       position: relative;
-      border-top-left-radius: 18px;
-      border-top-right-radius: 18px;
+
       overflow: hidden;
       //box-shadow: 0px 0px 64px 32px rgba(0, 0, 0, 0.2);
       .nav-bar {
@@ -616,8 +622,7 @@ export default {
       border-left: none;
       border-right: none;
       overflow: visible;
-      border-top-left-radius: 18px;
-      border-top-right-radius: 18px;
+
       &.sidebar-mobile-shadow {
         //box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
       }

@@ -3,7 +3,7 @@
     <div
       class="date-header flex row no-wrap justify-between grow ellipsis inter semibold"
       :class="
-        $q.screen.gt.xs ? ' q-px-md q-py-md t3' : 'q-px-sm q-ml-xs q-py-md t2'
+        $q.screen.gt.xs ? ' q-px-md q-py-md  t3' : 'q-px-sm q-ml-xs q-py-md t2'
       "
     >
       <span v-if="!!altLabel">{{ altLabel }}</span>

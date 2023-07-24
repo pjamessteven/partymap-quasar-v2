@@ -190,7 +190,7 @@ export default {
         this.$q.dark.isActive ||
         this.$route.name === 'EventPage' ||
         this.$route.name === 'Explore' ||
-        (this.$route.meta.fullscreenLayout === true && this.$q.screen.gt.xs)
+        (this.$route.meta.mapOverlay === true && this.$q.screen.gt.xs)
       ) {
         return 'white';
       } else {

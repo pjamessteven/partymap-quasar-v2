@@ -733,7 +733,7 @@ body {
 }
 
 .q-menu {
-  border-radius: 9px !important;
+  border-radius: 0px !important;
   //max-height: 100vh !important;
   /*
   max-width: unset !important;
@@ -779,7 +779,7 @@ body {
 }
 
 .q-card {
-  border-radius: 9px !important;
+  border-radius: 0px !important;
 }
 .q-item__section--avatar {
   min-width: unset !important;

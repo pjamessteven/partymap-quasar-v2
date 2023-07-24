@@ -1,7 +1,7 @@
 <template>
   <div class="view-options flex justify-center items-center">
     <q-btn-dropdown
-      class="inter semibold t3"
+      class="inter t2"
       no-caps
       @click.stop
       flat
@@ -11,7 +11,7 @@
     >
       <div class="row no-wrap q-pa-sm">
         <div class="column">
-          <div class="t3 q-ma-sm">View options</div>
+          <div class="t2 q-ma-sm">View options</div>
           <q-toggle v-model="compactView" label="Compact view" />
           <q-toggle
             v-if="showGroupByMonth"

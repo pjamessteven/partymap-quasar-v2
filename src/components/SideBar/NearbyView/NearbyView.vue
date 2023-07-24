@@ -8,12 +8,14 @@
             style="height: 100%; width: 100%; max-width: 100%"
           >
             <q-scroll-area
+              @click.prevent
               @scroll="onScroll"
               vertical
               :thumb-style="{
-                marginTop: '12px',
-                right: $q.screen.gt.xs ? '0px' : '0px',
+                marginTop: '4px',
+                right: $q.screen.gt.xs ? '0px' : '-16px',
                 width: $q.screen.gt.xs ? '8px' : '4px',
+                borderRadius: '0px',
               }"
               :class="!showPanel && 'disable-scroll'"
               class="scroll-area flex grow"
@@ -28,7 +30,7 @@
               <div class="scroll-stuff flex column">
                 <div
                   v-if="$q.screen.gt.xs"
-                  class="q-px-md q-pt-md q-pb-md flex items-center justify-between"
+                  class="q-px-md q-pt-md flex items-center justify-between"
                 >
                   <div class="flex items-center">
                     <q-btn
@@ -79,6 +81,7 @@
                       >Finding your location...
                     </span>
                   </div>
+                  <!--
                   <q-icon
                     flat
                     class="q-mr-md"
@@ -86,6 +89,7 @@
                     :class="{ 'rotate-180': showPanel }"
                     name="mdi-chevron-up"
                   />
+                  -->
                 </div>
                 <div
                   v-if="$q.screen.lt.sm"
@@ -158,7 +162,7 @@
                 </div>
                 <div
                   class="flex message"
-                  :class="$q.screen.gt.xs ? 'q-mx-lg  q-mb-sm q ' : 'q-mx-md  '"
+                  :class="$q.screen.gt.xs ? 'q-mx-lg  q-mb-sm' : 'q-mx-md  '"
                   @click="showMessage = !showMessage"
                 >
                   <div
@@ -174,14 +178,14 @@
                     >
                     <q-icon
                       class="q-ml-md"
-                      size="1.5rem"
+                      size="1.2rem"
                       :name="
                         !showMessage ? 'mdi-chevron-down' : 'mdi-chevron-up'
                       "
                     />
                     <div
                       class="flex grow justify-end items-center"
-                      v-if="$q.screen.gt.sm && false"
+                      v-if="$q.screen.gt.sm"
                     >
                       <div
                         @click.stop="() => (sidebarPanel = 'explore')"

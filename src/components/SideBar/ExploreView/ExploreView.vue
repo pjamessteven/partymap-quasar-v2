@@ -12,12 +12,6 @@
       <div>Explore Events</div>
 
       <div class="flex items-center q-my-sm show-map">
-        <!--
-        <div class="q-pr-md">
-          <span v-if="!showPanel">Show Results</span>
-          <
-            span v-else>Show Map</span>
-        </div>\-->
         <q-icon
           flat
           class="q-mr-md"
@@ -26,13 +20,6 @@
           name="mdi-chevron-up"
         />
       </div>
-    </div>
-    <div
-      :class="{ 'q-px-lg': showPanel }"
-      v-if="$q.screen.gt.xs && false"
-      style="margin-top: -3spx"
-    >
-      <q-separator />
     </div>
 
     <q-icon
@@ -48,12 +35,36 @@
     <div class="event-list-inner">
       <div class="inner-shadow" v-if="!showPanel && false" />
 
-      <EventDateViewOptions
-        v-if="$q.screen.gt.xs && !isLoadingInitial && showResults"
-        class="view-options"
-      />
+      <EventDateViewOptions v-if="$q.screen.gt.xs" class="view-options" />
 
       <div class="flex column grow no-wrap">
+        <div
+          class="header inter semibold t1 justify-between flex items-center"
+          :class="
+            $q.screen.lt.sm
+              ? 'q-pl-md q-py-md '
+              : 'q-pl-lg  q-pt-md q-py-md t1 q-mb-xs'
+          "
+          v-if="
+            !groupEventsByMonth &&
+            eventDates?.length > 0 &&
+            !isLoadingInitial &&
+            showResults
+          "
+        >
+          <span>Upcoming in this area:</span>
+        </div>
+        <div
+          class="header inter semibold justify-between flex items-center"
+          :class="
+            $q.screen.lt.sm ? 'q-pl-md q-py-md ' : 'q-pl-lg  q-pt-md q-py-md t1'
+          "
+          v-else-if="
+            (isLoadingInitial || (mapMoving && !blockUpdates)) && !showPanel
+          "
+        >
+          <span>Loading results...</span>
+        </div>
         <q-scroll-area
           vertical
           @scroll="onScrollMainContent"
@@ -71,6 +82,13 @@
         >
           <transition enter-active-class="animated fadeIn">
             <div class="flex column no-wrap scroll-content q-px-sm">
+              <div
+                :class="{ 'q-px-md q-pb-md': showPanel || true }"
+                v-if="$q.screen.gt.xs && false"
+                style="margin-top: -3spx"
+              >
+                <q-separator />
+              </div>
               <div class="flex column no-wrap content">
                 <div
                   class="header t2 inter semibold justify-between flex items-center"
@@ -134,17 +152,6 @@
                     />
                   </div>
                   -->
-                    <div
-                      class="header inter semibold justify-between flex items-center"
-                      :class="
-                        $q.screen.lt.sm
-                          ? 'q-pl-sm q-py-md '
-                          : 'q-pl-md  q-pt-md q-py-md t3'
-                      "
-                      v-if="!groupEventsByMonth && eventDates?.length > 0"
-                    >
-                      <span>Upcoming events in this area:</span>
-                    </div>
 
                     <EventDateList
                       v-if="showResults && compactView"
@@ -539,7 +546,7 @@ export default {
 
     .view-options {
       position: absolute;
-      right: -12px;
+      right: -16px;
       top: 8px;
       z-index: 100;
     }

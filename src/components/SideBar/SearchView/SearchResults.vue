@@ -120,6 +120,9 @@ export default {
       this.userLocationCountry = location.label.split(',').pop();
       this.fineLocation = false;
       this.sidebarPanel = 'nearby';
+      if (this.$q.screen.gt.xs) {
+        this.showPanel = false;
+      }
     },
   },
   computed: {
@@ -129,6 +132,7 @@ export default {
       'userLocationCountry',
       'sidebarPanel',
       'fineLocation',
+      'showPanel',
     ]),
     ...mapWritableState(useQueryStore, ['controlTag']),
     ...mapWritableState(useSearchStore, ['query']),
