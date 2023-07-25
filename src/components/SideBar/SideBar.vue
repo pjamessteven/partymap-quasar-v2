@@ -324,7 +324,6 @@ export default {
 
       //box-shadow: rgba(50, 50, 105, 0.15) 0px 0px 5px 0px,
       //  rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
-
       &.sidebar-mobile-shadow {
         box-shadow: 0px 0px 32px 16px rgba(0, 0, 0, 0.4);
       }
@@ -373,7 +372,7 @@ export default {
     //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.3);
     //box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
     //  rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-    //box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    //box-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
     max-height: 100%;
     transition: width 0.3s;
     overflow: visible;
@@ -386,17 +385,17 @@ export default {
     user-select: none;
     will-change: transform;
     padding-bottom: 64px;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
     //box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
     //  rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
     //  rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
     .sidebar-content {
-      border-top-left-radius: 0px;
-      border-top-right-radius: 0px;
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
       .sidebar-content-inner {
-        //border-top-left-radius: 18px;
-        //border-top-right-radius: 18px;
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
         overflow: hidden;
         isolation: isolate;
         .sidebar-content-inner-shadow {
@@ -572,6 +571,14 @@ export default {
     }
   }
 }
+@media only screen and (max-width: 1024px) {
+  .sidebar-wrapper {
+    .sidebar {
+      width: 90vw;
+    }
+  }
+}
+
 @media only screen and (max-width: 600px) {
   .body--dark {
     .sidebar-wrapper {

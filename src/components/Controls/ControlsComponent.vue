@@ -451,8 +451,9 @@ export default {
 
   .inner-wrapper {
     mask-image: none;
+    height: 44px;
     .control-scroll-area {
-      //height: 44px;
+      margin-top: -2px;
       overflow-y: hidden !important;
       mask-image: linear-gradient(
         to left,
@@ -468,6 +469,9 @@ export default {
         padding-left: 0px;
         padding-right: 24px;
       }
+    }
+    .searchbar-wrapper {
+      margin-top: -2px;
     }
     .search-button-wrapper {
       position: absolute;

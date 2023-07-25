@@ -76,6 +76,7 @@ export default {
       map: null, // when accessing this.map, we need to use toRaw() to avoid vue3 proxy which causes issues ()
       tileLayer: null,
       labelLayer: null,
+      individualMarkers: [],
       mapMarkers: null,
       mapMarkersPermanentTooltip: null,
       satelliteMapOpacity: 1,
@@ -186,21 +187,24 @@ export default {
         if (toRaw(this.map)) {
           if (to.name === 'EventPage') {
             // enter event page
-            if (this.mapMarkers && this.map.hasLayer(toRaw(this.mapMarkers))) {
-              this.mapMarkers.remove();
+            if (
+              this.mapMarkers &&
+              toRaw(this.map).hasLayer(toRaw(this.mapMarkers))
+            ) {
+              toRaw(this.mapMarkers).remove();
             }
             if (
               this.eventDateHoverLayer &&
-              this.map.hasLayer(toRaw(this.eventDateHoverLayer))
+              toRaw(this.map).hasLayer(toRaw(this.eventDateHoverLayer))
             ) {
-              this.eventDateHoverLayer.clearLayers();
-              this.eventDateHoverLayer.remove();
+              toRaw(this.eventDateHoverLayer).clearLayers();
+              toRaw(this.eventDateHoverLayer).remove();
             }
             // this.eventDateHoverLayer.clearLayers()
           } else if (to.name === 'Explore') {
             // restore previous map view
             if (this.exploreMapView) {
-              this.map.setView(
+              toRaw(this.map).setView(
                 this.exploreMapView.latlng,
                 this.exploreMapView.zoom
               );
@@ -208,31 +212,31 @@ export default {
 
             // restore default opacity
             if (this.mapStyle === 'satellite') {
-              this.tileLayer.setOpacity(this.satelliteMapOpacity);
+              toRaw(this.tileLayer).setOpacity(this.satelliteMapOpacity);
             } else if (this.mapStyle === 'transport') {
-              this.tileLayer.setOpacity(1);
+              toRaw(this.tileLayer).setOpacity(1);
             } else {
-              this.tileLayer.setOpacity(this.monochromeMapOpactiy);
+              toRaw(this.tileLayer).setOpacity(this.monochromeMapOpactiy);
             }
 
             if (
               this.focusMarkerLayer &&
-              this.map.hasLayer(toRaw(this.focusMarkerLayer))
+              toRaw(this.map).hasLayer(toRaw(this.focusMarkerLayer))
             ) {
               this.focusMarkerLayer.clearLayers();
               this.focusMarkerLayer.remove();
             }
             if (
               this.eventDateHoverLayer &&
-              this.map.hasLayer(toRaw(this.eventDateHoverLayer))
+              toRaw(this.map).hasLayer(toRaw(this.eventDateHoverLayer))
             ) {
               this.eventDateHoverLayer.clearLayers();
               this.eventDateHoverLayer.remove();
             }
 
             // possible performance issue
-            if (this.mapMarkers) {
-              this.mapMarkers.addTo(toRaw(this.map));
+            if (toRaw(this.mapMarkers)) {
+              toRaw(this.mapMarkers).addTo(toRaw(this.map));
             } else {
               this.clearMarkersAndLoadPoints();
             }
@@ -247,11 +251,11 @@ export default {
           // save current map view so we can return to it
           if (newval.lat && newval.lng) {
             this.exploreMapView = {
-              latlng: this.map.getCenter(),
-              zoom: this.map.getZoom(),
+              latlng: toRaw(this.map).getCenter(),
+              zoom: toRaw(this.map).getZoom(),
             };
 
-            var currentZoom = this.map.getZoom();
+            var currentZoom = toRaw(this.map).getZoom();
             if (currentZoom <= 4) {
               currentZoom = 4;
             }
@@ -263,7 +267,7 @@ export default {
     eventDateHoverMarker: function (newv) {
       this.eventDateHoverLayer.unbindTooltip();
       this.eventDateHoverLayer.clearLayers();
-      if (newv !== null && this.map) {
+      if (newv !== null && toRaw(this.map)) {
         var markers = [
           L.marker([newv.lat, newv.lng], {
             icon: this.defaultIcon,
@@ -314,11 +318,11 @@ export default {
     },
     clearMarkersAndLoadPoints() {
       if (this.mapMarkers !== null) {
-        this.map?.removeLayer(toRaw(this.mapMarkers));
+        toRaw(this.map)?.removeLayer(toRaw(this.mapMarkers));
         this.mapMarkers.clearLayers();
       }
       if (this.mapMarkersPermanentTooltip !== null) {
-        this.map?.removeLayer(toRaw(this.mapMarkersPermanentTooltip));
+        toRaw(this.map)?.removeLayer(toRaw(this.mapMarkersPermanentTooltip));
         this.mapMarkersPermanentTooltip.clearLayers();
       }
       this.loadPoints();
@@ -329,7 +333,7 @@ export default {
       var latlng = L.latLng(coords);
       if (this.$q.screen.gt.xs) {
         if (this.sidebarPanel === 'explore') {
-          this.map.fitBounds(L.latLngBounds(latlng, latlng), {
+          toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
             paddingTopLeft: [0, -128],
             animate: true,
             duration: 0.3,
@@ -337,7 +341,7 @@ export default {
             maxZoom: 10,
           });
         } else {
-          this.map.fitBounds(L.latLngBounds(latlng, latlng), {
+          toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
             paddingTopLeft: [0, -(this.windowHeight / 3) - 128],
             animate: true,
             duration: 0.3,
@@ -347,7 +351,7 @@ export default {
         }
       } else {
         // padding for mobile bottom panel
-        this.map.fitBounds(L.latLngBounds(latlng, latlng), {
+        toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
           paddingTopLeft: [0, -150],
           animate: true,
           duration: 0.3,
@@ -358,7 +362,7 @@ export default {
     },
     invalidateMapSize() {
       setTimeout(() => {
-        this.map.invalidateSize();
+        toRaw(this.map).invalidateSize();
       }, 1000);
     },
     showEventPageForMarker(data) {
@@ -405,14 +409,14 @@ export default {
       var pxSw = this.map.getPixelBounds().getBottomLeft();
 
       pxSw = pxSw.subtract(L.point(0, bottomPanelHeight)); // add the height of the bottom panel
-      var sw = this.map.unproject(pxSw);
-      bounds = L.latLngBounds(sw, this.map.getBounds().getNorthEast()); // bounds without the bottom panel
+      var sw = toRaw(this.map).unproject(pxSw);
+      bounds = L.latLngBounds(sw, toRaw(this.map).getBounds().getNorthEast()); // bounds without the bottom panel
 
       this.mapBounds = bounds;
       this.mapCenter = bounds;
     },
     setMarkerFocusForEventPage(latlng, zoom) {
-      this.mapMarkers?.remove();
+      toRaw(this.mapMarkers)?.remove();
       //this.mapMarkersPermanentTooltip.remove();
 
       var markers = [
@@ -429,7 +433,7 @@ export default {
       var mapContainerHeight = this.windowHeight; // minus menubar
       var paddingBottom = this.windowHeight - mapContainerHeight / 3 + 28;
       var paddingRight = 0;
-      this.map.fitBounds(toRaw(this.focusMarkerLayer).getBounds(), {
+      toRaw(this.map).fitBounds(toRaw(this.focusMarkerLayer).getBounds(), {
         paddingBottomRight: [paddingRight, paddingBottom],
         animate: true,
         maxZoom: zoom,
@@ -442,7 +446,7 @@ export default {
       );
       this.initTileLayers();
 
-      this.map.on('mousedown', () => {
+      toRaw(this.map).on('mousedown', () => {
         // switch to explore view
         if (
           this.sidebarPanel !== 'explore' &&
@@ -453,7 +457,7 @@ export default {
         this.showPanel = false;
       });
 
-      this.map.on('movestart', () => {
+      toRaw(this.map).on('movestart', () => {
         /*
         this.exploreMapView = {
           latlng: this.map.getCenter(),
@@ -463,7 +467,7 @@ export default {
         this.mapMoving = true;
       });
 
-      this.map.on('moveend', (event) => {
+      toRaw(this.map).on('moveend', (event) => {
         if (!this.blockUpdates) {
           /*
           this.exploreMapView = {
@@ -475,11 +479,11 @@ export default {
 
         this.mapMoving = false;
       });
-      this.map.on('zoomstart', () => {
+      toRaw(this.map).on('zoomstart', () => {
         this.markersLoaded = false;
         // switch to explore view handled by wheel event
       });
-      this.map.on('zoomend', (event) => {
+      toRaw(this.map).on('zoomend', (event) => {
         /*
         if (event.target.getZoom() > 10) {
           // show markers with tooltips at a certain zoom level
@@ -502,11 +506,17 @@ export default {
       });
     },
     initTileLayers() {
-      if (this.tileLayer && this.map?.hasLayer(toRaw(this.tileLayer))) {
-        this.map.removeLayer(toRaw(this.tileLayer));
+      if (
+        toRaw(this.tileLayer) &&
+        toRaw(this.map)?.hasLayer(toRaw(this.tileLayer))
+      ) {
+        toRaw(this.map).removeLayer(toRaw(this.tileLayer));
       }
-      if (this.labelLayer && this.map?.hasLayer(toRaw(this.labelLayer))) {
-        this.map.removeLayer(toRaw(this.labelLayer));
+      if (
+        toRaw(this.labelLayer) &&
+        toRaw(this.map)?.hasLayer(toRaw(this.labelLayer))
+      ) {
+        toRaw(this.map).removeLayer(toRaw(this.labelLayer));
       }
 
       // style specific parameters
@@ -531,8 +541,8 @@ export default {
           [90, 180],
         ],
       });
-      this.tileLayer.setOpacity(opacity);
-      this.tileLayer.addTo(toRaw(this.map));
+      toRaw(this.tileLayer).setOpacity(opacity);
+      toRaw(this.tileLayer).addTo(toRaw(this.map));
 
       if (this.mapStyle === 'satellite') {
         // add additional label layer for satellite map
@@ -544,8 +554,8 @@ export default {
             [90, 180],
           ],
         });
-        this.labelLayer.addTo(toRaw(this.map));
-        this.labelLayer.setOpacity(this.satelliteLabelLayerOpacity);
+        toRaw(this.labelLayer).addTo(toRaw(this.map));
+        toRaw(this.labelLayer).setOpacity(this.satelliteLabelLayerOpacity);
       }
       //this.map.fitWorld();
     },
@@ -561,7 +571,6 @@ export default {
           chunkedLoading: true,
         });
 */
-        var markers = [];
         var tooltipMarkers = [];
         for (let i = 0; i < this.points.length; i++) {
           var toolTipHtml = '';
@@ -597,14 +606,14 @@ export default {
           }
 
           let marker = L.marker([this.points[i].lat, this.points[i].lng], {
-            icon: this.defaultIcon,
+            icon: toRaw(this.defaultIcon),
             title: toolTipString,
             alt: toolTipString,
           }); //.bindTooltip(toolTipHtml, { direction: 'top', permanent: false });
 
           marker.on('click', this.clickMarker);
           marker.data = this.points[i];
-          markers.push(marker);
+          this.individualMarkers.push(marker);
           /*
           let tooltipMarker = L.marker(
             [this.points[i].lat, this.points[i].lng],
@@ -617,10 +626,13 @@ export default {
           tooltipMarkers.push(tooltipMarker);
           */
         }
-        this.mapMarkers.addLayers(markers);
+        toRaw(this.mapMarkers).addLayers(toRaw(this.individualMarkers));
+
+        //this.mapMarkers.addLayers(markers);
         // this.mapMarkersPermanentTooltip.addLayers(tooltipMarkers);
         this.markersLoaded = true;
-        this.mapMarkers.addTo(toRaw(this.map));
+        toRaw(this.map).addLayer(toRaw(this.mapMarkers));
+        //this.mapMarkers.addTo(toRaw(this.map));
       }
     },
   },

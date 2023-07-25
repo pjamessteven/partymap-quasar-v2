@@ -1,7 +1,7 @@
 <template>
   <div class="view-options flex justify-center items-center">
     <q-btn-dropdown
-      class="inter t2"
+      class="inter t3"
       no-caps
       @click.stop
       flat
@@ -51,5 +51,8 @@ export default {
 .body--dark {
 }
 .view-options {
+  :deep(.q-btn__content) {
+    font-weight: 400 !important;
+  }
 }
 </style>

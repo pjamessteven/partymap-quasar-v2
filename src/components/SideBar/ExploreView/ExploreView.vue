@@ -6,7 +6,7 @@
     <div
       @click="() => (showPanel = !showPanel)"
       style="pointer-events: all; cursor: pointer"
-      class="inter bolder text-h5 flex items-center justify-between q-pl-lg q-pr-md q-pt-md explore-header"
+      class="inter bolder text-h5 flex items-center justify-between q-pl-lg q-pr-md q-py-md explore-header"
       v-if="$q.screen.gt.xs"
     >
       <div>Explore Events</div>
@@ -21,6 +21,12 @@
         />
       </div>
     </div>
+    <div
+      :class="{ 'q-px-md': showPanel || true }"
+      v-if="$q.screen.gt.xs && false"
+    >
+      <q-separator />
+    </div>
 
     <q-icon
       @click="() => (showPanel = !showPanel)"
@@ -33,38 +39,19 @@
     />
     <div class="touch-overlay" v-touch-swipe.vertical="handleSwipe" />
     <div class="event-list-inner">
+      <EventDateViewOptions
+        v-if="$q.screen.gt.xs && groupEventsByMonth"
+        class="view-options-absolute"
+      />
+
       <div class="inner-shadow" v-if="!showPanel && false" />
 
-      <EventDateViewOptions v-if="$q.screen.gt.xs" class="view-options" />
-
-      <div class="flex column grow no-wrap">
-        <div
-          class="header inter semibold t1 justify-between flex items-center"
-          :class="
-            $q.screen.lt.sm
-              ? 'q-pl-md q-py-md '
-              : 'q-pl-lg  q-pt-md q-py-md t1 q-mb-xs'
-          "
-          v-if="
-            !groupEventsByMonth &&
-            eventDates?.length > 0 &&
-            !isLoadingInitial &&
-            showResults
-          "
-        >
-          <span>Upcoming in this area:</span>
-        </div>
-        <div
-          class="header inter semibold justify-between flex items-center"
-          :class="
-            $q.screen.lt.sm ? 'q-pl-md q-py-md ' : 'q-pl-lg  q-pt-md q-py-md t1'
-          "
-          v-else-if="
-            (isLoadingInitial || (mapMoving && !blockUpdates)) && !showPanel
-          "
-        >
-          <span>Loading results...</span>
-        </div>
+      <div
+        class="flex column grow no-wrap"
+        :style="
+          groupEventsByMonth && $q.screen.gt.xs ? 'margin-top: -16px' : ''
+        "
+      >
         <q-scroll-area
           vertical
           @scroll="onScrollMainContent"
@@ -82,24 +69,51 @@
         >
           <transition enter-active-class="animated fadeIn">
             <div class="flex column no-wrap scroll-content q-px-sm">
-              <div
-                :class="{ 'q-px-md q-pb-md': showPanel || true }"
-                v-if="$q.screen.gt.xs && false"
-                style="margin-top: -3spx"
-              >
-                <q-separator />
-              </div>
               <div class="flex column no-wrap content">
                 <div
-                  class="header t2 inter semibold justify-between flex items-center"
+                  class="inter t1 justify-between flex items-center"
                   :class="
-                    $q.screen.lt.sm ? 'q-pl-sm q-py-md' : 'q-pl-md  q-py-md '
+                    $q.screen.lt.sm
+                      ? 'q-pl-md q-py-md header t2 semibold '
+                      : 'q-pl-md  q-pb-md t3 '
                   "
-                  v-if="$q.screen.lt.sm && (isLoadingInitial || !showResults)"
+                  v-if="
+                    !groupEventsByMonth &&
+                    eventDates?.length > 0 &&
+                    !isLoadingInitial &&
+                    showResults &&
+                    eventDatesTotal
+                  "
                 >
-                  <span>Searching in this area...</span>
+                  <span
+                    >{{ eventDatesTotal }}
+                    <span v-if="eventDatesTotal === 1">result</span
+                    ><span v-else>results</span>&nbsp;in this area:</span
+                  >
+                  <EventDateViewOptions
+                    v-if="$q.screen.gt.xs"
+                    class="view-options"
+                  />
                 </div>
-
+                <div
+                  class="inter"
+                  :class="
+                    $q.screen.lt.sm
+                      ? 'q-pl-md q-py-md header t2 semibold'
+                      : 'q-pl-md  q-pb-md t3 '
+                  "
+                  :style="
+                    groupEventsByMonth && $q.screen.gt.xs
+                      ? 'margin-top: 16px'
+                      : ''
+                  "
+                  v-else-if="
+                    (isLoadingInitial || (mapMoving && !blockUpdates)) &&
+                    !showPanel
+                  "
+                >
+                  <span>Loading results...</span>
+                </div>
                 <div class="flex row no-wrap">
                   <!--
                   <ControlsComponent
@@ -192,7 +206,7 @@
         :style="
           $q.screen.lt.sm
             ? 'height: 100%; position: absolute; width: 100%; z-index: 500'
-            : 'height: 160px; position: absolute; width: 100%; z-index: 500'
+            : 'height: 100px; position: absolute; width: 100%; z-index: 500'
         "
       >
         <q-linear-progress
@@ -269,6 +283,7 @@ export default {
         if (this.$refs) this.$refs.scroll.setScrollPercentage('vertical', 0);
         this.eventDatesHasNext = true;
         this.eventDatesPage = 1;
+        this.eventDatesTotal = null;
         this.eventDates = []; // this is actually quite important
         if (!this.userLocation) {
           await this.loadIpInfo();
@@ -408,6 +423,7 @@ export default {
     ]),
     ...mapWritableState(useQueryStore, [
       'eventDates',
+      'eventDatesTotal',
       'eventDatesPage',
       'eventDatesHasNext',
       'artistsPage',
@@ -546,8 +562,15 @@ export default {
 
     .view-options {
       position: absolute;
-      right: -16px;
-      top: 8px;
+      right: -18px;
+      top: -8px;
+      z-index: 100;
+    }
+
+    .view-options-absolute {
+      position: absolute;
+      right: -18px;
+      top: -8px;
       z-index: 100;
     }
 
@@ -664,12 +687,14 @@ export default {
   }
   .event-list-vertical {
     background: white;
+
     .event-list-inner {
       //background: white;
     }
   }
   .header {
     background: white;
+
     //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.2);
   }
   .controls-component {

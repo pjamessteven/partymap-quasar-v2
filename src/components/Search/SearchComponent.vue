@@ -166,12 +166,14 @@ export default {
     //background: rgba(0, 0, 0, 0.5);
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
 .search-component {
   z-index: 4000;
   position: absolute;
-  top: 24px;
+  top: 32px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -188,7 +190,7 @@ export default {
 
       transition: all 0.3s;
       cursor: pointer;
-      width: 500px;
+      width: 510px;
       height: 100%;
       border-radius: 48px;
       backdrop-filter: blur(10px);
@@ -239,6 +241,10 @@ export default {
   }
   .search-component {
     top: 68px;
+    .controls-wrapper {
+      .controls-wrapper-inner {
+      }
+    }
   }
 }
 </style>

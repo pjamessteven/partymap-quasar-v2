@@ -90,7 +90,7 @@ interface QueryState {
   eventDatesHasNext: boolean;
   eventDatesLoading: boolean;
   eventDatesRequestId: number | null;
-
+  eventDatesTotal: number | null;
   // artists in bounds
   artists: Artist[];
   artistsHasNext: boolean;
@@ -163,6 +163,7 @@ export const useQueryStore = defineStore('query', {
     eventDatesPage: 1,
     eventDatesLoading: false,
     eventDatesRequestId: null,
+    eventDatesTotal: null,
 
     artists: [],
     artistsHasNext: false,
@@ -337,6 +338,7 @@ export const useQueryStore = defineStore('query', {
           this.eventDatesLoading = false;
           this.eventDatesHasNext = response.data.has_next;
           this.eventDatesPage += 1;
+          this.eventDatesTotal = response.data.total;
           return response.data.items;
         } else {
           return;

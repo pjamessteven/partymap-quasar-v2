@@ -150,7 +150,9 @@ export default {
       );
     }
     .overlay {
+      background: linear-gradient($bi-2, $bi-2 62px, black 62px, black);
       background: black;
+      //background: linear-gradient(transparent 5%, white 15%);
       /*
       background: linear-gradient(
         rgba(0, 0, 0, 0.78) 0px,
@@ -174,6 +176,7 @@ export default {
       );
     }
     .overlay {
+      //background: linear-gradient(#fafafa, #fafafa 64px, white 64px, white);
       background: white;
       //background: linear-gradient(transparent 5%, white 15%);
       /*

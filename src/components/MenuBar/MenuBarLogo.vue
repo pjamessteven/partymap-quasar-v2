@@ -29,12 +29,14 @@
         </div>
         -->
         <img
+          style="height: 30px; width: auto"
           src="~assets/partymap-logo-light-sm.png"
           v-if="color === 'white'"
           class="logo-image"
         />
         <img
-          src="~assets/partymap-logo-dark.sm.png"
+          style="height: 30px; width: auto"
+          src="~assets/partymap-logo-dark-sm.png"
           class="logo-image"
           v-else
         />

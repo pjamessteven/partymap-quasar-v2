@@ -2,15 +2,33 @@
   <div class="dialog-page" v-on:click.self="$router.go(-1)">
     <q-card :bordered="$q.screen.gt.sm" class="auth-card">
       <q-card-section
-        class="flex column justify-stretch q-px-xl q-pb-sm q-pt-xl"
+        class="flex column justify-stretch q-px-xl q-pb-sm"
         :class="$q.screen.gt.xs ? '' : ''"
       >
+        <div class="flex justify-center items-center q-mt-lg q-mb-xl">
+          <div>
+            <img
+              style="height: 30px; width: auto"
+              src="~assets/partymap-logo-light-sm.png"
+              v-if="$q.dark.isActive"
+              class="logo-image"
+            />
+            <img
+              style="height: 30px; width: auto"
+              src="~assets/partymap-logo-dark-sm.png"
+              class="logo-image"
+              v-else
+            />
+          </div>
+        </div>
+        <!--
         <div
-          class="header t1 inter bolder text-h6 q-mb-xl"
+          class="header inter bolder text-large q-mb-lg q-pb-sm q-mt-lg q-pt-md"
           style="text-align: center"
         >
           It's party time &#128526;
         </div>
+        -->
         <div class="flex column o-animated" :class="{ 'o-000': loading }">
           <q-input
             autocapitalize="off"
@@ -118,6 +136,7 @@
           </div>
         </div>
       </q-card-section>
+
       <InnerLoading v-if="loading" :solid="false" />
     </q-card>
     <q-dialog

@@ -31,7 +31,7 @@ export const useMainStore = defineStore('main', {
     showSidebar: true,
     showSearchBox: false, // for menubar search
     sidebarPanel: 'nearby',
-    showPanel: false,
+    showPanel: Screen.lt.sm,
     enablePanelSwipeDown: true,
     menubarOpacity: 1,
     overlayOpacity: 0,

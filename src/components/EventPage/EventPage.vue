@@ -1227,8 +1227,8 @@ a {
 
           pointer-events: all;
           padding-bottom: 0px;
-          border-top-left-radius: 0px !important;
-          border-top-right-radius: 0px !important;
+          border-top-left-radius: 18px !important;
+          border-top-right-radius: 18px !important;
           &.shadow {
             box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
               rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
@@ -1236,8 +1236,8 @@ a {
           }
           .content {
             height: 100%;
-            border-top-left-radius: 0px !important;
-            border-top-right-radius: 0px !important;
+            border-top-left-radius: 18px !important;
+            border-top-right-radius: 18px !important;
             //box-shadow: 0px 0px 64px 32px rgba(0, 0, 0, 0.2) !important;
 
             overflow: hidden;
