@@ -566,11 +566,10 @@ export default {
         // this.map.locate({setView: true, maxZoom: 17});
         // Leaflet.markercluster
         this.mapMarkers = L.markerClusterGroup({ chunkedLoading: true });
-        /*
-        this.mapMarkersPermanentTooltip = L.markerClusterGroup({
+
+        /*this.mapMarkersPermanentTooltip = L.markerClusterGroup({
           chunkedLoading: true,
-        });
-*/
+        });*/
         var tooltipMarkers = [];
         for (let i = 0; i < this.points.length; i++) {
           var toolTipHtml = '';
@@ -609,29 +608,18 @@ export default {
             icon: toRaw(this.defaultIcon),
             title: toolTipString,
             alt: toolTipString,
-          }); //.bindTooltip(toolTipHtml, { direction: 'top', permanent: false });
+          }).bindTooltip(toolTipHtml, { direction: 'top', permanent: true });
 
           marker.on('click', this.clickMarker);
           marker.data = this.points[i];
           this.individualMarkers.push(marker);
-          /*
-          let tooltipMarker = L.marker(
-            [this.points[i].lat, this.points[i].lng],
-            {
-              icon: this.defaultIcon,
-            }
-          ).bindTooltip(toolTipHtml, { direction: 'top', permanent: true });
-          tooltipMarker.on('click', this.clickMarker);
-          tooltipMarker.data = this.points[i];
-          tooltipMarkers.push(tooltipMarker);
-          */
         }
         toRaw(this.mapMarkers).addLayers(toRaw(this.individualMarkers));
+        //toRaw(this.mapMarkersPermanentTooltip).addLayers(tooltipMarkers);
 
-        //this.mapMarkers.addLayers(markers);
-        // this.mapMarkersPermanentTooltip.addLayers(tooltipMarkers);
         this.markersLoaded = true;
         toRaw(this.map).addLayer(toRaw(this.mapMarkers));
+        //toRaw(this.map).addLayer(toRaw(this.mapMarkersPermanentTooltip));
         //this.mapMarkers.addTo(toRaw(this.map));
       }
     },
