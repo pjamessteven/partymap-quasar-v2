@@ -38,7 +38,10 @@
       name="mdi-chevron-up"
     />
     <div class="touch-overlay" v-touch-swipe.vertical="handleSwipe" />
-    <div class="event-list-inner">
+    <div
+      class="event-list-inner"
+      :style="$q.screen.gt.xs && $q.screen.lt.lg ? 'margin-top: -20px' : ''"
+    >
       <EventDateViewOptions
         v-if="$q.screen.gt.xs && groupEventsByMonth"
         class="view-options-absolute"

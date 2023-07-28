@@ -6,6 +6,9 @@
           <div
             class="flex column grow no-wrap"
             style="height: 100%; width: 100%; max-width: 100%"
+            :style="
+              $q.screen.gt.xs && $q.screen.lt.md ? 'margin-top: -20px' : ''
+            "
           >
             <q-scroll-area
               @click.prevent

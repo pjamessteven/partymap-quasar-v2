@@ -55,7 +55,7 @@
       size="2rem"
       class="q-mr-md"
       name="mdi-chevron-up"
-      :class="{ 'q-mt-lg': $q.screen.lt.lg, 'rotate-180': showPanel }"
+      :class="{ 'rotate-180': showPanel }"
     />
     <div
       v-if="sidebarPanel === 'nearby' && $q.screen.gt.xs"

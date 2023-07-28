@@ -611,7 +611,7 @@ export default {
     .sidebar-wrapper {
       .sidebar {
         box-shadow: none;
-
+        border: none;
         .sidebar-content {
           background: white;
           .sidebar-content-inner {
