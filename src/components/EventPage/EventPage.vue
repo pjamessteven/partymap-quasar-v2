@@ -850,6 +850,7 @@ export default {
             response.data.next_date.id === eventDateId)
         ) {
           console.log(1);
+          console.log(this.focusMarker);
           if (!this.focusMarker && this.$route.name === 'EventPage') {
             console.log(2);
 
@@ -1027,6 +1028,10 @@ export default {
     this.mapOverlay = false;
     this.menubarOpacity = 0;
     this.overlayOpacity = 0;
+    this.focusMarker = null;
+  },
+  unmounted() {
+    this.wheelIndicator.destroy();
   },
 };
 </script>

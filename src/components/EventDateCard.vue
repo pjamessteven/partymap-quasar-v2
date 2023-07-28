@@ -200,14 +200,6 @@ export default {
     };
   },
   methods: {
-    setFocusMarker() {
-      if (this.$q.screen.gt.xs)
-        this.eventDateHoverMarker = {
-          lat: this.event.location.lat,
-          lng: this.event.location.lng,
-          name: this.event.name,
-        };
-    },
     getBottomBgImgStyle() {
       if (this.$q.dark.isActive) {
         return `background-image:  url("${this.imgThumbXsUrl}");

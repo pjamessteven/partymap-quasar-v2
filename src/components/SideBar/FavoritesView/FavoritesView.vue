@@ -25,7 +25,6 @@
           }"
           class="scroll-area flex grow"
           :content-style="{
-            'will-change': 'scroll-position',
             'touch-action': showPanel ? 'auto' : 'auto',
           }"
         >

@@ -63,9 +63,6 @@
           }"
           class="scroll-area flex grow"
           :class="!showPanel && 'disable-scroll'"
-          :content-style="{
-            'will-change': 'scroll-position',
-          }"
         >
           <transition enter-active-class="animated fadeIn">
             <div class="flex column no-wrap scroll-content q-px-sm">

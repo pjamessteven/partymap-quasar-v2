@@ -284,7 +284,7 @@ export default {
   transition: height 0.3s ease;
 
   .menubar-background {
-    will-change: opacity;
+    will-change: auto;
 
     position: absolute;
     height: 100%;

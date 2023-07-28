@@ -99,6 +99,9 @@ export default {
       preventMouse: false,
     });
   },
+  beforeUnmount() {
+    this.wheelIndicator.destroy();
+  },
   data() {
     return {
       lastx: 0,
@@ -383,7 +386,7 @@ export default {
     transition: all 0.3s ease;
     transform: translate3d(0, calc(100% - 226px), 0);
     user-select: none;
-    will-change: transform;
+    will-change: auto;
     padding-bottom: 64px;
     border-top-left-radius: 18px;
     border-top-right-radius: 18px;
@@ -522,11 +525,14 @@ export default {
       }
       */
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
   .sidebar-wrapper {
     .sidebar {
-      width: 90vw;
+      width: 100vw;
       padding-bottom: 134px;
+      &.sidebar-mobile-nearby {
+        transform: translate3d(0, calc(100% - 55vh), 0);
+      }
       &.sidebar-mobile-expanded {
         transform: translate3d(0, 134px, 0);
       }
@@ -568,13 +574,6 @@ export default {
       &.sidebar-mobile-expanded {
         transform: translate3d(0, 128px, 0);
       }
-    }
-  }
-}
-@media only screen and (max-width: 1024px) {
-  .sidebar-wrapper {
-    .sidebar {
-      width: 90vw;
     }
   }
 }
@@ -626,7 +625,7 @@ export default {
       //margin-top: 48px;
       transform: translate3d(0, calc(100% - 228px), 0);
 
-      will-change: transform;
+      will-change: auto;
       padding-bottom: 188px;
       border-left: none;
       border-right: none;

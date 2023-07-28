@@ -1,7 +1,6 @@
 <template>
   <div class="splash-screen flex justify-center items-center">
     <q-linear-progress
-      class="q-mt-xl"
       indeterminate
       size="2px"
       :color="$q.dark.isActive ? 'grey-6' : 'grey-8'"

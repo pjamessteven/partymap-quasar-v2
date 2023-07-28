@@ -20,7 +20,6 @@
               :class="!showPanel && 'disable-scroll'"
               class="scroll-area flex grow"
               :content-style="{
-                'will-change': 'scroll-position',
                 width: '100%',
               }"
               content-active-style="{
@@ -189,10 +188,9 @@
                     >
                       <div
                         @click.stop="() => (sidebarPanel = 'explore')"
-                        class="nav-button flex items-center justify-between q-px-md q-py-sm text- t2"
+                        class="nav-button flex no-wrap row items-center justify-between q-px-md q-ml-md q-py-sm text- t2"
                       >
-                        Explore the map
-
+                        <div style="white-space: nowrap">Explore the map</div>
                         <q-icon
                           name="mdi-chevron-right"
                           size="1.2rem"

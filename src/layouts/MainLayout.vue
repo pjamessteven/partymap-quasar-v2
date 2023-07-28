@@ -23,11 +23,7 @@
     </Transition>
     <MainMap />
 
-    <transition
-      appear
-      enter-active-class="animated fadeIn"
-      leave-active-class="animated fadeOut"
-    >
+    <transition appear enter-active-class="animated fadeIn">
       <SearchComponent
         v-show="
           ($q.screen.gt.sm && $route.name === 'Explore') ||
@@ -61,13 +57,7 @@
         'mobile-map-view-router': $q.screen.lt.sm,
       }"
     >
-      <transition
-        appear
-        enter-active-class="animated fadeIn"
-        leave-active-class="animated fadeOut"
-      >
-        <component :is="Component" />
-      </transition>
+      <component :is="Component" />
     </router-view>
     <NavigationBar
       class="nav-bar"
@@ -214,7 +204,7 @@ export default {
     height: 100%;
     width: 100%;
     pointer-events: none;
-    will-change: opacity;
+    will-change: auto;
     transition: opacity 0.3s;
   }
 

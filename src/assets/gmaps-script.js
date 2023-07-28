@@ -12,6 +12,7 @@ const initPromise = new Promise((resolve, reject) => {
 });
 
 export default function init() {
+  console.log('GMAPS INIT');
   // If Google Maps already is initialized
   // the `initPromise` should get resolved
   // eventually.

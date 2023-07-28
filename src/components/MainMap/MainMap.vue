@@ -246,6 +246,8 @@ export default {
     },
     focusMarker: {
       handler: function (newval) {
+        console.log('focus', newval);
+
         if (newval !== null) {
           this.blockUpdates = true;
           // save current map view so we can return to it
@@ -691,6 +693,17 @@ export default {
     //background: #484848;
   }
   .leaflet-map-pane {
+    .leaflet-tooltip-pane {
+      .leaflet-tooltip {
+        opacity: 1;
+        background: $bi-3;
+        color: $ti-1;
+        border-color: $bi-4;
+        &:before {
+          border-top-color: $bi-3;
+        }
+      }
+    }
     .leaflet-marker-pane {
       .marker-icon {
         background: url('assets/marker-dark-filled.png') !important;
