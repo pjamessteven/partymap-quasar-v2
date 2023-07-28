@@ -57,13 +57,6 @@ export default {
     },
   },
   created() {
-    this.$q.dark.set('auto');
-    if (this.$q.dark.isActive) {
-      this.darkModeToggle();
-    }
-    this.checkAuthCookie();
-  },
-  created() {
     if (document.readyState === 'complete') {
       this.assetsLoaded = true;
     } else {
@@ -73,6 +66,13 @@ export default {
         }
       });
     }
+
+    this.$q.dark.set('auto');
+
+    if (this.$q.dark.isActive) {
+      this.darkModeToggle();
+    }
+    this.checkAuthCookie();
   },
 };
 </script>
