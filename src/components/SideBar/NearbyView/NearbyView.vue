@@ -179,7 +179,7 @@
                     }"
                   >
                     <span
-                      >Welcome to PartyMap, the world-wide app for festivals and
+                      >Welcome to PartyMap, the global map of festivals and
                       events!</span
                     >
                     <q-icon

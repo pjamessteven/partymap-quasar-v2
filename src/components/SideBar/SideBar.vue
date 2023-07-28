@@ -303,9 +303,9 @@ export default {
         }
       }
       .sidebar-content-inner {
-        //border-top: 1px solid rgba(255, 255, 255, 0.1);
         // background: black;
         //border: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
 
         .sidebar-content-inner-shadow {
           background: $bi-1;
