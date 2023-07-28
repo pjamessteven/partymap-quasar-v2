@@ -96,6 +96,7 @@ export default {
     NavigationBar,
     SearchComponent,
   },
+
   methods: {},
   beforeRouteUpdate(to, from, next) {
     if (from.name === 'Explore') {
@@ -187,6 +188,9 @@ export default {
         rgba(0, 0, 0, 0) calc(100% - 256px),
         rgba(0, 0, 0, 0.48) 100%
       );*/
+    }
+    .splash-screen {
+      background: green;
     }
   }
 }

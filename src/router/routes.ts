@@ -1,5 +1,5 @@
 import { RouteRecordRaw } from 'vue-router';
-
+import EventPage from 'src/components/EventPage/EventPage.vue';
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -15,7 +15,7 @@ const routes: RouteRecordRaw[] = [
         path: '/event/:id/:eventDateId?',
         name: 'EventPage',
         components: {
-          event: () => import('src/components/EventPage/EventPage.vue'),
+          event: EventPage,
         },
         props: true,
         meta: {

@@ -1,15 +1,24 @@
 <template>
   <router-view />
+  <transition leave-active-class="animated fadeOut">
+    <SplashScreen v-if="!assetsLoaded" />
+  </transition>
 </template>
 
 <script>
 import { mapActions, mapState } from 'pinia';
 import { useMainStore } from './stores/main';
 import { useAuthStore } from './stores/auth';
+import SplashScreen from './components/SplashScreen.vue';
 
 export default {
+  components: { SplashScreen },
   name: 'App',
-  components: {},
+  data() {
+    return {
+      assetsLoaded: false,
+    };
+  },
   meta: {
     // meta tags
     title: 'PartyMap | The Global Directory of Festivals and Events',
@@ -53,6 +62,17 @@ export default {
       this.darkModeToggle();
     }
     this.checkAuthCookie();
+  },
+  created() {
+    if (document.readyState === 'complete') {
+      this.assetsLoaded = true;
+    } else {
+      document.addEventListener('readystatechange', (event) => {
+        if (document.readyState == 'complete') {
+          this.assetsLoaded = true;
+        }
+      });
+    }
   },
 };
 </script>

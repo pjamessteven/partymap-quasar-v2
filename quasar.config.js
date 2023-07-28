@@ -29,7 +29,7 @@ module.exports = configure(function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['i18n', 'axios', 'pswp'],
+    boot: ['i18n', 'axios'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ['app.scss'],
@@ -115,8 +115,8 @@ module.exports = configure(function (/* ctx */) {
 
     // animations: 'all', // --- includes all animations
     // https://v2.quasar.dev/options/animations
-    animations: 'all',
-    /*[
+    animations: [
+      /*
       'bounceOutLeft',
       'bounceOutRight',
       'bounceInLeft',
@@ -126,25 +126,26 @@ module.exports = configure(function (/* ctx */) {
       'bounceOutDown',
       'bounceOutUp',
       'boundOut',
+            'fadeOutLeft',
+      'fadeOutRight',
+            'slideInLeft',
+      'slideInRight',
+            'slideOutLeft',
+      'slideOutRight',
+            'fadeInLeft',
+      'fadeInRight',
+      */
       'fadeIn',
       'fadeInUp',
       'fadeInDown',
-      'fadeInLeft',
-      'fadeInRight',
       'fadeOut',
       'fadeOutUp',
       'fadeOutDown',
-      'fadeOutLeft',
-      'fadeOutRight',
       'slideInDown',
-      'slideInLeft',
-      'slideInRight',
       'slideInUp',
       'slideOutDown',
-      'slideOutLeft',
-      'slideOutRight',
       'slideOutUp',
-    ],*/
+    ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#sourcefiles
     // sourceFiles: {
