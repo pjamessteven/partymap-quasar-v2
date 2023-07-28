@@ -10,7 +10,6 @@
         'sidebar-mobile-nearby': sidebarPanel === 'nearby' && $q.screen.gt.xs,
         'sidebar-mobile-expanded-fullscreen': sidebarPanel === 'favorites',
         'sidebar-mobile-hidden': $q.screen.lt.sm && $route.name === 'EventPage',
-        'sidebar-mobile-shadow': !showPanel && $q.screen.gt.xs,
       }"
     >
       <!--
@@ -35,7 +34,7 @@
         <NavigationBar
           @click="togglePanel"
           class="nav-bar"
-          v-if="$q.screen.gt.xs && false"
+          v-if="$q.screen.gt.xs"
         />
         <div
           style="height: 100%; width: 100%"
@@ -281,12 +280,9 @@ export default {
 
   .sidebar-wrapper {
     .sidebar {
-      border: 1px solid transparent;
-      background: black;
-      &.sidebar-mobile-shadow {
-        border: 1px solid $bi-4;
-        border-bottom: none;
-      }
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: $bi-2;
+
       :deep(.sidebar-header) {
         // background: black;
       }
@@ -309,6 +305,12 @@ export default {
       .sidebar-content-inner {
         //border-top: 1px solid rgba(255, 255, 255, 0.1);
         // background: black;
+        //border: 1px solid rgba(255, 255, 255, 0.1);
+
+        .sidebar-content-inner-shadow {
+          background: $bi-1;
+          z-index: -1 !important;
+        }
       }
     }
   }
@@ -327,20 +329,22 @@ export default {
 
       //box-shadow: rgba(50, 50, 105, 0.15) 0px 0px 5px 0px,
       //  rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
-      &.sidebar-mobile-shadow {
-        box-shadow: 0px 0px 32px 16px rgba(0, 0, 0, 0.4);
-      }
+      box-shadow: rgba(100, 100, 100, 0.05) 0px 0px 10px 5px;
+
+      background: white;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+
       .sidebar-content {
         //background: rgba(100, 100, 100, 0.2);
         //backdrop-filter: blur(10px);
         background: white;
         .sidebar-content-inner {
-          background: white;
+          //background: black;
           .sidebar-content-inner-shadow {
             //box-shadow: inset rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
             // heavy box-shadow: inset rgba(100, 100, 111, 0.1) 0px 7px 29px 0px;
-            //box-shadow: inset rgba(100, 100, 100, 0.1) 0px 8px 10px -5px;
-            // border-top: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: inset rgba(100, 100, 100, 0.1) 0px 8px 10px -5px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
           }
         }
       }
@@ -378,11 +382,11 @@ export default {
     //box-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
     max-height: 100%;
     transition: width 0.3s;
-    overflow: visible;
+    overflow: hidden;
     height: 100%;
     pointer-events: all;
-    //border-top-left-radius: 18px;
-    //border-top-right-radius: 18px;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
     transition: all 0.3s ease;
     transform: translate3d(0, calc(100% - 226px), 0);
     user-select: none;
@@ -397,8 +401,8 @@ export default {
       border-top-left-radius: 18px;
       border-top-right-radius: 18px;
       .sidebar-content-inner {
-        border-top-left-radius: 0px;
-        border-top-right-radius: 0px;
+        border-top-left-radius: 18px;
+        border-top-right-radius: 18px;
         overflow: hidden;
         isolation: isolate;
         .sidebar-content-inner-shadow {
@@ -407,8 +411,8 @@ export default {
           width: 100%;
           z-index: 1;
           pointer-events: none;
-          // border-top-left-radius: 18px;
-          // border-top-right-radius: 18px;
+          border-top-left-radius: 18px;
+          border-top-right-radius: 18px;
         }
       }
     }
@@ -528,10 +532,10 @@ export default {
 @media only screen and (min-width: 600px) and (max-width: 1024px) {
   .sidebar-wrapper {
     .sidebar {
-      width: 100vw;
+      width: 96vw;
       padding-bottom: 134px;
       &.sidebar-mobile-nearby {
-        transform: translate3d(0, calc(100% - 55vh), 0);
+        transform: translate3d(0, calc(100% - 60vh), 0);
       }
       &.sidebar-mobile-expanded {
         transform: translate3d(0, 134px, 0);
@@ -577,8 +581,7 @@ export default {
     }
   }
 }
-
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 1024px) {
   .body--dark {
     .sidebar-wrapper {
       .hover-indicator-line {
@@ -587,9 +590,16 @@ export default {
         border: none;
         box-shadow: none;
         border-top: 1px solid transparent;
+        border-top: none;
 
         .sidebar-content {
           background: black;
+
+          .sidebar-content-inner {
+            .sidebar-content-inner-shadow {
+              background: black;
+            }
+          }
         }
         :deep(.panels) {
           width: 100%;
@@ -604,6 +614,62 @@ export default {
 
         .sidebar-content {
           background: white;
+          .sidebar-content-inner {
+            .sidebar-content-inner-shadow {
+              display: none;
+            }
+          }
+        }
+        :deep(.panels) {
+          //box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
+          border-top: none !important;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .body--dark {
+    .sidebar-wrapper {
+      .hover-indicator-line {
+      }
+      .sidebar {
+        //border: none;
+        box-shadow: none;
+        border-top: 1px solid $bi-4;
+        //border-top: none;
+
+        &.sidebar-mobile-expanded {
+          border-top-color: black;
+        }
+        .sidebar-content {
+          background: black;
+
+          .sidebar-content-inner {
+            .sidebar-content-inner-shadow {
+              background: black;
+            }
+          }
+        }
+        :deep(.panels) {
+          width: 100%;
+        }
+      }
+    }
+  }
+  .body--light {
+    .sidebar-wrapper {
+      .sidebar {
+        box-shadow: none;
+        border-color: transparent;
+        .sidebar-content {
+          background: white;
+          .sidebar-content-inner {
+            .sidebar-content-inner-shadow {
+              display: none;
+            }
+          }
         }
         :deep(.panels) {
           //box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
@@ -631,9 +697,6 @@ export default {
       border-right: none;
       overflow: visible;
 
-      &.sidebar-mobile-shadow {
-        //box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
-      }
       &.sidebar-mobile-expanded {
         transform: translate3d(0, 120px, 0);
         //padding-bottom: 128px;
@@ -666,7 +729,7 @@ export default {
           border-top: none !important;
 
           .sidebar-content-inner-shadow {
-            display: none;
+            //display: none;
           }
         }
       }

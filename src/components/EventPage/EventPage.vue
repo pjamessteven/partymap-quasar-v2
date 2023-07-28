@@ -263,7 +263,7 @@
                             :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
                             :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
                             flat
-                            :size="$q.screen.gt.xs ? '1em' : 'md'"
+                            :size="$q.screen.gt.xs ? '1em' : 'sm'"
                             :label="
                               $q.screen.gt.xs ? 'Save to device' : undefined
                             "
@@ -280,7 +280,7 @@
                               $q.screen.gt.xs ? $t('event.share') : undefined
                             "
                             no-caps
-                            :size="$q.screen.gt.xs ? '1em' : 'md'"
+                            :size="$q.screen.gt.xs ? '1em' : 'sm'"
                             flat
                             icon="mdi-share"
                             @click="share"
@@ -1373,10 +1373,15 @@ a {
   }
 }
 
+@media only screen and (max-width: 1024px) {
+  .content-card {
+    max-width: 96vw !important;
+  }
+}
 @media only screen and (max-width: 600px) {
   .body--light {
     .action-buttons-wrapper {
-      background: $b-2;
+      //background: $b-2;
       //box-shadow: rgba(100, 100, 111, 0.25) 0px 7px 29px 0px;
     }
   }
@@ -1384,12 +1389,12 @@ a {
     .event-page {
       .scroll-area {
         .content-card {
-          border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+          border-top: 1px solid $bi-4 !important;
         }
       }
     }
     .action-buttons-wrapper {
-      background: $bi-3;
+      background: $bi-1;
     }
   }
   .event-page {
@@ -1406,13 +1411,16 @@ a {
             min-height: 100%;
             margin-top: Max(calc(100% - 66%), 0px);
             border: none;
-            max-width: 100vw;
+            max-width: 100vw !important;
 
             overflow: hidden;
             .content {
               overflow-y: hidden;
               &.mobile-scroll-enable {
                 overflow-y: scroll;
+              }
+              .main-content {
+                border: none !important;
               }
             }
             .mobile-swipe-handle {

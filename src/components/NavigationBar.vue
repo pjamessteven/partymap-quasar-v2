@@ -1,13 +1,14 @@
 <template>
-  <div
-    class="navigation-bar flex row no-wrap items-center"
-    :class="$q.screen.gt.sm ? 'justify-between' : ''"
-  >
-    <div class="flex items-center q-pl-lg q-py-md" v-if="$q.screen.gt.xs">
+  <div class="navigation-bar justify-between flex row no-wrap items-center">
+    <div
+      class="flex items-center q-pl-lg q-py-lg"
+      v-if="$q.screen.gt.xs"
+      :class="{ 'q-pb-sm': $q.screen.lt.md }"
+    >
       <q-btn
         v-if="sidebarPanel === 'nearby'"
         flat
-        style="margin-left: -4px"
+        style="margin-left: -8px"
         class="q-mr-sm"
         @click.stop="() => clickLocation()"
       >
@@ -40,14 +41,7 @@
           </q-tooltip>
         </template>
       </q-btn>
-      <q-icon
-        v-else-if="sidebarPanel === 'explore'"
-        flat
-        size="2rem"
-        class="q-mr-md q-p"
-        :class="{ 'rotate-180': showPanel }"
-        name="mdi-chevron-up"
-      />
+
       <div
         class="q-pr-md inter bolder text-h5"
         style="text-transform: capitalize"
@@ -55,6 +49,14 @@
         {{ computedPanelName }}
       </div>
     </div>
+    <q-icon
+      v-if="sidebarPanel === 'explore' && $q.screen.gt.xs"
+      flat
+      size="2rem"
+      class="q-mr-md"
+      name="mdi-chevron-up"
+      :class="{ 'q-mt-lg': $q.screen.lt.lg, 'rotate-180': showPanel }"
+    />
     <div
       v-if="sidebarPanel === 'nearby' && $q.screen.gt.xs"
       @click.stop="() => (sidebarPanel = 'explore')"
@@ -178,30 +180,33 @@ export default {
       switch (this.sidebarPanel) {
         case 'nearby':
           if (this.userLocationCity) {
-            return (
-              'Near ' + this.userLocationCity + ', ' + this.userLocationCountry
-            );
+            if (this.$q.screen.gt.sm) {
+              return (
+                'Near ' +
+                this.userLocationCity +
+                ', ' +
+                this.userLocationCountry
+              );
+            } else {
+              return 'Near ' + this.userLocationCity;
+            }
           } else {
             return 'Finding your location...';
           }
         case 'explore':
-          if (this.showPanel) {
-            return 'Show map';
-          } else {
-            return 'Show results';
-          }
+          return 'Explore Events';
         case 'favorites':
           if (this.currentUser?.alias) {
             return (
               this.currentUser?.alias + ' - @' + this.currentUser?.username
             );
           } else {
-            return '@' + this.currentUser?.username;
+            return 'Your calendar';
           }
         case 'profile':
           return 'Your profile';
         case 'search':
-          return 'Search';
+          return 'Search results';
       }
       return '';
     },
@@ -220,7 +225,7 @@ export default {
   }
   .navigation-bar {
     //border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    //border-top: 1px solid rgba(255, 255, 255, 0.2);
     :deep(.q-tabs) {
       .q-tab {
         color: $ti-4 !important;

@@ -168,7 +168,7 @@ export default {
     }
     .overlay {
       //background: linear-gradient(#fafafa, #fafafa 64px, white 64px, white);
-      background: white;
+      background: #fafafa;
       //background: linear-gradient(transparent 5%, white 15%);
       /*
       background: linear-gradient(
@@ -242,7 +242,7 @@ export default {
   .nav-bar {
   }
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 1024px) {
   .body--dark {
     .main-layout {
       .overlay {

@@ -21,7 +21,7 @@ export default {
   },
   meta: {
     // meta tags
-    title: 'PartyMap | The Global Directory of Festivals and Events',
+    title: 'PartyMap',
     meta: {
       viewport: {
         name: 'viewport',
@@ -93,6 +93,10 @@ body {
   //letter-spacing: unset !important;
   touch-action: none;
   overscroll-behavior-x: none;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  text-size-adjust: none;
   #q-app {
     height: 100%;
   }

@@ -7,7 +7,7 @@
       @click="() => (showPanel = !showPanel)"
       style="pointer-events: all; cursor: pointer"
       class="inter bolder text-h5 flex items-center justify-between q-pl-lg q-pr-md q-py-md explore-header"
-      v-if="$q.screen.gt.xs"
+      v-if="$q.screen.gt.xs && false"
     >
       <div>Explore Events</div>
 
@@ -44,8 +44,6 @@
         class="view-options-absolute"
       />
 
-      <div class="inner-shadow" v-if="!showPanel && false" />
-
       <div
         class="flex column grow no-wrap"
         :style="
@@ -72,7 +70,7 @@
                   :class="
                     $q.screen.lt.sm
                       ? 'q-pl-md q-py-md header t2 semibold '
-                      : 'q-pl-md  q-pb-md t3 '
+                      : 'q-pl-md q-pb-md q-pt-lg t3 '
                   "
                   v-if="
                     !groupEventsByMonth &&
@@ -97,7 +95,7 @@
                   :class="
                     $q.screen.lt.sm
                       ? 'q-pl-md q-py-md header t2 semibold'
-                      : 'q-pl-md  q-pb-md t3 '
+                      : 'q-pl-md q-pb-md q-pt-lg t3 '
                   "
                   :style="
                     groupEventsByMonth && $q.screen.gt.xs
@@ -548,19 +546,11 @@ export default {
     height: 100%;
     transition: all 0.3s;
     position: relative;
-    .inner-shadow {
-      position: absolute;
-      height: 100%;
-      width: 100%;
-      z-index: 1;
-      pointer-events: none;
-      box-shadow: inset rgba(100, 100, 100, 0.1) 0px 8px 10px -5px;
-    }
 
     .view-options {
       position: absolute;
       right: -18px;
-      top: -8px;
+      top: 16px;
       z-index: 100;
     }
 

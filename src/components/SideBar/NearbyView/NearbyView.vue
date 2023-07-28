@@ -28,7 +28,7 @@
             >
               <div class="scroll-stuff flex column">
                 <div
-                  v-if="$q.screen.gt.xs"
+                  v-if="$q.screen.gt.xs && false"
                   class="q-px-md q-pt-md flex items-center justify-between"
                 >
                   <div class="flex items-center">
@@ -161,19 +161,26 @@
                 </div>
                 <div
                   class="flex message"
-                  :class="$q.screen.gt.xs ? 'q-mx-lg  q-mb-sm' : 'q-mx-md  '"
+                  :class="{
+                    'q-mx-lg  q-mb-sm q-mt-lg':
+                      $q.screen.gt.xs && $q.screen.lt.md,
+                    'q-mx-lg  q-mb-sm ': $q.screen.gt.sm,
+                    'q-mx-md': $q.screen.lt.md,
+                  }"
                   @click="showMessage = !showMessage"
                 >
                   <div
                     class="flex grow no-wrap inter q-pb-md t3"
                     :class="{
-                      'justify-between q-pt-sm items-center': $q.screen.lt.md,
+                      'justify-between q-pt-sm items-center': $q.screen.lt.sm,
+                      ' q-mt-lg': $q.screen.gt.sm,
+
                       ' items-end': $q.screen.gt.xs,
                     }"
                   >
                     <span
-                      >Welcome to PartyMap, the global directory of festivals
-                      and events!</span
+                      >Welcome to PartyMap, the world-wide app for festivals and
+                      events!</span
                     >
                     <q-icon
                       class="q-ml-md"
@@ -182,23 +189,6 @@
                         !showMessage ? 'mdi-chevron-down' : 'mdi-chevron-up'
                       "
                     />
-                    <div
-                      class="flex grow justify-end items-center"
-                      v-if="$q.screen.gt.sm"
-                    >
-                      <div
-                        @click.stop="() => (sidebarPanel = 'explore')"
-                        class="nav-button flex no-wrap row items-center justify-between q-px-md q-ml-md q-py-sm text- t2"
-                      >
-                        <div style="white-space: nowrap">Explore the map</div>
-                        <q-icon
-                          name="mdi-chevron-right"
-                          size="1.2rem"
-                          class="q-ml-sm"
-                          :class="{ 'q-ml-sm': $q.screen.gt.xs }"
-                        />
-                      </div>
-                    </div>
                   </div>
                   <div
                     v-if="showMessage"
@@ -1048,7 +1038,7 @@ export default {
       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     }
     .location-header {
-      background: black;
+      background: $bi-1;
     }
     .main-content {
       .message {
@@ -1388,6 +1378,13 @@ export default {
 }
 
 @media (max-width: 600px) {
+  .body--dark {
+    .landing-page {
+      .location-header {
+        background: black;
+      }
+    }
+  }
   .landing-page {
     //padding-top: 124px;
     .map-gap {

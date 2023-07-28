@@ -16,14 +16,18 @@
         (searchResults.length > 0 || locationSearchResults.length > 0) &&
         !loading
       "
-      :class="$q.screen.gt.xs ? 'q-px-lg' : ''"
+      :class="$q.screen.gt.xs ? 'q-px-lg q-pt-lg' : ''"
     >
+      <!--
       <div
         class="inter bolder t1"
         :class="$q.screen.lt.sm ? 'q-mt-md q-my-md' : ' q-my-lg  text-h6'"
       >
         Search results
       </div>
+
+
+    -->
       <SearchResults
         v-if="!loading"
         class="q-pb-md"

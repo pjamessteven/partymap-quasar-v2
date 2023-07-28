@@ -3,9 +3,9 @@
     <q-card :bordered="$q.screen.gt.sm" class="auth-card">
       <q-card-section
         class="flex column justify-stretch q-px-xl q-pb-sm"
-        :class="$q.screen.gt.xs ? '' : ''"
+        :class="$q.screen.gt.xs ? 'q-pt-xl' : ''"
       >
-        <div class="flex justify-center items-center q-mt-lg q-mb-xl">
+        <div class="flex justify-center items-center q-mt-md q-mb-xl">
           <div>
             <img
               style="height: 30px; width: auto"
