@@ -552,7 +552,7 @@ export default {
 
     .view-options {
       position: absolute;
-      right: -18px;
+      right: 0px;
       top: 16px;
       z-index: 100;
     }

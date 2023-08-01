@@ -1,5 +1,5 @@
 <template>
-  <q-dialog ref="dialog" @hide="onDialogHide">
+  <q-dialog ref="dialog">
     <q-card class="q-dialog-plugin dialog-card">
       <q-card-section class="dialog-card-header">
         <div class="text-h6">
@@ -24,13 +24,12 @@
         ></vue-hcaptcha>
       </q-card-section>
       <q-card-actions align="right" class="bg-white text-teal">
-        <q-btn flat color="primary" label="Cancel" v-close-popup />
+        <q-btn flat color="primary" label="Cancel" @click="hide()" />
         <q-btn
           :disable="!hcaptchaToken && !currentUser"
           color="primary"
           :label="$t('add.continue')"
           v-on:click="onOKClick()"
-          v-close-popup
         />
       </q-card-actions>
     </q-card>
@@ -60,10 +59,6 @@ export default {
 
     hide() {
       this.$refs.dialog.hide();
-    },
-
-    onDialogHide() {
-      this.$emit('hide');
     },
 
     onOKClick() {

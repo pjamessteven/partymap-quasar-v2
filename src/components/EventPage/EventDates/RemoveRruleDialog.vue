@@ -107,12 +107,6 @@ export default {
                 });
             } catch (e) {}
             progressDialog.hide();
-          })
-          .onCancel(() => {
-            this.$emit('closeDialog');
-          })
-          .onDismiss(() => {
-            this.$emit('closeDialog');
           });
       }
     },

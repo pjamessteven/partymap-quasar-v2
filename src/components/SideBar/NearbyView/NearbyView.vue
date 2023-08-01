@@ -544,7 +544,7 @@
                           />
                         </div>
                         <EventDateViewOptions
-                          style="margin-right: -24px"
+                          style="margin-right: 0px"
                           :show-group-by-month="false"
                           v-if="$q.screen.gt.xs"
                         />
@@ -619,7 +619,7 @@
                           </div>
                         </div>
                         <EventDateViewOptions
-                          style="margin-right: -24px"
+                          style="margin-right: 0px"
                           :show-group-by-month="false"
                           v-if="$q.screen.gt.xs"
                         />

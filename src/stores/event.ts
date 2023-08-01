@@ -115,6 +115,7 @@ export const useEventStore = defineStore('event', {
 
     async suggestEventEdit(payload: EventUpdate) {
       try {
+        console.log(this.event);
         const response = suggestEventEditRequest(this.event?.id, payload);
         return response;
       } catch (e) {

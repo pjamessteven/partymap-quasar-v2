@@ -396,6 +396,7 @@ body {
   background: black !important;
   //background: #1a202c!important;
   .dialog-card {
+    background: $bi-2;
     .dialog-card-header {
       //color: rgba(255, 255, 255, 0.67);
 
@@ -556,6 +557,9 @@ body {
 
   .dialog-card {
     background: $bi-2;
+    .dialog-card-header {
+      background: $bi-3;
+    }
   }
 
   .auth-card {
@@ -618,7 +622,7 @@ body {
   .q-card {
     box-shadow: none;
     border: 1px solid rgb(26, 26, 26);
-    background: $bi-1;
+    //background: $bi-1;
   }
 
   .event-page-card {

@@ -32,7 +32,9 @@
   }
 }
 .body--dark {
-  background: black;
+  .splash-screen {
+    background: black;
+  }
 }
 .splash-screen {
   position: absolute;

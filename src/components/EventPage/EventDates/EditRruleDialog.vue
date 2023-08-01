@@ -116,8 +116,6 @@
 </template>
 
 <script>
-import { suggestEventEditRequest } from 'src/api';
-
 import common from 'assets/common';
 
 import DateTimePicker from 'components/DateTimePicker.vue';
@@ -164,7 +162,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(useEventStore, ['updateEvent']),
+    ...mapActions(useEventStore, ['updateEvent', 'suggestEventEdit']),
     async updateEd() {
       if (this.currentUserCanEdit) {
         const progressDialog = this.$q.dialog({
@@ -201,10 +199,9 @@ export default {
               persistent: true, // we want the user to not be able to close it
               ok: false,
             });
-
             try {
               // include message and token in request
-              await suggestEventEditRequest({
+              await this.suggestEventEdit({
                 ...messageAndToken,
                 ...this.update,
               });
@@ -225,9 +222,6 @@ export default {
               progressDialog.hide();
               this.loading = false;
             }
-          })
-          .onDismiss(() => {
-            this.$emit('closeDialog');
           });
       }
     },
