@@ -48,6 +48,26 @@
       >
         {{ computedPanelName }}
       </div>
+
+      <q-icon
+        name="mdi-information-outline"
+        size="1.5rem"
+        class="t4"
+        v-if="
+          sidebarPanel === 'nearby' && !fineLocation && !userLocationLoading
+        "
+      >
+        <q-tooltip
+          style="font-size: 1em !important"
+          class=""
+          :content-class="
+            $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
+          "
+          :offset="[10, 10]"
+        >
+          This is a rough location based off your IP address
+        </q-tooltip>
+      </q-icon>
     </div>
     <q-icon
       v-if="sidebarPanel === 'explore' && $q.screen.gt.xs"
@@ -167,7 +187,11 @@ export default {
 
   computed: {
     ...mapState(useAuthStore, ['currentUser']),
-    ...mapWritableState(useMainStore, ['sidebarPanel', 'showPanel']),
+    ...mapWritableState(useMainStore, [
+      'sidebarPanel',
+      'showPanel',
+      'fineLocation',
+    ]),
     ...mapState(useMainStore, [
       'fineLocation',
       'userLocationLoading',

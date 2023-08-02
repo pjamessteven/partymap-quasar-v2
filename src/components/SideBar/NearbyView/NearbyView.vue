@@ -173,9 +173,9 @@
                   @click="showMessage = !showMessage"
                 >
                   <div
-                    class="flex grow no-wrap inter q-pb-md t3"
+                    class="flex grow no-wrap inter q-pb-md justify-between t3"
                     :class="{
-                      'justify-between q-pt-sm items-center': $q.screen.lt.sm,
+                      ' q-pt-sm items-center': $q.screen.lt.sm,
                       ' q-mt-lg': $q.screen.gt.sm,
 
                       ' items-end': $q.screen.gt.xs,

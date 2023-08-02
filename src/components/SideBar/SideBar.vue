@@ -343,7 +343,7 @@ export default {
           .sidebar-content-inner-shadow {
             //box-shadow: inset rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
             // heavy box-shadow: inset rgba(100, 100, 111, 0.1) 0px 7px 29px 0px;
-            box-shadow: inset rgba(100, 100, 100, 0.1) 0px 8px 10px -5px;
+            box-shadow: inset rgba(100, 100, 100, 0.15) 0px 8px 10px -5px;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
           }
         }

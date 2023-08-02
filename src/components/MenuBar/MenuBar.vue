@@ -161,7 +161,7 @@ export default {
         var opacity = this.menubarOpacity;
         if (this.$q.screen.gt.xs) {
           if (this.$q.dark.isActive) {
-            return `opacity: ${opacity}; background: black!important`;
+            return `opacity: ${opacity}; background: #181818!important`;
           } else {
             return `opacity: ${opacity}; background: white!important`;
           }

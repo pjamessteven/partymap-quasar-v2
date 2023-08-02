@@ -152,7 +152,7 @@ const props = withDefaults(defineProps<Props>(), {
 const gridColumns = computed(() => {
   if ($q.screen.gt.lg) {
     return `
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-columns: repeat(5, minmax(0, 1fr));
         `;
   } else if ($q.screen.gt.sm) {
     return `

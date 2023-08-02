@@ -108,7 +108,7 @@ export default {
         (newv === 'explore' && oldv === 'nearby') ||
         (newv === 'nearby' && oldv === 'explore')
       ) {
-        if (this.userLocation.lat)
+        if (this.userLocation?.lat)
           this.fitBoundsForExplorePage(this.userLocation);
       }
     },

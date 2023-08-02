@@ -1067,16 +1067,16 @@ a {
           }
         }
         .content {
-          background: black;
+          background: $bi-2;
 
           :deep(.event-page-header) {
-            background: black;
+            background: $bi-2;
           }
           .main-content {
             border: 1px solid #181818 !important;
           }
           .bottom-section {
-            background: $bi-3;
+            background: $bi-1;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
             border-bottom: none;
 

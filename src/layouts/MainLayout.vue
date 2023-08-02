@@ -115,7 +115,7 @@ export default {
           return `opacity: ${this.overlayOpacity}; background: black!important`;
         } else {
           if (this.$q.dark.isActive) {
-            return `opacity: ${this.overlayOpacity}; background: #242424!important`;
+            return `opacity: ${this.overlayOpacity}; background: black!important`;
           } else {
             return `opacity: ${this.overlayOpacity}; background: #f5f5f5!important`;
           }
