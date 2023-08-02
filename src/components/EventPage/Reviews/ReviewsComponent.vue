@@ -139,7 +139,7 @@ export default {
 }
 .body--light {
   .new-review {
-    background: $b-2;
+    background: $b-1;
     border: 1px solid (rgba(0, 0, 0, 0.1));
   }
 }

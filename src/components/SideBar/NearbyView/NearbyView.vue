@@ -47,7 +47,7 @@
                             class=""
                             v-if="fineLocation"
                           />
-                          <q-icon name="mdi-crosshairs" class="" v-else />
+                          <q-icon name="mdi-crosshairs-off" class="" v-else />
                         </div>
                         <div v-else style="position: relative" class="flex">
                           <q-icon style="z-index: 1" name="mdi-crosshairs" />
@@ -66,7 +66,13 @@
                           "
                           :offset="[10, 10]"
                         >
-                          {{ $t('landing_page.improve_location') }}
+                          <span v-if="!fineLocation">
+                            This rough location is based on your IP address.
+                            Click to improve your location.
+                          </span>
+                          <span v-else>
+                            {{ $t('landing_page.improve_location') }}
+                          </span>
                         </q-tooltip>
                       </template>
                     </q-btn>
@@ -137,7 +143,7 @@
                             class=""
                             v-if="fineLocation"
                           />
-                          <q-icon name="mdi-crosshairs" class="" v-else />
+                          <q-icon name="mdi-crosshairs-off" class="" v-else />
                         </div>
                         <div v-else style="position: relative" class="flex">
                           <q-icon style="z-index: 1" name="mdi-crosshairs" />
@@ -156,7 +162,13 @@
                           "
                           :offset="[10, 10]"
                         >
-                          {{ $t('landing_page.improve_location') }}
+                          <span v-if="!fineLocation">
+                            Using rough location from your IP address. Click to
+                            improve your location.
+                          </span>
+                          <span v-else>
+                            {{ $t('landing_page.improve_location') }}
+                          </span>
                         </q-tooltip>
                       </template>
                     </q-btn>
@@ -286,7 +298,7 @@
                   :class="$q.screen.gt.xs ? 'q-mt-' : 'q-mt-xl q-py-xl'"
                   :style="
                     $q.screen.gt.xs
-                      ? 'height: 100%; width: 100%; position: absolute; top: 0px; pointer-events: none'
+                      ? 'pointer-events: none;margin-top: -500px'
                       : 'margin-top: 350px'
                   "
                   v-if="loadingEverything || !computedSidebarPanelReady"

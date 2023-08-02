@@ -1,7 +1,7 @@
 <template>
   <div class="navigation-bar justify-between flex row no-wrap items-center">
     <div
-      class="flex items-center q-pl-lg q-py-lg"
+      class="flex items-center q-pl-lg q-py-md q-my-xs"
       v-if="$q.screen.gt.xs"
       :class="{ 'q-pb-sm': $q.screen.lt.md }"
     >
@@ -19,7 +19,7 @@
               class=""
               v-if="fineLocation && sidebarPanel === 'nearby'"
             />
-            <q-icon name="mdi-crosshairs" class="" v-else />
+            <q-icon name="mdi-crosshairs-off" class="" v-else />
           </div>
           <div v-else style="position: relative" class="flex">
             <q-icon style="z-index: 1" name="mdi-crosshairs" />
@@ -37,37 +37,23 @@
             "
             :offset="[10, 10]"
           >
-            {{ $t('landing_page.improve_location') }}
+            <span v-if="!fineLocation">
+              Using rough location from your IP address. Click to improve your
+              location.
+            </span>
+            <span v-else>
+              {{ $t('landing_page.improve_location') }}
+            </span>
           </q-tooltip>
         </template>
       </q-btn>
 
       <div
-        class="q-pr-md inter bolder text-h5"
+        class="q-pr-md inter bolder text-h6"
         style="text-transform: capitalize"
       >
         {{ computedPanelName }}
       </div>
-
-      <q-icon
-        name="mdi-information-outline"
-        size="1.5rem"
-        class="t4"
-        v-if="
-          sidebarPanel === 'nearby' && !fineLocation && !userLocationLoading
-        "
-      >
-        <q-tooltip
-          style="font-size: 1em !important"
-          class=""
-          :content-class="
-            $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
-          "
-          :offset="[10, 10]"
-        >
-          This is a rough location based off your IP address
-        </q-tooltip>
-      </q-icon>
     </div>
     <q-icon
       v-if="sidebarPanel === 'explore' && $q.screen.gt.xs"
@@ -220,13 +206,8 @@ export default {
         case 'explore':
           return 'Explore Events';
         case 'favorites':
-          if (this.currentUser?.alias) {
-            return (
-              this.currentUser?.alias + ' - @' + this.currentUser?.username
-            );
-          } else {
-            return 'Your calendar';
-          }
+          return 'Your calendar';
+
         case 'profile':
           return 'Your profile';
         case 'search':

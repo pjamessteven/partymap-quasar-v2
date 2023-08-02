@@ -106,7 +106,7 @@
               (!groupByMonth && eventDates && eventDates.length === 0)) &&
             !loading
           "
-          :class="$q.screen.lt.sm ? 'q-mt-lg semibold' : 'q-mt-'"
+          :class="$q.screen.lt.sm ? 'q-mt-lg semibold' : 'q-mt-lg'"
           class="t4 inter"
         >
           No results<span v-if="$route.name === 'Explore'"
