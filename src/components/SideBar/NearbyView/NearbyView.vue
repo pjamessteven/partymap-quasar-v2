@@ -6,9 +6,6 @@
           <div
             class="flex column grow no-wrap"
             style="height: 100%; width: 100%; max-width: 100%"
-            :style="
-              $q.screen.gt.xs && $q.screen.lt.md ? 'margin-top: -20px' : ''
-            "
           >
             <q-scroll-area
               @click.prevent
@@ -100,12 +97,11 @@
                   -->
                 </div>
                 <div
-                  v-if="$q.screen.lt.sm"
+                  v-if="$q.screen.lt.sm || true"
                   class="flex column mobile-location-header q-mt-md"
                   style="width: 100%"
                   :class="{
-                    'q-px-lg q-pt- q-mb-sm': $q.screen.gt.xs,
-                    'q-px-lg q-pt-lg q-mb-sm': $q.screen.gt.sm,
+                    'q-px-lg q-pt-sm q-mb-sm': $q.screen.gt.xs,
                     'q-px-md   ': $q.screen.lt.sm,
                   }"
                 >
@@ -113,7 +109,7 @@
                     <span class="">Near</span>
                   </div>
                   <div
-                    class="flex items-center no-wrap"
+                    class="flex items-center no-wrap justify-between"
                     :class="{ 'justify-between': $q.screen.lt.sm }"
                     style="width: 100%"
                   >
@@ -130,9 +126,8 @@
                       >...
                     </span>
                     <q-btn
-                      v-if="$q.screen.lt.sm"
                       flat
-                      class="q-pa-md"
+                      class="q-px-md"
                       :class="{ 'q-ml-md': $q.screen.lt.sm }"
                       @click.stop="() => getFineLocation()"
                     >
@@ -143,7 +138,7 @@
                             class=""
                             v-if="fineLocation"
                           />
-                          <q-icon name="mdi-crosshairs-off" class="" v-else />
+                          <q-icon name="mdi-crosshairs-gps" class="" v-else />
                         </div>
                         <div v-else style="position: relative" class="flex">
                           <q-icon style="z-index: 1" name="mdi-crosshairs" />
@@ -177,18 +172,16 @@
                 <div
                   class="flex message"
                   :class="{
-                    'q-mx-lg  q-mb-sm q-mt-lg':
-                      $q.screen.gt.xs && $q.screen.lt.md,
-                    'q-mx-lg  q-mb-sm ': $q.screen.gt.sm,
+                    'q-mx-lg  q-mb-sm ': $q.screen.gt.xs,
                     'q-mx-md': $q.screen.lt.md,
                   }"
                   @click="showMessage = !showMessage"
                 >
                   <div
-                    class="flex grow no-wrap inter q-pb-md justify-between t3"
+                    class="flex grow no-wrap inter q-pb-md t3"
                     :class="{
-                      ' q-pt-sm items-center': $q.screen.lt.sm,
-                      ' q-mt-lg': $q.screen.gt.sm,
+                      ' q-pt-sm items-center justify-between': $q.screen.lt.sm,
+                      ' q-mt-md': $q.screen.gt.xs,
 
                       ' items-end': $q.screen.gt.xs,
                     }"
@@ -1053,7 +1046,7 @@ export default {
       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     }
     .location-header {
-      background: $bi-1;
+      background: $bi-2;
     }
     .main-content {
       .message {

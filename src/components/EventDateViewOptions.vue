@@ -1,13 +1,12 @@
 <template>
-  <div class="view-options flex justify-center items-center">
+  <div class="flex justify-center items-center">
     <q-btn-dropdown
       class="inter t4"
       no-caps
       @click.stop
       flat
-      icon="mdi-format-list-bulleted"
       :dropdown-icon="
-        $q.screen.lt.sm && false ? 'mdi-dots-horizontal' : undefined
+        $q.screen.lt.sm ? 'mdi-dots-horizontal' : 'mdi-format-list-bulleted'
       "
       no-icon-animation
     >

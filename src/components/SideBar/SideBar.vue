@@ -34,14 +34,14 @@
         <NavigationBar
           @click="togglePanel"
           class="nav-bar"
-          v-if="$q.screen.gt.xs"
+          v-if="$q.screen.gt.xs && false"
         />
         <div
           style="height: 100%; width: 100%"
           class="sidebar-content-inner"
           @wheel="handleWheel"
         >
-          <div class="sidebar-content-inner-shadow" />
+          <!--<div class="sidebar-content-inner-shadow" />-->
           <NearbyView
             style="height: 100%; width: 100%"
             v-if="sidebarPanel === 'nearby'"
@@ -343,7 +343,7 @@ export default {
           .sidebar-content-inner-shadow {
             //box-shadow: inset rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
             // heavy box-shadow: inset rgba(100, 100, 111, 0.1) 0px 7px 29px 0px;
-            box-shadow: inset rgba(100, 100, 100, 0.1) 0px 8px 10px -5px;
+            //box-shadow: inset rgba(100, 100, 100, 0.1) 0px 8px 10px -5px;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
           }
         }
@@ -638,7 +638,7 @@ export default {
         box-shadow: none;
         border-top: 1px solid $bi-4;
         //border-top: none;
-
+        background: black;
         &.sidebar-mobile-expanded {
           border-top-color: black;
         }

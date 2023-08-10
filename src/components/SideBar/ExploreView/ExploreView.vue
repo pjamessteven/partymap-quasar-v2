@@ -42,17 +42,23 @@
       class="event-list-inner"
       :style="$q.screen.gt.xs && $q.screen.lt.lg ? 'margin-top: -20px' : ''"
     >
-      <EventDateViewOptions
-        v-if="$q.screen.gt.xs && groupEventsByMonth"
-        class="view-options-absolute"
-      />
-
       <div
-        class="flex column grow no-wrap"
-        :style="
-          groupEventsByMonth && $q.screen.gt.xs ? 'margin-top: -16px' : ''
-        "
+        class="flex row no-wrap items-center view-options-absolute"
+        v-if="$q.screen.gt.xs && groupEventsByMonth"
       >
+        <EventDateViewOptions class="q-mr-md" />
+
+        <q-icon
+          @click="() => (showPanel = !showPanel)"
+          v-if="$q.screen.gt.xs"
+          flat
+          size="2rem"
+          class="q-mr-md"
+          name="mdi-chevron-up"
+          :class="{ 'rotate-180': showPanel }"
+        />
+      </div>
+      <div class="flex column grow no-wrap">
         <q-scroll-area
           vertical
           @scroll="onScrollMainContent"
@@ -73,25 +79,43 @@
                   :class="
                     $q.screen.lt.sm
                       ? 'q-pl-md q-py-md header t2 semibold '
-                      : 'q-pl-md q-pb-md q-pt-lg t3 '
+                      : 'q-pl-md q-pb-md header q-pt-lg t1 semibold  '
                   "
-                  v-if="
-                    !groupEventsByMonth &&
-                    eventDates?.length > 0 &&
-                    !isLoadingInitial &&
-                    showResults &&
-                    eventDatesTotal
-                  "
+                  v-if="!groupEventsByMonth"
                 >
-                  <span
-                    >{{ eventDatesTotal }}
-                    <span v-if="eventDatesTotal === 1">result</span
-                    ><span v-else>results</span>&nbsp;in this area:</span
-                  >
-                  <EventDateViewOptions
-                    v-if="$q.screen.gt.xs"
-                    class="view-options"
-                  />
+                  <span>
+                    <span
+                      v-if="
+                        showResults && eventDatesTotal && eventDates?.length > 0
+                      "
+                      >{{ eventDatesTotal }}
+                      <span v-if="eventDatesTotal === 1">result</span
+                      ><span v-else>results</span>&nbsp;in this area:</span
+                    >
+                    <span
+                      v-else-if="
+                        isLoadingInitial || (mapMoving && !blockUpdates)
+                      "
+                      >Loading results...</span
+                    >
+                  </span>
+                  <div class="flex row items-center justify-start t1">
+                    <EventDateViewOptions
+                      v-if="$q.screen.gt.xs"
+                      class="q-mr-md"
+                    />
+                    <div class="separator vertical" />
+
+                    <q-icon
+                      v-if="$q.screen.gt.xs"
+                      flat
+                      size="2rem"
+                      class="q-mr-lg"
+                      name="mdi-chevron-up"
+                      @click="() => (showPanel = !showPanel)"
+                      :class="{ 'rotate-180': showPanel }"
+                    />
+                  </div>
                 </div>
                 <div
                   class="inter"
@@ -99,11 +123,6 @@
                     $q.screen.lt.sm
                       ? 'q-pl-md q-py-md header t2 semibold'
                       : 'q-pl-md q-pb-md q-pt-lg t3 '
-                  "
-                  :style="
-                    groupEventsByMonth && $q.screen.gt.xs
-                      ? 'margin-top: 16px'
-                      : ''
                   "
                   v-else-if="
                     (isLoadingInitial || (mapMoving && !blockUpdates)) &&
@@ -141,6 +160,11 @@
                   <div
                     class="flex column"
                     v-show="showResults && !isLoadingInitial"
+                    :style="
+                      groupEventsByMonth && $q.screen.gt.xs
+                        ? 'margin-top: 8px'
+                        : ''
+                    "
                   >
                     <!--
                   <div
@@ -552,15 +576,16 @@ export default {
 
     .view-options {
       position: absolute;
-      right: 0px;
-      top: 16px;
+      right: 64px;
+      top: 20px;
       z-index: 100;
     }
 
     .view-options-absolute {
       position: absolute;
-      right: -18px;
-      top: -8px;
+      right: 16px;
+      top: 22px;
+
       z-index: 100;
     }
 
@@ -661,10 +686,10 @@ export default {
   }
 
   .header {
-    background: black;
+    background: $bi-2;
   }
   .date-header {
-    background: black;
+    background: $bi-2;
   }
 }
 
@@ -702,6 +727,11 @@ export default {
 }
 
 @media only screen and (max-width: 600px) {
+  .body--dark {
+    .header {
+      background: black !important;
+    }
+  }
   .event-date-center {
     margin-top: 100px;
     align-items: start;

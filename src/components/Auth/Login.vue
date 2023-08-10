@@ -118,7 +118,7 @@
         </div>
         <div class="separator q-mt-md" />
 
-        <div class="t4 q-mt-md" style="text-align: center">
+        <div class="t4 q-mt-md" style="text-align: center; font-size: small">
           We take privacy very seriously and we will never share or sell your
           information.
           <div class="q-mt-sm">

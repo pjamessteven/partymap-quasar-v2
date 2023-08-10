@@ -33,6 +33,7 @@
             filled
             autocapitalize="off"
             class="q-mt-md"
+            type="email"
             hide-bottom-space
             v-bind:label="$t('auth.email')"
             v-model="email"

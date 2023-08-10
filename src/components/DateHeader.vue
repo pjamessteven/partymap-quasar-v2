@@ -62,10 +62,20 @@ export default {
 }
 .body--dark {
   .date-header {
-    background: black !important;
+    background: $bi-2 !important;
   }
 }
 @media only screen and (max-width: 600px) {
+  .body--light {
+    .date-header {
+      background: white !important;
+    }
+  }
+  .body--dark {
+    .date-header {
+      background: black !important;
+    }
+  }
   .date-header {
     //width: calc(100% - 64px) !important;
     //padding-right: 64px !important;
