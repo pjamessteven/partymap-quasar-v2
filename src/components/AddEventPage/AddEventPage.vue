@@ -340,27 +340,27 @@
                       autogrow
                       :input-style="{ 'min-height': '100px' }"
                       color="bg-grey-7"
-                      v-model="event.next_event_date_description"
+                      v-model="event.full_description"
                       :label="$t('description.detailed_description')"
                       style="padding-bottom: 0px"
                     />
                     <div v-if="event.host === false">
                       <p />
                       <q-option-group
-                        v-model="detailedDescriptionAttributeOption"
+                        v-model="FullDescriptionAttributeOption"
                         :options="attributeOptions"
                         color="primary"
                       />
                     </div>
                     <p />
                     <q-input
-                      v-if="detailedDescriptionAttributeOption === 'other'"
+                      v-if="FullDescriptionAttributeOption === 'other'"
                       dense
                       outlined
                       maxlength="200"
                       :input-style="{ 'min-height': '50px' }"
                       color="bg-grey-7"
-                      v-model="detailedDescriptionAttribute"
+                      v-model="fullDescriptionAttribute"
                       :label="$t('description.attribute_msg')"
                       :rules="[(val) => !!val]"
                       style="padding-bottom: 0px"
@@ -586,10 +586,10 @@ export default {
   data() {
     return {
       descriptionAttribute: null,
-      detailedDescriptionAttribute: null,
+      fullDescriptionAttribute: null,
       existingEvents: null,
       descriptionAttributeOption: 'self',
-      detailedDescriptionAttributeOption: 'self',
+      FullDescriptionAttributeOption: 'self',
       attributeOptions: [
         {
           label: 'I wrote this myself',
@@ -609,8 +609,8 @@ export default {
         name: '',
         description: '',
         description_attribute: null,
-        next_event_date_description: '',
-        next_event_date_description_attribute: null,
+        full_description: '',
+        full_description_attribute: null,
         next_event_date_size: null,
         next_event_date_artists: null,
         media_items: [],
@@ -672,11 +672,10 @@ export default {
       } else if (this.descriptionAttributeOption === 'other') {
         this.event.description_attribute = this.descriptionAttribute;
       }
-      if (this.detailedDescriptionAttributeOption === 'official') {
-        this.event.next_event_date_description_attribute = this.event.url;
-      } else if (this.detailedDescriptionAttributeOption === 'other') {
-        this.event.next_event_date_description_attribute =
-          this.detailedDescriptionAttribute;
+      if (this.FullDescriptionAttributeOption === 'official') {
+        this.event.full_description_attribute = this.event.url;
+      } else if (this.FullDescriptionAttributeOption === 'other') {
+        this.event.full_description_attribute = this.fullDescriptionAttribute;
       }
       try {
         const response = await addEventRequest(this.event);

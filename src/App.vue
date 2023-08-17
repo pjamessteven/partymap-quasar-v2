@@ -693,7 +693,7 @@ body {
 }
 .q-btn {
   font-size: 14px;
-  border-radius: 4px !important;
+  border-radius: 9px !important;
   font-weight: 500;
   .q-btn__content {
     flex-wrap: nowrap;

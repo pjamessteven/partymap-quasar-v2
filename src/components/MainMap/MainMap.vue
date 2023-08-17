@@ -76,7 +76,6 @@ export default {
       map: null, // when accessing this.map, we need to use toRaw() to avoid vue3 proxy which causes issues ()
       tileLayer: null,
       labelLayer: null,
-      individualMarkers: [],
       mapMarkers: null,
       mapMarkersPermanentTooltip: null,
       satelliteMapOpacity: 1,
@@ -614,9 +613,9 @@ export default {
 
           marker.on('click', this.clickMarker);
           marker.data = this.points[i];
-          this.individualMarkers.push(marker);
+          tooltipMarkers.push(marker);
         }
-        toRaw(this.mapMarkers).addLayers(toRaw(this.individualMarkers));
+        toRaw(this.mapMarkers).addLayers(tooltipMarkers);
         //toRaw(this.mapMarkersPermanentTooltip).addLayers(tooltipMarkers);
 
         this.markersLoaded = true;

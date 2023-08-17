@@ -93,7 +93,7 @@
           "
           class="flex row items-center no-wrap link-hover ed-inline-card editing-outline q-py-md"
           :class="{ 'q-pl-md': $q.screen.gt.xs }"
-          @click="addMissingInformation()"
+          @click="editing = true"
           style="cursor: pointer"
         >
           <q-icon
@@ -193,9 +193,9 @@ export default {
       'loadingEventDate',
       'selectedEventDateIndex',
       'selectedEventDate',
-      'editing',
       'currentUserIsHost',
     ]),
+    ...mapWritableState(useEventStore, ['editing']),
     ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
     rruleStatus() {
       if (this.event?.rrule?.separation_count > 0) {

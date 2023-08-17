@@ -28,8 +28,8 @@
       </div>
     </div>
     <q-dialog v-model="showUploadDialog">
-      <q-card class="upload-dialog">
-        <div class="flex row wrap items-center q-mb-md q-ma-md">
+      <q-card class="upload-dialog q-pa-md">
+        <div class="flex row wrap items-center q-mb-md q-mb-lg">
           <q-icon left size="1.25em" name="las la-upload" />
           <div class="flex column">
             <div class="text-h6 card-title q-pr-md">
@@ -109,7 +109,7 @@ export default {
                 persistent: false, // we want the user to not be able to close it
               })
               .onDismiss(() => {
-                window.bus.$emit('closeDialog');
+                this.$emit('closeDialog');
               });
           });
         });

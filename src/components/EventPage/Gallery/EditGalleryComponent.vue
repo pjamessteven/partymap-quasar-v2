@@ -45,7 +45,11 @@
         </transition-group>
       </div>
       <q-card-section class="flex justify-end">
-        <q-btn label="done" color="primary" />
+        <q-btn
+          label="done"
+          @click="window.bus.$emit('closeDialog')"
+          color="primary"
+        />
       </q-card-section>
     </div>
     <q-dialog v-model="showUploadDialog">

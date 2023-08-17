@@ -549,7 +549,7 @@
                           />
                         </div>
                         <EventDateViewOptions
-                          style="margin-right: 0px"
+                          style="margin-right: 16px"
                           :show-group-by-month="false"
                           v-if="$q.screen.gt.xs"
                         />
@@ -566,6 +566,7 @@
                           :hasNext="nearbyEventDatesHasNext"
                           :loading="nearbyEventDatesLoading"
                           :disableEndOfResultsMessage="true"
+                          :hideHeader="true"
                         />
                       </transition>
                       <transition
@@ -580,6 +581,7 @@
                           :hasNext="nearbyEventDatesHasNext"
                           :loading="nearbyEventDatesLoading"
                           :disableEndOfResultsMessage="true"
+                          :hideHeader="true"
                         />
                       </transition>
                       <div
@@ -624,7 +626,7 @@
                           </div>
                         </div>
                         <EventDateViewOptions
-                          style="margin-right: 0px"
+                          style="margin-right: 16px"
                           :show-group-by-month="false"
                           v-if="$q.screen.gt.xs"
                         />
@@ -640,6 +642,7 @@
                           :groupByMonth="false"
                           :eventDates="eventDates"
                           :hasNext="eventDatesHasNext"
+                          :hideHeader="true"
                         />
                       </transition>
                       <transition
@@ -654,6 +657,7 @@
                           :hasNext="
                             eventDatesHasNext && !nearbyEventDatesHasNext
                           "
+                          :hideHeader="true"
                         />
                       </transition>
 
@@ -1046,7 +1050,7 @@ export default {
       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     }
     .location-header {
-      background: $bi-2;
+      background: $bi-1;
     }
     .main-content {
       .message {
@@ -1082,7 +1086,7 @@ export default {
 }
 .body--light {
   .landing-page {
-    .map-gap {
+    scroll .map-gap {
       color: white;
       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     }
@@ -1177,7 +1181,7 @@ export default {
     overflow: hidden;
 
     :deep(.scroll) {
-      overflow-x: hidden;
+      //overflow-x: hidden;
       overflow-y: auto;
     }
 

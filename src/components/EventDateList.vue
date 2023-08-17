@@ -33,14 +33,14 @@
       </div>
     </div>
     <div v-else>
-      <!--
       <DateHeader
         class="header q-mt-"
         :class="$q.screen.lt.sm ? '' : ''"
-        :altLabel="'Upcoming events in this area:'"
+        :altLabel="computedTotalResultMessage"
+        v-if="!hideHeader"
       >
       </DateHeader>
-      -->
+
       <div
         class="ed-card-grid q-pb-sm q-mt-xs"
         :style="gridColumns"
@@ -107,9 +107,8 @@
           :class="$q.screen.lt.sm ? 'q-mt-lg t4 semibold' : 'q-mt-lg'"
           class="t4 inter"
         >
-          No results<span v-if="$route.name === 'Explore'"
-            >&nbsp;in this area</span
-          >
+          <span v-if="$route.name === 'Explore'"></span
+          ><span v-else>No results</span>
         </div>
       </div>
     </div>
@@ -137,6 +136,8 @@ interface Props {
   hasNext: boolean;
   loading?: boolean;
   disableEndOfResultsMessage?: boolean;
+  eventDatesTotal?: number;
+  hideHeader?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -145,6 +146,9 @@ const props = withDefaults(defineProps<Props>(), {
     return {};
   },
   groupByMonth: () => false,
+  eventDatesTotal: () => 0,
+  loading: () => false,
+  hideHeader: () => false,
 });
 
 const gridColumns = computed(() => {
@@ -161,6 +165,16 @@ const gridColumns = computed(() => {
         grid-template-columns: repeat(1, minmax(0, 1fr));
         `;
   }
+});
+
+const computedTotalResultMessage = computed(() => {
+  if (props.eventDatesTotal === 1) {
+    return props.eventDatesTotal + ' event in this area';
+  } else if (props.eventDatesTotal > 1) {
+    return props.eventDatesTotal + ' events in this area';
+  } else if (props.loading) {
+    return 'Loading events...';
+  } else return 'No events in this area.';
 });
 </script>
 <style lang="scss" scoped>

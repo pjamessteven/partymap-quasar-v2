@@ -147,21 +147,35 @@ export default {
     query(newv) {
       if (newv?.length > 0) this.sidebarPanel = 'search';
     },
-    controlArtist(newVal) {
-      if (newVal && newVal.length > 0 && this.$q.screen.lt.sm) {
-        this.$refs.scroll.setScrollPosition(
-          this.$refs.artistControl.$el.offsetLeft - 16,
-          300
-        );
-      }
+    controlArtist: {
+      handler(newVal) {
+        if (newVal && newVal.length > 0) {
+          this.sidebarPanel = 'explore';
+          if (this.$q.screen.lt.sm || true) {
+            this.$refs.scroll.setScrollPosition(
+              'horizontal',
+              this.$refs.artistControl.$el.offsetLeft - 16,
+              150
+            );
+          }
+        }
+      },
+      deep: true,
     },
-    controlTagSelectedOptions(newVal) {
-      if (newVal && newVal.length > 0 && this.$q.screen.lt.sm) {
-        this.$refs.scroll.setScrollPosition(
-          this.$refs.tagControl.$el.offsetLeft - 16,
-          300
-        );
-      }
+    controlTag: {
+      handler(newVal) {
+        if (newVal && newVal.length > 0) {
+          this.sidebarPanel = 'explore';
+          if (this.$q.screen.lt.sm || true) {
+            this.$refs.scroll.setScrollPosition(
+              'horizontal',
+              this.$refs.tagControl.$el.offsetLeft - 16,
+              300
+            );
+          }
+        }
+      },
+      deep: true,
     },
   },
   props: {

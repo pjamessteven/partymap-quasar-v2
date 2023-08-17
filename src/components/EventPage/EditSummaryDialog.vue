@@ -2,7 +2,7 @@
   <q-card class="edit-card dialog-card">
     <q-card-section class="flex column no-wrap dialog-card-header">
       <div class="flex items-center no-wrap justify-between grow">
-        <div class="text-h6 card-title q-pr-md">Update Event Description</div>
+        <div class="text-h6 card-title q-pr-md">Update Event Summary</div>
         <q-btn icon="close" class="q-ml-md" flat round dense v-close-popup />
       </div>
     </q-card-section>
@@ -17,13 +17,13 @@
       <q-input
         class="border-radius"
         counter
-        maxlength="3000"
+        maxlength="400"
         outlined
         autogrow
         :input-style="{ 'min-height': '100px' }"
         v-model="description"
         :rules="[(val) => !!val]"
-        label="Event Description"
+        label="Event Summary"
       />
       <!-- ATRRIBUTE -->
       <q-input
@@ -34,7 +34,7 @@
         :input-style="{ 'min-height': '50px' }"
         color="bg-grey-7"
         v-model="attribute"
-        label="Source (optional)"
+        label="Source"
       />
     </q-card-section>
     <q-card-section class="q-pt-md flex justify-end dialog-card-footer">
@@ -63,8 +63,8 @@ export default {
     editing: Boolean,
   },
   mounted() {
-    this.description = this.event.full_description;
-    this.attribute = this.event.full_description_attribute;
+    this.description = this.event.description;
+    this.attribute = this.event.description_attribute;
   },
   data() {
     return {
@@ -87,8 +87,8 @@ export default {
           ok: false,
         });
         await this.updateEvent({
-          full_description: this.description,
-          full_description_attribute: this.attribute,
+          description: this.description,
+          description_attribute: this.attribute,
         });
         this.loading = false;
         progressDialog.hide();
@@ -116,8 +116,8 @@ export default {
               await this.suggestEventEdit({
                 ...messageAndToken,
                 ...{
-                  full_description: this.description,
-                  full_description_attribute: this.attribute,
+                  description: this.description,
+                  description_attribute: this.attribute,
                 },
               });
               this.$q

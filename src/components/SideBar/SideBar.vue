@@ -123,27 +123,30 @@ export default {
     onMouseWheel(e) {
       const up = e.direction === 'up';
       const down = e.direction === 'down';
-      if (!this.showPanel && down) {
-        this.showPanel = true;
-      } else if (this.enablePanelSwipeDown && up && !this.preventMapZoom) {
-        this.preventMapZoom = true;
-        this.showPanel = false;
+      console.log(e);
+      if (e.wheelDeltaY > 2 || e.wheelDeltaY < -2)
+        if (!this.showPanel && down) {
+          // defined minimum sensitivity
+          this.showPanel = true;
+        } else if (this.enablePanelSwipeDown && up && !this.preventMapZoom) {
+          this.preventMapZoom = true;
+          this.showPanel = false;
 
-        setTimeout(() => {
-          // wait for animation - stop map from zooming uncontrolably
+          setTimeout(() => {
+            // wait for animation - stop map from zooming uncontrolably
 
-          this.preventMapZoom = false;
-        }, 1000);
+            this.preventMapZoom = false;
+          }, 1000);
 
-        if (
-          this.sidebarPanel !== 'explore' &&
-          this.sidebarPanel !== 'favorites' &&
-          this.$q.screen.lt.sm
-        ) {
-          this.sidebarPanel = 'explore';
+          if (
+            this.sidebarPanel !== 'explore' &&
+            this.sidebarPanel !== 'favorites' &&
+            this.$q.screen.lt.sm
+          ) {
+            this.sidebarPanel = 'explore';
+          }
+          return false;
         }
-        return false;
-      }
     },
 
     hideDialog() {
@@ -281,7 +284,7 @@ export default {
   .sidebar-wrapper {
     .sidebar {
       border: 1px solid rgba(255, 255, 255, 0.1);
-      background: $bi-2;
+      background: $bi-1;
 
       :deep(.sidebar-header) {
         // background: black;
@@ -355,7 +358,7 @@ export default {
       }
 
       :deep(.sidebar-header) {
-        color: $bi-2;
+        color: $bi-1;
 
         background: white;
       }

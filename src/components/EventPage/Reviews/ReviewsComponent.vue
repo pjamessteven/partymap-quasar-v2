@@ -3,7 +3,7 @@
     <div class="inter bolder text-large t2 q-pr-md q-mb event-page-header">
       Reviews:
     </div>
-    <div class="new-review flex column q-mt-md grow">
+    <div class="new-review flex column q-mt-sm grow">
       <div class="flex row items-end">
         <q-input
           label="Share your experience!"
@@ -75,10 +75,10 @@
       </transition>
     </div>
     <div
-      class="no-reviews t3 inter text-large q-mt-lg"
+      class="no-reviews t4 inter text-large q-mt-lg"
       v-if="event?.event_contributions?.length === 0"
     >
-      No reviews yet - be the first!
+      No reviews yet... be the first!
     </div>
     <div v-else class="q-mt-md">
       <ReviewComponent

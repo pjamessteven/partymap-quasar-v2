@@ -18,6 +18,7 @@
           size="2rem"
           :class="{ 'rotate-180': showPanel }"
           name="mdi-chevron-up"
+          style="cursor: pointer"
         />
       </div>
     </div>
@@ -36,6 +37,7 @@
       class="q-pa-md q-mr-xs mobile-panel-button t2"
       :class="{ 'rotate-180': showPanel }"
       name="mdi-chevron-up"
+      style="pointer-events: all"
     />
     <div class="touch-overlay" v-touch-swipe.vertical="handleSwipe" />
     <div
@@ -43,20 +45,24 @@
       :style="$q.screen.gt.xs && $q.screen.lt.lg ? 'margin-top: -20px' : ''"
     >
       <div
-        class="flex row no-wrap items-center view-options-absolute"
-        v-if="$q.screen.gt.xs && groupEventsByMonth"
+        class="flex row no-wrap items-center justify-between q-pa-md view-options-absolute"
+        v-if="$q.screen.gt.xs"
       >
-        <EventDateViewOptions class="q-mr-md" />
+        <div class="text-large inter bolder q-ml-sm">Explore Events</div>
+        <div class="flex row items-center no-wrap">
+          <EventDateViewOptions class="q-mr-md" />
 
-        <q-icon
-          @click="() => (showPanel = !showPanel)"
-          v-if="$q.screen.gt.xs"
-          flat
-          size="2rem"
-          class="q-mr-md"
-          name="mdi-chevron-up"
-          :class="{ 'rotate-180': showPanel }"
-        />
+          <q-icon
+            @click="() => (showPanel = !showPanel)"
+            v-if="$q.screen.gt.xs"
+            flat
+            size="2rem"
+            class="q-mr-md"
+            name="mdi-chevron-up"
+            :class="{ 'rotate-180': showPanel }"
+            style="cursor: pointer"
+          />
+        </div>
       </div>
       <div class="flex column grow no-wrap">
         <q-scroll-area
@@ -74,63 +80,6 @@
           <transition enter-active-class="animated fadeIn">
             <div class="flex column no-wrap scroll-content q-px-sm">
               <div class="flex column no-wrap content">
-                <div
-                  class="inter t1 justify-between flex items-center"
-                  :class="
-                    $q.screen.lt.sm
-                      ? 'q-pl-md q-py-md header t2 semibold '
-                      : 'q-pl-md q-pb-md header q-pt-lg t1 semibold  '
-                  "
-                  v-if="!groupEventsByMonth"
-                >
-                  <span>
-                    <span
-                      v-if="
-                        showResults && eventDatesTotal && eventDates?.length > 0
-                      "
-                      >{{ eventDatesTotal }}
-                      <span v-if="eventDatesTotal === 1">result</span
-                      ><span v-else>results</span>&nbsp;in this area:</span
-                    >
-                    <span
-                      v-else-if="
-                        isLoadingInitial || (mapMoving && !blockUpdates)
-                      "
-                      >Loading results...</span
-                    >
-                  </span>
-                  <div class="flex row items-center justify-start t1">
-                    <EventDateViewOptions
-                      v-if="$q.screen.gt.xs"
-                      class="q-mr-md"
-                    />
-                    <div class="separator vertical" />
-
-                    <q-icon
-                      v-if="$q.screen.gt.xs"
-                      flat
-                      size="2rem"
-                      class="q-mr-lg"
-                      name="mdi-chevron-up"
-                      @click="() => (showPanel = !showPanel)"
-                      :class="{ 'rotate-180': showPanel }"
-                    />
-                  </div>
-                </div>
-                <div
-                  class="inter"
-                  :class="
-                    $q.screen.lt.sm
-                      ? 'q-pl-md q-py-md header t2 semibold'
-                      : 'q-pl-md q-pb-md q-pt-lg t3 '
-                  "
-                  v-else-if="
-                    (isLoadingInitial || (mapMoving && !blockUpdates)) &&
-                    !showPanel
-                  "
-                >
-                  <span>Loading results...</span>
-                </div>
                 <div class="flex row no-wrap">
                   <!--
                   <ControlsComponent
@@ -157,15 +106,7 @@
                   />
                 </div>
                 <transition appear enter-active-class="animated fadeIn slow">
-                  <div
-                    class="flex column"
-                    v-show="showResults && !isLoadingInitial"
-                    :style="
-                      groupEventsByMonth && $q.screen.gt.xs
-                        ? 'margin-top: 8px'
-                        : ''
-                    "
-                  >
+                  <div class="flex column">
                     <!--
                   <div
                     class="flex column artists-wrapper"
@@ -190,21 +131,27 @@
                   -->
 
                     <EventDateList
-                      v-if="showResults && compactView"
+                      v-if="compactView"
                       :groupByMonth="groupEventsByMonth"
-                      :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
-                      :eventDates="eventDates"
+                      :eventDatesGroupedByMonth="
+                        !mapMoving ? eventDatesGroupedByMonth : []
+                      "
+                      :eventDates="!mapMoving ? eventDates : []"
                       :hasNext="eventDatesHasNext"
-                      :loading="eventDatesLoading"
+                      :loading="eventDatesLoading || mapMoving"
+                      :eventDatesTotal="!mapMoving ? eventDatesTotal : 0"
                     />
 
                     <EventDatePosterList
-                      v-if="showResults && !compactView"
+                      v-if="!compactView"
                       :groupByMonth="groupEventsByMonth"
-                      :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
-                      :eventDates="eventDates"
+                      :eventDatesGroupedByMonth="
+                        !mapMoving ? eventDatesGroupedByMonth : []
+                      "
+                      :eventDates="!mapMoving ? eventDates : []"
                       :hasNext="eventDatesHasNext"
-                      :loading="eventDatesLoading"
+                      :loading="eventDatesLoading || mapMoving"
+                      :eventDatesTotal="!mapMoving ? eventDatesTotal : 0"
                     />
                   </div>
                 </transition>
@@ -228,7 +175,7 @@
         :style="
           $q.screen.lt.sm
             ? 'height: 100%; position: absolute; width: 100%; z-index: 500'
-            : 'height: 144px; position: absolute; width: 100%; z-index: 500'
+            : 'height: 278px; position: absolute; width: 100%; z-index: 500'
         "
       >
         <q-linear-progress
@@ -301,7 +248,7 @@ export default {
     async getInitialList() {
       if (this.$route.name === 'Explore' && !this.blockUpdates) {
         // event date stuff
-        this.isLoadingDatesInitial = true;
+        // this.isLoadingDatesInitial = true;
         if (this.$refs) this.$refs.scroll.setScrollPercentage('vertical', 0);
         this.eventDatesHasNext = true;
         this.eventDatesPage = 1;
@@ -332,7 +279,7 @@ export default {
         try {
           await this.loadEventDates();
         } catch (error) {}
-        this.isLoadingDatesInitial = false;
+        // this.isLoadingDatesInitial = false;
       }
     },
     handleSwipe() {
@@ -462,7 +409,8 @@ export default {
       );
     },
     isLoadingInitial() {
-      return this.isLoadingDatesInitial || this.isLoadingArtistsInitial;
+      // return this.isLoadingDatesInitial || this.isLoadingArtistsInitial;
+      return this.eventDatesLoading && this.eventDatesTotal <= 1;
     },
 
     route() {
@@ -582,11 +530,7 @@ export default {
     }
 
     .view-options-absolute {
-      position: absolute;
-      right: 16px;
-      top: 22px;
-
-      z-index: 100;
+      z-index: 1000;
     }
 
     .date-header-bg {
@@ -686,10 +630,10 @@ export default {
   }
 
   .header {
-    background: $bi-2;
+    background: $bi-1;
   }
   .date-header {
-    background: $bi-2;
+    background: $bi-1;
   }
 }
 

@@ -34,9 +34,7 @@
             <div
               class="content"
               :class="scrollPercentage >= 1 ? 'mobile-scroll-enable' : ''"
-              v-touch-swipe.mouse.down="
-                scrollPercentage === 0 ? handleSwipe : null
-              "
+              v-touch-swipe.down="scrollPercentage === 0 ? handleSwipe : null"
             >
               <div class="flex column">
                 <div class="header flex column">
@@ -129,18 +127,28 @@
                       </div>
 
                       <FeaturedMediaComponent
-                        v-if="event?.media_items?.length > 0 && $q.screen.lt.md"
+                        v-if="$q.screen.lt.md"
                         :editing="editing"
                         class="q-mt-lg"
                         :item="event?.media_items?.[0]"
                       />
 
                       <div
-                        v-if="
-                          (computedTicketUrl || computedExternalUrl) && false
-                        "
-                        class="event-buttons flex row justify-start items-center wrap"
-                        :class="$q.screen.gt.sm ? 'q-mt-lg' : 'q-mt-md'"
+                        class="flex grow justify-start items-start"
+                        v-if="!!event"
+                      >
+                        <SummaryComponent
+                          :editing="editing"
+                          :class="
+                            $q.screen.gt.sm ? 'q-mt-md' : 'q-mt-lg q-mr-lg'
+                          "
+                        />
+                      </div>
+
+                      <div
+                        v-if="computedTicketUrl || computedExternalUrl"
+                        class="event-buttons flex row justify-start items-center wrap o-080"
+                        :class="$q.screen.gt.sm ? 'q-mt-md' : 'q-mt-md'"
                       >
                         <a
                           :href="computedExternalUrl"
@@ -149,9 +157,10 @@
                           class="q-mr-sm q-mt-sm"
                         >
                           <q-btn
+                            no-caps
                             color="grey-3"
                             text-color="black"
-                            :label="$t('event.go_to_website')"
+                            label="Visit website"
                             size="md"
                             class="border-radius"
                             icon="las la-external-link-alt"
@@ -175,17 +184,6 @@
                         </a>
                       </div>
 
-                      <div
-                        class="flex grow justify-start items-start"
-                        v-if="!!event"
-                      >
-                        <DescriptionComponent
-                          :editing="editing"
-                          :class="
-                            $q.screen.gt.sm ? 'q-mt-md' : 'q-mt-lg q-mr-lg'
-                          "
-                        />
-                      </div>
                       <!--
                       <q-rating
                         v-if="!!event"
@@ -305,22 +303,6 @@
                             @click="editing = !editing"
                             v-if="currentUserIsHost && !editing"
                           />
-                          <!-- CORRESPONDING 'DONE' BUTTON -->
-                          <q-btn
-                            color="primary"
-                            text-color="white"
-                            :label="$t('event.done')"
-                            no-caps
-                            :icon="$q.screen.gt.xs ? 'mdi-check' : undefined"
-                            :style="
-                              $q.dark.isActive
-                                ? 'border-right: 1px solid rgba(255,255,255,0.05)'
-                                : 'border-right: 1px solid rgba(0,0,0,0.05)'
-                            "
-                            :size="$q.screen.gt.xs ? 'md' : 'md'"
-                            @click="editing = !editing"
-                            v-if="editing"
-                          />
                         </div>
                         <div class="q-gutter-sm">
                           <q-btn
@@ -395,7 +377,7 @@
                                 v-close-popup
                                 v-ripple
                                 v-if="!currentUserIsHost && event.host == null"
-                                @click="showingSuggestionsDialog = true"
+                                @click="editing = true"
                                 clickable
                               >
                                 <q-item-section avatar>
@@ -482,8 +464,8 @@
                         }"
                       >
                         <EventDates />
-
-                        <ReviewsComponent class="q-mt-m q-mb-xl" />
+                        <DescriptionComponent :editing="editing" />
+                        <ReviewsComponent class="q-mt-xl q-mb-xl" />
                       </div>
                     </div>
                   </div>
@@ -572,7 +554,28 @@
           </div>
         </div>
       </div>
-
+      <div class="sticky-editing-footer flex row justify-center" v-if="editing">
+        <div
+          class="sticky-editing-footer-inner col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12"
+        >
+          <div class="flex justify-end q-pa-md">
+            <q-btn
+              color="primary"
+              text-color="white"
+              label="Finished editing"
+              no-caps
+              :icon="$q.screen.gt.xs ? 'mdi-check' : undefined"
+              :style="
+                $q.dark.isActive
+                  ? 'border-right: 1px solid rgba(255,255,255,0.05)'
+                  : 'border-right: 1px solid rgba(0,0,0,0.05)'
+              "
+              :size="$q.screen.gt.xs ? 'md' : 'md'"
+              @click="editing = !editing"
+            />
+          </div>
+        </div>
+      </div>
       <!-- hidden element for copying url -->
       <input :value="computedUrl" ref="copyUrlInput" style="display: none" />
       <q-dialog v-model="showingReportDialog">
@@ -605,6 +608,7 @@ import { mapActions, mapState, mapWritableState } from 'pinia';
 import _ from 'lodash';
 import common from 'assets/common';
 import DescriptionComponent from 'components/EventPage/DescriptionComponent.vue';
+import SummaryComponent from 'components/EventPage/SummaryComponent.vue';
 import EventDates from 'components/EventPage/EventDates/EventDates.vue';
 import EventDateSidebarDesktop from 'components/EventPage/EventDates/EventDateSidebarDesktop.vue';
 import FeaturedMediaBackground from 'components/EventPage/Gallery/FeaturedMediaBackground.vue';
@@ -648,7 +652,7 @@ export default {
     TagsComponent,
     FeaturedMediaComponent,
     FeaturedMediaBackground,
-    DescriptionComponent,
+    SummaryComponent,
     NextEventDateSummary,
     ReviewsComponent,
     ReportDialog,
@@ -659,6 +663,7 @@ export default {
     InterestedComponent,
     SuggestionsDialog,
     InnerLoading,
+    DescriptionComponent,
   },
   props: {
     id: {
@@ -1007,11 +1012,13 @@ export default {
     this.editing = this.$route.params.editing;
     // clear previous event
     this.load();
+    /* disabling this for now
     this.wheelIndicator = new WheelIndicator({
       elem: this.$refs.contentcard,
       callback: this.onMouseWheel,
       preventMouse: false,
     });
+    */
   },
   created() {
     this.timeAgo = common.timeAgo;
@@ -1031,7 +1038,9 @@ export default {
     this.focusMarker = null;
   },
   unmounted() {
-    this.wheelIndicator.destroy();
+    if (this.wheelIndicator) {
+      this.wheelIndicator.destroy();
+    }
   },
 };
 </script>
@@ -1053,6 +1062,12 @@ a {
   .event-page {
     .history-container {
       background: black;
+    }
+    .sticky-editing-footer {
+      .sticky-editing-footer-inner {
+        background: $bi-3;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
     }
     .edit-bar {
       background: $bi-2;
@@ -1125,9 +1140,19 @@ a {
 .body--light {
   .event-page {
     background: transparent;
-
+    .event-page-content {
+      :deep(.editing-outline) {
+        border-color: grey !important;
+      }
+    }
     .history-container {
       background: $b-1;
+    }
+    .sticky-editing-footer {
+      .sticky-editing-footer-inner {
+        background: white;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+      }
     }
     .scroll-area {
       .main-row {
@@ -1206,6 +1231,16 @@ a {
   }
   .event-page-content {
     width: 100%;
+    .sticky-editing-footer {
+      position: fixed;
+      bottom: 0px;
+      left: 0px;
+      width: 100%;
+      z-index: 1000;
+    }
+    :deep(.editing-outline) {
+      border-color: white !important;
+    }
     .history-container {
       z-index: 1;
       position: sticky;
@@ -1263,9 +1298,7 @@ a {
               .q-inner-loading {
                 background: none;
               }
-              :deep(.editing-outline) {
-                border-color: white !important;
-              }
+
               .header-content {
                 position: relative;
                 width: 100%;
@@ -1366,16 +1399,25 @@ a {
   .content-card {
     max-width: 960px !important;
   }
+  .sticky-editing-footer-inner {
+    max-width: 960px;
+  }
 }
 @media only screen and (min-width: 1023px) {
   .content-card {
     max-width: 1024px !important;
+  }
+  .sticky-editing-footer-inner {
+    max-width: 1024px;
   }
 }
 
 @media only screen and (max-width: 1024px) {
   .content-card {
     max-width: 96vw !important;
+  }
+  .sticky-editing-footer-inner {
+    max-width: 96vw;
   }
 }
 @media only screen and (max-width: 600px) {
@@ -1399,6 +1441,9 @@ a {
   }
   .event-page {
     .event-page-content {
+      .sticky-editing-footer-inner {
+        max-width: 100vw;
+      }
       .scroll-area {
         height: 100%;
         .featured-media {

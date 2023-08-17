@@ -32,7 +32,7 @@
             <div
               v-if="!editing"
               class="inter bold t1"
-              :class="$q.screen.lt.sm ? ' ' : ' text-h6'"
+              :class="$q.screen.lt.sm ? ' ' : 'bolder text-large'"
             >
               @{{ user.username
               }}<q-icon

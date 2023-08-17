@@ -7,13 +7,11 @@
         </div>
       </q-card-section>
       <q-card-section class="dialog-card-content">
-        <div class="t2 q-my-md">
-          Optionally tell us why this improvement is needed.
-        </div>
         <q-input
+          class="q-mt-md"
           type="textarea"
           outlined
-          :label="$t('suggestions.message')"
+          placeholder="Say why this improvement is needed (optional)"
           v-model="message"
         />
         <vue-hcaptcha

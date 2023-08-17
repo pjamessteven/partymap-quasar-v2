@@ -33,20 +33,19 @@
       </div>
     </div>
     <div v-else>
-      <!--
       <DateHeader
-        class="header q-mt-"
+        v-if="!hideHeader"
+        class="total-result-header q-mt-"
         :class="$q.screen.lt.sm ? '' : ''"
-        :altLabel="'Upcoming events in this area:'"
+        :altLabel="computedTotalResultMessage"
       >
       </DateHeader>
-      -->
       <div
-        class="ed-poster-grid q-pb-sm q-mt-xs"
+        class="ed-poster-grid q-pb-sm"
         :style="gridColumns"
         :class="{
           'q-px-md': $q.screen.gt.xs,
-          'q-px-sm ': $q.screen.lt.sm,
+          'q-px-sm q-mt-xs': $q.screen.lt.sm,
         }"
       >
         <EventDatePoster
@@ -109,9 +108,8 @@
           :class="$q.screen.lt.sm ? 'q-mt-lg semibold' : 'q-mt-lg'"
           class="t4 inter"
         >
-          No results<span v-if="$route.name === 'Explore'"
-            >&nbsp;in this area</span
-          >
+          <span v-if="$route.name === 'Explore'"></span
+          ><span v-else>No results</span>
         </div>
       </div>
     </div>
@@ -139,6 +137,8 @@ interface Props {
   hasNext: boolean;
   loading?: boolean;
   disableEndOfResultsMessage?: boolean;
+  eventDatesTotal: number;
+  hideHeader?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -147,6 +147,9 @@ const props = withDefaults(defineProps<Props>(), {
     return [];
   },
   groupByMonth: () => false,
+  eventDatesTotal: () => 0,
+  loading: () => false,
+  hideHeader: () => false,
 });
 
 const gridColumns = computed(() => {
@@ -168,8 +171,21 @@ const gridColumns = computed(() => {
         `;
   }
 });
+
+const computedTotalResultMessage = computed(() => {
+  if (props.eventDatesTotal === 1) {
+    return props.eventDatesTotal + ' event in this area';
+  } else if (props.eventDatesTotal > 1) {
+    return props.eventDatesTotal + ' events in this area';
+  } else if (props.loading) {
+    return 'Loading events...';
+  } else return 'No events in this area.';
+});
 </script>
 <style lang="scss" scoped>
+.total-result-header {
+  position: unset;
+}
 .ed-poster-grid {
   display: grid;
   grid-gap: 1rem;

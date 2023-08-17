@@ -2,9 +2,11 @@
   <div class="date-header-wrapper">
     <div
       class="date-header flex row no-wrap justify-between grow ellipsis inter semibold"
-      :class="
-        $q.screen.gt.xs ? ' q-px-md q-py-md  t3' : 'q-px-sm q-ml-xs q-py-md t2'
-      "
+      :class="{
+        ' q-px-md q-pb-md  t2': $q.screen.gt.xs,
+        'q-pt-md': $q.screen.gt.xs && $route.name !== 'Explore',
+        'q-px-sm q-ml-xs q-py-md t2': $q.screen.lt.sm,
+      }"
     >
       <span v-if="!!altLabel">{{ altLabel }}</span>
       <span v-else> Events in {{ dateString }}</span>
@@ -62,7 +64,7 @@ export default {
 }
 .body--dark {
   .date-header {
-    background: $bi-2 !important;
+    background: $bi-1 !important;
   }
 }
 @media only screen and (max-width: 600px) {

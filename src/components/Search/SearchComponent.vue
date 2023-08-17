@@ -161,7 +161,7 @@ export default {
 .body--dark {
   .controls-wrapper-inner {
     color: $ti-1;
-    background: $bi-2;
+    background: $bi-1;
 
     //background: rgba(0, 0, 0, 0.5);
     border-top: 1px solid rgba(255, 255, 255, 0.2);

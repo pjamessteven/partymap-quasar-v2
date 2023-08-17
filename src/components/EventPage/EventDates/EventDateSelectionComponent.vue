@@ -7,10 +7,16 @@
       <div
         class="flex column"
         :class="{
-          'q-pb-lg': this.event?.event_dates?.length === 0,
+          'q-pb-lg': event?.event_dates?.length === 0,
           'q-mb-md': $q.screen.gt.sm,
         }"
       >
+        <div
+          class="inter bolder text-large t2 event-page-header"
+          v-if="editing && event?.event_dates?.length === 0"
+        >
+          Event Dates:
+        </div>
         <div
           class="flex row justify-start grow no-wrap schedule-msg-buttons q-mt-md q-pa-md"
           v-if="editing"
@@ -37,9 +43,9 @@
           </div>
           <div class="flex row justify-start grow" v-else>
             <q-btn
-              color="primary"
               label="Add date"
               size="md"
+              no-caps
               style="white-space: nowrap"
               class="q-mr-sm soft-button-shadow"
               icon="las la-plus"
@@ -47,7 +53,7 @@
             />
             <q-btn
               class="soft-button-shadow"
-              color="primary"
+              no-caps
               @click="enableRrule"
               :label="$t('event_dates.set_up_recurring_dates')"
             />

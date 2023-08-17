@@ -28,6 +28,9 @@
         ref="itemWrapperInner"
         @click="showFullscreen = true"
       >
+        <div class="no-media t4 flex items-center justify-center" v-if="!item">
+          <div>No poster image... add one?</div>
+        </div>
         <video
           v-if="item?.v_low_url && item?.v_low_url.length > 0"
           class="video"
@@ -42,18 +45,28 @@
             class="image-thumb"
           />
         </video>
-        <img :src="item?.thumb_xs_url" v-if="!loaded" />
+        <img :src="item?.thumb_xs_url" v-if="!loaded && item" />
         <img v-show="loaded" :src="item?.thumb_url" @load="loaded = true" />
       </div>
     </div>
-    <q-dialog v-model="showEditDialog">
+    <q-dialog v-model="showEditDialog" v-if="currentUserCanEdit">
       <EditGalleryComponent />
+    </q-dialog>
+    <q-dialog
+      v-else
+      :model-value="showEditDialog"
+      @hide="showEditDialog = null"
+      transition-show="jump-up"
+      transition-hide="jump-down"
+    >
+      <SuggestNewCoverDialog @closeDialog="() => (showEditDialog = false)" />
     </q-dialog>
   </div>
 </template>
 
 <script>
 import EditGalleryComponent from 'components/EventPage/Gallery/EditGalleryComponent.vue';
+import SuggestNewCoverDialog from 'components/EventPage/Gallery/SuggestNewCoverDialog.vue';
 
 import GalleryDialog from './GalleryDialog.vue';
 import { mapState, mapWritableState } from 'pinia';
@@ -64,6 +77,7 @@ export default {
   components: {
     EditGalleryComponent,
     GalleryDialog,
+    SuggestNewCoverDialog,
   },
   props: {
     item: Object,
@@ -79,7 +93,7 @@ export default {
   methods: {},
 
   computed: {
-    ...mapState(useEventStore, ['event']),
+    ...mapState(useEventStore, ['event', 'currentUserCanEdit']),
     ...mapState(useAuthStore, ['currentUser']),
     ...mapWritableState(useEventStore, ['backgroundMediaIndex']),
     noCache() {
@@ -125,6 +139,7 @@ export default {
   .item-wrapper {
     position: relative;
     height: 100%;
+    width: 100%;
     max-height: 100%;
     overflow: visible;
     display: flex;
@@ -135,12 +150,19 @@ export default {
     .item-wrapper-inner {
       height: 100%;
       max-height: 100%;
+      width: 100%;
       position: relative;
       display: flex;
       justify-content: center;
       align-content: center;
       align-items: center;
       // background: white;
+      .no-media {
+        background: grey;
+        width: 100%;
+        height: 100%;
+        flex-grow: 1;
+      }
       img,
       video {
         cursor: pointer;

@@ -99,7 +99,7 @@
       transition-show="jump-up"
       transition-hide="jump-down"
     >
-      <EditDescriptionDialog @closeDialog="closeDialog()" />
+      <EditSummaryDialog @closeDialog="closeDialog()" />
     </q-dialog>
 
     <q-dialog
@@ -177,7 +177,7 @@
 import common from 'assets/common';
 
 import AddEventDateDialog from 'components/EventPage/EventDates/AddEventDateDialog.vue';
-import EditDescriptionDialog from 'components/EventPage/EditDescriptionDialog.vue';
+import EditSummaryDialog from 'components/EventPage/EditSummaryDialog.vue';
 import EditEventDateDialog from 'components/EventPage/EventDates/EditEventDateDialog.vue';
 import EditNameDialog from 'components/EventPage/EditNameDialog.vue';
 import EditRruleDialog from 'components/EventPage/EventDates/EditRruleDialog.vue';
@@ -198,7 +198,7 @@ export default {
     EditRruleDialog,
     RemoveRruleDialog,
     SelectTagsDialog,
-    EditDescriptionDialog,
+    EditSummaryDialog,
     EditNameDialog,
     SuggestNewCoverDialog,
     SelectArtistsDialog,
