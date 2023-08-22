@@ -1,5 +1,15 @@
 <template>
   <div class="flex column">
+    <DateHeader
+      v-if="
+        (!hideHeader && !groupByMonth) ||
+        (groupByMonth && loading) ||
+        (groupByMonth && !loading && eventDatesTotal === 0)
+      "
+      class="total-result-header"
+      :altLabel="computedTotalResultMessage"
+    >
+    </DateHeader>
     <div v-if="groupByMonth">
       <div
         v-for="yearMonth in Object.keys(eventDatesGroupedByMonth).sort()"
@@ -33,13 +43,6 @@
       </div>
     </div>
     <div v-else>
-      <DateHeader
-        v-if="!hideHeader"
-        class="total-result-header q-mt-"
-        :class="$q.screen.lt.sm ? '' : ''"
-        :altLabel="computedTotalResultMessage"
-      >
-      </DateHeader>
       <div
         class="ed-poster-grid q-pb-sm"
         :style="gridColumns"

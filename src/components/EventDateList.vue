@@ -1,6 +1,17 @@
 <template>
   <div class="flex column">
-    <div v-if="groupByMonth">
+    <DateHeader
+      class="header"
+      :altLabel="computedTotalResultMessage"
+      v-if="
+        (!hideHeader && !groupByMonth) ||
+        (groupByMonth && loading) ||
+        (groupByMonth && !loading && eventDatesTotal === 0)
+      "
+    >
+    </DateHeader>
+
+    <div v-if="groupByMonth && !loading">
       <div
         v-for="yearMonth in Object.keys(eventDatesGroupedByMonth).sort()"
         :key="yearMonth"
@@ -32,15 +43,7 @@
         </div>
       </div>
     </div>
-    <div v-else>
-      <DateHeader
-        class="header q-mt-"
-        :class="$q.screen.lt.sm ? '' : ''"
-        :altLabel="computedTotalResultMessage"
-        v-if="!hideHeader"
-      >
-      </DateHeader>
-
+    <div v-else-if="!loading">
       <div
         class="ed-card-grid q-pb-sm q-mt-xs"
         :style="gridColumns"

@@ -18,7 +18,7 @@ interface MainStoreState {
   overlayOpacity: number;
   ipInfo: IpInfo | null;
   userLocationLoading: boolean;
-  userLocation: { lat: string; lng: string };
+  userLocation: { lat: string; lng: string } | null;
   userLocationCity: string | null;
   userLocationCountry: string | null;
   fineLocation: boolean;

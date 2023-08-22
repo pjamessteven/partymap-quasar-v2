@@ -28,7 +28,10 @@
         ref="itemWrapperInner"
         @click="showFullscreen = true"
       >
-        <div class="no-media t4 flex items-center justify-center" v-if="!item">
+        <div
+          class="no-media t4 flex items-center justify-center"
+          v-if="!item && event"
+        >
           <div>No poster image... add one?</div>
         </div>
         <video

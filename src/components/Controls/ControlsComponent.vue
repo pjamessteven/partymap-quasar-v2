@@ -124,10 +124,11 @@ import DurationControl from './DurationControl.vue';
 import SizeControl from './SizeControl.vue';
 import TagControl from './TagControl.vue';
 import LocalityControl from './LocalityControl.vue';
-import { mapState, mapWritableState } from 'pinia';
+import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useQueryStore } from 'src/stores/query';
 import { useSearchStore } from 'src/stores/search';
+import { useMapStore } from 'src/stores/map';
 
 export default {
   name: 'ControlsComponent',
@@ -151,11 +152,11 @@ export default {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
           this.sidebarPanel = 'explore';
-          if (this.$q.screen.lt.sm || true) {
+          if (this.$q.screen.lt.sm) {
             this.$refs.scroll.setScrollPosition(
               'horizontal',
               this.$refs.artistControl.$el.offsetLeft - 16,
-              150
+              300
             );
           }
         }
@@ -166,7 +167,52 @@ export default {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
           this.sidebarPanel = 'explore';
-          if (this.$q.screen.lt.sm || true) {
+          if (this.$q.screen.lt.sm) {
+            this.$refs.scroll.setScrollPosition(
+              'horizontal',
+              this.$refs.tagControl.$el.offsetLeft - 16,
+              300
+            );
+          }
+        }
+      },
+      deep: true,
+    },
+    controlDateRange: {
+      handler(newVal) {
+        if (newVal && newVal.end) {
+          this.sidebarPanel = 'explore';
+          if (this.$q.screen.lt.sm) {
+            this.$refs.scroll.setScrollPosition(
+              'horizontal',
+              this.$refs.tagControl.$el.offsetLeft - 16,
+              300
+            );
+          }
+        }
+      },
+      deep: true,
+    },
+    controlSize: {
+      handler(newVal) {
+        if (newVal && newVal.length > 0) {
+          this.sidebarPanel = 'explore';
+          if (this.$q.screen.lt.sm) {
+            this.$refs.scroll.setScrollPosition(
+              'horizontal',
+              this.$refs.tagControl.$el.offsetLeft - 16,
+              300
+            );
+          }
+        }
+      },
+      deep: true,
+    },
+    controlDuration: {
+      handler(newVal) {
+        if (newVal && newVal.length > 0) {
+          this.sidebarPanel = 'explore';
+          if (this.$q.screen.lt.sm) {
             this.$refs.scroll.setScrollPosition(
               'horizontal',
               this.$refs.tagControl.$el.offsetLeft - 16,
@@ -197,6 +243,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(useMapStore, ['setExploreMapViewToWorld']),
     clearSearch() {
       this.query = null;
       this.searchbarShowing = false;

@@ -171,7 +171,7 @@ export const useQueryStore = defineStore('query', {
     artistsLoading: false,
   }),
   getters: {
-    anyQueryFiltersEnabled: (state): boolean => {
+    anyFiltersEnabled: (state): boolean => {
       return (
         !!state.controlDateRange.end ||
         state.controlDuration.length > 0 ||
@@ -185,6 +185,21 @@ export const useQueryStore = defineStore('query', {
     },
   },
   actions: {
+    clearAllFilters() {
+      this.controlDateRange = {
+        start: this.startDate,
+        end: null,
+      };
+      this.controlDateRangeSelectedOption = null;
+      this.controlFavorites = false;
+      this.controlDuration = [];
+      this.controlSize = [];
+      this.controlArtist = [];
+      this.controlTag = [];
+      this.controlCountry = null;
+      this.controlLocality = null;
+      this.controlRegion = null;
+    },
     async loadPoints() {
       try {
         this.loadingPoints = true;
@@ -383,22 +398,6 @@ export const useQueryStore = defineStore('query', {
       this.artistsPage += 1;
       return await this.loadArtists();
     },
-    resetControls() {
-      this.controlDateRange = {
-        start: this.startDate,
-        end: null,
-      };
-      this.controlDateRangeSelectedOption = null;
-      this.controlFavorites = false;
-      this.controlDuration = [];
-      this.controlSize = [];
-      this.controlArtist = [];
-      this.controlTag = [];
-      this.controlCountry = null;
-      this.controlLocality = null;
-      this.controlRegion = null;
-    },
-
     async loadArtistOptions(query: string | null = null) {
       try {
         this.artistOptionsLoading = true;

@@ -40,10 +40,7 @@
       style="pointer-events: all"
     />
     <div class="touch-overlay" v-touch-swipe.vertical="handleSwipe" />
-    <div
-      class="event-list-inner"
-      :style="$q.screen.gt.xs && $q.screen.lt.lg ? 'margin-top: -20px' : ''"
-    >
+    <div class="event-list-inner">
       <div
         class="flex row no-wrap items-center justify-between q-pa-md view-options-absolute"
         v-if="$q.screen.gt.xs"
@@ -93,6 +90,7 @@
                   />
                   -->
                 </div>
+                <!--
                 <div
                   class="artist-profile-wrapper"
                   :class="
@@ -105,6 +103,7 @@
                     :id="controlArtist[0].id"
                   />
                 </div>
+                -->
                 <transition appear enter-active-class="animated fadeIn slow">
                   <div class="flex column">
                     <!--
@@ -170,7 +169,6 @@
         Loading...
       </div>
       <div
-        v-if="(isLoadingInitial || (mapMoving && !blockUpdates)) && !showPanel"
         class="event-date-center flex grow justify-center"
         :style="
           $q.screen.lt.sm
@@ -179,6 +177,9 @@
         "
       >
         <q-linear-progress
+          v-if="
+            (isLoadingInitial || (mapMoving && !blockUpdates)) && !showPanel
+          "
           class="linear-progress"
           indeterminate
           size="2px"
@@ -186,13 +187,61 @@
           rounded
           :style="$q.screen.gt.xs ? 'max-width: 200px' : 'max-width: 120px'"
         />
+        <div
+          class="flex row no-wrap"
+          style="pointer-events: all"
+          v-else-if="
+            (groupEventsByMonth &&
+              Object.keys(eventDatesGroupedByMonth)?.length == 0) ||
+            (!groupEventsByMonth && eventDates && eventDates.length === 0)
+          "
+        >
+          <q-btn
+            no-caps
+            v-if="anyFiltersEnabled"
+            class="button-plain flex items-center"
+            :class="{
+              active: mode === 'all',
+            }"
+            @click="
+              () => {
+                clearAllFilters();
+              }
+            "
+          >
+            <div class="flex items-center row no-wrap">
+              <q-icon name="mdi-close" size="1rem" class="q-pr-md" />
+              <div>Clear filters</div>
+            </div>
+          </q-btn>
+          <q-btn
+            no-caps
+            v-if="mapZoomLevel > 2"
+            class="button-plain flex items-center q-ml-sm"
+            :class="{
+              active: mode === 'all',
+            }"
+            @click="zoomOut()"
+          >
+            <div class="flex items-center row no-wrap">
+              <q-icon
+                name="mdi-magnify-minus-outline"
+                size="1rem"
+                class="q-pr-md"
+              />
+              <div>Zoom out</div>
+            </div>
+          </q-btn>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { toRaw } from 'vue';
+
 import _ from 'lodash';
-import ArtistProfile from 'components/ArtistProfile.vue';
+//import ArtistProfile from 'components/ArtistProfile.vue';
 
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
@@ -207,7 +256,7 @@ import { mapActions, mapWritableState, mapState } from 'pinia';
 export default {
   components: {
     //ControlsComponent,
-    ArtistProfile,
+    //ArtistProfile,
     //ArtistsComponent,
     EventDateList,
     EventDatePosterList,
@@ -242,9 +291,13 @@ export default {
       'loadEventDates',
       'loadArtists',
       'loadMoreArtists',
+      'clearAllFilters',
     ]),
     ...mapActions(useMainStore, ['loadIpInfo']),
-
+    zoomOut() {
+      toRaw(this.map).setZoom(1);
+      this.showPanel = false;
+    },
     async getInitialList() {
       if (this.$route.name === 'Explore' && !this.blockUpdates) {
         // event date stuff
@@ -254,6 +307,7 @@ export default {
         this.eventDatesPage = 1;
         this.eventDatesTotal = null;
         this.eventDates = []; // this is actually quite important
+        this.eventDatesGroupedByMonth = {};
         if (!this.userLocation) {
           await this.loadIpInfo();
           this.loadMore();
@@ -307,6 +361,9 @@ export default {
     },
   },
   watch: {
+    mapMoving(newv) {
+      if (newv) this.eventDatesHasNext = false;
+    },
     route: {
       handler: async function (to) {
         if (to.name === 'Explore') {
@@ -373,15 +430,16 @@ export default {
       'groupEventsByMonth',
     ]),
     ...mapWritableState(useMainStore, ['showPanel', 'enablePanelSwipeDown']),
+    ...mapWritableState(useMapStore, ['map']),
     ...mapState(useAuthStore, ['currentUser']),
     ...mapState(useMapStore, [
       'mapBounds',
       'blockUpdates',
       'mapMoving',
       'showResults',
+      'mapZoomLevel',
     ]),
     ...mapState(useQueryStore, [
-      'eventDatesGroupedByMonth',
       'controlTag',
       'controlDateRange',
       'controlSize',
@@ -389,6 +447,7 @@ export default {
       'controlArtist',
       'artists',
       'artistsHasNext',
+      'anyFiltersEnabled',
     ]),
     ...mapWritableState(useQueryStore, [
       'eventDates',
@@ -398,6 +457,7 @@ export default {
       'artistsPage',
       'artistsHasNext',
       'eventDatesLoading',
+      'eventDatesGroupedByMonth',
     ]),
     noFiltersSelected() {
       return (

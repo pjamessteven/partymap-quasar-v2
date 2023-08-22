@@ -73,7 +73,6 @@ export default {
       clusterOptions: {
         chunkedLoading: true,
       },
-      map: null, // when accessing this.map, we need to use toRaw() to avoid vue3 proxy which causes issues ()
       tileLayer: null,
       labelLayer: null,
       mapMarkers: null,
@@ -485,6 +484,7 @@ export default {
         // switch to explore view handled by wheel event
       });
       toRaw(this.map).on('zoomend', (event) => {
+        this.mapZoomLevel = toRaw(this.map).getZoom();
         /*
         if (event.target.getZoom() > 10) {
           // show markers with tooltips at a certain zoom level
@@ -633,6 +633,7 @@ export default {
       'defaultIcon',
     ]),
     ...mapWritableState(useMapStore, [
+      'map',
       'mapBounds',
       'mapCenter',
       'exploreMapView',
@@ -642,6 +643,7 @@ export default {
       'blockUpdates',
       'preventMapZoom',
       'mapStyle',
+      'mapZoomLevel',
     ]),
     ...mapWritableState(useMainStore, [
       'userLocation',

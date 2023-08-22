@@ -3,7 +3,7 @@
     no-caps
     class="button-control flex items-center"
     :class="anyControlFiltersEnabled ? 'active' : ''"
-    @click="resetControls"
+    @click="clearAllFilters"
   >
     Reset
   </q-btn>
@@ -12,9 +12,9 @@
 <script>
 import { mapActions, mapState } from 'pinia';
 import { useQueryStore } from 'src/stores/query';
-export default {
+export default {2
   methods: {
-    ...mapActions(useQueryStore, ['resetControls']),
+    ...mapActions(useQueryStore, ['clearAllFilters']),
   },
   computed: {
     ...mapState(useQueryStore, ['anyControlFiltersEnabled']),

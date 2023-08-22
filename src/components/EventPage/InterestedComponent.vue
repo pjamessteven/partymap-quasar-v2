@@ -5,7 +5,7 @@
     :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
     flat
     :size="$q.screen.gt.xs ? '1em' : 'md'"
-    :label="$q.screen.gt.xs ? computedLabel : undefined"
+    :label="computedLabel"
     :icon="computedIcon"
     icon-right="mdi-chevron-down"
     no-caps

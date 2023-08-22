@@ -146,7 +146,9 @@
                       </div>
 
                       <div
-                        v-if="computedTicketUrl || computedExternalUrl"
+                        v-if="
+                          (computedTicketUrl || computedExternalUrl) && event
+                        "
                         class="event-buttons flex row justify-start items-center wrap o-080"
                         :class="$q.screen.gt.sm ? 'q-mt-md' : 'q-mt-md'"
                       >
@@ -265,7 +267,7 @@
                             :label="
                               $q.screen.gt.xs ? 'Save to device' : undefined
                             "
-                            icon="mdi-download"
+                            icon="mdi-calendar-export-outline"
                             no-caps
                             @click="getIcalFile"
                           ></q-btn>
