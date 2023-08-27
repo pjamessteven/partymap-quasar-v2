@@ -44,6 +44,7 @@
         <q-tab
           key="2"
           name="explore"
+          @click="() => (showPanel = false)"
           :label="$q.screen.gt.xs && false ? undefined : 'Explore'"
           content-class="tab"
           :ripple="false"
@@ -130,9 +131,8 @@ export default {
       'showSidebar',
       'menubarOpacity',
       'routerHistory',
-      'showPanel',
     ]),
-    ...mapWritableState(useMainStore, ['sidebarPanel']),
+    ...mapWritableState(useMainStore, ['sidebarPanel', 'showPanel']),
 
     ...mapWritableState(useMainStore, ['routerHistory']),
 

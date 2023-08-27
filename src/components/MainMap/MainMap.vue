@@ -598,9 +598,9 @@ export default {
                 if (j === this.points[i].events.length - 1) {
                   //  toolTipHtml = toolTipHtml + '<ul/>'
                   // last item
+                  }
                 }
-              }
-              */
+                */
               }
             }
           }
@@ -609,7 +609,11 @@ export default {
             icon: toRaw(this.defaultIcon),
             title: toolTipString,
             alt: toolTipString,
-          }).bindTooltip(toolTipHtml, { direction: 'top', permanent: true });
+          }).bindTooltip(toolTipHtml, {
+            direction: 'top',
+            permanent: true,
+            interactive: true,
+          });
 
           marker.on('click', this.clickMarker);
           marker.data = this.points[i];

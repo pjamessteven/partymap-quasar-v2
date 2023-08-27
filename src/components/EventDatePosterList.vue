@@ -1,15 +1,10 @@
 <template>
   <div class="flex column">
     <DateHeader
-      v-if="
-        (!hideHeader && !groupByMonth) ||
-        (groupByMonth && loading) ||
-        (groupByMonth && !loading && eventDatesTotal === 0)
-      "
+      v-if="!hideHeader && !groupByMonth && eventDatesTotal > 0"
       class="total-result-header"
       :altLabel="computedTotalResultMessage"
-    >
-    </DateHeader>
+    />
     <div v-if="groupByMonth">
       <div
         v-for="yearMonth in Object.keys(eventDatesGroupedByMonth).sort()"
@@ -180,9 +175,7 @@ const computedTotalResultMessage = computed(() => {
     return props.eventDatesTotal + ' event in this area';
   } else if (props.eventDatesTotal > 1) {
     return props.eventDatesTotal + ' events in this area';
-  } else if (props.loading) {
-    return 'Loading events...';
-  } else return 'No events in this area.';
+  } else return null;
 });
 </script>
 <style lang="scss" scoped>
@@ -205,7 +198,10 @@ const computedTotalResultMessage = computed(() => {
 }
 @media only screen and (max-width: 600px) {
   .ed-poster-grid {
-    grid-gap: 0.5rem;
+    grid-gap: 0.5re m;
+  }
+  .total-result-header {
+    position: sticky;
   }
 }
 </style>

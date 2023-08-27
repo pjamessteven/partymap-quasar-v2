@@ -169,13 +169,28 @@
         Loading...
       </div>
       <div
-        class="event-date-center flex grow justify-center"
+        class="event-date-center flex column grow no-wrap justify-center"
         :style="
           $q.screen.lt.sm
-            ? 'height: 100%; position: absolute; width: 100%; z-index: 500'
-            : 'height: 278px; position: absolute; width: 100%; z-index: 500'
+            ? 'height: 144px; position: absolute; width: 100%; z-index: 500'
+            : 'height: 240px; position: absolute; width: 100%; z-index: 500'
         "
       >
+        <div
+          class="inter semibold q-mb-md"
+          v-if="
+            (isLoadingInitial || (mapMoving && !blockUpdates)) && !showPanel
+          "
+        >
+          Loading events...
+        </div>
+        <div
+          class="inter semibold q-mb-md"
+          v-else-if="!isLoadingInitial && eventDatesTotal === 0"
+        >
+          No events in this area
+        </div>
+
         <q-linear-progress
           v-if="
             (isLoadingInitial || (mapMoving && !blockUpdates)) && !showPanel
@@ -737,8 +752,6 @@ export default {
     }
   }
   .event-date-center {
-    margin-top: 100px;
-    align-items: start;
   }
 
   .event-list-vertical {

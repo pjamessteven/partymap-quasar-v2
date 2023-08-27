@@ -173,14 +173,14 @@
                   class="flex message"
                   :class="{
                     'q-mx-lg  q-mb-sm ': $q.screen.gt.xs,
-                    'q-mx-md': $q.screen.lt.md,
+                    'q-mx-md ': $q.screen.lt.md,
                   }"
                   @click="showMessage = !showMessage"
                 >
                   <div
                     class="flex grow no-wrap inter q-pb-md t3"
                     :class="{
-                      ' q-pt-sm items-center justify-between': $q.screen.lt.sm,
+                      ' q-pt-md  items-center justify-between': $q.screen.lt.sm,
                       ' q-mt-md': $q.screen.gt.xs,
 
                       ' items-end': $q.screen.gt.xs,
