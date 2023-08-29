@@ -183,7 +183,8 @@ export default {
           !this.$q.dark.isActive) ||
         (this.showPanel &&
           this.$route.name === 'Explore' &&
-          !this.$q.dark.isActive)
+          !this.$q.dark.isActive &&
+          this.$q.screen.lt.sm)
       ) {
         return 'black';
       } else if (

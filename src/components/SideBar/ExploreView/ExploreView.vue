@@ -206,9 +206,10 @@
           class="flex row no-wrap"
           style="pointer-events: all"
           v-else-if="
-            (groupEventsByMonth &&
+            ((groupEventsByMonth &&
               Object.keys(eventDatesGroupedByMonth)?.length == 0) ||
-            (!groupEventsByMonth && eventDates && eventDates.length === 0)
+              (!groupEventsByMonth && eventDates && eventDates.length === 0)) &&
+            !(isLoadingInitial || (mapMoving && !blockUpdates))
           "
         >
           <q-btn

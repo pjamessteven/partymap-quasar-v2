@@ -3,7 +3,11 @@
     <MenuBar class="menubar" />
     <div class="default-overlay" />
 
-    <div class="overlay" :style="computedOverlayStyle" />
+    <div
+      class="overlay"
+      :style="computedOverlayStyle"
+      @click="clickOverlay()"
+    />
     <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
     <Transition
       appear
@@ -87,7 +91,12 @@ export default {
     SearchComponent,
   },
 
-  methods: {},
+  methods: {
+    clickOverlay() {
+      this.showPanel = false;
+      this.sidebarPanel = 'explore';
+    },
+  },
   beforeRouteUpdate(to, from, next) {
     if (from.name === 'Explore') {
       this.blockUpdates = true;
@@ -102,7 +111,6 @@ export default {
   },
   computed: {
     ...mapWritableState(useMapStore, ['blockUpdates']),
-
     ...mapWritableState(useMainStore, [
       'showSidebar',
       'overlayOpacity',
@@ -141,8 +149,8 @@ export default {
       );
     }
     .overlay {
-      background: linear-gradient($bi-2, $bi-2 62px, black 62px, black);
-      background: black;
+      //background: linear-gradient($bi-2, $bi-2 62px, black 62px, black);
+      background: rgba(0, 0, 0, 0.7);
       //background: linear-gradient(transparent 5%, white 15%);
       /*
       background: linear-gradient(
@@ -168,7 +176,8 @@ export default {
     }
     .overlay {
       //background: linear-gradient(#fafafa, #fafafa 64px, white 64px, white);
-      background: #fafafa;
+      background: rgba(0, 0, 0, 0.5);
+      //backdrop-filter: blur(2px);
       //background: linear-gradient(transparent 5%, white 15%);
       /*
       background: linear-gradient(
@@ -206,6 +215,7 @@ export default {
     pointer-events: none;
     will-change: auto;
     transition: opacity 0.3s;
+    cursor: grab;
   }
 
   .menubar {

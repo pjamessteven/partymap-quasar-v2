@@ -491,6 +491,10 @@ export default {
     height: 100%;
     transition: all 0.3s;
 
+    :deep(.date-header) {
+      padding-top: 16px;
+    }
+
     .date-header-bg {
       // only useful for light theme
       position: absolute;
