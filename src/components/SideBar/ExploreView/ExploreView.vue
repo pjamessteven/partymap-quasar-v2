@@ -216,9 +216,6 @@
             no-caps
             v-if="anyFiltersEnabled"
             class="button-plain flex items-center"
-            :class="{
-              active: mode === 'all',
-            }"
             @click="
               () => {
                 clearAllFilters();
@@ -234,9 +231,6 @@
             no-caps
             v-if="mapZoomLevel > 2"
             class="button-plain flex items-center q-ml-sm"
-            :class="{
-              active: mode === 'all',
-            }"
             @click="zoomOut()"
           >
             <div class="flex items-center row no-wrap">

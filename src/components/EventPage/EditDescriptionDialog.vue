@@ -17,7 +17,7 @@
       <q-input
         class="border-radius"
         counter
-        maxlength="3000"
+        maxlength="10000"
         outlined
         autogrow
         :input-style="{ 'min-height': '100px' }"

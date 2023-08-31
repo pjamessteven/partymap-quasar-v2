@@ -135,7 +135,7 @@ interface Props {
   hasNext: boolean;
   loading?: boolean;
   disableEndOfResultsMessage?: boolean;
-  eventDatesTotal: number;
+  eventDatesTotal?: number;
   hideHeader?: boolean;
 }
 

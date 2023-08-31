@@ -32,6 +32,13 @@
       </span>
       <div class="flex row wrap q-py-sm q-gutter-xs">
         <Tag
+          v-for="(tag, index) in computedResults"
+          :key="index"
+          :value="tag.tag"
+          :disabled="tagsList.indexOf(tag.tag) > -1"
+          v-on:selected="onSelectTag(tag.tag)"
+        />
+        <Tag
           v-if="
             query?.length > 0 &&
             computedResults.findIndex((tag) => tag.tag == query) === -1
@@ -40,13 +47,6 @@
           :value="query"
           :disabled="tagsList.indexOf(query) > -1"
           v-on:selected="onSelectTag(query)"
-        />
-        <Tag
-          v-for="(tag, index) in computedResults"
-          :key="index"
-          :value="tag.tag"
-          :disabled="tagsList.indexOf(tag.tag) > -1"
-          v-on:selected="onSelectTag(tag.tag)"
         />
         <Tag
           v-if="!query || query.length == 0"
@@ -122,6 +122,7 @@ export default {
       handler: function () {
         this.$emit('valueUpdated', this.tagsList);
       },
+      deep: true,
     },
   },
   methods: {

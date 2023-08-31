@@ -9,7 +9,7 @@
         :model-config="modelConfig"
         keepVisibleOnInput
         :is-inline="inlineCalendar"
-        :min-date="new Date()"
+        :min-date="currentUserIsStaff ? undefined : new Date()"
       />
       <div class="flex row wrap q-gutter-md q-mt-sm justify-start">
         <div class="time-box flex column q-pa-sm">
@@ -72,11 +72,15 @@
 import { DatePicker } from 'v-calendar';
 import moment from 'moment-timezone';
 import _ from 'lodash';
+import { useAuthStore } from 'src/stores/auth';
+import { mapState } from 'pinia';
+
 export default {
   components: {
     DatePicker,
   },
   props: ['value', 'singleValue', 'inlineCalendar', 'isRange'],
+
   data() {
     return {
       modelConfig: {
@@ -194,6 +198,9 @@ export default {
       deep: true,
       immediate: false,
     },
+  },
+  computed: {
+    ...mapState(useAuthStore, ['currentUserIsStaff']),
   },
   beforeMount() {
     var local = moment();

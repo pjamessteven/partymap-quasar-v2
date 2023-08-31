@@ -12,7 +12,9 @@
           :class="editing ? 'q-pa-md' : ''"
         >
           <span v-if="event.full_description?.length > 0">
-            <span class="o-080">{{ event.full_description }}</span
+            <span class="o-080" style="white-space: pre-line">{{
+              event.full_description
+            }}</span
             ><span
               v-if="
                 event.full_description_attribute &&

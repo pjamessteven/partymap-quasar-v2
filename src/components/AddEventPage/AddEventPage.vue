@@ -316,7 +316,7 @@
                       {{ $t('add.suggested_tags') }}
                     </p>
                     <SelectTagsComponent
-                      @valueUpdated="event.tags = $event"
+                      @valueUpdated="($event) => (event.tags = $event)"
                       :mode="'emit'"
                     />
                     <p />

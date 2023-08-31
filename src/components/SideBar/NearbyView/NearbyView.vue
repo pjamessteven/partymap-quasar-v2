@@ -187,8 +187,8 @@
                     }"
                   >
                     <span
-                      >Welcome to PartyMap, the global map of festivals and
-                      events!</span
+                      >Welcome to PartyMap, the global directory of festivals
+                      and events!</span
                     >
                     <q-icon
                       class="q-ml-md"
