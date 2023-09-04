@@ -166,6 +166,19 @@ const routes: RouteRecordRaw[] = [
           friendlyName: 'Admin',
         },
       },
+      {
+        path: '/todo',
+        name: 'WorkQueuePage',
+        components: {
+          default: () =>
+            import('src/components/WorkQueuePage/WorkQueuePage.vue'),
+        },
+        meta: {
+          auth: false,
+          mapOverlay: false,
+          friendlyName: 'Work Queue',
+        },
+      },
     ],
   },
 

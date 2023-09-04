@@ -397,6 +397,7 @@ body {
   //background: #1a202c!important;
   .dialog-card {
     background: $bi-2;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
     .dialog-card-header {
       //color: rgba(255, 255, 255, 0.67);
 
@@ -697,6 +698,9 @@ body {
   font-weight: 500;
   .q-btn__content {
     flex-wrap: nowrap;
+  }
+  &.q-btn--square {
+    border-radius: 0px !important;
   }
 }
 

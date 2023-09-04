@@ -45,7 +45,7 @@
         class="flex row no-wrap items-center justify-between q-pa-md view-options-absolute"
         v-if="$q.screen.gt.xs"
       >
-        <div class="text-large inter bolder q-ml-sm">Explore Events</div>
+        <div class="text-h5 inter bolder q-ml-sm q-my-sm">Explore Events</div>
         <div class="flex row items-center no-wrap">
           <EventDateViewOptions class="q-mr-md" />
 
@@ -105,7 +105,10 @@
                 </div>
                 -->
                 <transition appear enter-active-class="animated fadeIn slow">
-                  <div class="flex column">
+                  <div
+                    class="flex column"
+                    :style="mapMoving && !blockUpdates ? 'opacity: 0' : ''"
+                  >
                     <!--
                   <div
                     class="flex column artists-wrapper"
@@ -132,24 +135,20 @@
                     <EventDateList
                       v-if="compactView"
                       :groupByMonth="groupEventsByMonth"
-                      :eventDatesGroupedByMonth="
-                        !mapMoving ? eventDatesGroupedByMonth : []
-                      "
-                      :eventDates="!mapMoving ? eventDates : []"
+                      :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
+                      :eventDates="eventDates"
                       :hasNext="eventDatesHasNext"
-                      :loading="eventDatesLoading || mapMoving"
+                      :loading="eventDatesLoading"
                       :eventDatesTotal="!mapMoving ? eventDatesTotal : 0"
                     />
 
                     <EventDatePosterList
                       v-if="!compactView"
                       :groupByMonth="groupEventsByMonth"
-                      :eventDatesGroupedByMonth="
-                        !mapMoving ? eventDatesGroupedByMonth : []
-                      "
-                      :eventDates="!mapMoving ? eventDates : []"
+                      :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
+                      :eventDates="eventDates"
                       :hasNext="eventDatesHasNext"
-                      :loading="eventDatesLoading || mapMoving"
+                      :loading="eventDatesLoading"
                       :eventDatesTotal="!mapMoving ? eventDatesTotal : 0"
                     />
                   </div>

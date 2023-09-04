@@ -1,30 +1,23 @@
 <template>
   <SolidPage :loading="loading">
     <template v-slot:title>
-      <div>Administration</div>
+      <div>Work Queue</div>
     </template>
     <template v-slot>
-      <PendingEventsComponent class="q-mt-lg" />
-      <PendingReportsComponent class="q-mt-lg" />
-      <PendingSuggestionsComponent class="q-mt-lg q-mb-xl" />
+      <WorkQueueComponent class="q-mt-lg" />
     </template>
   </SolidPage>
 </template>
 
 <script>
-import PendingEventsComponent from './PendingEventsComponent.vue';
-import PendingReportsComponent from './PendingReportsComponent.vue';
-import PendingSuggestionsComponent from './PendingSuggestionsComponent.vue';
 import SolidPage from 'components/dialogs/SolidPage.vue';
-
+import WorkQueueComponent from './WorkQueueComponent.vue';
 import { mapState } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
 
 export default {
   components: {
-    PendingEventsComponent,
-    PendingReportsComponent,
-    PendingSuggestionsComponent,
+    WorkQueueComponent,
     SolidPage,
   },
   props: {

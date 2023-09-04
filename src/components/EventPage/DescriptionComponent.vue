@@ -20,7 +20,7 @@
                 event.full_description_attribute &&
                 event.full_description_attribute.length > 0
               "
-            >
+              >&nbsp;
               <a
                 class="link-hover o-050"
                 target="_blank"

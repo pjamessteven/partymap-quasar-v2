@@ -705,7 +705,7 @@ export default {
       }
       &.sidebar-mobile-expanded-fullscreen {
         transform: translate3d(0, 0px, 0);
-        // padding-bottom: 68px;
+        padding-bottom: 68px;
         border-top-left-radius: 0px;
         border-top-right-radius: 0px;
         .sidebar-content {

@@ -12,7 +12,7 @@
     >
       <div class="row no-wrap q-pa-sm">
         <div class="column">
-          <div class="q-ma-sm">View options</div>
+          <div class="q-ma-sm inter bold">View options</div>
           <q-toggle v-model="compactView" label="Compact view" />
           <q-toggle
             v-if="showGroupByMonth"

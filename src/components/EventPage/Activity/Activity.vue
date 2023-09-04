@@ -11,7 +11,7 @@
               class="link-hover t1"
               :to="{
                 name: 'UserPage',
-                params: { id: activity.actor.username },
+                params: { username: activity.actor.username },
               }"
             >
               {{ activity.actor.username }}

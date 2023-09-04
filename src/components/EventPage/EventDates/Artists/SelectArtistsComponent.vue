@@ -12,7 +12,6 @@
       @update:model-value="onSelectArtist"
       emit-value
       map-options
-      input-debounce="300"
       :options="results"
       @filter="filterFn"
       label="Search for artists"
@@ -38,7 +37,7 @@
       </template>
     </q-select>
     <div
-      class="flex row justify-between no-wrap items-center q-mt-sm list-select"
+      class="flex row no-wrap items-center q-mt-sm list-select"
       style="max-width: 100%"
     >
       <q-tabs
@@ -51,7 +50,7 @@
         <q-tab v-for="list in lists" :key="list" :label="list" :name="list" />
       </q-tabs>
       <div class="flex row items-center no-wrap">
-        <q-btn flat icon-right="mdi-plus" label="Add Stage">
+        <q-btn flat icon-right="mdi-plus" label="Add Stage" class="t3">
           <q-menu
             transition-show="jump-down"
             transition-hide="jump-up"
@@ -59,8 +58,13 @@
             self="top right"
           >
             <div class="flex row">
-              <q-input v-model="listToAdd" filled placeholder="Stage name" />
-              <q-btn @click="addList" label="Add" />
+              <q-input
+                v-model="listToAdd"
+                filled
+                square
+                placeholder="Stage name"
+              />
+              <q-btn @click="addList" label="Add" flat square />
             </div>
           </q-menu>
         </q-btn>
@@ -224,34 +228,40 @@ export default {
     },
     filterFn(val, update, abort) {
       // call abort() at any time if you can't retrieve data somehow
-      update(() => {
+      update(async () => {
         if (val === '') {
           this.results = [];
         } else {
           this.loadingResults = true;
-          getArtistsRequest({
-            query: val,
-            page: 1,
-            sort: 'event_count',
-            desc: true,
-            per_page: 5,
-          }).then((pmResponse) => {
-            getMusicBrainzArtist(val).then((mbResponse) => {
-              // map id key to be mbid
-              var mappedResponse = mbResponse.data.artists
-                .map(({ id, ...rest }) => ({ ...rest, mbid: id }))
-                .filter(
-                  (x) => this.results.findIndex((y) => y.mbid === x.mbid) === -1
-                );
-              this.results = [
-                ...[{ name: val, newRecord: true }],
-                ...pmResponse.data.items,
-                ...mappedResponse,
-              ];
-              this.$refs.musicBrainzInput.refresh();
-              this.loadingResults = false;
-            });
-          });
+          try {
+            // if one of the below calls fails... both will.. :(
+            const [pmResponse, mbResponse] = await Promise.all([
+              getArtistsRequest({
+                query: val,
+                page: 1,
+                sort: 'event_count',
+                desc: true,
+                per_page: 5,
+              }),
+              getMusicBrainzArtist(val),
+            ]);
+            let mappedResponse = mbResponse.data.artists
+              .map(({ id, ...rest }) => ({ ...rest, mbid: id }))
+              .filter(
+                (x) =>
+                  pmResponse.data.items.findIndex((y) => y.mbid === x.mbid) ===
+                  -1
+              );
+            this.results = [
+              ...[{ name: val, newRecord: true }],
+              ...pmResponse.data.items,
+              ...mappedResponse,
+            ];
+            //this.$refs.musicBrainzInput.refresh();
+            this.loadingResults = false;
+          } catch {
+            abort();
+          }
         }
       });
     },
@@ -381,7 +391,7 @@ export default {
     background: $bi-3;
   }
   .list-select {
-    background: $bi-2;
+    //background: $bi-2;
   }
 }
 .body--light {
@@ -389,7 +399,7 @@ export default {
     border: 1px solid rgba(0, 0, 0, 0.1);
   }
   .list-select {
-    background: $b-2;
+    //background: $b-2;
   }
 }
 

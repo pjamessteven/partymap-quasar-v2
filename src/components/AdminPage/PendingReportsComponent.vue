@@ -65,9 +65,9 @@
                         v-if="item.creator"
                         :to="{
                           name: 'UserPage',
-                          params: { id: item.creator.username },
+                          params: { username: item.creator?.username },
                         }"
-                        >{{ item.creator.username }}</router-link
+                        >{{ item.creator?.username }}</router-link
                       >
                       &nbsp;<a class="link-hover" :href="'mailto:' + item.email"
                         >({{ item.email }})</a

@@ -47,7 +47,7 @@
       clickable
     >
       <q-item-section avatar>
-        <q-icon name="las la-sign-out-alt" />
+        <q-icon name="mdi-logout-variant" />
       </q-item-section>
       <q-item-section>
         <q-item-label>{{ $t('sidebar.logout') }}</q-item-label>
@@ -61,10 +61,24 @@
       clickable
     >
       <q-item-section avatar>
-        <q-icon name="las la-user-lock" />
+        <q-icon name="mdi-shield-account-outline" />
       </q-item-section>
       <q-item-section>
         <q-item-label>Administration</q-item-label>
+      </q-item-section>
+    </q-item>
+
+    <q-item
+      v-if="currentUser && currentUser.role >= 20"
+      v-ripple
+      v-on:click="$router.push({ name: 'WorkQueuePage' })"
+      clickable
+    >
+      <q-item-section avatar>
+        <q-icon name="mdi-format-list-bulleted" />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>Work Queue</q-item-label>
       </q-item-section>
     </q-item>
 
@@ -100,7 +114,7 @@
 -->
     <q-item v-ripple @click="showAddEventDialog()" clickable>
       <q-item-section avatar>
-        <q-icon name="las la-plus-square" />
+        <q-icon name="mdi-shape-square-plus" />
       </q-item-section>
       <q-item-section>
         <q-item-label>Add event</q-item-label>
