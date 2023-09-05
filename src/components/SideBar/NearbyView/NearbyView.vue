@@ -1199,7 +1199,8 @@ export default {
         position: sticky;
 
         top: -1px;
-        z-index: 100;
+
+        z-index: 1000;
         width: 100%;
 
         // text-transform: lowercase;

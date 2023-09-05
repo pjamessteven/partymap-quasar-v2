@@ -128,7 +128,7 @@ export default {
     position: relative;
     //justify-content: center;
     transform: scale(1.2) translateX(1);
-    will-change: auto;
+    // will-change: auto;
     .video {
       width: 100%;
       object-fit: cover;

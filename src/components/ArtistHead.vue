@@ -55,16 +55,12 @@ export default {
         background-size: cover;
         display: inline-block;
         background-position: center;
-        //filter: blur(1px);
-
         `;
       } else {
         return `background-image:  url("${imageUrl}");
           background-size: cover;
           display: inline-block;
           background-position: center;
-          //filter: blur(1px);
-
           `;
       }
     },
@@ -77,9 +73,10 @@ export default {
   .artist-head-wrapper {
     overflow: hidden;
     border: 1px solid black;
+    border-top: 1px solid rgba(48, 48, 48);
+
     .card-bottom-background {
       background: $bi-3;
-      filter: blur(12px) brightness(68%);
     }
     .artist-head {
     }
@@ -89,9 +86,6 @@ export default {
   .artist-head-wrapper {
     .card-bottom-background {
       background: $b-4;
-    }
-    &:hover {
-      opacity: 0.9;
     }
   }
 }
@@ -105,12 +99,21 @@ export default {
   position: relative;
   overflow: hidden;
   transition: opacity 0.3s;
+
+  &:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
   &:hover {
-    .card-bottom-background {
-      opacity: 0.9;
-    }
-    .artist-head {
-      filter: brightness(120%);
+    &:before {
+      opacity: 1;
     }
   }
   .card-bottom-background {
@@ -119,7 +122,7 @@ export default {
     //border: 1px solid #181818;
     z-index: 0;
     filter: blur(12px);
-    transform: rotate(180deg) scaleX(-1) scale(2);
+    transform: rotate(180deg) scaleX(-1) scale(2) translate3d(0, 0, 0); // translate3d is a hack for safari to force gpu rendering of blur()
     //mask-image: linear-gradient(to top, transparent 0%, white 64px);
     position: absolute;
     height: 100%;
@@ -133,7 +136,6 @@ export default {
     height: 100%;
     width: 100%;
     opacity: 1;
-    background: white;
     border-radius: 9px;
     //background: white;
   }

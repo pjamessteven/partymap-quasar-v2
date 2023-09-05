@@ -363,7 +363,6 @@ export default {
     height: 100%;
     //justify-content: center;
     transform: scale(1.2) translateX(1);
-    will-change: auto;
     .item {
       position: absolute;
       width: 100%;

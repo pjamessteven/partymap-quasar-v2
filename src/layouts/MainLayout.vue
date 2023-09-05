@@ -213,7 +213,7 @@ export default {
     height: 100%;
     width: 100%;
     pointer-events: none;
-    will-change: auto;
+    //will-change: auto;
     transition: opacity 0.3s;
     cursor: grab;
   }

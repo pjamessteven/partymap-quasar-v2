@@ -206,16 +206,12 @@ export default {
         background-size: cover;
         display: inline-block;
         background-position: center;
-        //filter: blur(1px);
-
         `;
       } else {
         return `background-image:  url("${this.imgThumbXsUrl}");
           background-size: cover;
           display: inline-block;
           background-position: center;
-          //filter: blur(1px);
-
           `;
       }
     },
@@ -255,7 +251,8 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .ed-card {
-    outline: 1px solid (rgba(255, 255, 255, 0.1));
+    outline: 1px solid black;
+    border-top: 1px solid rgba(48, 48, 48);
 
     .ed-card-content {
       background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9));
@@ -320,6 +317,7 @@ export default {
 }
 
 .ed-card {
+  border: none;
   border-radius: 9px;
   direction: ltr;
   display: flex;
@@ -329,12 +327,23 @@ export default {
   overflow: hidden;
   -webkit-backface-visibility: hidden;
   -webkit-transform: translate3d(0, 0, 0);
-  background: white;
+
+  &:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
 
   &:hover {
     //transform: scale(1.01) translateY(0px);
-    .ed-card-content {
-      opacity: 0.9;
+    &:before {
+      opacity: 1;
     }
   }
 
@@ -346,21 +355,16 @@ export default {
   .ed-card-content {
     position: relative;
     transition: opacity 0.3s ease;
-    //color: white;
-    //background: black;
 
     .card-bottom-background {
       border-radius: 9px;
       overflow: hidden;
-      //border: 1px solid #181818;
       z-index: 0;
       filter: blur(12px);
-      transform: rotate(180deg) scaleX(-1) scale(2);
-      //mask-image: linear-gradient(to top, transparent 0%, white 64px);
+      transform: rotate(180deg) scaleX(-1) scale(2) translate3d(0, 0, 0); // translate3d is a hack for safari to force gpu rendering of blur();
       position: absolute;
       height: 100%;
       width: 100%;
-      //opacity: 0.4;
       transition: opacity 0.2s ease;
     }
 

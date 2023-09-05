@@ -393,7 +393,7 @@ export default {
     transition: all 0.3s ease;
     transform: translate3d(0, calc(100% - 226px), 0);
     user-select: none;
-    will-change: auto;
+    //will-change: auto;
     padding-bottom: 64px;
 
     //box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
@@ -693,7 +693,7 @@ export default {
       //margin-top: 48px;
       transform: translate3d(0, calc(100% - 228px), 0);
 
-      will-change: auto;
+      //will-change: auto;
       padding-bottom: 188px;
       border-left: none;
       border-right: none;
