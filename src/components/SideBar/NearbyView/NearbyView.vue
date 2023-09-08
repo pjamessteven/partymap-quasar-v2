@@ -1054,7 +1054,7 @@ export default {
       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     }
     .location-header {
-      background: $bi-1;
+      background: black;
     }
     .main-content {
       .message {

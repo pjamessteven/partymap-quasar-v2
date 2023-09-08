@@ -151,7 +151,7 @@ export default {
 
     background: white;
     color: $t-1;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.1);
   }
   .search-popup-wrapper {
     background: white;
@@ -164,16 +164,16 @@ export default {
     background: $bi-1;
 
     //background: rgba(0, 0, 0, 0.5);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
   }
 }
 .search-component {
   z-index: 4000;
   position: absolute;
-  top: 24px;
+  top: 16px;
   width: 100%;
   display: flex;
   justify-content: center;

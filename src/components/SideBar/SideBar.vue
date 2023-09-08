@@ -6,6 +6,7 @@
       class="flex column justify-between no-wrap sidebar"
       id="sidebar"
       v-bind:class="{
+        shadow: panelHiddenDelayed && $q.screen.gt.xs,
         'sidebar-mobile-expanded': showPanel,
         'sidebar-mobile-nearby': sidebarPanel === 'nearby' && $q.screen.gt.xs,
         'sidebar-mobile-expanded-fullscreen': sidebarPanel === 'favorites',
@@ -107,6 +108,7 @@ export default {
       preventMapInteraction: false,
       wheelIndicator: null,
       pointerEvents: 'pointer-events: none;',
+      panelHiddenDelayed: false,
     };
   },
   methods: {
@@ -190,10 +192,17 @@ export default {
   },
   watch: {
     showPanel(newv) {
+      // timeouts are so that we wait until the animation is finished
       if (newv === true) {
-        setTimeout(() => (this.pointerEvents = 'pointer-events: all;'), 350);
+        setTimeout(() => {
+          this.pointerEvents = 'pointer-events: all;';
+        }, 350);
+        this.panelHiddenDelayed = false;
       } else {
         this.pointerEvents = 'pointer-events: none;';
+        setTimeout(() => {
+          this.panelHiddenDelayed = true;
+        }, 350);
       }
     },
     route(newv, oldv) {
@@ -283,8 +292,12 @@ export default {
 
   .sidebar-wrapper {
     .sidebar {
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: $bi-1;
+      border: 1px solid black;
+      background: black;
+
+      &.shadow {
+        border: 1px solid $bi-3;
+      }
 
       :deep(.sidebar-header) {
         // background: black;
@@ -308,7 +321,6 @@ export default {
       .sidebar-content-inner {
         // background: black;
         //border: 1px solid rgba(255, 255, 255, 0.1);
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
 
         .sidebar-content-inner-shadow {
           background: $bi-1;
@@ -332,11 +344,14 @@ export default {
 
       //box-shadow: rgba(50, 50, 105, 0.15) 0px 0px 5px 0px,
       //  rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
-      box-shadow: rgba(100, 100, 100, 0.05) 0px 0px 10px 5px;
 
       background: white;
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      border: 1px solid white;
 
+      &.shadow {
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: rgba(100, 100, 100, 0.05) 0px 0px 10px 5px;
+      }
       .sidebar-content {
         //background: rgba(100, 100, 100, 0.2);
         //backdrop-filter: blur(10px);
@@ -388,9 +403,8 @@ export default {
     overflow: hidden;
     height: 100%;
     pointer-events: all;
-    border-top-left-radius: 18px;
-    border-top-right-radius: 18px;
-    transition: all 0.3s ease;
+
+    transition: transform 0.3s ease, border-color 0.3s;
     transform: translate3d(0, calc(100% - 226px), 0);
     user-select: none;
     //will-change: auto;
@@ -400,11 +414,7 @@ export default {
     //  rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
     //  rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
     .sidebar-content {
-      border-top-left-radius: 18px;
-      border-top-right-radius: 18px;
       .sidebar-content-inner {
-        border-top-left-radius: 18px;
-        border-top-right-radius: 18px;
         overflow: hidden;
         isolation: isolate;
         .sidebar-content-inner-shadow {
@@ -413,8 +423,6 @@ export default {
           width: 100%;
           z-index: 1;
           pointer-events: none;
-          border-top-left-radius: 18px;
-          border-top-right-radius: 18px;
         }
       }
     }

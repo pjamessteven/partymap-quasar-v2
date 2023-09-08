@@ -64,7 +64,7 @@ export default {
 }
 .body--dark {
   .date-header {
-    background: $bi-1 !important;
+    background: black !important;
   }
 }
 @media only screen and (max-width: 600px) {

@@ -1,10 +1,6 @@
 <template>
-  <div class="flex row menubar justify-between">
-    <div
-      class="menubar-background"
-      :style="computedStyle"
-      v-if="!$route.meta.mapOverlay || this.$route.name !== 'Explore'"
-    />
+  <div class="flex row menubar justify-between items-center">
+    <div class="menubar-background" :style="computedStyle" />
     <MenuBarLogo
       class="logo"
       :color="iconColor"
@@ -161,9 +157,9 @@ export default {
         var opacity = this.menubarOpacity;
         if (this.$q.screen.gt.xs) {
           if (this.$q.dark.isActive) {
-            return `opacity: ${opacity}; background: #181818!important`;
+            return `opacity: ${opacity}; background: #181818!important; border-bottom: 1px solid rgba(255, 255, 255, 0.1);`;
           } else {
-            return `opacity: ${opacity}; background: white!important`;
+            return `opacity: ${opacity}; background: white!important; border-bottom: 1px solid rgba(0, 0, 0, 0.1);`;
           }
         } else {
           return `opacity: ${opacity}; background: black!important;`;
@@ -173,7 +169,22 @@ export default {
         (this.$q.screen.lt.sm && this.$route.name !== 'Explore')
       ) {
         return 'opacity: 1;  border: none!important';
-      } else return 'opacity: 0;';
+      } else if (this.$route.name === 'Explore') {
+        // explore view
+        if (this.$q.dark.isActive) {
+          if (this.showPanel) {
+            return 'background: #121212;';
+          } else {
+            return 'background: rgba(255,255,255,0.05)';
+          }
+        } else {
+          if (this.showPanel) {
+            return 'background: #f5f5f5;';
+          } else {
+            return 'background: rgba(255,255,255,0.1)';
+          }
+        }
+      } else return 'opacity: 0';
     },
     iconColor() {
       if (
@@ -183,8 +194,7 @@ export default {
           !this.$q.dark.isActive) ||
         (this.showPanel &&
           this.$route.name === 'Explore' &&
-          !this.$q.dark.isActive &&
-          this.$q.screen.lt.sm)
+          !this.$q.dark.isActive)
       ) {
         return 'black';
       } else if (
@@ -207,7 +217,7 @@ export default {
   .menubar {
     .menubar-background {
       background: black;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      //
     }
     .tab-wrapper {
       :deep(.q-tabs) {
@@ -238,7 +248,6 @@ export default {
   .menubar {
     .menubar-background {
       background: white;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
     .tab-wrapper {
       :deep(.q-tabs) {
@@ -280,7 +289,7 @@ export default {
 
 .menubar {
   //transition: opacity 0.15s;
-  height: 62px;
+  height: 82px;
   position: relative;
   transition: height 0.3s ease;
 
@@ -288,7 +297,7 @@ export default {
     position: absolute;
     height: 100%;
     width: 100%;
-    transition: opacity 0.3s ease;
+    transition: all 0.3s ease;
   }
   .logo {
     z-index: 1;
