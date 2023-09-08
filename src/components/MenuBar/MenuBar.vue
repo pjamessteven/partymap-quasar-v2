@@ -33,15 +33,19 @@
           key="1"
           name="nearby"
           content-class="tab"
-          :label="$q.screen.gt.xs && false ? undefined : 'Nearby'"
           :ripple="false"
+          :icon="sidebarPanel === 'nearby' ? 'mdi-home' : 'mdi-home-outline'"
         />
 
         <q-tab
           key="2"
           name="explore"
           @click="() => (showPanel = false)"
-          :label="$q.screen.gt.xs && false ? undefined : 'Explore'"
+          :icon="
+            sidebarPanel === 'explore'
+              ? 'mdi-map-search'
+              : 'mdi-map-search-outline'
+          "
           content-class="tab"
           :ripple="false"
         />
@@ -49,8 +53,12 @@
         <q-tab
           key="3"
           name="favorites"
-          :label="$q.screen.gt.xs && false ? undefined : 'Calendar'"
           content-class="tab"
+          :icon="
+            sidebarPanel === 'favorites'
+              ? 'mdi-calendar-star'
+              : 'mdi-calendar-star-outline'
+          "
           :ripple="false"
         />
       </q-tabs>
@@ -309,24 +317,26 @@ export default {
   .tab-wrapper {
     pointer-events: all;
     position: absolute;
-    left: 150px;
+    left: 155px;
     top: 0px;
-    height: 62px;
+    height: 82px;
     display: flex;
     align-items: center;
 
     :deep(.q-tabs) {
+      height: 100%;
       .q-tab {
         //padding-top: 4px;
-        //padding-bottom: 4px;
-        padding: 2px;
+        padding: 8px;
+        padding-bottom: 12px;
+        font-size: 28px;
         margin: 4px;
         //margin: 4px 4px;
         //border-radius: 64px;
         transition: all 0.3s;
         color: white;
         background: none !important;
-
+        font-size: 32px;
         opacity: 1 !important;
         border: 1px solid transparent;
         $duration: 0.4s;
@@ -338,7 +348,7 @@ export default {
         &:after {
           content: '';
           position: absolute;
-          bottom: 2px;
+          bottom: -4px;
           left: 0;
           right: 0;
           height: 1px;
@@ -355,6 +365,9 @@ export default {
           transition: transform $duration $easeOutBack, opacity $duration;
         }
 
+        .q-tab__icon {
+          font-size: 26px;
+        }
         .q-focus-helper {
           display: none;
         }

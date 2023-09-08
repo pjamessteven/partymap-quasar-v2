@@ -143,7 +143,7 @@ export default {
     .default-overlay {
       background: linear-gradient(
         rgba(0, 0, 0, 0.68),
-        rgba(0, 0, 0, 0.6) 62px,
+        rgba(0, 0, 0, 0.6) 82px,
         transparent 128px,
         transparent
       );
@@ -169,7 +169,7 @@ export default {
     .default-overlay {
       background: linear-gradient(
         rgba(0, 0, 0, 0.68),
-        rgba(0, 0, 0, 0.6) 62px,
+        rgba(0, 0, 0, 0.6) 82px,
         transparent 128px,
         transparent
       );
