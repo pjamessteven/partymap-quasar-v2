@@ -139,7 +139,7 @@
                       :eventDates="eventDates"
                       :hasNext="eventDatesHasNext"
                       :loading="eventDatesLoading"
-                      :eventDatesTotal="!mapMoving ? eventDatesTotal : 0"
+                      :eventDatesTotal="eventDatesTotal"
                     />
 
                     <EventDatePosterList
@@ -149,7 +149,7 @@
                       :eventDates="eventDates"
                       :hasNext="eventDatesHasNext"
                       :loading="eventDatesLoading"
-                      :eventDatesTotal="!mapMoving ? eventDatesTotal : 0"
+                      :eventDatesTotal="eventDatesTotal"
                     />
                   </div>
                 </transition>

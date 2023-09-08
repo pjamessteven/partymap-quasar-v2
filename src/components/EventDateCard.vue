@@ -361,11 +361,19 @@ export default {
       overflow: hidden;
       z-index: 0;
       filter: blur(12px);
-      transform: rotate(180deg) scaleX(-1) scale(2) translate3d(0, 0, 0); // translate3d is a hack for safari to force gpu rendering of blur();
+      transform: rotate(180deg) scaleX(-1) scale(2);
       position: absolute;
       height: 100%;
       width: 100%;
       transition: opacity 0.2s ease;
+
+      /* Safari 10.1+ */
+      @media not all and (min-resolution: 0.001dpcm) {
+        @supports (-webkit-appearance: none) {
+          transform: rotate(180deg) scaleX(-1) scale(2) translate3d(0, 0, 0);
+          // translate3d is a hack for safari to force gpu rendering of blur()
+        }
+      }
     }
 
     .tag-container {

@@ -445,7 +445,11 @@
                             Top tags around the world:
                           </div>
                         </div>
-                        <div :class="$q.screen.gt.xs ? 'q-pl-lg' : 'q-pl-md'">
+                        <div
+                          :class="
+                            $q.screen.gt.xs ? 'q-pl-lg q-mb-sm' : 'q-pl-md'
+                          "
+                        >
                           <q-scroll-area
                             horizontal
                             class="tag-scroll-area"

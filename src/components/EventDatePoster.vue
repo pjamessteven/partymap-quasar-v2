@@ -250,8 +250,8 @@ export default {
       if (this.$q.dark.isActive) {
         return ` background: linear-gradient(
           0deg,
-          rgba(18, 18, 18, 0.8) 66%,
-          rgba(48, 48, 48, 0.5) 100%
+          rgba(18, 18, 18, 0.7) 66%,
+          rgba(48, 48, 48, 0.3) 100%
         ), url("${this.imgThumbXsUrl}");
         background-size: cover;
         display: inline-block;
@@ -373,7 +373,7 @@ export default {
         background: linear-gradient(
           0deg,
           rgba(0, 0, 0, 0.3) 0%,
-          rgba(0, 0, 0, 0.6) 80%
+          rgba(0, 0, 0, 0.64) 80%
         );
       }
     }
@@ -389,16 +389,28 @@ export default {
   cursor: pointer;
   transition: all 0.2s ease;
   overflow: hidden;
-  -webkit-backface-visibility: hidden;
-  -webkit-transform: translate3d(0, 0, 0);
   position: relative;
+  @media not all and (min-resolution: 0.001dpcm) {
+    @supports (-webkit-appearance: none) {
+      -webkit-backface-visibility: hidden;
+      -webkit-transform: translate3d(0, 0, 0);
+      // translate3d is a hack for safari to force gpu rendering of blur()
+    }
+  }
   .ed-poster-bg {
     z-index: -1;
     filter: blur(12px);
-    transform: rotate(180deg) scaleX(-1) scale(1.6) translate3d(0, 0, 0); // translate3d is a hack for safari to force gpu rendering of blur()
+    transform: rotate(180deg) scaleX(-1) scale(1.6);
     position: absolute;
     height: 100%;
     width: 100%;
+    /* Safari 10.1+ */
+    @media not all and (min-resolution: 0.001dpcm) {
+      @supports (-webkit-appearance: none) {
+        transform: rotate(180deg) scaleX(-1) scale(1.6) translate3d(0, 0, 0);
+        // translate3d is a hack for safari to force gpu rendering of blur()
+      }
+    }
   }
 
   &:before {

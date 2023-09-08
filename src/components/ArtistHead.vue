@@ -10,7 +10,6 @@
   >
     <div class="artist-head-wrapper flex column justify-start items-center">
       <div class="card-bottom-background" :style="getBgImgStyle()" />
-      <div class="card-bottom-background-underlay" />
       <div class="artist-head flex column no-wrap">
         <div class="artist-head-background shadow-2xl">
           <img
@@ -78,8 +77,6 @@ export default {
     .card-bottom-background {
       background: $bi-3;
     }
-    .artist-head {
-    }
   }
 }
 .body--light {
@@ -99,7 +96,7 @@ export default {
   position: relative;
   overflow: hidden;
   transition: opacity 0.3s;
-
+  transform: translate3d(0, 0, 0);
   &:before {
     content: '';
     position: absolute;
@@ -119,26 +116,24 @@ export default {
   .card-bottom-background {
     border-radius: 9px;
     overflow: hidden;
-    //border: 1px solid #181818;
-    z-index: 0;
+    z-index: -1;
     filter: blur(12px);
-    transform: rotate(180deg) scaleX(-1) scale(2) translate3d(0, 0, 0); // translate3d is a hack for safari to force gpu rendering of blur()
-    //mask-image: linear-gradient(to top, transparent 0%, white 64px);
+    transform: rotate(180deg) scaleX(-1) scale(2);
     position: absolute;
     height: 100%;
     width: 100%;
     //opacity: 0.4;
     transition: opacity 0.2s ease;
+
+    /* Safari 10.1+ */
+    @media not all and (min-resolution: 0.001dpcm) {
+      @supports (-webkit-appearance: none) {
+        transform: rotate(180deg) scaleX(-1) scale(2) translate3d(0, 0, 0);
+        // translate3d is a hack for safari to force gpu rendering of blur()
+      }
+    }
   }
-  .card-bottom-background-underlay {
-    z-index: -1;
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    opacity: 1;
-    border-radius: 9px;
-    //background: white;
-  }
+
   .artist-head {
     padding: 16px;
     position: relative;
