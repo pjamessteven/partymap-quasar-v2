@@ -1,80 +1,73 @@
 <template>
-  <div>
-    <router-link
-      v-touch-swipe.mouse.up.prevent
-      v-slot="{ navigate }"
-      :custom="true"
-      :to="{
-        name: 'EventPage',
-        params: {
-          id: event.event_id,
-          eventDateId: event.id,
-        },
-        query: {
-          name: event.name.replace(/ /g, '_'),
-        },
-      }"
-    >
-      <transition appear enter-active-class="animated fadeIn">
+  <transition appear enter-active-class="animated fadeIn">
+    <div class="ed-card">
+      <router-link
+        v-touch-swipe.mouse.up.prevent
+        v-slot="{ navigate }"
+        :custom="true"
+        :to="{
+          name: 'EventPage',
+          params: {
+            id: event.event_id,
+            eventDateId: event.id,
+          },
+          query: {
+            name: event.name.replace(/ /g, '_'),
+          },
+        }"
+      >
+        <div class="card-bottom-background" :style="getBottomBgImgStyle()" />
         <div
-          class="ed-card"
+          class="ed-card-content flex row no-wrap q-pa-md"
           @mousedown="() => onClickCard($event, navigate)"
-          :class="{
-            'animated-shimmer': false,
-          }"
         >
-          <div class="ed-card-content flex row no-wrap q-pa-md">
-            <div
-              class="card-bottom-background"
-              :style="getBottomBgImgStyle()"
+          <div
+            class="image-container flex justify-center items-center shadow-2xl"
+          >
+            <img
+              :src="imgThumbXsUrl"
+              class="image not-loaded"
+              v-show="!loadedImage"
             />
+            <img
+              :src="imgThumbUrl"
+              class="image"
+              @load="() => (loadedImage = true)"
+              v-show="loadedImage"
+            />
+          </div>
+          <div class="flex column ellipsis q-pl-md">
             <div
-              class="image-container flex justify-center items-center shadow-2xl"
+              class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
             >
-              <img
-                :src="imgThumbXsUrl"
-                class="image not-loaded"
-                v-show="!loadedImage"
-              />
-              <img
-                :src="imgThumbUrl"
-                class="image"
-                @load="() => (loadedImage = true)"
-                v-show="loadedImage"
-              />
-            </div>
-            <div class="flex column ellipsis q-pl-md">
               <div
-                class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
+                class="flex row items-baseline no-wrap inter bold q-mr-sm ellipsis"
               >
-                <div
-                  class="flex row items-baseline no-wrap inter bold q-mr-sm ellipsis"
+                <span class="ellipsis">{{ event.name }}</span>
+                <q-icon
+                  class="q-ml-sm o-080"
+                  name="mdi-check-decagram"
+                  v-if="event.event.host"
                 >
-                  <span class="ellipsis">{{ event.name }}</span>
-                  <q-icon
-                    class="q-ml-sm o-080"
-                    name="mdi-check-decagram"
-                    v-if="event.event.host"
+                  <q-tooltip
+                    :content-class="
+                      $q.dark.isActive
+                        ? 'bg-black text-white'
+                        : 'bg-white text-black'
+                    "
+                    :offset="[10, 10]"
+                    content-style="font-size: 16px"
                   >
-                    <q-tooltip
-                      :content-class="
-                        $q.dark.isActive
-                          ? 'bg-black text-white'
-                          : 'bg-white text-black'
-                      "
-                      :offset="[10, 10]"
-                      content-style="font-size: 16px"
-                    >
-                      {{ $t('event.official_page') }}
-                    </q-tooltip></q-icon
-                  >
-                </div>
+                    {{ $t('event.official_page') }}
+                  </q-tooltip></q-icon
+                >
               </div>
-              <div
-                class="flex column grow justify-between card-bottom-text q-mt-xs o-070"
-                style="font-weight: 400"
-              >
-                <!--
+            </div>
+            <div
+              class="flex column grow justify-between card-bottom-text q-mt-xs o-070"
+              style="font-weight: 400"
+            >
+              <!--
 
           <div class="flex row items-center ">
             <q-badge
@@ -90,91 +83,85 @@
             </span>
           </div>
 -->
-                <div class="flex column">
-                  <span>
-                    <q-icon name="las la-clock" class="q-mr-sm" />
-                    <q-badge
-                      v-if="event.cancelled"
-                      class="q-my-xs"
-                      color="red"
-                      :label="$t('event_date_inline.cancelled')"
-                    />
-                    <span v-else-if="event.date_confirmed">{{
-                      relativeHumanTime(
-                        event.start_naive,
-                        event.end_naive,
-                        event.tz
-                      )
-                    }}</span>
+              <div class="flex column">
+                <span>
+                  <q-icon name="las la-clock" class="q-mr-sm" />
+                  <q-badge
+                    v-if="event.cancelled"
+                    class="q-my-xs"
+                    color="red"
+                    :label="$t('event_date_inline.cancelled')"
+                  />
+                  <span v-else-if="event.date_confirmed">{{
+                    relativeHumanTime(
+                      event.start_naive,
+                      event.end_naive,
+                      event.tz
+                    )
+                  }}</span>
 
-                    <span v-else>Date TBC</span>
-                  </span>
-                  <div class="flex row items-center no-wrap ellipsis">
-                    <q-icon name="las la-calendar" class="q-mr-sm" />
-                    <div class="flex row no-wrap ellipsis">
-                      <span v-if="event.date_confirmed">
-                        {{ localDateWithWeekday(event.start_naive, event.tz) }}
-                      </span>
-                      <span v-else>
-                        {{ monthYear(event.start_naive, event.tz) }}
-                      </span>
-                      <span
-                        v-if="
-                          event.event.rrule &&
-                          event.event.rrule.separation_count > 0
-                        "
-                        class="flex row items-center q-ml-xs o-070 no-wrap ellipsis"
-                      >
-                        <q-icon
-                          class="q-ml-xs q-mr-sm"
-                          name="las la-redo-alt"
-                        />
-                        {{ simplifiedRecurringPattern(event.event.rrule) }}
-                      </span>
-                    </div>
-                  </div>
-                  <div class="">
-                    <span v-if="event.location && event.location.locality">
-                      <q-icon name="las la-map-marker" class="q-mr-sm" />{{
-                        event.location.locality.long_name
-                      }},
-                      {{ event.location.locality.region.long_name }}
+                  <span v-else>Date TBC</span>
+                </span>
+                <div class="flex row items-center no-wrap ellipsis">
+                  <q-icon name="las la-calendar" class="q-mr-sm" />
+                  <div class="flex row no-wrap ellipsis">
+                    <span v-if="event.date_confirmed">
+                      {{ localDateWithWeekday(event.start_naive, event.tz) }}
                     </span>
                     <span v-else>
-                      <q-icon name="las la-map-marker" class="q-mr-sm" />{{
-                        event.location.name
-                      }}
+                      {{ monthYear(event.start_naive, event.tz) }}
                     </span>
-                    <span v-if="event.distance != null" class="o-050 ellipsis"
-                      >&nbsp;({{
-                        Intl.NumberFormat().format(
-                          parseInt(Number(event.distance) / 1000)
-                        )
-                      }}km)</span
+                    <span
+                      v-if="
+                        event.event.rrule &&
+                        event.event.rrule.separation_count > 0
+                      "
+                      class="flex row items-center q-ml-xs o-070 no-wrap ellipsis"
                     >
+                      <q-icon class="q-ml-xs q-mr-sm" name="las la-redo-alt" />
+                      {{ simplifiedRecurringPattern(event.event.rrule) }}
+                    </span>
                   </div>
                 </div>
+                <div class="">
+                  <span v-if="event.location && event.location.locality">
+                    <q-icon name="las la-map-marker" class="q-mr-sm" />{{
+                      event.location.locality.long_name
+                    }},
+                    {{ event.location.locality.region.long_name }}
+                  </span>
+                  <span v-else>
+                    <q-icon name="las la-map-marker" class="q-mr-sm" />{{
+                      event.location.name
+                    }}
+                  </span>
+                  <span v-if="event.distance != null" class="o-050 ellipsis"
+                    >&nbsp;({{
+                      Intl.NumberFormat().format(
+                        parseInt(Number(event.distance) / 1000)
+                      )
+                    }}km)</span
+                  >
+                </div>
               </div>
-              <div
-                class="tag-container flex row q-mt-sm no-wrap ellipsis"
-                style="min-height: 31px"
-                v-if="
-                  event.event.event_tags && event.event.event_tags.length > 0
-                "
-              >
-                <Tag
-                  class="q-mr-xs"
-                  v-for="(et, index) in event.event.event_tags"
-                  :key="index"
-                  :value="et.tag"
-                ></Tag>
-              </div>
+            </div>
+            <div
+              class="tag-container flex row q-mt-sm no-wrap ellipsis"
+              style="min-height: 31px"
+              v-if="event.event.event_tags && event.event.event_tags.length > 0"
+            >
+              <Tag
+                class="q-mr-xs"
+                v-for="(et, index) in event.event.event_tags"
+                :key="index"
+                :value="et.tag"
+              ></Tag>
             </div>
           </div>
         </div>
-      </transition>
-    </router-link>
-  </div>
+      </router-link>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -253,13 +240,13 @@ export default {
   .ed-card {
     outline: 1px solid black;
     border-top: 1px solid rgba(48, 48, 48);
+    background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9));
 
+    .card-bottom-background {
+      background: $bi-3;
+      opacity: 0.4;
+    }
     .ed-card-content {
-      background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9));
-      .card-bottom-background {
-        background: $bi-3;
-        opacity: 0.4;
-      }
     }
     .card-background {
       background: $bi-4;
@@ -288,24 +275,22 @@ export default {
 
     box-shadow: rgba(0, 0, 0, 0.12) 0px 3px 8px;
     font-smooth: always;
+    background: black;
 
     .card-background {
       //background: #181818;
       opacity: 0.8;
       transition: opacity 0.2s ease;
     }
+    .card-bottom-background {
+      opacity: 0.68;
+      background: white;
+      transition: opacity 0.2s ease;
+    }
     .ed-card-content {
       border-top: 1px solid (rgba(255, 255, 255, 0.2));
-      background: black;
 
       color: white !important;
-
-      .card-bottom-background {
-        opacity: 0.68;
-        z-index: 0;
-        background: white;
-        transition: opacity 0.2s ease;
-      }
     }
     &:first-child {
       margin-top: 0px;
@@ -325,9 +310,14 @@ export default {
   cursor: pointer;
   transition: all 0.2s ease;
   overflow: hidden;
-  -webkit-backface-visibility: hidden;
-  -webkit-transform: translate3d(0, 0, 0);
+  position: relative;
+  transform: translate3d(0, 0, 0);
 
+  @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
+    // translate3d is a hack for safari to force gpu rendering of blur()
+  }
   &:before {
     content: '';
     position: absolute;
@@ -338,6 +328,8 @@ export default {
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
+    border-radius: 9px;
+    z-index: 2;
   }
 
   &:hover {
@@ -347,35 +339,30 @@ export default {
     }
   }
 
-  &:active {
-    //  transform: scale(0.98);
-  }
-  position: relative;
+  .card-bottom-background {
+    //border-radius: 9px;
+    z-index: 1;
+    filter: blur(12px);
+    transform: rotate(180deg) scaleX(-1) scale(2);
+    position: absolute;
+    height: 100%;
+    width: 100%;
 
+    /* Safari Only*/
+    @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+      transform: rotate(180deg) scaleX(-1) scale(2) translate3d(0, 0, 0);
+      // translate3d is a hack for safari to force gpu rendering of blur()
+    }
+  }
   .ed-card-content {
     position: relative;
     transition: opacity 0.3s ease;
-
-    .card-bottom-background {
-      border-radius: 9px;
-      overflow: hidden;
-      z-index: 0;
-      filter: blur(12px);
-      transform: rotate(180deg) scaleX(-1) scale(2);
-      position: absolute;
-      height: 100%;
-      width: 100%;
-      transition: opacity 0.2s ease;
-
-      /* Safari 10.1+ */
-      @media not all and (min-resolution: 0.001dpcm) {
-        @supports (-webkit-appearance: none) {
-          transform: rotate(180deg) scaleX(-1) scale(2) translate3d(0, 0, 0);
-          // translate3d is a hack for safari to force gpu rendering of blur()
-        }
-      }
+    z-index: 1;
+    @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+      -webkit-backface-visibility: hidden;
+      -webkit-transform: translate3d(0, 0, 0);
+      // translate3d is a hack for safari to force gpu rendering of blur()
     }
-
     .tag-container {
       :deep(.tag) {
         background: transparent !important;
@@ -407,7 +394,9 @@ export default {
       width: 86px;
       aspect-ratio: 595 / 842;
       min-width: 90px;
+      z-index: 1;
       border-radius: 9px;
+
       .image {
         height: 100%;
         width: 100%;
@@ -499,11 +488,5 @@ export default {
 
 // sm
 @media only screen and (max-width: 600px) {
-  .ed-card {
-    &:active,
-    &:hover {
-      transform: none;
-    }
-  }
 }
 </style>

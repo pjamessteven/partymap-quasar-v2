@@ -384,16 +384,15 @@ export default {
     //  rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
     //box-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
     max-height: 100%;
-    transition: width 0.3s;
+    //transition: width 0.3s;
     overflow: hidden;
     height: 100%;
     pointer-events: all;
     border-top-left-radius: 18px;
     border-top-right-radius: 18px;
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
     transform: translate3d(0, calc(100% - 226px), 0);
     user-select: none;
-    //will-change: auto;
     padding-bottom: 64px;
 
     //box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
@@ -402,11 +401,13 @@ export default {
     .sidebar-content {
       border-top-left-radius: 18px;
       border-top-right-radius: 18px;
+
       .sidebar-content-inner {
         border-top-left-radius: 18px;
         border-top-right-radius: 18px;
         overflow: hidden;
-        isolation: isolate;
+        isolation: isolate; // lol what?
+
         .sidebar-content-inner-shadow {
           position: absolute;
           height: 100%;

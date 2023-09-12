@@ -390,26 +390,22 @@ export default {
   transition: all 0.2s ease;
   overflow: hidden;
   position: relative;
-  @media not all and (min-resolution: 0.001dpcm) {
-    @supports (-webkit-appearance: none) {
-      -webkit-backface-visibility: hidden;
-      -webkit-transform: translate3d(0, 0, 0);
-      // translate3d is a hack for safari to force gpu rendering of blur()
-    }
+  @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
+    // translate3d is a hack for safari to force gpu rendering of blur()
   }
   .ed-poster-bg {
-    z-index: -1;
+    z-index: 1;
     filter: blur(12px);
     transform: rotate(180deg) scaleX(-1) scale(1.6);
     position: absolute;
     height: 100%;
     width: 100%;
     /* Safari 10.1+ */
-    @media not all and (min-resolution: 0.001dpcm) {
-      @supports (-webkit-appearance: none) {
-        transform: rotate(180deg) scaleX(-1) scale(1.6) translate3d(0, 0, 0);
-        // translate3d is a hack for safari to force gpu rendering of blur()
-      }
+    @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+      transform: rotate(180deg) scaleX(-1) scale(1.6) translate3d(0, 0, 0);
+      // translate3d is a hack for safari to force gpu rendering of blur()
     }
   }
 

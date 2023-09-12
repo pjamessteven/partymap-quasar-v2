@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
 import moment from 'moment';
+import { Screen } from 'quasar';
+
 import {
   getPointsRequest,
   getEventDatesRequest,
@@ -329,7 +331,7 @@ export const useQueryStore = defineStore('query', {
           favorites: main.sidebarPanel === 'favorites' ? true : undefined,
           sort_option: 'date',
           page: this.eventDatesPage,
-          per_page: 20,
+          per_page: Screen.lt.sm ? 10 : 20,
           distinct: true,
         });
         if (this.eventDatesRequestId === requestId) {

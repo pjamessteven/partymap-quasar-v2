@@ -205,6 +205,7 @@ export default {
     position: absolute;
     height: 100%;
     width: 100%;
+
     pointer-events: none;
   }
   .overlay {
@@ -212,10 +213,16 @@ export default {
     position: absolute;
     height: 100%;
     width: 100%;
+    opacity: 0;
     pointer-events: none;
     //will-change: auto;
     transition: opacity 0.3s;
     cursor: grab;
+    @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+      -webkit-backface-visibility: hidden;
+      -webkit-transform: translate3d(0, 0, 0);
+      // translate3d is a hack for safari to force gpu rendering of blur()
+    }
   }
 
   .menubar {
