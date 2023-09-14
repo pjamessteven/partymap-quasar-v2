@@ -16,7 +16,7 @@
           },
         }"
       >
-        <div class="card-bottom-background" :style="getBottomBgImgStyle()" />
+        <div class="ed-card-bg" :style="getBottomBgImgStyle()" />
         <div
           class="ed-card-content flex row no-wrap q-pa-md"
           @mousedown="() => onClickCard($event, navigate)"
@@ -242,7 +242,7 @@ export default {
     border-top: 1px solid rgba(48, 48, 48);
     background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9));
 
-    .card-bottom-background {
+    .ed-card-bg {
       background: $bi-3;
       opacity: 0.4;
     }
@@ -282,7 +282,7 @@ export default {
       opacity: 0.8;
       transition: opacity 0.2s ease;
     }
-    .card-bottom-background {
+    .ed-card-bg {
       opacity: 0.68;
       background: white;
       transition: opacity 0.2s ease;
@@ -311,7 +311,6 @@ export default {
   transition: all 0.2s ease;
   overflow: hidden;
   position: relative;
-  transform: translate3d(0, 0, 0);
 
   @supports (font: -apple-system-body) and (-webkit-appearance: none) {
     -webkit-backface-visibility: hidden;
@@ -339,7 +338,7 @@ export default {
     }
   }
 
-  .card-bottom-background {
+  .ed-card-bg {
     //border-radius: 9px;
     z-index: 1;
     filter: blur(12px);

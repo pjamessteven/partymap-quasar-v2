@@ -1129,6 +1129,11 @@ a {
       .content-card {
         .header {
           background: $bi-2 !important;
+
+          .featured-media {
+            opacity: 0.48;
+          }
+
           :deep(.tag) {
             border-color: rgba(255, 255, 255, 0.1) !important;
           }
@@ -1198,6 +1203,10 @@ a {
               background: $bi-4 !important;
               border-bottom: 1px solid rgba(0, 0, 0, 0.1);
               color: white;
+
+              .featured-media {
+                opacity: 0.68;
+              }
 
               .header-content {
                 color: white;

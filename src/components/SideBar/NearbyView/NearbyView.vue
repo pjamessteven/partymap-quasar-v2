@@ -1201,9 +1201,7 @@ export default {
       }
       .location-header {
         position: sticky;
-
         top: -1px;
-
         z-index: 1000;
         width: 100%;
 

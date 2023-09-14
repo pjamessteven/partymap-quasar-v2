@@ -61,7 +61,12 @@
         'mobile-map-view-router': $q.screen.lt.sm,
       }"
     >
-      <component :is="Component" />
+      <transition
+        enter-active-class="animated slideInUp"
+        leave-active-class="animated slideOutDown"
+      >
+        <component :is="Component" />
+      </transition>
     </router-view>
     <NavigationBar
       class="nav-bar"
@@ -129,7 +134,10 @@ export default {
           }
         }
       } else {
-        if (this.showPanel && this.$route.name === 'Explore')
+        if (
+          (this.showPanel && this.$route.name === 'Explore') ||
+          (this.$q.screen.lt.md && this.showPanel)
+        )
           return 'opacity: 1; pointer-events: all';
         else return 'opacity: 0';
       }
@@ -150,8 +158,11 @@ export default {
     }
     .overlay {
       //background: linear-gradient($bi-2, $bi-2 62px, black 62px, black);
-      background: rgba(0, 0, 0, 0.7);
-      //background: linear-gradient(transparent 5%, white 15%);
+      background: linear-gradient(
+        rgba(0, 0, 0, 1),
+        rgba(0, 0, 0, 0.7) 128px,
+        rgba(0, 0, 0, 0.7)
+      ); //background: linear-gradient(transparent 5%, white 15%);
       /*
       background: linear-gradient(
         rgba(0, 0, 0, 0.78) 0px,
@@ -176,8 +187,11 @@ export default {
     }
     .overlay {
       //background: linear-gradient(#fafafa, #fafafa 64px, white 64px, white);
-      background: rgba(0, 0, 0, 0.5);
-      //backdrop-filter: blur(2px);
+      background: linear-gradient(
+        rgba(0, 0, 0, 1),
+        rgba(0, 0, 0, 0.5) 128px,
+        rgba(0, 0, 0, 0.5)
+      ); //backdrop-filter: blur(2px);
       //background: linear-gradient(transparent 5%, white 15%);
       /*
       background: linear-gradient(

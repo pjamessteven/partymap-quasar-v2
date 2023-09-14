@@ -908,12 +908,18 @@ body {
         color: $bi-2;
       }
     }
+    .dialog-page {
+      background: black;
+    }
   }
   .body--light {
     .q-dialog {
       .menu {
         color: $b-2;
       }
+    }
+    .dialog-page {
+      background: white;
     }
   }
   .q-card {

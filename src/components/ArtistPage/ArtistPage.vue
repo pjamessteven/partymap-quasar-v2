@@ -7,13 +7,21 @@
       <div class="artist-header flex row justify-between items-start no-wrap">
         <div class="flex column no-wrap" style="width: 100%">
           <div class="mobile-image-container" v-if="$q.screen.lt.md">
-            <div class="image-container-background">
-              <transition appear enter-active-class="animated fadeIn slower">
-                <img :src="computedImageSrc" v-if="computedImageSrc" />
-              </transition>
+            <transition appear enter-active-class="animated fadeIn slower">
+              <div class="image-container-background" v-if="artist">
+                <img :src="computedSmImageSrc" />
 
-              <div class="overlay" />
-            </div>
+                <img
+                  style="z-index: 2"
+                  v-show="loadedFullRes"
+                  :src="computedImageSrc"
+                  @load="loadedFullRes = true"
+                />
+
+                <div class="image-container-overlay" />
+              </div>
+            </transition>
+
             <div class="flex-column mobile-title q-pa-md">
               <div class="text-h5 inter bolder">
                 <b>{{ computedName }}</b>
@@ -162,11 +170,18 @@
         </div>
 
         <div class="image-container q-ma-lg q-ml-xl" v-if="$q.screen.gt.sm">
-          <div class="image-container-background">
-            <transition appear enter-active-class="animated fadeIn slower">
-              <img :src="computedImageSrc" v-if="computedImageSrc" />
-            </transition>
-          </div>
+          <transition appear enter-active-class="animated fadeIn slower">
+            <div class="image-container-background" v-if="artist">
+              <img :src="computedSmImageSrc" />
+
+              <img
+                style="z-index: 2"
+                v-show="loadedFullRes"
+                :src="computedImageSrc"
+                @load="loadedFullRes = true"
+              />
+            </div>
+          </transition>
         </div>
       </div>
       <transition appear enter-active-class="animated fadeIn slower">
@@ -249,6 +264,7 @@ export default {
       artist: null,
       loading: false,
       showFullDescription: false,
+      loadedFullRes: false, // full resolution image loaded, hide smaller placeholder
     };
   },
   props: {
@@ -325,18 +341,17 @@ export default {
         return null;
       }
     },
+    computedSmImageSrc() {
+      // make things seem faster by showing the thumbnail thats already loaded by ArtistHead component
+      if (this.artist?.media_items?.[0]) {
+        return this.artist.media_items[0].thumb_xs_url;
+      } else {
+        return '';
+      }
+    },
     computedImageSrc() {
-      if (this.artist) {
-        if (this.artist.media_items && this.artist.media_items[0]) {
-          return this.artist.media_items[0].thumb_url;
-        } else {
-          var imageUrl = '';
-          var index = this.artist.urls.findIndex((x) => x.type === 'image');
-          if (index > -1) {
-            imageUrl = this.artist.urls[index].url;
-          }
-          return imageUrl;
-        }
+      if (this.artist?.media_items?.[0]) {
+        return this.artist.media_items[0].thumb_url;
       } else {
         return '';
       }
@@ -392,11 +407,12 @@ export default {
     //max-width: 400px;
     // max-height: 400px;
     // min-width: 400px;
-    width: auto;
+    //width: auto;
     position: relative;
     overflow: hidden;
     aspect-ratio: 1;
     border-radius: 100%;
+    min-width: 308px;
     .image-container-background {
       width: 100%;
       //position: absolute;
@@ -405,8 +421,13 @@ export default {
       object-fit: cover;
       justify-content: center;
       align-items: center;
+
       img {
+        position: absolute;
+        left: 0px;
+        top: 0px;
         width: 100%;
+
         height: auto;
       }
     }
@@ -447,13 +468,20 @@ export default {
         justify-content: center;
         align-items: center;
         z-index: 1;
-        .overlay {
+        .image-container-overlay {
+          z-index: 3000;
           position: absolute;
+          left: 0px;
+          top: 0px;
           height: 100%;
           width: 100%;
           background: linear-gradient(transparent, rgba(0, 0, 0, 0.68));
         }
         img {
+          position: absolute;
+          left: 0px;
+          top: 0px;
+          width: 100%;
           width: 100%;
         }
       }
