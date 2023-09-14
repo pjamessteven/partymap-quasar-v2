@@ -32,11 +32,10 @@
               class="mobile-swipe-handle"
             />
             <div
-              class="content"
-              :class="scrollPercentage >= 1 ? 'mobile-scroll-enable' : ''"
+              class="content flex column"
               v-touch-swipe.down="scrollPercentage === 0 ? handleSwipe : null"
             >
-              <div class="flex column">
+              <div class="flex column grow">
                 <div class="header flex column">
                   <InnerLoading v-if="loading" :solid="false" />
 
@@ -1447,24 +1446,25 @@ a {
         max-width: 100vw;
       }
       .scroll-area {
-        height: 100%;
+        //height: 100%;
         .featured-media {
           overflow: hidden;
         }
         .main-row {
-          height: 100%;
+          //z-index: 0;
+          //height: 100%;
           .content-card {
-            max-height: calc(100% - 66vh);
+            //max-height: calc(100% - 66vh);
             min-height: 100%;
             margin-top: Max(calc(100% - 66%), 0px);
             border: none;
             max-width: 100vw !important;
 
-            overflow: hidden;
+            //overflow: hidden;
             .content {
-              overflow-y: hidden;
+              //overflow-y: hidden;
               &.mobile-scroll-enable {
-                overflow-y: scroll;
+                //overflow-y: scroll;
               }
               .main-content {
                 border: none !important;

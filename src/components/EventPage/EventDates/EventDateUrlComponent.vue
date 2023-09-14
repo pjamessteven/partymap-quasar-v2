@@ -2,6 +2,7 @@
   <div
     v-if="selectedEventDate != null"
     class="flex row items-center no-wrap ed-inline-card editing-outline"
+    style="max-width: 100%"
     :class="[editing || showMoreFields ? 'editing q-px-md' : '']"
     @click="editing || showMoreFields ? (showEditingDialog = true) : null"
   >
@@ -12,17 +13,19 @@
       "
       name="las la-external-link-alt"
     />
+    <!--Display grid fixes overflow issues (..somehow...)-->
     <div
-      class="flex column q-ml-md t2"
+      class="ellipsis q-ml-md t2"
+      style="display: grid"
       :class="$q.screen.gt.sm ? 'text-large' : ''"
     >
       <div
-        class="flex column"
+        class="ellipsis"
         style="white-space: pre-line"
         v-if="computedExternalUrl"
       >
         <a
-          class="link-hover underline"
+          class="link-hover underline ellipsis"
           target="_blank"
           :href="computedExternalUrl"
           >{{ selectedEventDate.url }}</a

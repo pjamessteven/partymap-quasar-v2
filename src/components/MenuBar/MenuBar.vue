@@ -184,7 +184,7 @@ export default {
         (this.showPanel &&
           this.$route.name === 'Explore' &&
           !this.$q.dark.isActive &&
-          this.$q.screen.lt.sm)
+          this.$q.screen.lt.md)
       ) {
         return 'black';
       } else if (
