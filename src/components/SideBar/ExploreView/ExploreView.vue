@@ -29,16 +29,18 @@
       <q-separator />
     </div>
 
-    <q-icon
-      @click="() => (showPanel = !showPanel)"
-      v-if="$q.screen.lt.sm"
-      flat
-      size="1.5rem"
-      class="q-pa-md q-mr-xs mobile-panel-button t2"
-      :class="{ 'rotate-180': showPanel }"
-      name="mdi-chevron-up"
-      style="pointer-events: all"
-    />
+    <div class="mobile-panel-button">
+      <q-icon
+        @click="() => (showPanel = !showPanel)"
+        v-if="$q.screen.lt.sm"
+        flat
+        size="1.5rem"
+        class="q-pa-md q-mr-xs t2"
+        :class="{ 'rotate-180': showPanel }"
+        name="mdi-chevron-up"
+        style="pointer-events: all"
+      />
+    </div>
     <div class="touch-overlay" v-touch-swipe.vertical="handleSwipe" />
     <div class="event-list-inner">
       <div
@@ -750,11 +752,15 @@ export default {
 
   .event-list-vertical {
     margin-top: 4px;
+
     .mobile-panel-button {
       position: absolute;
       right: 0px;
       top: -4px;
       z-index: 5000;
+      @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+        -webkit-transform: translate3d(0, 0, 0);
+      }
     }
     .event-list-inner {
       .artists-component {

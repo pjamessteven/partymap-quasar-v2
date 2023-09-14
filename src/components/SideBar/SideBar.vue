@@ -3,7 +3,7 @@
     <div
       ref="sidebar"
       v-touch-swipe.mouse.up="!showPanel ? handleSwipe : null"
-      class="flex column justify-between no-wrap sidebar"
+      class="flex justify-between no-wrap sidebar"
       id="sidebar"
       v-bind:class="{
         shadow: panelHiddenDelayed && $q.screen.gt.xs,
@@ -350,7 +350,8 @@ export default {
 
       &.shadow {
         border: 1px solid rgba(0, 0, 0, 0.1);
-        box-shadow: rgba(100, 100, 100, 0.05) 0px 0px 10px 5px;
+        box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+        //box-shadow: rgba(100, 100, 100, 0.05) 0px 0px 10px 5px;
       }
       .sidebar-content {
         //background: rgba(100, 100, 100, 0.2);
@@ -399,24 +400,28 @@ export default {
     //  rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
     //box-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
     max-height: 100%;
-    transition: width 0.3s;
+    //transition: width 0.3s;
     overflow: hidden;
     height: 100%;
     pointer-events: all;
-
-    transition: transform 0.3s ease, border-color 0.3s;
+    transition: all 0.4s ease;
     transform: translate3d(0, calc(100% - 226px), 0);
     user-select: none;
-    //will-change: auto;
     padding-bottom: 64px;
-
+    display: flex;
+    justify-content: center;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
     //box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
     //  rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
     //  rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
     .sidebar-content {
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
       .sidebar-content-inner {
         overflow: hidden;
-        isolation: isolate;
+        isolation: isolate; // lol what?
+
         .sidebar-content-inner-shadow {
           position: absolute;
           height: 100%;
@@ -557,11 +562,12 @@ export default {
 @media only screen and (min-width: 1024px) {
   .sidebar-wrapper {
     .sidebar {
+      padding-bottom: 96px;
       width: 66vw;
       min-width: 920px;
       max-width: 1024px;
-      padding-bottom: 96px;
-
+      .sidebar-content {
+      }
       &.sidebar-mobile-expanded {
         transform: translate3d(0, 96px, 0);
       }
@@ -574,6 +580,8 @@ export default {
     .sidebar {
       width: 66vw;
       max-width: 1024px;
+      .sidebar-content {
+      }
     }
   }
 }
@@ -581,10 +589,12 @@ export default {
 @media only screen and (min-width: 1921px) {
   .sidebar-wrapper {
     .sidebar {
-      max-width: 1280px;
       padding-bottom: 128px;
       transform: translate3d(0, calc(100% - 298px), 0);
+      max-width: 1280px;
 
+      .sidebar-content {
+      }
       &.sidebar-mobile-expanded {
         transform: translate3d(0, 128px, 0);
       }
@@ -706,7 +716,10 @@ export default {
       border-left: none;
       border-right: none;
       overflow: visible;
+      width: 100%;
 
+      .sidebar-content {
+      }
       &.sidebar-mobile-expanded {
         transform: translate3d(0, 120px, 0);
         //padding-bottom: 128px;

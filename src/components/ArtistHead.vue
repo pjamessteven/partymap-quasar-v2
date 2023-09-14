@@ -96,7 +96,12 @@ export default {
   position: relative;
   overflow: hidden;
   transition: opacity 0.3s;
-  transform: translate3d(0, 0, 0);
+  // transform: translate3d(0, 0, 0);
+  @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
+    // translate3d is a hack for safari to force gpu rendering of blur()
+  }
   &:before {
     content: '';
     position: absolute;
@@ -125,12 +130,10 @@ export default {
     //opacity: 0.4;
     transition: opacity 0.2s ease;
 
-    /* Safari 10.1+ */
-    @media not all and (min-resolution: 0.001dpcm) {
-      @supports (-webkit-appearance: none) {
-        transform: rotate(180deg) scaleX(-1) scale(2) translate3d(0, 0, 0);
-        // translate3d is a hack for safari to force gpu rendering of blur()
-      }
+    @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+      -webkit-backface-visibility: hidden;
+      transform: rotate(180deg) scaleX(-1) scale(2) translate3d(0, 0, 0);
+      // translate3d is a hack for safari to force gpu rendering of blur()
     }
   }
 

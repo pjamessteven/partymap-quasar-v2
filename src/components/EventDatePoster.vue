@@ -6,7 +6,6 @@
         'animated-shimmer': false,
       }"
     >
-      <div class="ed-poster-bg" :style="getBottomBgImgStyle()" />
       <router-link
         v-slot="{ navigate }"
         :custom="true"
@@ -21,6 +20,8 @@
           },
         }"
       >
+        <div class="ed-poster-bg" :style="getBottomBgImgStyle()" />
+
         <div
           class="ed-poster-content flex column no-wrap"
           @mousedown="() => onClickCard($event, navigate)"
@@ -331,13 +332,8 @@ export default {
 .body--dark {
   .ed-poster {
     .ed-poster-content {
-      transition: opacity 0.3s;
-
-      //background: linear-gradient(rgba(18, 18, 18, 0.8), rgba(18, 18, 18, 0.8));
       .image-container {
         border-top: 1px solid rgba(48, 48, 48);
-      }
-      .card-bottom-content {
       }
     }
 
@@ -359,9 +355,6 @@ export default {
     box-shadow: rgba(0, 0, 0, 0.12) 0px 3px 8px;
     font-smooth: always;
 
-    .ed-poster-bg {
-      opacity: 0.8;
-    }
     .ed-poster-bg {
       opacity: 0.68;
     }
@@ -387,30 +380,13 @@ export default {
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  transition: all 0.2s ease;
   overflow: hidden;
   position: relative;
-  @media not all and (min-resolution: 0.001dpcm) {
-    @supports (-webkit-appearance: none) {
-      -webkit-backface-visibility: hidden;
-      -webkit-transform: translate3d(0, 0, 0);
-      // translate3d is a hack for safari to force gpu rendering of blur()
-    }
-  }
-  .ed-poster-bg {
-    z-index: -1;
-    filter: blur(12px);
-    transform: rotate(180deg) scaleX(-1) scale(1.6);
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    /* Safari 10.1+ */
-    @media not all and (min-resolution: 0.001dpcm) {
-      @supports (-webkit-appearance: none) {
-        transform: rotate(180deg) scaleX(-1) scale(1.6) translate3d(0, 0, 0);
-        // translate3d is a hack for safari to force gpu rendering of blur()
-      }
-    }
+
+  @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
+    // translate3d is a hack for safari to force gpu rendering of blur()
   }
 
   &:before {
@@ -431,19 +407,31 @@ export default {
       opacity: 1;
     }
   }
-  .image-container {
-    transition: transform 0.2s;
-  }
 
-  position: relative;
+  .ed-poster-bg {
+    z-index: 1;
+    filter: blur(12px);
+    transform: rotate(180deg) scaleX(-1) scale(1.6);
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    /* Safari 10.1+ */
+    @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+      transform: rotate(180deg) scaleX(-1) scale(1.6) translate3d(0, 0, 0);
+      // translate3d is a hack for safari to force gpu rendering of blur()
+    }
+  }
 
   .ed-poster-content {
     z-index: 1;
     position: relative;
-    z-index: 1;
     width: 100%;
     pointer-events: all;
-
+    @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+      -webkit-backface-visibility: hidden;
+      -webkit-transform: translate3d(0, 0, 0);
+      // translate3d is a hack for safari to force gpu rendering of blur()
+    }
     .card-bottom-content {
       .tag-container {
         :deep(.tag) {

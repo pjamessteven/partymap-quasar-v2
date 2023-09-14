@@ -4,6 +4,7 @@
       <div
         @click="openEditorDialog()"
         class="editing-outline"
+        style="white-space: pre-line; word-break: break-word"
         :class="editing ? 'q-pa-md' : ''"
       >
         <span class="o-080">{{ event.description }}</span

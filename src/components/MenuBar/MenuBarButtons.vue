@@ -61,8 +61,20 @@
       </div>
       <!-- <div class="separator vertical"></div>-->
     </div>
+    <q-btn flat class="profile-button" @click="sidebarPanel = 'favorites'">
+      <div class="profile-button-inner">
+        <q-icon name="mdi-calendar-star" class="q-mr-md q-ml-md t2" />
+        <q-avatar
+          color="blue"
+          text-color="white"
+          icon="mdi-account-circle"
+          font-size="14px"
+          size="36px"
+        />
+      </div>
+    </q-btn>
     <q-btn
-      class="button-menu"
+      class="menubar-button"
       icon="mdi-menu"
       flat
       :class="{
@@ -180,6 +192,18 @@ export default {
         background-color: $ti-2;
       }
     }
+
+    .profile-button {
+      .profile-button-inner {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: $bi-2;
+      }
+      &:hover {
+        .profile-button-inner {
+          background: $bi-3;
+        }
+      }
+    }
   }
 }
 
@@ -217,9 +241,32 @@ export default {
         border-color: grey;
       }
     }
+
+    .profile-button {
+      .profile-button-inner {
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: #fafafa;
+      }
+      &:hover {
+        .profile-button-inner {
+          background: $b-3;
+        }
+      }
+    }
   }
 }
+.profile-button {
+  border-radius: 0px !important;
 
+  background: none !important;
+  :deep(.q-focus-helper) {
+    display: none;
+  }
+  .profile-button-inner {
+    border-radius: 38px;
+    transition: background 0.3s;
+  }
+}
 .q-btn {
   pointer-events: all;
 }
@@ -317,7 +364,7 @@ export default {
     }
   }
 }
-.button-menu {
+.menubar-button {
   border-radius: 0px !important;
   pointer-events: all;
 }

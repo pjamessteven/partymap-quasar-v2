@@ -61,7 +61,12 @@
         'mobile-map-view-router': $q.screen.lt.sm,
       }"
     >
-      <component :is="Component" />
+      <transition
+        enter-active-class="animated slideInUp"
+        leave-active-class="animated slideOutDown"
+      >
+        <component :is="Component" />
+      </transition>
     </router-view>
     <NavigationBar
       class="nav-bar"
@@ -129,7 +134,10 @@ export default {
           }
         }
       } else {
-        if (this.showPanel && this.$route.name === 'Explore')
+        if (
+          (this.showPanel && this.$route.name === 'Explore') ||
+          (this.$q.screen.lt.md && this.showPanel)
+        )
           return 'opacity: 1; pointer-events: all';
         else return 'opacity: 0';
       }
@@ -169,8 +177,8 @@ export default {
     .default-overlay {
       background: linear-gradient(
         rgba(0, 0, 0, 0.68),
-        rgba(0, 0, 0, 0.6) 82px,
-        transparent 128px,
+        rgba(0, 0, 0, 0.6) 42px,
+        transparent 112px,
         transparent
       );
     }
@@ -205,6 +213,7 @@ export default {
     position: absolute;
     height: 100%;
     width: 100%;
+
     pointer-events: none;
   }
   .overlay {
@@ -212,10 +221,16 @@ export default {
     position: absolute;
     height: 100%;
     width: 100%;
+    opacity: 0;
     pointer-events: none;
     //will-change: auto;
     transition: opacity 0.3s;
     cursor: grab;
+    @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+      -webkit-backface-visibility: hidden;
+      -webkit-transform: translate3d(0, 0, 0);
+      // translate3d is a hack for safari to force gpu rendering of blur()
+    }
   }
 
   .menubar {

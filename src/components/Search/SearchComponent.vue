@@ -5,16 +5,12 @@
       @click="() => (showSearch = !showSearch)"
     >
       <div class="controls-wrapper-inner">
-        <ControlsComponent />
-        <!--
-        <div class="location-button-wrapper q-mr-sm">
+        <div class="location-button-wrapper q-mr-sm" v-if="$q.screen.gt.xs">
           <q-btn
-            :class="{ 'show-location': sidebarPanel === 'explore' }"
             flat
             round
-            class="q-pa-sm q-ml-md location"
+            class="q-pa-sm q-ml-md location t1"
             @click.stop="() => clickLocation()"
-            :color="iconColor"
           >
             <template v-slot:default>
               <div v-if="!userLocationLoading" class="flex">
@@ -34,9 +30,23 @@
                   name="mdi-crosshairs-gps"
                 />
               </div>
+              <!--
+              <q-tooltip
+                style="font-size: 1em !important"
+                :content-class="
+                  $q.dark.isActive
+                    ? 'bg-black text-white'
+                    : 'bg-white text-black'
+                "
+                :offset="[10, 10]"
+              >
+                Near you
+              </q-tooltip>-->
             </template>
           </q-btn>
-          -->
+        </div>
+        <ControlsComponent />
+
         <!--
           <q-icon
             flat
@@ -97,6 +107,7 @@ export default {
 
     clickLocation() {
       this.getFineLocation();
+      this.sidebarPanel = 'nearby';
     },
     /*
     showDialog() {
@@ -129,27 +140,26 @@ export default {
       'userLocationCity',
       'userLocation',
     ]),
-    iconColor() {
-      if (this.showPanel || this.$q.dark.isActive) {
-        return 'grey';
-      } else {
-        return 'white';
-      }
-    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .body--light {
-  .location-button-wrapper {
-    background: white;
-    color: $t-1;
+  .search-component {
+    .controls-wrapper {
+      .controls-wrapper-inner {
+        .location-button-wrapper {
+          background: white;
+          color: $t-1;
+        }
+      }
+    }
   }
   .controls-wrapper-inner {
-    box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+    //
 
-    background: white;
+    background: #fafafa;
     color: $t-1;
     border: 1px solid rgba(0, 0, 0, 0.1);
   }
@@ -161,7 +171,7 @@ export default {
 .body--dark {
   .controls-wrapper-inner {
     color: $ti-1;
-    background: $bi-1;
+    background: $bi-2;
 
     //background: rgba(0, 0, 0, 0.5);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -173,7 +183,7 @@ export default {
 .search-component {
   z-index: 4000;
   position: absolute;
-  top: 16px;
+  top: 12px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -194,10 +204,11 @@ export default {
       height: 100%;
       border-radius: 48px;
       backdrop-filter: blur(10px);
+      position: relative;
 
       .location-button-wrapper {
         position: absolute;
-        right: -64px;
+        left: -80px;
         top: 4px;
         border-radius: 24px;
         background: transparent;
@@ -215,7 +226,6 @@ export default {
 
 @media only screen and (min-width: 1921px) {
   .search-component {
-    top: 32px;
   }
 }
 
@@ -224,7 +234,6 @@ export default {
     width: 100%;
     display: flex;
     justify-content: center;
-    top: 72px;
     left: unset;
     padding: 0 16px;
   }
@@ -232,15 +241,19 @@ export default {
 
 @media only screen and (max-width: 600px) {
   .body--light {
+    .controls-wrapper-inner {
+      box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+    }
   }
   .body--dark {
     .controls-wrapper-inner {
       border: 1px solid $bi-3;
       background: $bi-2;
+      box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.4);
     }
   }
   .search-component {
-    top: 68px;
+    top: 72px;
     .controls-wrapper {
       .controls-wrapper-inner {
       }

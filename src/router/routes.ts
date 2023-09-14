@@ -1,5 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
 import EventPage from 'src/components/EventPage/EventPage.vue';
+import Login from 'src/components/Auth/Login.vue';
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -36,7 +37,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/login',
         name: 'Login',
-        component: () => import('src/components/Auth/Login.vue'),
+        component: Login,
 
         meta: {
           auth: false,

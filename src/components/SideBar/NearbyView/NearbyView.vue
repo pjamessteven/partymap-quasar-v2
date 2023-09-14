@@ -28,76 +28,6 @@
             >
               <div class="scroll-stuff flex column">
                 <div
-                  v-if="$q.screen.gt.xs && false"
-                  class="q-px-md q-pt-md flex items-center justify-between"
-                >
-                  <div class="flex items-center">
-                    <q-btn
-                      flat
-                      class="q-pa-md q-mr-xs"
-                      @click.stop="() => getFineLocation()"
-                    >
-                      <template v-slot:default>
-                        <div v-if="!userLocationLoading" class="flex">
-                          <q-icon
-                            name="mdi-crosshairs-gps"
-                            class=""
-                            v-if="fineLocation"
-                          />
-                          <q-icon name="mdi-crosshairs-off" class="" v-else />
-                        </div>
-                        <div v-else style="position: relative" class="flex">
-                          <q-icon style="z-index: 1" name="mdi-crosshairs" />
-                          <q-icon
-                            style="z-index: 2; left: 0px"
-                            class="animated infinite flash slowest absolute"
-                            name="mdi-crosshairs-gps"
-                          />
-                        </div>
-                        <q-tooltip
-                          style="font-size: 1em !important"
-                          :content-class="
-                            $q.dark.isActive
-                              ? 'bg-black text-white'
-                              : 'bg-white text-black'
-                          "
-                          :offset="[10, 10]"
-                        >
-                          <span v-if="!fineLocation">
-                            This rough location is based on your IP address.
-                            Click to improve your location.
-                          </span>
-                          <span v-else>
-                            {{ $t('landing_page.improve_location') }}
-                          </span>
-                        </q-tooltip>
-                      </template>
-                    </q-btn>
-                    <span
-                      v-if="userLocation"
-                      class="ellipsis q-mr-sm text-h5 inter bolder"
-                    >
-                      Near&nbsp;{{ userLocationCity
-                      }}<span v-if="$q.screen.gt.xs"
-                        >, {{ userLocationCountry }}</span
-                      >
-                    </span>
-                    <span class="ellipsis text-h5 inter bolder" v-else
-                      >Finding your location...
-                    </span>
-                  </div>
-                  <!--
-                  <q-icon
-                    flat
-                    class="q-mr-md"
-                    size="2rem"
-                    :class="{ 'rotate-180': showPanel }"
-                    name="mdi-chevron-up"
-                  />
-                  -->
-                </div>
-                <div
-                  v-if="$q.screen.lt.sm || true"
                   class="flex column mobile-location-header q-mt-md"
                   style="width: 100%"
                   :class="{
@@ -122,11 +52,12 @@
                         >, {{ userLocationCountry }}</span
                       >
                     </span>
-                    <span class="ellipsis text-h4 inter bolder" v-else
+                    <span class="ellipsis text-h4 inter bolder t4" v-else
                       >...
                     </span>
                     <q-btn
                       flat
+                      v-if="$q.screen.lt.sm"
                       class="q-px-md"
                       :class="{ 'q-ml-md': $q.screen.lt.sm }"
                       @click.stop="() => getFineLocation()"
@@ -166,6 +97,22 @@
                           </span>
                         </q-tooltip>
                       </template>
+                    </q-btn>
+                    <q-btn
+                      v-else
+                      @click.stop="() => (sidebarPanel = 'explore')"
+                      flat
+                      no-caps
+                      class="nav-button q-mr-sm q-px-md q-py-sm"
+                    >
+                      Explore the map
+
+                      <q-icon
+                        name="mdi-chevron-right"
+                        size="1rem"
+                        class="q-ml-md"
+                        :class="{ 'q-ml-md': $q.screen.gt.xs }"
+                      />
                     </q-btn>
                   </div>
                 </div>
@@ -267,9 +214,12 @@
                       :class="{ 'q-ml-md': $q.screen.gt.xs }"
                     />
                   </div>
-                  <div
+                  -->
+                  <q-btn
                     @click.stop="() => (sidebarPanel = 'explore')"
-                    class="nav-button flex items-center justify-between q-mr-sm q-px-md q-py-sm"
+                    flat
+                    no-caps
+                    class="nav-button q-mr-sm q-px-md q-py-sm"
                   >
                     Explore the map &nbsp;&#128527;
 
@@ -279,9 +229,9 @@
                       class="q-ml-md"
                       :class="{ 'q-ml-md': $q.screen.gt.xs }"
                     />
-                  </div>
-                  -->
+                  </q-btn>
                 </div>
+
                 <div class="q-px-lg" v-if="$q.screen.gt.xs && false">
                   <q-separator />
                 </div>
@@ -1201,9 +1151,7 @@ export default {
       }
       .location-header {
         position: sticky;
-
         top: -1px;
-
         z-index: 1000;
         width: 100%;
 

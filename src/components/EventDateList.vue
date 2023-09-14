@@ -24,7 +24,7 @@
           class="ed-card-grid q-pb-sm"
           :style="gridColumns"
           :class="{
-            'q-px-md ': $q.screen.gt.xs,
+            'q-px-md q-mb-lg': $q.screen.gt.xs,
             'q-px-sm  q-mt-': $q.screen.lt.sm,
           }"
         >

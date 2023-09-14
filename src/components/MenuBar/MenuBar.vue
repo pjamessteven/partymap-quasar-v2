@@ -8,7 +8,7 @@
     />
     <div
       class="tab-wrapper"
-      v-if="$route.name === 'Explore' && $q.screen.gt.xs"
+      v-if="$route.name === 'Explore' && $q.screen.gt.xs && false"
     >
        
       <q-tabs
@@ -34,7 +34,9 @@
           name="nearby"
           content-class="tab"
           :ripple="false"
-          :icon="sidebarPanel === 'nearby' ? 'mdi-home' : 'mdi-home-outline'"
+          :icon="
+            sidebarPanel === 'nearby' ? 'mdi-home-outline' : 'mdi-home-outline'
+          "
         />
 
         <q-tab
@@ -177,20 +179,12 @@ export default {
         (this.$q.screen.lt.sm && this.$route.name !== 'Explore')
       ) {
         return 'opacity: 1;  border: none!important';
-      } else if (this.$route.name === 'Explore') {
+      } else if (this.$route.name === 'Explore' && this.$q.screen.gt.xs) {
         // explore view
         if (this.$q.dark.isActive) {
-          if (this.showPanel) {
-            return 'background: #121212;';
-          } else {
-            return 'background: rgba(255,255,255,0.05)';
-          }
+          return 'background: black';
         } else {
-          if (this.showPanel) {
-            return 'background: #f5f5f5;';
-          } else {
-            return 'background: rgba(255,255,255,0.1)';
-          }
+          return 'background: white';
         }
       } else return 'opacity: 0';
     },
@@ -200,9 +194,13 @@ export default {
           this.$q.screen.gt.xs &&
           this.menubarOpacity === 1 &&
           !this.$q.dark.isActive) ||
-        (this.showPanel &&
-          this.$route.name === 'Explore' &&
-          !this.$q.dark.isActive)
+        (this.$route.name === 'Explore' &&
+          !this.$q.dark.isActive &&
+          this.$q.screen.gt.xs) ||
+        (this.$route.name === 'Explore' &&
+          !this.$q.dark.isActive &&
+          this.$q.screen.lt.sm &&
+          this.showPanel)
       ) {
         return 'black';
       } else if (
@@ -225,6 +223,8 @@ export default {
   .menubar {
     .menubar-background {
       background: black;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
       //
     }
     .tab-wrapper {
@@ -256,6 +256,9 @@ export default {
   .menubar {
     .menubar-background {
       background: white;
+      //border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      //box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+      box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
     }
     .tab-wrapper {
       :deep(.q-tabs) {
@@ -297,7 +300,7 @@ export default {
 
 .menubar {
   //transition: opacity 0.15s;
-  height: 82px;
+  height: 72px;
   position: relative;
   transition: height 0.3s ease;
 
@@ -319,7 +322,7 @@ export default {
     position: absolute;
     left: 155px;
     top: 0px;
-    height: 82px;
+    height: 72px;
     display: flex;
     align-items: center;
 
