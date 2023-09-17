@@ -396,12 +396,7 @@ export default {
         this.getInitialList();
       }
     },
-    currentUser() {
-      // load favorites after user logs in
-      if (this.sidebarPanel === 'favorites') {
-        this.getInitialList();
-      }
-    },
+
     controlDateRange: {
       handler() {
         this.getInitialList();

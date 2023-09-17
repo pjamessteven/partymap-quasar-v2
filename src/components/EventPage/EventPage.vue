@@ -747,8 +747,7 @@ export default {
 
         /* disabled this behavior because it's too confusing
         if (
-          this.sidebarPanel !== 'explore' &&
-          this.sidebarPanel !== 'favorites'
+          this.sidebarPanel !== 'explore'
         ) {
           this.sidebarPanel = 'explore';
         } */

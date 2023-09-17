@@ -122,7 +122,7 @@ const routes: RouteRecordRaw[] = [
       },
 
       {
-        path: '/user/:username',
+        path: '/user/:username?',
         name: 'UserPage',
         component: () => import('src/components/UserPage/UserPage.vue'),
         props: true,

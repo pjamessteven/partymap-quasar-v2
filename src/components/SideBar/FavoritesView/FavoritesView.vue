@@ -14,6 +14,7 @@
         class="flex column grow no-wrap"
         :class="{ 'q-mx-sm': $q.screen.lt.sm, 'q-mx-sm': $q.screen.gt.xs }"
       >
+        <!--
         <div
           class="flex row no-wrap items-center justify-between q-pa-md view-options-absolute"
           v-if="$q.screen.gt.xs"
@@ -21,7 +22,7 @@
           <div class="text-h5 inter bolder q-my-sm">Your Calendar</div>
         </div>
         <q-separator />
-
+-->
         <q-scroll-area
           @wheel.stop
           vertical
@@ -31,7 +32,7 @@
             right: $q.screen.gt.xs ? '0px' : '-16px',
             width: $q.screen.gt.xs ? '4px' : '4px',
           }"
-          class="scroll-area flex grow"
+          class="scroll-area flex grow q-mt-md"
           :content-style="{
             'touch-action': showPanel ? 'auto' : 'auto',
           }"

@@ -6,65 +6,7 @@
       :color="iconColor"
       v-if="!previousRouteName || this.$route.name === 'Explore'"
     />
-    <div
-      class="tab-wrapper"
-      v-if="$route.name === 'Explore' && $q.screen.gt.xs && false"
-    >
-       
-      <q-tabs
-        class="tabs inter bolder"
-        :class="{
-          'light-button': iconColor === 'white',
-        }"
-        @click.stop
-        :content-class="$q.screen.gt.lg ? '' : ''"
-        v-model="sidebarPanel"
-        no-caps
-        :active-class="
-          $q.screen.lt.sm
-            ? $route.name === 'Explore'
-              ? undefined
-              : 'inactive-tab'
-            : 'active-tab'
-        "
-        indicator-color="transparent"
-      >
-        <q-tab
-          key="1"
-          name="nearby"
-          content-class="tab"
-          :ripple="false"
-          :icon="
-            sidebarPanel === 'nearby' ? 'mdi-home-outline' : 'mdi-home-outline'
-          "
-        />
 
-        <q-tab
-          key="2"
-          name="explore"
-          @click="() => (showPanel = false)"
-          :icon="
-            sidebarPanel === 'explore'
-              ? 'mdi-map-search'
-              : 'mdi-map-search-outline'
-          "
-          content-class="tab"
-          :ripple="false"
-        />
-
-        <q-tab
-          key="3"
-          name="favorites"
-          content-class="tab"
-          :icon="
-            sidebarPanel === 'favorites'
-              ? 'mdi-calendar-star'
-              : 'mdi-calendar-star-outline'
-          "
-          :ripple="false"
-        />
-      </q-tabs>
-    </div>
     <transition
       appear
       enter-active-class="animated fadeIn slow"

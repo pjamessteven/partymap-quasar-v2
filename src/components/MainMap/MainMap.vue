@@ -307,10 +307,7 @@ export default {
       if (!this.preventMapZoom) {
         this.showPanel = false;
 
-        if (
-          this.sidebarPanel !== 'explore' &&
-          this.sidebarPanel !== 'favorites'
-        ) {
+        if (this.sidebarPanel !== 'explore') {
           this.sidebarPanel = 'explore';
         }
         return false;

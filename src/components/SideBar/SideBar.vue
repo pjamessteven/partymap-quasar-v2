@@ -9,7 +9,6 @@
         shadow: panelHiddenDelayed && $q.screen.gt.xs,
         'sidebar-mobile-expanded': showPanel,
         'sidebar-mobile-nearby': sidebarPanel === 'nearby' && $q.screen.gt.xs,
-        'sidebar-mobile-expanded-fullscreen': sidebarPanel === 'favorites',
         'sidebar-mobile-hidden': $q.screen.lt.sm && $route.name === 'EventPage',
       }"
     >
@@ -53,11 +52,6 @@
             v-if="sidebarPanel === 'explore'"
           />
 
-          <FavoritesView
-            style="height: 100%; width: 100%"
-            v-if="sidebarPanel === 'favorites'"
-          />
-
           <SearchView
             style="height: 100%; width: 100%"
             v-show="sidebarPanel === 'search'"
@@ -71,7 +65,6 @@
 <script>
 import ExploreView from './ExploreView/ExploreView.vue';
 import SearchView from './SearchView/SearchView.vue';
-import FavoritesView from './FavoritesView/FavoritesView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
 import NavigationBar from 'components/NavigationBar.vue';
 import MobileSwipeHandle from '../MobileSwipeHandle.vue';
@@ -89,7 +82,6 @@ export default {
     SearchView,
     NavigationBar,
     NearbyView,
-    FavoritesView,
     //MobileSwipeHandle,
   },
   async mounted() {
@@ -140,11 +132,7 @@ export default {
             this.preventMapZoom = false;
           }, 1000);
 
-          if (
-            this.sidebarPanel !== 'explore' &&
-            this.sidebarPanel !== 'favorites' &&
-            this.$q.screen.lt.sm
-          ) {
+          if (this.sidebarPanel !== 'explore' && this.$q.screen.lt.sm) {
             this.sidebarPanel = 'explore';
           }
           return false;
@@ -158,11 +146,7 @@ export default {
       if (info.direction === 'down' && this.showPanel) {
         this.showPanel = false;
 
-        if (
-          this.sidebarPanel !== 'explore' &&
-          this.sidebarPanel !== 'favorites' &&
-          this.$q.screen.lt.sm
-        ) {
+        if (this.sidebarPanel !== 'explore' && this.$q.screen.lt.sm) {
           this.sidebarPanel = 'explore';
         }
       } else {
@@ -172,10 +156,7 @@ export default {
     togglePanel(event) {
       this.showPanel = !this.showPanel;
 
-      if (
-        this.sidebarPanel !== 'explore' &&
-        this.sidebarPanel !== 'favorites'
-      ) {
+      if (this.sidebarPanel !== 'explore') {
         this.sidebarPanel = 'explore';
       }
     },
@@ -247,18 +228,6 @@ export default {
           this.showPanel = false;
           this.enablePanelSwipeDown = true;
         }
-      }
-      if (to === 'favorites' || to === 'profile') {
-        if (this.currentUser) {
-          this.controlFavorites = true;
-          this.showPanel = true;
-        } else {
-          this.sidebarPanel = from;
-
-          this.$router.push({ name: 'Login' });
-        }
-      } else if (from === 'favorites') {
-        this.controlFavorites = false;
       }
     },
   },
@@ -562,14 +531,14 @@ export default {
 @media only screen and (min-width: 1024px) {
   .sidebar-wrapper {
     .sidebar {
-      padding-bottom: 96px;
+      padding-bottom: 88px;
       width: 66vw;
       min-width: 920px;
       max-width: 1024px;
       .sidebar-content {
       }
       &.sidebar-mobile-expanded {
-        transform: translate3d(0, 96px, 0);
+        transform: translate3d(0, 88px, 0);
       }
     }
   }
@@ -724,20 +693,7 @@ export default {
         transform: translate3d(0, 120px, 0);
         //padding-bottom: 128px;
       }
-      &.sidebar-mobile-expanded-fullscreen {
-        transform: translate3d(0, 0px, 0);
-        padding-bottom: 68px;
-        border-top-left-radius: 0px;
-        border-top-right-radius: 0px;
-        .sidebar-content {
-          border-top-left-radius: 0px;
-          border-top-right-radius: 0px;
-          .sidebar-content-inner {
-            border-top-left-radius: 0px;
-            border-top-right-radius: 0px;
-          }
-        }
-      }
+
       &.sidebar-mobile-hidden {
         transform: translate3d(0, calc(100%), 0);
       }

@@ -61,18 +61,43 @@
       </div>
       <!-- <div class="separator vertical"></div>-->
     </div>
-    <q-btn flat class="profile-button" @click="sidebarPanel = 'favorites'">
-      <div class="profile-button-inner">
-        <q-icon name="mdi-calendar-star" class="q-mr-md q-ml-md t2" />
-        <q-avatar
-          color="blue"
-          text-color="white"
-          icon="mdi-account-circle"
-          font-size="14px"
-          size="36px"
-        />
-      </div>
-    </q-btn>
+    <router-link
+      v-if="$q.screen.gt.xs"
+      class="flex link-hover"
+      :to="
+        currentUser
+          ? {
+              name: 'UserPage',
+              params: { username: currentUser.username },
+            }
+          : { path: '/login', query: { from: $route.path } }
+      "
+    >
+      <q-btn
+        flat
+        no-caps
+        class="profile-button t2"
+        :class="{
+          'light-button': color === 'white',
+        }"
+      >
+        <div class="profile-button-inner flex row items-center">
+          <!--
+          <q-icon name="mdi-calendar-star" class="q-mr-md q-ml-md t2" />
+          -->
+          <div class="q-px-md q-pl-md" v-if="!currentUser">Sign in</div>
+          <div class="q-px-md q-pl-md" v-else>@{{ currentUser.username }}</div>
+          <q-avatar
+            :color="color"
+            class="o-080"
+            :text-color="color === 'white' ? 'black' : 'white'"
+            icon="mdi-account-circle"
+            font-size="14px"
+            size="36px"
+          />
+        </div>
+      </q-btn>
+    </router-link>
     <q-btn
       class="menubar-button"
       icon="mdi-menu"
@@ -250,6 +275,22 @@ export default {
       &:hover {
         .profile-button-inner {
           background: $b-3;
+        }
+      }
+
+      &.light-button {
+        .profile-button-inner {
+          background: transparent;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+
+          .q-icon {
+            color: $ti-1;
+          }
+        }
+        &:hover {
+          .profile-button-inner {
+            background: $bi-3;
+          }
         }
       }
     }

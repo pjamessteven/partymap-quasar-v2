@@ -61,7 +61,7 @@ const initMap = () => {
 
   map.value.on('mousedown', () => {
     // switch to explore view
-    if (this.sidebarPanel !== 'explore' && this.sidebarPanel !== 'favorites') {
+    if (this.sidebarPanel !== 'explore') {
       this.sidebarPanel = 'explore';
     }
     this.showPanel = false;

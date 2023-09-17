@@ -17,7 +17,7 @@
                 <q-icon
                   name="mdi-crosshairs-gps"
                   class=""
-                  v-if="fineLocation && sidebarPanel === 'nearby'"
+                  v-if="(fineLocation && sidebarPanel === 'nearby') || true"
                   size="1.3rem"
                 />
                 <q-icon name="mdi-crosshairs" class="" v-else size="1.3rem" />
@@ -243,6 +243,7 @@ export default {
   .body--light {
     .controls-wrapper-inner {
       box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(0, 0, 0, 0.05);
     }
   }
   .body--dark {

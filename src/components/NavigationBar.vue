@@ -119,17 +119,25 @@
         :ripple="false"
       />
 
-      <q-tab
+      <q-route-tab
+        name="'none'"
         key="3"
-        name="favorites"
         :icon="
-          sidebarPanel === 'favorites'
+          $route.name === 'UserPage'
             ? 'mdi-calendar-star'
             : 'mdi-calendar-star-outline'
         "
         :label="$q.screen.gt.xs ? undefined : 'Calendar'"
         content-class="tab"
         :ripple="false"
+        :to="
+          currentUser
+            ? {
+                name: 'UserPage',
+                params: { username: currentUser.username },
+              }
+            : { path: '/login', query: { from: $route.path } }
+        "
       />
       <!--
       <q-tab

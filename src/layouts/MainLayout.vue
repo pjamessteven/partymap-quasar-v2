@@ -70,7 +70,12 @@
     </router-view>
     <NavigationBar
       class="nav-bar"
-      v-show="$q.screen.lt && $route.name === 'Explore'"
+      v-show="
+        $q.screen.lt.sm &&
+        ($route.name === 'Explore' ||
+          $route.name === 'UserPage' ||
+          $route.meta.mapOverlay)
+      "
     />
   </div>
 </template>
