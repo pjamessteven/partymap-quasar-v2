@@ -5,7 +5,11 @@
       @click="() => (showSearch = !showSearch)"
     >
       <div class="controls-wrapper-inner">
-        <div class="location-button-wrapper q-mr-sm" v-if="$q.screen.gt.xs">
+        <div
+          class="location-button-wrapper q-mr-sm"
+          :class="showPanel ? 'show-panel' : ''"
+          v-if="$q.screen.gt.xs"
+        >
           <q-btn
             flat
             round
@@ -150,8 +154,16 @@ export default {
     .controls-wrapper {
       .controls-wrapper-inner {
         .location-button-wrapper {
-          background: white;
-          color: $t-1;
+          //background: white;
+          color: $ti-1;
+          .q-btn {
+            color: $ti-1;
+          }
+          &.show-panel {
+            .q-btn {
+              color: $t-1;
+            }
+          }
         }
       }
     }

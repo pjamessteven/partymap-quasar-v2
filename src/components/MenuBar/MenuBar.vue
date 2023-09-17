@@ -125,7 +125,11 @@ export default {
         (this.$q.screen.lt.sm && this.$route.name !== 'Explore')
       ) {
         return 'opacity: 1;  border: none!important';
-      } else if (this.$route.name === 'Explore' && this.$q.screen.gt.xs) {
+      } else if (
+        this.$route.name === 'Explore' &&
+        this.$q.screen.gt.xs &&
+        this.showPanel
+      ) {
         // explore view
         if (this.$q.dark.isActive) {
           return 'background: black';
@@ -142,7 +146,8 @@ export default {
           !this.$q.dark.isActive) ||
         (this.$route.name === 'Explore' &&
           !this.$q.dark.isActive &&
-          this.$q.screen.gt.xs) ||
+          this.$q.screen.gt.xs &&
+          this.showPanel) ||
         (this.$route.name === 'Explore' &&
           !this.$q.dark.isActive &&
           this.$q.screen.lt.sm &&
