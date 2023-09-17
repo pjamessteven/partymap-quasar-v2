@@ -33,7 +33,6 @@ const routes: RouteRecordRaw[] = [
           mapOverlay: false,
         },
       },
-
       {
         path: '/login',
         name: 'Login',
@@ -42,7 +41,6 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: true,
-          noBackNavigation: true,
         },
       },
       {
@@ -130,6 +128,7 @@ const routes: RouteRecordRaw[] = [
           auth: false,
           mapOverlay: false,
           friendlyName: 'User page',
+          noBackNavigation: true,
         },
       },
       {

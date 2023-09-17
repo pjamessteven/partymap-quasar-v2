@@ -14,7 +14,11 @@
           <div
             v-if="scrollPercentage === 0"
             class="clickable-background"
-            @click="$router.push({ name: 'Explore' })"
+            @click="
+              routerHistory.length > 0
+                ? $router.go(-1)
+                : $router.push({ query: { view: 'explore' }, name: 'Explore' })
+            "
           />
           <div
             ref="contentcard"
@@ -906,6 +910,7 @@ export default {
   },
   computed: {
     ...mapWritableState(useMainStore, ['menubarOpacity', 'overlayOpacity']),
+    ...mapState(useMainStore, ['routerHistory']),
     ...mapWritableState(useMapStore, ['focusMarker', 'preventMapZoom']),
     ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
     ...mapState(useEventStore, ['loadingEvent', 'selectedEventDate']),

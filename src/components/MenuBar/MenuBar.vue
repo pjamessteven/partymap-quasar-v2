@@ -63,15 +63,19 @@ export default {
           return 'Back to results';
         } else if (this.sidebarPanel === 'nearby') {
           return 'Back home';
-        } else if (this.sidebarPanel === 'favorites') {
-          return 'Back to your events';
+        } else if (this.sidebarPanel === 'profile') {
+          return 'Back';
         } else return null;
       } else if (
         previousRoute.name === 'EventPage' ||
         previousRoute.name === 'ArtistPage'
       ) {
         return 'Back to ' + previousRoute.query.name.replace(/_/g, ' ');
-      } else return previousRoute.meta['friendlyName'];
+      } else if (previousRoute?.meta['friendlyName']) {
+        return previousRoute.meta['friendlyName'];
+      } else {
+        return 'Back';
+      }
     },
   },
   computed: {

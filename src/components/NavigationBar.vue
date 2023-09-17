@@ -77,27 +77,32 @@
         :class="{ 'q-ml-md': $q.screen.gt.xs }"
       />
     </div>
+
     <q-tabs
       v-if="$q.screen.lt.sm"
       @click.stop
-      v-model="sidebarPanel"
+      :model-value="sidebarPanel"
+      @update:model-value="updateNav"
       no-caps
       :indicator-color="
         $q.screen.lt.sm
-          ? $route.name === 'Explore'
+          ? $route.name === 'Explore' || $route.name === 'UserPage'
             ? undefined
             : 'transparent'
           : 'transparent'
       "
       :active-class="
         $q.screen.lt.sm
-          ? $route.name === 'Explore'
+          ? $route.name === 'Explore' || $route.name === 'UserPage'
             ? undefined
             : 'inactive-tab'
           : 'active-tab'
       "
     >
-      <q-tab
+      <q-route-tab
+        :to="{ name: 'Explore' }"
+        exact
+        replace
         key="1"
         name="nearby"
         content-class="tab"
@@ -106,7 +111,10 @@
         :icon="sidebarPanel === 'nearby' ? 'mdi-home' : 'mdi-home-outline'"
       />
 
-      <q-tab
+      <q-route-tab
+        :to="{ query: { view: 'explore' }, name: 'Explore' }"
+        exact
+        replace
         key="2"
         name="explore"
         :icon="
@@ -120,7 +128,7 @@
       />
 
       <q-route-tab
-        name="'none'"
+        name="profile"
         key="3"
         :icon="
           $route.name === 'UserPage'
@@ -138,7 +146,9 @@
               }
             : { path: '/login', query: { from: $route.path } }
         "
+        exact
       />
+
       <!--
       <q-tab
         key="4"
@@ -176,6 +186,13 @@ export default {
       this.getFineLocation();
       this.sidebarPanel = 'nearby';
       this.showPanel = true;
+    },
+    updateNav(val) {
+      // sidebarpanel should always be set to something
+      // if using vmodel it will change to null when route changes
+      if (val) {
+        this.sidebarPanel = val;
+      }
     },
   },
 

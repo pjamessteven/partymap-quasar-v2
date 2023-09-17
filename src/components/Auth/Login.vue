@@ -6,7 +6,7 @@
         :class="$q.screen.gt.xs ? 'q-pt-xl' : ''"
       >
         <div class="flex justify-center items-center q-mt-md q-mb-xl">
-          <div v-if="$q.screen.gt.sm">
+          <div>
             <img
               style="height: 30px; width: auto"
               src="~assets/partymap-logo-light-sm.png"

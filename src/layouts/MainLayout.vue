@@ -72,9 +72,7 @@
       class="nav-bar"
       v-show="
         $q.screen.lt.sm &&
-        ($route.name === 'Explore' ||
-          $route.name === 'UserPage' ||
-          $route.meta.mapOverlay)
+        ($route.name === 'Explore' || $route.name === 'UserPage')
       "
     />
   </div>

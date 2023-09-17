@@ -6,7 +6,7 @@
       :altLabel="computedTotalResultMessage"
     />
 
-    <div v-if="groupByMonth && !loading">
+    <div v-if="groupByMonth">
       <div
         v-for="yearMonth in Object.keys(eventDatesGroupedByMonth).sort()"
         :key="yearMonth"
@@ -38,7 +38,7 @@
         </div>
       </div>
     </div>
-    <div v-else-if="!loading">
+    <div v-else>
       <div
         class="ed-card-grid q-pb-sm q-mt-xs"
         :style="gridColumns"

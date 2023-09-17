@@ -5,6 +5,7 @@
       class="total-result-header"
       :altLabel="computedTotalResultMessage"
     />
+
     <div v-if="groupByMonth">
       <div
         v-for="yearMonth in Object.keys(eventDatesGroupedByMonth).sort()"

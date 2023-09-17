@@ -2443,10 +2443,10 @@
   dependencies:
     "side-channel" "^1.0.4"
 
-"quasar@^2.6.0", "quasar@^2.8.0":
-  "integrity" "sha512-rX4Rwp9wlCeB9A6RQUxEx/q84LMBVVm6WTECkoq8r/+NBgl9aHVexzZQBnRn2i61D0BJpdX5VcnMxAnJkTx/kA=="
-  "resolved" "https://registry.npmjs.org/quasar/-/quasar-2.11.5.tgz"
-  "version" "2.11.5"
+"quasar@^2.12.7", "quasar@^2.8.0":
+  "integrity" "sha512-JF2rb8u1RcXPpiaDh/RnO/5rFx7kABDMov0WnRI3acJ5s4TD2FyPrCmS7VgleLubDYRSsSAontJ6EijGz4BHig=="
+  "resolved" "https://registry.npmjs.org/quasar/-/quasar-2.12.7.tgz"
+  "version" "2.12.7"
 
 "queue-microtask@^1.2.2":
   "integrity" "sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A=="

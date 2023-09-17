@@ -10,7 +10,6 @@
       v-if="$q.screen.gt.xs && false"
     >
       <div>Explore Events</div>
-
       <div class="flex items-center q-my-sm show-map">
         <q-icon
           flat
@@ -365,7 +364,7 @@ export default {
       } else {
         this.enablePanelSwipeDown = false;
       }
-      if (info.verticalPercentage === 1) {
+      if (info.verticalPercentage > 0.99) {
         // reached bottom
         this.loadMore();
       }

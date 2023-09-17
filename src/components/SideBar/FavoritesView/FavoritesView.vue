@@ -280,7 +280,6 @@
                   />
                 </div>
                 -->
-
                 <transition appear enter-active-class="animated fadeIn slower">
                   <EventDateList
                     v-if="
@@ -290,7 +289,6 @@
                     :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
                     :eventDates="userEventDates"
                     :hasNext="userEventDatesHasNext"
-                    :loading="userEventDatesLoading"
                   />
                 </transition>
                 <transition appear enter-active-class="animated fadeIn slower">
@@ -302,7 +300,6 @@
                     :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
                     :eventDates="userEventDates"
                     :hasNext="userEventDatesHasNext"
-                    :loading="userEventDatesLoading"
                   />
                 </transition>
               </div>
@@ -606,13 +603,13 @@ export default {
 
 @media only screen and (max-width: 600px) {
   .event-date-center {
-    margin-top: 74px;
+    //margin-top: 74px;
     align-items: start;
   }
 
   .event-list-vertical {
-    padding-top: 64px !important;
-
+    //padding-top: 64px !important;
+    padding-bottom: 68px;
     .event-list-inner {
       .artists-component {
         height: 178px;

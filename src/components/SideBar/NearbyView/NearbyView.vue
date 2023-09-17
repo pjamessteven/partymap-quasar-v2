@@ -193,14 +193,13 @@
                   </div>
                 </div>
                 <div
-                  v-if="$q.screen.gt.xs && false"
+                  v-if="$q.screen.lt.sm && false"
                   class="nav-button-container flex row no-wrap q-px-md t1 q-mt-md"
                   :class="{
                     'q-mb-sm': $q.screen.lt.sm,
                     'q-mb-sm text-large inter bold q-px-lg ': $q.screen.gt.xs,
                   }"
                 >
-                  <!--
                   <div
                     flat
                     @click.stop="showAddEventDialog()"
@@ -214,21 +213,21 @@
                       :class="{ 'q-ml-md': $q.screen.gt.xs }"
                     />
                   </div>
-                  -->
+
                   <q-btn
                     @click.stop="() => (sidebarPanel = 'explore')"
                     flat
                     no-caps
-                    class="nav-button q-mr-sm q-px-md q-py-sm"
+                    class="nav-button q-px-md q-py-sm"
                   >
-                    Explore the map &nbsp;&#128527;
-
-                    <q-icon
-                      name="mdi-chevron-right"
-                      size="1rem"
-                      class="q-ml-md"
-                      :class="{ 'q-ml-md': $q.screen.gt.xs }"
-                    />
+                    <div class="flex justify-between items-center grow">
+                      <span> Explore the map! </span>
+                      <q-icon
+                        name="mdi-chevron-right"
+                        size="1rem"
+                        class="q-ml-md"
+                      />
+                    </div>
                   </q-btn>
                 </div>
 
