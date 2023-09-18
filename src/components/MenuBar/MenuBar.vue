@@ -6,7 +6,55 @@
       :color="iconColor"
       v-if="!previousRouteName || this.$route.name === 'Explore'"
     />
+    <div
+      class="tab-wrapper"
+      v-if="$route.name === 'Explore' && $q.screen.gt.xs"
+    >
+       
+      <q-tabs
+        class="tabs inter bolder"
+        :class="{
+          'light-button': iconColor === 'white',
+        }"
+        @click.stop
+        :content-class="$q.screen.gt.lg ? '' : ''"
+        v-model="sidebarPanel"
+        no-caps
+        :active-class="
+          $q.screen.lt.sm
+            ? $route.name === 'Explore'
+              ? undefined
+              : 'inactive-tab'
+            : 'active-tab'
+        "
+        indicator-color="transparent"
+      >
+        <q-tab
+          key="1"
+          name="nearby"
+          content-class="tab"
+          :label="$q.screen.gt.xs && false ? undefined : 'Nearby'"
+          :ripple="false"
+        />
 
+        <q-tab
+          key="2"
+          name="explore"
+          @click="() => (showPanel = false)"
+          :label="$q.screen.gt.xs && false ? undefined : 'Explore'"
+          content-class="tab"
+          :ripple="false"
+        />
+
+        <q-tab
+          key="3"
+          name="favorites"
+          :label="$q.screen.gt.xs && false ? undefined : 'Browse'"
+          content-class="tab"
+          :ripple="false"
+        />
+      </q-tabs>
+    </div>
     <transition
       appear
       enter-active-class="animated fadeIn slow"
@@ -283,14 +331,12 @@ export default {
         //padding-top: 4px;
         padding: 8px;
         padding-bottom: 12px;
-        font-size: 28px;
         margin: 4px;
         //margin: 4px 4px;
         //border-radius: 64px;
         transition: all 0.3s;
         color: white;
         background: none !important;
-        font-size: 32px;
         opacity: 1 !important;
         border: 1px solid transparent;
         $duration: 0.4s;
@@ -302,7 +348,7 @@ export default {
         &:after {
           content: '';
           position: absolute;
-          bottom: -4px;
+          bottom: 4px;
           left: 0;
           right: 0;
           height: 1px;
@@ -320,13 +366,14 @@ export default {
         }
 
         .q-tab__icon {
-          font-size: 26px;
+          font-size: 1.2rem;
         }
         .q-focus-helper {
           display: none;
         }
         .q-tab__label {
           font-weight: 500 !important;
+          font-size: small;
         }
         &.q-tab--active {
           background: none !important;

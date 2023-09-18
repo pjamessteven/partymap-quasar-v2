@@ -8,7 +8,7 @@
         <div
           class="location-button-wrapper q-mr-sm"
           :class="showPanel ? 'show-panel' : ''"
-          v-if="$q.screen.gt.xs"
+          v-if="$q.screen.gt.xs && false"
         >
           <q-btn
             flat
