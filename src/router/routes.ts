@@ -24,6 +24,19 @@ const routes: RouteRecordRaw[] = [
           mapOverlay: true,
         },
       },
+
+      {
+        path: '/browse',
+        name: 'BrowsePage',
+        component: () => import('src/components/BrowsePage/BrowsePage.vue'),
+        props: true,
+        meta: {
+          auth: false,
+          mapOverlay: false,
+          friendlyName: 'Browse',
+          noBackNavigation: true,
+        },
+      },
       {
         path: 'artist/:id',
         name: 'ArtistPage',

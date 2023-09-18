@@ -43,7 +43,7 @@
     <div class="touch-overlay" v-touch-swipe.vertical="handleSwipe" />
     <div class="event-list-inner">
       <div
-        class="flex row no-wrap items-center justify-between q-pa-md view-options-absolute"
+        class="flex row no-wrap items-center justify-between q-px-md q-pt-md q-pb-sm view-options-absolute"
         v-if="$q.screen.gt.xs"
       >
         <div class="text-h5 inter bolder q-ml-sm q-my-sm">Explore Events</div>
@@ -54,8 +54,8 @@
             @click="() => (showPanel = !showPanel)"
             v-if="$q.screen.gt.xs"
             flat
-            size="2rem"
-            class="q-mr-md"
+            size="2.5rem"
+            class="q-mr-md t1"
             name="mdi-chevron-up"
             :class="{ 'rotate-180': showPanel }"
             style="cursor: pointer"

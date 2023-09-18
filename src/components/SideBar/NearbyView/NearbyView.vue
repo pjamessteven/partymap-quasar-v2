@@ -128,7 +128,7 @@
                     class="flex grow no-wrap inter q-pb-md t3"
                     :class="{
                       ' q-pt-md  items-center justify-between': $q.screen.lt.sm,
-                      ' q-mt-md': $q.screen.gt.xs,
+                      ' q-mt-md inter bold t3 text-large': $q.screen.gt.xs,
 
                       ' items-end': $q.screen.gt.xs,
                     }"

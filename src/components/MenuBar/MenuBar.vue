@@ -1,15 +1,8 @@
 <template>
   <div class="flex row menubar justify-between items-center">
     <div class="menubar-background" :style="computedStyle" />
-    <MenuBarLogo
-      class="logo"
-      :color="iconColor"
-      v-if="!previousRouteName || this.$route.name === 'Explore'"
-    />
-    <div
-      class="tab-wrapper"
-      v-if="$route.name === 'Explore' && $q.screen.gt.xs"
-    >
+    <MenuBarLogo class="logo" :color="iconColor" v-if="!previousRouteName" />
+    <div class="tab-wrapper" v-if="!previousRouteName && $q.screen.gt.xs">
        
       <q-tabs
         class="tabs inter bolder"
@@ -18,7 +11,8 @@
         }"
         @click.stop
         :content-class="$q.screen.gt.lg ? '' : ''"
-        v-model="sidebarPanel"
+        :model-value="sidebarPanel"
+        @update:model-value="updateNav"
         no-caps
         :active-class="
           $q.screen.lt.sm
@@ -29,7 +23,9 @@
         "
         indicator-color="transparent"
       >
-        <q-tab
+        <q-route-tab
+          :to="{ name: 'Explore' }"
+          exact
           key="1"
           name="nearby"
           content-class="tab"
@@ -37,7 +33,9 @@
           :ripple="false"
         />
 
-        <q-tab
+        <q-route-tab
+          :to="{ query: { view: 'explore' }, name: 'Explore' }"
+          exact
           key="2"
           name="explore"
           @click="() => (showPanel = false)"
@@ -46,9 +44,11 @@
           :ripple="false"
         />
 
-        <q-tab
+        <q-route-tab
+          :to="{ name: 'BrowsePage' }"
+          exact
           key="3"
-          name="favorites"
+          name="browse"
           :label="$q.screen.gt.xs && false ? undefined : 'Browse'"
           content-class="tab"
           :ripple="false"
@@ -102,10 +102,20 @@ export default {
     return {};
   },
   methods: {
+    updateNav(val) {
+      // sidebarpanel should always be set to something
+      // if using vmodel it will change to null when route changes
+      if (val) {
+        this.sidebarPanel = val;
+      }
+    },
     back() {
       this.$router.go(-1);
     },
     getPreviousRouteName(previousRoute) {
+      if (this.$route.name === 'Explore' || this.$route.name === 'BrowsePage') {
+        return null;
+      }
       if (previousRoute.name === 'Explore') {
         if (this.sidebarPanel === 'explore' || this.sidebarPanel === 'search') {
           return 'Back to results';
@@ -326,6 +336,83 @@ export default {
     align-items: center;
 
     :deep(.q-tabs) {
+      .q-tab {
+        //padding-top: 4px;
+        //padding-bottom: 4px;
+        padding: 2px;
+        margin: 8px;
+        //margin: 4px 4px;
+        //border-radius: 64px;
+        transition: all 0.3s;
+        color: white;
+        background: none !important;
+
+        opacity: 1 !important;
+        border: 1px solid transparent;
+        $duration: 0.4s;
+        $outDuration: 0.1s;
+        $distance: 10px;
+        $easeOutBack: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /*
+        bouncey underline effect
+        &:before,
+        &:after {
+          content: '';
+          position: absolute;
+          bottom: -3px;
+          left: 0;
+          right: 0;
+          height: 1px;
+          //background-color: black;
+        }
+        &:before {
+          opacity: 0;
+          transform: translateY(-$distance);
+          transition: transform 0s $easeOutBack, opacity 0s;
+        }
+        &:after {
+          opacity: 0;
+          transform: translateY($distance/2);
+          transition: transform $duration $easeOutBack, opacity $duration;
+        }
+        */
+        .q-focus-helper {
+          display: none;
+        }
+        .q-tab__label {
+          font-weight: 500 !important;
+        }
+        &.q-tab--active {
+          background: none !important;
+        }
+        &.q-tab--inactive {
+          color: grey;
+          // opacity: 0.3 !important;
+        }
+        &:hover {
+          background: none;
+          background: none !important;
+        }
+
+        &:hover,
+        &.q-tab--active {
+          &:before,
+          &:after {
+            opacity: 1;
+            transform: translateY(0);
+          }
+          &:before {
+            transition: transform $duration $easeOutBack, opacity $duration;
+          }
+          &:after {
+            transition: transform 0s $duration $easeOutBack,
+              opacity 0s $duration;
+          }
+        }
+      }
+    }
+    /*
+    :deep(.q-tabs) {
       height: 100%;
       .q-tab {
         //padding-top: 4px;
@@ -404,6 +491,7 @@ export default {
         }
       }
     }
+    */
   }
 
   .back-button-wrapper {
