@@ -47,7 +47,7 @@
     </div>
         -->
     <div
-      v-if="$q.screen.gt.xs"
+      v-if="$q.screen.gt.xs && false"
       class="flex items-center q-mr-sm q-pr-xs"
       :class="{
         'light-button': color === 'white',

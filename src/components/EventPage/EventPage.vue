@@ -771,7 +771,7 @@ export default {
         } else {
           this.menubarOpacity = 0;
         }
-        this.overlayOpacity = ((info.target.scrollTop * 1.5) / 100) * 1;
+        //this.overlayOpacity = ((info.target.scrollTop * 1.5) / 100) * 1;
       } else {
         if (
           info.target.scrollTop >
