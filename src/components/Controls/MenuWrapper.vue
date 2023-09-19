@@ -11,9 +11,11 @@
     anchor="top middle"
     self="bottom middle"
     :offset="[0, 8]"
-    style="min-width: 300px !important; display: flex; flex-direction: column"
+    max-height="600px"
   >
-    <slot></slot>
+    <div style="min-height: 200px; min-width: 200px">
+      <slot></slot>
+    </div>
   </q-menu>
   <MobileMenu
     :showing="showing"

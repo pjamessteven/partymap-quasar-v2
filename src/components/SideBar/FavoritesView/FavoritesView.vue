@@ -32,7 +32,7 @@
             right: $q.screen.gt.xs ? '0px' : '-16px',
             width: $q.screen.gt.xs ? '4px' : '4px',
           }"
-          class="scroll-area flex grow q-mt-md"
+          class="scroll-area flex grow"
           :content-style="{
             'touch-action': showPanel ? 'auto' : 'auto',
           }"

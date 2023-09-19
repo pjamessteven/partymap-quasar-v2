@@ -1,99 +1,24 @@
 <template>
   <div class="navigation-bar justify-between flex row no-wrap items-center">
-    <div
-      class="flex items-center q-pl-lg q-py-md q-my-xs"
-      v-if="$q.screen.gt.xs"
-      :class="{ 'q-pb-sm': $q.screen.lt.md }"
-    >
-      <q-btn
-        v-if="sidebarPanel === 'nearby'"
-        flat
-        style="margin-left: -8px"
-        class="q-mr-sm"
-        @click.stop="() => clickLocation()"
-      >
-        <template v-slot:default>
-          <div v-if="!userLocationLoading" class="flex">
-            <q-icon
-              name="mdi-crosshairs-gps"
-              class=""
-              v-if="fineLocation && sidebarPanel === 'nearby'"
-            />
-            <q-icon name="mdi-crosshairs-off" class="" v-else />
-          </div>
-          <div v-else style="position: relative" class="flex">
-            <q-icon style="z-index: 1" name="mdi-crosshairs" />
-            <q-icon
-              style="z-index: 2; left: 0px"
-              class="animated infinite flash slowest absolute"
-              name="mdi-crosshairs-gps"
-            />
-          </div>
-          <q-tooltip
-            style="font-size: 1em !important"
-            class=""
-            :content-class="
-              $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
-            "
-            :offset="[10, 10]"
-          >
-            <span v-if="!fineLocation">
-              Using rough location from your IP address. Click to improve your
-              location.
-            </span>
-            <span v-else>
-              {{ $t('landing_page.improve_location') }}
-            </span>
-          </q-tooltip>
-        </template>
-      </q-btn>
-
-      <div
-        class="q-pr-md inter bolder text-h6"
-        style="text-transform: capitalize"
-      >
-        {{ computedPanelName }}
-      </div>
-    </div>
-    <q-icon
-      v-if="sidebarPanel === 'explore' && $q.screen.gt.xs"
-      flat
-      size="2rem"
-      class="q-mr-md"
-      name="mdi-chevron-up"
-      :class="{ 'rotate-180': showPanel }"
-    />
-    <div
-      v-if="sidebarPanel === 'nearby' && $q.screen.gt.xs"
-      @click.stop="() => (sidebarPanel = 'explore')"
-      class="nav-button flex items-center justify-between q-mr-sm q-px-md q-py-sm"
-    >
-      Explore the map
-
-      <q-icon
-        name="mdi-chevron-right"
-        size="1rem"
-        class="q-ml-md"
-        :class="{ 'q-ml-md': $q.screen.gt.xs }"
-      />
-    </div>
-
     <q-tabs
-      v-if="$q.screen.lt.sm"
       @click.stop
       :model-value="sidebarPanel"
       @update:model-value="updateNav"
       no-caps
       :indicator-color="
         $q.screen.lt.sm
-          ? $route.name === 'Explore' || $route.name === 'UserPage'
+          ? $route.name === 'Explore' ||
+            $route.name === 'UserPage' ||
+            $route.name === 'BrowsePage'
             ? undefined
             : 'transparent'
           : 'transparent'
       "
       :active-class="
         $q.screen.lt.sm
-          ? $route.name === 'Explore' || $route.name === 'UserPage'
+          ? $route.name === 'Explore' ||
+            $route.name === 'UserPage' ||
+            $route.name === 'BrowsePage'
             ? undefined
             : 'inactive-tab'
           : 'active-tab'
@@ -128,8 +53,23 @@
       />
 
       <q-route-tab
-        name="profile"
+        :to="{ name: 'BrowsePage' }"
+        exact
         key="3"
+        name="browse"
+        :label="$q.screen.gt.xs ? undefined : 'Browse'"
+        :icon="
+          $route.name === 'BrowsePage'
+            ? 'mdi-feature-search'
+            : 'mdi-feature-search-outline'
+        "
+        content-class="tab"
+        :ripple="false"
+      />
+
+      <q-route-tab
+        name="profile"
+        key="4"
         :icon="
           $route.name === 'UserPage'
             ? 'mdi-calendar-star'

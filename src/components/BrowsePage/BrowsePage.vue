@@ -1,16 +1,21 @@
 <template>
   <SolidPage>
     <template v-slot>
-      <div class="flex column browse-page q-pb-xl">
-        <BrowseTaggedEvents
-          v-for="(tag, index) in Object.keys(taggedEvents)"
-          :key="index"
-          :title="items[tag].title"
-          :tagline="items[tag].tagline"
-          :description="items[tag].description"
-          :eventDates="taggedEvents[tag].eventDates"
-        >
-        </BrowseTaggedEvents>
+      <div
+        class="flex column browse-page q-mb-xl"
+        :class="$q.screen.gt.xs ? 'q-pb-xl' : 'q-mt-m'"
+      >
+        <div class="flex column" v-if="ready">
+          <BrowseTaggedEvents
+            v-for="(tag, index) in Object.keys(taggedEvents)"
+            :key="index"
+            :title="items[tag].title"
+            :tagline="items[tag].tagline"
+            :description="items[tag].description"
+            :eventDates="taggedEvents[tag].eventDates"
+          />
+        </div>
+        <InnerLoading v-else />
       </div>
     </template>
   </SolidPage>
@@ -22,10 +27,10 @@ import { mapActions, mapState } from 'pinia';
 import SolidPage from 'src/components/dialogs/SolidPage.vue';
 import { useBrowseStore } from 'src/stores/browse';
 import BrowseTaggedEvents from './BrowseTaggedEvents.vue';
-//import InnerLoading from 'src/components/InnerLoading.vue';
+import InnerLoading from 'src/components/InnerLoading.vue';
 
 export default {
-  components: { SolidPage, BrowseTaggedEvents },
+  components: { SolidPage, BrowseTaggedEvents, InnerLoading },
   props: {
     username: {
       default: null,
@@ -33,8 +38,8 @@ export default {
   },
   data() {
     return {
+      ready: false,
       user: null,
-      loading: false,
       items: {
         nature: {
           title: 'Nature',
@@ -71,11 +76,15 @@ export default {
     if (
       Object.keys(this.taggedEvents).length !== Object.keys(this.items).length
     ) {
-      this.loading = true;
       for (const tag of Object.keys(this.items)) {
         await this.loadEventDates(tag);
+        this.ready = true;
       }
-      this.loading = false;
+    } else {
+      setTimeout(() => {
+        // wait for transition before displaying content for smoothness
+        this.ready = true;
+      }, 350);
     }
   },
   methods: { ...mapActions(useBrowseStore, ['loadEventDates']) },
@@ -95,5 +104,10 @@ export default {
 }
 
 .body--light {
+}
+@media only screen and (max-width: 600px) {
+  .browse-page {
+    padding-bottom: 68px;
+  }
 }
 </style>

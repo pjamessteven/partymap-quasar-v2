@@ -146,12 +146,17 @@ export default {
       this.previousSidebarPanel = oldv;
     },
     query(newv) {
-      if (newv?.length > 0) this.sidebarPanel = 'search';
+      if (newv?.length > 0) {
+        this.sidebarPanel = 'search';
+        if (this.$route.name !== 'Explore') {
+          this.$router.push({ name: 'Explore', query: { view: 'explore' } });
+        }
+      }
     },
     controlArtist: {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
-          this.sidebarPanel = 'explore';
+          this.goToExplore();
           if (this.$q.screen.lt.sm) {
             this.$refs.scroll.setScrollPosition(
               'horizontal',
@@ -166,7 +171,7 @@ export default {
     controlTag: {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
-          this.sidebarPanel = 'explore';
+          this.goToExplore();
           if (this.$q.screen.lt.sm) {
             this.$refs.scroll.setScrollPosition(
               'horizontal',
@@ -181,7 +186,7 @@ export default {
     controlDateRange: {
       handler(newVal) {
         if (newVal && newVal.end) {
-          this.sidebarPanel = 'explore';
+          this.goToExplore();
           if (this.$q.screen.lt.sm) {
             this.$refs.scroll.setScrollPosition(
               'horizontal',
@@ -196,7 +201,7 @@ export default {
     controlSize: {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
-          this.sidebarPanel = 'explore';
+          this.goToExplore();
           if (this.$q.screen.lt.sm) {
             this.$refs.scroll.setScrollPosition(
               'horizontal',
@@ -211,7 +216,7 @@ export default {
     controlDuration: {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
-          this.sidebarPanel = 'explore';
+          this.goToExplore();
           if (this.$q.screen.lt.sm) {
             this.$refs.scroll.setScrollPosition(
               'horizontal',
@@ -244,6 +249,12 @@ export default {
   },
   methods: {
     ...mapActions(useMapStore, ['setExploreMapViewToWorld']),
+    goToExplore() {
+      this.sidebarPanel = 'explore';
+      if (this.$route.name !== 'Explore') {
+        this.$router.push({ name: 'Explore', query: { view: 'explore' } });
+      }
+    },
     clearSearch() {
       this.query = null;
       this.searchbarShowing = false;

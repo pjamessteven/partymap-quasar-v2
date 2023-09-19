@@ -100,7 +100,7 @@ export default {
       preventMapInteraction: false,
       wheelIndicator: null,
       pointerEvents: 'pointer-events: none;',
-      panelHiddenDelayed: false,
+      panelHiddenDelayed: true,
     };
   },
   methods: {

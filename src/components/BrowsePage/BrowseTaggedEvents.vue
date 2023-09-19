@@ -1,46 +1,48 @@
 <template>
-  <div class="flex column browse-">
-    <div
-      class="text-h5 inter bolder"
-      :class="$q.screen.gt.xs ? 'q-px-lg q-mt-xl' : 'q-px-md'"
-    >
-      {{ title }}
-    </div>
-    <div
-      class="text-large inter bold t3"
-      :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'"
-    >
-      {{ tagline }}
-    </div>
-    <div :class="$q.screen.gt.xs ? 'q-mt-lg' : ''">
-      <q-scroll-area
-        horizontal
-        class="user-event-scroll-area"
-        style="width: 100%"
-        :thumb-style="
-          $q.screen.gt.xs
-            ? {
-                bottom: '0px',
-                height: '8px',
-                marginLeft: '24px',
-              }
-            : { bottom: '0px', height: '0px' }
-        "
+  <transition appear enter-active-class="animated fadeIn slow">
+    <div class="flex column browse-">
+      <div
+        class="text-h5 inter bolder"
+        :class="$q.screen.gt.xs ? 'q-px-lg q-mt-xl' : 'q-px-md q-mt-lg'"
       >
-        <div
-          class="flex row no-wrap q-gutter-md"
-          :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'"
+        {{ title }}
+      </div>
+      <div
+        class="text-large inter bold t3"
+        :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md q-mt-xs'"
+      >
+        {{ tagline }}
+      </div>
+      <div :class="$q.screen.gt.xs ? 'q-mt-lg' : 'q-mt-md'">
+        <q-scroll-area
+          horizontal
+          class="user-event-scroll-area"
+          style="width: 100%"
+          :thumb-style="
+            $q.screen.gt.xs
+              ? {
+                  bottom: '0px',
+                  height: '8px',
+                  marginLeft: '24px',
+                }
+              : { bottom: '0px', height: '0px' }
+          "
         >
-          <EventDatePoster
-            v-for="(ed, index) in eventDates"
-            :key="index"
-            :hideInfo="true"
-            :event="ed[0]"
-          />
-        </div>
-      </q-scroll-area>
+          <div
+            class="flex row no-wrap q-gutter-md"
+            :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'"
+          >
+            <EventDatePoster
+              v-for="(ed, index) in eventDates"
+              :key="index"
+              :hideInfo="true"
+              :event="ed[0]"
+            />
+          </div>
+        </q-scroll-area>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>

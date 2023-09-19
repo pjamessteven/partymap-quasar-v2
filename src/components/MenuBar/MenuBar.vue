@@ -113,7 +113,12 @@ export default {
       this.$router.go(-1);
     },
     getPreviousRouteName(previousRoute) {
-      if (this.$route.name === 'Explore' || this.$route.name === 'BrowsePage') {
+      console.log('pte', previousRoute);
+      if (
+        this.$route.name === 'Explore' ||
+        this.$route.name === 'BrowsePage' ||
+        this.$route.name === 'UserPage'
+      ) {
         return null;
       }
       if (previousRoute.name === 'Explore') {
@@ -123,7 +128,7 @@ export default {
           return 'Back home';
         } else if (this.sidebarPanel === 'profile') {
           return 'Back';
-        } else return null;
+        } else return 'null';
       } else if (
         previousRoute.name === 'EventPage' ||
         previousRoute.name === 'ArtistPage'
@@ -150,10 +155,7 @@ export default {
       if (this.routerHistory.length == 0) return null;
       const previousRoute = this.routerHistory[this.routerHistory.length - 1];
       if (previousRoute) {
-        if (
-          previousRoute.meta?.noBackNavigation &&
-          this.sidebarPanel !== 'explore'
-        ) {
+        if (previousRoute.meta?.noBackNavigation) {
           return null;
         } else return this.getPreviousRouteName(previousRoute);
       } else return null;
@@ -540,6 +542,7 @@ export default {
     }
   }
   .menubar {
+    height: 62px;
     z-index: 1;
     .back-button-wrapper {
       left: 0px;

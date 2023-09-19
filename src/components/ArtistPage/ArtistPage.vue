@@ -147,6 +147,7 @@
 
               <div
                 class="flex column"
+                style="max-width: 100%"
                 v-if="
                   artist &&
                   artist.past_event_dates &&
@@ -156,14 +157,12 @@
                 <div class="q-mt-lg q-mb-md inter bold t3">
                   {{ $t('artists.past_events') }}:
                 </div>
-                <div class="flex column" style="max-width: 100%">
-                  <EventDateCard
-                    v-for="(ed, index) in artist.past_event_dates"
-                    :key="index"
-                    :event="ed"
-                    class="q-mb-md ed-card"
-                  />
-                </div>
+                <EventDateCard
+                  v-for="(ed, index) in artist.past_event_dates"
+                  :key="index"
+                  :event="ed"
+                  class="q-mb-md ed-card"
+                />
               </div>
             </div>
           </transition>

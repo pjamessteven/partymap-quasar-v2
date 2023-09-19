@@ -25,7 +25,6 @@ const createHistory = process.env.SERVER
 
 const Router = createRouter({
   scrollBehavior(to, from, savedPosition) {
-    console.log('router history', to, from);
     const main = useMainStore();
     const fromHistory = Boolean(savedPosition);
     if (fromHistory && main.routerHistory.length > 0) {
@@ -33,6 +32,15 @@ const Router = createRouter({
     } else {
       main.routerHistory.push(from);
     }
+
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (savedPosition) {
+          return resolve(savedPosition);
+        }
+      }, 1200);
+    });
+
     return savedPosition || { left: 0, top: 0 };
   },
   routes,

@@ -30,10 +30,9 @@
     <transition appear enter-active-class="animated fadeIn">
       <SearchComponent
         v-show="
-          ($q.screen.gt.sm && $route.name === 'Explore') ||
-          (sidebarPanel === 'explore' && $route.name === 'Explore') ||
-          (sidebarPanel === 'nearby' && $route.name === 'Explore') ||
-          (sidebarPanel === 'search' && $route.name === 'Explore')
+          $route.name === 'Explore' ||
+          ($q.screen.gt.sm && $route.name === 'BrowsePage') ||
+          ($q.screen.gt.sm && $route.name === 'UserPage')
         "
       />
     </transition>
@@ -62,8 +61,8 @@
       }"
     >
       <transition
-        enter-active-class="animated slideInUp"
-        leave-active-class="animated slideOutDown"
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut"
       >
         <component :is="Component" />
       </transition>
@@ -72,7 +71,9 @@
       class="nav-bar"
       v-show="
         $q.screen.lt.sm &&
-        ($route.name === 'Explore' || $route.name === 'UserPage')
+        ($route.name === 'Explore' ||
+          $route.name === 'UserPage' ||
+          $route.name === 'BrowsePage')
       "
     />
   </div>
@@ -139,7 +140,8 @@ export default {
       } else {
         if (
           (this.showPanel && this.$route.name === 'Explore') ||
-          (this.$q.screen.lt.md && this.showPanel)
+          (this.$q.screen.lt.md && this.showPanel) ||
+          this.$route.name !== 'Explore'
         )
           return 'opacity: 1; pointer-events: all';
         else return 'opacity: 0';

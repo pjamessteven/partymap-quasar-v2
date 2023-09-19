@@ -181,7 +181,7 @@ export default {
       },
     },
     route: {
-      handler: function (to) {
+      handler: function (to, from) {
         if (toRaw(this.map)) {
           if (to.name === 'EventPage') {
             // enter event page
@@ -199,6 +199,11 @@ export default {
               toRaw(this.eventDateHoverLayer).remove();
             }
             // this.eventDateHoverLayer.clearLayers()
+          } else if (from.name === 'Explore') {
+            this.exploreMapView = {
+              latlng: this.map.getCenter(),
+              zoom: this.map.getZoom(),
+            };
           } else if (to.name === 'Explore') {
             // restore previous map view
             if (this.exploreMapView) {

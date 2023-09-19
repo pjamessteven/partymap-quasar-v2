@@ -34,7 +34,7 @@ const routes: RouteRecordRaw[] = [
           auth: false,
           mapOverlay: false,
           friendlyName: 'Browse',
-          noBackNavigation: true,
+          noBackNavigation: false,
         },
       },
       {

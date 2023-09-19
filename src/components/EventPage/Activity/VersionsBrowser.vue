@@ -8,7 +8,7 @@
         :disable="!hasNext"
         :label="$t('activity.older')"
       />
-      <transition appear enter-active-class="animated fadeIn slow">
+      <transition appear enter-active-class="animated slideInUp slow">
         <q-slider
           class="q-ma-md"
           v-model="selectedRevisionIndex"

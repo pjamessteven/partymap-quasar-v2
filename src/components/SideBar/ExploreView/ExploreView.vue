@@ -188,7 +188,7 @@
           class="inter semibold q-mb-md"
           v-else-if="!isLoadingInitial && eventDatesTotal === 0"
         >
-          No events in this area
+          Nothing happening here...
         </div>
 
         <q-linear-progress
@@ -272,13 +272,7 @@ export default {
     EventDatePosterList,
     EventDateViewOptions,
   },
-  beforeCreate() {
-    this.eventDatesLoading = true;
-    setTimeout(() => {
-      this.getInitialList();
-    }, 300);
-    // watcher on map bounds triggers inital load i think
-  },
+
   mounted() {
     setTimeout(() => {
       this.hasLoaded = true;
@@ -309,30 +303,28 @@ export default {
       this.showPanel = false;
     },
     async getInitialList() {
-      if (this.$route.name === 'Explore' && !this.blockUpdates) {
-        // event date stuff
-        // this.isLoadingDatesInitial = true;
-        if (this.$refs) this.$refs.scroll.setScrollPercentage('vertical', 0);
-        this.eventDatesHasNext = true;
-        this.eventDatesPage = 1;
-        this.eventDatesTotal = null;
-        this.eventDates = []; // this is actually quite important
-        this.eventDatesGroupedByMonth = {};
-        if (!this.userLocation) {
-          await this.loadIpInfo();
-          this.loadMore();
-        } else {
-          this.loadMore();
-        }
-        // Artist stuff
-        /*
+      // event date stuff
+      // this.isLoadingDatesInitial = true;
+      if (this.$refs) this.$refs.scroll.setScrollPercentage('vertical', 0);
+      this.eventDatesHasNext = true;
+      this.eventDatesPage = 1;
+      this.eventDatesTotal = null;
+      this.eventDates = []; // this is actually quite important
+      this.eventDatesGroupedByMonth = {};
+      if (!this.userLocation) {
+        await this.loadIpInfo();
+        this.loadMore();
+      } else {
+        this.loadMore();
+      }
+      // Artist stuff
+      /*
         this.artistsPage = 1;
         this.artistsHasNext = true;
         this.isLoadingArtistsInitial = true;
         await this.loadArtists();
         this.isLoadingArtistsInitial = false;
         */
-      }
     },
     async loadMore() {
       if (
@@ -376,7 +368,7 @@ export default {
     },
     route: {
       handler: async function (to) {
-        if (to.name === 'Explore') {
+        if (to.name === 'Explore' && !this.blockUpdates) {
           if (this.eventDates?.length === 0) {
             if (!this.userLocation) {
               await this.loadIpInfo();

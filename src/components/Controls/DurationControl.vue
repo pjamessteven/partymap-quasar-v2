@@ -35,32 +35,34 @@
         </div>
       </div>
       <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
-        <div class="q-gutter-sm flex column q-pr-md q-pa-xs">
-          <q-checkbox
-            v-model="controlDuration"
-            val="1"
-            :label="$t('top_controls.one_day')"
-          />
-          <q-checkbox
-            v-model="controlDuration"
-            val="2"
-            :label="$t('top_controls.two_days')"
-          />
-          <q-checkbox
-            v-model="controlDuration"
-            val="3"
-            :label="$t('top_controls.three_days')"
-          />
-          <q-checkbox
-            v-model="controlDuration"
-            val="4"
-            :label="$t('top_controls.four_days')"
-          />
-          <q-checkbox
-            v-model="controlDuration"
-            val="5"
-            :label="$t('top_controls.five_days_plus')"
-          />
+        <div class="flex row items-start">
+          <div class="q-gutter-sm flex column q-pr-md q-pa-xs">
+            <q-checkbox
+              v-model="controlDuration"
+              val="1"
+              :label="$t('top_controls.one_day')"
+            />
+            <q-checkbox
+              v-model="controlDuration"
+              val="2"
+              :label="$t('top_controls.two_days')"
+            />
+            <q-checkbox
+              v-model="controlDuration"
+              val="3"
+              :label="$t('top_controls.three_days')"
+            />
+            <q-checkbox
+              v-model="controlDuration"
+              val="4"
+              :label="$t('top_controls.four_days')"
+            />
+            <q-checkbox
+              v-model="controlDuration"
+              val="5"
+              :label="$t('top_controls.five_days_plus')"
+            />
+          </div>
         </div>
       </MenuWrapper>
     </q-btn>

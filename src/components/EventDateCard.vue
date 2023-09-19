@@ -123,14 +123,17 @@
                     </span>
                   </div>
                 </div>
-                <div class="">
-                  <span v-if="event.location && event.location.locality">
+                <div>
+                  <span
+                    v-if="event.location && event.location.locality"
+                    class="ellipsis"
+                  >
                     <q-icon name="las la-map-marker" class="q-mr-sm" />{{
                       event.location.locality.long_name
                     }},
                     {{ event.location.locality.region.long_name }}
                   </span>
-                  <span v-else>
+                  <span v-else class="ellipsis">
                     <q-icon name="las la-map-marker" class="q-mr-sm" />{{
                       event.location.name
                     }}
@@ -311,12 +314,13 @@ export default {
   transition: all 0.2s ease;
   overflow: hidden;
   position: relative;
-
+  transform: translate3d(0, 0, 0);
   @supports (font: -apple-system-body) and (-webkit-appearance: none) {
     -webkit-backface-visibility: hidden;
     -webkit-transform: translate3d(0, 0, 0);
     // translate3d is a hack for safari to force gpu rendering of blur()
   }
+
   &:before {
     content: '';
     position: absolute;

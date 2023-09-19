@@ -22,7 +22,6 @@
         >
           <q-icon style="font-size: 18px" name="mdi-close" />
         </div>
-
         <div class="button-label flex row items-center row no-wrap">
           <div v-if="!controlDateRangeSelectedOption?.value" class="q-mr-sm">
             <i class="las la-calendar" />
