@@ -1,6 +1,11 @@
 <template>
   <div class="navigation-bar justify-between flex row no-wrap items-center">
     <q-tabs
+      :class="{
+        'light-button': color === 'white',
+        'inter bolder desktop-tabs': $q.screen.gt.xs,
+      }"
+      class="tabs"
       @click.stop
       :model-value="sidebarPanel"
       @update:model-value="updateNav"
@@ -27,27 +32,34 @@
       <q-route-tab
         :to="{ name: 'Explore' }"
         exact
-        replace
         key="1"
         name="nearby"
         content-class="tab"
-        :label="$q.screen.gt.xs ? undefined : 'Home'"
+        label="Nearby"
         :ripple="false"
-        :icon="sidebarPanel === 'nearby' ? 'mdi-home' : 'mdi-home-outline'"
+        :icon="
+          $q.screen.lt.sm
+            ? sidebarPanel === 'nearby'
+              ? 'mdi-home'
+              : 'mdi-home-outline'
+            : undefined
+        "
       />
 
       <q-route-tab
         :to="{ query: { view: 'explore' }, name: 'Explore' }"
+        @click="() => (showPanel = false)"
         exact
-        replace
         key="2"
         name="explore"
         :icon="
-          sidebarPanel === 'explore'
-            ? 'mdi-map-search'
-            : 'mdi-map-search-outline'
+          $q.screen.lt.sm
+            ? sidebarPanel === 'explore'
+              ? 'mdi-map-search'
+              : 'mdi-map-search-outline'
+            : undefined
         "
-        :label="$q.screen.gt.xs ? undefined : 'Explore'"
+        label="Explore"
         content-class="tab"
         :ripple="false"
       />
@@ -57,17 +69,20 @@
         exact
         key="3"
         name="browse"
-        :label="$q.screen.gt.xs ? undefined : 'Browse'"
+        label="Browse"
         :icon="
-          $route.name === 'BrowsePage'
-            ? 'mdi-feature-search'
-            : 'mdi-feature-search-outline'
+          $q.screen.lt.sm
+            ? $route.name === 'BrowsePage'
+              ? 'mdi-feature-search'
+              : 'mdi-feature-search-outline'
+            : undefined
         "
         content-class="tab"
         :ripple="false"
       />
 
       <q-route-tab
+        v-if="$q.screen.lt.sm"
         name="profile"
         key="4"
         :icon="
@@ -75,7 +90,7 @@
             ? 'mdi-calendar-star'
             : 'mdi-calendar-star-outline'
         "
-        :label="$q.screen.gt.xs ? undefined : 'Calendar'"
+        label="Calendar"
         content-class="tab"
         :ripple="false"
         :to="
@@ -115,8 +130,8 @@ export default {
   name: 'NavigationBar',
 
   components: {},
-  props: {},
 
+  props: { color: { type: String, default: 'black' } },
   data() {
     return {};
   },
@@ -135,7 +150,21 @@ export default {
       }
     },
   },
-
+  watch: {
+    sidebarPanel: {
+      // update route to match sidebar panel value
+      // easier to manage this here than in every instance where we naviate back to explore
+      handler: function (newval) {
+        if (newval === 'nearby') {
+          if (this.$route.query.view) {
+            this.$router.push({ name: 'Explore' });
+          }
+        } else if (newval === 'explore') {
+          this.$router.push({ name: 'Explore', query: { view: 'explore' } });
+        }
+      },
+    },
+  },
   computed: {
     ...mapState(useAuthStore, ['currentUser']),
     ...mapWritableState(useMainStore, [
@@ -196,14 +225,21 @@ export default {
   .navigation-bar {
     //border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     //border-top: 1px solid rgba(255, 255, 255, 0.2);
-    :deep(.q-tabs) {
-      .q-tab {
-        color: $ti-4 !important;
 
+    :deep(.desktop-tabs) {
+      .q-tab {
+        .q-tab__label {
+          // text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+        }
         &.q-tab--active {
-          background: $bi-4;
-          //border: 1px solid rgba(255, 255, 255, 0.3);
-          color: white !important;
+          color: white;
+        }
+        &.q-tab--inactive {
+          color: $ti-2;
+        }
+        &:before,
+        &:after {
+          background-color: white;
         }
       }
     }
@@ -213,14 +249,33 @@ export default {
   .navigation-bar {
     //box-shadow: rgba(100, 100, 111, 0.15) 0px 7px 29px 0px;
     //background: white;
-    :deep(.q-tabs) {
+    :deep(.desktop-tabs) {
+      &.light-button {
+        .q-tab {
+          .q-tab__label {
+            // text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+          }
+          &.q-tab--active {
+            color: white;
+          }
+          &.q-tab--inactive {
+            color: $ti-2;
+          }
+          &:before,
+          &:after {
+            background-color: white;
+          }
+        }
+      }
       .q-tab {
-        color: $t-4 !important;
-
+        .q-tab__label {
+        }
         &.q-tab--active {
-          background: $b-3;
-          border: 1px solid rgba(255, 255, 255, 0.3);
-          color: black !important;
+          color: black;
+        }
+        &:before,
+        &:after {
+          background-color: black;
         }
       }
     }
@@ -230,37 +285,80 @@ export default {
   }
 }
 .navigation-bar {
-  width: 216px;
-  padding-right: 8px;
-  pointer-events: all;
-  overflow: none;
-  width: 100%;
-  z-index: 2000;
-  //height: 62px;
-  position: relative;
-  :deep(.q-tabs) {
-    right: 12px;
-
+  :deep(.desktop-tabs) {
     .q-tab {
-      padding-top: 4px;
+      //padding-top: 4px;
       //padding-bottom: 4px;
-      padding: 8px;
-      margin: 16px 4px;
-      border-radius: 18px;
+      padding: 2px;
+      margin: 8px;
+      //margin: 4px 4px;
+      //border-radius: 64px;
       transition: all 0.3s;
+      color: white;
+      background: none !important;
 
       opacity: 1 !important;
       border: 1px solid transparent;
+      $duration: 0.4s;
+      $outDuration: 0.1s;
+      $distance: 10px;
+      $easeOutBack: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      /*
+        bouncey underline effect
+        &:before,
+        &:after {
+          content: '';
+          position: absolute;
+          bottom: -3px;
+          left: 0;
+          right: 0;
+          height: 1px;
+          //background-color: black;
+        }
+        &:before {
+          opacity: 0;
+          transform: translateY(-$distance);
+          transition: transform 0s $easeOutBack, opacity 0s;
+        }
+        &:after {
+          opacity: 0;
+          transform: translateY($distance/2);
+          transition: transform $duration $easeOutBack, opacity $duration;
+        }
+        */
+      .q-focus-helper {
+        display: none;
+      }
+      .q-tab__label {
+        font-weight: 500 !important;
+      }
       &.q-tab--active {
+        background: none !important;
       }
       &.q-tab--inactive {
         color: grey;
         // opacity: 0.3 !important;
       }
+      &:hover {
+        background: none;
+        background: none !important;
+      }
+
+      &:hover,
+      &.q-tab--active {
+        &:before,
+        &:after {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        &:before {
+          transition: transform $duration $easeOutBack, opacity $duration;
+        }
+        &:after {
+          transition: transform 0s $duration $easeOutBack, opacity 0s $duration;
+        }
+      }
     }
-  }
-  :deep(.q-tab__icon) {
-    //padding: 0px 0px;
   }
 }
 .nav-separator {
@@ -280,6 +378,7 @@ export default {
       background: $bi-2;
       //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.8);
       border-top: 1px solid rgba(255, 255, 255, 0.1);
+
       :deep(.q-tabs) {
         color: $ti-2 !important;
 

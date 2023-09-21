@@ -3,57 +3,7 @@
     <div class="menubar-background" :style="computedStyle" />
     <MenuBarLogo class="logo" :color="iconColor" v-if="!previousRouteName" />
     <div class="tab-wrapper" v-if="!previousRouteName && $q.screen.gt.xs">
-       
-      <q-tabs
-        class="tabs inter bolder"
-        :class="{
-          'light-button': iconColor === 'white',
-        }"
-        @click.stop
-        :content-class="$q.screen.gt.lg ? '' : ''"
-        :model-value="sidebarPanel"
-        @update:model-value="updateNav"
-        no-caps
-        :active-class="
-          $q.screen.lt.sm
-            ? $route.name === 'Explore'
-              ? undefined
-              : 'inactive-tab'
-            : 'active-tab'
-        "
-        indicator-color="transparent"
-      >
-        <q-route-tab
-          :to="{ name: 'Explore' }"
-          exact
-          key="1"
-          name="nearby"
-          content-class="tab"
-          :label="$q.screen.gt.xs && false ? undefined : 'Nearby'"
-          :ripple="false"
-        />
-
-        <q-route-tab
-          :to="{ query: { view: 'explore' }, name: 'Explore' }"
-          exact
-          key="2"
-          name="explore"
-          @click="() => (showPanel = false)"
-          :label="$q.screen.gt.xs && false ? undefined : 'Explore'"
-          content-class="tab"
-          :ripple="false"
-        />
-
-        <q-route-tab
-          :to="{ name: 'BrowsePage' }"
-          exact
-          key="3"
-          name="browse"
-          :label="$q.screen.gt.xs && false ? undefined : 'Browse'"
-          content-class="tab"
-          :ripple="false"
-        />
-      </q-tabs>
+      <NavigationBar :color="iconColor" />
     </div>
     <transition
       appear
@@ -89,6 +39,7 @@
 <script>
 import MenuBarLogo from './MenuBarLogo.vue';
 import MenuBarButtons from './MenuBarButtons.vue';
+import NavigationBar from 'src/components/NavigationBar.vue';
 import { useMainStore } from 'stores/main';
 import { mapState, mapWritableState } from 'pinia';
 export default {
@@ -96,6 +47,7 @@ export default {
   components: {
     MenuBarLogo,
     MenuBarButtons,
+    NavigationBar,
   },
 
   data() {
@@ -238,28 +190,6 @@ export default {
 
       //
     }
-    .tab-wrapper {
-      :deep(.q-tabs) {
-        .q-tab {
-          .q-tab__label {
-            // text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
-          }
-          &.q-tab--active {
-            color: white;
-          }
-          &.q-tab--inactive {
-            color: $ti-2;
-          }
-          &:before,
-          &:after {
-            background-color: white;
-          }
-        }
-      }
-      .separator {
-        border-color: $bi-4;
-      }
-    }
   }
 }
 
@@ -270,41 +200,6 @@ export default {
       //border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       //box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
       box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
-    }
-    .tab-wrapper {
-      :deep(.q-tabs) {
-        &.light-button {
-          .q-tab {
-            .q-tab__label {
-              // text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
-            }
-            &.q-tab--active {
-              color: white;
-            }
-            &.q-tab--inactive {
-              color: $ti-2;
-            }
-            &:before,
-            &:after {
-              background-color: white;
-            }
-          }
-        }
-        .q-tab {
-          .q-tab__label {
-          }
-          &.q-tab--active {
-            color: black;
-          }
-          &:before,
-          &:after {
-            background-color: black;
-          }
-        }
-      }
-      .separator {
-        border-color: grey;
-      }
     }
   }
 }
@@ -336,164 +231,6 @@ export default {
     height: 72px;
     display: flex;
     align-items: center;
-
-    :deep(.q-tabs) {
-      .q-tab {
-        //padding-top: 4px;
-        //padding-bottom: 4px;
-        padding: 2px;
-        margin: 8px;
-        //margin: 4px 4px;
-        //border-radius: 64px;
-        transition: all 0.3s;
-        color: white;
-        background: none !important;
-
-        opacity: 1 !important;
-        border: 1px solid transparent;
-        $duration: 0.4s;
-        $outDuration: 0.1s;
-        $distance: 10px;
-        $easeOutBack: cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        /*
-        bouncey underline effect
-        &:before,
-        &:after {
-          content: '';
-          position: absolute;
-          bottom: -3px;
-          left: 0;
-          right: 0;
-          height: 1px;
-          //background-color: black;
-        }
-        &:before {
-          opacity: 0;
-          transform: translateY(-$distance);
-          transition: transform 0s $easeOutBack, opacity 0s;
-        }
-        &:after {
-          opacity: 0;
-          transform: translateY($distance/2);
-          transition: transform $duration $easeOutBack, opacity $duration;
-        }
-        */
-        .q-focus-helper {
-          display: none;
-        }
-        .q-tab__label {
-          font-weight: 500 !important;
-        }
-        &.q-tab--active {
-          background: none !important;
-        }
-        &.q-tab--inactive {
-          color: grey;
-          // opacity: 0.3 !important;
-        }
-        &:hover {
-          background: none;
-          background: none !important;
-        }
-
-        &:hover,
-        &.q-tab--active {
-          &:before,
-          &:after {
-            opacity: 1;
-            transform: translateY(0);
-          }
-          &:before {
-            transition: transform $duration $easeOutBack, opacity $duration;
-          }
-          &:after {
-            transition: transform 0s $duration $easeOutBack,
-              opacity 0s $duration;
-          }
-        }
-      }
-    }
-    /*
-    :deep(.q-tabs) {
-      height: 100%;
-      .q-tab {
-        //padding-top: 4px;
-        padding: 8px;
-        padding-bottom: 12px;
-        margin: 4px;
-        //margin: 4px 4px;
-        //border-radius: 64px;
-        transition: all 0.3s;
-        color: white;
-        background: none !important;
-        opacity: 1 !important;
-        border: 1px solid transparent;
-        $duration: 0.4s;
-        $outDuration: 0.1s;
-        $distance: 10px;
-        $easeOutBack: cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
-        &:before,
-        &:after {
-          content: '';
-          position: absolute;
-          bottom: 4px;
-          left: 0;
-          right: 0;
-          height: 1px;
-          //background-color: black;
-        }
-        &:before {
-          opacity: 0;
-          transform: translateY(-$distance);
-          transition: transform 0s $easeOutBack, opacity 0s;
-        }
-        &:after {
-          opacity: 0;
-          transform: translateY($distance/2);
-          transition: transform $duration $easeOutBack, opacity $duration;
-        }
-
-        .q-tab__icon {
-          font-size: 1.2rem;
-        }
-        .q-focus-helper {
-          display: none;
-        }
-        .q-tab__label {
-          font-weight: 500 !important;
-          font-size: small;
-        }
-        &.q-tab--active {
-          background: none !important;
-        }
-        &.q-tab--inactive {
-          color: grey;
-          // opacity: 0.3 !important;
-        }
-        &:hover {
-          background: none;
-          background: none !important;
-        }
-
-        &:hover,
-        &.q-tab--active {
-          &:before,
-          &:after {
-            opacity: 1;
-            transform: translateY(0);
-          }
-          &:before {
-            transition: transform $duration $easeOutBack, opacity $duration;
-          }
-          &:after {
-            transition: transform 0s $duration $easeOutBack,
-              opacity 0s $duration;
-          }
-        }
-      }
-    }
-    */
   }
 
   .back-button-wrapper {

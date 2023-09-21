@@ -149,7 +149,7 @@ export default {
       if (newv?.length > 0) {
         this.sidebarPanel = 'search';
         if (this.$route.name !== 'Explore') {
-          this.$router.push({ name: 'Explore', query: { view: 'explore' } });
+          this.$router.push({ name: 'Explore' });
         }
       }
     },
@@ -252,7 +252,7 @@ export default {
     goToExplore() {
       this.sidebarPanel = 'explore';
       if (this.$route.name !== 'Explore') {
-        this.$router.push({ name: 'Explore', query: { view: 'explore' } });
+        this.$router.push({ name: 'Explore' });
       }
     },
     clearSearch() {

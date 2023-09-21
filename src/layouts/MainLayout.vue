@@ -69,7 +69,7 @@
     </router-view>
     <NavigationBar
       class="nav-bar"
-      v-show="
+      v-if="
         $q.screen.lt.sm &&
         ($route.name === 'Explore' ||
           $route.name === 'UserPage' ||

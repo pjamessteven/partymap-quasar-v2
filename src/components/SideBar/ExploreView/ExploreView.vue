@@ -303,6 +303,7 @@ export default {
       this.showPanel = false;
     },
     async getInitialList() {
+      console.log('getinitiallist');
       // event date stuff
       // this.isLoadingDatesInitial = true;
       if (this.$refs) this.$refs.scroll.setScrollPercentage('vertical', 0);
@@ -390,6 +391,7 @@ export default {
 
     controlDateRange: {
       handler() {
+        console.log('ctl date range');
         this.getInitialList();
       },
       deep: true,

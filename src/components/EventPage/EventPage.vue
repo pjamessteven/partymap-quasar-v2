@@ -17,7 +17,7 @@
             @click="
               routerHistory.length > 0
                 ? $router.go(-1)
-                : $router.push({ query: { view: 'explore' }, name: 'Explore' })
+                : $router.push({ name: 'Explore' })
             "
           />
           <div
