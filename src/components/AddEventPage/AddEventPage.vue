@@ -653,10 +653,7 @@ export default {
         });
       }
     },
-    goBack() {
-      this.$router.push({ name: 'Explore' });
-      this.showSidebar = true;
-    },
+
     async submitEvent() {
       const progressDialog = this.$q.dialog({
         title: this.$t('add.uploading_event'),

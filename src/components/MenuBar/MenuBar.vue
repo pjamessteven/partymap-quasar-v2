@@ -137,7 +137,7 @@ export default {
         (this.$q.screen.lt.sm && this.$route.name !== 'Explore')
       ) {
         return 'opacity: 1;  border: none!important';
-      } else if (
+      } /*else if (
         this.$route.name === 'Explore' &&
         this.$q.screen.gt.xs &&
         this.showPanel
@@ -148,7 +148,7 @@ export default {
         } else {
           return 'background: white';
         }
-      } else return 'opacity: 0';
+      }*/ else return 'opacity: 0';
     },
     iconColor() {
       if (
@@ -186,7 +186,7 @@ export default {
   .menubar {
     .menubar-background {
       background: black;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      //border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
       //
     }
@@ -199,7 +199,7 @@ export default {
       background: white;
       //border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       //box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-      box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+      //box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
     }
   }
 }
@@ -243,7 +243,7 @@ export default {
       opacity: 1;
       transition: opacity 0.3s ease;
       pointer-events: all;
-      min-height: 62px;
+      min-height: 72px;
       border-radius: 0px !important;
     }
   }

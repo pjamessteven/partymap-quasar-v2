@@ -186,14 +186,7 @@ export default {
         }, 350);
       }
     },
-    /*
-    route(newv, oldv) {
-      if (newv.name === 'Explore' && oldv.name === 'Explore') {
-        // simulate route change back to nearby view
-        this.sidebarPanel = 'nearby';
-        this.showPanel = true;
-      }
-    }, */
+
     mapMoving() {
       if (this.view === 'nearby' && !this.loadingUserLocation) {
         this.view = 'explore';
