@@ -59,6 +59,7 @@
         @hide="onHide()"
         @show="onShow()"
         class="menu-wrapper"
+        @scroll="onScrollMainContent($event)"
       >
         <div class="sticky-input">
           <q-input
@@ -217,7 +218,7 @@ export default {
       console.log(event.target);
       if (
         event.target.offsetHeight + event.target.scrollTop >=
-        event.target.scrollHeight
+        event.target.scrollHeight - 1
       ) {
         // reached bottom
         this.loadMore();

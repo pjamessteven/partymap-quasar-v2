@@ -50,6 +50,7 @@
         @hide="onHide()"
         @show="onShow()"
         class="menu-wrapper"
+        @scroll="onScrollMainContent($event)"
       >
         <div class="sticky-input">
           <q-input
@@ -73,7 +74,7 @@
           </q-input>
           <div class="separator" style="width: 100%" />
         </div>
-        <div @scroll="onScrollMainContent($event)" class="control-menu">
+        <div class="control-menu" @scroll="onScrollMainContent($event)">
           <div
             class="flex column grow"
             v-if="artistOptions && artistOptions.length > 0"
@@ -94,54 +95,63 @@
                 <div class="q-px-md">
                   <q-separator v-if="index > 0" />
                 </div>
-                <q-item
-                  :active="
-                    controlArtist.findIndex((x) => x.id == artist.id) > -1
-                  "
-                  clickable
-                  @click="clickArtist(artist)"
+                <router-link
+                  :to="{
+                    name: 'ArtistPage',
+                    params: { id: artist.id },
+                    query: {
+                      name: artist.name.replace(/ /g, '_'),
+                    },
+                  }"
                 >
-                  <q-item-section avatar>
-                    <q-avatar class="avatar">
-                      <img
-                        v-if="
-                          artist &&
-                          artist.media_items &&
-                          artist.media_items[0] &&
-                          artist.media_items[0].thumb_xxs_url
-                        "
-                        :src="artist.media_items[0].thumb_xxs_url"
-                      />
-                      <q-icon
-                        v-else
-                        size="1em"
-                        class="t3"
-                        name="mdi-account-music-outline"
-                      />
-                    </q-avatar>
-                  </q-item-section>
-                  <q-item-section>
-                    <div class="flex row justify-between no-wrap">
-                      <div class="flex column justify-center no-wrap">
-                        <q-item-label>
-                          {{ artist.name }}
-                        </q-item-label>
+                  <q-item
+                    :active="
+                      controlArtist.findIndex((x) => x.id == artist.id) > -1
+                    "
+                    clickable
+                    @click="clickArtist(artist)"
+                  >
+                    <q-item-section avatar>
+                      <q-avatar class="avatar">
+                        <img
+                          v-if="
+                            artist &&
+                            artist.media_items &&
+                            artist.media_items[0] &&
+                            artist.media_items[0].thumb_xxs_url
+                          "
+                          :src="artist.media_items[0].thumb_xxs_url"
+                        />
+                        <q-icon
+                          v-else
+                          size="1em"
+                          class="t3"
+                          name="mdi-account-music-outline"
+                        />
+                      </q-avatar>
+                    </q-item-section>
+                    <q-item-section>
+                      <div class="flex row justify-between no-wrap">
+                        <div class="flex column justify-center no-wrap">
+                          <q-item-label>
+                            {{ artist.name }}
+                          </q-item-label>
 
-                        <q-item-label
-                          caption
-                          class="t4 ellipsis-2-lines"
-                          v-if="artist.disambiguation || artist.area"
-                        >
-                          {{ artist.disambiguation }}
-                          <span v-if="artist.area">
-                            <span v-if="artist.area.name">
-                              ({{ artist.area.name }})
+                          <q-item-label
+                            caption
+                            class="t4 ellipsis-2-lines"
+                            v-if="artist.disambiguation || artist.area"
+                          >
+                            {{ artist.disambiguation }}
+                            <span v-if="artist.area">
+                              <span v-if="artist.area.name">
+                                ({{ artist.area.name }})
+                              </span>
+                              <span v-else> ({{ artist.area }}) </span>
                             </span>
-                            <span v-else> ({{ artist.area }}) </span>
-                          </span>
-                        </q-item-label>
-                      </div>
-                      <!--
+                          </q-item-label>
+                        </div>
+                        <!--
                         <q-checkbox
                           :value="
                             controlArtist.findIndex(
@@ -151,9 +161,10 @@
                           @update:model-value="clickArtist(artist)"
                         />
                         -->
-                    </div>
-                  </q-item-section>
-                </q-item>
+                      </div>
+                    </q-item-section>
+                  </q-item>
+                </router-link>
               </div>
             </q-list>
             <div
@@ -204,7 +215,7 @@ export default {
       'loadMoreArtistOptions',
     ]),
     clickArtist(artist) {
-      this.controlArtist = [artist];
+      //this.controlArtist = [artist];
 
       this.onHide();
     },
@@ -232,7 +243,7 @@ export default {
     onScrollMainContent(event) {
       if (
         event.target.offsetHeight + event.target.scrollTop >=
-        event.target.scrollHeight
+        event.target.scrollHeight - 1
       ) {
         // reached bottom, load more
         this.loadArtistOptions(this.query);

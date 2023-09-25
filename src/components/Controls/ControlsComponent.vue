@@ -39,7 +39,7 @@
         </q-btn>
         <div class="separator vertical" />
 
-        <DateControl v-if="showDateControl" :key="1" />
+        <DateControl v-if="showDateControl" ref="dateControl" :key="1" />
         <!--
         <div class="separator vertical" />
         <q-btn
@@ -72,10 +72,14 @@
         <ArtistControl v-if="showArtistControl" :key="3" ref="artistControl" />
         <div class="separator vertical" />
 
-        <SizeControl v-if="showSizeControl" :key="4" />
+        <SizeControl v-if="showSizeControl" ref="sizeControl" :key="4" />
         <div class="separator vertical" />
 
-        <DurationControl v-if="showDurationControl" :key="5" />
+        <DurationControl
+          v-if="showDurationControl"
+          ref="durationControl"
+          :key="5"
+        />
 
         <!--
           <LocalityControl
@@ -141,6 +145,12 @@ export default {
     // LocalityControl,
   },
   watch: {
+    anyFiltersEnabled(newv) {
+      if (!newv) {
+        // scroll to start when removing filters
+        this.$refs.scroll.setScrollPosition('horizontal', 0, 150);
+      }
+    },
     sidebarPanel(newv, oldv) {
       // so we can return to previous sidebar panel after triggering search
       this.previousSidebarPanel = oldv;
@@ -157,13 +167,13 @@ export default {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
           this.goToExplore();
-          if (this.$q.screen.lt.sm) {
+          setTimeout(() => {
             this.$refs.scroll.setScrollPosition(
               'horizontal',
-              this.$refs.artistControl.$el.offsetLeft - 16,
-              300
+              this.$refs.artistControl.$el.offsetLeft,
+              150
             );
-          }
+          }, 100);
         }
       },
       deep: true,
@@ -172,13 +182,11 @@ export default {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
           this.goToExplore();
-          if (this.$q.screen.lt.sm) {
-            this.$refs.scroll.setScrollPosition(
-              'horizontal',
-              this.$refs.tagControl.$el.offsetLeft - 16,
-              300
-            );
-          }
+          this.$refs.scroll.setScrollPosition(
+            'horizontal',
+            this.$refs.tagControl.$el.offsetLeft,
+            150
+          );
         }
       },
       deep: true,
@@ -187,13 +195,11 @@ export default {
       handler(newVal) {
         if (newVal && newVal.end) {
           this.goToExplore();
-          if (this.$q.screen.lt.sm) {
-            this.$refs.scroll.setScrollPosition(
-              'horizontal',
-              this.$refs.tagControl.$el.offsetLeft - 16,
-              300
-            );
-          }
+          this.$refs.scroll.setScrollPosition(
+            'horizontal',
+            this.$refs.dateControl.$el.offsetLeft,
+            150
+          );
         }
       },
       deep: true,
@@ -202,13 +208,11 @@ export default {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
           this.goToExplore();
-          if (this.$q.screen.lt.sm) {
-            this.$refs.scroll.setScrollPosition(
-              'horizontal',
-              this.$refs.tagControl.$el.offsetLeft - 16,
-              300
-            );
-          }
+          this.$refs.scroll.setScrollPosition(
+            'horizontal',
+            this.$refs.sizeControl.$el.offsetLeft - 16,
+            150
+          );
         }
       },
       deep: true,
@@ -217,13 +221,11 @@ export default {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
           this.goToExplore();
-          if (this.$q.screen.lt.sm) {
-            this.$refs.scroll.setScrollPosition(
-              'horizontal',
-              this.$refs.tagControl.$el.offsetLeft - 16,
-              300
-            );
-          }
+          this.$refs.scroll.setScrollPosition(
+            'horizontal',
+            this.$refs.durationControl.$el.offsetLeft,
+            150
+          );
         }
       },
       deep: true,
@@ -248,11 +250,10 @@ export default {
     };
   },
   methods: {
-    ...mapActions(useMapStore, ['setExploreMapViewToWorld']),
     goToExplore() {
       this.sidebarPanel = 'explore';
       if (this.$route.name !== 'Explore') {
-        this.$router.push({ name: 'Explore' });
+        this.$router.push({ name: 'Explore', query: { view: 'explore' } });
       }
     },
     clearSearch() {
@@ -280,6 +281,7 @@ export default {
       'controlCountry',
       'controlRegion',
       'controlLocality',
+      'anyFiltersEnabled',
     ]),
     dateControlActive() {
       return !!this.controlDateRange.end;
@@ -420,6 +422,7 @@ export default {
   .control-scroll-area {
     height: 48px;
     width: 100%;
+    padding-right: 32px;
 
     mask-image: linear-gradient(
       to left,

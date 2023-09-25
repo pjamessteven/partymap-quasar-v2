@@ -35,13 +35,13 @@
           <transition appear enter-active-class="animated fadeIn slower">
             <div class="main-content flex column" v-if="artist && !loading">
               <div
-                class="t1 q-mt-md text-large inter bold"
+                class="t3 q-mt-sm text-large inter bolder"
                 v-if="artist && $q.screen.gt.xs"
               >
                 {{ artist.disambiguation }}
               </div>
               <div
-                class="q-mt-lg q-mb-sm inter bold t3"
+                class="q-mt-lg q-mb-sm inter bold t2"
                 v-if="
                   artist && artist.tags && artist.tags.length > 0 && !loading
                 "
@@ -75,7 +75,7 @@
               </div>
 
               <div
-                class="q-mt-lg q-mb-sm inter bold t3"
+                class="q-mt-lg q-mb-sm inter bold t2"
                 v-if="computedDescription && computedDescription.length > 0"
               >
                 {{ $t('artists.description') }}:
@@ -110,7 +110,7 @@
               </div>
 
               <div
-                class="q-mt-lg q-mb-sm inter bold t3"
+                class="q-mt-lg q-mb-sm inter bold t2"
                 v-if="urls && urls.length > 0"
               >
                 {{ $t('artists.links') }}:
@@ -125,8 +125,8 @@
               </div>
 
               <div class="flex column" v-if="artist" style="max-width: 100%">
-                <div class="q-mt-lg q-mb-md inter bold t3">
-                  {{ $t('artists.upcoming_events') }}:
+                <div class="q-mt-lg q-mb-md inter bold t2">
+                  Upcoming events:
                 </div>
                 <div
                   class="t3"
@@ -136,6 +136,22 @@
                   "
                 >
                   No upcoming events for this artist.
+                </div>
+                <div v-else>
+                  <q-btn
+                    flat
+                    no-caps
+                    class="nav-button q-mr-sm q-px-md q-mb-md q-py-sm"
+                    @click="viewOnMap"
+                  >
+                    View {{ artist.name }} on the map
+                    <q-icon
+                      name="mdi-chevron-right"
+                      size="1rem"
+                      class="q-ml-md"
+                      :class="{ 'q-ml-md': $q.screen.gt.xs }"
+                    />
+                  </q-btn>
                 </div>
                 <EventDateCard
                   v-for="(ed, index) in artist.future_event_dates"
@@ -218,6 +234,7 @@
 
 <script>
 import { getArtistRequest, refreshArtistRequest } from 'src/api';
+import { toRaw } from 'vue';
 
 import _ from 'lodash';
 import ArtistUrl from './ArtistUrl.vue';
@@ -225,9 +242,10 @@ import EventDateCard from 'components/EventDateCard.vue';
 import Tag from 'components/EventPage/Tags/TagComponent.vue';
 import SolidPage from 'components/dialogs/SolidPage.vue';
 
-import { mapState } from 'pinia';
+import { mapState, mapWritableState } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
-
+import { useQueryStore } from 'src/stores/query';
+import { useMapStore } from 'src/stores/map';
 export default {
   name: 'ArtistPage',
   meta() {
@@ -272,6 +290,14 @@ export default {
     },
   },
   methods: {
+    viewOnMap() {
+      setTimeout(() => {
+        toRaw(this.map).setZoom(1);
+      }, 300);
+      this.controlArtist = [this.artist];
+
+      //this.$router.push({ name: 'Explore', query: { view: 'explore' } });
+    },
     refreshArtist() {
       if (this.currentUser) {
         this.loading = true;
@@ -309,8 +335,9 @@ export default {
     });
   },
   computed: {
+    ...mapWritableState(useQueryStore, ['controlArtist']),
     ...mapState(useAuthStore, ['currentUser']),
-
+    ...mapWritableState(useMapStore, ['map']),
     longDescription() {
       if (
         this.artist &&

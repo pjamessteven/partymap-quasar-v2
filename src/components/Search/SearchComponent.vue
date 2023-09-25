@@ -217,7 +217,6 @@ export default {
       border-radius: 48px;
       backdrop-filter: blur(10px);
       position: relative;
-
       .location-button-wrapper {
         position: absolute;
         left: -80px;
