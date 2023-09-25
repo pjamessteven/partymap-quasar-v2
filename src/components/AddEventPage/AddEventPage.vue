@@ -452,7 +452,7 @@
 
                 <!-- Size -->
 
-                <div class="flex row grow no-wrap items-baseline q-mt-md">
+                <div class="flex row grow no-wrap items-baseline q-mt-xl">
                   <q-icon size="xs" name="las la-user-friends" />
                   <div class="flex column grow q-ml-lg">
                     <p class="text-large inter bold">
