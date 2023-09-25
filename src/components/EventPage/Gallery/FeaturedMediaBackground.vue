@@ -146,8 +146,6 @@ export default {
       height: 100%;
       overflow: hidden;
       //  filter: blur(50px);
-      -webkit-backface-visibility: hidden;
-      -webkit-transform: translate3d(0, 0, 0);
       -webkit-transform: translateZ(0);
       backface-visibility: hidden;
       transform: translate3d(0, 0, 0);
@@ -156,6 +154,12 @@ export default {
       // position by top left corner of image
       left: calc(0px + (100% / 2) - 128px);
       top: calc(0px + (100% / 2) - 128px);
+
+      @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+        -webkit-backface-visibility: hidden;
+        -webkit-transform: translate3d(0, 0, 0) scale(2);
+        // translate3d is a hack for safari to force gpu rendering of blur()
+      }
     }
   }
 }

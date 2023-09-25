@@ -178,6 +178,12 @@ export default {
         filter: drop-shadow(1px 2px 78px rgba(0, 0, 0, 0.48));
         transition: opacity 0.3s;
         opacity: 1;
+
+        @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+          -webkit-backface-visibility: hidden;
+          -webkit-transform: translate3d(0, 0, 0);
+          // translate3d is a hack for safari to force gpu rendering of blur()
+        }
         &:hover {
           opacity: 0.9;
         }
@@ -204,8 +210,10 @@ export default {
       align-items: start;
       .item-wrapper-inner {
         justify-content: flex-start;
-        img {
+        img,
+        video {
           width: unset;
+          filter: none;
         }
       }
     }

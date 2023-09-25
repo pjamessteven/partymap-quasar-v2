@@ -75,23 +75,8 @@
           class="scroll-area flex grow"
           :class="!showPanel && 'disable-scroll'"
         >
-          <transition enter-active-class="animated fadeIn">
-            <div class="flex column no-wrap scroll-content q-px-sm">
-              <div class="flex column no-wrap content">
-                <div class="flex row no-wrap">
-                  <!--
-                  <ControlsComponent
-                    class="controls-component grow"
-                    :class="{
-                      'q-mt-md': $q.screen.lt.sm,
-                      'q-mt-md ': $q.screen.gt.xs,
-                    }"
-                    :showSelectedValue="true"
-                    :showOnlySelected="false"
-                  />
-                  -->
-                </div>
-                <!--
+          <div class="flex column no-wrap scroll-content q-px-sm">
+            <!--
                 <div
                   class="artist-profile-wrapper"
                   :class="
@@ -105,12 +90,12 @@
                   />
                 </div>
                 -->
-                <transition appear enter-active-class="animated fadeIn slow">
-                  <div
-                    class="flex column"
-                    :style="mapMoving && !blockUpdates ? 'opacity: 0' : ''"
-                  >
-                    <!--
+            <transition appear enter-active-class="animated fadeIn slow">
+              <div
+                class="flex column"
+                :style="mapMoving && !blockUpdates ? 'opacity: 0' : ''"
+              >
+                <!--
                   <div
                     class="flex column artists-wrapper"
                     v-if="noFiltersSelected && artists?.length > 0"
@@ -133,30 +118,28 @@
                   </div>
                   -->
 
-                    <EventDateList
-                      v-if="compactView"
-                      :groupByMonth="groupEventsByMonth"
-                      :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
-                      :eventDates="eventDates"
-                      :hasNext="eventDatesHasNext"
-                      :loading="eventDatesLoading"
-                      :eventDatesTotal="eventDatesTotal"
-                    />
+                <EventDateList
+                  v-if="compactView"
+                  :groupByMonth="groupEventsByMonth"
+                  :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
+                  :eventDates="eventDates"
+                  :hasNext="eventDatesHasNext"
+                  :loading="eventDatesLoading"
+                  :eventDatesTotal="eventDatesTotal"
+                />
 
-                    <EventDatePosterList
-                      v-if="!compactView"
-                      :groupByMonth="groupEventsByMonth"
-                      :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
-                      :eventDates="eventDates"
-                      :hasNext="eventDatesHasNext"
-                      :loading="eventDatesLoading"
-                      :eventDatesTotal="eventDatesTotal"
-                    />
-                  </div>
-                </transition>
+                <EventDatePosterList
+                  v-if="!compactView"
+                  :groupByMonth="groupEventsByMonth"
+                  :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
+                  :eventDates="eventDates"
+                  :hasNext="eventDatesHasNext"
+                  :loading="eventDatesLoading"
+                  :eventDatesTotal="eventDatesTotal"
+                />
               </div>
-            </div>
-          </transition>
+            </transition>
+          </div>
         </q-scroll-area>
       </div>
       <div
@@ -566,13 +549,6 @@ export default {
   position: absolute;
   pointer-events: none;
 
-  .explore-header {
-    &:hover {
-      .show-map {
-      }
-    }
-  }
-
   .event-list-inner {
     pointer-events: all;
     display: flex;
@@ -635,6 +611,7 @@ export default {
       position: relative;
       width: 100%;
       min-height: 100%;
+      -webkit-overflow-scrolling: auto;
     }
     :deep(.q-scrollarea__thumb) {
       z-index: 1000;
@@ -668,13 +645,6 @@ export default {
   }
   .event-list-vertical {
     pointer-events: none;
-
-    .explore-header {
-      &:hover {
-        .show-map {
-        }
-      }
-    }
 
     .controls-component {
       background: black;

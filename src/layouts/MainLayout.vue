@@ -69,11 +69,13 @@
     </router-view>
     <NavigationBar
       class="nav-bar"
-      v-if="
-        $q.screen.lt.sm &&
-        ($route.name === 'Explore' ||
-          $route.name === 'UserPage' ||
-          $route.name === 'BrowsePage')
+      v-if="$q.screen.lt.sm"
+      :style="
+        $route.name === 'Explore' ||
+        $route.name === 'UserPage' ||
+        $route.name === 'BrowsePage'
+          ? ''
+          : 'display: none'
       "
     />
   </div>
@@ -270,6 +272,8 @@ export default {
     z-index: 104;
   }
   .nav-bar {
+    opacity: 1;
+    transition: opacity 4s;
   }
 }
 @media only screen and (max-width: 1024px) {

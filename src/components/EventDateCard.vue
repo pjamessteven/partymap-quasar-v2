@@ -1,37 +1,36 @@
 <template>
-  <transition appear enter-active-class="animated fadeIn">
-    <div class="ed-card">
-      <router-link
-        v-touch-swipe.mouse.up.prevent
-        v-slot="{ navigate }"
-        :custom="true"
-        :to="{
-          name: 'EventPage',
-          params: {
-            id: event.event_id,
-            eventDateId: event.id,
-          },
-          query: {
-            name: event.name.replace(/ /g, '_'),
-          },
-        }"
-      >
+  <!--
+   was preivously on router-link element but this caused problems-->
+
+  <router-link
+    v-slot="{ navigate }"
+    :custom="true"
+    :to="{
+      name: 'EventPage',
+      params: {
+        id: event.event_id,
+        eventDateId: event.id,
+      },
+      query: {
+        name: event.name.replace(/ /g, '_'),
+      },
+    }"
+  >
+    <div>
+      <div class="ed-card" @click="() => onClickCard($event, navigate)">
         <div class="ed-card-bg" :style="getBottomBgImgStyle()" />
-        <div
-          class="ed-card-content flex row no-wrap q-pa-md"
-          @mousedown="() => onClickCard($event, navigate)"
-        >
+        <div class="ed-card-content flex row no-wrap q-pa-md">
           <div
             class="image-container flex justify-center items-center shadow-2xl"
           >
             <img
               :src="imgThumbXsUrl"
-              class="image not-loaded"
+              class="not-loaded"
               v-show="!loadedImage"
             />
             <img
               :src="imgThumbUrl"
-              class="image"
+              class=""
               @load="() => (loadedImage = true)"
               v-show="loadedImage"
             />
@@ -162,9 +161,9 @@
             </div>
           </div>
         </div>
-      </router-link>
+      </div>
     </div>
-  </transition>
+  </router-link>
 </template>
 
 <script>
@@ -312,37 +311,42 @@ export default {
   flex-direction: column;
   cursor: pointer;
   transition: all 0.2s ease;
+  pointer-events: all;
   overflow: hidden;
   position: relative;
-  transform: translate3d(0, 0, 0);
+  // transform: translate3d(0, 0, 0);
   @supports (font: -apple-system-body) and (-webkit-appearance: none) {
     -webkit-backface-visibility: hidden;
     -webkit-transform: translate3d(0, 0, 0);
     // translate3d is a hack for safari to force gpu rendering of blur()
   }
 
-  &:before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.1);
-    z-index: 10;
-    opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
-    border-radius: 9px;
-    z-index: 2;
-  }
-
-  &:hover {
-    //transform: scale(1.01) translateY(0px);
+  @media (hover: hover) {
     &:before {
-      opacity: 1;
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      border-radius: 9px;
+      z-index: 2;
+    }
+
+    &:hover {
+      //transform: scale(1.01) translateY(0px);
+      &:before {
+        opacity: 1;
+      }
     }
   }
 
   .ed-card-bg {
+    pointer-events: none;
+
     //border-radius: 9px;
     z-index: 1;
     filter: blur(12px);
@@ -350,20 +354,24 @@ export default {
     position: absolute;
     height: 100%;
     width: 100%;
-
+    overflow: hidden;
     /* Safari Only*/
     @supports (font: -apple-system-body) and (-webkit-appearance: none) {
-      transform: rotate(180deg) scaleX(-1) scale(2) translate3d(0, 0, 0);
+      -webkit-backface-visibility: hidden;
+
+      -webkit-transform: rotate(180deg) scaleX(-1) scale(2) translate3d(0, 0, 0);
       // translate3d is a hack for safari to force gpu rendering of blur()
     }
   }
   .ed-card-content {
+    pointer-events: none;
+
     position: relative;
     transition: opacity 0.3s ease;
     z-index: 1;
     @supports (font: -apple-system-body) and (-webkit-appearance: none) {
-      -webkit-backface-visibility: hidden;
-      -webkit-transform: translate3d(0, 0, 0);
+      // -webkit-backface-visibility: hidden;
+      // -webkit-transform: translate3d(0, 0, 0);
       // translate3d is a hack for safari to force gpu rendering of blur()
     }
     .tag-container {
@@ -397,16 +405,16 @@ export default {
       width: 86px;
       aspect-ratio: 595 / 842;
       min-width: 90px;
-      z-index: 1;
+      z-index: 2;
       border-radius: 9px;
 
-      .image {
+      img {
         height: 100%;
         width: 100%;
         max-height: 100%;
         max-width: 100%;
         object-fit: cover;
-        z-index: 2;
+        pointer-events: none;
       }
     }
   }
@@ -423,70 +431,8 @@ export default {
 }
 
 .body--light {
-  .animated-shimmer {
-    box-shadow: none;
-    background: linear-gradient(
-      315deg,
-      transparent,
-      rgba(255, 255, 255, 0.2) 50%,
-      transparent 100%
-    );
-    background-size: 400% 400%;
-    border-color: rgba(255, 255, 255, 0.1);
-    -webkit-animation: shimmer 2s ease-in-out infinite;
-    -moz-animation: shimmer 2s ease-in-out infinite;
-    animation: shimmer 2s ease-in-out infinite;
-    .card-content {
-      opacity: 0;
-    }
-  }
 }
 .body--dark {
-  .animated-shimmer {
-    background: linear-gradient(315deg, $bi-1, transparent 50%, $bi-1 100%);
-    background-size: 400% 400%;
-
-    -webkit-animation: shimmer 1.5s ease infinite;
-    -moz-animation: shimmer 1.5s ease infinite;
-    animation: shimmer 1.5s ease infinite;
-    .card-content {
-      opacity: 0;
-    }
-  }
-}
-
-@-webkit-keyframes shimmer {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 51%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-@-moz-keyframes shimmer {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 51%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-@keyframes shimmer {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 51%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
 }
 
 // sm
