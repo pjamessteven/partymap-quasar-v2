@@ -1,11 +1,6 @@
 <template>
   <transition appear enter-active-class="animated fadeIn">
-    <div
-      class="ed-poster"
-      :class="{
-        'animated-shimmer': false,
-      }"
-    >
+    <div class="ed-poster">
       <router-link
         v-slot="{ navigate }"
         :custom="true"
@@ -31,12 +26,11 @@
           >
             <img
               :src="imgThumbXsUrl"
-              class="image not-loaded"
+              class="not-loaded"
               v-show="!loadedImage"
             />
             <img
               :src="imgThumbUrl"
-              class="image"
               @load="() => (loadedImage = true)"
               v-show="loadedImage"
             />
@@ -466,13 +460,14 @@ export default {
         z-index: 1;
         transform: scale(1.2);
       }
-      .image {
+      img {
         height: 100%;
         width: 100%;
         max-height: 100%;
         max-width: 100%;
         object-fit: cover;
         z-index: 2;
+        pointer-events: none;
       }
     }
   }

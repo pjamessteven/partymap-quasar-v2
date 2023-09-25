@@ -12,19 +12,6 @@
         'sidebar-mobile-hidden': $q.screen.lt.sm && $route.name === 'EventPage',
       }"
     >
-      <!--
-        <span
-          v-if="$route.name === 'Explore' && sidebarPanel === 'nearby'"
-          class="welcome-message inter bolder text-large q-mb-xl q-mt-lg"
-          >Welcome to the global map of festivals and events!</span
-        >
-        -->
-      <!--
-      <MobileSwipeHandle
-        @swipe="onMobileSwipeHandle($event)"
-        v-show="$q.screen.lt.sm && sidebarPanel === 'explore'"
-      />
-      -->
       <div
         v-touch-swipe.mouse.down="
           enablePanelSwipeDown && showPanel ? handleSwipe : null
@@ -41,7 +28,6 @@
           class="sidebar-content-inner"
           @wheel="handleWheel"
         >
-          <!--<div class="sidebar-content-inner-shadow" />-->
           <NearbyView
             style="height: 100%; width: 100%"
             v-if="sidebarPanel === 'nearby'"

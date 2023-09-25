@@ -1,36 +1,41 @@
 <template>
-  <!--
-   was preivously on router-link element but this caused problems-->
-
-  <router-link
-    v-slot="{ navigate }"
-    :custom="true"
-    :to="{
-      name: 'EventPage',
-      params: {
-        id: event.event_id,
-        eventDateId: event.id,
-      },
-      query: {
-        name: event.name.replace(/ /g, '_'),
-      },
-    }"
-  >
-    <div>
-      <div class="ed-card" @click="() => onClickCard($event, navigate)">
+  <transition appear enter-active-class="animated fadeIn">
+    <div class="ed-card">
+      <router-link
+        v-touch-swipe.mouse.up.prevent
+        v-slot="{ navigate }"
+        :custom="true"
+        :to="{
+          name: 'EventPage',
+          params: {
+            id: event.event_id,
+            eventDateId: event.id,
+          },
+          query: {
+            name: event.name.replace(/ /g, '_'),
+          },
+        }"
+      >
         <div class="ed-card-bg" :style="getBottomBgImgStyle()" />
-        <div class="ed-card-content flex row no-wrap q-pa-md">
+        <div
+          class="ed-card-content flex row no-wrap q-pa-md"
+          @mousedown="() => onClickCard($event, navigate)"
+          @mouseover.stop="
+            () => ($q.platform.is.ios ? onClickCard($event, navigate) : false)
+          "
+        >
+          <!-- mouseover.stop is to fix a stupid ios bug relating to q-scroll-area having a mouseover event and causing the user to have to double click on items-->
           <div
             class="image-container flex justify-center items-center shadow-2xl"
           >
             <img
               :src="imgThumbXsUrl"
-              class="not-loaded"
+              class="image not-loaded"
               v-show="!loadedImage"
             />
             <img
               :src="imgThumbUrl"
-              class=""
+              class="image"
               @load="() => (loadedImage = true)"
               v-show="loadedImage"
             />
@@ -161,9 +166,9 @@
             </div>
           </div>
         </div>
-      </div>
+      </router-link>
     </div>
-  </router-link>
+  </transition>
 </template>
 
 <script>
@@ -311,42 +316,37 @@ export default {
   flex-direction: column;
   cursor: pointer;
   transition: all 0.2s ease;
-  pointer-events: all;
   overflow: hidden;
   position: relative;
-  // transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
   @supports (font: -apple-system-body) and (-webkit-appearance: none) {
     -webkit-backface-visibility: hidden;
     -webkit-transform: translate3d(0, 0, 0);
     // translate3d is a hack for safari to force gpu rendering of blur()
   }
 
-  @media (hover: hover) {
-    &:before {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.1);
-      z-index: 10;
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-      border-radius: 9px;
-      z-index: 2;
-    }
+  &:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    border-radius: 9px;
+    z-index: 2;
+  }
 
-    &:hover {
-      //transform: scale(1.01) translateY(0px);
-      &:before {
-        opacity: 1;
-      }
+  &:hover {
+    //transform: scale(1.01) translateY(0px);
+    &:before {
+      opacity: 1;
     }
   }
 
   .ed-card-bg {
-    pointer-events: none;
-
     //border-radius: 9px;
     z-index: 1;
     filter: blur(12px);
@@ -354,24 +354,20 @@ export default {
     position: absolute;
     height: 100%;
     width: 100%;
-    overflow: hidden;
+
     /* Safari Only*/
     @supports (font: -apple-system-body) and (-webkit-appearance: none) {
-      -webkit-backface-visibility: hidden;
-
-      -webkit-transform: rotate(180deg) scaleX(-1) scale(2) translate3d(0, 0, 0);
+      transform: rotate(180deg) scaleX(-1) scale(2) translate3d(0, 0, 0);
       // translate3d is a hack for safari to force gpu rendering of blur()
     }
   }
   .ed-card-content {
-    pointer-events: none;
-
     position: relative;
     transition: opacity 0.3s ease;
     z-index: 1;
     @supports (font: -apple-system-body) and (-webkit-appearance: none) {
-      // -webkit-backface-visibility: hidden;
-      // -webkit-transform: translate3d(0, 0, 0);
+      -webkit-backface-visibility: hidden;
+      -webkit-transform: translate3d(0, 0, 0);
       // translate3d is a hack for safari to force gpu rendering of blur()
     }
     .tag-container {
@@ -405,15 +401,16 @@ export default {
       width: 86px;
       aspect-ratio: 595 / 842;
       min-width: 90px;
-      z-index: 2;
+      z-index: 1;
       border-radius: 9px;
 
-      img {
+      .image {
         height: 100%;
         width: 100%;
         max-height: 100%;
         max-width: 100%;
         object-fit: cover;
+        z-index: 2;
         pointer-events: none;
       }
     }
@@ -428,11 +425,6 @@ export default {
       overflow: hidden;
     }
   }
-}
-
-.body--light {
-}
-.body--dark {
 }
 
 // sm

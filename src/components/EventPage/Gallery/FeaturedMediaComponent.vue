@@ -178,7 +178,7 @@ export default {
         filter: drop-shadow(1px 2px 78px rgba(0, 0, 0, 0.48));
         transition: opacity 0.3s;
         opacity: 1;
-
+        pointer-events: none;
         @supports (font: -apple-system-body) and (-webkit-appearance: none) {
           -webkit-backface-visibility: hidden;
           -webkit-transform: translate3d(0, 0, 0);

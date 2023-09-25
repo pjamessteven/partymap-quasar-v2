@@ -73,51 +73,15 @@
             borderRadius: 0,
           }"
           class="scroll-area flex grow"
+          @mouseenter="mouseEnter"
           :class="!showPanel && 'disable-scroll'"
         >
           <div class="flex column no-wrap scroll-content q-px-sm">
-            <!--
-                <div
-                  class="artist-profile-wrapper"
-                  :class="
-                    $q.screen.gt.xs ? 'q-px-md q-pb-md q-pt-sm' : 'q-pa-sm'
-                  "
-                  v-if="controlArtist.length > 0"
-                >
-                  <ArtistProfile
-                    :key="controlArtist[0].id"
-                    :id="controlArtist[0].id"
-                  />
-                </div>
-                -->
             <transition appear enter-active-class="animated fadeIn slow">
               <div
                 class="flex column"
                 :style="mapMoving && !blockUpdates ? 'opacity: 0' : ''"
               >
-                <!--
-                  <div
-                    class="flex column artists-wrapper"
-                    v-if="noFiltersSelected && artists?.length > 0"
-                  >
-                    <div
-                      class="header q-py-md t1 chicago"
-                      :class="
-                        $q.screen.lt.sm ? 'q-pl-sm q-mt-sm' : 'q-pl-md  q-py-md'
-                      "
-                    >
-                      Top artists in this area:
-                    </div>
-                    <ArtistsComponent
-                      @wheel.stop
-                      class="artists-component"
-                      :artists="artists"
-                      :hasNext="artistsHasNext"
-                      :loadMore="loadMoreArtists"
-                    />
-                  </div>
-                  -->
-
                 <EventDateList
                   v-if="compactView"
                   :groupByMonth="groupEventsByMonth"
@@ -259,6 +223,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.hasLoaded = true;
+      // the event listener in q-scroll-area causees a bug in ios that makes you have to click twice on links within
     }, 500);
   },
   data() {
@@ -286,7 +251,6 @@ export default {
       this.showPanel = false;
     },
     async getInitialList() {
-      console.log('getinitiallist');
       // event date stuff
       // this.isLoadingDatesInitial = true;
       if (this.$refs) this.$refs.scroll.setScrollPercentage('vertical', 0);
@@ -301,14 +265,6 @@ export default {
       } else {
         this.loadMore();
       }
-      // Artist stuff
-      /*
-        this.artistsPage = 1;
-        this.artistsHasNext = true;
-        this.isLoadingArtistsInitial = true;
-        await this.loadArtists();
-        this.isLoadingArtistsInitial = false;
-        */
     },
     async loadMore() {
       if (
@@ -319,7 +275,6 @@ export default {
         try {
           await this.loadEventDates();
         } catch (error) {}
-        // this.isLoadingDatesInitial = false;
       }
     },
     handleSwipe() {
@@ -347,6 +302,11 @@ export default {
     },
   },
   watch: {
+    showPanel(newv) {
+      if (newv) {
+        this.enablePanelSwipeDown = true;
+      }
+    },
     mapMoving(newv) {
       if (newv) this.eventDatesHasNext = false;
     },

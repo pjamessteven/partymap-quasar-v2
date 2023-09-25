@@ -14,6 +14,7 @@
           <div
             v-if="scrollPercentage === 0"
             class="clickable-background"
+            style="pointer-events: all"
             @click="
               routerHistory.length > 0
                 ? $router.go(-1)
@@ -1270,7 +1271,7 @@ a {
       height: 100%;
       overflow-x: hidden;
       overflow-y: auto;
-
+      -webkit-overflow-scrolling: touch; // WOW THIS ACTUALLY HELPS ON IOS
       .main-row {
         position: relative;
 
