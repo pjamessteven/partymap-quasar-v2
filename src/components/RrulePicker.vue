@@ -143,7 +143,11 @@
       <q-radio
         v-model="dateMode"
         val="rough"
-        label="Every year during this month (Confirm exact dates later)"
+        :label="
+          separationCount == 1
+            ? 'Every year around this time (Confirm exact future dates later)'
+            : 'Every second year around this time (Confirm exact future dates later)'
+        "
       />
     </div>
   </div>
@@ -157,17 +161,17 @@ export default {
   props: ['dateTime', 'disableOneOff'],
   data() {
     return {
-      dateMode: 'relative',
-      recurringType: 1,
+      dateMode: 'rough',
+      recurringType: 3,
       separationCount: this.disableOneOff ? 1 : 0,
       separationCountOptions: [
         { id: 0, desc: this.$t('add.once') },
-        { id: 1, desc: this.$t('add.every_') },
-        { id: 2, desc: this.$t('add.every_second_') },
+        { id: 1, desc: 'Recurring event: ' + this.$t('add.every_') },
+        { id: 2, desc: 'Recurring event: ' + this.$t('add.every_second_') },
       ],
       separationCountOptionsNoOneOff: [
-        { id: 1, desc: this.$t('add.every_') },
-        { id: 2, desc: this.$t('add.every_second_') },
+        { id: 1, desc: 'Recurring event: ' + this.$t('add.every_') },
+        { id: 2, desc: 'Recurring event: ' + this.$t('add.every_second_') },
       ],
       recurringTypeOptions: [
         { id: 1, desc: this.$t('add.week') },
