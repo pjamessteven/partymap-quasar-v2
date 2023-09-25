@@ -248,6 +248,7 @@ export default {
     justify-content: center;
     left: unset;
     padding: 0 16px;
+    top: 72px;
   }
 }
 
