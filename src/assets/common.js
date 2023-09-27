@@ -210,7 +210,7 @@ export default {
   localDateTimeShort: function (t, tz) {
     moment.locale(locale);
     var m = moment.tz(t, tz);
-    return m.format('dddd') + ', ' + m.format('lll');
+    return m.format('ddd') + ' ' + m.format('lll');
   },
   monthYear: function (t, tz) {
     moment.locale(locale);

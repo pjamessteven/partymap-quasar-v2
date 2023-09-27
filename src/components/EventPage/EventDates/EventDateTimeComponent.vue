@@ -23,10 +23,18 @@
           :class="$q.screen.gt.sm ? 'text-large' : ''"
           v-if="selectedEventDate?.date_confirmed"
         >
-          <div class="t2">
-            <span v-if="selectedEventDate.start_naive">
+          <div class="t2" v-if="selectedEventDate.start_naive">
+            <span v-if="$q.screen.gt.xs">
               {{
                 localDateTimeLong(
+                  selectedEventDate.start_naive,
+                  selectedEventDate.tz
+                )
+              }}
+            </span>
+            <span v-else>
+              {{
+                localDateTimeShort(
                   selectedEventDate.start_naive,
                   selectedEventDate.tz
                 )
@@ -51,12 +59,20 @@
             :class="$q.screen.gt.sm ? 'text-large' : ''"
           >
             <span>{{ $t('event_date_inline.ends') }}&nbsp;</span>
-            <span>{{
+            <span v-if="$q.screen.gt.xs">{{
               localDateTimeLong(
                 selectedEventDate.end_naive,
                 selectedEventDate.tz
               )
             }}</span>
+            <span v-else>
+              {{
+                localDateTimeShort(
+                  selectedEventDate.end_naive,
+                  selectedEventDate.tz
+                )
+              }}
+            </span>
           </div>
         </div>
         <div
@@ -324,6 +340,7 @@ export default {
   created() {
     this.relativeHumanTime = common.relativeHumanTime;
     this.localDateTimeLong = common.localDateTimeLong;
+    this.localDateTimeShort = common.localDateTimeShort;
     this.localDateLong = common.localDateLong;
     this.localTimeCompact = common.localTimeCompact;
     this.timeZoneAbbreviention = common.timeZoneAbbreviention;

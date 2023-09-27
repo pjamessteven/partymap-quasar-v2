@@ -9,6 +9,40 @@
         }"
         >{{ review.creator.username }}</RouterLink
       >&nbsp;({{ timeAgo(review.created_at) }})
+
+      <q-btn flat icon="mdi-dots-vertical" class="q-px-sm t4" size="sm">
+        <q-tooltip
+          :content-class="
+            $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
+          "
+          :offset="[10, 10]"
+          content-style="font-size: 16px"
+        >
+          {{ $t('sidebar.more') }}
+        </q-tooltip>
+        <q-menu
+          transition-show="jump-down"
+          transition-hide="jump-up"
+          anchor="bottom right"
+          self="top right"
+        >
+          <!-- SHOW REPORT if not creator -->
+          <q-item
+            v-close-popup
+            v-ripple
+            v-if="!currentUserIsCreator"
+            v-on:click="showingReportDialog = true"
+            clickable
+          >
+            <q-item-section avatar>
+              <q-icon name="mdi-alert-circle-outline" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Report this contribution</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-menu>
+      </q-btn>
     </div>
     <q-rating
       :model-value="review.rating"
@@ -64,16 +98,26 @@
       :currentItemIndex="currentMediaItemIndex"
       @onClose="currentMediaItemIndex = null"
     />
+    <q-dialog v-model="showingReportDialog">
+      <ReportDialog
+        :mode="'reportContribution'"
+        @closeDialog="showingReportDialog = false"
+      />
+    </q-dialog>
   </div>
 </template>
 
 <script>
+import { useAuthStore } from 'src/stores/auth';
+import { mapState } from 'pinia';
+
 import common from 'src/assets/common';
 import GalleryDialog from 'components/EventPage/Gallery/GalleryDialog.vue';
+import ReportDialog from 'components/EventPage/ReportDialog.vue';
 
 export default {
   components: {
-    //InnerLoading
+    ReportDialog,
     GalleryDialog,
   },
   props: {
@@ -83,10 +127,16 @@ export default {
     return {
       currentMediaItemIndex: null,
       loading: false,
+      showingReportDialog: false,
     };
   },
   watch: {},
-  computed: {},
+  computed: {
+    ...mapState(useAuthStore, ['currentUser']),
+    currentUserIsCreator() {
+      return this.currentUser.username === this.review.creator.username;
+    },
+  },
   methods: {},
   created() {
     this.timeAgo = common.timeAgo;

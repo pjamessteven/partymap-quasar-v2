@@ -1,7 +1,7 @@
 <template>
   <div class="flex column">
     <div class="inter bolder text-large t2 q-pr-md q-mb event-page-header">
-      Reviews:
+      Reviews and photos:
     </div>
     <div class="new-review flex column q-mt-sm grow">
       <div class="flex row items-end">
@@ -78,7 +78,7 @@
       class="no-reviews t4 inter text-large q-mt-lg"
       v-if="event?.event_contributions?.length === 0"
     >
-      No reviews yet... be the first!
+      No one has shared their experience yet... be the first!
     </div>
     <div v-else class="q-mt-md">
       <ReviewComponent

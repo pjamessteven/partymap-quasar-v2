@@ -267,10 +267,7 @@
                             :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
                             :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
                             flat
-                            :size="$q.screen.gt.xs ? '1em' : 'sm'"
-                            :label="
-                              $q.screen.gt.xs ? 'Save to device' : undefined
-                            "
+                            :label="$q.screen.gt.xs ? 'Save to device' : 'Save'"
                             icon="mdi-calendar-export-outline"
                             no-caps
                             @click="getIcalFile"
@@ -284,7 +281,6 @@
                               $q.screen.gt.xs ? $t('event.share') : undefined
                             "
                             no-caps
-                            :size="$q.screen.gt.xs ? '1em' : 'sm'"
                             flat
                             icon="mdi-share"
                             @click="share"
@@ -585,12 +581,15 @@
       <!-- hidden element for copying url -->
       <input :value="computedUrl" ref="copyUrlInput" style="display: none" />
       <q-dialog v-model="showingReportDialog">
-        <ReportDialog @closeDialog="showingReportDialog = false" />
+        <ReportDialog
+          :mode="'reportEvent'"
+          @closeDialog="showingReportDialog = false"
+        />
       </q-dialog>
       <q-dialog v-model="showingClaimDialog">
         <ReportDialog
           @closeDialog="showingClaimDialog = false"
-          :mode="'claim'"
+          :mode="'claimEvent'"
         />
       </q-dialog>
 

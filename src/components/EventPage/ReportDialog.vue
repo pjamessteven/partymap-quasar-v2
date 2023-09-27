@@ -1,16 +1,21 @@
 <template>
   <q-card class="feedback-dialog dialog-card">
     <q-card-section class="row items-center q-pb-none dialog-card-header">
-      <div class="text-h6" v-if="mode === 'claim'">
+      <div class="text-h6" v-if="mode === 'claimEvent'">
         {{ $t('report.claim_event_page') }}
       </div>
-      <div v-else class="text-h6">{{ $t('report.report_event') }}</div>
+      <div v-else-if="mode === 'reportEvent'" class="text-h6">
+        {{ $t('report.report_event') }}
+      </div>
+      <div v-else-if="mode === 'reportContribution'" class="text-h6">
+        Report contribution
+      </div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>
 
     <q-card-section class="dialog-card-content">
-      <div class="t2" v-if="mode === 'claim'">
+      <div class="t2" v-if="mode === 'claimEvent'">
         {{ $t('report.claim_message') }}
         <a href="https://www.facebook.com/partymap.official" target="_blank"
           >Facebook</a
@@ -20,11 +25,13 @@
           >Instagram</a
         >, {{ $t('report.or_from_your_email') }}
       </div>
-      <div class="t2 q-mt-md" v-if="mode === 'claim'">
+      <div class="t2 q-mt-md" v-if="mode === 'claimEvent'">
         {{ $t('report.claim_message_2') }}
       </div>
+
       <div class="t2" v-else>
-        {{ $t('report.please_tell_us_your_problem') }}
+        Please let us know, in detail, what your issue is with this content. If
+        we have any follow up questions, we will be in touch.
       </div>
 
       <q-input
@@ -96,6 +103,7 @@ export default {
   components: { VueHcaptcha },
   props: {
     mode: String,
+    contributionId: String,
   },
   methods: {
     verify(token) {
@@ -110,16 +118,7 @@ export default {
         persistent: true, // we want the user to not be able to close it
         ok: false,
       });
-      postReportRequest({
-        message:
-          this.mode === 'claim'
-            ? 'The following message is a claim for the event page: ' +
-              this.message
-            : this.message,
-        event_id: this.event.id,
-        email: this.email,
-        hcaptcha_token: this.hcaptchaToken,
-      }).then(() => {
+      postReportRequest(this.computedPayload).then(() => {
         progressDialog.hide();
         this.$q
           .dialog({
@@ -147,6 +146,33 @@ export default {
       ) {
         return true;
       } else return this.$t('validation.email_invalid');
+    },
+    computedPayload() {
+      let payload = {
+        message: this.message,
+        email: this.email,
+        hcaptcha_token: this.hcaptchaToken,
+      };
+      if (this.mode === 'claimEvent') {
+        payload = {
+          ...payload,
+          event_id: this.event.id,
+          message:
+            'The following message is a claim for the event page: ' +
+            this.message,
+        };
+      } else if (this.mode === 'reportEvent') {
+        payload = {
+          ...payload,
+          event_id: this.event.id,
+        };
+      } else if (this.mode === 'reportContribution') {
+        payload = {
+          ...payload,
+          event_contribution_id: this.contributionId,
+        };
+      }
+      return payload;
     },
   },
 };
