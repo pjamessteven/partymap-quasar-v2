@@ -170,10 +170,11 @@ export default {
   }
   .controls-wrapper-inner {
     //
-
-    background: #fafafa;
+    box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+    background: white;
+    //background: #fafafa;
     color: $t-1;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    //border: 1px solid rgba(0, 0, 0, 0.1);
   }
   .search-popup-wrapper {
     background: white;
@@ -195,7 +196,7 @@ export default {
 .search-component {
   z-index: 4000;
   position: absolute;
-  top: 12px;
+  top: 38px;
   width: 100%;
   display: flex;
   justify-content: center;

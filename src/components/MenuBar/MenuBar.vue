@@ -148,7 +148,7 @@ export default {
         } else {
           return 'background: white';
         }
-      }*/ else return 'opacity: 0';
+      } */ else return 'opacity: 0';
     },
     iconColor() {
       if (
@@ -186,7 +186,7 @@ export default {
   .menubar {
     .menubar-background {
       background: black;
-      //border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
       //
     }
@@ -197,7 +197,7 @@ export default {
   .menubar {
     .menubar-background {
       background: white;
-      //border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      //`border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       //box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
       //box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
     }
@@ -206,7 +206,7 @@ export default {
 
 .menubar {
   //transition: opacity 0.15s;
-  height: 72px;
+  height: 64px;
   position: relative;
   transition: height 0.3s ease;
 
@@ -228,7 +228,7 @@ export default {
     position: absolute;
     left: 155px;
     top: 0px;
-    height: 72px;
+    height: 64px;
     display: flex;
     align-items: center;
   }
@@ -243,7 +243,7 @@ export default {
       opacity: 1;
       transition: opacity 0.3s ease;
       pointer-events: all;
-      min-height: 72px;
+      min-height: 64px;
       border-radius: 0px !important;
     }
   }
@@ -258,7 +258,7 @@ export default {
 @media only screen and (max-width: 1023px) {
 }
 // xs
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 1023px) {
   .body--dark {
     .menubar {
       border-top: 1px solid rgba(255, 255, 255, 0.1);
