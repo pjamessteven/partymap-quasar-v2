@@ -290,7 +290,7 @@ export default {
       //padding-top: 4px;
       //padding-bottom: 4px;
       padding: 2px;
-      margin: 8px;
+      margin: 6px;
       //margin: 4px 4px;
       //border-radius: 64px;
       transition: all 0.3s;
@@ -303,29 +303,28 @@ export default {
       $outDuration: 0.1s;
       $distance: 10px;
       $easeOutBack: cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      /*
-        bouncey underline effect
-        &:before,
-        &:after {
-          content: '';
-          position: absolute;
-          bottom: -3px;
-          left: 0;
-          right: 0;
-          height: 1px;
-          //background-color: black;
-        }
-        &:before {
-          opacity: 0;
-          transform: translateY(-$distance);
-          transition: transform 0s $easeOutBack, opacity 0s;
-        }
-        &:after {
-          opacity: 0;
-          transform: translateY($distance/2);
-          transition: transform $duration $easeOutBack, opacity $duration;
-        }
-        */
+
+      &:before,
+      &:after {
+        content: '';
+        position: absolute;
+        bottom: 2px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        //background-color: black;
+      }
+      &:before {
+        opacity: 0;
+        transform: translateY(-$distance);
+        transition: transform 0s $easeOutBack, opacity 0s;
+      }
+      &:after {
+        opacity: 0;
+        transform: translateY($distance/2);
+        transition: transform $duration $easeOutBack, opacity $duration;
+      }
+
       .q-focus-helper {
         display: none;
       }
