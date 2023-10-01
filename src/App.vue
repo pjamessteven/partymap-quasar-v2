@@ -705,11 +705,13 @@ body {
 }
 
 .soft-button-shadow {
+  &::before {
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 3px 0px,
+      rgba(0, 0, 0, 0.1) 0px 1px 2px 0px !important;
+  }
   .q-btn__wrapper::before {
     // this would be a nice shadow if it worked
     //box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
-      rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   }
 }
 

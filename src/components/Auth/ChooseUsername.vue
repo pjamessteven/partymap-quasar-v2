@@ -3,10 +3,11 @@
     <q-card :bordered="$q.screen.gt.sm" class="q-pa-md auth-card">
       <q-card-section class="title flex justify-center column">
         <b class="text-large">{{ $t('auth.choose_username') }}</b>
+        <p />
         <p class="t3">{{ $t('auth.choose_username_message') }}</p>
-        <p class="t2">{{ $t('auth.choose_username_requirements') }}</p>
+        <p class="t1">{{ $t('auth.choose_username_requirements') }}</p>
       </q-card-section>
-      <q-card-section class="flex grow">
+      <q-card-section class="flex grow q-pt-none">
         <q-input
           filled
           class="flex grow"

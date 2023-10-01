@@ -31,8 +31,7 @@
       <SearchComponent
         v-show="
           $route.name === 'Explore' ||
-          ($q.screen.gt.sm && $route.name === 'BrowsePage') ||
-          ($q.screen.gt.sm && $route.name === 'UserPage')
+          ($q.screen.gt.sm && $route.name === 'BrowsePage')
         "
       />
     </transition>

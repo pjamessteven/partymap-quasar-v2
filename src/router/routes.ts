@@ -38,6 +38,34 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
+        path: '/privacy_policy',
+        name: 'PrivacyPage',
+        component: () =>
+          import('src/components/dialogs/AboutDialog/PrivacyPolicyDialog.vue'),
+        props: true,
+        meta: {
+          auth: false,
+          mapOverlay: false,
+          friendlyName: 'Privacy',
+          noBackNavigation: false,
+        },
+      },
+      {
+        path: '/terms_and_conditions',
+        name: 'TermsAndConditionsPage',
+        component: () =>
+          import(
+            'src/components/dialogs/AboutDialog/TermsAndConditionsDialog.vue'
+          ),
+        props: true,
+        meta: {
+          auth: false,
+          mapOverlay: false,
+          friendlyName: 'Privacy',
+          noBackNavigation: false,
+        },
+      },
+      {
         path: 'artist/:id',
         name: 'ArtistPage',
         component: () => import('src/components/ArtistPage/ArtistPage.vue'),

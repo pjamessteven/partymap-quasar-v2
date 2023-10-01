@@ -50,7 +50,7 @@
 
             <q-input
               v-if="editing"
-              v-model="alias"
+              v-model="user.alias"
               label="Full Name (Optional)"
               maxlength="200"
             />
@@ -73,9 +73,9 @@
             />
           </div>
 
-          <div class="action-buttons flex row q-mt-md" v-if="!username">
+          <div class="action-buttons flex row q-mt-md">
             <div
-              v-if="!editing"
+              v-if="currentUser?.username === username && !editing"
               @click.stop="() => (editing = !editing)"
               class="nav-button flex items-center justify-between q-mr-sm"
             >
@@ -121,7 +121,7 @@
             </div>
             <div
               v-if="editing"
-              @click.stop="() => loadUserDetails()"
+              @click.stop="() => loadCurrentUserDetails()"
               class="nav-button flex items-center justify-between q-mr-sm"
             >
               <span>Cancel</span>
@@ -153,7 +153,7 @@
             round
             dense
             v-close-popup
-            @click="() => (avatar = null)"
+            @click="() => (user.avatar = null)"
             class="q-ml-xl"
           />
         </q-card-section>
@@ -172,7 +172,7 @@
             @filesSelected="selectFile($event)"
             :label="'Select image'"
           />
-          <div class="flex row q-gutter-sm q-mt-sm" v-if="avatar">
+          <div class="flex row q-gutter-sm q-mt-sm" v-if="user.avatar">
             <q-btn color="primary" label="Save" @click="uploadAvatar()"></q-btn>
             <q-btn flat label="Select new" @click="selectAvatar()"></q-btn>
           </div>
@@ -214,7 +214,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(useAuthStore, ['editUser']),
+    ...mapActions(useAuthStore, ['editUser', 'checkAuthCookie']),
     share() {
       if (navigator.share) {
         navigator.share({
@@ -238,7 +238,8 @@ export default {
     },
     loadCurrentUserDetails() {
       this.user = this.currentUser;
-      this.user.editing = false;
+      console.log(this.user);
+      this.editing = false;
     },
     selectFile(event) {
       const file = toRaw(event)?.[0];
@@ -264,6 +265,8 @@ export default {
       try {
         await this.editUser({ avatar: this.user.avatar });
       } catch {}
+      await this.checkAuthCookie();
+      this.loadCurrentUserDetails();
       progressDialog.hide();
       this.showAvatarDialog = false;
       this.editing = false;
@@ -294,7 +297,7 @@ export default {
         description: this.user.description || undefined,
         alias: this.user.alias || undefined,
         username:
-          this.user.username !== this.currentUser.username
+          this.user.username !== this.currentUser?.username
             ? this.user.username
             : undefined,
       };

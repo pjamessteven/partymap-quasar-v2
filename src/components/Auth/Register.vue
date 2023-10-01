@@ -1,12 +1,9 @@
 <template>
   <div class="dialog-page" v-on:click.self="$router.go(-1)">
     <q-card :bordered="$q.screen.gt.sm" class="auth-card">
-      <q-card-section
-        class="title flex q-mt-md flex justify-center q-px-lg"
-        style="text-align: center"
-      >
+      <q-card-section style="text-align: center">
         <div
-          class="header t1 inter bolder text-h6 q-mb-lg"
+          class="header t1 inter bolder text-h5 q-my-lg"
           style="text-align: center; text-transform: capitalize"
         >
           {{ $t('auth.create') }}
@@ -69,13 +66,14 @@
           <InnerLoading v-if="loading" :solid="true" />
         </q-card-section>
 
-        <q-card-section class="flex justify-center q-mb-md">
+        <q-card-section class="flex justify-center q-mb-md q-px-lg">
           <q-btn
             class="inter bolder"
             :disable="loading"
-            :label="$t('auth.sign_up')"
-            outline
-            size="medium"
+            label="Let's go, sign me up!"
+            no-caps
+            color="primary"
+            size=""
             type="submit"
           />
         </q-card-section>

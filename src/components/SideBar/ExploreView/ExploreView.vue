@@ -124,12 +124,12 @@
         "
       >
         <div
-          class="inter semibold q-mb-md"
+          class="inter semibold q-mb-lg"
           v-if="
             (isLoadingInitial || (mapMoving && !blockUpdates)) && !showPanel
           "
         >
-          Loading events...
+          Finding what's good...
         </div>
         <div
           class="inter semibold q-mb-md"

@@ -48,6 +48,7 @@
           :label="$t('auth.reset_password')"
           color="primary"
           v-on:click="reset"
+          no-caps
         />
       </q-card-section>
     </q-card>

@@ -1,12 +1,9 @@
 <template>
   <div class="dialog-page" v-on:click.self="hideDialog">
     <q-card :bordered="$q.screen.gt.sm" class="auth-card">
-      <q-card-section
-        class="title flex q-mt-md flex justify-center q-px-lg"
-        style="text-align: center"
-      >
+      <q-card-section class="q-px-lg" style="text-align: center">
         <div
-          class="header t1 inter bolder text-h6 q-mb-lg"
+          class="header t1 inter bolder text-h6 q-my-lg"
           style="text-align: center; text-transform: "
         >
           {{ $t('auth.forgot_password') }}
@@ -34,6 +31,7 @@
           :label="$t('auth.reset_password')"
           color="primary"
           v-on:click="resetPassword"
+          no-caps
         />
       </q-card-section>
       <InnerLoading v-if="loading" :solid="true" />

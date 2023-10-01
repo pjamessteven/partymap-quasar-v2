@@ -5,7 +5,7 @@
         class="flex column justify-stretch q-px-xl q-pb-sm"
         :class="$q.screen.gt.xs ? 'q-pt-xl' : ''"
       >
-        <div class="flex justify-center items-center q-mt-md q-mb-xl">
+        <div class="flex justify-center items-center q-mt-sm q-mb-xl">
           <div>
             <img
               style="height: 30px; width: auto"
@@ -29,7 +29,48 @@
           It's party time &#128526;
         </div>
         -->
-        <div class="flex column o-animated" :class="{ 'o-000': loading }">
+        <q-card-section
+          class="flex column justify-center items-center q-pt-none q-pb-lg"
+        >
+          <!--
+          <q-btn
+            style="background: #1877f2"
+            text-color="white"
+            no-caps
+            class="soft-button-shadow"
+            icon="mdi-facebook"
+            v-bind:label="$t('auth.log_in_with_facebook')"
+            type="a"
+            :href="facebookLoginUrl"
+          />
+          -->
+          <q-btn
+            color="white"
+            text-color="black "
+            no-caps
+            class="soft-button-shadow"
+            type="a"
+            :href="googleLoginUrl"
+          >
+            <img
+              style="height: 24px; width: auto"
+              src="~assets/g-logo.png"
+              class="q-mr-md"
+            />
+            Continue with Google
+          </q-btn>
+        </q-card-section>
+
+        <div class="flex row items-center justify-between no-wrap">
+          <div class="separator"></div>
+          <div class="q-px-md t3">or</div>
+          <div class="separator"></div>
+        </div>
+
+        <div
+          class="flex column o-animated q-mt-md"
+          :class="{ 'o-000': loading }"
+        >
           <q-input
             autocapitalize="off"
             ref="login"
@@ -51,10 +92,10 @@
           />
           <div class="flex row grow justify-end items-center q-mt-lg">
             <q-btn
-              size="medium"
+              size="small"
               color="primary"
               no-caps
-              class="soft-button-shadow q-mb-md t1 inter bold text-large"
+              class="soft-button-shadow nav-btn q-mb-md t1 inter bold text-large"
               v-bind:label="$t('auth.login')"
               type="a"
               @click="_login"
@@ -69,28 +110,7 @@
         </div>
       </q-card-section>
 
-      <q-card-section
-        class="flex column justify-center items-end q-pt-xs q-px-lg q-pb-lg bottom-section"
-      >
-        <!--
-        <q-btn
-          style="background: #1877f2"
-          text-color="white"
-          no-caps
-          class="soft-button-shadow"
-          icon="mdi-facebook"
-          v-bind:label="$t('auth.log_in_with_facebook')"
-          type="a"
-          :href="facebookLoginUrl"
-        />
-
-        <div class="q-pt-md name-not-visible-text t4">
-          {{ $t('auth.real_name_not_visible') }}
-          <br />
-          {{ $t('auth.only_save_email') }}
-        </div>
-      -->
-
+      <q-card-section class="q-pt-none q-px-lg q-pb-lg bottom-section">
         <div class="separator o-animated" :class="{ 'o-000': loading }" />
         <div
           class="flex column items-end o-animated"
@@ -203,9 +223,16 @@ export default {
   computed: {
     facebookLoginUrl() {
       if (this.$route.query.from) {
-        return API_URL + '/oauth/facebook?next_url=' + this.$route.query.from;
+        return API_URL + '/oauth/fb?next_url=' + this.$route.query.from;
       } else {
-        return API_URL + '/oauth/facebook';
+        return API_URL + '/oauth/fb';
+      }
+    },
+    googleLoginUrl() {
+      if (this.$route.query.from) {
+        return API_URL + '/oauth/google?next_url=' + this.$route.query.from;
+      } else {
+        return API_URL + '/oauth/google';
       }
     },
   },
