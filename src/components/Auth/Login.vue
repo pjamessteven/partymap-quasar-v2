@@ -59,9 +59,11 @@
               Continue with Google
             </q-btn>
           </div>
+          <!--
           <div class="t4 q-mt-md" style="text-align: center; font-size: small">
             We only store your email address.
           </div>
+          -->
         </q-card-section>
 
         <div class="flex row items-center justify-between no-wrap">
