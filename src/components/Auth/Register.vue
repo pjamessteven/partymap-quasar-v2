@@ -6,7 +6,7 @@
           class="header t1 inter bolder text-h5 q-my-lg"
           style="text-align: center; text-transform: capitalize"
         >
-          {{ $t('auth.create') }}
+          Create your account
         </div>
         <p class="t3">{{ $t('auth.choose_username_message') }}</p>
       </q-card-section>
@@ -68,7 +68,7 @@
 
         <q-card-section class="flex justify-center q-mb-md q-px-lg">
           <q-btn
-            class="inter bolder"
+            class="inter bold"
             :disable="loading"
             label="Let's go, sign me up!"
             no-caps

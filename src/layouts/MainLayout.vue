@@ -142,7 +142,8 @@ export default {
         if (
           (this.showPanel && this.$route.name === 'Explore') ||
           (this.$q.screen.lt.md && this.showPanel) ||
-          this.$route.name !== 'Explore'
+          (this.$route.name !== 'Explore' &&
+            this.$route.meta.mapOverlay === false)
         )
           return 'opacity: 1; pointer-events: all';
         else return 'opacity: 0';

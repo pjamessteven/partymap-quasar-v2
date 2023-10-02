@@ -845,7 +845,7 @@ body {
 }
 
 .dialog-page {
-  background: rgba(0, 0, 0, 0.68);
+  background: rgba(0, 0, 0, 0.48);
   display: flex;
   flex-direction: column;
   align-items: center;

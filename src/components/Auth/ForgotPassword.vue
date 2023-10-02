@@ -1,5 +1,5 @@
 <template>
-  <div class="dialog-page" v-on:click.self="hideDialog">
+  <div class="dialog-page" v-on:click.self="$router.go(-1)">
     <q-card :bordered="$q.screen.gt.sm" class="auth-card">
       <q-card-section class="q-px-lg" style="text-align: center">
         <div

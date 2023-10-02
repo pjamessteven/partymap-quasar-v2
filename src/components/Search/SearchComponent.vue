@@ -241,7 +241,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 1280px) {
   .search-component {
     width: 100%;
     display: flex;
