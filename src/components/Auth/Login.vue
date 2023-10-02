@@ -31,20 +31,9 @@
         -->
         <q-card-section class="q-pt-none q-pb-md">
           <div class="flex justify-center items-center">
-            <!--
-          <q-btn
-            style="background: #1877f2"
-            text-color="white"
-            no-caps
-            class="soft-button-shadow"
-            icon="mdi-facebook"
-            v-bind:label="$t('auth.log_in_with_facebook')"
-            type="a"
-            :href="facebookLoginUrl"
-          />
-          -->
             <q-btn
               color="white"
+              style="width: 231px"
               text-color="black "
               no-caps
               class="soft-button-shadow"
@@ -52,12 +41,22 @@
               :href="googleLoginUrl"
             >
               <img
-                style="height: 24px; width: auto"
+                style="height: 20px; width: auto"
                 src="~assets/g-logo.png"
                 class="q-mr-md"
               />
               Continue with Google
             </q-btn>
+            <q-btn
+              style="background: #1877f2; width: 231px"
+              text-color="white"
+              no-caps
+              class="soft-button-shadow q-mt-md"
+              icon="mdi-facebook"
+              v-bind:label="$t('auth.log_in_with_facebook')"
+              type="a"
+              :href="facebookLoginUrl"
+            />
           </div>
           <!--
           <div class="t4 q-mt-md" style="text-align: center; font-size: small">
@@ -228,9 +227,9 @@ export default {
   computed: {
     facebookLoginUrl() {
       if (this.$route.query.from) {
-        return API_URL + '/oauth/fb?next_url=' + this.$route.query.from;
+        return API_URL + '/oauth/facebook?next_url=' + this.$route.query.from;
       } else {
-        return API_URL + '/oauth/fb';
+        return API_URL + '/oauth/facebook';
       }
     },
     googleLoginUrl() {
