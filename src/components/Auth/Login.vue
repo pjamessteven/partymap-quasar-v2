@@ -3,7 +3,7 @@
     <q-card :bordered="$q.screen.gt.sm" class="auth-card">
       <q-card-section
         class="flex column justify-stretch q-px-xl q-pb-sm"
-        :class="$q.screen.gt.xs ? 'q-pt-xl' : ''"
+        :class="$q.screen.gt.xs ? 'q-pt-xl' : 'q-pt-none'"
       >
         <div class="flex justify-center items-center q-mt-sm q-mb-xl">
           <div>
@@ -29,10 +29,9 @@
           It's party time &#128526;
         </div>
         -->
-        <q-card-section
-          class="flex column justify-center items-center q-pt-none q-pb-lg"
-        >
-          <!--
+        <q-card-section class="q-pt-none q-pb-md">
+          <div class="flex justify-center items-center">
+            <!--
           <q-btn
             style="background: #1877f2"
             text-color="white"
@@ -44,21 +43,25 @@
             :href="facebookLoginUrl"
           />
           -->
-          <q-btn
-            color="white"
-            text-color="black "
-            no-caps
-            class="soft-button-shadow"
-            type="a"
-            :href="googleLoginUrl"
-          >
-            <img
-              style="height: 24px; width: auto"
-              src="~assets/g-logo.png"
-              class="q-mr-md"
-            />
-            Continue with Google
-          </q-btn>
+            <q-btn
+              color="white"
+              text-color="black "
+              no-caps
+              class="soft-button-shadow"
+              type="a"
+              :href="googleLoginUrl"
+            >
+              <img
+                style="height: 24px; width: auto"
+                src="~assets/g-logo.png"
+                class="q-mr-md"
+              />
+              Continue with Google
+            </q-btn>
+          </div>
+          <div class="t4 q-mt-md" style="text-align: center; font-size: small">
+            We only store your email address.
+          </div>
         </q-card-section>
 
         <div class="flex row items-center justify-between no-wrap">
