@@ -479,7 +479,6 @@ export default {
   cursor: pointer;
 }
 .edit-card {
-  min-width: 400px;
   max-width: 460px;
 }
 

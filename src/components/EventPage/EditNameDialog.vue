@@ -135,9 +135,6 @@ export default {
 .body--light {
 }
 
-.edit-card {
-  min-width: 400px;
-}
 @media only screen and (max-width: 1023px) {
   .card {
     margin-top: 0px;

@@ -178,8 +178,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.feedback-dialog {
-  min-width: 400px;
-}
-</style>
+<style lang="scss"></style>

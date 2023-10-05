@@ -123,10 +123,6 @@ export default {
 .top-section {
   cursor: pointer;
 }
-.edit-card {
-  min-width: 400px;
-  max-width: 460px;
-}
 
 @media only screen and (max-width: 1023px) {
   .card {

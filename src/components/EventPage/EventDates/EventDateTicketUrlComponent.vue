@@ -20,7 +20,7 @@
         <a
           class="link-hover underline"
           target="_blank"
-          :href="computedExternalUrl"
+          :href="!editing ? computedExternalUrl : undefined"
           >{{ selectedEventDate.ticket_url }}</a
         >
       </div>

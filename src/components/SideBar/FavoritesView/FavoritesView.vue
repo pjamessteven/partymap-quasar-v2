@@ -53,8 +53,8 @@
 
               <div class="flex column no-wrap content">
                 <div
-                  class="q-mt-md flex row no-wrap items-center"
-                  :class="$q.screen.gt.xs ? 'q-pl-md' : ''"
+                  class="q-mt-md flex row no-wrap items-center control-bar"
+                  :class="$q.screen.gt.xs ? 'q-pl-md q-mb-md' : ''"
                 >
                   <q-scroll-area
                     ref="scroll"
@@ -285,7 +285,7 @@
                     v-if="
                       userEventDates && compactView && !isLoadingDatesInitial
                     "
-                    :groupByMonth="true"
+                    :groupByMonth="false"
                     :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
                     :eventDates="userEventDates"
                     :hasNext="userEventDatesHasNext"
@@ -296,7 +296,7 @@
                     v-if="
                       userEventDates && !compactView && !isLoadingDatesInitial
                     "
-                    :groupByMonth="true"
+                    :groupByMonth="false"
                     :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
                     :eventDates="userEventDates"
                     :hasNext="userEventDatesHasNext"
@@ -480,6 +480,12 @@ export default {
   z-index: 10;
 }
 
+.control-bar {
+  position: sticky;
+  top: 0px;
+  z-index: 100;
+}
+
 .event-list-vertical {
   display: flex;
   flex-direction: column;
@@ -552,9 +558,13 @@ export default {
 }
 
 .body--dark {
+  .control-bar {
+    background: black;
+  }
   .scroll-area {
     background: transparent;
   }
+
   .event-list-vertical {
     pointer-events: none;
     .controls-component {
@@ -578,6 +588,9 @@ export default {
 }
 
 .body--light {
+  .control-bar {
+    background: white;
+  }
   .scroll-area {
     background: transparent;
     .search-input {

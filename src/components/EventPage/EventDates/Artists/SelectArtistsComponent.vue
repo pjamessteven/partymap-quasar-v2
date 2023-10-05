@@ -2,6 +2,7 @@
   <div class="select-artists-component flex column">
     <q-select
       option-label="name"
+      style="max-width: 100%"
       ref="musicBrainzInput"
       :loading="loadingResults"
       outlined

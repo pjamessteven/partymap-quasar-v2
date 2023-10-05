@@ -138,13 +138,20 @@
                       />
 
                       <div
+                        class="flex row q-mt-lg no-wrap tags-wrapper"
+                        v-if="event?.event_tags && $q.screen.lt.md"
+                      >
+                        <TagsComponent :editing="editing" />
+                      </div>
+
+                      <div
                         class="flex grow justify-start items-start"
                         v-if="!!event"
                       >
                         <SummaryComponent
                           :editing="editing"
                           :class="
-                            $q.screen.gt.sm ? 'q-mt-md' : 'q-mt-lg q-mr-lg'
+                            $q.screen.gt.sm ? 'q-mt-md' : 'q-mt-md q-mr-lg'
                           "
                         />
                       </div>
@@ -204,8 +211,8 @@
 
                       <div
                         class="flex row justify-between items-end no-wrap tags-wrapper"
-                        :class="$q.screen.gt.sm ? 'q-pt-lg' : 'q-pt-md'"
-                        v-if="event?.event_tags"
+                        :class="$q.screen.gt.sm ? 'q-pt-lg' : ''"
+                        v-if="event?.event_tags && $q.screen.gt.sm"
                       >
                         <TagsComponent :editing="editing" />
                       </div>
@@ -808,17 +815,33 @@ export default {
           url: this.computedUrl,
         });
       } else {
-        // copy url to clipboard
-        var copyText = this.$refs.copyUrlInput;
-        /* Select the text field */
-        copyText.select();
-        copyText.setSelectionRange(0, 99999); /* For mobile devices */
+        if (!navigator.clipboard) {
+          // try the old way
+          try {
+            // copy url to clipboard
+            var copyText = this.$refs.copyUrlInput;
+            /* Select the text field */
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); /* For mobile devices */
 
-        /* Copy the text inside the text field */
-        document.execCommand('copy');
+            /* Copy the text inside the text field */
+            document.execCommand('copy');
 
-        /* Alert the copied text */
-        this.$q.notify('Copied link to clipboard');
+            /* Alert the copied text */
+            this.$q.notify('Copied event link to clipboard');
+          } catch (err) {
+            this.$q.notify('Sharing not supported in this browser :(');
+          }
+          return;
+        } else {
+          // do it the modern way
+          navigator.clipboard
+            .writeText(this.computedUrl)
+            .then(() => this.$q.notify('Copied event link to clipboard'))
+            .catch(() =>
+              this.$q.notify('Sharing not supported in this browser :(')
+            );
+        }
       }
     },
     async load() {

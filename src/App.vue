@@ -819,6 +819,11 @@ body {
   min-width: unset !important;
 }
 
+.edit-card {
+  min-width: 400px;
+  max-width: 460px;
+}
+
 .separator {
   width: 100%;
   border-top-style: solid;
@@ -924,6 +929,12 @@ body {
       background: white;
     }
   }
+  :deep(.q-dialog) {
+    .q-card {
+      max-width: 100vw;
+    }
+  }
+
   .q-card {
     &.fullscreen-mobile-card {
       border: none !important;
@@ -935,6 +946,14 @@ body {
       max-height: unset !important;
       border-radius: 0px !important;
     }
+  }
+
+  .edit-card {
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    border-radius: 0px !important;
+    border: none !important;
   }
 
   .dialog-page {

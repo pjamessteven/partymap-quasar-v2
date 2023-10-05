@@ -135,7 +135,7 @@
           class="inter semibold q-mb-md"
           v-else-if="!isLoadingInitial && eventDatesTotal === 0"
         >
-          Nothing happening here...
+          Nothing to see here
         </div>
 
         <q-linear-progress

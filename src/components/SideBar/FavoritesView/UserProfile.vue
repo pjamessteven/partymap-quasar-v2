@@ -223,17 +223,33 @@ export default {
           url: this.computedUrl,
         });
       } else {
-        // copy url to clipboard
-        var copyText = this.$refs.copyProfileUrlInput;
-        /* Select the text field */
-        copyText.select();
-        copyText.setSelectionRange(0, 99999); /* For mobile devices */
+        if (!navigator.clipboard) {
+          // try the old way
+          try {
+            // copy url to clipboard
+            var copyText = this.$refs.copyProfileUrlInput;
+            /* Select the text field */
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); /* For mobile devices */
 
-        /* Copy the text inside the text field */
-        document.execCommand('copy');
+            /* Copy the text inside the text field */
+            document.execCommand('copy');
 
-        /* Alert the copied text */
-        this.$q.notify('Copied link to clipboard');
+            /* Alert the copied text */
+            this.$q.notify('Copied profile link to clipboard');
+          } catch (err) {
+            this.$q.notify('Sharing not supported in this browser :(');
+          }
+          return;
+        } else {
+          // do it the modern way
+          navigator.clipboard
+            .writeText(this.computedUrl)
+            .then(() => this.$q.notify('Copied profile link to clipboard'))
+            .catch(() =>
+              this.$q.notify('Sharing not supported in this browser :(')
+            );
+        }
       }
     },
     loadCurrentUserDetails() {

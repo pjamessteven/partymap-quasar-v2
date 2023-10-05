@@ -274,9 +274,15 @@ export const useEventStore = defineStore('event', {
     async toggleInterested() {
       try {
         if (this.selectedEventDate) {
-          if (this.selectedEventDate.user_going)
+          if (this.selectedEventDate.user_going) {
             this.selectedEventDate.user_going = false;
-          this.selectedEventDate.user_interested = true;
+          }
+
+          if (this.selectedEventDate.user_interested) {
+            this.selectedEventDate.user_interested = false;
+          } else {
+            this.selectedEventDate.user_interested = true;
+          }
           await toggleEventDateInterestedRequest(this.selectedEventDate.id);
         } else {
           throw new Error('toggleInterested: No event date selected');
@@ -290,10 +296,16 @@ export const useEventStore = defineStore('event', {
     async toggleGoing() {
       try {
         if (this.selectedEventDate) {
-          if (this.selectedEventDate.user_interested)
+          if (this.selectedEventDate.user_interested) {
             this.selectedEventDate.user_interested = false;
+          }
 
-          this.selectedEventDate.user_going = true;
+          if (this.selectedEventDate.user_going) {
+            this.selectedEventDate.user_going = false;
+          } else {
+            this.selectedEventDate.user_going = true;
+          }
+
           await toggleEventDateGoingRequest(this.selectedEventDate.id);
         } else {
           throw new Error('toggleGoing: No event date selected');

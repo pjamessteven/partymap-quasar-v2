@@ -27,7 +27,7 @@
         <a
           class="link-hover underline ellipsis"
           target="_blank"
-          :href="computedExternalUrl"
+          :href="!editing ? computedExternalUrl : undefined"
           >{{ selectedEventDate.url }}</a
         >
       </div>
