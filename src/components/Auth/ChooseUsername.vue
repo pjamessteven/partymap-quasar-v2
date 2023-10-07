@@ -9,6 +9,7 @@
       </q-card-section>
       <q-card-section class="flex grow q-pt-none">
         <q-input
+          autocapitalize="off"
           filled
           class="flex grow"
           v-bind:label="$t('auth.username')"
@@ -70,6 +71,14 @@ export default {
         if (error.response.data.error.code === 'USERNAME_TAKEN') {
           this.username_taken = true;
         }
+      }
+    },
+  },
+  watch: {
+    username(newv, oldv) {
+      if (!newv !== oldv) {
+        // force lowercase username
+        this.username = this.username.toLowerCase();
       }
     },
   },

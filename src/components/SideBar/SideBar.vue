@@ -493,7 +493,7 @@ export default {
       }
       */
 
-@media only screen and (min-width: 600px) and (max-width: 1024px) {
+@media only screen and (min-width: 600px) and (max-width: 1280px) {
   .sidebar-wrapper {
     .sidebar {
       width: 96vw;
@@ -502,13 +502,13 @@ export default {
         transform: translate3d(0, calc(100% - 60vh), 0);
       }
       &.sidebar-mobile-expanded {
-        transform: translate3d(0, 134px, 0);
+        transform: translate3d(0, 128px, 0);
       }
     }
   }
 }
 
-@media only screen and (min-width: 1024px) {
+@media only screen and (min-width: 1280px) {
   .sidebar-wrapper {
     .sidebar {
       padding-bottom: 88px;

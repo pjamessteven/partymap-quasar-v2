@@ -47,3 +47,15 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 npm install -g @quasar/icongenie
 
 icongenie generate --icon /Users/peter/development/partymap-git/partymap-quasarv2/src/assets/marker-dark.png --background /Users/peter/development/partymap-git/partymap-quasarv2/src/assets/partymap-logo-light.png --png-color 000000 --splashscreen-color 000000 --svg-color 000000 --theme-color 000000
+
+## Capactior Android font size fix
+
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+
+public void onResume() {
+super.onResume();
+WebSettings settings = bridge.getWebView().getSettings();
+settings.setTextZoom(100);
+settings.setSupportZoom(false);
+}

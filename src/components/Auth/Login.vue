@@ -38,7 +38,8 @@
               no-caps
               class="soft-button-shadow"
               type="a"
-              :href="googleLoginUrl"
+              :href="!$q.platform.nativeMobile ? googleLoginUrl : undefined"
+              @click="$q.platform.nativeMobile ? nativeGoogleLogin : undefined"
             >
               <img
                 style="height: 20px; width: auto"
@@ -55,7 +56,8 @@
               icon="mdi-facebook"
               v-bind:label="$t('auth.log_in_with_facebook')"
               type="a"
-              :href="facebookLoginUrl"
+              :href="!$q.platform.nativeMobile ? facebookLoginUrl : undefined"
+              @click="$q.platform.nativeMobile ? nativeFbLogin : undefined"
             />
           </div>
           <!--
@@ -188,6 +190,7 @@ import InnerLoading from 'src/components/InnerLoading.vue';
 import TermsAndConditionsDialog from 'src/components/dialogs/AboutDialog/TermsAndConditionsDialog.vue';
 import PrivacyPolicyDialog from 'src/components/dialogs/AboutDialog/PrivacyPolicyDialog.vue';
 import { useQueryStore } from 'src/stores/query';
+import { Browser } from '@capacitor/browser';
 
 export default {
   name: 'LoginPage',
@@ -222,6 +225,16 @@ export default {
     },
     hideDialog() {
       this.$router.push({ name: 'Explore' });
+    },
+    nativeGoogleLogin() {
+      const openCapacitorSite = async () => {
+        await Browser.open({ url: this.googleLoginUrl });
+      };
+    },
+    nativeFbLogin() {
+      const openCapacitorSite = async () => {
+        await Browser.open({ url: this.facebookLoginUrl });
+      };
     },
   },
   computed: {
