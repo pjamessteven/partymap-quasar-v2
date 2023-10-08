@@ -266,7 +266,11 @@
                       >
                         <div
                           class="q-py-md location-header flex justify-between"
-                          :class="$q.screen.gt.xs ? 'q-px-lg text-' : 'q-px-md'"
+                          :class="
+                            $q.screen.gt.xs
+                              ? 'q-px-lg text-large bold'
+                              : 'q-px-md'
+                          "
                         >
                           <div class="t1 text- inter semibold">
                             Your upcoming events:
@@ -324,12 +328,12 @@
                         <div
                           class="q-py-md location-header"
                           :class="
-                            $q.screen.gt.xs ? 'q-pl-lg q-mt- text-' : 'q-pl-md'
+                            $q.screen.gt.xs
+                              ? 'q-pl-lg text-large inter bold'
+                              : 'q-pl-md  intersemibold'
                           "
                         >
-                          <div class="t1 text- inter semibold">
-                            Top tags in your area:
-                          </div>
+                          <div class="t1 text-">Top tags in your area:</div>
                         </div>
                         <div
                           class=""
@@ -387,10 +391,12 @@
                         <div
                           class="q-py-md location-header"
                           :class="
-                            $q.screen.gt.xs ? 'q-pl-lg q-mt- text-' : 'q-pl-md'
+                            $q.screen.gt.xs
+                              ? 'q-pl-lg q-mt- text-large bold'
+                              : 'q-pl-md'
                           "
                         >
-                          <div class="t1 text- inter semibold">
+                          <div class="t1 inter semibold">
                             Top tags around the world:
                           </div>
                         </div>
@@ -484,7 +490,11 @@
 
                       <div
                         class="t1 inter semibold location-header q-py-sm flex row items-center justify-between"
-                        :class="$q.screen.gt.xs ? 'q-pl-lg text-' : 'q-pl-md'"
+                        :class="
+                          $q.screen.gt.xs
+                            ? 'q-pl-lg text-large bold'
+                            : 'q-pl-md'
+                        "
                       >
                         <div class="flex items-center">
                           <div class="">
@@ -564,7 +574,11 @@
 
                       <div
                         class="t1 inter semibold location-header flex row items-center justify-between"
-                        :class="$q.screen.gt.xs ? 'q-pl-sm text-' : 'q-pl-sm'"
+                        :class="
+                          $q.screen.gt.xs
+                            ? 'q-pl-sm text-large bold'
+                            : 'q-pl-sm'
+                        "
                         v-if="eventDates && eventDates.length > 0"
                         style="height: 56px"
                       >

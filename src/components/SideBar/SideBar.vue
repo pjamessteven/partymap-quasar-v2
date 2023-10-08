@@ -658,7 +658,11 @@ export default {
       width: 100%;
       background: transparent;
       //margin-top: 48px;
-      transform: translate3d(0, calc(100% - 228px), 0);
+      transform: translate3d(
+        0,
+        calc(100% - 228px - env(safe-area-inset-top)),
+        0
+      );
 
       //will-change: auto;
       padding-bottom: 188px;

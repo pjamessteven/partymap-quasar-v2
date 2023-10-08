@@ -261,7 +261,7 @@ export default {
 @media only screen and (max-width: 1023px) {
   .body--dark {
     .menubar {
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      //border-top: 1px solid rgba(255, 255, 255, 0.1);
       .menubar-background {
         border-bottom: none;
       }
@@ -269,7 +269,7 @@ export default {
   }
   .body--light {
     .menubar {
-      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      //border-top: 1px solid rgba(0, 0, 0, 0.05);
       //border-top: none;
       //border-bottom: none;
       box-shadow: none;

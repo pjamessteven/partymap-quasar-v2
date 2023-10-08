@@ -267,7 +267,7 @@ export default {
     }
   }
   .search-component {
-    top: 72px;
+    top: calc(72px + env(safe-area-inset-top));
     .controls-wrapper {
       .controls-wrapper-inner {
       }

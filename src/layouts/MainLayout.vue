@@ -1,6 +1,6 @@
 <template>
   <div class="main-layout">
-    <MenuBar class="menubar" />
+    <MainMap />
     <div class="default-overlay" />
 
     <div
@@ -8,75 +8,78 @@
       :style="computedOverlayStyle"
       @click="clickOverlay()"
     />
-    <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
-    <Transition
-      appear
-      :enter-active-class="
-        $q.screen.gt.xs ? 'animated  slideInUp' : 'animated fadeIn'
-      "
-      :leave-active-class="
-        $q.screen.gt.xs ? 'animated slideOutDown' : undefined
-      "
-    >
-      <SideBar
-        class="sidebar-component"
-        v-show="
-          $q.screen.lt.sm || ($q.screen.gt.xs && $route.name == 'Explore')
-        "
-      />
-    </Transition>
-    <MainMap />
+    <div class="main-inner-layout">
+      <MenuBar class="menubar" />
 
-    <transition appear enter-active-class="animated fadeIn">
-      <SearchComponent
-        v-show="
+      <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
+      <Transition
+        appear
+        :enter-active-class="
+          $q.screen.gt.xs ? 'animated  slideInUp' : 'animated fadeIn'
+        "
+        :leave-active-class="
+          $q.screen.gt.xs ? 'animated slideOutDown' : undefined
+        "
+      >
+        <SideBar
+          class="sidebar-component"
+          v-show="
+            $q.screen.lt.sm || ($q.screen.gt.xs && $route.name == 'Explore')
+          "
+        />
+      </Transition>
+
+      <transition appear enter-active-class="animated fadeIn">
+        <SearchComponent
+          v-show="
+            $route.name === 'Explore' ||
+            ($q.screen.gt.sm && $route.name === 'BrowsePage')
+          "
+        />
+      </transition>
+      <!-- There's two router views because we want different transitions for different pages
+  and we're lazy... -->
+      <router-view
+        name="event"
+        v-slot="{ Component }"
+        class="main-layout-router"
+        v-bind:class="{
+          'mobile-map-view-router': $q.screen.lt.sm,
+        }"
+      >
+        <transition
+          enter-active-class="animated slideInUp"
+          leave-active-class="animated slideOutDown"
+        >
+          <component :is="Component" />
+        </transition>
+      </router-view>
+      <router-view
+        v-slot="{ Component }"
+        class="main-layout-router"
+        v-bind:class="{
+          'mobile-map-view-router': $q.screen.lt.sm,
+        }"
+      >
+        <transition
+          enter-active-class="animated fadeIn"
+          leave-active-class="animated fadeOut"
+        >
+          <component :is="Component" />
+        </transition>
+      </router-view>
+      <NavigationBar
+        class="nav-bar"
+        v-if="$q.screen.lt.sm"
+        :style="
           $route.name === 'Explore' ||
-          ($q.screen.gt.sm && $route.name === 'BrowsePage')
+          $route.name === 'UserPage' ||
+          $route.name === 'BrowsePage'
+            ? ''
+            : 'display: none'
         "
       />
-    </transition>
-    <!-- There's two router views because we want different transitions for different pages
-  and we're lazy... -->
-    <router-view
-      name="event"
-      v-slot="{ Component }"
-      class="main-layout-router"
-      v-bind:class="{
-        'mobile-map-view-router': $q.screen.lt.sm,
-      }"
-    >
-      <transition
-        enter-active-class="animated slideInUp"
-        leave-active-class="animated slideOutDown"
-      >
-        <component :is="Component" />
-      </transition>
-    </router-view>
-    <router-view
-      v-slot="{ Component }"
-      class="main-layout-router"
-      v-bind:class="{
-        'mobile-map-view-router': $q.screen.lt.sm,
-      }"
-    >
-      <transition
-        enter-active-class="animated fadeIn"
-        leave-active-class="animated fadeOut"
-      >
-        <component :is="Component" />
-      </transition>
-    </router-view>
-    <NavigationBar
-      class="nav-bar"
-      v-if="$q.screen.lt.sm"
-      :style="
-        $route.name === 'Explore' ||
-        $route.name === 'UserPage' ||
-        $route.name === 'BrowsePage'
-          ? ''
-          : 'display: none'
-      "
-    />
+    </div>
   </div>
 </template>
 
@@ -203,9 +206,9 @@ export default {
         rgba(0, 0, 0, 0.48) 100%
       );*/
     }
-    .splash-screen {
-      background: green;
-    }
+  }
+  .splash-screen {
+    background: green;
   }
 }
 
@@ -214,7 +217,6 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
-
   .default-overlay {
     z-index: 103;
     position: absolute;
@@ -239,41 +241,44 @@ export default {
       // translate3d is a hack for safari to force gpu rendering of blur()
     }
   }
+  .main-inner-layout {
+    margin-top: env(safe-area-inset-top);
 
-  .menubar {
-    width: 100%;
-    min-height: 62px !important;
-    position: absolute;
-    z-index: 1000 !important;
-    pointer-events: none;
-    z-index: 102;
-  }
-  .menubar-logo {
-    position: absolute;
-    z-index: 1000;
-  }
-  .controls-mobile {
-    position: absolute;
-    z-index: 103;
-    top: 64px;
-    width: 100%;
-  }
-  .sidebar-component {
-    z-index: 104;
-  }
-  .main-layout-router {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    z-index: 105;
-    top: 0px;
-  }
-  .mobile-map-view-router {
-    z-index: 104;
-  }
-  .nav-bar {
-    opacity: 1;
-    transition: opacity 4s;
+    .menubar {
+      width: 100%;
+      min-height: 62px !important;
+      position: absolute;
+      z-index: 1000 !important;
+      pointer-events: none;
+      z-index: 102;
+    }
+    .menubar-logo {
+      position: absolute;
+      z-index: 1000;
+    }
+    .controls-mobile {
+      position: absolute;
+      z-index: 103;
+      top: 64px;
+      width: 100%;
+    }
+    .sidebar-component {
+      z-index: 104;
+    }
+    .main-layout-router {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      z-index: 105;
+      top: 0px;
+    }
+    .mobile-map-view-router {
+      z-index: 104;
+    }
+    .nav-bar {
+      opacity: 1;
+      transition: opacity 4s;
+    }
   }
 }
 @media only screen and (max-width: 1024px) {

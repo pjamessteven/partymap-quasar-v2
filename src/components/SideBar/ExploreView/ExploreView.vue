@@ -73,7 +73,6 @@
             borderRadius: 0,
           }"
           class="scroll-area flex grow"
-          @mouseenter="mouseEnter"
           :class="!showPanel && 'disable-scroll'"
         >
           <div class="flex column no-wrap scroll-content q-px-sm">
