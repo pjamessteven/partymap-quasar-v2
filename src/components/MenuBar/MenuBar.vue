@@ -57,7 +57,7 @@ export default {
   },
   watch: {
     iconColor(newv, oldv) {
-      if (this.$q.platform.is.capacitor && this.$q.platform.is.ios) {
+      if (this.$q.platform.is.capacitor) {
         if (newv === 'black') {
           StatusBar.setStyle({ style: Style.Light });
         } else {
@@ -65,6 +65,10 @@ export default {
         }
       }
     },
+  },
+  mounted() {
+    // Display content under transparent status bar (Android only)
+    StatusBar.setOverlaysWebView({ overlay: true });
   },
   methods: {
     updateNav(val) {

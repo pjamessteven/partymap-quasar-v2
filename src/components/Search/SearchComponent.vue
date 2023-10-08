@@ -267,7 +267,14 @@ export default {
     }
   }
   .search-component {
-    @supports (top: env(safe-area-inset-top)) {
+    @supports ((top: env(safe-area-inset-top))) {
+      top: calc(68px + env(safe-area-inset-top));
+    }
+    // ios specific padding
+    @supports (
+      (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+        (-webkit-appearance: none)
+    ) {
       top: calc(72px + env(safe-area-inset-top) - 8px);
     }
     .controls-wrapper {

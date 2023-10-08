@@ -659,7 +659,29 @@ export default {
       background: transparent;
       //margin-top: 48px;
       transform: translate3d(0, calc(100% - 228px), 0);
-      @supports (top: env(safe-area-inset-top)) {
+
+      //will-change: auto;
+      padding-bottom: 188px;
+      border-left: none;
+      border-right: none;
+      overflow: visible;
+      width: 100%;
+
+      @supports ((top: env(safe-area-inset-top))) {
+        transform: translate3d(
+          0,
+          calc(
+            100% - 228px - env(safe-area-inset-top) -
+              env(safe-area-inset-bottom)
+          ),
+          0
+        );
+        padding-bottom: calc(188px + env(safe-area-inset-top));
+      }
+      @supports (
+        (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+          (-webkit-appearance: none)
+      ) {
         transform: translate3d(
           0,
           calc(
@@ -668,14 +690,8 @@ export default {
           ),
           0
         );
+        padding-bottom: calc(188px + env(safe-area-inset-top) + 16px);
       }
-
-      //will-change: auto;
-      padding-bottom: 188px;
-      border-left: none;
-      border-right: none;
-      overflow: visible;
-      width: 100%;
 
       .sidebar-content {
       }

@@ -2,7 +2,6 @@
   <div class="main-layout">
     <MainMap />
     <div class="default-overlay" />
-
     <div
       class="overlay"
       :style="computedOverlayStyle"
@@ -93,6 +92,8 @@ import NavigationBar from 'src/components/NavigationBar.vue';
 import { mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import { useMainStore } from 'src/stores/main';
+import { SafeAreaController } from '@aashu-dubey/capacitor-statusbar-safe-area';
+import { SafeArea } from '@aashu-dubey/capacitor-statusbar-safe-area';
 
 export default {
   components: {
@@ -103,12 +104,27 @@ export default {
     NavigationBar,
     SearchComponent,
   },
-
+  data() {
+    return {
+      androidStatusbarHeight: 0,
+      insets: {},
+    };
+  },
   methods: {
     clickOverlay() {
       this.showPanel = false;
       this.sidebarPanel = 'explore';
     },
+  },
+  async mounted() {
+    // this package is specifically to get the statusbar padding on android
+    /*
+    SafeAreaController.injectCSSVariables();
+    const { height } = await SafeArea.getStatusBarHeight();
+    this.androidStatusbarHeight = height;
+    const insets = await SafeArea.getSafeAreaInsets();
+    this.insets = insets;
+    */
   },
   beforeRouteUpdate(to, from, next) {
     if (from.name === 'Explore') {
@@ -246,8 +262,14 @@ export default {
     height: 100%;
     pointer-events: none;
     width: 100%;
-
-    @supports (top: env(safe-area-inset-top)) {
+    @supports ((top: env(safe-area-inset-top))) {
+      padding-top: calc(env(safe-area-inset-top));
+    }
+    // ios specific top padding
+    @supports (
+      (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+        (-webkit-appearance: none)
+    ) {
       padding-top: calc(env(safe-area-inset-top) - 8px);
     }
     @supports (top: env(safe-area-inset-bottom)) {

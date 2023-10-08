@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@aashu-dubey/capacitor-statusbar-safe-area@^2.1.1":
+  "integrity" "sha512-ILzDOx73gsTHVlGEdHEVbzUSZu9/UCOqaul8i/YrNrOOBce/Jt14fwkc1GNzjYkoPbHkCpvH5FBbKrq7hF3tUw=="
+  "resolved" "https://registry.npmjs.org/@aashu-dubey/capacitor-statusbar-safe-area/-/capacitor-statusbar-safe-area-2.1.1.tgz"
+  "version" "2.1.1"
+
 "@babel/parser@^7.16.4":
   "integrity" "sha512-T3Z9oHybU+0vZlY9CiDSJQTD5ZapcW18ZctFMi0MOAl/4BjFF4ul7NVSARLdbGO5vDqy9eQiGTV0LtKfvCYvcg=="
   "resolved" "https://registry.npmjs.org/@babel/parser/-/parser-7.20.7.tgz"
@@ -40,7 +45,7 @@
     "tslib" "^2.4.0"
     "xml2js" "^0.5.0"
 
-"@capacitor/core@^5.0.0", "@capacitor/core@^5.4.0", "@capacitor/core@^5.4.2":
+"@capacitor/core@^5.0.0", "@capacitor/core@^5.0.3", "@capacitor/core@^5.4.0", "@capacitor/core@^5.4.2":
   "integrity" "sha512-XbR1vldJFzBWHeoGPpgfNy3Zhjf0NxXdHEaGNANWVBg0ZWG2gwFr1dcRALUUQtbwrEEkCCNiLYg4YiQPRk7SEQ=="
   "resolved" "https://registry.npmjs.org/@capacitor/core/-/core-5.4.2.tgz"
   "version" "5.4.2"
