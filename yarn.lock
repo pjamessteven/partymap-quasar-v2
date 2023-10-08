@@ -47,6 +47,11 @@
   dependencies:
     "tslib" "^2.1.0"
 
+"@capacitor/status-bar@^5.0.6":
+  "integrity" "sha512-7od8CxsBnot1XMK3IeOkproFL4hgoKoWAc3pwUvmDOkQsXoxwQm4SR9mLwQavv1XfxtHbFV9Ukd7FwMxOPSViw=="
+  "resolved" "https://registry.npmjs.org/@capacitor/status-bar/-/status-bar-5.0.6.tgz"
+  "version" "5.0.6"
+
 "@esbuild-plugins/node-globals-polyfill@^0.2.3":
   "integrity" "sha512-r3MIryXDeXDOZh7ih1l/yE9ZLORCd5e8vWg02azWRGj5SPTuoh69A2AIyn0Z31V/kHBfZ4HgWJ+OK3GTTwLmnw=="
   "resolved" "https://registry.npmjs.org/@esbuild-plugins/node-globals-polyfill/-/node-globals-polyfill-0.2.3.tgz"

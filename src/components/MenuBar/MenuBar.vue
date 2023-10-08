@@ -42,6 +42,8 @@ import MenuBarButtons from './MenuBarButtons.vue';
 import NavigationBar from 'src/components/NavigationBar.vue';
 import { useMainStore } from 'stores/main';
 import { mapState, mapWritableState } from 'pinia';
+import { StatusBar, Style } from '@capacitor/status-bar';
+
 export default {
   name: 'MenuBar',
   components: {
@@ -52,6 +54,17 @@ export default {
 
   data() {
     return {};
+  },
+  watch: {
+    iconColor(newv, oldv) {
+      if (this.$q.platform.is.capacitor && this.$q.platform.is.ios) {
+        if (newv === 'black') {
+          StatusBar.setStyle({ style: Style.Light });
+        } else {
+          StatusBar.setStyle({ style: Style.Dark });
+        }
+      }
+    },
   },
   methods: {
     updateNav(val) {
