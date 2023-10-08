@@ -658,11 +658,17 @@ export default {
       width: 100%;
       background: transparent;
       //margin-top: 48px;
-      transform: translate3d(
-        0,
-        calc(100% - 228px - env(safe-area-inset-top)),
-        0
-      );
+      transform: translate3d(0, calc(100% - 228px), 0);
+      @supports (top: env(safe-area-inset-top)) {
+        transform: translate3d(
+          0,
+          calc(
+            100% - 228px - env(safe-area-inset-top) -
+              env(safe-area-inset-bottom) + 16px
+          ),
+          0
+        );
+      }
 
       //will-change: auto;
       padding-bottom: 188px;

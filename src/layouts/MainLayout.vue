@@ -217,6 +217,7 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
+
   .default-overlay {
     z-index: 103;
     position: absolute;
@@ -242,7 +243,16 @@ export default {
     }
   }
   .main-inner-layout {
-    margin-top: env(safe-area-inset-top);
+    height: 100%;
+    pointer-events: none;
+    width: 100%;
+
+    @supports (top: env(safe-area-inset-top)) {
+      padding-top: calc(env(safe-area-inset-top) - 8px);
+    }
+    @supports (top: env(safe-area-inset-bottom)) {
+      padding-bottom: calc(env(safe-area-inset-bottom) - 16px);
+    }
 
     .menubar {
       width: 100%;

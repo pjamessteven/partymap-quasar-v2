@@ -879,6 +879,7 @@ img.leaflet-marker-shadow {
 
 .map {
   cursor: grab;
+
   &.disable-interaction {
     pointer-events: none !important;
     cursor: default;
@@ -980,7 +981,7 @@ canvas {
   :deep(.leaflet-top) {
     top: unset;
     transform: unset;
-    bottom: 268px;
+    bottom: calc(268px + env(safe-area-inset-bottom));
   }
 }
 </style>

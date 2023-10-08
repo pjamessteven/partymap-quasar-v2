@@ -267,7 +267,9 @@ export default {
     }
   }
   .search-component {
-    top: calc(72px + env(safe-area-inset-top));
+    @supports (top: env(safe-area-inset-top)) {
+      top: calc(72px + env(safe-area-inset-top) - 8px);
+    }
     .controls-wrapper {
       .controls-wrapper-inner {
       }

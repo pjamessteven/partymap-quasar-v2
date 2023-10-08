@@ -11,7 +11,7 @@
       @update:model-value="updateNav"
       no-caps
       :indicator-color="
-        $q.screen.lt.sm
+        $q.screen.lt.sm && false
           ? $route.name === 'Explore' ||
             $route.name === 'UserPage' ||
             $route.name === 'BrowsePage'
@@ -419,11 +419,15 @@ export default {
   }
   .navigation-bar {
     width: 100%;
+    pointer-events: all;
     position: absolute;
     z-index: 1000;
     bottom: 0;
     border-bottom: none !important;
     justify-content: unset;
+    @supports (top: env(safe-area-inset-bottom)) {
+      padding-bottom: calc(env(safe-area-inset-bottom) - 16px);
+    }
     :deep(.q-tabs) {
       width: 100%;
       position: relative;
