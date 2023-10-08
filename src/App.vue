@@ -943,6 +943,7 @@ body {
       margin-bottom: unset;
       width: 100%;
       height: 100%;
+      padding-top: env(safe-area-inset-top);
       max-height: unset !important;
       border-radius: 0px !important;
     }
@@ -964,6 +965,8 @@ body {
       margin-bottom: unset;
       width: 100%;
       height: 100%;
+      padding-top: env(safe-area-inset-top);
+
       border-radius: 0px !important;
       .dialog-card-header {
         flex-grow: 1;

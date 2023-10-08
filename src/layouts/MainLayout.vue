@@ -303,6 +303,8 @@ export default {
       width: 100%;
       z-index: 105;
       top: 0px;
+      pointer-events: all;
+      padding-top: calc(64px + env(safe-area-inset-top));
     }
     .mobile-map-view-router {
       z-index: 104;
