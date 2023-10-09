@@ -4,12 +4,12 @@
 
     <div class="solid-page-inner flex column no-wrap">
       <div
-        v-if="$q.screen.gt.xs && $slots.title"
+        v-if="$slots.title"
         class="inter bolder"
         :class="
           $q.screen.gt.xs
             ? 'q-pt-xl q-pb-sm text-h4'
-            : 'q-px-md q-pt-md q-pb-sm text-h6'
+            : 'q-px-md q-pt-md q-pb-md text-h5'
         "
       >
         <slot name="title"></slot>
@@ -53,7 +53,7 @@ export default {
   overflow: auto;
   width: 100%;
   height: 100%;
-  padding-top: 64px;
+  //padding-top: 64px;
   display: flex;
   justify-content: center;
   //overflow: hidden;

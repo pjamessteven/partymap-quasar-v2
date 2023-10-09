@@ -116,15 +116,13 @@ export default {
       this.sidebarPanel = 'explore';
     },
   },
-  async mounted() {
+  async beforeMount() {
     // this package is specifically to get the statusbar padding on android
-    /*
     SafeAreaController.injectCSSVariables();
     const { height } = await SafeArea.getStatusBarHeight();
     this.androidStatusbarHeight = height;
     const insets = await SafeArea.getSafeAreaInsets();
     this.insets = insets;
-    */
   },
   beforeRouteUpdate(to, from, next) {
     if (from.name === 'Explore') {
@@ -262,8 +260,9 @@ export default {
     height: 100%;
     pointer-events: none;
     width: 100%;
-    @supports ((top: env(safe-area-inset-top))) {
-      padding-top: calc(env(safe-area-inset-top));
+    // android
+    @supports ((top: var(--safe-area-inset-top))) {
+      padding-top: var(--safe-area-inset-top);
     }
     // ios specific top padding
     @supports (
@@ -304,7 +303,6 @@ export default {
       z-index: 105;
       top: 0px;
       pointer-events: all;
-      padding-top: calc(64px + env(safe-area-inset-top));
     }
     .mobile-map-view-router {
       z-index: 104;

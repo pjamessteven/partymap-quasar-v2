@@ -37,9 +37,11 @@
               text-color="black "
               no-caps
               class="soft-button-shadow"
-              type="a"
-              :href="!$q.platform.nativeMobile ? googleLoginUrl : undefined"
-              @click="$q.platform.nativeMobile ? nativeGoogleLogin : undefined"
+              :type="!$q.platform.is.nativeMobile ? 'a' : undefined"
+              :href="!$q.platform.is.nativeMobile ? googleLoginUrl : undefined"
+              @click="
+                $q.platform.is.nativeMobile ? nativeGoogleLogin() : undefined
+              "
             >
               <img
                 style="height: 20px; width: auto"
@@ -55,9 +57,11 @@
               class="soft-button-shadow q-mt-md"
               icon="mdi-facebook"
               v-bind:label="$t('auth.log_in_with_facebook')"
-              type="a"
-              :href="!$q.platform.nativeMobile ? facebookLoginUrl : undefined"
-              @click="$q.platform.nativeMobile ? nativeFbLogin : undefined"
+              :type="!$q.platform.is.nativeMobile ? 'a' : undefined"
+              :href="
+                !$q.platform.is.nativeMobile ? facebookLoginUrl : undefined
+              "
+              @click="$q.platform.is.nativeMobile ? nativeFbLogin() : undefined"
             />
           </div>
           <!--
@@ -191,7 +195,7 @@ import TermsAndConditionsDialog from 'src/components/dialogs/AboutDialog/TermsAn
 import PrivacyPolicyDialog from 'src/components/dialogs/AboutDialog/PrivacyPolicyDialog.vue';
 import { useQueryStore } from 'src/stores/query';
 import { Browser } from '@capacitor/browser';
-
+import { toRaw } from 'vue';
 export default {
   name: 'LoginPage',
   components: { InnerLoading, TermsAndConditionsDialog, PrivacyPolicyDialog },
@@ -226,15 +230,11 @@ export default {
     hideDialog() {
       this.$router.push({ name: 'Explore' });
     },
-    nativeGoogleLogin() {
-      const openCapacitorSite = async () => {
-        await Browser.open({ url: this.googleLoginUrl });
-      };
+    async nativeGoogleLogin() {
+      await Browser.open({ url: this.googleLoginUrl });
     },
-    nativeFbLogin() {
-      const openCapacitorSite = async () => {
-        await Browser.open({ url: this.facebookLoginUrl });
-      };
+    async nativeFbLogin() {
+      await Browser.open({ url: this.facebookLoginUrl });
     },
   },
   computed: {

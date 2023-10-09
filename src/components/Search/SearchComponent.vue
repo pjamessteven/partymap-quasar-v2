@@ -267,8 +267,9 @@ export default {
     }
   }
   .search-component {
-    @supports ((top: env(safe-area-inset-top))) {
-      top: calc(68px + env(safe-area-inset-top));
+    // android
+    @supports ((top: var(--safe-area-inset-top))) {
+      top: calc(68px + var(--safe-area-inset-top));
     }
     // ios specific padding
     @supports (

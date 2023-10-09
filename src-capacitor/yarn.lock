@@ -17,6 +17,11 @@
   "resolved" "https://registry.npmjs.org/@capacitor/app/-/app-5.0.6.tgz"
   "version" "5.0.6"
 
+"@capacitor/browser@^5.1.0":
+  "integrity" "sha512-7togqchk2Tvq4SmLaWhcrd4x48ES/GEZsceM+29aun7WhxQEVcDU0cJsVdSU2LNFwNhWgPV2GW90etVd1B3OdQ=="
+  "resolved" "https://registry.npmjs.org/@capacitor/browser/-/browser-5.1.0.tgz"
+  "version" "5.1.0"
+
 "@capacitor/cli@^5.0.0":
   "integrity" "sha512-ck2DC9hEai2BWsBM08WN98xjC2LDusSzUWQySTNQ81S/cQUpSPXk9YX+KTd3rP/kI/sXpOuDEe7SSS7qkD1a2w=="
   "resolved" "https://registry.npmjs.org/@capacitor/cli/-/cli-5.4.2.tgz"

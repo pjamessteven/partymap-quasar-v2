@@ -667,12 +667,12 @@ export default {
       overflow: visible;
       width: 100%;
 
-      @supports ((top: env(safe-area-inset-top))) {
+      @supports ((top: var(--safe-area-inset-top))) {
         transform: translate3d(
           0,
           calc(
-            100% - 228px - env(safe-area-inset-top) -
-              env(safe-area-inset-bottom)
+            100% - 228px - var(--safe-area-inset-top) -
+              var(--safe-area-inset-bottom)
           ),
           0
         );

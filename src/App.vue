@@ -134,7 +134,7 @@ body {
     position: relative;
     top: 0px;
     z-index: 100;
-    padding: 18px 18px;
+    padding: 16px 16px;
     font-weight: 800 !important;
     .text-h6 {
       font-weight: 800 !important;
@@ -812,6 +812,23 @@ body {
   padding: 0px;
 }
 
+.q-dialog {
+  @supports ((top: var(--safe-area-inset-top))) {
+    padding-top: calc(var(--safe-area-inset-top));
+  }
+  @supports ((bottom: var(--safe-area-inset-bottom))) {
+    padding-bottom: calc(var(--safe-area-inset-bottom));
+  }
+  .q-dialog__inner {
+    @supports ((top: var(--safe-area-inset-top))) {
+      padding-top: calc(var(--safe-area-inset-top));
+    }
+    @supports ((bottom: var(--safe-area-inset-bottom))) {
+      padding-bottom: calc(var(--safe-area-inset-bottom));
+    }
+  }
+}
+
 .q-card {
   border-radius: 9px !important;
 }
@@ -943,7 +960,6 @@ body {
       margin-bottom: unset;
       width: 100%;
       height: 100%;
-      padding-top: env(safe-area-inset-top);
       max-height: unset !important;
       border-radius: 0px !important;
     }
@@ -965,7 +981,7 @@ body {
       margin-bottom: unset;
       width: 100%;
       height: 100%;
-      padding-top: env(safe-area-inset-top);
+      padding-top: calc(var(--safe-area-inset-top));
 
       border-radius: 0px !important;
       .dialog-card-header {
