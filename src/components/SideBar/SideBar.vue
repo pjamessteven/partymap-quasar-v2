@@ -690,7 +690,7 @@ export default {
           ),
           0
         );
-        padding-bottom: calc(188px + env(safe-area-inset-top) + 16px);
+        padding-bottom: calc(188px + env(safe-area-inset-top) + 8px);
       }
 
       .sidebar-content {

@@ -2,7 +2,6 @@
   <transition appear enter-active-class="animated fadeIn">
     <div class="ed-card">
       <router-link
-        v-touch-swipe.mouse.up.prevent
         v-slot="{ navigate }"
         :custom="true"
         :to="{

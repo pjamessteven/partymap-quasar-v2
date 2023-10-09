@@ -12,7 +12,7 @@
             :title="items[tag].title"
             :tagline="items[tag].tagline"
             :description="items[tag].description"
-            :eventDates="taggedEvents[tag].eventDates"
+            :eventDates="taggedEvents?.[tag]?.eventDates"
           />
         </div>
         <InnerLoading v-else />
@@ -77,8 +77,12 @@ export default {
       Object.keys(this.taggedEvents).length !== Object.keys(this.items).length
     ) {
       for (const tag of Object.keys(this.items)) {
-        await this.loadEventDates(tag);
-        this.ready = true;
+        try {
+          await this.loadEventDates(tag);
+          this.ready = true;
+        } catch (e) {
+          console.log(e);
+        }
       }
     } else {
       setTimeout(() => {

@@ -67,7 +67,6 @@ export const useBrowseStore = defineStore('browse', {
           per_page: Screen.lt.sm ? 10 : 20,
           distinct: true,
         });
-
         if (item.eventDatesPage === 1) {
           item.eventDates = response.data.items;
           item.eventDatesGroupedByMonth = groupEventDatesByMonth(
@@ -91,6 +90,7 @@ export const useBrowseStore = defineStore('browse', {
         throw error;
       }
       this.taggedEvents[tag] = item;
+      return;
     },
   },
 });

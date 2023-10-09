@@ -147,7 +147,7 @@
                   </div>
                   <div
                     v-if="showMessage"
-                    class="flex column items-start justify-start t2 q-mt-sm"
+                    class="flex column items-start justify-start t2 q-mt-sm q-mb-md"
                   >
                     PartyMap is a community-driven platform for finding parties
                     and festivals around the world! PartyMap is a work in
@@ -160,8 +160,14 @@
 
                     <p />
 
-                    Much love to my people around the world - Pete
-                    <div class="flex q-gutter-md q-mt-md q-mb-lg">
+                    Much love to my party people around the world...
+
+                    <p />
+                    - Pete
+                    <div
+                      class="flex q-gutter-md q-mb-lg"
+                      v-if="!$q.platform.is.nativeMobile"
+                    >
                       <div
                         @click.stop
                         class="appstore-wrapper flex items-center q-py-sm q-px-md"
@@ -193,7 +199,7 @@
                   </div>
                 </div>
                 <div
-                  v-if="$q.screen.lt.sm && false"
+                  v-if="$q.screen.lt.sm"
                   class="nav-button-container flex row no-wrap q-px-md t1 q-mt-md"
                   :class="{
                     'q-mb-sm': $q.screen.lt.sm,
@@ -203,13 +209,14 @@
                   <div
                     flat
                     @click.stop="showAddEventDialog()"
-                    class="nav-button flex items-center justify-between q-mr-sm q-px-md q-py-sm"
+                    class="nav-button flex items-center justify-center q-mr-sm q-px-md q-py-sm"
                   >
-                    <span v-if="$q.screen.lt.sm">Add</span
+                    <span v-if="$q.screen.lt.sm">Submit event</span
                     ><span v-else>Add an event</span>
                     <q-icon
                       name="mdi-plus"
                       size="1rem"
+                      class="q-ml-md"
                       :class="{ 'q-ml-md': $q.screen.gt.xs }"
                     />
                   </div>
@@ -220,8 +227,8 @@
                     no-caps
                     class="nav-button q-px-md q-py-sm"
                   >
-                    <div class="flex justify-between items-center grow">
-                      <span> Explore the map! </span>
+                    <div class="flex justify-center items-center grow">
+                      <span>Explore the map! </span>
                       <q-icon
                         name="mdi-chevron-right"
                         size="1rem"
@@ -236,13 +243,7 @@
                 </div>
 
                 <div
-                  class="flex row justify-center items-center"
-                  :class="$q.screen.gt.xs ? 'q-mt-' : 'q-mt-xl q-py-xl'"
-                  :style="
-                    $q.screen.gt.xs
-                      ? 'pointer-events: none;margin-top: -500px'
-                      : 'margin-top: 350px'
-                  "
+                  class="flex row justify-center items-cente loading-wrapper"
                   v-if="loadingEverything || !computedSidebarPanelReady"
                 >
                   <!--
@@ -1236,10 +1237,15 @@ export default {
   .main-content {
     width: 100%;
     height: 100%;
-
-    .message {
-      //border-radius: 9px;
-      cursor: pointer;
+    .scroll-stuff {
+      .loading-wrapper {
+        pointer-events: none;
+        margin-top: -500px;
+      }
+      .message {
+        //border-radius: 9px;
+        cursor: pointer;
+      }
     }
 
     .mobile-hide-wrapper {
@@ -1391,11 +1397,18 @@ export default {
       }
     }
     .main-content {
-      .message {
-        border-radius: 0px;
-        border-left: none !important;
-        border-right: none !important;
+      .scroll-stuff {
+        .loading-wrapper {
+          pointer-events: none;
+          margin-top: calc(500px + var(--safe-area-inset-top));
+        }
+        .message {
+          border-radius: 0px;
+          border-left: none !important;
+          border-right: none !important;
+        }
       }
+
       .nav-button-container {
         .nav-button {
           flex-basis: unset;

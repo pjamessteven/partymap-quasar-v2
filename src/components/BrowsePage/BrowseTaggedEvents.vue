@@ -46,37 +46,24 @@
 </template>
 
 <script>
-import common from 'assets/common';
-import { mapState } from 'pinia';
-import { useAuthStore } from 'src/stores/auth';
 //import InnerLoading from 'src/components/InnerLoading.vue';
 import EventDatePoster from 'src/components/EventDatePoster.vue';
 
 export default {
   components: { EventDatePoster },
   props: {
-    tag: {},
-    title: {},
-    tagline: {},
-    description: {},
-    eventDates: [],
+    title: { default: '' },
+    tagline: { default: '' },
+    eventDates: {
+      default: [],
+    },
   },
   data() {
-    return {
-      user: null,
-      loading: false,
-    };
+    return {};
   },
   //mounted() {},
   methods: {},
   watch: {},
-  computed: {
-    ...mapState(useAuthStore, ['currentUser']),
-  },
-  created() {
-    this.timeAgo = common.timeAgo;
-    this.dateUTCToLocal = common.dateUTCToLocal;
-  },
 };
 </script>
 

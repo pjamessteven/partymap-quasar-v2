@@ -350,7 +350,18 @@ export default {
   }
   .main-layout {
     .main-layout-router {
-      padding-top: 62px;
+      padding-top: calc(62px + var(--safe-area-inset-top));
+      // ios specific top padding
+      @supports (
+        (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+          (-webkit-appearance: none)
+      ) {
+        padding-top: calc(62px + var(--safe-area-inset-top) - 8px);
+      }
+
+      @supports (top: env(safe-area-inset-bottom)) {
+        padding-bottom: calc(env(safe-area-inset-bottom) - 16px);
+      }
     }
 
     .overlay {
