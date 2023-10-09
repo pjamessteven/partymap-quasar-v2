@@ -272,7 +272,8 @@ export default {
       padding-top: calc(env(safe-area-inset-top) - 8px);
     }
     @supports (top: env(safe-area-inset-bottom)) {
-      padding-bottom: calc(env(safe-area-inset-bottom) - 16px);
+      // we only really care about bottom padding when it's overlaying the nav bar
+      //padding-bottom: calc(env(safe-area-inset-bottom) - 16px);
     }
 
     .menubar {
@@ -360,7 +361,8 @@ export default {
       }
 
       @supports (top: env(safe-area-inset-bottom)) {
-        padding-bottom: calc(env(safe-area-inset-bottom) - 16px);
+        // we only really care about bottom padding when it's overlaying the nav bar
+        // padding-bottom: calc(env(safe-area-inset-bottom) - 16px);
       }
     }
 

@@ -211,7 +211,7 @@
                     @click.stop="showAddEventDialog()"
                     class="nav-button flex items-center justify-center q-mr-sm q-px-md q-py-sm"
                   >
-                    <span v-if="$q.screen.lt.sm">Submit event</span
+                    <span v-if="$q.screen.lt.sm">Submit</span
                     ><span v-else>Add an event</span>
                     <q-icon
                       name="mdi-plus"
