@@ -5,7 +5,7 @@
       :class="{
         ' q-px-md q-pb-md  t3 inter bold text-large': $q.screen.gt.xs,
         'q-pt-md': $q.screen.gt.xs && $route.name !== 'Explore',
-        'q-px-sm q-ml-xs q-py-md t2': $q.screen.lt.sm,
+        'q-px-sm q-ml-xs q-py-md t2 semibold': $q.screen.lt.sm,
       }"
     >
       <span v-if="!!altLabel">{{ altLabel }}</span>

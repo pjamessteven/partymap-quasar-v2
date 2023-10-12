@@ -115,79 +115,87 @@
         Loading...
       </div>
       <div
-        class="event-date-center flex column grow no-wrap justify-center"
+        class="event-date-center t2 flex column grow no-wrap justify-center items-center"
         :style="
           $q.screen.lt.sm
             ? 'height: 144px; position: absolute; width: 100%; z-index: 500'
+            : $q.screen.gt.lg
+            ? 'height: 300px; position: absolute; width: 100%; z-index: 500'
             : 'height: 240px; position: absolute; width: 100%; z-index: 500'
         "
       >
-        <div
-          class="inter semibold q-mb-lg"
-          v-if="
-            (isLoadingInitial || (mapMoving && !blockUpdates)) && !showPanel
-          "
-        >
-          Finding what's good...
-        </div>
-        <div
-          class="inter semibold q-mb-md"
-          v-else-if="!isLoadingInitial && eventDatesTotal === 0"
-        >
-          Nothing to see here
-        </div>
-
-        <q-linear-progress
-          v-if="
-            (isLoadingInitial || (mapMoving && !blockUpdates)) && !showPanel
-          "
-          class="linear-progress"
-          indeterminate
-          size="2px"
-          :color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
-          rounded
-          :style="$q.screen.gt.xs ? 'max-width: 200px' : 'max-width: 120px'"
-        />
-        <div
-          class="flex row no-wrap"
-          style="pointer-events: all"
-          v-else-if="
-            ((groupEventsByMonth &&
-              Object.keys(eventDatesGroupedByMonth)?.length == 0) ||
-              (!groupEventsByMonth && eventDates && eventDates.length === 0)) &&
-            !(isLoadingInitial || (mapMoving && !blockUpdates))
-          "
-        >
-          <q-btn
-            no-caps
-            v-if="anyFiltersEnabled"
-            class="button-plain flex items-center"
-            @click="
-              () => {
-                clearAllFilters();
-              }
+        <div class="flex column justify-center items-center no-wrap">
+          <div
+            class="inter semibold q-mb-md"
+            v-if="
+              (isLoadingInitial || (mapMoving && !blockUpdates)) && !showPanel
             "
           >
-            <div class="flex items-center row no-wrap">
-              <q-icon name="mdi-close" size="1rem" class="q-pr-md" />
-              <div>Clear filters</div>
-            </div>
-          </q-btn>
-          <q-btn
-            no-caps
-            v-if="mapZoomLevel > 2"
-            class="button-plain flex items-center q-ml-sm"
-            @click="zoomOut()"
+            Finding what's good...
+          </div>
+          <div
+            class="inter semibold q-mb-md"
+            v-else-if="!isLoadingInitial && eventDatesTotal === 0"
           >
-            <div class="flex items-center row no-wrap">
-              <q-icon
-                name="mdi-magnify-minus-outline"
-                size="1rem"
-                class="q-pr-md"
-              />
-              <div>Zoom out</div>
+            Nothing coming up in this area
+          </div>
+
+          <div style="height: 28px; width: 200px" class="flex justify-center">
+            <q-linear-progress
+              v-if="
+                (isLoadingInitial || (mapMoving && !blockUpdates)) && !showPanel
+              "
+              class="linear-progress q-mt-md"
+              indeterminate
+              size="2px"
+              :color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
+              rounded
+              :style="$q.screen.gt.xs ? 'max-width: 200px' : 'max-width: 120px'"
+            />
+            <div
+              class="flex row no-wrap"
+              style="pointer-events: all"
+              v-else-if="
+                ((groupEventsByMonth &&
+                  Object.keys(eventDatesGroupedByMonth)?.length == 0) ||
+                  (!groupEventsByMonth &&
+                    eventDates &&
+                    eventDates.length === 0)) &&
+                !(isLoadingInitial || (mapMoving && !blockUpdates))
+              "
+            >
+              <q-btn
+                no-caps
+                v-if="anyFiltersEnabled"
+                class="button-plain flex items-center"
+                @click="
+                  () => {
+                    clearAllFilters();
+                  }
+                "
+              >
+                <div class="flex items-center row no-wrap">
+                  <q-icon name="mdi-close" size="1rem" class="q-pr-md" />
+                  <div>Clear filters</div>
+                </div>
+              </q-btn>
+              <q-btn
+                no-caps
+                v-if="mapZoomLevel > 2"
+                class="button-plain flex items-center q-ml-sm"
+                @click="zoomOut()"
+              >
+                <div class="flex items-center row no-wrap">
+                  <q-icon
+                    name="mdi-magnify-minus-outline"
+                    size="1rem"
+                    class="q-pr-md"
+                  />
+                  <div>Zoom out</div>
+                </div>
+              </q-btn>
             </div>
-          </q-btn>
+          </div>
         </div>
       </div>
     </div>

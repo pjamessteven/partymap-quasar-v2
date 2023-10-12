@@ -336,7 +336,7 @@
                           :class="
                             $q.screen.gt.xs
                               ? 'q-pl-lg text-large inter bold'
-                              : 'q-pl-md  intersemibold'
+                              : 'q-pl-md  inter semibold'
                           "
                         >
                           <div class="t1 text-">Top tags in your area:</div>
