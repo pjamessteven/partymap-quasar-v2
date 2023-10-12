@@ -124,6 +124,23 @@
                 />
               </div>
 
+              <div>
+                <q-btn
+                  flat
+                  no-caps
+                  class="nav-button q-mr-sm q-px-md q-mt-md q-py-sm"
+                  :class="$q.screen.gt.sm ? 'q-mt-lg' : ''"
+                  @click="viewOnMap"
+                >
+                  See upcoming events on map
+                  <q-icon
+                    name="mdi-chevron-right"
+                    size="1rem"
+                    class="q-ml-md"
+                    :class="{ 'q-ml-md': $q.screen.gt.xs }"
+                  />
+                </q-btn>
+              </div>
               <div class="flex column" v-if="artist" style="max-width: 100%">
                 <div class="q-mt-lg q-mb-md inter bold t2">
                   Upcoming events:
@@ -137,22 +154,7 @@
                 >
                   No upcoming events for this artist.
                 </div>
-                <div v-else>
-                  <q-btn
-                    flat
-                    no-caps
-                    class="nav-button q-mr-sm q-px-md q-mb-md q-py-sm"
-                    @click="viewOnMap"
-                  >
-                    View {{ artist.name }} on the map
-                    <q-icon
-                      name="mdi-chevron-right"
-                      size="1rem"
-                      class="q-ml-md"
-                      :class="{ 'q-ml-md': $q.screen.gt.xs }"
-                    />
-                  </q-btn>
-                </div>
+                <div v-else></div>
                 <EventDateCard
                   v-for="(ed, index) in artist.future_event_dates"
                   :key="index"

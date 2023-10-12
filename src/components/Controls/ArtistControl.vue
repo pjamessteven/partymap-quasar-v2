@@ -96,6 +96,7 @@
                   <q-separator v-if="index > 0" />
                 </div>
                 <router-link
+                  style="text-decoration: none; color: inherit"
                   :to="{
                     name: 'ArtistPage',
                     params: { id: artist.id },

@@ -299,6 +299,12 @@ export default {
         this.loadMore();
       }
     },
+    delayedGetInitial() {
+      setTimeout(() => {
+        this.blockUpdates = false;
+        this.getInitialList();
+      }, 200);
+    },
   },
   watch: {
     showPanel(newv) {
@@ -333,32 +339,31 @@ export default {
 
     controlDateRange: {
       handler() {
-        console.log('ctl date range');
-        this.getInitialList();
+        this.delayedGetInitial();
       },
       deep: true,
     },
     controlDuration: {
       handler() {
-        this.getInitialList();
+        this.delayedGetInitial();
       },
       deep: true,
     },
     controlSize: {
       handler() {
-        this.getInitialList();
+        this.delayedGetInitial();
       },
       deep: true,
     },
     controlArtist: {
       handler() {
-        this.getInitialList();
+        this.delayedGetInitial();
       },
       deep: true,
     },
     controlTag: {
       handler() {
-        this.getInitialList();
+        this.delayedGetInitial();
       },
       deep: true,
     },
@@ -371,11 +376,10 @@ export default {
       'groupEventsByMonth',
     ]),
     ...mapWritableState(useMainStore, ['showPanel', 'enablePanelSwipeDown']),
-    ...mapWritableState(useMapStore, ['map']),
+    ...mapWritableState(useMapStore, ['map', 'blockUpdates']),
     ...mapState(useAuthStore, ['currentUser']),
     ...mapState(useMapStore, [
       'mapBounds',
-      'blockUpdates',
       'mapMoving',
       'showResults',
       'mapZoomLevel',

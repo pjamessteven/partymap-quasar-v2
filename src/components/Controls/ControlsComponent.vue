@@ -95,6 +95,8 @@
         ref="search"
         borderless
         autofocus
+        @focus="onSearchbarFocus()"
+        @blur="onSearchbarBlur()"
         @clear="clearSearch()"
         class="searchbar-input inter bold"
         v-model="query"
@@ -244,12 +246,20 @@ export default {
   },
   data() {
     return {
-      searchbarShowing: false,
       previousSidebarPanel: '',
       previousShowPanel: '',
     };
   },
   methods: {
+    hideResultsAndPreviousPanel() {
+      if (this.sidebarPanel === 'search') {
+        // hide results and restore previous sidebar state
+        this.sidebarPanel = this.previousSidebarPanel;
+        if (this.sidebarPanel === 'explore') {
+          this.showPanel = false;
+        }
+      }
+    },
     goToExplore() {
       this.sidebarPanel = 'explore';
       if (this.$route.name !== 'Explore') {
@@ -259,17 +269,23 @@ export default {
     clearSearch() {
       this.query = null;
       this.searchbarShowing = false;
-      if (this.sidebarPanel === 'search') {
-        // hide results and restore previous sidebar state
-        this.sidebarPanel = this.previousSidebarPanel;
-        if (this.sidebarPanel === 'explore') {
-          this.showPanel = false;
-        }
+      this.hideResultsAndPreviousPanel();
+    },
+    onSearchbarFocus() {
+      if (this.query.length > 0) {
+        this.sidebarPanel = 'search';
+        this.showPanel = true;
+      }
+    },
+    onSearchbarBlur() {
+      if (!this.query || this.query.length === 0) {
+        this.searchbarShowing = false;
+        this.hideResultsAndPreviousPanel();
       }
     },
   },
   computed: {
-    ...mapWritableState(useSearchStore, ['query']),
+    ...mapWritableState(useSearchStore, ['query', 'searchbarShowing']),
     ...mapWritableState(useMainStore, ['showPanel', 'sidebarPanel']),
     ...mapState(useQueryStore, [
       'controlDateRange',

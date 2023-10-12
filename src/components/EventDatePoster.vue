@@ -63,7 +63,7 @@
                   >
                 </div>
               </div>
-              <div class="flex items-center">
+              <div class="flex items-center no-wrap">
                 <q-icon name="las la-clock" class="q-mr-xs" />
                 <q-badge
                   v-if="event.cancelled"

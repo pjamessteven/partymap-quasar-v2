@@ -62,17 +62,21 @@ export default {
       if (this.query?.length > 0) {
         this.loading = true;
         const provider = new OpenStreetMapProvider();
-
+        const currentQuery = this.query;
         const [searchResultsResponse, locationSearchResponse] =
           await Promise.all([
             getSearchSuggestionsRequest({ query: this.query }),
             provider.search({ query: this.query }),
           ]);
-        this.searchResults = searchResultsResponse.data.results;
-        this.locationSearchResults = locationSearchResponse.map((res) => ({
-          label: res.label,
-          location: { lat: res.y, lng: res.x },
-        }));
+
+        if (currentQuery === this.query) {
+          //only set results if query hasn't changed
+          this.searchResults = searchResultsResponse.data.results;
+          this.locationSearchResults = locationSearchResponse.map((res) => ({
+            label: res.label,
+            location: { lat: res.y, lng: res.x },
+          }));
+        }
         this.loading = false;
       }
     },
@@ -83,9 +87,11 @@ export default {
   },
   watch: {
     query() {
-      if (this.query?.length === 0) {
-        this.clearSearchResults();
-      } else this.debouncedSearch();
+      this.clearSearchResults();
+
+      if (this.query?.length > 0) {
+        this.debouncedSearch();
+      }
     },
   },
   computed: {

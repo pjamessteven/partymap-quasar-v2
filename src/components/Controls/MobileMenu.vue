@@ -15,13 +15,11 @@ export default {
   },
   watch: {
     showing(newv) {
-      console.log(newv);
       this.$nextTick(() => {
         if (newv) {
           this.showDialog();
         } else if (this.dialog) {
-          console.log('hide');
-          this.dialog.hide();
+          //  this.dialog.hide();
         }
       });
     },

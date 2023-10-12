@@ -47,10 +47,15 @@
                       v-if="userLocation"
                       class="ellipsis q-mr-sm text-h4 inter bolder"
                     >
-                      {{ userLocationCity
-                      }}<span v-if="$q.screen.gt.xs"
-                        >, {{ userLocationCountry }}</span
+                      <span v-if="userLocationCity">
+                        {{ userLocationCity
+                        }}<span v-if="userLocationCountry && $q.screen.gt.xs"
+                          >,</span
+                        ></span
                       >
+                      <span v-if="$q.screen.gt.xs || !userLocationCity">{{
+                        userLocationCountry
+                      }}</span>
                     </span>
                     <span class="ellipsis text-h4 inter bolder t4" v-else
                       >...
@@ -67,9 +72,9 @@
                           <q-icon
                             name="mdi-crosshairs-gps"
                             class=""
-                            v-if="fineLocation"
+                            v-if="fineLocation && !userLocationFromSearch"
                           />
-                          <q-icon name="mdi-crosshairs-gps" class="" v-else />
+                          <q-icon name="mdi-crosshairs" class="" v-else />
                         </div>
                         <div v-else style="position: relative" class="flex">
                           <q-icon style="z-index: 1" name="mdi-crosshairs" />
@@ -209,7 +214,7 @@
                   <div
                     flat
                     @click.stop="showAddEventDialog()"
-                    class="nav-button flex items-center justify-center q-mr-sm q-px-md q-py-sm"
+                    class="nav-button flex items-center justify-center q-mr-sm q-px-md q-py-xs"
                   >
                     <span v-if="$q.screen.lt.sm">Submit</span
                     ><span v-else>Add an event</span>
@@ -225,7 +230,7 @@
                     @click.stop="() => (sidebarPanel = 'explore')"
                     flat
                     no-caps
-                    class="nav-button q-px-md q-py-sm"
+                    class="nav-button q-px-md q-py-xs"
                   >
                     <div class="flex justify-center items-center grow">
                       <span>Explore the map! </span>
@@ -871,13 +876,12 @@ export default {
           const userLocationHasSignficantlyChanged =
             Math.round(newval.lat) !== Math.round(oldval.lat) ||
             Math.round(newval.lng) !== Math.round(oldval.lng);
-
           if (userLocationHasSignficantlyChanged) {
             this.loadEverything();
           }
         }
       },
-      deep: true,
+      //deep: true,
     },
     queryRadius: {
       handler: function (newval, oldval) {
@@ -901,6 +905,7 @@ export default {
     ...mapState(useMainStore, [
       'userLocationLoading',
       'userLocation',
+      'userLocationFromSearch',
       'userLocationCity',
       'userLocationCountry',
       'fineLocation',

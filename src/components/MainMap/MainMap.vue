@@ -106,7 +106,7 @@ export default {
         (newv === 'explore' && oldv === 'nearby') ||
         (newv === 'nearby' && oldv === 'explore')
       ) {
-        if (this.userLocation?.lat)
+        if (this.userLocation?.lat && !this.userLocationFromSearch)
           this.fitBoundsForExplorePage(this.userLocation);
       }
     },
@@ -652,6 +652,7 @@ export default {
       'mapZoomLevel',
     ]),
     ...mapWritableState(useMainStore, [
+      'userLocationFromSearch',
       'userLocation',
       'sidebarPanel',
       'showPanel',

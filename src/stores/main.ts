@@ -18,7 +18,8 @@ interface MainStoreState {
   overlayOpacity: number;
   ipInfo: IpInfo | null;
   userLocationLoading: boolean;
-  userLocation: { lat: string; lng: string } | null;
+  userLocation: { lat: number; lng: number } | null;
+  userLocationFromSearch: boolean;
   userLocationCity: string | null;
   userLocationCountry: string | null;
   fineLocation: boolean;
@@ -41,6 +42,7 @@ export const useMainStore = defineStore('main', {
     userLocation: null,
     userLocationCity: null,
     userLocationCountry: null,
+    userLocationFromSearch: false,
     fineLocation: false,
     groupEventsByMonth: Screen.lt.sm,
     compactView: Screen.lt.sm,
@@ -60,6 +62,7 @@ export const useMainStore = defineStore('main', {
         };
         this.userLocationCity = response.data.city;
         this.userLocationCountry = response.data.country;
+        this.userLocationFromSearch = false;
         return;
       } catch (error) {
         throw error;
@@ -109,6 +112,7 @@ export const useMainStore = defineStore('main', {
               }
               this.userLocationCountry = address.country;
               this.userLocationLoading = false;
+              this.userLocationFromSearch = false;
             } catch (e) {
               // just show the co-ords if reverse geocoding fails
               this.userLocationCity =

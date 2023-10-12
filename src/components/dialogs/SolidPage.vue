@@ -53,7 +53,7 @@ export default {
   overflow: auto;
   width: 100%;
   height: 100%;
-  //padding-top: 64px;
+  padding-top: 64px;
   display: flex;
   justify-content: center;
   //overflow: hidden;
@@ -83,7 +83,7 @@ export default {
 // sm
 @media only screen and (max-width: 600px) {
   .solid-page {
-    //padding-top: 16px !important;
+    //: 16px !important;
     overflow: hidden;
     width: 100%;
     max-width: 100%;

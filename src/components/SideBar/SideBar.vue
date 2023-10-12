@@ -367,6 +367,7 @@ export default {
     .sidebar-content {
       border-top-left-radius: 18px;
       border-top-right-radius: 18px;
+      overflow: hidden;
       .sidebar-content-inner {
         overflow: hidden;
         isolation: isolate; // lol what?

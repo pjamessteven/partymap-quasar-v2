@@ -5,7 +5,7 @@
         class="flex column justify-stretch q-px-xl q-pb-sm"
         :class="$q.screen.gt.xs ? 'q-pt-xl' : 'q-pt-none'"
       >
-        <div class="flex justify-center items-center q-mt-sm q-mb-xl">
+        <div class="flex justify-center items-center q-mt-sm q-mb-lg">
           <div>
             <img
               style="height: 30px; width: auto"
@@ -64,11 +64,9 @@
               @click="$q.platform.is.nativeMobile ? nativeFbLogin() : undefined"
             />
           </div>
-          <!--
-          <div class="t4 q-mt-md" style="text-align: center; font-size: small">
+          <div class="t3 q-mt-md" style="text-align: center; font-size: small">
             We only store your email address.
           </div>
-          -->
         </q-card-section>
 
         <div class="flex row items-center justify-between no-wrap">
@@ -149,8 +147,7 @@
         <div class="separator q-mt-md" />
 
         <div class="t4 q-mt-md" style="text-align: center; font-size: small">
-          We take privacy very seriously and we will never share or sell your
-          information.
+          We will never share or sell your information.
           <div class="q-mt-sm">
             <a
               class="link-hover underline"
@@ -195,7 +192,6 @@ import TermsAndConditionsDialog from 'src/components/dialogs/AboutDialog/TermsAn
 import PrivacyPolicyDialog from 'src/components/dialogs/AboutDialog/PrivacyPolicyDialog.vue';
 import { useQueryStore } from 'src/stores/query';
 import { Browser } from '@capacitor/browser';
-import { toRaw } from 'vue';
 export default {
   name: 'LoginPage',
   components: { InnerLoading, TermsAndConditionsDialog, PrivacyPolicyDialog },
