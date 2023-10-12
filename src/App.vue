@@ -12,7 +12,7 @@ import { useAuthStore } from './stores/auth';
 import SplashScreen from './components/SplashScreen.vue';
 import { App } from '@capacitor/app';
 import { Browser } from '@capacitor/browser';
-//import { CapacitorCookies } from '@capacitor/core';
+import { CapacitorCookies } from '@capacitor/core';
 export default {
   components: { SplashScreen },
   name: 'App',
@@ -63,27 +63,47 @@ export default {
     if (this.$q.platform.is.capacitor) {
       App.addListener('appUrlOpen', async (event) => {
         if (event.url.indexOf('?session')) {
-          const session = event.url.split('?session').pop();
-          document.cookie = 'session' + '=' + session;
-          console.log('doc cookie', document.cookie);
-          /*
+          let session = event.url.split('?session').pop();
+          // facebook login causes this shit to be appended to the next_url query param
+          if (session.endsWith('#_=_')) {
+            console.log('ends');
+            session = session.replace('#_=_', '');
+          }
+          const cookieValue = session + '; HttpOnly; Path=/';
+          console.log('sesh', session);
+
+          // idk lol
           await CapacitorCookies.setCookie({
-            url: 'https://partymap.com',
+            url: 'api.partymap.com',
             key: 'session',
-            value: session,
+            value: cookieValue,
           });
-          */
-          /*
+          await CapacitorCookies.setCookie({
+            url: 'partymap.com',
+            key: 'session',
+            value: cookieValue,
+          });
+          await CapacitorCookies.setCookie({
+            url: 'http://partymap.com',
+            key: 'session',
+            value: cookieValue,
+          });
+
           await CapacitorCookies.setCookie({
             url: '192.168.1.149',
             key: 'session',
-            value: session,
+            value: cookieValue,
           });
-          */
+
+          await CapacitorCookies.setCookie({
+            url: 'http://192.168.1.149',
+            key: 'session',
+            value: cookieValue,
+          });
+
           this.checkAuthCookie();
         }
 
-        console.log('appUrlOpen', event);
         if (event.url.indexOf('api.partymap.com') > 0) {
           // oauth redirect
           //await Browser.open({ url: event.url });
