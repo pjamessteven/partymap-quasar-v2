@@ -17,6 +17,11 @@
   "resolved" "https://registry.npmjs.org/@capacitor/android/-/android-5.4.2.tgz"
   "version" "5.4.2"
 
+"@capacitor/app@^5.0.6":
+  "integrity" "sha512-6ZXVdnNmaYILasC/RjQw+yfTmq2ZO7Q3v5lFcDVfq3PFGnybyYQh+RstBrYri+376OmXOXxBD7E6UxBhrMzXGA=="
+  "resolved" "https://registry.npmjs.org/@capacitor/app/-/app-5.0.6.tgz"
+  "version" "5.0.6"
+
 "@capacitor/browser@^5.1.0":
   "integrity" "sha512-7togqchk2Tvq4SmLaWhcrd4x48ES/GEZsceM+29aun7WhxQEVcDU0cJsVdSU2LNFwNhWgPV2GW90etVd1B3OdQ=="
   "resolved" "https://registry.npmjs.org/@capacitor/browser/-/browser-5.1.0.tgz"
@@ -1148,6 +1153,11 @@
   "integrity" "sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw=="
   "resolved" "https://registry.npmjs.org/cookie/-/cookie-0.5.0.tgz"
   "version" "0.5.0"
+
+"cordova-plugin-inappbrowser@^5.0.0":
+  "integrity" "sha512-MqnpmUQ/iy6hxtIGDdlIhy8aNi1pNanLATpbnkk7uCqW9YQ4rH/dGK9zESbZ50pUi2A2D2QMjBXNV175TJK5OQ=="
+  "resolved" "https://registry.npmjs.org/cordova-plugin-inappbrowser/-/cordova-plugin-inappbrowser-5.0.0.tgz"
+  "version" "5.0.0"
 
 "core-util-is@~1.0.0":
   "integrity" "sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ=="

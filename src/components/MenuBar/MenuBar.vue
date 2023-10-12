@@ -67,8 +67,10 @@ export default {
     },
   },
   mounted() {
-    // Display content under transparent status bar (Android only)
-    StatusBar.setOverlaysWebView({ overlay: true });
+    if (this.$q.platform.is.capacitor) {
+      // Display content under transparent status bar (Android only)
+      StatusBar.setOverlaysWebView({ overlay: true });
+    }
   },
   methods: {
     updateNav(val) {

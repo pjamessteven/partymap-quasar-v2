@@ -12,6 +12,8 @@ PODS:
     - Capacitor
   - CapacitorStatusBar (5.0.6):
     - Capacitor
+  - CordovaPlugins (5.4.2):
+    - CapacitorCordova
 
 DEPENDENCIES:
   - "AashuDubeyCapacitorStatusbarSafeArea (from `../../node_modules/@aashu-dubey/capacitor-statusbar-safe-area`)"
@@ -21,6 +23,7 @@ DEPENDENCIES:
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
+  - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
 
 EXTERNAL SOURCES:
   AashuDubeyCapacitorStatusbarSafeArea:
@@ -37,6 +40,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/splash-screen"
   CapacitorStatusBar:
     :path: "../../node_modules/@capacitor/status-bar"
+  CordovaPlugins:
+    :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
   AashuDubeyCapacitorStatusbarSafeArea: 4833bf7ac284b54c6650f0d80634552094fd3229
@@ -46,7 +51,8 @@ SPEC CHECKSUMS:
   CapacitorCordova: cfcc06b698481da655415985eeb2b8da363f8451
   CapacitorSplashScreen: 5fa2ab5e46cf5cc530cf16a51c80c7a986579ccd
   CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
+  CordovaPlugins: 1d3a261da5ef6630205a9dff11154d07f1d1fa83
 
-PODFILE CHECKSUM: 6cce4aae551deb58e89a4e168856437af192dfc0
+PODFILE CHECKSUM: 0877a503e86dac550109be3b61eb48381e21a433
 
 COCOAPODS: 1.10.2

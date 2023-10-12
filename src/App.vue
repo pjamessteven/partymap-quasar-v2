@@ -10,7 +10,9 @@ import { mapActions, mapState } from 'pinia';
 import { useMainStore } from './stores/main';
 import { useAuthStore } from './stores/auth';
 import SplashScreen from './components/SplashScreen.vue';
-
+import { App } from '@capacitor/app';
+import { Browser } from '@capacitor/browser';
+//import { CapacitorCookies } from '@capacitor/core';
 export default {
   components: { SplashScreen },
   name: 'App',
@@ -55,6 +57,46 @@ export default {
         this.$q.dark.set(false);
       }
     },
+  },
+  mounted() {
+    // handle deep links in native app
+    if (this.$q.platform.is.capacitor) {
+      App.addListener('appUrlOpen', async (event) => {
+        if (event.url.indexOf('?session')) {
+          const session = event.url.split('?session').pop();
+          document.cookie = 'session' + '=' + session;
+          console.log('doc cookie', document.cookie);
+          /*
+          await CapacitorCookies.setCookie({
+            url: 'https://partymap.com',
+            key: 'session',
+            value: session,
+          });
+          */
+          /*
+          await CapacitorCookies.setCookie({
+            url: '192.168.1.149',
+            key: 'session',
+            value: session,
+          });
+          */
+          this.checkAuthCookie();
+        }
+
+        console.log('appUrlOpen', event);
+        if (event.url.indexOf('api.partymap.com') > 0) {
+          // oauth redirect
+          //await Browser.open({ url: event.url });
+          //window.location.replace(event.url);
+        } else {
+          const slug = event.url.split('.com').pop();
+          // We only push to the route if there is a slug present
+          if (slug) {
+            this.$router.push(slug);
+          }
+        }
+      });
+    }
   },
   created() {
     if (document.readyState === 'complete') {

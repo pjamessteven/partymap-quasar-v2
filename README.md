@@ -59,3 +59,7 @@ WebSettings settings = bridge.getWebView().getSettings();
 settings.setTextZoom(100);
 settings.setSupportZoom(false);
 }
+
+## Deep linking for Android Info...
+
+This relies on public/.well-known/assetlinks.json to be served at partymap.com/.well-known/assetlinks.json (public folder items are included in build root). Deep linking is used to redirect to the app after oauth, for example.

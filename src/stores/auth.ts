@@ -27,6 +27,7 @@ export const useAuthStore = defineStore('auth', {
     async checkAuthCookie() {
       const response = await checkAuthenticatedRequest();
       const user: PrivateUser = response.data;
+      console.log(response.data);
       if (user) {
         this.currentUser = user;
         // for facebook signup
