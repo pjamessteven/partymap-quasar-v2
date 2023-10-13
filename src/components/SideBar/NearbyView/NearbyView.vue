@@ -233,7 +233,7 @@
                     class="nav-button q-px-md q-py-xs"
                   >
                     <div class="flex justify-center items-center grow">
-                      <span>Explore the map! </span>
+                      <span>Explore the map </span>
                       <q-icon
                         name="mdi-chevron-right"
                         size="1rem"
@@ -636,7 +636,7 @@
 
                       <div
                         class="flex row justify-center q-mt-md"
-                        style="opacity: 0"
+                        style="opacity: 0; margin-top: -16px"
                       >
                         <a
                           v-for="i in eventDatesPageNumbers"
@@ -843,7 +843,7 @@ export default {
       this.addParamsToLocation({ global_page: page });
       this.eventDates = null;
       this.eventDatesPage = page;
-      this.loadEventDates;
+      this.loadEventDates();
     },
   },
   watch: {

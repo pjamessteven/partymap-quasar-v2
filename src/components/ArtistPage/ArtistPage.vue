@@ -132,7 +132,7 @@
                   :class="$q.screen.gt.sm ? 'q-mt-lg' : ''"
                   @click="viewOnMap"
                 >
-                  See upcoming events on map
+                  See upcoming on map
                   <q-icon
                     name="mdi-chevron-right"
                     size="1rem"

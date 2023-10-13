@@ -70,6 +70,11 @@ export default {
     if (this.$q.platform.is.capacitor) {
       // Display content under transparent status bar (Android only)
       StatusBar.setOverlaysWebView({ overlay: true });
+      if (this.iconColor === 'black') {
+        StatusBar.setStyle({ style: Style.Light });
+      } else {
+        StatusBar.setStyle({ style: Style.Dark });
+      }
     }
   },
   methods: {
@@ -84,7 +89,6 @@ export default {
       this.$router.go(-1);
     },
     getPreviousRouteName(previousRoute) {
-      console.log('pte', previousRoute);
       if (
         this.$route.name === 'Explore' ||
         this.$route.name === 'BrowsePage' ||
@@ -94,19 +98,23 @@ export default {
       }
       if (previousRoute.name === 'Explore') {
         if (this.sidebarPanel === 'explore' || this.sidebarPanel === 'search') {
-          return 'Back to results';
+          return this.$q.screen.lt.md ? 'Back' : 'Back to results';
         } else if (this.sidebarPanel === 'nearby') {
-          return 'Back home';
+          return this.$q.screen.lt.md ? 'Back' : 'Back home';
         } else if (this.sidebarPanel === 'profile') {
-          return 'Back';
+          return this.$q.screen.lt.md ? 'Back' : 'Back';
         } else return 'null';
       } else if (
         previousRoute.name === 'EventPage' ||
         previousRoute.name === 'ArtistPage'
       ) {
-        return 'Back to ' + previousRoute.query.name.replace(/_/g, ' ');
+        return this.$q.screen.lt.md
+          ? 'Back'
+          : 'Back to ' + previousRoute.query.name.replace(/_/g, ' ');
       } else if (previousRoute?.meta['friendlyName']) {
-        return previousRoute.meta['friendlyName'];
+        return this.$q.screen.lt.md
+          ? 'Back'
+          : previousRoute.meta['friendlyName'];
       } else {
         return 'Back';
       }

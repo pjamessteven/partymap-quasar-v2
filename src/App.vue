@@ -1043,7 +1043,7 @@ body {
       margin-bottom: unset;
       width: 100%;
       height: 100%;
-      padding-top: calc(var(--safe-area-inset-top));
+      //padding-top: calc(var(--safe-area-inset-top));
 
       border-radius: 0px !important;
       .dialog-card-header {

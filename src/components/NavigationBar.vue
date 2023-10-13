@@ -434,6 +434,7 @@ export default {
       right: unset;
       //height: 64px;
       .q-tab {
+        flex-grow: 1;
         min-height: 68px;
         padding: 0px !important;
         opacity: 0.3 !important;

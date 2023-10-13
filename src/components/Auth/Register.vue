@@ -6,7 +6,7 @@
           class="header t1 inter bolder text-h5 q-my-lg"
           style="text-align: center; text-transform: capitalize"
         >
-          Create your account
+          Create account
         </div>
         <p class="t3">{{ $t('auth.choose_username_message') }}</p>
       </q-card-section>
@@ -70,7 +70,7 @@
           <q-btn
             class="inter bold"
             :disable="loading"
-            label="Let's go, sign me up!"
+            label="Sign up!"
             no-caps
             color="primary"
             size=""

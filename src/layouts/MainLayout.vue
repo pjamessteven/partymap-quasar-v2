@@ -64,7 +64,9 @@
           :enter-active-class="
             $q.screen.lt.sm ? 'animated fadeIn' : 'animated fadeIn'
           "
-          :leave-active-class="$q.screen.lt.sm ? '' : 'animated fadeOut'"
+          :leave-active-class="
+            $q.screen.lt.sm ? 'animated fadeOut' : 'animated fadeOut'
+          "
         >
           <component :is="Component" />
         </transition>

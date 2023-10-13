@@ -28,7 +28,7 @@
         <q-btn
           class="soft-button-shadow"
           :disable="loading"
-          :label="$t('auth.reset_password')"
+          label="Send password reset email"
           color="primary"
           v-on:click="resetPassword"
           no-caps

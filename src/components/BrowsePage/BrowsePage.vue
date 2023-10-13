@@ -4,6 +4,7 @@
       <div
         class="flex column browse-page q-mb-xl"
         :class="$q.screen.gt.xs ? 'q-pb-xl' : 'q-mt-m'"
+        :style="$q.screen.gt.xs ? '' : 'margin-top: -16px'"
       >
         <div class="flex column" v-if="ready">
           <BrowseTaggedEvents

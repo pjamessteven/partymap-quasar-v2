@@ -677,7 +677,7 @@ export default {
           ),
           0
         );
-        padding-bottom: calc(188px + env(safe-area-inset-top));
+        padding-bottom: calc(188px + var(--safe-area-inset-top));
       }
       @supports (
         (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
@@ -691,8 +691,8 @@ export default {
           ),
           0
         );
-        // below value is correct for iphone 7
-        padding-bottom: calc(188px + env(safe-area-inset-top) - 8px);
+        // below value -8px is correct for iphone 7
+        padding-bottom: calc(188px + env(safe-area-inset-top) + 16px);
       }
 
       .sidebar-content {
