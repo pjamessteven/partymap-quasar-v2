@@ -449,14 +449,16 @@ export default {
       this.initTileLayers();
 
       toRaw(this.map).on('mousedown', () => {
-        // switch to explore view
-        if (
-          this.sidebarPanel !== 'explore' &&
-          this.sidebarPanel !== 'favorites'
-        ) {
-          this.sidebarPanel = 'explore';
+        if (this.$route.name === 'Explore') {
+          // switch to explore view
+          if (
+            this.sidebarPanel !== 'explore' &&
+            this.sidebarPanel !== 'favorites'
+          ) {
+            this.sidebarPanel = 'explore';
+          }
+          this.showPanel = false;
         }
-        this.showPanel = false;
       });
 
       toRaw(this.map).on('movestart', () => {

@@ -290,7 +290,7 @@ export default {
 
     onScrollMainContent(info) {
       this.mainContentScrollPosition = info.verticalPosition;
-      if (info.verticalPercentage === 0) {
+      if (info.verticalPosition <= 0) {
         if (!this.$q.platform.has.touch) {
           setTimeout(() => {
             // behavior fix for desktop scroll

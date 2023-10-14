@@ -1,5 +1,8 @@
 <template>
-  <div class="event-page">
+  <div
+    class="event-page"
+    :style="peekMap ? 'pointer-events: none !important' : ''"
+  >
     <div class="flex row no-wrap event-page-content">
       <div
         class="flex history-container col-4 col-xs-12 col-sm-6 col-md-5 col-lg-4 col-xl-4"
@@ -9,17 +12,17 @@
         <HistoryComponent @close="showingHistory = false" />
         -->
       </div>
-      <div class="scroll-area flex grow" @scroll="onScrollMainContent">
+      <div
+        class="scroll-area flex grow"
+        @scroll="onScrollMainContent"
+        :style="peekMap && $q.screen.lt.sm ? 'overflow: hidden' : ''"
+      >
         <div class="row flex grow main-row no-wrap justify-center">
           <div
-            v-if="scrollPercentage === 0"
+            v-if="scrollPercentage <= 0 && !peekMap"
             class="clickable-background"
             style="pointer-events: all"
-            @click="
-              routerHistory.length > 0
-                ? $router.go(-1)
-                : $router.push({ name: 'Explore' })
-            "
+            @click="clickBackground()"
           />
           <div
             ref="contentcard"
@@ -28,17 +31,26 @@
               'col-12 no-margin-top': showingHistory,
               'col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12':
                 !showingHistory,
-              shadow: scrollPercentage === 0 || $q.screen.lt.sm,
+              shadow: overlayOpacity === 0 || $q.screen.lt.sm,
+              'peek-map': peekMap,
             }"
           >
+            <div
+              class="peek-map-overlay"
+              @click="swipeUp"
+              v-if="peekMap"
+              v-touch-swipe="swipe"
+            />
+
             <MobileSwipeHandle
               v-if="$q.screen.lt.sm && false"
               @swipe="handleSwipe($event)"
               class="mobile-swipe-handle"
             />
+
             <div
               class="content flex column"
-              v-touch-swipe.down="scrollPercentage === 0 ? handleSwipe : null"
+              v-touch-swipe.down="scrollPercentage <= 0 ? swipeDown : null"
             >
               <div class="flex column grow">
                 <div class="header flex column">
@@ -690,6 +702,7 @@ export default {
   },
   data() {
     return {
+      peekMap: false,
       enableSwipeDown: true,
       wheelIndicator: null,
       bottomImagePadding: 0,
@@ -716,6 +729,22 @@ export default {
       'toggleFavorite',
       'loadEventDate',
     ]),
+    clickBackground() {
+      this.peekMap = !this.peekMap;
+    },
+    swipeDown() {
+      this.goBack();
+    },
+    swipeUp() {
+      this.peekMap = false;
+    },
+    swipe(event) {
+      if (event.direction === 'up') {
+        this.swipeUp();
+      } else if (event.direction === 'down') {
+        this.swipeDown();
+      }
+    },
     toggleFavorite() {
       if (this.currentUser) {
         this.toggleFavorite();
@@ -740,19 +769,28 @@ export default {
           });
         });
     },
+    goBack() {
+      if (this.routerHistory.length > 0) {
+        this.$router.go(-1);
+      } else {
+        this.$router.push({ name: 'Explore' });
+      }
+    },
     handleSwipe() {
-      this.$router.go(-1);
+      this.goBack();
     },
     onMouseWheel(e) {
       const up = e.direction === 'up';
-      if (this.enableSwipeDown && up && !this.$q.screen.lt.sm) {
+      if (this.enableSwipeDown && up && this.$q.screen.gt.xs) {
         this.preventMapZoom = true;
 
-        this.$router.go(-1);
+        if (this.peekMap) {
+          this.goBack();
+        }
+        this.peekMap = true;
 
         setTimeout(() => {
           // wait for animation - stop map from zooming uncontrolably
-
           this.preventMapZoom = false;
         }, 1000);
 
@@ -763,6 +801,9 @@ export default {
           this.sidebarPanel = 'explore';
         } */
         return false;
+      } else if (this.peekMap && !up && this.$q.screen.gt.xs) {
+        this.swipeUp();
+        return false;
       }
     },
     onScrollMainContent(info) {
@@ -772,7 +813,6 @@ export default {
       if (this.$q.screen.lt.sm) {
         //this.menubarOpacity = ((info.target.scrollTop * 1.5) / 100) * -1 + 1;
         //this.menubarOpacity = ((info.target.scrollTop * 1.5) / 100) * 1;
-        console.log(info.target.scrollTop);
         if (info.target.scrollTop > 64) {
           this.menubarOpacity = 1;
         } else {
@@ -793,7 +833,7 @@ export default {
         //this.overlayOpacity = ((info.target.scrollTop * 0.5) / 100) * 1;
       }
 
-      if (this.scrollPercentage === 0) {
+      if (this.scrollPercentage <= 0) {
         setTimeout(() => {
           // behavior fix for desktop scroll
           this.enableSwipeDown = true;
@@ -881,11 +921,7 @@ export default {
           (response.data.next_date &&
             response.data.next_date.id === eventDateId)
         ) {
-          console.log(1);
-          console.log(this.focusMarker);
           if (!this.focusMarker && this.$route.name === 'EventPage') {
-            console.log(2);
-
             // // weird but necessary
             // only do this if focusedlatlng not already set before mounting this component
             // (by eventdatecard)
@@ -899,15 +935,12 @@ export default {
           (!response.data.next_date ||
             response.data.next_date.id !== eventDateId)
         ) {
-          console.log(3);
-
           // if navigating to specific date, load it
 
           const eventDateResponse = await this.loadEventDate(eventDateId);
 
           if (!this.focusMarker && this.$route.name === 'EventPage') {
             // weird but necessary
-            console.log(4);
             // only do this if focusedlatlng not already set before mounting this component
             // (by eventdatecard)
             this.focusMarker = {
@@ -929,6 +962,9 @@ export default {
   watch: {
     id: function () {
       this.loadEvent();
+    },
+    peekMap: function (newV) {
+      console.trace('pee', newV);
     },
   },
   computed: {
@@ -1040,13 +1076,11 @@ export default {
     this.editing = this.$route.params.editing;
     // clear previous event
     this.load();
-    /* disabling this for now
     this.wheelIndicator = new WheelIndicator({
       elem: this.$refs.contentcard,
       callback: this.onMouseWheel,
       preventMouse: false,
     });
-    */
   },
   created() {
     this.timeAgo = common.timeAgo;
@@ -1258,7 +1292,6 @@ a {
 }
 
 .event-page {
-  pointer-events: all;
   .event-page-overlay {
     background: rgba(0, 0, 0, 0.5);
     width: 100%;
@@ -1294,6 +1327,7 @@ a {
       overflow-x: hidden;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch; // WOW THIS ACTUALLY HELPS ON IOS
+
       .main-row {
         position: relative;
 
@@ -1302,11 +1336,28 @@ a {
           max-width: 1024px;
           //border: none !important;
           min-height: 100vh;
-
+          position: relative;
           pointer-events: all;
           padding-bottom: 0px;
           border-top-left-radius: 18px !important;
           border-top-right-radius: 18px !important;
+          transition: transform 300ms;
+          &.peek-map {
+            // 256px represents how high the top of the panel is from the bottom
+            transform: translate3d(
+              0,
+              calc(100vh - max(calc((100vh - 66vh) - 64px), 0px) - 256px),
+              0
+            );
+            cursor: pointer;
+            .peek-map-overlay {
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              z-index: 12;
+              cursor: pointer;
+            }
+          }
           &.shadow {
             box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
               rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
@@ -1405,7 +1456,7 @@ a {
           height: 100%;
           width: 100vw;
           top: 0;
-          cursor: pointer;
+          cursor: grab;
         }
       }
     }

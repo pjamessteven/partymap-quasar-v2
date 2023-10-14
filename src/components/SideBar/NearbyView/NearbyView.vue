@@ -797,7 +797,7 @@ export default {
     onScroll(info) {
       this.scrollPosition = info.verticalPosition;
       // prevent swipes
-      if (info.verticalPercentage === 0) {
+      if (info.verticalPosition <= 0) {
         this.enablePanelSwipeDown = true;
       } else {
         this.enablePanelSwipeDown = false;
