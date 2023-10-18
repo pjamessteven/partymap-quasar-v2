@@ -19,10 +19,10 @@
       <div class="mobile-image-container" v-if="$q.screen.lt.md">
         <transition appear enter-active-class="animated fadeIn slower">
           <div class="image-container-background" v-if="artist">
-            <img :src="computedSmImageSrc" />
+            <img :src="computedSmImageSrc" style="z-index: 2" />
 
             <img
-              style="z-index: 2"
+              style="z-index: 3"
               v-show="loadedFullRes"
               :src="computedImageSrc"
               @load="loadedFullRes = true"
@@ -73,17 +73,19 @@
               />
             </div>
             <div class="image-container q-ml-lg">
-              <transition appear enter-active-class="animated fadeIn slower">
-                <div class="image-container-background" v-if="artist">
-                  <img :src="computedSmImageSrc" />
+              <div class="image-container-background" v-if="artist">
+                <transition appear enter-active-class="animated fadeIn slower">
+                  <img :src="computedSmImageSrc" style="z-index: 2" />
+                </transition>
+                <transition appear enter-active-class="animated fadeIn slower">
                   <img
-                    style="z-index: 2"
+                    style="z-index: 3"
                     v-show="loadedFullRes"
                     :src="computedImageSrc"
                     @load="loadedFullRes = true"
                   />
-                </div>
-              </transition>
+                </transition>
+              </div>
             </div>
           </div>
         </div>
@@ -102,10 +104,9 @@
           />
           <transition appear enter-active-class="animated fadeIn slower">
             <div
-              class="flex column"
+              class="flex column events"
               v-if="artist && !loading"
               :class="$q.screen.gt.sm ? ' q-px-lg' : ''"
-              style="width: 100%"
             >
               <div class="flex column" v-if="artist" style="max-width: 100%">
                 <div class="q-mt-lg q-mb-md inter bold t2">
@@ -553,7 +554,11 @@ export default {
           top: 0px;
           height: 100%;
           width: 100%;
-          background: linear-gradient(transparent, rgba(0, 0, 0, 0.68));
+          background: linear-gradient(
+            rgba(0, 0, 0, 0.68),
+            transparent,
+            rgba(0, 0, 0, 0.68)
+          );
         }
         img {
           position: absolute;
@@ -567,6 +572,9 @@ export default {
     .main-content {
       padding-left: 16px;
       padding-right: 16px;
+      .events {
+        width: 100%;
+      }
     }
 
     .ed-card {

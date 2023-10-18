@@ -482,16 +482,11 @@ export default {
       toRaw(this.map).on('click', () => {
         if (this.$route.name === 'EventPage') {
           //this.peekMap = false;
-          if (!this.peekMap) {
-            this.goBack();
-          }
+          this.goBack();
         }
       });
 
       toRaw(this.map).on('mousedown', () => {
-        if (this.$route.name === 'EventPage' && !this.peekMap) {
-          this.peekMap = true;
-        }
         if (this.$route.name === 'Explore') {
           // switch to explore view
           if (
