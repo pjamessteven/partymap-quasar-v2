@@ -46,7 +46,7 @@
         class="flex row no-wrap items-center justify-between q-px-md q-pt-md q-pb-sm view-options-absolute"
         v-if="$q.screen.gt.xs"
       >
-        <div class="text-h5 inter bolder q-ml-sm q-my-sm">Explore Events</div>
+        <div class="text-h5 inter bolder q-ml-sm q-my-sm">Upcoming events</div>
         <div class="flex row items-center no-wrap">
           <EventDateViewOptions class="q-mr-md" />
 
@@ -73,7 +73,7 @@
             borderRadius: 0,
           }"
           class="scroll-area flex grow"
-          :class="!showPanel && 'disable-scroll'"
+          :class="(!showPanel || preventMapZoom) && 'disable-scroll'"
         >
           <div class="flex column no-wrap scroll-content q-px-sm">
             <transition appear enter-active-class="animated fadeIn slow">
@@ -384,7 +384,7 @@ export default {
       'groupEventsByMonth',
     ]),
     ...mapWritableState(useMainStore, ['showPanel', 'enablePanelSwipeDown']),
-    ...mapWritableState(useMapStore, ['map', 'blockUpdates']),
+    ...mapWritableState(useMapStore, ['map', 'blockUpdates', 'preventMapZoom']),
     ...mapState(useAuthStore, ['currentUser']),
     ...mapState(useMapStore, [
       'mapBounds',

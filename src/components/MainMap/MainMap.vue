@@ -101,6 +101,9 @@ export default {
   },
 
   watch: {
+    peekMap(newv, oldv) {
+      if (this.$route.name === 'EventPage') this.fitBoundsForFocusMarker();
+    },
     sidebarPanel(newv, oldv) {
       if (
         (newv === 'explore' && oldv === 'nearby') ||
@@ -183,6 +186,9 @@ export default {
     route: {
       handler: function (to, from) {
         if (toRaw(this.map)) {
+          if (from.name === 'EventPage') {
+            this.peekMap = false;
+          }
           if (to.name === 'EventPage') {
             // enter event page
             if (
@@ -205,6 +211,8 @@ export default {
               zoom: this.map.getZoom(),
             };
           } else if (to.name === 'Explore') {
+            //
+
             // restore previous map view
             if (this.exploreMapView) {
               toRaw(this.map).setView(
@@ -260,11 +268,7 @@ export default {
               zoom: toRaw(this.map).getZoom(),
             };
 
-            var currentZoom = toRaw(this.map).getZoom();
-            if (currentZoom <= 4) {
-              currentZoom = 4;
-            }
-            this.setMarkerFocusForEventPage(newval, currentZoom);
+            this.setMarkerFocusForEventPage(newval);
           }
         }
       },
@@ -303,6 +307,13 @@ export default {
 
   methods: {
     ...mapActions(useQueryStore, ['loadPoints']),
+    goBack() {
+      if (this.routerHistory.length > 0) {
+        this.$router.go(-1);
+      } else {
+        this.$router.push({ name: 'Explore' });
+      }
+    },
     handleWheel(event) {
       if (this.preventMapZoom) {
         event.stopImmediatePropagation();
@@ -328,6 +339,34 @@ export default {
         this.mapMarkersPermanentTooltip.clearLayers();
       }
       this.loadPoints();
+    },
+    fitBoundsForFocusMarker() {
+      // var paddingBottom = this.windowHeight - (this.windowHeight / 2 - 120)
+      var zoom = toRaw(this.map).getZoom();
+      if (zoom <= 4) {
+        zoom = 4;
+      }
+
+      var mapContainerHeight = this.windowHeight; // minus menubar
+      var paddingBottom = this.windowHeight - mapContainerHeight / 3 + 28;
+      var paddingRight = 0;
+
+      const bounds = toRaw(this.focusMarkerLayer).getBounds();
+      if (this.peekMap) {
+        toRaw(this.map).fitBounds(bounds, {
+          paddingTopLeft: [0, -128],
+          animate: true,
+          duration: 0.3,
+          easeLinearity: 1,
+          maxZoom: 10,
+        });
+      } else {
+        toRaw(this.map).fitBounds(bounds, {
+          paddingBottomRight: [paddingRight, paddingBottom],
+          animate: true,
+          maxZoom: zoom,
+        });
+      }
     },
 
     fitBoundsForExplorePage(coords) {
@@ -431,15 +470,8 @@ export default {
       this.focusMarkerLayer.clearLayers();
       this.focusMarkerLayer = L.featureGroup(markers);
       this.focusMarkerLayer.addTo(toRaw(this.map));
-      // var paddingBottom = this.windowHeight - (this.windowHeight / 2 - 120)
-      var mapContainerHeight = this.windowHeight; // minus menubar
-      var paddingBottom = this.windowHeight - mapContainerHeight / 3 + 28;
-      var paddingRight = 0;
-      toRaw(this.map).fitBounds(toRaw(this.focusMarkerLayer).getBounds(), {
-        paddingBottomRight: [paddingRight, paddingBottom],
-        animate: true,
-        maxZoom: zoom,
-      });
+
+      this.fitBoundsForFocusMarker();
     },
     initMap() {
       this.map = L.map(this.$refs.map, this.mapOptions).setView(
@@ -447,8 +479,19 @@ export default {
         3
       );
       this.initTileLayers();
+      toRaw(this.map).on('click', () => {
+        if (this.$route.name === 'EventPage') {
+          //this.peekMap = false;
+          if (!this.peekMap) {
+            this.goBack();
+          }
+        }
+      });
 
       toRaw(this.map).on('mousedown', () => {
+        if (this.$route.name === 'EventPage' && !this.peekMap) {
+          this.peekMap = true;
+        }
         if (this.$route.name === 'Explore') {
           // switch to explore view
           if (
@@ -484,6 +527,9 @@ export default {
         this.mapMoving = false;
       });
       toRaw(this.map).on('zoomstart', () => {
+        if (this.$route.name === 'EventPage' && !this.peekMap) {
+          //  this.peekMap = true;
+        }
         this.markersLoaded = false;
         // switch to explore view handled by wheel event
       });
@@ -641,6 +687,7 @@ export default {
       'defaultIcon',
     ]),
     ...mapWritableState(useMapStore, [
+      'peekMap',
       'map',
       'mapBounds',
       'mapCenter',
@@ -660,6 +707,7 @@ export default {
       'showPanel',
       'darkMode',
     ]),
+    ...mapState(useMainStore, ['routerHistory']),
     ...mapState(useQueryStore, [
       'controlDateRange',
       'controlDuration',

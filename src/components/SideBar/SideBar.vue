@@ -361,9 +361,11 @@ export default {
     justify-content: center;
     border-top-left-radius: 18px;
     border-top-right-radius: 18px;
+
     //box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
     //  rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
     //  rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
+
     .sidebar-content {
       border-top-left-radius: 18px;
       border-top-right-radius: 18px;

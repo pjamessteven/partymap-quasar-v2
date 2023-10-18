@@ -167,9 +167,9 @@ const gridColumns = computed(() => {
 
 const computedTotalResultMessage = computed(() => {
   if (props.eventDatesTotal === 1) {
-    return props.eventDatesTotal + ' event in this area';
+    return props.eventDatesTotal + ' in this area';
   } else if (props.eventDatesTotal > 1) {
-    return props.eventDatesTotal + ' events in this area';
+    return props.eventDatesTotal + ' in this area';
   } else return null;
 });
 </script>

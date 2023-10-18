@@ -1,146 +1,112 @@
 <template>
-  <SolidPage :loading="loading">
-    <template v-slot:title v-if="$q.screen.gt.xs">
-      <div>{{ computedName }}</div>
-    </template>
-    <template v-slot>
-      <div class="artist-header flex row justify-between items-start no-wrap">
-        <div class="flex column no-wrap" style="width: 100%">
-          <div class="mobile-image-container" v-if="$q.screen.lt.md">
-            <transition appear enter-active-class="animated fadeIn slower">
-              <div class="image-container-background" v-if="artist">
-                <img :src="computedSmImageSrc" />
+  <div class="artist-page jj flex column justify-center">
+    <q-scroll-area
+      vertical
+      ref="scrollArea"
+      style="height: 100%; width: 100%"
+      @scroll="onScrollMainContent"
+      :thumb-style="
+        $q.screen.gt.xs
+          ? {
+              bottom: '0px',
+              height: '8px',
+              marginLeft: '16px',
+              borderRadius: '0px',
+            }
+          : { bottom: '0px', height: '0px', borderRadius: '0px' }
+      "
+    >
+      <div class="mobile-image-container" v-if="$q.screen.lt.md">
+        <transition appear enter-active-class="animated fadeIn slower">
+          <div class="image-container-background" v-if="artist">
+            <img :src="computedSmImageSrc" />
 
-                <img
-                  style="z-index: 2"
-                  v-show="loadedFullRes"
-                  :src="computedImageSrc"
-                  @load="loadedFullRes = true"
-                />
+            <img
+              style="z-index: 2"
+              v-show="loadedFullRes"
+              :src="computedImageSrc"
+              @load="loadedFullRes = true"
+            />
 
-                <div class="image-container-overlay" />
-              </div>
-            </transition>
+            <div class="image-container-overlay" />
+          </div>
+        </transition>
 
-            <div class="flex-column mobile-title q-pa-md">
-              <div class="text-h5 inter bolder">
-                <b>{{ computedName }}</b>
+        <div class="flex-column mobile-title q-pa-md">
+          <div class="text-h5 inter bolder">
+            <b>{{ computedName }}</b>
+          </div>
+          <div class="o-050" v-if="artist">
+            {{ artist.disambiguation }}
+          </div>
+        </div>
+      </div>
+      <div
+        class="artist-header flex row justify-center no-wrap"
+        v-if="$q.screen.gt.sm"
+      >
+        <div class="artist-background" :style="computedBackround">
+          <transition
+            appear
+            enter-active-class="animated fadeIn slow"
+            leave-active-class="animated fadeOut"
+          >
+            <img :src="computedSmImageSrc" class="item" />
+          </transition>
+        </div>
+        <div
+          class="header-content flex col col-xs-12 col-md-10 col-lg-10 col-xl-8"
+        >
+          <div
+            class="flex row no-wrap grow items-start justify-between q-pa-lg"
+          >
+            <div class="flex column">
+              <div
+                class="text-h2 inter bolder"
+                style="color: white; z-index: 2"
+              >
+                {{ computedName }}
               </div>
-              <div class="o-050" v-if="artist">
-                {{ artist.disambiguation }}
-              </div>
+              <ArtistDetails
+                @refreshArtist="refreshArtist()"
+                :artist="artist"
+              />
+            </div>
+            <div class="image-container q-ml-lg">
+              <transition appear enter-active-class="animated fadeIn slower">
+                <div class="image-container-background" v-if="artist">
+                  <img :src="computedSmImageSrc" />
+                  <img
+                    style="z-index: 2"
+                    v-show="loadedFullRes"
+                    :src="computedImageSrc"
+                    @load="loadedFullRes = true"
+                  />
+                </div>
+              </transition>
             </div>
           </div>
-
+        </div>
+      </div>
+      <div
+        class="artist-content flex row justify-center no-wrap"
+        style="width: 100%"
+      >
+        <div
+          class="main-content q-mb-lg flex col col-xs-12 col-md-10 col-lg-10 col-xl-8"
+        >
+          <ArtistDetails
+            v-if="$q.screen.lt.md"
+            @refreshArtist="refreshArtist()"
+            :artist="artist"
+          />
           <transition appear enter-active-class="animated fadeIn slower">
-            <div class="main-content flex column" v-if="artist && !loading">
-              <div
-                class="t3 q-mt-sm text-large inter bolder"
-                v-if="artist && $q.screen.gt.xs"
-              >
-                {{ artist.disambiguation }}
-              </div>
-              <div
-                class="q-mt-lg q-mb-sm inter bold t2"
-                v-if="
-                  artist && artist.tags && artist.tags.length > 0 && !loading
-                "
-              >
-                {{ $t('artists.tags') }}:
-              </div>
-              <!--
             <div
-              class="t3"
-              v-if="
-                artist &&
-                  ((artist.tags && artist.tags.length === 0) || !artist.tags) &&
-                  !loading
-              "
+              class="flex column"
+              v-if="artist && !loading"
+              :class="$q.screen.gt.sm ? ' q-px-lg' : ''"
+              style="width: 100%"
             >
-              No tags for this artist yet.
-            </div>
-          -->
-              <div
-                class="flex row wrap q-gutter-xs"
-                style="max-width: 100%"
-                v-if="artist && artist.tags"
-              >
-                <Tag
-                  class="tag"
-                  v-for="(at, index) in artist.tags"
-                  :key="index"
-                  :value="at.tag"
-                  :label="at.label"
-                ></Tag>
-              </div>
-
-              <div
-                class="q-mt-lg q-mb-sm inter bold t2"
-                v-if="computedDescription && computedDescription.length > 0"
-              >
-                {{ $t('artists.description') }}:
-              </div>
-              <!--
-            <div
-              class="t3"
-              v-if="
-                (!computedDescription || computedDescription.length === 0) &&
-                  !loading
-              "
-            >
-              No description for this artist yet.
-            </div>
-          -->
-              <div
-                style="max-width: 100%"
-                v-if="computedDescription && computedDescription.length > 0"
-              >
-                <span v-if="artist" v-html="computedDescription" /><span
-                  v-if="longDescription && !showFullDescription"
-                  @click="showFullDescription = true"
-                  class="link-hover underline q-ml-xs"
-                  >...show more</span
-                >
-                <span
-                  v-if="longDescription && showFullDescription"
-                  @click="showFullDescription = false"
-                  class="link-hover underline"
-                  >...show less</span
-                >
-              </div>
-
-              <div
-                class="q-mt-lg q-mb-sm inter bold t2"
-                v-if="urls && urls.length > 0"
-              >
-                {{ $t('artists.links') }}:
-              </div>
-
-              <div class="flex column" style="max-width: 100%">
-                <ArtistUrl
-                  v-for="(url, index) in urls"
-                  :url="url"
-                  :key="index"
-                />
-              </div>
-
-              <div>
-                <q-btn
-                  flat
-                  no-caps
-                  class="nav-button q-mr-sm q-px-md q-mt-md q-py-sm"
-                  :class="$q.screen.gt.sm ? 'q-mt-lg' : ''"
-                  @click="viewOnMap"
-                >
-                  See upcoming on map
-                  <q-icon
-                    name="mdi-chevron-right"
-                    size="1rem"
-                    class="q-ml-md"
-                    :class="{ 'q-ml-md': $q.screen.gt.xs }"
-                  />
-                </q-btn>
-              </div>
               <div class="flex column" v-if="artist" style="max-width: 100%">
                 <div class="q-mt-lg q-mb-md inter bold t2">
                   Upcoming events:
@@ -172,7 +138,7 @@
                   artist.past_event_dates.length > 0
                 "
               >
-                <div class="q-mt-lg q-mb-md inter bold t3">
+                <div class="q-mt-lg q-mb-md inter bold t2">
                   {{ $t('artists.past_events') }}:
                 </div>
                 <EventDateCard
@@ -185,24 +151,13 @@
             </div>
           </transition>
         </div>
-
-        <div class="image-container q-ma-lg q-ml-xl" v-if="$q.screen.gt.sm">
-          <transition appear enter-active-class="animated fadeIn slower">
-            <div class="image-container-background" v-if="artist">
-              <img :src="computedSmImageSrc" />
-
-              <img
-                style="z-index: 2"
-                v-show="loadedFullRes"
-                :src="computedImageSrc"
-                @load="loadedFullRes = true"
-              />
-            </div>
-          </transition>
-        </div>
       </div>
+
       <transition appear enter-active-class="animated fadeIn slower">
-        <div class="q-pb-lg q-mt-xl footer" v-if="artist">
+        <div
+          class="q-pb-lg q-px-md q-mt-xl footer"
+          v-if="artist && $q.screen.lt.md"
+        >
           <div class="t3">
             Artist info by
             <a
@@ -230,8 +185,8 @@
           </div>
         </div>
       </transition>
-    </template>
-  </SolidPage>
+    </q-scroll-area>
+  </div>
 </template>
 
 <script>
@@ -239,15 +194,13 @@ import { getArtistRequest, refreshArtistRequest } from 'src/api';
 import { toRaw } from 'vue';
 
 import _ from 'lodash';
-import ArtistUrl from './ArtistUrl.vue';
 import EventDateCard from 'components/EventDateCard.vue';
-import Tag from 'components/EventPage/Tags/TagComponent.vue';
-import SolidPage from 'components/dialogs/SolidPage.vue';
-
+import ArtistDetails from 'components/ArtistPage/ArtistDetails.vue';
 import { mapState, mapWritableState } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
 import { useQueryStore } from 'src/stores/query';
 import { useMapStore } from 'src/stores/map';
+import { useMainStore } from 'src/stores/main';
 export default {
   name: 'ArtistPage',
   meta() {
@@ -273,10 +226,8 @@ export default {
     };
   },
   components: {
-    SolidPage,
-    ArtistUrl,
     EventDateCard,
-    Tag,
+    ArtistDetails,
   },
   data() {
     return {
@@ -319,8 +270,25 @@ export default {
         });
       }
     },
+    onScrollMainContent(info) {
+      // console.log(info);
+      // var height = window.innerHeight / 3 - 120; // this is the height of the gap between menu bar and top of event card
+      this.scrollPercentage = info.verticalPercentage;
+      let verticalPostion = info.verticalPosition;
+      // menubar should always show on large screens (when sidebar is open)c
+
+      if (verticalPostion > 8) {
+        this.overlayOpacity = 1;
+        this.menubarOpacity = 1;
+      } else {
+        this.overlayOpacity = 0;
+        this.menubarOpacity = 0;
+      }
+      //this.overlayOpacity = ((info.target.scrollTop * 0.5) / 100) * 1;
+    },
   },
   mounted() {
+    this.menubarOpacity = 0;
     this.loading = true;
     getArtistRequest(this.id).then((response) => {
       this.loading = false;
@@ -337,6 +305,7 @@ export default {
     });
   },
   computed: {
+    ...mapWritableState(useMainStore, ['menubarOpacity']),
     ...mapWritableState(useQueryStore, ['controlArtist']),
     ...mapState(useAuthStore, ['currentUser']),
     ...mapWritableState(useMapStore, ['map']),
@@ -429,53 +398,134 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.artist-header {
-  position: relative;
-  .image-container {
-    //max-width: 400px;
-    // max-height: 400px;
-    // min-width: 400px;
-    //width: auto;
-    position: relative;
-    overflow: hidden;
-    aspect-ratio: 1;
-    border-radius: 100%;
-    min-width: 308px;
-    .image-container-background {
-      width: 100%;
-      //position: absolute;
-      display: flex;
-      flex-grow: 1;
-      object-fit: cover;
-      justify-content: center;
-      align-items: center;
-
-      img {
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        width: 100%;
-
-        height: auto;
+.body--dark {
+  .artist-page {
+    background: black;
+    .artist-header {
+      .artist-background {
+        background: $bi-2;
       }
     }
   }
-  .ed-card {
-    max-width: 400px;
+}
+.body--light {
+  .artist-page {
+    background: white;
+    .artist-header {
+      .artist-background {
+        background: darkgrey;
+      }
+    }
   }
 }
-.tag {
-  pointer-events: none;
-  cursor: unset;
-}
-.footer {
-  display: flex;
-  flex-grow: 1;
-  align-items: flex-end;
-  position: relative;
-}
-@media only screen and (max-width: 1023px) {
+.artist-page {
+  height: 100%;
+  width: 100%;
   .artist-header {
+    position: relative;
+    padding-top: 72px;
+
+    .header-content {
+      max-width: 1024px;
+    }
+    .artist-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 33vh;
+      //max-height: 512px;
+      overflow: hidden;
+      // transform: translate3d(0, 0, 0);
+
+      &:before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        background: linear-gradient(rgba(0, 0, 0, 0.68), transparent);
+      }
+      img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        //  filter: blur(50px);
+        backface-visibility: hidden;
+        // position by top left corner of image
+        left: 0px;
+        top: 0px;
+        filter: blur(30px);
+        transform: translate3d(0, 0, 0) scale(2);
+        @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+          -webkit-backface-visibility: hidden;
+          -webkit-transform: translate3d(0, 0, 0) scale(2);
+          // translate3d is a hack for safari to force gpu rendering of blur()
+        }
+      }
+    }
+    .image-container {
+      //max-width: 400px;
+      // max-height: 400px;
+      // min-width: 400px;
+      //width: auto;
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 1;
+      border-radius: 100%;
+      min-width: 308px;
+      .image-container-background {
+        width: 100%;
+        //position: absolute;
+        display: flex;
+        flex-grow: 1;
+        object-fit: cover;
+        justify-content: center;
+        align-items: center;
+
+        img {
+          position: absolute;
+          left: 0px;
+          top: 0px;
+          width: 100%;
+
+          height: auto;
+        }
+      }
+    }
+    .ed-card {
+      max-width: 400px;
+    }
+  }
+  .main-content {
+    max-width: 1024px;
+  }
+
+  .tag {
+    pointer-events: none;
+    cursor: unset;
+  }
+}
+
+@media only screen and (max-width: 1023px) {
+  .body--light {
+    .artist-page {
+      :deep(.artist-details) {
+        .details {
+          color: black;
+        }
+      }
+    }
+  }
+  .artist-page {
+    padding-top: 0px !important;
+    .artist-content {
+      .main-content {
+        max-width: 100vw;
+      }
+    }
     .mobile-image-container {
       width: 100%;
       height: 300px;
@@ -522,10 +572,6 @@ export default {
     .ed-card {
       max-width: 100%;
     }
-  }
-  .footer {
-    padding-left: 16px;
-    padding-right: 16px;
   }
 }
 </style>

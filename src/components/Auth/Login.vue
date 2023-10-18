@@ -64,7 +64,11 @@
               @click="$q.platform.is.nativeMobile ? nativeFbLogin() : undefined"
             />
           </div>
-          <div class="t3 q-mt-md" style="text-align: center; font-size: small">
+          <div
+            class="t3 q-mt-md"
+            style="text-align: center; font-size: small"
+            v-if="false"
+          >
             We only store your email address.
           </div>
         </q-card-section>

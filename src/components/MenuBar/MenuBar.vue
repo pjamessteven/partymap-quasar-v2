@@ -1,6 +1,7 @@
 <template>
   <div class="flex row menubar justify-between items-center">
     <div class="menubar-background" :style="computedStyle" />
+
     <MenuBarLogo class="logo" :color="iconColor" v-if="!previousRouteName" />
     <div class="tab-wrapper" v-if="!previousRouteName && $q.screen.gt.xs">
       <NavigationBar :color="iconColor" />
@@ -92,7 +93,8 @@ export default {
       if (
         this.$route.name === 'Explore' ||
         this.$route.name === 'BrowsePage' ||
-        this.$route.name === 'UserPage'
+        this.$route.name === 'UserPage' ||
+        !previousRoute
       ) {
         return null;
       }
@@ -131,7 +133,7 @@ export default {
     ...mapWritableState(useMainStore, ['routerHistory']),
 
     previousRouteName() {
-      if (this.routerHistory.length == 0) return null;
+      if (this.routerHistory.length == 1) return null;
       const previousRoute = this.routerHistory[this.routerHistory.length - 1];
       if (previousRoute) {
         if (previousRoute.meta?.noBackNavigation) {
@@ -142,13 +144,17 @@ export default {
     transparentMenuBar() {
       return (
         this.$route.name === 'EventPage' ||
+        this.$route.name === 'ArtistPage' ||
         this.$route.name === 'Explore' ||
         (this.$route.meta.fullscreenLayout === true && this.$q.screen.gt.xs)
       );
     },
 
     computedStyle() {
-      if (this.$route.name === 'EventPage') {
+      if (
+        this.$route.name === 'EventPage' ||
+        this.$route.name === 'ArtistPage'
+      ) {
         var opacity = this.menubarOpacity;
         if (this.$q.screen.gt.xs) {
           if (this.$q.dark.isActive) {
@@ -179,7 +185,8 @@ export default {
     },
     iconColor() {
       if (
-        (this.$route.name === 'EventPage' &&
+        ((this.$route.name === 'EventPage' ||
+          this.$route.name === 'ArtistPage') &&
           this.$q.screen.gt.xs &&
           this.menubarOpacity === 1 &&
           !this.$q.dark.isActive) ||
@@ -196,6 +203,7 @@ export default {
       } else if (
         this.$q.dark.isActive ||
         this.$route.name === 'EventPage' ||
+        this.$route.name === 'ArtistPage' ||
         this.$route.name === 'Explore' ||
         (this.$route.meta.mapOverlay === true && this.$q.screen.gt.xs)
       ) {

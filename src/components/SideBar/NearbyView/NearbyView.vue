@@ -40,7 +40,6 @@
                   </div>
                   <div
                     class="flex items-center no-wrap justify-between"
-                    :class="{ 'justify-between': $q.screen.lt.sm }"
                     style="width: 100%"
                   >
                     <span
@@ -103,8 +102,32 @@
                         </q-tooltip>
                       </template>
                     </q-btn>
+                  </div>
+                  <div
+                    v-if="$q.screen.gt.xs"
+                    style="
+                      height: 168px;
+                      position: absolute;
+                      top: 0px;
+                      right: 0px;
+                    "
+                    class="q-pa-md flex column justify-between items-end"
+                  >
+                    <div>
+                      <q-btn
+                        flat
+                        @click="() => (showPanel = !showPanel)"
+                        class="q-py-md"
+                      >
+                        <q-icon
+                          flat
+                          size="2rem"
+                          :class="{ 'rotate-180': showPanel }"
+                          name="mdi-chevron-up"
+                        />
+                      </q-btn>
+                    </div>
                     <q-btn
-                      v-else
                       @click.stop="() => (sidebarPanel = 'explore')"
                       flat
                       no-caps

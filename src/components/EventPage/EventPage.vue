@@ -1,8 +1,20 @@
 <template>
   <div
     class="event-page"
-    :style="peekMap ? 'pointer-events: none !important' : ''"
+    :style="peekMap || true ? 'pointer-events: none !important' : ''"
   >
+    <transition appear enter-active-class="animated fadeIn slow">
+      <div class="peek-address-wrapper flex row justify-center" v-if="peekMap">
+        <div
+          class="peek-address inter flex column justify-start items-stretch col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12"
+          :class="$q.screen.gt.xs ? 'text-h5' : 'text-h6'"
+        >
+          <div class="o-070">
+            {{ selectedEventDate.location.description }}
+          </div>
+        </div>
+      </div>
+    </transition>
     <div class="flex row no-wrap event-page-content">
       <div
         class="flex history-container col-4 col-xs-12 col-sm-6 col-md-5 col-lg-4 col-xl-4"
@@ -12,14 +24,26 @@
         <HistoryComponent @close="showingHistory = false" />
         -->
       </div>
-      <div
-        class="scroll-area flex grow"
+      <q-scroll-area
+        vertical
+        ref="scrollArea"
         @scroll="onScrollMainContent"
-        :style="peekMap && $q.screen.lt.sm ? 'overflow: hidden' : ''"
+        class="scroll-area flex grow"
+        :style="peekMapDelayed ? 'overflow: hidden; ' : ''"
+        :thumb-style="
+          $q.screen.gt.xs
+            ? {
+                bottom: '0px',
+                height: '8px',
+                marginLeft: '16px',
+                borderRadius: '0px',
+              }
+            : { bottom: '0px', height: '0px', borderRadius: '0px' }
+        "
       >
         <div class="row flex grow main-row no-wrap justify-center">
           <div
-            v-if="scrollPercentage <= 0 && !peekMap"
+            v-if="scrollPercentage <= 0 && !peekMap && false"
             class="clickable-background"
             style="pointer-events: all"
             @click="clickBackground()"
@@ -562,7 +586,9 @@
                         class="link-hover underline"
                         :to="{
                           name: 'UserPage',
-                          params: { username: event.transaction.user.username },
+                          params: {
+                            username: event.transaction.user.username,
+                          },
                         }"
                       >
                         {{ event.transaction.user.username }}
@@ -574,7 +600,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </q-scroll-area>
       <div class="sticky-editing-footer flex row justify-center" v-if="editing">
         <div
           class="sticky-editing-footer-inner col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12"
@@ -702,7 +728,7 @@ export default {
   },
   data() {
     return {
-      peekMap: false,
+      peekMapDelayed: false,
       enableSwipeDown: true,
       wheelIndicator: null,
       bottomImagePadding: 0,
@@ -729,8 +755,13 @@ export default {
       'toggleFavorite',
       'loadEventDate',
     ]),
+
     clickBackground() {
-      this.peekMap = !this.peekMap;
+      if (this.$q.platform.is.mobile || true) {
+        this.peekMap = !this.peekMap;
+      } else {
+        this.goBack();
+      }
     },
     swipeDown() {
       this.goBack();
@@ -784,11 +815,9 @@ export default {
       if (this.enableSwipeDown && up && this.$q.screen.gt.xs) {
         this.preventMapZoom = true;
 
-        if (this.peekMap) {
-          this.goBack();
-        }
+        //this.goBack();
+        //this.swipeUp();
         this.peekMap = true;
-
         setTimeout(() => {
           // wait for animation - stop map from zooming uncontrolably
           this.preventMapZoom = false;
@@ -807,21 +836,23 @@ export default {
       }
     },
     onScrollMainContent(info) {
-      var height = window.innerHeight / 3 - 120; // this is the height of the gap between menu bar and top of event card
-      this.scrollPercentage = info.target.scrollTop / height;
+      // console.log(info);
+      // var height = window.innerHeight / 3 - 120; // this is the height of the gap between menu bar and top of event card
+      this.scrollPercentage = info.verticalPercentage;
+      let verticalPostion = info.verticalPosition;
       // menubar should always show on large screens (when sidebar is open)c
       if (this.$q.screen.lt.sm) {
         //this.menubarOpacity = ((info.target.scrollTop * 1.5) / 100) * -1 + 1;
         //this.menubarOpacity = ((info.target.scrollTop * 1.5) / 100) * 1;
-        if (info.target.scrollTop > 64) {
+        if (verticalPostion > 64) {
           this.menubarOpacity = 1;
         } else {
           this.menubarOpacity = 0;
         }
-        this.overlayOpacity = ((info.target.scrollTop * 1.5) / 100) * 1;
+        this.overlayOpacity = ((verticalPostion * 1.5) / 100) * 1;
       } else {
         if (
-          info.target.scrollTop >
+          verticalPostion >
           window.innerHeight - window.innerHeight * 0.66 - 196
         ) {
           this.overlayOpacity = 1;
@@ -963,14 +994,25 @@ export default {
     id: function () {
       this.loadEvent();
     },
-    peekMap: function (newV) {
-      console.trace('pee', newV);
+    peekMap(newv) {
+      // timeouts are so that we wait until the animation is finished
+      if (newv === true) {
+        this.peekMapDelayed = true;
+      } else {
+        setTimeout(() => {
+          this.peekMapDelayed = newv;
+        }, 350);
+      }
     },
   },
   computed: {
     ...mapWritableState(useMainStore, ['menubarOpacity', 'overlayOpacity']),
     ...mapState(useMainStore, ['routerHistory']),
-    ...mapWritableState(useMapStore, ['focusMarker', 'preventMapZoom']),
+    ...mapWritableState(useMapStore, [
+      'focusMarker',
+      'preventMapZoom',
+      'peekMap',
+    ]),
     ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
     ...mapState(useEventStore, ['loadingEvent', 'selectedEventDate']),
     ...mapWritableState(useEventStore, ['event', 'editing']),
@@ -1292,6 +1334,19 @@ a {
 }
 
 .event-page {
+  .peek-address-wrapper {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    .peek-address {
+      pointer-events: all;
+      color: white;
+      text-align: center;
+      margin-top: 72px;
+      max-width: 1024px;
+    }
+  }
   .event-page-overlay {
     background: rgba(0, 0, 0, 0.5);
     width: 100%;
@@ -1485,6 +1540,9 @@ a {
 }
 
 @media only screen and (min-width: 599px) {
+  .peek-address {
+    max-width: 960px !important;
+  }
   .content-card {
     max-width: 960px !important;
   }
@@ -1493,6 +1551,9 @@ a {
   }
 }
 @media only screen and (min-width: 1023px) {
+  .peek-address {
+    max-width: 1024px !important;
+  }
   .content-card {
     max-width: 1024px !important;
   }
@@ -1502,6 +1563,9 @@ a {
 }
 
 @media only screen and (max-width: 1024px) {
+  .peek-address {
+    max-width: 96vw !important;
+  }
   .content-card {
     max-width: 96vw !important;
   }

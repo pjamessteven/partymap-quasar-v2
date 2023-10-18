@@ -23,7 +23,7 @@
       <q-icon name="las la-play" v-else-if="url.type === 'streaming'" />
       <q-icon name="las la-play" v-else-if="url.type === 'free streaming'" />
       <q-icon name="las la-external-link-alt" v-else />
-      <span class="url-type t1 q-ml-xs" v-if="!iconsOnly">{{ url.type }}</span>
+      <span class="url-type q-ml-xs" v-if="!iconsOnly">{{ url.type }}</span>
     </a>
   </div>
 </template>
