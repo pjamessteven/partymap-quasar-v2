@@ -693,8 +693,8 @@ export default {
           ),
           0
         );
-        // below value -8px is correct for iphone 7
-        padding-bottom: calc(188px + env(safe-area-inset-top) + 16px);
+        // below value -8px is correct for iphone 7, + 16px is correct for iphone x in app mode, 0px correct for iphone x in browser
+        // padding-bottom: calc(188px + env(safe-area-inset-top));
       }
 
       .sidebar-content {

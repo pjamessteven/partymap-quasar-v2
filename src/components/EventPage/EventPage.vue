@@ -1,7 +1,9 @@
 <template>
   <div
     class="event-page"
-    :style="peekMap || true ? 'pointer-events: none !important' : ''"
+    :style="
+      peekMap || !$q.platform.is.ios ? 'pointer-events: none !important' : ''
+    "
   >
     <transition appear enter-active-class="animated fadeIn slow">
       <div class="peek-address-wrapper flex row justify-center" v-if="peekMap">
@@ -43,7 +45,7 @@
       >
         <div class="row flex grow main-row no-wrap justify-center">
           <div
-            v-if="scrollPercentage <= 0 && !peekMap && false"
+            v-if="scrollPercentage <= 0 && !peekMap && $q.platform.is.ios"
             class="clickable-background"
             style="pointer-events: all"
             @click="clickBackground()"
@@ -268,7 +270,6 @@
                 <div
                   class="main-content"
                   :class="$q.screen.gt.sm ? ' q-pa-xl' : ''"
-                  v-if="!!event"
                 >
                   <div
                     v-if="
@@ -283,7 +284,7 @@
                       }}
                     </div>
                   </div>
-                  <div v-else class="flex row no-wrap">
+                  <div v-else-if="!!event" class="flex row no-wrap">
                     <EventDateSidebarDesktop
                       v-if="$q.screen.gt.sm"
                       class="q-mr-lg"
@@ -757,11 +758,14 @@ export default {
     ]),
 
     clickBackground() {
+      /*
       if (this.$q.platform.is.mobile || true) {
         this.peekMap = !this.peekMap;
       } else {
         this.goBack();
       }
+      */
+      this.goBack();
     },
     swipeDown() {
       this.goBack();
@@ -1186,13 +1190,12 @@ a {
           }
         }
         .content {
-          background: $bi-2;
-
           :deep(.event-page-header) {
             background: $bi-2;
           }
           .main-content {
             border: 1px solid #181818 !important;
+            background: $bi-2;
           }
           .bottom-section {
             background: $bi-1;
@@ -1230,6 +1233,8 @@ a {
         background: $bi-2;
       }
       .content-card {
+        background: $bi-2;
+
         .header {
           background: $bi-2 !important;
 
@@ -1266,9 +1271,11 @@ a {
     .scroll-area {
       .main-row {
         .content-card {
+          //background: white;
           .main-content {
             border: 1px solid $b-4 !important;
-
+            background: white;
+            min-height: 20vh;
             .action-buttons {
               /*
               .q-btn {
@@ -1280,7 +1287,7 @@ a {
             }
           }
           .content {
-            background: white;
+            // background: white;
 
             :deep(.event-page-header) {
               background: white;
@@ -1387,6 +1394,7 @@ a {
         position: relative;
 
         .content-card {
+          min-height: 2000px;
           margin-top: Max(calc((100vh - 66vh) - 64px), 0px);
           max-width: 1024px;
           //border: none !important;
@@ -1608,6 +1616,7 @@ a {
           .content-card {
             //max-height: calc(100% - 66vh);
             min-height: 100%;
+            min-height: 100vh;
             margin-top: Max(calc(100% - 66%), 0px);
             border: none;
             max-width: 100vw !important;

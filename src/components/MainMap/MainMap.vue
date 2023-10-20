@@ -482,7 +482,11 @@ export default {
       toRaw(this.map).on('click', () => {
         if (this.$route.name === 'EventPage') {
           //this.peekMap = false;
-          this.goBack();
+          if (!this.peekMap) {
+            this.goBack();
+          } else {
+            this.peekMap = false;
+          }
         }
       });
 

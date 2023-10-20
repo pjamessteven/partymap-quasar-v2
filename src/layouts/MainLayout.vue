@@ -28,14 +28,12 @@
         />
       </Transition>
 
-      <transition appear enter-active-class="animated fadeIn">
-        <SearchComponent
-          v-show="
-            $route.name === 'Explore' ||
-            ($q.screen.gt.sm && $route.name === 'BrowsePage')
-          "
-        />
-      </transition>
+      <SearchComponent
+        v-show="
+          $route.name === 'Explore' ||
+          ($q.screen.gt.sm && $route.name === 'BrowsePage')
+        "
+      />
       <!-- There's two router views because we want different transitions for different pages
   and we're lazy... -->
       <router-view

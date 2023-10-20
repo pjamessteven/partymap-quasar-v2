@@ -459,7 +459,7 @@ export default {
     }
 
     .scroll-wrapper {
-      height: 48px;
+      height: 46px;
       padding-right: 64px;
     }
   }
@@ -543,6 +543,8 @@ export default {
   .inner-wrapper {
     mask-image: none;
     height: 44px;
+    overflow-y: hidden;
+
     .control-scroll-area {
       margin-top: -2px;
       overflow-y: hidden !important;
@@ -554,6 +556,8 @@ export default {
         white calc(100% - 64px),
         white 100%
       );
+      overflow-y: hidden;
+
       .scroll-wrapper {
         //height: 44px;
         overflow-y: hidden;
