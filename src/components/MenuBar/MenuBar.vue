@@ -244,7 +244,6 @@ export default {
   height: 64px;
   position: relative;
   transition: height 0.3s ease;
-
   .menubar-background {
     position: absolute;
     height: 100%;
@@ -316,6 +315,24 @@ export default {
   .menubar {
     height: 62px;
     z-index: 1;
+    position: fixed;
+    top: 0px;
+
+    // android
+    @supports ((top: var(--safe-area-inset-top))) {
+      //padding-top: calc(env(safe-area-inset-top));
+      //height: calc(env(safe-area-inset-top) + 62px);
+      top: var(--safe-area-inset-top);
+    }
+    .menubar-background {
+      @supports ((top: var(--safe-area-inset-top))) {
+        padding-top: var(--safe-area-inset-top);
+        height: calc(env(safe-area-inset-top) + 62px);
+        position: fixed;
+        top: 0px;
+      }
+    }
+
     .back-button-wrapper {
       left: 0px;
 

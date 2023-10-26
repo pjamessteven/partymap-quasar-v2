@@ -266,8 +266,8 @@
                   </q-btn>
                 </div>
 
-                <div class="q-px-lg" v-if="$q.screen.gt.xs && false">
-                  <q-separator />
+                <div class="q-px-md q-mt-sm q-mb-xs" v-if="$q.screen.lt.md">
+                  <div class="separator" />
                 </div>
 
                 <div
@@ -1434,6 +1434,8 @@ export default {
           border-radius: 0px;
           border-left: none !important;
           border-right: none !important;
+          border: none;
+          margin-bottom: -16px !important;
         }
       }
 
