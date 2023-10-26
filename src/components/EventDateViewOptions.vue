@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-center items-center">
     <q-btn-dropdown
-      class="inter t4"
+      class="inter t3"
       no-caps
       @click.stop
       flat

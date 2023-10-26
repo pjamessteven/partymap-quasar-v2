@@ -2,9 +2,13 @@
   <div class="flex row menubar justify-between items-center">
     <div class="menubar-background" :style="computedStyle" />
 
-    <MenuBarLogo class="logo" :color="iconColor" v-if="!previousRouteName" />
+    <MenuBarLogo
+      class="logo"
+      :color="leftIconColor"
+      v-if="!previousRouteName"
+    />
     <div class="tab-wrapper" v-if="!previousRouteName && $q.screen.gt.xs">
-      <NavigationBar :color="iconColor" />
+      <NavigationBar :color="leftIconColor" />
     </div>
     <transition
       appear
@@ -182,6 +186,34 @@ export default {
           return 'background: white';
         }
       } */ else return 'opacity: 0';
+    },
+    leftIconColor() {
+      if (
+        ((this.$route.name === 'EventPage' ||
+          this.$route.name === 'ArtistPage') &&
+          this.$q.screen.gt.xs &&
+          this.menubarOpacity === 1 &&
+          !this.$q.dark.isActive) ||
+        (this.$route.name === 'Explore' &&
+          !this.$q.dark.isActive &&
+          this.$q.screen.gt.xs) ||
+        (this.$route.name === 'Explore' &&
+          !this.$q.dark.isActive &&
+          this.$q.screen.lt.sm &&
+          this.showPanel)
+      ) {
+        return 'black';
+      } else if (
+        this.$q.dark.isActive ||
+        this.$route.name === 'EventPage' ||
+        this.$route.name === 'ArtistPage' ||
+        this.$route.name === 'Explore' ||
+        (this.$route.meta.mapOverlay === true && this.$q.screen.gt.xs)
+      ) {
+        return 'white';
+      } else {
+        return 'black';
+      }
     },
     iconColor() {
       if (

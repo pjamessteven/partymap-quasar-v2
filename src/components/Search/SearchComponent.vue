@@ -196,12 +196,12 @@ export default {
 .search-component {
   z-index: 4000;
   position: absolute;
-  top: 38px;
+  top: 80px;
   width: 100%;
   display: flex;
   justify-content: center;
   pointer-events: none;
-
+  max-width: 33vw;
   .controls-wrapper {
     z-index: 1000;
     width: 100%;
@@ -249,6 +249,15 @@ export default {
     left: unset;
     padding: 0 16px;
     top: 72px;
+    max-width: 50vw;
+  }
+}
+@media only screen and (max-width: 1681px) {
+  .search-component {
+    width: 50vw;
+    max-width: 50vw;
+    .sidebar-content {
+    }
   }
 }
 
@@ -267,6 +276,8 @@ export default {
     }
   }
   .search-component {
+    width: 100vw;
+    max-width: 100vw;
     // android
     @supports ((top: var(--safe-area-inset-top))) {
       top: calc(68px + var(--safe-area-inset-top));

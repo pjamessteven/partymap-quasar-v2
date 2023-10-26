@@ -3,7 +3,7 @@
     <div
       class="date-header flex row no-wrap justify-between grow ellipsis inter semibold"
       :class="{
-        ' q-px-md q-pb-md  t3 inter bold text-large': $q.screen.gt.xs,
+        ' q-px-md q-pb-md  q-pb-lg t2 inter  ': $q.screen.gt.xs,
         'q-pt-md': $q.screen.gt.xs && $route.name !== 'Explore',
         'q-px-sm q-ml-xs q-py-md t2 semibold': $q.screen.lt.sm,
       }"

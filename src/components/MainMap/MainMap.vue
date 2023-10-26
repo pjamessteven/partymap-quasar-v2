@@ -39,6 +39,7 @@ import 'leaflet.tilelayer.colorfilter';
 //import '../../../node_modules/leaflet.tilelayer.colorfilter/src/leaflet-tilelayer-colorfilter.js';
 
 import EventSelectionComponent from './EventSelectionComponent.vue';
+import { useNearbyStore } from 'src/stores/nearby';
 
 export default {
   components: {},
@@ -109,6 +110,9 @@ export default {
         (newv === 'explore' && oldv === 'nearby') ||
         (newv === 'nearby' && oldv === 'explore')
       ) {
+        if (this.nearbyEventsDates?.length > 0) {
+          this.setMapBoundsNearby();
+        }
         if (this.userLocation?.lat && !this.userLocationFromSearch)
           this.fitBoundsForExplorePage(this.userLocation);
       }
@@ -307,6 +311,7 @@ export default {
 
   methods: {
     ...mapActions(useQueryStore, ['loadPoints']),
+    ...mapActions(useNearbyStore, ['setMapBoundsNearby']),
     goBack() {
       if (this.routerHistory.length > 0) {
         this.$router.go(-1);
@@ -717,6 +722,7 @@ export default {
       'controlRegion',
       'controlLocality',
       'loadingPoints',
+      'nearbyEventDates',
       'points',
     ]),
     route() {

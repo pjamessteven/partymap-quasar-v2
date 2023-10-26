@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia';
+import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useMainStore } from './stores/main';
 import { useAuthStore } from './stores/auth';
 import SplashScreen from './components/SplashScreen.vue';
@@ -33,7 +33,7 @@ export default {
       description: {
         name: 'description',
         content:
-          'PartyMap is a community-driven platform for discovering festivals and events near you and around the world.',
+          'PartyMap is a community-driven platform for discovering festivals and experiences near you and around the world.',
       },
       keywords: {
         name: 'keywords',
@@ -48,6 +48,11 @@ export default {
   },
   computed: {
     ...mapState(useMainStore, ['darkMode']),
+    ...mapWritableState(useMainStore, ['compactView', 'groupEventsByMonth']),
+
+    screen() {
+      return this.$q.screen;
+    },
   },
   watch: {
     darkMode: function (newval) {
@@ -56,6 +61,16 @@ export default {
       } else {
         this.$q.dark.set(false);
       }
+    },
+    screen: {
+      handler: function (screen) {
+        if (screen.gt.md) {
+          this.compactView = false;
+        } else {
+          this.compactView = true;
+        }
+      },
+      deep: true,
     },
   },
   mounted() {

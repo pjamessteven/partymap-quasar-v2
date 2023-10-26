@@ -17,7 +17,7 @@
                 width: $q.screen.gt.xs ? '8px' : '4px',
                 borderRadius: '0px',
               }"
-              :class="!showPanel && 'disable-scroll'"
+              :class="$q.screen.lt.sm && !showPanel && 'disable-scroll'"
               class="scroll-area flex grow"
               :content-style="{
                 width: '100%',
@@ -61,7 +61,6 @@
                     </span>
                     <q-btn
                       flat
-                      v-if="$q.screen.lt.sm"
                       class="q-px-md"
                       :class="{ 'q-ml-md': $q.screen.lt.sm }"
                       @click.stop="() => getFineLocation()"
@@ -103,46 +102,6 @@
                       </template>
                     </q-btn>
                   </div>
-                  <div
-                    v-if="$q.screen.gt.xs"
-                    style="
-                      height: 168px;
-                      position: absolute;
-                      top: 0px;
-                      right: 0px;
-                    "
-                    class="q-pa-md flex column justify-between items-end"
-                  >
-                    <div>
-                      <q-btn
-                        flat
-                        @click="() => (showPanel = !showPanel)"
-                        class="q-py-md"
-                      >
-                        <q-icon
-                          flat
-                          size="2rem"
-                          :class="{ 'rotate-180': showPanel }"
-                          name="mdi-chevron-up"
-                        />
-                      </q-btn>
-                    </div>
-                    <q-btn
-                      @click.stop="() => (sidebarPanel = 'explore')"
-                      flat
-                      no-caps
-                      class="nav-button q-mr-sm q-px-md q-py-sm"
-                    >
-                      Explore the map
-
-                      <q-icon
-                        name="mdi-chevron-right"
-                        size="1rem"
-                        class="q-ml-md"
-                        :class="{ 'q-ml-md': $q.screen.gt.xs }"
-                      />
-                    </q-btn>
-                  </div>
                 </div>
                 <div
                   class="flex message"
@@ -163,7 +122,7 @@
                   >
                     <span
                       >Welcome to PartyMap, the global directory of festivals
-                      and events!</span
+                      and experiences!</span
                     >
                     <q-icon
                       class="q-ml-md"

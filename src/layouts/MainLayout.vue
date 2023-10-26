@@ -14,10 +14,10 @@
       <Transition
         appear
         :enter-active-class="
-          $q.screen.gt.xs ? 'animated  slideInUp' : 'animated fadeIn'
+          $q.screen.gt.xs ? 'animated  slideInLeft' : 'animated fadeIn'
         "
         :leave-active-class="
-          $q.screen.gt.xs ? 'animated slideOutDown' : undefined
+          $q.screen.gt.xs ? 'animated slideOutLeft' : undefined
         "
       >
         <SideBar
@@ -30,7 +30,7 @@
 
       <SearchComponent
         v-show="
-          $route.name === 'Explore' ||
+          (false && $route.name === 'Explore') ||
           ($q.screen.gt.sm && $route.name === 'BrowsePage')
         "
       />

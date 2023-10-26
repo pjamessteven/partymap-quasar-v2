@@ -4,24 +4,6 @@
     style="height: 100%; width: 100%; position: relative; overflow: hidden"
   >
     <div
-      @click="() => (showPanel = !showPanel)"
-      style="pointer-events: all; cursor: pointer"
-      class="inter bolder text-h5 flex items-center justify-between q-pl-lg q-pr-md q-py-md explore-header"
-      v-if="$q.screen.gt.xs && false"
-    >
-      <div>Explore Events</div>
-      <div class="flex items-center q-my-sm show-map">
-        <q-icon
-          flat
-          class="q-mr-md"
-          size="2rem"
-          :class="{ 'rotate-180': showPanel }"
-          name="mdi-chevron-up"
-          style="cursor: pointer"
-        />
-      </div>
-    </div>
-    <div
       :class="{ 'q-px-md': showPanel || true }"
       v-if="$q.screen.gt.xs && false"
     >
@@ -46,23 +28,25 @@
         class="flex row no-wrap items-center justify-between q-px-md q-pt-md q-pb-sm view-options-absolute"
         v-if="$q.screen.gt.xs"
       >
-        <div class="text-h5 inter bolder q-ml-sm q-my-sm">Upcoming events</div>
         <div class="flex row items-center no-wrap">
-          <EventDateViewOptions class="q-mr-md" />
+          <EventDateViewOptions class="q-m-md" />
 
           <q-icon
             @click="() => (showPanel = !showPanel)"
-            v-if="$q.screen.gt.xs"
+            v-if="$q.screen.gt.xs && $q.screen.lt.md"
             flat
             size="2.5rem"
-            class="q-mr-md t1"
+            class="q-mx-md t1"
             name="mdi-chevron-up"
             :class="{ 'rotate-180': showPanel }"
             style="cursor: pointer"
           />
         </div>
       </div>
-      <div class="flex column grow no-wrap">
+      <div
+        class="flex column grow no-wrap"
+        :class="$q.screen.gt.sm ? 'q-pt-lg' : ''"
+      >
         <q-scroll-area
           vertical
           @scroll="onScrollMainContent"
@@ -73,7 +57,10 @@
             borderRadius: 0,
           }"
           class="scroll-area flex grow"
-          :class="(!showPanel || preventMapZoom) && 'disable-scroll'"
+          :class="
+            (($q.screen.lt.md && !showPanel) || preventMapZoom) &&
+            'disable-scroll'
+          "
         >
           <div class="flex column no-wrap scroll-content q-px-sm">
             <transition appear enter-active-class="animated fadeIn slow">
@@ -527,7 +514,6 @@ export default {
     height: 100%;
     transition: all 0.3s;
     position: relative;
-
     .view-options {
       position: absolute;
       right: 64px;
@@ -536,6 +522,8 @@ export default {
     }
 
     .view-options-absolute {
+      position: absolute;
+      right: 0px;
       z-index: 1000;
     }
 

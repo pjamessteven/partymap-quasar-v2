@@ -123,7 +123,7 @@ import { useQuasar } from 'quasar';
 
 const $q = useQuasar();
 
-const mainStore = useMainStore();
+const main = useMainStore();
 
 interface Props {
   eventDates: [EventDate, string][];
@@ -149,28 +149,44 @@ const props = withDefaults(defineProps<Props>(), {
   hideHeader: () => false,
 });
 
-const gridColumns = computed(() => {
-  if ($q.screen.gt.lg) {
-    return `
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        `;
-  } else if ($q.screen.gt.sm) {
-    return `
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        `;
-  } else {
-    return `
-        grid-template-columns: repeat(1, minmax(0, 1fr));
-        `;
-  }
-});
-
 const computedTotalResultMessage = computed(() => {
   if (props.eventDatesTotal === 1) {
-    return props.eventDatesTotal + ' in this area';
+    return props.eventDatesTotal + ' upcoming events in this area';
   } else if (props.eventDatesTotal > 1) {
-    return props.eventDatesTotal + ' in this area';
+    return props.eventDatesTotal + ' upcoming events in this area';
   } else return null;
+});
+
+const gridColumns = computed(() => {
+  if (main.showPanel) {
+    if ($q.screen.gt.lg) {
+      return `
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        `;
+    } else if ($q.screen.gt.sm) {
+      return `
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        `;
+    } else {
+      return `
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        `;
+    }
+  } else {
+    if ($q.screen.gt.lg) {
+      return `
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        `;
+    } else if ($q.screen.gt.sm) {
+      return `
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        `;
+    } else {
+      return `
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        `;
+    }
+  }
 });
 </script>
 <style lang="scss" scoped>

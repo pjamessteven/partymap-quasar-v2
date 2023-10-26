@@ -23,21 +23,19 @@
           class="nav-bar"
           v-if="$q.screen.gt.xs && false"
         />
-        <div
-          style="height: 100%; width: 100%"
-          class="sidebar-content-inner"
-          @wheel="handleWheel"
-        >
-          <NearbyView
-            style="height: 100%; width: 100%"
-            v-if="sidebarPanel === 'nearby'"
-          />
-
-          <ExploreView
-            style="height: 100%; width: 100%"
-            v-show="sidebarPanel === 'explore'"
-          />
-
+        <div style="height: 100%; width: 100%" class="sidebar-content-inner">
+          <transition appear enter-active-class="animated fadeIn">
+            <NearbyView
+              style="height: 100%; width: 100%"
+              v-if="sidebarPanel === 'nearby'"
+            />
+          </transition>
+          <transition appear enter-active-class="animated fadeIn">
+            <ExploreView
+              style="height: 100%; width: 100%"
+              v-show="sidebarPanel === 'explore'"
+            />
+          </transition>
           <SearchView
             style="height: 100%; width: 100%"
             v-show="sidebarPanel === 'search'"
@@ -53,14 +51,11 @@ import ExploreView from './ExploreView/ExploreView.vue';
 import SearchView from './SearchView/SearchView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
 import NavigationBar from 'components/NavigationBar.vue';
-import MobileSwipeHandle from '../MobileSwipeHandle.vue';
 import { useAuthStore } from 'src/stores/auth';
 import { mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
-
-import WheelIndicator from 'wheel-indicator';
 
 export default {
   components: {
@@ -71,31 +66,26 @@ export default {
     //MobileSwipeHandle,
   },
   async mounted() {
+    /*
     this.wheelIndicator = new WheelIndicator({
       elem: this.$refs.sidebar,
       callback: this.onMouseWheel,
       preventMouse: false,
     });
-  },
-  beforeUnmount() {
-    this.wheelIndicator.destroy();
+    */
   },
   data() {
     return {
       lastx: 0,
       preventMapInteraction: false,
       wheelIndicator: null,
-      pointerEvents: 'pointer-events: none;',
       panelHiddenDelayed: true,
     };
   },
   methods: {
     handleWheel(event) {
       // safari behavior fix
-      if (
-        this.pointerEvents === 'pointer-events: none;' &&
-        this.$q.platform.is.safari
-      ) {
+      if (this.$q.platform.is.safari) {
         event.preventDefault();
         return false;
       }
@@ -161,12 +151,8 @@ export default {
     showPanel(newv) {
       // timeouts are so that we wait until the animation is finished
       if (newv === true) {
-        setTimeout(() => {
-          this.pointerEvents = 'pointer-events: all;';
-        }, 350);
         this.panelHiddenDelayed = false;
       } else {
-        this.pointerEvents = 'pointer-events: none;';
         setTimeout(() => {
           this.panelHiddenDelayed = true;
         }, 350);
@@ -336,7 +322,7 @@ export default {
   height: 100%;
   width: 100%;
   pointer-events: none;
-  justify-content: center;
+  justify-content: start;
   display: flex;
 
   .sidebar {
@@ -349,26 +335,18 @@ export default {
     //  rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
     //box-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
     max-height: 100%;
-    //transition: width 0.3s;
     overflow: hidden;
     height: 100%;
     pointer-events: all;
     transition: all 0.4s ease;
-    transform: translate3d(0, calc(100% - 226px), 0);
+    //transform: translate3d(0, calc(100% - 226px), 0);
     user-select: none;
-    padding-bottom: 64px;
+    //padding-bottom: 64px;
     display: flex;
     justify-content: center;
-    border-top-left-radius: 18px;
-    border-top-right-radius: 18px;
-
-    //box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
-    //  rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
-    //  rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
 
     .sidebar-content {
-      border-top-left-radius: 18px;
-      border-top-right-radius: 18px;
+      padding-top: 128px;
       overflow: hidden;
       .sidebar-content-inner {
         overflow: hidden;
@@ -385,7 +363,7 @@ export default {
     }
 
     &.sidebar-mobile-nearby {
-      transform: translate3d(0, calc(100% - 66vh), 0);
+      //transform: translate3d(0, calc(100% - 66vh), 0);
     }
 
     &.sidebar-mobile-expanded {
@@ -411,7 +389,6 @@ export default {
     :deep(.scroll-area) {
       overflow: hidden;
       .scroll-content {
-        //padding-top: 32px;
       }
     }
 
@@ -419,7 +396,6 @@ export default {
       padding-top: 8px;
       padding-bottom: 8px;
       color: white;
-      //position: sticky;
       top: 0px;
       z-index: 99;
     }
@@ -427,7 +403,6 @@ export default {
       height: 100%;
       width: 100%;
       position: relative;
-
       overflow: hidden;
       //box-shadow: 0px 0px 64px 32px rgba(0, 0, 0, 0.2);
       .nav-bar {
@@ -502,7 +477,7 @@ export default {
       width: 96vw;
       padding-bottom: 134px;
       &.sidebar-mobile-nearby {
-        transform: translate3d(0, calc(100% - 60vh), 0);
+        //transform: translate3d(0, calc(100% - 60vh), 0);
       }
       &.sidebar-mobile-expanded {
         transform: translate3d(0, 128px, 0);
@@ -514,10 +489,9 @@ export default {
 @media only screen and (min-width: 1280px) {
   .sidebar-wrapper {
     .sidebar {
-      padding-bottom: 88px;
-      width: 66vw;
-      min-width: 920px;
-      max-width: 1024px;
+      //padding-bottom: 88px;
+      width: 50vw;
+      //max-width: 33vw;
       .sidebar-content {
       }
       &.sidebar-mobile-expanded {
@@ -530,30 +504,15 @@ export default {
 @media only screen and (min-width: 1080px) {
   .sidebar-wrapper {
     .sidebar {
-      width: 66vw;
-      max-width: 1024px;
+      width: 50vw;
+      max-width: 50vw;
       .sidebar-content {
       }
     }
   }
 }
 
-@media only screen and (min-width: 1921px) {
-  .sidebar-wrapper {
-    .sidebar {
-      padding-bottom: 128px;
-      transform: translate3d(0, calc(100% - 298px), 0);
-      max-width: 1280px;
-
-      .sidebar-content {
-      }
-      &.sidebar-mobile-expanded {
-        transform: translate3d(0, 128px, 0);
-      }
-    }
-  }
-}
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 1681px) {
   .body--dark {
     .sidebar-wrapper {
       .hover-indicator-line {
@@ -599,6 +558,13 @@ export default {
       }
     }
   }
+
+  .sidebar-wrapper {
+    .sidebar {
+      width: 50vw;
+      max-width: 50vw;
+    }
+  }
 }
 
 @media only screen and (max-width: 600px) {
@@ -612,6 +578,7 @@ export default {
         border-top: 1px solid $bi-4;
         //border-top: none;
         background: black;
+
         &.sidebar-mobile-expanded {
           border-top-color: black;
         }
@@ -668,7 +635,8 @@ export default {
       border-left: none;
       border-right: none;
       overflow: visible;
-      width: 100%;
+      max-width: 100vw;
+      width: 100vwv;
 
       @supports ((top: var(--safe-area-inset-top))) {
         transform: translate3d(

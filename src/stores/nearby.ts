@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { toRaw } from 'vue';
 import moment from 'moment';
 import {
   getArtistsRequest,
@@ -9,7 +10,9 @@ import { Artist, EventDate, Tag } from 'src/types/autogen_types';
 import { useMainStore } from 'src/stores/main';
 import { useQueryStore } from 'src/stores/query';
 import { useAuthStore } from './auth';
-
+import { useMapStore } from './map';
+import { O } from 'app/dist/spa/assets/index.bdd54828';
+import L from 'leaflet';
 interface NearbyState {
   loadingEverything: boolean;
 
@@ -150,6 +153,24 @@ export const useNearbyStore = defineStore('nearby', {
         throw error;
       }
     },
+    setMapBoundsNearby() {
+      const mappedPoints = this.nearbyEventDates.map((item: any) =>
+        item?.[0]?.location?.lat
+          ? {
+              lat: item?.[0]?.location.lat,
+              lng: item?.[0]?.location.lng,
+            }
+          : {
+              lat: undefined,
+              lng: undefined,
+            }
+      );
+      const mapStore = useMapStore();
+      if (mapStore.map) {
+        const bounds = L.latLngBounds(mappedPoints);
+        toRaw(mapStore.map).fitBounds(bounds);
+      }
+    },
     async loadNearbyEventDates() {
       const main = useMainStore();
       try {
@@ -169,6 +190,7 @@ export const useNearbyStore = defineStore('nearby', {
             response.data.items
           );
         }
+
         if (this.nearbyEventDatesPage === 1 && response.data.radius) {
           // server will calculate a fitting query radius
           // if user has not selected one
@@ -177,6 +199,9 @@ export const useNearbyStore = defineStore('nearby', {
         this.nearbyEventDatesHasNext = response.data.has_next;
         this.nearbyEventDatesPage += 1;
         this.nearbyArtistsSuccess = true;
+
+        // TODO add sidebar offset
+        this.setMapBoundsNearby();
 
         return;
       } catch (error) {
