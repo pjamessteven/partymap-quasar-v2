@@ -23,6 +23,7 @@
           class="nav-bar"
           v-if="$q.screen.gt.xs && false"
         />
+        <SearchComponent />
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
           <transition appear enter-active-class="animated fadeIn">
             <NearbyView
@@ -47,6 +48,8 @@
 </template>
 
 <script>
+import SearchComponent from 'src/components/Search/SearchComponent.vue';
+
 import ExploreView from './ExploreView/ExploreView.vue';
 import SearchView from './SearchView/SearchView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
@@ -64,6 +67,7 @@ export default {
     NavigationBar,
     NearbyView,
     //MobileSwipeHandle,
+    SearchComponent,
   },
   async mounted() {
     /*

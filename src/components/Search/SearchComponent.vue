@@ -170,9 +170,9 @@ export default {
   }
   .controls-wrapper-inner {
     //
-    box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+    //box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
     background: white;
-    //background: #fafafa;
+    background: #f5f5f5;
     color: $t-1;
     //border: 1px solid rgba(0, 0, 0, 0.1);
   }
@@ -201,7 +201,7 @@ export default {
   display: flex;
   justify-content: center;
   pointer-events: none;
-  max-width: 33vw;
+  //max-width: 33vw;
   .controls-wrapper {
     z-index: 1000;
     width: 100%;
@@ -249,13 +249,13 @@ export default {
     left: unset;
     padding: 0 16px;
     top: 72px;
-    max-width: 50vw;
+    //max-width: 50vw;
   }
 }
 @media only screen and (max-width: 1681px) {
   .search-component {
-    width: 50vw;
-    max-width: 50vw;
+    //width: 50vw;
+    //max-width: 50vw;
     .sidebar-content {
     }
   }

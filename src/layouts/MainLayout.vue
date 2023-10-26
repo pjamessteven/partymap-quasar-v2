@@ -29,8 +29,8 @@
       </Transition>
 
       <SearchComponent
-        v-show="
-          (false && $route.name === 'Explore') ||
+        v-if="
+          ($q.screen.lt.md && $route.name === 'Explore') ||
           ($q.screen.gt.sm && $route.name === 'BrowsePage')
         "
       />
