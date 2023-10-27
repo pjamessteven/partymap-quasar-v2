@@ -75,11 +75,17 @@
         a profile.
       </p>
       <p>
-        If you originally logged in with Google or Facebook, but you want to
-        move away from it, you can add a password from the account page and
-        continue to log in with the email address affiliated with the
-        third-party login provider and your newly created password.
+        If you delete your PartyMap account, your data (email address) will be
+        removed from our database.
       </p>
+      <p>
+        If you originally logged in with Google or Facebook, but you want to
+        move away from it while keeping your PartyMap account, you can add a
+        password from the account page and continue to log in with the email
+        address affiliated with the third-party login provider and your newly
+        created password.
+      </p>
+
       <p>
         NOTE: YOU MUST DO THIS BEFORE DELETING OR DE-ACTIVATING YOUR FACEBOOK OR
         GOOGLE ACCOUNT.
