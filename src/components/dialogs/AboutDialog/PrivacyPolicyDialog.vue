@@ -10,9 +10,10 @@
       <u><b>What is this all about?</b></u>
       <p />
       <p>
-        At PartyMap one of our main priorities is the privacy of our visitors.
-        This Privacy Policy document contains types of information that is
-        collected and recorded by PartyMap and how we use it.
+        Privacy is really important. As the creator of PartyMap I have taken a
+        lot of care in regards to how I am handling and storing data. This
+        privacy policy formally outlines these concerns and explains what data
+        is collected and recorded by PartyMap and how we use it.
       </p>
 
       <p>
@@ -31,7 +32,8 @@
       <p />
 
       <p>
-        By using our website, you hereby consent to our Privacy Policy and agree
+        I promise that there's nothing nasty in here, but it must be said that
+        by using our website, you hereby consent to our Privacy Policy and agree
         to its terms.
       </p>
 
@@ -53,6 +55,34 @@
         When you register for an Account, we may ask for your contact
         information, including items such as name, company name, address, email
         address, and/or telephone number.
+      </p>
+      <p>
+        When you connect to PartyMap.com, your IP address, browser user-agent
+        and rough location is logged. This gives me a rough idea about who is
+        actually using this bloody website [laughing crying emoji], where it's
+        popping off, and if they're using a phone or desktop.
+      </p>
+
+      <u><b>Third-party login disclaimer (Google and FaceBook)</b></u>
+      <p />
+      <p>
+        When you login with your Google or Facebook account, we don't receive
+        your login credentials as these are processed by Google or Facebook (the
+        authentication provider). We only request the bare-minumum information
+        from the authentication provider, which may consist of your full name,
+        email address and date of birth. We only store your email address in our
+        database, as this is the only personal information we require to create
+        a profile.
+      </p>
+      <p>
+        If you originally logged in with Google or Facebook, but you want to
+        move away from it, you can add a password from the account page and
+        continue to log in with the email address affiliated with the
+        third-party login provider and your newly created password.
+      </p>
+      <p>
+        NOTE: YOU MUST DO THIS BEFORE DELETING OR DE-ACTIVATING YOUR FACEBOOK OR
+        GOOGLE ACCOUNT.
       </p>
 
       <u><b>How we use your information</b></u>
@@ -96,7 +126,7 @@
       <p>
         Like most websites, PartyMap uses cookies. The only cookie that PartyMap
         stores in your browser is a session token which is used to keep you
-        logged into your account.
+        logged into your account. We don't do any creepy tracking.
       </p>
 
       <u><b>Third Party Privacy Policies</b></u>

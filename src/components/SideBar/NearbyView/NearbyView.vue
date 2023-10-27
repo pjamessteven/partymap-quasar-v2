@@ -7,6 +7,14 @@
             class="flex column grow no-wrap"
             style="height: 100%; width: 100%; max-width: 100%"
           >
+            <transition
+              appear
+              enter-active-class="animated fadeIn"
+              leave-active-class="animated fadeOut"
+            >
+              <div class="list-shadow" v-if="scrollPosition > 228 && false" />
+            </transition>
+
             <q-scroll-area
               @click.prevent
               @scroll="onScroll"
@@ -39,7 +47,11 @@
                     <span class="">Near</span>
                   </div>
                   <div
-                    class="flex items-center no-wrap justify-between"
+                    class="flex items-center no-wrap"
+                    :class="{
+                      'justify-between': $q.screen.gt.xs,
+                      'justify-between  ': $q.screen.lt.sm,
+                    }"
                     style="width: 100%"
                   >
                     <span
@@ -49,10 +61,9 @@
                       <span v-if="userLocationCity">
                         {{ userLocationCity
                         }}<span v-if="userLocationCountry && $q.screen.gt.xs"
-                          >,</span
+                          >,&nbsp;</span
                         ></span
-                      >
-                      <span v-if="$q.screen.gt.xs || !userLocationCity">{{
+                      ><span v-if="$q.screen.gt.xs || !userLocationCity">{{
                         userLocationCountry
                       }}</span>
                     </span>
@@ -61,7 +72,7 @@
                     </span>
                     <q-btn
                       flat
-                      v-if="$q.screen.lt.sm"
+                      v-if="$q.screen.lt.sm || true"
                       class="q-px-md"
                       :class="{ 'q-ml-md': $q.screen.lt.sm }"
                       @click.stop="() => getFineLocation()"
@@ -103,8 +114,9 @@
                       </template>
                     </q-btn>
                   </div>
+                  <!--
                   <div
-                    v-if="$q.screen.gt.xs"
+                    v-if="$q.screen.gt.xs "
                     style="
                       height: 168px;
                       position: absolute;
@@ -128,6 +140,7 @@
                       </q-btn>
                     </div>
                     <q-btn
+                      v-if="false"
                       @click.stop="() => (sidebarPanel = 'explore')"
                       flat
                       no-caps
@@ -143,6 +156,7 @@
                       />
                     </q-btn>
                   </div>
+                  -->
                 </div>
                 <div
                   class="flex message"
@@ -297,13 +311,11 @@
                           class="q-py-md location-header flex justify-between"
                           :class="
                             $q.screen.gt.xs
-                              ? 'q-px-lg text-large bold'
-                              : 'q-px-md'
+                              ? 'q-px-lg t1 text-large inter semibold'
+                              : 'q-px-md t1 inter semibold'
                           "
                         >
-                          <div class="t1 text- inter semibold">
-                            Your upcoming events:
-                          </div>
+                          <div class="text-">Your upcoming events:</div>
                           <div
                             class="link-hover t3 inter semibold"
                             @click="() => (sidebarPanel = 'favorites')"
@@ -358,11 +370,11 @@
                           class="q-py-md location-header"
                           :class="
                             $q.screen.gt.xs
-                              ? 'q-pl-lg text-large inter bold'
-                              : 'q-pl-md  inter semibold'
+                              ? 'q-px-lg  t1 text-large inter semibold'
+                              : 'q-pl-md t1 inter semibold'
                           "
                         >
-                          <div class="t1 text-">Top tags in your area:</div>
+                          <div class="text-">Top tags in your area:</div>
                         </div>
                         <div
                           class=""
@@ -421,11 +433,11 @@
                           class="q-py-md location-header"
                           :class="
                             $q.screen.gt.xs
-                              ? 'q-pl-lg q-mt- text-large bold'
-                              : 'q-pl-md'
+                              ? 'q-px-lg  t1 text-large inter semibold'
+                              : 'q-pl-md t1'
                           "
                         >
-                          <div class="t1 inter semibold">
+                          <div class="inter semibold">
                             Top tags around the world:
                           </div>
                         </div>
@@ -483,8 +495,12 @@
                         :style="$q.screen.gt.xs ? 'margin-top: -16px' : ''"
                       >
                         <div
-                          class="t1 location-header q-py-md inter semibold"
-                          :class="$q.screen.gt.xs ? 'q-pl-lg text-' : 'q-pl-md'"
+                          class="location-header q-py-md inter"
+                          :class="
+                            $q.screen.gt.xs
+                              ? 'q-px-lg t1 text-large inter semibold'
+                              : 'q-pl-md t1 semibold'
+                          "
                         >
                           Artists playing nearby:
                         </div>
@@ -503,8 +519,12 @@
                         v-else-if="artistOptions?.length > 0"
                       >
                         <div
-                          class="t1 location-header q-py-md inter semibold"
-                          :class="$q.screen.gt.xs ? 'q-pl-lg text-' : 'q-pl-md'"
+                          class="location-header q-py-md inter semibold"
+                          :class="
+                            $q.screen.gt.xs
+                              ? 'q-pl-lg  t1 text-large inter semibold'
+                              : 'q-pl-md t1'
+                          "
                         >
                           Top artists worldwide:
                         </div>
@@ -521,7 +541,7 @@
                         class="t1 inter semibold location-header q-py-sm flex row items-center justify-between"
                         :class="
                           $q.screen.gt.xs
-                            ? 'q-pl-lg text-large bold'
+                            ? 'q-pl-lg  t1 text-large inter semibold'
                             : 'q-pl-md'
                         "
                       >
@@ -605,8 +625,8 @@
                         class="t1 inter semibold location-header flex row items-center justify-between"
                         :class="
                           $q.screen.gt.xs
-                            ? 'q-pl-sm text-large bold'
-                            : 'q-pl-sm'
+                            ? 'q-pl-sm  t1 text-large inter semibold'
+                            : 'q-pl-sm t1'
                         "
                         v-if="eventDates && eventDates.length > 0"
                         style="height: 56px"
@@ -617,7 +637,7 @@
                           class="flex"
                           :class="$q.screen.gt.xs ? 'q-pl-md' : 'q-pl-sm'"
                         >
-                          <div class="ellipsis t1" v-if="userLocation">
+                          <div class="ellipsis" v-if="userLocation">
                             {{ $t('landing_page.all_upcoming_events') }}:
                           </div>
                         </div>
@@ -1172,6 +1192,15 @@ export default {
     }
   }
 
+  .list-shadow {
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 8px;
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 5px;
+    z-index: 1000;
+  }
+
   .scroll-area {
     height: 100%;
     overflow: hidden;
@@ -1188,6 +1217,7 @@ export default {
     }
     .scroll-stuff {
       max-width: 100vw;
+      position: relative;
 
       .mobile-location-header {
       }
@@ -1268,7 +1298,10 @@ export default {
     .scroll-stuff {
       .loading-wrapper {
         pointer-events: none;
-        margin-top: -500px;
+        height: 100%;
+        width: 100%;
+        margin-top: 550px;
+        //background: green;
       }
       .message {
         //border-radius: 9px;

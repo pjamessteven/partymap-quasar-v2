@@ -996,7 +996,7 @@ export default {
   },
   watch: {
     id: function () {
-      this.loadEvent();
+      // this.loadEvent();
     },
     peekMap(newv) {
       // timeouts are so that we wait until the animation is finished
@@ -1121,12 +1121,15 @@ export default {
     this.menubarOpacity = 0;
     this.editing = this.$route.params.editing;
     // clear previous event
-    this.load();
-    this.wheelIndicator = new WheelIndicator({
-      elem: this.$refs.contentcard,
-      callback: this.onMouseWheel,
-      preventMouse: false,
-    });
+    setTimeout(() => this.load(), 100);
+    //    this.load();
+    if (this.$q.screen.gt.xs) {
+      this.wheelIndicator = new WheelIndicator({
+        elem: this.$refs.contentcard,
+        callback: this.onMouseWheel,
+        preventMouse: false,
+      });
+    }
   },
   created() {
     this.timeAgo = common.timeAgo;
@@ -1144,6 +1147,7 @@ export default {
     this.menubarOpacity = 0;
     this.overlayOpacity = 0;
     this.focusMarker = null;
+    this.event = null;
   },
   unmounted() {
     if (this.wheelIndicator) {
@@ -1482,7 +1486,9 @@ a {
                 }
               }
             }
-
+            .main-content {
+              min-height: 800p;
+            }
             :deep(.event-page-header) {
               position: sticky;
               top: 0px;

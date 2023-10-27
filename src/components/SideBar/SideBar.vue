@@ -354,6 +354,8 @@ export default {
     height: 100%;
     pointer-events: all;
     transition: all 0.4s ease;
+    //transition-timing-function: cubic-bezier(0, 1.3, 0.4, 1);
+
     transform: translate3d(0, calc(100% - 226px), 0);
     user-select: none;
     padding-bottom: 64px;

@@ -2,8 +2,7 @@
   "appId": "org.partymap.com",
   "appName": "PartyMap",
   "server": {
-    "hostname": "api.partymap.com",
-    "url": "http://192.168.1.149:9500"
+    "hostname": "api.partymap.com"
   },
   "bundledWebRuntime": false,
   "npmClient": "yarn",

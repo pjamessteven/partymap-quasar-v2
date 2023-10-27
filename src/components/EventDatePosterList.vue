@@ -172,16 +172,24 @@ const gridColumns = computed(() => {
 });
 
 const computedTotalResultMessage = computed(() => {
-  if (props.eventDatesTotal === 1) {
-    return props.eventDatesTotal + ' in this area';
-  } else if (props.eventDatesTotal > 1) {
-    return props.eventDatesTotal + ' in this area';
-  } else return null;
+  if ($q.screen.gt.xs) {
+    if (props.eventDatesTotal === 1) {
+      return props.eventDatesTotal + ' good time in this area';
+    } else if (props.eventDatesTotal > 1) {
+      return props.eventDatesTotal + ' good times in this area';
+    } else return null;
+  } else {
+    if (props.eventDatesTotal === 1) {
+      return props.eventDatesTotal + ' upcoming in this area';
+    } else if (props.eventDatesTotal > 1) {
+      return props.eventDatesTotal + ' good times in this area';
+    } else return null;
+  }
 });
 </script>
 <style lang="scss" scoped>
 .total-result-header {
-  //position: unset;
+  position: unset;
 }
 .ed-poster-grid {
   display: grid;

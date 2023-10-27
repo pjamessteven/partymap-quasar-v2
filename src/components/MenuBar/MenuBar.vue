@@ -3,7 +3,16 @@
     <div class="menubar-background" :style="computedStyle" />
 
     <MenuBarLogo class="logo" :color="iconColor" v-if="!previousRouteName" />
+
     <div class="tab-wrapper" v-if="!previousRouteName && $q.screen.gt.xs">
+      <div class="q-py-lg q-pl-sm q-pr-md" style="height: 100%">
+        <div
+          class="separator vertical"
+          :style="
+            iconColor === 'black' ? 'border-color: grey' : 'border-color: grey'
+          "
+        />
+      </div>
       <NavigationBar :color="iconColor" />
     </div>
     <transition
