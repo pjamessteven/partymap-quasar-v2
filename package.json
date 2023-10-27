@@ -33,7 +33,6 @@
     "leaflet.tilelayer.colorfilter": "^1.2.5",
     "lodash": "^4.17.21",
     "moment-timezone": "^0.5.40",
-    "phonegap-plugin-mobile-accessibility": "github:phonegap/phonegap-mobile-accessibility",
     "pinia": "^2.0.11",
     "quasar": "^2.12.7",
     "v-calendar": "^3.0.0-alpha.8",
