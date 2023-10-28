@@ -1,6 +1,6 @@
 <template>
   <transition appear enter-active-class="animated fadeIn">
-    <div class="ed-card">
+    <div class="ed-card" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
       <router-link
         v-slot="{ navigate }"
         :custom="true"
@@ -193,6 +193,16 @@ export default {
     };
   },
   methods: {
+    mouseEnter() {
+      this.eventDateHoverMarker = {
+        lat: this.event.location.lat,
+        lng: this.event.location.lng,
+        name: this.event.name,
+      };
+    },
+    mouseLeave() {
+      this.eventDateHoverMarker = null;
+    },
     getBottomBgImgStyle() {
       if (this.$q.dark.isActive) {
         return `background-image:  url("${this.imgThumbXsUrl}");

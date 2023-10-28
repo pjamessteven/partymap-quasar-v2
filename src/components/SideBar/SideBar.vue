@@ -18,12 +18,26 @@
         "
         class="sidebar-content flex column no-wrap"
       >
+        <div
+          class="add-event-wrapper items-center flex justify-center q-px-md q-py-sm"
+          v-if="$route.name === 'Explore' && $q.screen.gt.xs"
+        >
+          <q-btn
+            class="inter nav-button"
+            no-caps
+            flat
+            style="margin-top: 4px"
+            @click="showAddEventDialog"
+          >
+            Submit <q-icon name="mdi-plus" class="q-ml-sm" size="1rem" />
+          </q-btn>
+        </div>
         <NavigationBar
           @click="togglePanel"
           class="nav-bar"
           v-if="$q.screen.gt.xs && false"
         />
-        <SearchComponent />
+        <SearchComponent class="search-component" />
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
           <transition appear enter-active-class="animated fadeIn">
             <NearbyView
@@ -49,6 +63,7 @@
 
 <script>
 import SearchComponent from 'src/components/Search/SearchComponent.vue';
+import AddEventDialog from 'components/dialogs/AddEventDialog.vue';
 
 import ExploreView from './ExploreView/ExploreView.vue';
 import SearchView from './SearchView/SearchView.vue';
@@ -87,6 +102,26 @@ export default {
     };
   },
   methods: {
+    showAddEventDialog() {
+      this.$q
+        .dialog({
+          parent: this,
+          component: AddEventDialog,
+        })
+        .onOk((data) => {
+          if (!this.currentUser && data.host) {
+            this.$router.push({ name: 'Login' });
+          } else if (data.host) {
+            this.$router.push({
+              name: 'AddEventHost',
+            });
+          } else {
+            this.$router.push({
+              name: 'AddEventPublic',
+            });
+          }
+        });
+    },
     handleWheel(event) {
       // safari behavior fix
       if (this.$q.platform.is.safari) {
@@ -341,6 +376,7 @@ export default {
     max-height: 100%;
     overflow: hidden;
     height: 100%;
+    max-width: 720px;
     pointer-events: all;
     transition: all 0.4s ease;
     //transform: translate3d(0, calc(100% - 226px), 0);
@@ -352,6 +388,13 @@ export default {
     .sidebar-content {
       padding-top: 128px;
       overflow: hidden;
+      position: relative;
+      .add-event-wrapper {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        z-index: 5000;
+      }
       .sidebar-content-inner {
         overflow: hidden;
         isolation: isolate; // lol what?
@@ -475,6 +518,62 @@ export default {
       }
       */
 
+@media only screen and (min-width: 600px) {
+  .body--light {
+    .sidebar {
+      .search-component {
+        background: white;
+        box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+
+        :deep(.controls-wrapper-inner) {
+          background: white;
+        }
+      }
+    }
+  }
+  .body--dark {
+    .sidebar {
+      .search-component {
+        background: $bi-2;
+
+        :deep(.controls-wrapper-inner) {
+          background: $bi-2;
+        }
+      }
+    }
+  }
+  .sidebar {
+    .search-component {
+      width: 100%;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      padding-top: 72px;
+      background: $bi-2;
+      justify-content: center;
+      :deep(.controls-wrapper-inner) {
+        width: 100%;
+        border-radius: 0px;
+        border-top: none;
+        background: $bi-2;
+        //justify-content: center;
+
+        border-radius: none !important;
+        .inner-wrapper {
+          border-radius: 0px;
+          .scroll-wrapper {
+            // justify-content: center;
+            padding-right: 0px;
+            height: 48px;
+          }
+          .search-button {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
 @media only screen and (min-width: 600px) and (max-width: 1280px) {
   .sidebar-wrapper {
     .sidebar {
@@ -509,7 +608,6 @@ export default {
   .sidebar-wrapper {
     .sidebar {
       width: 50vw;
-      max-width: 50vw;
       .sidebar-content {
       }
     }
@@ -566,7 +664,6 @@ export default {
   .sidebar-wrapper {
     .sidebar {
       width: 50vw;
-      max-width: 50vw;
     }
   }
 }

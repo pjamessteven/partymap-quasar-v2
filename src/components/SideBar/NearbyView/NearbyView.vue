@@ -49,7 +49,7 @@
                       <span v-if="userLocationCity">
                         {{ userLocationCity
                         }}<span v-if="userLocationCountry && $q.screen.gt.xs"
-                          >,</span
+                          >,&nbsp;</span
                         ></span
                       >
                       <span v-if="$q.screen.gt.xs || !userLocationCity">{{

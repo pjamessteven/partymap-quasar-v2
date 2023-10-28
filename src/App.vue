@@ -33,7 +33,7 @@ export default {
       description: {
         name: 'description',
         content:
-          'PartyMap is a community-driven platform for discovering festivals and experiences near you and around the world.',
+          'PartyMap is a community-driven platform for discovering festivals and events near you and around the world.',
       },
       keywords: {
         name: 'keywords',
@@ -64,7 +64,7 @@ export default {
     },
     screen: {
       handler: function (screen) {
-        if (screen.gt.md) {
+        if (screen.gt.lg) {
           this.compactView = false;
         } else {
           this.compactView = true;

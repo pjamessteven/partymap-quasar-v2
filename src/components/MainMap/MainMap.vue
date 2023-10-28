@@ -278,8 +278,8 @@ export default {
       },
     },
     eventDateHoverMarker: function (newv) {
-      this.eventDateHoverLayer.unbindTooltip();
-      this.eventDateHoverLayer.clearLayers();
+      toRaw(this.eventDateHoverLayer).unbindTooltip();
+      toRaw(this.eventDateHoverLayer).clearLayers();
       if (newv !== null && toRaw(this.map)) {
         var markers = [
           L.marker([newv.lat, newv.lng], {
@@ -288,7 +288,10 @@ export default {
           }),
         ];
         this.eventDateHoverLayer = L.featureGroup(markers)
-          .bindTooltip(newv.name, { direction: 'top', permanent: true })
+          .bindTooltip('!!! ' + newv.name + ' !!!', {
+            direction: 'top',
+            permanent: true,
+          })
           .addTo(toRaw(this.map));
       }
     },

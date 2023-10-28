@@ -33,7 +33,7 @@
 
           <q-icon
             @click="() => (showPanel = !showPanel)"
-            v-if="$q.screen.gt.xs && $q.screen.lt.md"
+            v-if="$q.screen.gt.xs && false"
             flat
             size="2.5rem"
             class="q-mx-md t1"
