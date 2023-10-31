@@ -274,6 +274,7 @@ export default {
       box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.4);
     }
   }
+
   .search-component {
     width: 100vw;
     max-width: 100vw;
@@ -286,10 +287,22 @@ export default {
       (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
         (-webkit-appearance: none)
     ) {
-      top: calc(72px + env(safe-area-inset-top) - 8px);
+      top: calc(68px + env(safe-area-inset-top));
     }
     .controls-wrapper {
       .controls-wrapper-inner {
+      }
+    }
+  }
+
+  .native-mobile {
+    // ios specific padding for capcaitor app
+    .search-component {
+      @supports (
+        (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+          (-webkit-appearance: none)
+      ) {
+        top: calc(68px + env(safe-area-inset-top) - 8px);
       }
     }
   }

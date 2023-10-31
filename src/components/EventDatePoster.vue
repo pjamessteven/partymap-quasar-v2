@@ -12,6 +12,7 @@
           },
           query: {
             name: event.name.replace(/ /g, '_'),
+            thumbXsUrl: imgThumbXsUrl,
           },
         }"
       >

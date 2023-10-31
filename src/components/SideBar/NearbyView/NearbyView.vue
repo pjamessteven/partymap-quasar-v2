@@ -7,13 +7,21 @@
             class="flex column grow no-wrap"
             style="height: 100%; width: 100%; max-width: 100%"
           >
+            <transition
+              appear
+              enter-active-class="animated fadeIn"
+              leave-active-class="animated fadeOut"
+            >
+              <div class="list-shadow" v-if="scrollPosition > 228 && false" />
+            </transition>
+
             <q-scroll-area
               @click.prevent
               @scroll="onScroll"
               vertical
               :thumb-style="{
-                marginTop: '4px',
-                right: $q.screen.gt.xs ? '0px' : '-16px',
+                marginTop: '16px',
+                right: $q.screen.gt.xs ? '-16px' : '0px',
                 width: $q.screen.gt.xs ? '8px' : '4px',
                 borderRadius: '0px',
               }"
@@ -39,7 +47,11 @@
                     <span class="">Near</span>
                   </div>
                   <div
-                    class="flex items-center no-wrap justify-between"
+                    class="flex items-center no-wrap"
+                    :class="{
+                      'justify-between': $q.screen.gt.xs,
+                      'justify-between  ': $q.screen.lt.sm,
+                    }"
                     style="width: 100%"
                   >
                     <span
@@ -51,8 +63,7 @@
                         }}<span v-if="userLocationCountry && $q.screen.gt.xs"
                           >,&nbsp;</span
                         ></span
-                      >
-                      <span v-if="$q.screen.gt.xs || !userLocationCity">{{
+                      ><span v-if="$q.screen.gt.xs || !userLocationCity">{{
                         userLocationCountry
                       }}</span>
                     </span>
@@ -225,8 +236,8 @@
                   </q-btn>
                 </div>
 
-                <div class="q-px-lg" v-if="$q.screen.gt.xs && false">
-                  <q-separator />
+                <div class="q-px-md q-mt-sm q-mb-xs" v-if="$q.screen.lt.md">
+                  <div class="separator" />
                 </div>
 
                 <div
@@ -256,13 +267,11 @@
                           class="q-py-md location-header flex justify-between"
                           :class="
                             $q.screen.gt.xs
-                              ? 'q-px-lg text-large bold'
-                              : 'q-px-md'
+                              ? 'q-px-lg t1 text-large inter semibold'
+                              : 'q-px-md t1 inter semibold'
                           "
                         >
-                          <div class="t1 text- inter semibold">
-                            Your upcoming events:
-                          </div>
+                          <div class="text-">Your upcoming events:</div>
                           <div
                             class="link-hover t3 inter semibold"
                             @click="() => (sidebarPanel = 'favorites')"
@@ -317,11 +326,11 @@
                           class="q-py-md location-header"
                           :class="
                             $q.screen.gt.xs
-                              ? 'q-pl-lg text-large inter bold'
-                              : 'q-pl-md  inter semibold'
+                              ? 'q-px-lg  t1 text-large inter semibold'
+                              : 'q-pl-md t1 inter semibold'
                           "
                         >
-                          <div class="t1 text-">Top tags in your area:</div>
+                          <div class="text-">Top tags in your area:</div>
                         </div>
                         <div
                           class=""
@@ -380,11 +389,11 @@
                           class="q-py-md location-header"
                           :class="
                             $q.screen.gt.xs
-                              ? 'q-pl-lg q-mt- text-large bold'
-                              : 'q-pl-md'
+                              ? 'q-px-lg  t1 text-large inter semibold'
+                              : 'q-pl-md t1'
                           "
                         >
-                          <div class="t1 inter semibold">
+                          <div class="inter semibold">
                             Top tags around the world:
                           </div>
                         </div>
@@ -442,8 +451,12 @@
                         :style="$q.screen.gt.xs ? 'margin-top: -16px' : ''"
                       >
                         <div
-                          class="t1 location-header q-py-md inter semibold"
-                          :class="$q.screen.gt.xs ? 'q-pl-lg text-' : 'q-pl-md'"
+                          class="location-header q-py-md inter"
+                          :class="
+                            $q.screen.gt.xs
+                              ? 'q-px-lg t1 text-large inter semibold'
+                              : 'q-pl-md t1 semibold'
+                          "
                         >
                           Artists playing nearby:
                         </div>
@@ -462,8 +475,12 @@
                         v-else-if="artistOptions?.length > 0"
                       >
                         <div
-                          class="t1 location-header q-py-md inter semibold"
-                          :class="$q.screen.gt.xs ? 'q-pl-lg text-' : 'q-pl-md'"
+                          class="location-header q-py-md inter semibold"
+                          :class="
+                            $q.screen.gt.xs
+                              ? 'q-pl-lg  t1 text-large inter semibold'
+                              : 'q-pl-md t1'
+                          "
                         >
                           Top artists worldwide:
                         </div>
@@ -480,7 +497,7 @@
                         class="t1 inter semibold location-header q-py-sm flex row items-center justify-between"
                         :class="
                           $q.screen.gt.xs
-                            ? 'q-pl-lg text-large bold'
+                            ? 'q-pl-lg  t1 text-large inter semibold'
                             : 'q-pl-md'
                         "
                       >
@@ -564,8 +581,8 @@
                         class="t1 inter semibold location-header flex row items-center justify-between"
                         :class="
                           $q.screen.gt.xs
-                            ? 'q-pl-sm text-large bold'
-                            : 'q-pl-sm'
+                            ? 'q-pl-sm  t1 text-large inter semibold'
+                            : 'q-pl-sm t1'
                         "
                         v-if="eventDates && eventDates.length > 0"
                         style="height: 56px"
@@ -576,7 +593,7 @@
                           class="flex"
                           :class="$q.screen.gt.xs ? 'q-pl-md' : 'q-pl-sm'"
                         >
-                          <div class="ellipsis t1" v-if="userLocation">
+                          <div class="ellipsis" v-if="userLocation">
                             {{ $t('landing_page.all_upcoming_events') }}:
                           </div>
                         </div>
@@ -1076,6 +1093,8 @@ export default {
           transition: all 0.3s ease;
           background: rgba(255, 255, 255, 0);
           border: 1px solid rgba(0, 0, 0, 0.1);
+          //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px 0px;
+
           &:hover {
             background: rgba(0, 0, 0, 0.1);
           }
@@ -1131,6 +1150,15 @@ export default {
     }
   }
 
+  .list-shadow {
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 8px;
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 5px;
+    z-index: 1000;
+  }
+
   .scroll-area {
     height: 100%;
     overflow: hidden;
@@ -1147,6 +1175,7 @@ export default {
     }
     .scroll-stuff {
       max-width: 100vw;
+      position: relative;
 
       .mobile-location-header {
       }
@@ -1227,7 +1256,10 @@ export default {
     .scroll-stuff {
       .loading-wrapper {
         pointer-events: none;
-        margin-top: -500px;
+        height: 100%;
+        width: 100%;
+        margin-top: 550px;
+        //background: green;
       }
       .message {
         //border-radius: 9px;
@@ -1302,7 +1334,7 @@ export default {
         transition: all 0.3s ease;
         white-space: nowrap;
         cursor: pointer;
-        border-radius: 9px;
+        border-radius: 18px;
         padding: 6px 12px;
         //font-size: small;
         &:hover {
@@ -1393,6 +1425,8 @@ export default {
           border-radius: 0px;
           border-left: none !important;
           border-right: none !important;
+          border: none;
+          margin-bottom: -16px !important;
         }
       }
 

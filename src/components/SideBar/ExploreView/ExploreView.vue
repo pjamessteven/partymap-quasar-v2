@@ -51,11 +51,22 @@
           vertical
           @scroll="onScrollMainContent"
           ref="scroll"
-          :thumb-style="{
-            right: $q.screen.gt.xs ? '0px' : '-16px',
-            width: $q.screen.gt.xs ? '8px' : '4px',
-            borderRadius: 0,
-          }"
+          :thumb-style="
+            $q.screen.gt.xs
+              ? {
+                  bottom: '0px',
+                  height: '8px',
+                  right: '-16px',
+                  borderRadius: '0px',
+                  width: '8px',
+                }
+              : {
+                  marginTop: '52px',
+                  height: '0px',
+                  borderRadius: '0px',
+                  width: '4px',
+                }
+          "
           class="scroll-area flex grow"
           :class="
             (($q.screen.lt.md && !showPanel) || preventMapZoom) &&
@@ -92,6 +103,7 @@
           </div>
         </q-scroll-area>
       </div>
+      <!--
       <div
         v-if="
           $q.screen.gt.xs && (isLoadingInitial || (mapMoving && !blockUpdates))
@@ -101,6 +113,7 @@
       >
         Loading...
       </div>
+      -->
       <div
         class="event-date-center t2 flex column grow no-wrap justify-center items-center"
         :style="
@@ -153,6 +166,7 @@
             >
               <q-btn
                 no-caps
+                style="border-radius: 48px !important"
                 v-if="anyFiltersEnabled"
                 class="button-plain flex items-center"
                 @click="
@@ -168,6 +182,7 @@
               </q-btn>
               <q-btn
                 no-caps
+                style="border-radius: 48px !important"
                 v-if="mapZoomLevel > 2"
                 class="button-plain flex items-center q-ml-sm"
                 @click="zoomOut()"

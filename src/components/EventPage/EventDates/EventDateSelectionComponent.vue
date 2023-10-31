@@ -236,12 +236,21 @@ export default {
     },
     scrollSelectedEdIntoView() {
       if (this.selectedEventDateIndex > 0) {
-        // scroll to middle
-        this.$refs.scrollArea.setScrollPosition(
-          'horizontal',
-          this.selectedEventDateIndex * (180 + 18) - (180 + 18),
-          100
-        );
+        if (this.$q.screen.gt.xs) {
+          // scroll to middle
+          this.$refs.scrollArea.setScrollPosition(
+            'horizontal',
+            this.selectedEventDateIndex * (180 + 18) - (180 + 18),
+            100
+          );
+        } else {
+          // scroll so item is on the left
+          this.$refs.scrollArea.setScrollPosition(
+            'horizontal',
+            this.selectedEventDateIndex * (180 + 18),
+            100
+          );
+        }
       } else {
         this.$refs.scrollArea.setScrollPosition(
           'horizontal',

@@ -12,6 +12,7 @@
           },
           query: {
             name: event.name.replace(/ /g, '_'),
+            thumbXsUrl: imgThumbXsUrl,
           },
         }"
       >
@@ -438,5 +439,14 @@ export default {
 
 // sm
 @media only screen and (max-width: 600px) {
+  .ed-card {
+    &:before {
+      display: none;
+      //opacity: 1;
+    }
+    &:hover {
+      //transform: scale(1.01) translateY(0px);
+    }
+  }
 }
 </style>

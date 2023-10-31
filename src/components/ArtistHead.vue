@@ -5,6 +5,7 @@
       params: { id: artist.id },
       query: {
         name: artist.name.replace(/ /g, '_'),
+        thumb_xs_url: artist?.media_items?.[0]?.thumb_xs_url,
       },
     }"
   >
@@ -201,8 +202,15 @@ a {
     }
   }
   */
+
   .artist-head-wrapper {
     .artist-head {
+    }
+
+    &:hover {
+      &:before {
+        display: none;
+      }
     }
   }
 }

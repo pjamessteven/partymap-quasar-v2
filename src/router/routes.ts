@@ -1,5 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
 import EventPage from 'src/components/EventPage/EventPage.vue';
+import BrowsePage from 'src/components/BrowsePage/BrowsePage.vue';
 import Login from 'src/components/Auth/Login.vue';
 const routes: RouteRecordRaw[] = [
   {
@@ -28,7 +29,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/browse',
         name: 'BrowsePage',
-        component: () => import('src/components/BrowsePage/BrowsePage.vue'),
+        component: BrowsePage,
         props: true,
         meta: {
           auth: false,

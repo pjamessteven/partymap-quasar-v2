@@ -60,6 +60,7 @@
           -->
           <div
             style="max-width: 100%"
+            class="t2"
             v-if="computedDescription && computedDescription.length > 0"
           >
             <span v-if="artist" v-html="computedDescription" /><span

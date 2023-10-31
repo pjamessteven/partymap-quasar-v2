@@ -1,7 +1,7 @@
 <template>
   <div class="date-header-wrapper">
     <div
-      class="date-header flex row no-wrap justify-between grow ellipsis inter semibold"
+      class="date-header flex row no-wrap justify-between grow ellipsis inter"
       :class="{
         ' q-px-md q-pb-md  q-pb-lg t2 inter  ': $q.screen.gt.xs,
         'q-pt-md': $q.screen.gt.xs && $route.name !== 'Explore',

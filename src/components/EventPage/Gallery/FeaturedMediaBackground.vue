@@ -1,6 +1,7 @@
 <template>
   <div class="featured-media">
     <div class="overlay" />
+
     <div class="media-wrapper" v-if="headerBackground">
       <transition
         appear
@@ -28,7 +29,7 @@
         </video>
         <img
           :key="headerBackground.id + 'else'"
-          v-else-if="headerBackground.image_url"
+          v-else-if="headerBackground.thumb_xs_url"
           :src="headerBackground.thumb_xs_url"
           class="item"
         />
@@ -45,6 +46,7 @@ export default {
   components: {},
   props: {
     editing: Boolean,
+    thumbXsUrl: String,
   },
   data() {
     return {
@@ -67,7 +69,9 @@ export default {
       if (this.event?.media_items?.length) {
         return this.event.media_items[this.backgroundMediaIndex];
       } else {
-        return null;
+        return {
+          thumb_xs_url: this.thumbXsUrl,
+        };
       }
     },
   },

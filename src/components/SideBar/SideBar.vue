@@ -37,7 +37,7 @@
           class="nav-bar"
           v-if="$q.screen.gt.xs && false"
         />
-        <SearchComponent class="search-component" />
+        <SearchComponent class="search-component" v-if="$q.screen.gt.xs" />
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
           <transition appear enter-active-class="animated fadeIn">
             <NearbyView
@@ -679,7 +679,6 @@ export default {
         border-top: 1px solid $bi-4;
         //border-top: none;
         background: black;
-
         &.sidebar-mobile-expanded {
           border-top-color: black;
         }
@@ -723,6 +722,8 @@ export default {
     padding: 0;
     overflow: hidden;
     box-shadow: none;
+    border-radius: 18px;
+
     .sidebar {
       box-shadow: none;
 
@@ -735,9 +736,10 @@ export default {
       padding-bottom: 188px;
       border-left: none;
       border-right: none;
-      overflow: visible;
+      overflow: none;
       max-width: 100vw;
       width: 100vwv;
+      border-radius: 18px;
 
       @supports ((top: var(--safe-area-inset-top))) {
         transform: translate3d(

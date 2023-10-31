@@ -35,11 +35,7 @@
       </span>
     </div>
 
-    <div
-      v-if="
-        (event && event.event_dates && event.event_dates.length > 1) || editing
-      "
-    >
+    <div v-if="(event && event.event_dates) || editing">
       <EventDateSelectionComponent :editing="editing" />
     </div>
     <div

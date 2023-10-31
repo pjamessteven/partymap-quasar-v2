@@ -40,7 +40,12 @@
                 marginLeft: '16px',
                 borderRadius: '0px',
               }
-            : { bottom: '0px', height: '0px', borderRadius: '0px' }
+            : {
+                bottom: '0px',
+                height: '0px',
+                borderRadius: '0px',
+                width: '4px',
+              }
         "
       >
         <div class="row flex grow main-row no-wrap justify-center">
@@ -83,9 +88,7 @@
                   <InnerLoading v-if="loading" :solid="false" />
 
                   <FeaturedMediaBackground
-                    v-if="
-                      event && event.media_items && event.media_items.length > 0
-                    "
+                    :thumbXsUrl="computedThumbXsUrl"
                     class="featured-media"
                     :editing="editing"
                   />
@@ -174,13 +177,6 @@
                         class="q-mt-lg"
                         :item="event?.media_items?.[0]"
                       />
-
-                      <div
-                        class="flex row q-mt-lg no-wrap tags-wrapper"
-                        v-if="event?.event_tags && $q.screen.lt.md"
-                      >
-                        <TagsComponent :editing="editing" />
-                      </div>
 
                       <div
                         class="flex grow justify-start items-start"
@@ -509,8 +505,20 @@
                           'q-px-xl': $q.screen.gt.xs && $q.screen.lt.md,
                         }"
                       >
+                        <div
+                          class="flex column q-pb-md q-pt-md no-wrap tags-wrapper"
+                          v-if="event?.event_tags && $q.screen.lt.md"
+                        >
+                          <div class="text-large inter bolder t2 q-mb-md">
+                            Tags:
+                          </div>
+
+                          <TagsComponent :editing="editing" />
+                        </div>
                         <EventDates />
+
                         <DescriptionComponent :editing="editing" />
+
                         <ReviewsComponent class="q-mt-xl q-mb-xl" />
                       </div>
                     </div>
@@ -540,7 +548,8 @@
                 v-if="!!event"
                 class="bottom-section flex"
                 :class="{
-                  'column reverse no-wrap q-pa-md q-py-lg ': $q.screen.lt.sm,
+                  'column reverse no-wrap q-pa-md q-py-lg q-pb-xl ':
+                    $q.screen.lt.sm,
                   'row justify-between items-center': $q.screen.gt.xs,
                   'q-pa-xl': $q.screen.gt.sm,
                   'q-px-xl q-py-xl': $q.screen.gt.xs && $q.screen.lt.md,
@@ -548,7 +557,7 @@
               >
                 <div
                   class="flex column"
-                  :class="$q.screen.gt.xs ? 'items-start' : ''"
+                  :class="$q.screen.gt.xs ? 'items-start' : ' q-pb-md'"
                 >
                   <div class="t4">{{ event.page_views }} page views</div>
                   <div class="t4 flex column items-start no-wrap q-mt-xs">
@@ -996,7 +1005,7 @@ export default {
   },
   watch: {
     id: function () {
-      this.loadEvent();
+      // this.loadEvent();
     },
     peekMap(newv) {
       // timeouts are so that we wait until the animation is finished
@@ -1077,6 +1086,13 @@ export default {
         return false;
       }
     },
+    computedThumbXsUrl() {
+      if (this.$route.query.thumbXsUrl) {
+        return this.$route.query.thumbXsUrl;
+      } else {
+        return null;
+      }
+    },
     computedName() {
       if (this.event?.name) {
         return this.event.name;
@@ -1121,12 +1137,15 @@ export default {
     this.menubarOpacity = 0;
     this.editing = this.$route.params.editing;
     // clear previous event
-    this.load();
-    this.wheelIndicator = new WheelIndicator({
-      elem: this.$refs.contentcard,
-      callback: this.onMouseWheel,
-      preventMouse: false,
-    });
+    setTimeout(() => this.load(), 100);
+    //    this.load();
+    if (this.$q.screen.gt.xs) {
+      this.wheelIndicator = new WheelIndicator({
+        elem: this.$refs.contentcard,
+        callback: this.onMouseWheel,
+        preventMouse: false,
+      });
+    }
   },
   created() {
     this.timeAgo = common.timeAgo;
@@ -1144,6 +1163,7 @@ export default {
     this.menubarOpacity = 0;
     this.overlayOpacity = 0;
     this.focusMarker = null;
+    this.event = null;
   },
   unmounted() {
     if (this.wheelIndicator) {
@@ -1482,7 +1502,9 @@ a {
                 }
               }
             }
-
+            .main-content {
+              min-height: 800p;
+            }
             :deep(.event-page-header) {
               position: sticky;
               top: 0px;
@@ -1639,7 +1661,8 @@ a {
               border: none;
             }
             .header {
-              min-height: 550px;
+              //min-height: 66vh !important;
+              // background: green !important;
             }
           }
         }

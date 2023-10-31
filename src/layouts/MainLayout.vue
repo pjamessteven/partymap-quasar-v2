@@ -59,12 +59,8 @@
         }"
       >
         <transition
-          :enter-active-class="
-            $q.screen.lt.sm ? 'animated fadeIn' : 'animated fadeIn'
-          "
-          :leave-active-class="
-            $q.screen.lt.sm ? 'animated fadeOut' : 'animated fadeOut'
-          "
+          enter-active-class="animated fadeIn"
+          leave-active-class="animated fadeOut"
         >
           <component :is="Component" />
         </transition>
@@ -307,6 +303,7 @@ export default {
       top: 0px;
       pointer-events: all;
     }
+
     .mobile-map-view-router {
       z-index: 104;
     }

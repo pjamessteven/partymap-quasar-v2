@@ -149,14 +149,6 @@ const props = withDefaults(defineProps<Props>(), {
   hideHeader: () => false,
 });
 
-const computedTotalResultMessage = computed(() => {
-  if (props.eventDatesTotal === 1) {
-    return props.eventDatesTotal + ' upcoming events in this area';
-  } else if (props.eventDatesTotal > 1) {
-    return props.eventDatesTotal + ' upcoming events in this area';
-  } else return null;
-});
-
 const gridColumns = computed(() => {
   if (main.showPanel) {
     if ($q.screen.gt.lg) {
@@ -186,6 +178,22 @@ const gridColumns = computed(() => {
         grid-template-columns: repeat(1, minmax(0, 1fr));
         `;
     }
+  }
+});
+
+const computedTotalResultMessage = computed(() => {
+  if ($q.screen.gt.xs) {
+    if (props.eventDatesTotal === 1) {
+      return props.eventDatesTotal + ' good time in this area';
+    } else if (props.eventDatesTotal > 1) {
+      return props.eventDatesTotal + ' good times in this area';
+    } else return null;
+  } else {
+    if (props.eventDatesTotal === 1) {
+      return props.eventDatesTotal + ' upcoming in this area';
+    } else if (props.eventDatesTotal > 1) {
+      return props.eventDatesTotal + ' upcoming in this area';
+    } else return null;
   }
 });
 </script>

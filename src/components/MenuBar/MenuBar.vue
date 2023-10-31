@@ -22,6 +22,7 @@
         <div class="separator vertical" v-if="$q.screen.gt.xs" />
         <q-btn
           class="back-button"
+          :ripple="false"
           flat
           icon="mdi-chevron-left"
           :label="previousRouteName"
@@ -276,7 +277,6 @@ export default {
   height: 64px;
   position: relative;
   transition: height 0.3s ease;
-
   .menubar-background {
     position: absolute;
     height: 100%;
@@ -348,6 +348,32 @@ export default {
   .menubar {
     height: 62px;
     z-index: 1;
+    position: fixed;
+    top: 0px;
+
+    // android
+    @supports ((top: var(--safe-area-inset-top))) {
+      //padding-top: calc(env(safe-area-inset-top));
+      //height: calc(env(safe-area-inset-top) + 62px);
+      top: var(--safe-area-inset-top);
+    }
+    // ios specific top padding
+    @supports (
+      (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
+        (-webkit-appearance: none)
+    ) {
+      top: calc(var(--safe-area-inset-top) - 0px);
+    }
+
+    .menubar-background {
+      @supports ((top: var(--safe-area-inset-top))) {
+        padding-top: var(--safe-area-inset-top);
+        height: calc(env(safe-area-inset-top) + 62px);
+        position: fixed;
+        top: 0px;
+      }
+    }
+
     .back-button-wrapper {
       left: 0px;
 
@@ -357,6 +383,27 @@ export default {
     &.search-expanded {
       .logo {
         opacity: 0;
+      }
+    }
+  }
+
+  .native-mobile {
+    // ios specific padding for capcaitor app
+    .menubar {
+      @supports (
+        (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+          (-webkit-appearance: none)
+      ) {
+        top: calc(env(safe-area-inset-top) - 8px);
+      }
+
+      .menubar-background {
+        @supports ((top: var(--safe-area-inset-top))) {
+          padding-top: var(--safe-area-inset-top);
+          height: calc(env(safe-area-inset-top) + 62px - 8px);
+          position: fixed;
+          top: 0px;
+        }
       }
     }
   }

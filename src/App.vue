@@ -12,6 +12,7 @@ import { useAuthStore } from './stores/auth';
 import SplashScreen from './components/SplashScreen.vue';
 import { App } from '@capacitor/app';
 import { Browser } from '@capacitor/browser';
+
 import { CapacitorCookies } from '@capacitor/core';
 export default {
   components: { SplashScreen },
@@ -118,7 +119,7 @@ export default {
 
           this.checkAuthCookie();
         }
-
+        // Splash.hide();
         if (event.url.indexOf('api.partymap.com') > 0) {
           // oauth redirect
           //await Browser.open({ url: event.url });
@@ -433,9 +434,9 @@ body {
   }
 
   .nav-button {
-    background: $b-3;
+    background: $b-2;
     &:hover {
-      background: $b-4;
+      background: $b-3;
     }
   }
 
@@ -589,9 +590,9 @@ body {
   }
 
   .nav-button {
-    background: $bi-3;
+    background: $bi-2;
     &:hover {
-      background: $bi-4;
+      background: $bi-3;
     }
   }
 
