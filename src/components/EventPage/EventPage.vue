@@ -98,7 +98,7 @@
                       :class="{
                         'q-pa-xl': $q.screen.gt.xs,
                         'q-pa-lg': $q.screen.lt.md && $q.screen.gt.xs,
-                        'q-pl-md q-pb-md': $q.screen.lt.sm,
+                        'q-px-md q-pb-md': $q.screen.lt.sm,
                       }"
                     >
                       <div
@@ -176,6 +176,7 @@
                         :editing="editing"
                         class="q-mt-lg"
                         :item="event?.media_items?.[0]"
+                        :preview="computedThumbXsUrl"
                       />
 
                       <div
@@ -191,44 +192,11 @@
                       </div>
 
                       <div
-                        v-if="
-                          (computedTicketUrl || computedExternalUrl) && event
-                        "
-                        class="event-buttons flex row justify-start items-center wrap o-080"
-                        :class="$q.screen.gt.sm ? 'q-mt-md' : 'q-mt-md'"
+                        class="flex row justify-between items-end no-wrap tags-wrapper"
+                        :class="$q.screen.gt.sm ? 'q-pt-lg' : 'q-mt-md'"
+                        v-if="event?.event_tags"
                       >
-                        <a
-                          :href="computedExternalUrl"
-                          target="_blank"
-                          v-if="computedExternalUrl && !editing"
-                          class="q-mr-sm q-mt-sm"
-                        >
-                          <q-btn
-                            no-caps
-                            color="grey-3"
-                            text-color="black"
-                            label="Visit website"
-                            size="md"
-                            class="border-radius"
-                            icon="las la-external-link-alt"
-                          />
-                        </a>
-                        <a
-                          :href="computedTicketUrl"
-                          target="_blank"
-                          v-if="computedTicketUrl && event?.host && !editing"
-                          class="q-mr-sm q-mt-sm"
-                        >
-                          <q-btn
-                            :disable="editing"
-                            color="grey-3"
-                            text-color="black"
-                            :label="$t('event.get_tickets')"
-                            size="md"
-                            class="border-radius"
-                            icon="las la-ticket-alt"
-                          />
-                        </a>
+                        <TagsComponent :editing="editing" />
                       </div>
 
                       <!--
@@ -242,14 +210,6 @@
                         class="q-mt-md"
                       />
                       -->
-
-                      <div
-                        class="flex row justify-between items-end no-wrap tags-wrapper"
-                        :class="$q.screen.gt.sm ? 'q-pt-lg' : ''"
-                        v-if="event?.event_tags && $q.screen.gt.sm"
-                      >
-                        <TagsComponent :editing="editing" />
-                      </div>
                     </div>
                     <div
                       class="flex column no-wrap justify-center q-py-xl q-pr-xl col-6 col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"
@@ -263,6 +223,7 @@
                     </div>
                   </div>
                 </div>
+
                 <div
                   class="main-content"
                   :class="$q.screen.gt.sm ? ' q-pa-xl' : ''"
@@ -290,209 +251,280 @@
                       :class="{ 'q-pl-lg': $q.screen.gt.sm }"
                     >
                       <div
-                        class="flex items-stretch justify-between no-wrap action-buttons-wrapper"
-                        :class="{
-                          'q-py-md q-px-md ': $q.screen.lt.sm,
-                          'q-px-xl q-my-lg': $q.screen.gt.xs && $q.screen.lt.md,
-                          'q-mb-lg': $q.screen.gt.sm,
-                        }"
+                        v-if="
+                          (computedTicketUrl || computedExternalUrl) && event
+                        "
+                        class="event-buttons flex row items-center wrap o-100"
+                        :class="$q.screen.gt.sm ? 'q-mb-lg q-pb-sm' : 'q-pa-md'"
                       >
-                        <div
-                          class="action-buttons no-wrap flex items-stretch q-gutter-sm"
+                        <q-scroll-area
+                          horizontal
+                          class="event-buttons-scroll"
+                          style="width: 100%"
+                          :thumb-style="
+                            $q.screen.gt.xs
+                              ? {
+                                  bottom: '0px',
+                                  height: '8px',
+                                  marginLeft: '24px',
+                                }
+                              : { bottom: '0px', height: '0px' }
+                          "
                         >
-                          <InterestedComponent />
-
-                          <q-btn
-                            class="button-light"
-                            :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
-                            :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
-                            flat
-                            :label="$q.screen.gt.xs ? 'Save to device' : 'Save'"
-                            icon="mdi-calendar-export-outline"
-                            no-caps
-                            @click="getIcalFile"
-                          ></q-btn>
-                          <!-- show share button -->
-                          <q-btn
-                            class="button-light"
-                            :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
-                            :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
-                            :label="
-                              $q.screen.gt.xs ? $t('event.share') : undefined
-                            "
-                            no-caps
-                            flat
-                            icon="mdi-share"
-                            @click="share"
-                            v-if="!editing"
-                          />
-
-                          <!-- show EDIT BUTTON if user is host or user is staff and public event -->
-                          <q-btn
-                            flat
-                            class="button-light"
-                            :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
-                            :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
-                            :label="$t('event.edit_event')"
-                            no-caps
-                            :icon="
-                              $q.screen.gt.xs
-                                ? 'mdi-square-edit-outline'
-                                : undefined
-                            "
-                            style="padding-left: 4px"
-                            :size="$q.screen.gt.xs ? '1em' : 'md'"
-                            @click="editing = !editing"
-                            v-if="currentUserIsHost && !editing"
-                          />
-                        </div>
-                        <div class="q-gutter-sm">
-                          <q-btn
-                            flat
-                            :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
-                            :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
-                            icon="mdi-dots-vertical"
-                            class="q-px-sm"
-                            :size="$q.screen.gt.xs ? '1em' : 'md'"
+                          <div
+                            class="flex justify-between items-center no-wrap"
                           >
-                            <q-tooltip
-                              :content-class="
-                                $q.dark.isActive
-                                  ? 'bg-black text-white'
-                                  : 'bg-white text-black'
-                              "
-                              :offset="[10, 10]"
-                              content-style="font-size: 16px"
+                            <div
+                              class="flex row q-gutter-sm items-center no-wrap"
                             >
-                              {{ $t('sidebar.more') }}
-                            </q-tooltip>
-                            <q-menu
-                              transition-show="jump-down"
-                              transition-hide="jump-up"
-                              anchor="bottom right"
-                              self="top right"
-                            >
-                              <!-- SHOW REPORT if not host -->
-                              <q-item
-                                v-close-popup
-                                v-ripple
-                                v-if="!currentUserIsHost"
-                                v-on:click="showingReportDialog = true"
-                                clickable
+                              <a
+                                :href="computedExternalUrl"
+                                target="_blank"
+                                v-if="computedExternalUrl && !editing"
                               >
-                                <q-item-section avatar>
-                                  <q-icon name="mdi-alert-circle-outline" />
-                                </q-item-section>
-                                <q-item-section>
-                                  <q-item-label>{{
-                                    $t('report.report_event')
-                                  }}</q-item-label>
-                                </q-item-section>
-                              </q-item>
-                              <!-- SHOW CLAIM if there is no event host -->
-                              <q-item
-                                v-close-popup
-                                v-ripple
-                                v-if="!currentUserIsHost && !event.host"
-                                @click="
-                                  currentUser
-                                    ? (showingClaimDialog = true)
-                                    : $router.push({
-                                        path: '/login',
-                                        query: { from: $route.path },
-                                      })
+                                <q-btn
+                                  no-caps
+                                  class="button-light"
+                                  :color="
+                                    $q.dark.isActive ? 'grey-10' : 'grey-1'
+                                  "
+                                  :text-color="
+                                    $q.dark.isActive ? 'grey-6' : 'grey-8'
+                                  "
+                                  flat
+                                  label="Visit website"
+                                  icon="las la-external-link-alt"
+                                  :class="$q.screen.gt.sm ? '' : 'flex grow'"
+                                />
+                              </a>
+                              <a
+                                :href="computedTicketUrl"
+                                target="_blank"
+                                v-if="
+                                  computedTicketUrl && event?.host && !editing
                                 "
-                                clickable
                               >
-                                <q-item-section avatar>
-                                  <q-icon name="mdi-check-decagram-outline" />
-                                </q-item-section>
-                                <q-item-section>
-                                  <q-item-label>{{
-                                    $t('report.are_you_host')
-                                  }}</q-item-label>
-                                </q-item-section>
-                              </q-item>
+                                <q-btn
+                                  :disable="editing"
+                                  color="grey-3"
+                                  text-color="black"
+                                  :label="$t('event.get_tickets')"
+                                  size="md"
+                                  class="border-radius"
+                                  icon="las la-ticket-alt"
+                                  :class="$q.screen.gt.sm ? '' : 'flex grow'"
+                                />
+                              </a>
 
-                              <!-- SHOW SUGGESTIONS if there is no event host -->
-                              <q-item
-                                v-close-popup
-                                v-ripple
-                                v-if="!currentUserIsHost && event.host == null"
-                                @click="editing = true"
-                                clickable
+                              <InterestedComponent />
+
+                              <q-btn
+                                class="button-light"
+                                :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
+                                :text-color="
+                                  $q.dark.isActive ? 'grey-6' : 'grey-8'
+                                "
+                                flat
+                                :label="
+                                  $q.screen.gt.xs ? 'Device' : 'Save to device'
+                                "
+                                icon="mdi-calendar-export-outline"
+                                no-caps
+                                @click="getIcalFile"
+                              ></q-btn>
+                              <!-- show share button -->
+                              <q-btn
+                                class="button-light"
+                                :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
+                                :text-color="
+                                  $q.dark.isActive ? 'grey-6' : 'grey-8'
+                                "
+                                :label="
+                                  $q.screen.gt.xs
+                                    ? $t('event.share')
+                                    : undefined
+                                "
+                                no-caps
+                                flat
+                                icon="mdi-share"
+                                @click="share"
+                                v-if="!editing"
+                              />
+
+                              <!-- show EDIT BUTTON if user is host or user is staff and public event -->
+                              <q-btn
+                                flat
+                                class="button-light"
+                                :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
+                                :text-color="
+                                  $q.dark.isActive ? 'grey-6' : 'grey-8'
+                                "
+                                :label="$t('event.edit_event')"
+                                no-caps
+                                :icon="
+                                  $q.screen.gt.xs
+                                    ? 'mdi-square-edit-outline'
+                                    : undefined
+                                "
+                                style="padding-left: 4px"
+                                :size="$q.screen.gt.xs ? '1em' : 'md'"
+                                @click="editing = !editing"
+                                v-if="currentUserIsHost && !editing"
+                              />
+                            </div>
+                            <q-btn
+                              flat
+                              :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
+                              :text-color="
+                                $q.dark.isActive ? 'grey-6' : 'grey-8'
+                              "
+                              icon="mdi-dots-vertical"
+                              class="q-px-sm q-ml-md"
+                              :size="$q.screen.gt.xs ? '1em' : 'md'"
+                            >
+                              <q-tooltip
+                                :content-class="
+                                  $q.dark.isActive
+                                    ? 'bg-black text-white'
+                                    : 'bg-white text-black'
+                                "
+                                :offset="[10, 10]"
+                                content-style="font-size: 16px"
                               >
-                                <q-item-section avatar>
-                                  <q-icon name="las la-hand-peace" />
-                                </q-item-section>
-                                <q-item-section>
-                                  <q-item-label>{{
-                                    $t('suggestions.improve_this_page')
-                                  }}</q-item-label>
-                                </q-item-section>
-                              </q-item>
-                              <!-- SHOW EDIT if currentUserIsStaff -->
-                              <q-item
-                                v-if="currentUserIsStaff"
-                                v-ripple
-                                v-close-popup
-                                v-on:click="editing = !editing"
-                                clickable
+                                {{ $t('sidebar.more') }}
+                              </q-tooltip>
+                              <q-menu
+                                transition-show="jump-down"
+                                transition-hide="jump-up"
+                                anchor="bottom right"
+                                self="top right"
                               >
-                                <q-item-section avatar>
-                                  <q-icon name="las la-edit" />
-                                </q-item-section>
-                                <q-item-section>
-                                  <q-item-label
-                                    >{{
-                                      $t('event.edit_event')
-                                    }}
-                                    &nbsp;(admin)</q-item-label
-                                  >
-                                </q-item-section>
-                              </q-item>
-                              <q-item
-                                v-if="currentUserIsHost || currentUserIsStaff"
-                                v-ripple
-                                v-close-popup
-                                v-on:click="deleteEvent()"
-                                clickable
-                              >
-                                <q-item-section avatar>
-                                  <q-icon name="las la-trash" />
-                                </q-item-section>
-                                <q-item-section>
-                                  <q-item-label
-                                    >{{ $t('event.delete_event') }}
-                                    <span
-                                      v-if="
-                                        currentUserIsStaff && !currentUserIsHost
-                                      "
-                                      >(admin)</span
-                                    ></q-item-label
-                                  >
-                                </q-item-section>
-                              </q-item>
-                              <q-item
-                                v-if="currentUserIsStaff"
-                                v-ripple
-                                v-close-popup
-                                v-on:click="showingHistory = true"
-                                clickable
-                              >
-                                <q-item-section avatar>
-                                  <q-icon name="las la-history" />
-                                </q-item-section>
-                                <q-item-section>
-                                  <q-item-label>
-                                    Suggestions and Activity
-                                  </q-item-label>
-                                </q-item-section>
-                              </q-item>
-                            </q-menu>
-                          </q-btn>
-                        </div>
+                                <!-- SHOW REPORT if not host -->
+                                <q-item
+                                  v-close-popup
+                                  v-ripple
+                                  v-if="!currentUserIsHost"
+                                  v-on:click="showingReportDialog = true"
+                                  clickable
+                                >
+                                  <q-item-section avatar>
+                                    <q-icon name="mdi-alert-circle-outline" />
+                                  </q-item-section>
+                                  <q-item-section>
+                                    <q-item-label>{{
+                                      $t('report.report_event')
+                                    }}</q-item-label>
+                                  </q-item-section>
+                                </q-item>
+                                <!-- SHOW CLAIM if there is no event host -->
+                                <q-item
+                                  v-close-popup
+                                  v-ripple
+                                  v-if="!currentUserIsHost && !event.host"
+                                  @click="
+                                    currentUser
+                                      ? (showingClaimDialog = true)
+                                      : $router.push({
+                                          path: '/login',
+                                          query: { from: $route.path },
+                                        })
+                                  "
+                                  clickable
+                                >
+                                  <q-item-section avatar>
+                                    <q-icon name="mdi-check-decagram-outline" />
+                                  </q-item-section>
+                                  <q-item-section>
+                                    <q-item-label>{{
+                                      $t('report.are_you_host')
+                                    }}</q-item-label>
+                                  </q-item-section>
+                                </q-item>
+
+                                <!-- SHOW SUGGESTIONS if there is no event host -->
+                                <q-item
+                                  v-close-popup
+                                  v-ripple
+                                  v-if="
+                                    !currentUserIsHost && event.host == null
+                                  "
+                                  @click="editing = true"
+                                  clickable
+                                >
+                                  <q-item-section avatar>
+                                    <q-icon name="las la-hand-peace" />
+                                  </q-item-section>
+                                  <q-item-section>
+                                    <q-item-label>{{
+                                      $t('suggestions.improve_this_page')
+                                    }}</q-item-label>
+                                  </q-item-section>
+                                </q-item>
+                                <!-- SHOW EDIT if currentUserIsStaff -->
+                                <q-item
+                                  v-if="currentUserIsStaff"
+                                  v-ripple
+                                  v-close-popup
+                                  v-on:click="editing = !editing"
+                                  clickable
+                                >
+                                  <q-item-section avatar>
+                                    <q-icon name="las la-edit" />
+                                  </q-item-section>
+                                  <q-item-section>
+                                    <q-item-label
+                                      >{{
+                                        $t('event.edit_event')
+                                      }}
+                                      &nbsp;(admin)</q-item-label
+                                    >
+                                  </q-item-section>
+                                </q-item>
+                                <q-item
+                                  v-if="currentUserIsHost || currentUserIsStaff"
+                                  v-ripple
+                                  v-close-popup
+                                  v-on:click="deleteEvent()"
+                                  clickable
+                                >
+                                  <q-item-section avatar>
+                                    <q-icon name="las la-trash" />
+                                  </q-item-section>
+                                  <q-item-section>
+                                    <q-item-label
+                                      >{{ $t('event.delete_event') }}
+                                      <span
+                                        v-if="
+                                          currentUserIsStaff &&
+                                          !currentUserIsHost
+                                        "
+                                        >(admin)</span
+                                      ></q-item-label
+                                    >
+                                  </q-item-section>
+                                </q-item>
+                                <q-item
+                                  v-if="currentUserIsStaff"
+                                  v-ripple
+                                  v-close-popup
+                                  v-on:click="showingHistory = true"
+                                  clickable
+                                >
+                                  <q-item-section avatar>
+                                    <q-icon name="las la-history" />
+                                  </q-item-section>
+                                  <q-item-section>
+                                    <q-item-label>
+                                      Suggestions and Activity
+                                    </q-item-label>
+                                  </q-item-section>
+                                </q-item>
+                              </q-menu>
+                            </q-btn>
+                          </div>
+                        </q-scroll-area>
                       </div>
+
                       <div
                         v-if="$q.screen.lt.sm"
                         class="separator"
@@ -505,16 +537,6 @@
                           'q-px-xl': $q.screen.gt.xs && $q.screen.lt.md,
                         }"
                       >
-                        <div
-                          class="flex column q-pb-md q-pt-md no-wrap tags-wrapper"
-                          v-if="event?.event_tags && $q.screen.lt.md"
-                        >
-                          <div class="text-large inter bolder t2 q-mb-md">
-                            Tags:
-                          </div>
-
-                          <TagsComponent :editing="editing" />
-                        </div>
                         <EventDates />
 
                         <DescriptionComponent :editing="editing" />
@@ -548,7 +570,7 @@
                 v-if="!!event"
                 class="bottom-section flex"
                 :class="{
-                  'column reverse no-wrap q-pa-md q-py-lg q-pb-xl ':
+                  'column reverse no-wrap q-pa-md q-py-lg q-pb-lg ':
                     $q.screen.lt.sm,
                   'row justify-between items-center': $q.screen.gt.xs,
                   'q-pa-xl': $q.screen.gt.sm,
@@ -1204,9 +1226,8 @@ a {
     .scroll-area {
       .content-card {
         .main-content {
-          .action-buttons {
-            :deep(.q-btn) {
-            }
+          .event-buttons {
+            background: black;
           }
         }
         .content {
@@ -1304,6 +1325,11 @@ a {
                   rgba(0, 0, 0, 0.06) 0px 1px 2px 0px !important;
               }
               */
+            }
+          }
+          .event-buttons {
+            background: white;
+            .event-buttons-scroll {
             }
           }
           .content {
@@ -1502,6 +1528,11 @@ a {
                 }
               }
             }
+            .event-buttons {
+              .event-buttons-scroll {
+                height: 36px;
+              }
+            }
             .main-content {
               min-height: 800p;
             }
@@ -1606,8 +1637,8 @@ a {
 @media only screen and (max-width: 600px) {
   .body--light {
     .action-buttons-wrapper {
-      //background: $b-2;
-      //box-shadow: rgba(100, 100, 111, 0.25) 0px 7px 29px 0px;
+      background: $b-2 !important;
+      box-shadow: rgba(100, 100, 111, 0.25) 0px 7px 29px 0px;
     }
   }
   .body--dark {
@@ -1619,7 +1650,8 @@ a {
       }
     }
     .action-buttons-wrapper {
-      background: $bi-1;
+      background: $bi-2;
+      box-shadow: rgba(100, 100, 111, 0.1) 0px 7px 29px 0px;
     }
   }
   .event-page {

@@ -5,7 +5,7 @@
     :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
     flat
     :size="$q.screen.gt.xs ? '1em' : 'md'"
-    :label="$q.screen.gt.xs ? computedLabel : undefined"
+    :label="$q.screen.gt.xs ? computedLabel : computedLabel"
     :icon="computedIcon"
     icon-right="mdi-chevron-down"
     no-caps
@@ -106,9 +106,13 @@ export default {
       } else return 'mdi-star-outline';
     },
     computedLabel() {
-      if (this.selectedEventDate?.user_going) {
+      if (this.userGoing) {
         return 'Going';
-      } else return 'Interested';
+      } else if (this.userInterested) {
+        return 'Interested';
+      } else {
+        return 'You';
+      }
     },
   },
 };

@@ -8,7 +8,7 @@
         class="flex column"
         :class="{
           'q-pb-lg': event?.event_dates?.length === 0,
-          'q-mb-md': $q.screen.gt.sm,
+          'q-mb-sm': $q.screen.gt.sm,
         }"
       >
         <div

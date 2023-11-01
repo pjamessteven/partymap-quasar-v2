@@ -14,26 +14,33 @@
       <Transition
         appear
         :enter-active-class="
-          $q.screen.gt.xs ? 'animated  slideInLeft' : 'animated fadeIn'
+          $q.screen.gt.xs ? 'animated  slideInLeft' : 'animated fadeIn slow'
         "
-        :leave-active-class="
-          $q.screen.gt.xs ? 'animated slideOutLeft' : undefined
-        "
+        :leave-active-class="$q.screen.gt.xs ? 'animated slideOutLeft' : ' '"
       >
         <SideBar
           class="sidebar-component"
           v-show="
-            $q.screen.lt.sm || ($q.screen.gt.xs && $route.name == 'Explore')
+            ($q.screen.lt.sm && $route.name == 'Explore') ||
+            ($q.screen.gt.xs && $route.name == 'Explore')
           "
         />
       </Transition>
-
-      <SearchComponent
-        v-if="
-          ($q.screen.lt.md && $route.name === 'Explore') ||
-          ($q.screen.gt.sm && $route.name === 'BrowsePage')
+      <transition
+        :enter-active-class="
+          $q.screen.gt.xs ? 'animated  fadeIn slower' : 'animated fadeIn slow'
         "
-      />
+        :leave-active-class="
+          $q.screen.gt.xs ? 'animated fadeOut slower' : undefined
+        "
+      >
+        <SearchComponent
+          v-show="
+            ($q.screen.lt.md && $route.name !== 'EventPage') ||
+            ($q.screen.gt.sm && $route.name === 'BrowsePage')
+          "
+        />
+      </transition>
       <!-- There's two router views because we want different transitions for different pages
   and we're lazy... -->
       <router-view
@@ -59,8 +66,12 @@
         }"
       >
         <transition
-          enter-active-class="animated fadeIn"
-          leave-active-class="animated fadeOut"
+          :enter-active-class="
+            $q.screen.gt.xs ? 'animated  fadeIn' : 'animated fadeIn slow'
+          "
+          :leave-active-class="
+            $q.screen.gt.xs ? 'animated fadeOut' : 'animated fadeOut slow'
+          "
         >
           <component :is="Component" />
         </transition>
@@ -145,7 +156,11 @@ export default {
     computedOverlayStyle() {
       if (this.$route.name === 'EventPage') {
         if (this.$q.screen.lt.sm) {
-          return `opacity: ${this.overlayOpacity}; background: black!important`;
+          if (this.$q.dark.isActive) {
+            return `opacity: ${this.overlayOpacity}; background: black!important`;
+          } else {
+            return `opacity: ${this.overlayOpacity}; background: linear-gradient(black, black 50%, #f5f5f5 50%, #f5f5f5 100%)!important`;
+          }
         } else {
           if (this.$q.dark.isActive) {
             return `opacity: ${this.overlayOpacity}; background: black!important`;
@@ -299,7 +314,7 @@ export default {
       position: absolute;
       height: 100%;
       width: 100%;
-      z-index: 105;
+      z-index: 106;
       top: 0px;
       pointer-events: all;
     }

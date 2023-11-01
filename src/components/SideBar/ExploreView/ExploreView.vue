@@ -320,7 +320,12 @@ export default {
     showPanel(newv) {
       if (newv) {
         this.enablePanelSwipeDown = true;
+      } else {
+        if (this.$refs) this.$refs.scroll.setScrollPercentage('vertical', 0);
       }
+    },
+    sidebarPanel(newv) {
+      this.$refs.scroll.setScrollPercentage('vertical', 0);
     },
     mapMoving(newv) {
       if (newv) this.eventDatesHasNext = false;

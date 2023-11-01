@@ -194,7 +194,7 @@ export default {
   }
 }
 .search-component {
-  z-index: 4000;
+  z-index: 104;
   position: absolute;
   top: 80px;
   width: 100%;
@@ -203,7 +203,7 @@ export default {
   pointer-events: none;
   //max-width: 33vw;
   .controls-wrapper {
-    z-index: 1000;
+    //z-index: 105;
     width: 100%;
     justify-content: center;
     position: relative;

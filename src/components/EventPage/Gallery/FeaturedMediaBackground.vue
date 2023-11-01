@@ -66,12 +66,14 @@ export default {
   computed: {
     ...mapState(useEventStore, ['event', 'backgroundMediaIndex']),
     headerBackground() {
-      if (this.event?.media_items?.length) {
-        return this.event.media_items[this.backgroundMediaIndex];
-      } else {
+      if (this.thumbXsUrl) {
         return {
           thumb_xs_url: this.thumbXsUrl,
         };
+      } else if (this.event?.media_items?.length) {
+        return this.event.media_items[this.backgroundMediaIndex];
+      } else {
+        return null;
       }
     },
   },
