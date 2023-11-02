@@ -157,9 +157,9 @@ const gridColumns = computed(() => {
   if (main.showPanel) {
     if ($q.screen.gt.lg) {
       return `
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         `;
-    } else if ($q.screen.gt.sm) {
+    } else if ($q.screen.gt.md) {
       return `
         grid-template-columns: repeat(3, minmax(0, 1fr));
         `;
@@ -175,9 +175,9 @@ const gridColumns = computed(() => {
   } else {
     if ($q.screen.gt.lg) {
       return `
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         `;
-    } else if ($q.screen.gt.sm) {
+    } else if ($q.screen.gt.md) {
       return `
         grid-template-columns: repeat(3, minmax(0, 1fr));
         `;

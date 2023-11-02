@@ -11,33 +11,26 @@
       <MenuBar class="menubar" />
 
       <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
-      <Transition
-        appear
-        :enter-active-class="
-          $q.screen.gt.xs ? 'animated  slideInLeft' : 'animated fadeIn slow'
+
+      <SideBar
+        class="sidebar-component"
+        v-show="
+          $q.screen.lt.sm || ($q.screen.gt.xs && $route.name == 'Explore')
         "
-        :leave-active-class="$q.screen.gt.xs ? 'animated slideOutLeft' : ' '"
-      >
-        <SideBar
-          class="sidebar-component"
-          v-show="
-            ($q.screen.lt.sm && $route.name == 'Explore') ||
-            ($q.screen.gt.xs && $route.name == 'Explore')
-          "
-        />
-      </Transition>
+        :class="{ hide: $q.screen.lt.sm && $route.name === 'EventPage' }"
+      />
       <transition
         :enter-active-class="
-          $q.screen.gt.xs ? 'animated  fadeIn slower' : 'animated fadeIn slow'
+          $q.screen.gt.xs ? 'animated  fadeIn slow' : 'animated fadeIn'
         "
         :leave-active-class="
-          $q.screen.gt.xs ? 'animated fadeOut slower' : undefined
+          $q.screen.gt.xs ? 'animated fadeOut slow' : 'animated fadeOut'
         "
       >
         <SearchComponent
           v-show="
-            ($q.screen.lt.md && $route.name !== 'EventPage') ||
-            ($q.screen.gt.sm && $route.name === 'BrowsePage')
+            ($q.screen.lt.sm && $route.name !== 'EventPage') ||
+            ($q.screen.gt.xs && $route.name === 'BrowsePage')
           "
         />
       </transition>
@@ -52,8 +45,12 @@
         }"
       >
         <transition
-          enter-active-class="animated slideInUp"
-          leave-active-class="animated slideOutDown"
+          :enter-active-class="
+            $q.screen.gt.xs ? 'animated  slideInUp' : 'animated fadeInUp '
+          "
+          :leave-active-class="
+            $q.screen.gt.xs ? 'animated slideOutDown' : 'animated fadeOutDown'
+          "
         >
           <component :is="Component" />
         </transition>
@@ -65,16 +62,7 @@
           'mobile-map-view-router': $q.screen.lt.sm,
         }"
       >
-        <transition
-          :enter-active-class="
-            $q.screen.gt.xs ? 'animated  fadeIn' : 'animated fadeIn slow'
-          "
-          :leave-active-class="
-            $q.screen.gt.xs ? 'animated fadeOut' : 'animated fadeOut slow'
-          "
-        >
-          <component :is="Component" />
-        </transition>
+        <component :is="Component" />
       </router-view>
       <NavigationBar
         class="nav-bar"
@@ -157,7 +145,7 @@ export default {
       if (this.$route.name === 'EventPage') {
         if (this.$q.screen.lt.sm) {
           if (this.$q.dark.isActive) {
-            return `opacity: ${this.overlayOpacity}; background: black!important`;
+            return `opacity: ${this.overlayOpacity}; background: linear-gradient(black, black 50%, #060606 50%, #060606 100%)!important`;
           } else {
             return `opacity: ${this.overlayOpacity}; background: linear-gradient(black, black 50%, #f5f5f5 50%, #f5f5f5 100%)!important`;
           }
@@ -309,6 +297,12 @@ export default {
     }
     .sidebar-component {
       z-index: 104;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+      &.hide {
+        opacity: 0;
+        pointer-events: none;
+      }
     }
     .main-layout-router {
       position: absolute;
@@ -320,7 +314,7 @@ export default {
     }
 
     .mobile-map-view-router {
-      z-index: 104;
+      z-index: 106;
     }
     .nav-bar {
       opacity: 1;

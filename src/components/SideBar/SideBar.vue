@@ -378,7 +378,7 @@ export default {
     height: 100%;
     max-width: 720px;
     pointer-events: all;
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
     //transform: translate3d(0, calc(100% - 226px), 0);
     user-select: none;
     //padding-bottom: 64px;
@@ -522,11 +522,11 @@ export default {
   .body--light {
     .sidebar {
       .search-component {
-        background: white;
-        box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
-
+        //background: white;
+        //
         :deep(.controls-wrapper-inner) {
           background: white;
+          box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
         }
       }
     }
@@ -534,7 +534,7 @@ export default {
   .body--dark {
     .sidebar {
       .search-component {
-        background: $bi-2;
+        //background: $bi-2;
 
         :deep(.controls-wrapper-inner) {
           background: $bi-2;
@@ -544,21 +544,21 @@ export default {
   }
   .sidebar {
     .search-component {
-      width: 100%;
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      padding-top: 72px;
-      background: $bi-2;
-      justify-content: center;
+      // width: unset;
+      //position: absolute;
+      //top: 0px;
+      //left: 0px;
+      // padding-top: 72px;
+      //background: $bi-2;
+      //justify-content: center;
       :deep(.controls-wrapper-inner) {
-        width: 100%;
-        border-radius: 0px;
+        // width: 100%;
+        // border-radius: 0px;
         border-top: none;
-        background: $bi-2;
-        //justify-content: center;
+        //background: $bi-2;
+        justify-content: center;
 
-        border-radius: none !important;
+        // border-radius: none !important;
         .inner-wrapper {
           border-radius: 0px;
           .scroll-wrapper {
@@ -567,7 +567,7 @@ export default {
             height: 48px;
           }
           .search-button {
-            display: none;
+            // display: none;
           }
         }
       }
@@ -594,7 +594,7 @@ export default {
     .sidebar {
       //padding-bottom: 88px;
       width: 50vw;
-      //max-width: 33vw;
+      max-width: 854px;
       .sidebar-content {
       }
       &.sidebar-mobile-expanded {
@@ -776,7 +776,7 @@ export default {
       }
 
       &.sidebar-mobile-hidden {
-        transform: translate3d(0, calc(100%), 0);
+        // transform: translate3d(0, Max(calc(100% - 66%), calc(100% - 228px)), 0);
       }
 
       .sidebar-content {

@@ -12,7 +12,6 @@ import { useAuthStore } from './stores/auth';
 import SplashScreen from './components/SplashScreen.vue';
 import { App } from '@capacitor/app';
 import { Browser } from '@capacitor/browser';
-
 import { CapacitorCookies } from '@capacitor/core';
 export default {
   components: { SplashScreen },

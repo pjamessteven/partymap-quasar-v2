@@ -2,7 +2,7 @@
   <q-btn
     class="button-light"
     :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
-    :text-color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
+    :text-color="$q.dark.isActive ? 'grey-4' : 'grey-3'"
     flat
     :size="$q.screen.gt.xs ? '1em' : 'md'"
     :label="$q.screen.gt.xs ? computedLabel : computedLabel"
