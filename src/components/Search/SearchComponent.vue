@@ -197,7 +197,7 @@ export default {
 .search-component {
   z-index: 4000;
   position: absolute;
-  top: 36px;
+  top: 38px;
   width: 100%;
   display: flex;
   justify-content: center;

@@ -545,7 +545,7 @@ export default {
     .sidebar {
       padding-bottom: 128px;
       transform: translate3d(0, calc(100% - 298px), 0);
-      max-width: 1280px;
+      max-width: 1080px;
 
       .sidebar-content {
       }

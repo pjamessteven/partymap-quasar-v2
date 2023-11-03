@@ -151,7 +151,7 @@ body {
   font-family: Inter, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto,
     Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Helvetica,
     Arial, sans-serif !important;
-  // /font-family: chicagoflf;
+  font-family: chicagoflf;
   //letter-spacing: unset !important;
   touch-action: none;
   overscroll-behavior-x: none;

@@ -306,6 +306,9 @@ export default {
   .profile-button-inner {
     border-radius: 38px;
     transition: background 0.3s;
+    // background: none !important;
+    // font-size: 16px;
+    font-weight: 400;
   }
 }
 .q-btn {

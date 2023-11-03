@@ -46,7 +46,7 @@
         class="flex row no-wrap items-center justify-between q-px-md q-pt-md q-pb-sm view-options-absolute"
         v-if="$q.screen.gt.xs"
       >
-        <div class="text-h5 inter bolder q-ml-sm q-my-sm">Upcoming events</div>
+        <div class="text-h5 inter bolder q-ml-sm q-my-sm">Explore the map</div>
         <div class="flex row items-center no-wrap">
           <EventDateViewOptions class="q-mr-md" />
 

@@ -1087,7 +1087,6 @@ export default {
           transition: all 0.3s ease;
           background: black;
           border: 1px solid rgba(255, 255, 255, 0.2);
-
           &:hover {
             opacity: 1;
             background: rgba(36, 36, 36, 1);
@@ -1137,6 +1136,7 @@ export default {
           transition: all 0.3s ease;
           background: rgba(255, 255, 255, 0);
           border: 1px solid rgba(0, 0, 0, 0.1);
+
           &:hover {
             background: rgba(0, 0, 0, 0.1);
           }
@@ -1378,6 +1378,8 @@ export default {
         cursor: pointer;
         border-radius: 9px;
         padding: 6px 12px;
+        border-radius: 18px;
+
         //font-size: small;
         &:hover {
           // opacity: 0.48;
