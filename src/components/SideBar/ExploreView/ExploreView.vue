@@ -119,12 +119,10 @@
         :style="
           $q.screen.lt.sm
             ? 'height: 144px; position: absolute; width: 100%; z-index: 500'
-            : $q.screen.gt.lg
-            ? 'height: 300px; position: absolute; width: 100%; z-index: 500'
-            : 'height: 240px; position: absolute; width: 100%; z-index: 500'
+            : 'height: 100%; position: absolute; width: 100%; z-index: 500'
         "
       >
-        <div class="flex column justify-center items-center no-wrap">
+        <div class="flex column items-center no-wrap">
           <div
             class="inter semibold q-mb-md"
             v-if="
@@ -140,7 +138,7 @@
             Nothing coming up in this area
           </div>
 
-          <div style="height: 28px; width: 200px" class="flex justify-center">
+          <div style="height: 20px; width: 200px" class="flex justify-center">
             <q-linear-progress
               v-if="
                 (isLoadingInitial || (mapMoving && !blockUpdates)) && !showPanel
@@ -674,7 +672,7 @@ export default {
 
 @media only screen and (min-width: 1921px) {
   .linear-progress {
-    margin-top: 32px;
+    // margin-top: 32px;
   }
 }
 

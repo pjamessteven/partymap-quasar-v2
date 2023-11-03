@@ -8,6 +8,7 @@
       :dropdown-icon="
         $q.screen.lt.sm ? 'mdi-dots-horizontal' : 'mdi-format-list-bulleted'
       "
+      size="sm"
       no-icon-animation
     >
       <div class="row no-wrap q-pa-sm">

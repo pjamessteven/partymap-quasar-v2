@@ -21,15 +21,59 @@
         <div
           class="add-event-wrapper items-center flex justify-center q-px-md q-py-sm"
           v-if="$route.name === 'Explore' && $q.screen.gt.xs"
+          style="margin-top: 4px"
         >
           <q-btn
             class="inter nav-button"
             no-caps
             flat
-            style="margin-top: 4px"
             @click="showAddEventDialog"
           >
             Submit <q-icon name="mdi-plus" class="q-ml-sm" size="1rem" />
+          </q-btn>
+          <q-btn
+            flat
+            no-caps
+            class="inter nav-button q-ml-sm"
+            @click.stop="() => getFineLocation()"
+          >
+            <template v-slot:default>
+              <div v-if="!userLocationLoading" class="flex items-center">
+                <q-icon
+                  name="mdi-crosshairs-gps"
+                  class=""
+                  size="1rem"
+                  v-if="fineLocation && !userLocationFromSearch"
+                />
+                <q-icon name="mdi-crosshairs" size="1rem" class="" v-else />
+              </div>
+              <div v-else style="position: relative" class="flex items-center">
+                <q-icon style="z-index: 1" name="mdi-crosshairs" size="1rem" />
+                <q-icon
+                  style="z-index: 2; left: 0px"
+                  size="1rem"
+                  class="animated infinite flash slowest absolute"
+                  name="mdi-crosshairs-gps"
+                />
+              </div>
+              <q-tooltip
+                style="font-size: 1em !important"
+                :content-class="
+                  $q.dark.isActive
+                    ? 'bg-black text-white'
+                    : 'bg-white text-black'
+                "
+                :offset="[10, 10]"
+              >
+                <span v-if="!fineLocation">
+                  Using rough location from your IP address. Click to improve
+                  your location.
+                </span>
+                <span v-else>
+                  {{ $t('landing_page.improve_location') }}
+                </span>
+              </q-tooltip>
+            </template>
           </q-btn>
         </div>
         <NavigationBar
@@ -238,7 +282,13 @@ export default {
   },
   computed: {
     ...mapState(useAuthStore, ['currentUser']),
-    ...mapState(useMainStore, ['userLocation', 'loadingUserLocation']),
+    ...mapState(useMainStore, [
+      'userLocation',
+      'loadingUserLocation',
+      'getFineLocation',
+      'userLocationLoading',
+      'userLocationFromSearch',
+    ]),
     ...mapWritableState(useMainStore, [
       'showPanel',
       'sidebarPanel',
@@ -260,6 +310,9 @@ export default {
 
 <style lang="scss" scoped>
 .body--dark {
+  .nav-button {
+    background: $bi-4;
+  }
   .hover-indicator-line {
     background: rgba(255, 255, 255, 0.2);
   }
@@ -522,11 +575,13 @@ export default {
   .body--light {
     .sidebar {
       .search-component {
-        //background: white;
+        background: white !important;
         //
         :deep(.controls-wrapper-inner) {
-          background: white;
-          box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+          background: white !important;
+
+          //background: $b-2;
+          // box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
         }
       }
     }
@@ -534,26 +589,29 @@ export default {
   .body--dark {
     .sidebar {
       .search-component {
-        //background: $bi-2;
+        background: $bi-2;
 
         :deep(.controls-wrapper-inner) {
           background: $bi-2;
+          //border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
       }
     }
   }
   .sidebar {
     .search-component {
-      // width: unset;
-      //position: absolute;
-      //top: 0px;
-      //left: 0px;
-      // padding-top: 72px;
-      //background: $bi-2;
-      //justify-content: center;
+      width: 100%;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      padding-top: 68px;
+      //background: $b-2;
+      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+      justify-content: center;
       :deep(.controls-wrapper-inner) {
-        // width: 100%;
-        // border-radius: 0px;
+        width: 100%;
+        border-radius: 0px;
         border-top: none;
         //background: $bi-2;
         justify-content: center;
@@ -567,7 +625,7 @@ export default {
             height: 48px;
           }
           .search-button {
-            // display: none;
+            display: none;
           }
         }
       }

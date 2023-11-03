@@ -28,10 +28,7 @@
         "
       >
         <SearchComponent
-          v-show="
-            ($q.screen.lt.sm && $route.name !== 'EventPage') ||
-            ($q.screen.gt.xs && $route.name === 'BrowsePage')
-          "
+          v-show="$q.screen.lt.sm && $route.name !== 'EventPage'"
         />
       </transition>
       <!-- There's two router views because we want different transitions for different pages

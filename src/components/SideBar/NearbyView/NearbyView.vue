@@ -43,34 +43,41 @@
                     'q-px-md   ': $q.screen.lt.sm,
                   }"
                 >
-                  <div class="ellipsis text-h4 inter bolder">
+                  <div
+                    class="ellipsis text-h4 inter bolder"
+                    v-if="$q.screen.lt.sm"
+                  >
                     <span class="">Near</span>
                   </div>
                   <div
                     class="flex items-center no-wrap"
                     :class="{
-                      'justify-between': $q.screen.gt.xs,
-                      'justify-between  ': $q.screen.lt.sm,
+                      'justify-start text-h4': $q.screen.gt.xs,
+                      'justify-between  text-h4': $q.screen.lt.sm,
                     }"
                     style="width: 100%"
                   >
                     <span
                       v-if="userLocation"
-                      class="ellipsis q-mr-sm text-h4 inter bolder"
+                      class="ellipsis q-mr-sm inter bolder"
                     >
-                      <span v-if="userLocationCity">
+                      <span class="" v-if="$q.screen.gt.xs">Near&nbsp;</span
+                      ><span v-if="userLocationCity">
                         {{ userLocationCity
-                        }}<span v-if="userLocationCountry && $q.screen.gt.xs"
+                        }}<span
+                          v-if="userLocationCountry && $q.screen.gt.xs && false"
                           >,&nbsp;</span
                         ></span
-                      ><span v-if="$q.screen.gt.xs || !userLocationCity">{{
-                        userLocationCountry
-                      }}</span>
+                      ><span
+                        v-if="false && ($q.screen.gt.xs || !userLocationCity)"
+                        >{{ userLocationCountry }}</span
+                      >
                     </span>
                     <span class="ellipsis text-h4 inter bolder t4" v-else
                       >...
                     </span>
                     <q-btn
+                      v-if="$q.screen.lt.sm"
                       flat
                       class="q-px-md"
                       :class="{ 'q-ml-md': $q.screen.lt.sm }"
@@ -123,10 +130,10 @@
                   @click="showMessage = !showMessage"
                 >
                   <div
-                    class="flex grow no-wrap inter q-pb-md t3"
+                    class="flex grow no-wrap justify-between inter q-pb-md"
                     :class="{
-                      ' q-pt-md  items-center justify-between': $q.screen.lt.sm,
-                      ' q-mt-md inter bold t3 text-large': $q.screen.gt.xs,
+                      ' q-pt-md t3 items-center ': $q.screen.lt.sm,
+                      ' q-mt-sm inter text-large bolder t2 ': $q.screen.gt.xs,
 
                       ' items-end': $q.screen.gt.xs,
                     }"
@@ -145,7 +152,7 @@
                   </div>
                   <div
                     v-if="showMessage"
-                    class="flex column items-start justify-start t2 q-mt-sm q-mb-md"
+                    class="flex column items-start justify-start t1 q-mt-sm q-mb-md"
                   >
                     PartyMap is a community-driven platform for finding parties
                     and festivals around the world! PartyMap is a work in
@@ -163,7 +170,7 @@
                     <p />
                     - Pete
                     <div
-                      class="flex q-gutter-md q-mb-lg"
+                      class="flex q-gutter-md q-my-lg"
                       v-if="!$q.platform.is.nativeMobile"
                     >
                       <div
@@ -267,7 +274,7 @@
                           class="q-py-md location-header flex justify-between"
                           :class="
                             $q.screen.gt.xs
-                              ? 'q-px-lg t1 text-large inter semibold'
+                              ? 'q-px-lg t1 inter semibold'
                               : 'q-px-md t1 inter semibold'
                           "
                         >
@@ -326,7 +333,7 @@
                           class="q-py-md location-header"
                           :class="
                             $q.screen.gt.xs
-                              ? 'q-px-lg  t1 text-large inter semibold'
+                              ? 'q-px-lg  t1 inter semibold'
                               : 'q-pl-md t1 inter semibold'
                           "
                         >
@@ -389,7 +396,7 @@
                           class="q-py-md location-header"
                           :class="
                             $q.screen.gt.xs
-                              ? 'q-px-lg  t1 text-large inter semibold'
+                              ? 'q-px-lg  t1 inter semibold'
                               : 'q-pl-md t1'
                           "
                         >
@@ -445,16 +452,12 @@
                       </div>
 
                       <!-- artists -->
-                      <div
-                        class="flex column"
-                        v-if="nearbyArtists?.length > 5"
-                        :style="$q.screen.gt.xs ? 'margin-top: -16px' : ''"
-                      >
+                      <div class="flex column" v-if="nearbyArtists?.length > 5">
                         <div
                           class="location-header q-py-md inter"
                           :class="
                             $q.screen.gt.xs
-                              ? 'q-px-lg t1 text-large inter semibold'
+                              ? 'q-px-lg t1 inter semibold'
                               : 'q-pl-md t1 semibold'
                           "
                         >
@@ -478,7 +481,7 @@
                           class="location-header q-py-md inter semibold"
                           :class="
                             $q.screen.gt.xs
-                              ? 'q-pl-lg  t1 text-large inter semibold'
+                              ? 'q-pl-lg  t1 inter semibold'
                               : 'q-pl-md t1'
                           "
                         >
@@ -497,7 +500,7 @@
                         class="t1 inter semibold location-header q-py-sm flex row items-center justify-between"
                         :class="
                           $q.screen.gt.xs
-                            ? 'q-pl-lg  t1 text-large inter semibold'
+                            ? 'q-pl-lg  t1 inter semibold'
                             : 'q-pl-md'
                         "
                       >
@@ -581,7 +584,7 @@
                         class="t1 inter semibold location-header flex row items-center justify-between"
                         :class="
                           $q.screen.gt.xs
-                            ? 'q-pl-sm  t1 text-large inter semibold'
+                            ? 'q-pl-sm  t1 inter semibold'
                             : 'q-pl-sm t1'
                         "
                         v-if="eventDates && eventDates.length > 0"
@@ -1256,9 +1259,11 @@ export default {
     .scroll-stuff {
       .loading-wrapper {
         pointer-events: none;
-        height: 100%;
+        position: absolute;
+        height: 100vh;
         width: 100%;
-        margin-top: 550px;
+        justify-content: center;
+        display: flex;
         //background: green;
       }
       .message {

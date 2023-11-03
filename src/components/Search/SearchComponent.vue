@@ -175,6 +175,7 @@ export default {
     background: #f5f5f5;
     color: $t-1;
     //border: 1px solid rgba(0, 0, 0, 0.1);
+    //box-shadow: none;
   }
   .search-popup-wrapper {
     background: white;
@@ -196,7 +197,7 @@ export default {
 .search-component {
   z-index: 104;
   position: absolute;
-  top: 80px;
+  top: 78px;
   width: 100%;
   display: flex;
   justify-content: center;
