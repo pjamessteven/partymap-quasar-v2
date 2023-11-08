@@ -77,16 +77,19 @@ export default {
     // handle deep links in native app
     if (this.$q.platform.is.capacitor) {
       App.addListener('appUrlOpen', async (event) => {
+        console.log('APP URL OPEN', event.url);
         if (event.url.indexOf('?session')) {
           let session = event.url.split('?session').pop();
           // facebook login causes this shit to be appended to the next_url query param
           if (session.endsWith('#_=_')) {
-            console.log('ends');
             session = session.replace('#_=_', '');
           }
           const cookieValue = session + '; HttpOnly; Path=/';
           console.log('sesh', session);
-
+          await CapacitorCookies.setCookie({
+            key: 'test',
+            value: '1234',
+          });
           // idk lol
           await CapacitorCookies.setCookie({
             url: 'api.partymap.com',
@@ -94,12 +97,33 @@ export default {
             value: cookieValue,
           });
           await CapacitorCookies.setCookie({
+            url: 'https://api.partymap.com',
+            key: 'session',
+            value: cookieValue,
+          });
+          await CapacitorCookies.setCookie({
+            url: 'capacitor://api.partymap.com',
+            key: 'session',
+            value: cookieValue,
+          });
+          await CapacitorCookies.setCookie({
+            url: 'capacitor://api.partymap.com',
+            key: 'session2',
+            value: '12341234',
+          });
+          await CapacitorCookies.setCookie({
             url: 'partymap.com',
             key: 'session',
             value: cookieValue,
           });
           await CapacitorCookies.setCookie({
-            url: 'http://partymap.com',
+            url: 'capacitor://partymap.com',
+            key: 'session',
+            value: cookieValue,
+          });
+
+          await CapacitorCookies.setCookie({
+            url: 'https://partymap.com',
             key: 'session',
             value: cookieValue,
           });
@@ -117,6 +141,7 @@ export default {
           });
 
           this.checkAuthCookie();
+          console.log('doc cookies', document.cookie);
         }
         // Splash.hide();
         if (event.url.indexOf('api.partymap.com') > 0) {
@@ -124,7 +149,13 @@ export default {
           //await Browser.open({ url: event.url });
           //window.location.replace(event.url);
         } else {
-          const slug = event.url.split('.com').pop();
+          let slug;
+          if (event.url.indexOf('partymap://') > -1) {
+            // app link
+            slug = event.url.split('partymap://').pop();
+          } else {
+            slug = event.url.split('.com').pop();
+          }
           // We only push to the route if there is a slug present
           if (slug) {
             this.$router.push(slug);

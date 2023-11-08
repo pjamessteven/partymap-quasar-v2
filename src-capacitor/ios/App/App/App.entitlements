@@ -5,6 +5,7 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:partymap.com</string>
+		<string>applinks:partymap</string>
 	</array>
 </dict>
 </plist>

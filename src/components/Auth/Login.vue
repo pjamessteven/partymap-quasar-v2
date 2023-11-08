@@ -239,18 +239,36 @@ export default {
   },
   computed: {
     facebookLoginUrl() {
+      let url;
       if (this.$route.query.from) {
-        return API_URL + '/oauth/facebook?next_url=' + this.$route.query.from;
+        url = API_URL + '/oauth/facebook?next_url=' + this.$route.query.from;
+        if (this.$q.platform.is.capacitor) {
+          url += '&mobile=true';
+        }
       } else {
-        return API_URL + '/oauth/facebook';
+        url = API_URL + '/oauth/facebook';
+        if (this.$q.platform.is.capacitor) {
+          url += '?mobile=true';
+        }
       }
+
+      return url;
     },
     googleLoginUrl() {
+      let url;
       if (this.$route.query.from) {
-        return API_URL + '/oauth/google?next_url=' + this.$route.query.from;
+        url = API_URL + '/oauth/google?next_url=' + this.$route.query.from;
+        if (this.$q.platform.is.capacitor) {
+          url += '&mobile=true';
+        }
       } else {
-        return API_URL + '/oauth/google';
+        url = API_URL + '/oauth/google';
+        if (this.$q.platform.is.capacitor) {
+          url += '?mobile=true';
+        }
       }
+
+      return url;
     },
   },
   mounted() {
