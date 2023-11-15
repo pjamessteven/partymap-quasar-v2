@@ -33,7 +33,7 @@
               <div class="q-mr-sm">
                 <i class="mdi mdi-magnify" />
               </div>
-              <div>everything</div>
+              <div>search</div>
             </div>
           </div>
         </q-btn>

@@ -111,9 +111,14 @@ export default {
         (newv === 'nearby' && oldv === 'explore')
       ) {
         if (this.nearbyEventsDates?.length > 0) {
-          this.setMapBoundsNearby();
+          //this.setMapBoundsNearby();
         }
-        if (this.userLocation?.lat && !this.userLocationFromSearch)
+        if (
+          this.userLocation?.lat &&
+          !this.userLocationFromSearch &&
+          this.$q.screen.gt.xs
+        )
+          // go to users location
           this.fitBoundsForExplorePage(this.userLocation);
       }
     },

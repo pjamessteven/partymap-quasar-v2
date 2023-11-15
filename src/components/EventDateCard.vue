@@ -40,12 +40,16 @@
               v-show="loadedImage"
             />
           </div>
-          <div class="flex column ellipsis q-pl-md">
+          <div class="flex column q-pl-md">
             <div
               class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
             >
               <div
                 class="flex row items-baseline no-wrap inter bold q-mr-sm ellipsis"
+                :class="{
+                  'text-large q-mb-sm': $q.screen.gt.sm,
+                  'q-mb-xs': $q.screen.lt.md,
+                }"
               >
                 <span class="ellipsis">{{ event.name }}</span>
                 <q-icon
@@ -68,7 +72,14 @@
               </div>
             </div>
             <div
-              class="flex column grow justify-between card-bottom-text q-mt-xs o-070"
+              v-if="$q.screen.gt.xs"
+              class="description flex grow ellipsis q-pr-sm q-mt-"
+              style="max-width: 100%"
+            >
+              {{ event.event.description }}
+            </div>
+            <div
+              class="flex column grow justify-center card-bottom-text o-070"
               style="font-weight: 400"
             >
               <!--
@@ -152,18 +163,22 @@
                 </div>
               </div>
             </div>
-            <div
-              class="tag-container flex row q-mt-sm no-wrap ellipsis"
-              style="min-height: 31px"
-              v-if="event.event.event_tags && event.event.event_tags.length > 0"
-            >
-              <Tag
-                class="q-mr-xs"
-                v-for="(et, index) in event.event.event_tags"
-                :key="index"
-                :value="et.tag"
-              ></Tag>
-            </div>
+
+            <q-scroll-area vertical style="min-height: 31px" class="q-mt-sm">
+              <div
+                class="tag-container flex row no-wrap ellipsis"
+                v-if="
+                  event.event.event_tags && event.event.event_tags.length > 0
+                "
+              >
+                <Tag
+                  class="q-mr-xs"
+                  v-for="(et, index) in event.event.event_tags"
+                  :key="index"
+                  :value="et.tag"
+                ></Tag>
+              </div>
+            </q-scroll-area>
           </div>
         </div>
       </router-link>
@@ -300,7 +315,7 @@ export default {
       transition: opacity 0.2s ease;
     }
     .ed-card-bg {
-      opacity: 0.68;
+      opacity: 0.4;
       background: white;
       transition: opacity 0.2s ease;
     }
@@ -446,6 +461,38 @@ export default {
     }
     &:hover {
       //transform: scale(1.01) translateY(0px);
+    }
+  }
+}
+
+// desktop
+@media only screen and (min-width: 600px) {
+  .ed-card {
+    &:before {
+      display: none;
+      //opacity: 1;
+    }
+    &:hover {
+      //transform: scale(1.01) translateY(0px);
+    }
+    .ed-card-content {
+      .image-container {
+        min-width: 144px;
+      }
+      .description {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        height: 60px; // height of 3 lines of text
+        @supports (-webkit-line-clamp: 3) {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: initial;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+        }
+      }
     }
   }
 }

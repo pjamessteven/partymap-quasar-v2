@@ -22,6 +22,7 @@
         <div class="separator vertical" v-if="$q.screen.gt.xs" />
         <q-btn
           class="back-button"
+          style="cursor: pointer"
           :ripple="false"
           flat
           icon="mdi-chevron-left"

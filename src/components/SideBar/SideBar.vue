@@ -24,14 +24,16 @@
           style="margin-top: 4px"
         >
           <q-btn
-            class="inter nav-button"
+            v-if="false"
+            class="inter nav-button shadow"
             no-caps
             flat
             @click="showAddEventDialog"
-          >
-            Submit <q-icon name="mdi-plus" class="q-ml-sm" size="1rem" />
+            >Submit
+            <q-icon name="mdi-plus" class="q-ml-sm" size="1rem" />
           </q-btn>
           <q-btn
+            v-if="false"
             flat
             no-caps
             class="inter nav-button q-ml-sm"
@@ -83,18 +85,14 @@
         />
         <SearchComponent class="search-component" v-if="$q.screen.gt.xs" />
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
-          <transition appear enter-active-class="animated fadeIn">
-            <NearbyView
-              style="height: 100%; width: 100%"
-              v-if="sidebarPanel === 'nearby'"
-            />
-          </transition>
-          <transition appear enter-active-class="animated fadeIn">
-            <ExploreView
-              style="height: 100%; width: 100%"
-              v-show="sidebarPanel === 'explore'"
-            />
-          </transition>
+          <NearbyView
+            style="height: 100%; width: 100%"
+            v-if="sidebarPanel === 'nearby'"
+          />
+          <ExploreView
+            style="height: 100%; width: 100%"
+            v-show="sidebarPanel === 'explore'"
+          />
           <SearchView
             style="height: 100%; width: 100%"
             v-show="sidebarPanel === 'search'"
@@ -429,9 +427,9 @@ export default {
     max-height: 100%;
     overflow: hidden;
     height: 100%;
-    max-width: 720px;
+    max-width: 600px;
     pointer-events: all;
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
     //transform: translate3d(0, calc(100% - 226px), 0);
     user-select: none;
     //padding-bottom: 64px;
@@ -590,10 +588,12 @@ export default {
     .sidebar {
       .search-component {
         background: $bi-2;
+        box-shadow: none;
 
         :deep(.controls-wrapper-inner) {
           background: $bi-2;
           //border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          border: none;
         }
       }
     }
@@ -610,17 +610,21 @@ export default {
 
       justify-content: center;
       :deep(.controls-wrapper-inner) {
-        width: 100%;
+        // width: 100%;
         border-radius: 0px;
-        border-top: none;
+        //border-top: none;
         //background: $bi-2;
         justify-content: center;
-
+        width: 100%;
         // border-radius: none !important;
         .inner-wrapper {
           border-radius: 0px;
+          .control-scroll-area {
+            padding-right: 0px !important;
+            mask-image: none;
+          }
           .scroll-wrapper {
-            // justify-content: center;
+            justify-content: start;
             padding-right: 0px;
             height: 48px;
           }
@@ -652,7 +656,7 @@ export default {
     .sidebar {
       //padding-bottom: 88px;
       width: 50vw;
-      max-width: 854px;
+      max-width: 580px;
       .sidebar-content {
       }
       &.sidebar-mobile-expanded {
@@ -834,7 +838,8 @@ export default {
       }
 
       &.sidebar-mobile-hidden {
-        // transform: translate3d(0, Max(calc(100% - 66%), calc(100% - 228px)), 0);
+        //transform: translate3d(0, Max(calc(100% - 66%), calc(100% - 228px)), 0);
+        transform: translate3d(0, Max(calc(100% - 66%), calc(100% - 0px)), 0);
       }
 
       .sidebar-content {

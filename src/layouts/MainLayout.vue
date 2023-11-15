@@ -11,43 +11,39 @@
       <MenuBar class="menubar" />
 
       <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
-
-      <SideBar
-        class="sidebar-component"
-        v-show="
-          $q.screen.lt.sm || ($q.screen.gt.xs && $route.name == 'Explore')
-        "
-        :class="{ hide: $q.screen.lt.sm && $route.name === 'EventPage' }"
-      />
-      <transition
+      <Transition
+        appear
         :enter-active-class="
-          $q.screen.gt.xs ? 'animated  fadeIn slow' : 'animated fadeIn'
+          $q.screen.gt.xs ? 'animated  slideInLeft' : 'animated fadeIn'
         "
         :leave-active-class="
-          $q.screen.gt.xs ? 'animated fadeOut slow' : 'animated fadeOut'
+          $q.screen.gt.xs ? 'animated slideOutLeft' : undefined
         "
       >
-        <SearchComponent
-          v-show="$q.screen.lt.sm && $route.name !== 'EventPage'"
+        <SideBar
+          class="sidebar-component"
+          v-show="
+            $q.screen.lt.sm || ($q.screen.gt.xs && $route.name == 'Explore')
+          "
+          :class="{ hide: $q.screen.lt.sm && $route.name === 'EventPage' }"
         />
-      </transition>
+      </Transition>
+      <SearchComponent
+        v-show="$q.screen.lt.sm && $route.name !== 'EventPage'"
+      />
       <!-- There's two router views because we want different transitions for different pages
   and we're lazy... -->
       <router-view
         name="event"
         v-slot="{ Component }"
-        class="main-layout-router"
+        class="main-layout-router event-router"
         v-bind:class="{
           'mobile-map-view-router': $q.screen.lt.sm,
         }"
       >
         <transition
-          :enter-active-class="
-            $q.screen.gt.xs ? 'animated  slideInUp' : 'animated fadeInUp '
-          "
-          :leave-active-class="
-            $q.screen.gt.xs ? 'animated slideOutDown' : 'animated fadeOutDown'
-          "
+          enter-active-class="animated slideInUp"
+          leave-active-class="animated slideOutDown"
         >
           <component :is="Component" />
         </transition>
@@ -59,7 +55,12 @@
           'mobile-map-view-router': $q.screen.lt.sm,
         }"
       >
-        <component :is="Component" />
+        <transition
+          enter-active-class="animated fadeIn"
+          leave-active-class="animated fadeOut"
+        >
+          <component :is="Component" />
+        </transition>
       </router-view>
       <NavigationBar
         class="nav-bar"
@@ -155,10 +156,13 @@ export default {
         }
       } else {
         if (
-          (this.showPanel && this.$route.name === 'Explore') ||
+          (this.showPanel &&
+            this.$route.name === 'Explore' &&
+            this.$q.screen.gt.xs) ||
           (this.$q.screen.lt.md && this.showPanel) ||
           (this.$route.name !== 'Explore' &&
-            this.$route.meta.mapOverlay === false)
+            this.$route.meta.mapOverlay === false &&
+            this.$q.screen.gt.xs)
         )
           return 'opacity: 1; pointer-events: all';
         else return 'opacity: 0';
@@ -246,7 +250,7 @@ export default {
     opacity: 0;
     pointer-events: none;
     //will-change: auto;
-    transition: opacity 0.3s;
+    transition: opacity 0.4s;
     cursor: grab;
     @supports (font: -apple-system-body) and (-webkit-appearance: none) {
       -webkit-backface-visibility: hidden;
@@ -295,11 +299,13 @@ export default {
     .sidebar-component {
       z-index: 104;
       opacity: 1;
-      transition: opacity 0.3s ease;
+      // transition: opacity 0.3s ease;
+      /*
       &.hide {
         opacity: 0;
         pointer-events: none;
       }
+      */
     }
     .main-layout-router {
       position: absolute;
@@ -308,6 +314,9 @@ export default {
       z-index: 106;
       top: 0px;
       pointer-events: all;
+    }
+    .event-router {
+      z-index: 5000;
     }
 
     .mobile-map-view-router {

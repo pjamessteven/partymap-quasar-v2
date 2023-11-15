@@ -74,6 +74,18 @@
           "
         >
           <div class="flex column no-wrap scroll-content q-px-sm">
+            <ArtistsComponent
+              v-if="
+                $q.screen.gt.xs &&
+                artists.length > 0 &&
+                ((groupByMonth &&
+                  Object.keys(eventDatesGroupedByMonth)?.length > 0) ||
+                  (!groupByMonth && eventDates?.length > 0))
+              "
+              :artists="artists"
+              :hasNext="artistsHasNext"
+              :loadMore="loadArtists"
+            />
             <transition appear enter-active-class="animated fadeIn slow">
               <div
                 class="flex column"
@@ -81,7 +93,7 @@
               >
                 <EventDateList
                   v-if="compactView"
-                  :groupByMonth="groupEventsByMonth"
+                  :groupByMonth="groupByMonth"
                   :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
                   :eventDates="eventDates"
                   :hasNext="eventDatesHasNext"
@@ -91,7 +103,7 @@
 
                 <EventDatePosterList
                   v-if="!compactView"
-                  :groupByMonth="groupEventsByMonth"
+                  :groupByMonth="groupByMonth"
                   :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
                   :eventDates="eventDates"
                   :hasNext="eventDatesHasNext"
@@ -154,11 +166,9 @@
               class="flex row no-wrap"
               style="pointer-events: all"
               v-else-if="
-                ((groupEventsByMonth &&
+                ((groupByMonth &&
                   Object.keys(eventDatesGroupedByMonth)?.length == 0) ||
-                  (!groupEventsByMonth &&
-                    eventDates &&
-                    eventDates.length === 0)) &&
+                  (!groupByMonth && eventDates && eventDates.length === 0)) &&
                 !(isLoadingInitial || (mapMoving && !blockUpdates))
               "
             >
@@ -210,7 +220,7 @@ import _ from 'lodash';
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
 import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
-
+import ArtistsComponent from 'src/components/SideBar/ArtistsComponent.vue';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
 import { useMainStore } from 'src/stores/main';
@@ -221,7 +231,7 @@ export default {
   components: {
     //ControlsComponent,
     //ArtistProfile,
-    //ArtistsComponent,
+    ArtistsComponent,
     EventDateList,
     EventDatePosterList,
     EventDateViewOptions,
@@ -265,6 +275,7 @@ export default {
       this.eventDatesPage = 1;
       this.eventDatesTotal = null;
       this.eventDates = []; // this is actually quite important
+      this.artists = [];
       this.eventDatesGroupedByMonth = {};
       if (!this.userLocation) {
         await this.loadIpInfo();
@@ -281,6 +292,7 @@ export default {
       ) {
         try {
           await this.loadEventDates();
+          await this.loadArtists();
         } catch (error) {}
       }
     },
@@ -386,7 +398,7 @@ export default {
       'sidebarPanel',
       'userLocation',
       'compactView',
-      'groupEventsByMonth',
+      'groupByMonth',
     ]),
     ...mapWritableState(useMainStore, ['showPanel', 'enablePanelSwipeDown']),
     ...mapWritableState(useMapStore, ['map', 'blockUpdates', 'preventMapZoom']),
@@ -403,7 +415,6 @@ export default {
       'controlSize',
       'controlDuration',
       'controlArtist',
-      'artists',
       'artistsHasNext',
       'anyFiltersEnabled',
     ]),
@@ -412,6 +423,7 @@ export default {
       'eventDatesTotal',
       'eventDatesPage',
       'eventDatesHasNext',
+      'artists',
       'artistsPage',
       'artistsHasNext',
       'eventDatesLoading',

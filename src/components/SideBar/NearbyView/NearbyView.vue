@@ -133,14 +133,14 @@
                     class="flex grow no-wrap justify-between inter q-pb-md"
                     :class="{
                       ' q-pt-md t3 items-center ': $q.screen.lt.sm,
-                      ' q-mt-sm inter text-large bolder t2 ': $q.screen.gt.xs,
+                      ' q-mt-sm inter text-large semibold t3 ': $q.screen.gt.xs,
 
                       ' items-end': $q.screen.gt.xs,
                     }"
                   >
                     <span
-                      >Welcome to PartyMap, the global directory of festivals
-                      and experiences!</span
+                      >Welcome to the global directory of festivals and
+                      experiences!</span
                     >
                     <q-icon
                       class="q-ml-md"
@@ -248,7 +248,7 @@
                 </div>
 
                 <div
-                  class="flex row justify-center items-cente loading-wrapper"
+                  class="flex row justify-center items-center loading-wrapper"
                   v-if="loadingEverything || !computedSidebarPanelReady"
                 >
                   <!--
@@ -1264,7 +1264,6 @@ export default {
         width: 100%;
         justify-content: center;
         display: flex;
-        //background: green;
       }
       .message {
         //border-radius: 9px;
@@ -1424,7 +1423,7 @@ export default {
       .scroll-stuff {
         .loading-wrapper {
           pointer-events: none;
-          margin-top: calc(500px + var(--safe-area-inset-top));
+          //margin-top: calc(var(--safe-area-inset-top));
         }
         .message {
           border-radius: 0px;

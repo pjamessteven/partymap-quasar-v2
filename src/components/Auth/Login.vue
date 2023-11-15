@@ -215,7 +215,10 @@ export default {
     async _login() {
       this.loading = true;
       try {
-        await this.login(this.identifier, this.password);
+        await this.login({
+          identifier: this.identifier,
+          password: this.password,
+        });
         this.loadUserEventDates('all', 'future');
         if (this.$route.query.from) {
           this.$router.replace(this.$route.query.from);
