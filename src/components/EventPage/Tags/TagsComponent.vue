@@ -96,7 +96,7 @@ export default {
 }
 :deep(.tag) {
   .tag-inner {
-    opacity: 0.48;
+    opacity: 0.67;
   }
 }
 </style>

@@ -3,7 +3,7 @@
     <q-tabs
       :class="{
         'light-button': color === 'white',
-        'inter bolder desktop-tabs': $q.screen.gt.xs,
+        'inter bolder desktop-tabs': $q.screen.gt.sm,
       }"
       class="tabs"
       @click.stop
@@ -11,7 +11,7 @@
       @update:model-value="updateNav"
       no-caps
       :indicator-color="
-        $q.screen.lt.sm && false
+        $q.screen.lt.md && false
           ? $route.name === 'Explore' ||
             $route.name === 'UserPage' ||
             $route.name === 'BrowsePage'
@@ -20,7 +20,7 @@
           : 'transparent'
       "
       :active-class="
-        $q.screen.lt.sm
+        $q.screen.lt.md
           ? $route.name === 'Explore' ||
             $route.name === 'UserPage' ||
             $route.name === 'BrowsePage'
@@ -38,7 +38,7 @@
         label="Nearby"
         :ripple="false"
         :icon="
-          $q.screen.lt.sm
+          $q.screen.lt.md
             ? sidebarPanel === 'nearby'
               ? 'mdi-home'
               : 'mdi-home-outline'
@@ -53,7 +53,7 @@
         key="2"
         name="explore"
         :icon="
-          $q.screen.lt.sm
+          $q.screen.lt.md
             ? sidebarPanel === 'explore'
               ? 'mdi-map-search'
               : 'mdi-map-search-outline'
@@ -71,7 +71,7 @@
         name="browse"
         label="Browse"
         :icon="
-          $q.screen.lt.sm
+          $q.screen.lt.md
             ? $route.name === 'BrowsePage'
               ? 'mdi-feature-search'
               : 'mdi-feature-search-outline'
@@ -82,7 +82,7 @@
       />
 
       <q-route-tab
-        v-if="$q.screen.lt.sm"
+        v-if="$q.screen.lt.md"
         name="profile"
         key="4"
         :icon="
@@ -370,7 +370,7 @@ export default {
 .animated.slowest {
   animation-duration: calc(var(--animate-duration) * 10);
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 1024px) {
   .body--dark {
     .navigation-bar {
       //background: black;

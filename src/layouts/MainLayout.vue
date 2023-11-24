@@ -55,12 +55,7 @@
           'mobile-map-view-router': $q.screen.lt.sm,
         }"
       >
-        <transition
-          enter-active-class="animated fadeIn"
-          leave-active-class="animated fadeOut"
-        >
-          <component :is="Component" />
-        </transition>
+        <component :is="Component" />
       </router-view>
       <NavigationBar
         class="nav-bar"
@@ -156,9 +151,6 @@ export default {
         }
       } else {
         if (
-          (this.showPanel &&
-            this.$route.name === 'Explore' &&
-            this.$q.screen.gt.xs) ||
           (this.$q.screen.lt.md && this.showPanel) ||
           (this.$route.name !== 'Explore' &&
             this.$route.meta.mapOverlay === false &&
@@ -316,7 +308,7 @@ export default {
       pointer-events: all;
     }
     .event-router {
-      z-index: 5000;
+      //   z-index: 5000;
     }
 
     .mobile-map-view-router {

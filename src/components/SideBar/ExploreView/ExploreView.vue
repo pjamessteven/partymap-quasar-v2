@@ -33,7 +33,7 @@
 
           <q-icon
             @click="() => (showPanel = !showPanel)"
-            v-if="$q.screen.gt.xs && false"
+            v-if="$q.screen.gt.sm && false"
             flat
             size="2.5rem"
             class="q-mx-md t1"
@@ -52,7 +52,7 @@
           @scroll="onScrollMainContent"
           ref="scroll"
           :thumb-style="
-            $q.screen.gt.xs
+            $q.screen.gt.sm
               ? {
                   bottom: '0px',
                   height: '8px',
@@ -69,11 +69,12 @@
           "
           class="scroll-area flex grow"
           :class="
-            (($q.screen.lt.md && !showPanel) || preventMapZoom) &&
+            (($q.screen.lt.sm && !showPanel) || preventMapZoom) &&
             'disable-scroll'
           "
         >
           <div class="flex column no-wrap scroll-content q-px-sm">
+            <!-- theres no point in this 
             <ArtistsComponent
               v-if="
                 $q.screen.gt.xs &&
@@ -86,6 +87,7 @@
               :hasNext="artistsHasNext"
               :loadMore="loadArtists"
             />
+            -->
             <transition appear enter-active-class="animated fadeIn slow">
               <div
                 class="flex column"
@@ -220,7 +222,7 @@ import _ from 'lodash';
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
 import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
-import ArtistsComponent from 'src/components/SideBar/ArtistsComponent.vue';
+//import ArtistsComponent from 'src/components/SideBar/ArtistsComponent.vue';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
 import { useMainStore } from 'src/stores/main';
@@ -231,17 +233,29 @@ export default {
   components: {
     //ControlsComponent,
     //ArtistProfile,
-    ArtistsComponent,
+    // ArtistsComponent,
     EventDateList,
     EventDatePosterList,
     EventDateViewOptions,
   },
 
-  mounted() {
+  async mounted() {
     setTimeout(() => {
       this.hasLoaded = true;
       // the event listener in q-scroll-area causees a bug in ios that makes you have to click twice on links within
     }, 500);
+    if (this.eventDates?.length === 0) {
+      this.blockUpdates = false;
+      if (!this.userLocation) {
+        await this.loadIpInfo();
+        this.getInitialList();
+      } else {
+        this.getInitialList();
+      }
+    }
+    if (!this.userLocation) {
+      // this.loadIpInfo(); happens in route watcher
+    }
   },
   data() {
     return {
@@ -277,12 +291,8 @@ export default {
       this.eventDates = []; // this is actually quite important
       this.artists = [];
       this.eventDatesGroupedByMonth = {};
-      if (!this.userLocation) {
-        await this.loadIpInfo();
-        this.loadMore();
-      } else {
-        this.loadMore();
-      }
+
+      this.loadMore();
     },
     async loadMore() {
       if (
@@ -292,7 +302,7 @@ export default {
       ) {
         try {
           await this.loadEventDates();
-          await this.loadArtists();
+          //  await this.loadArtists();
         } catch (error) {}
       }
     },
@@ -342,8 +352,9 @@ export default {
     },
     route: {
       handler: async function (to) {
-        if (to.name === 'Explore' && !this.blockUpdates) {
+        if (to.name === 'Explore') {
           if (this.eventDates?.length === 0) {
+            this.blockUpdates = false;
             if (!this.userLocation) {
               await this.loadIpInfo();
               this.getInitialList();

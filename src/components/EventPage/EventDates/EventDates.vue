@@ -55,7 +55,7 @@
       :key="selectedEventDateIndex + 101"
     >
       <div class="inter bolder t2 text-large q-pr-md event-page-header">
-        <span v-if="event.event_dates.length > 1">Date details:</span
+        <span v-if="event.event_dates.length > 1">Details:</span
         ><span v-else>Event details:</span>
       </div>
 
@@ -78,6 +78,13 @@
             }"
           >
           </component>
+          <q-separator
+            v-if="
+              index === visibleComponents.length - 1 &&
+              !editing &&
+              !showMoreFields
+            "
+          />
         </div>
         <!-- SHOW MORE FIELDS -->
         <div
@@ -344,6 +351,10 @@ export default {
 
 <style lang="scss" scoped>
 .body--dark {
+  .q-separator--dark {
+    background: none;
+    border-top: 1px solid rgb(42, 42, 42) !important;
+  }
 }
 .body--light {
 }

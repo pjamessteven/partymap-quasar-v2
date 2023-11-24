@@ -7,7 +7,7 @@
       :color="leftIconColor"
       v-if="!previousRouteName"
     />
-    <div class="tab-wrapper" v-if="!previousRouteName && $q.screen.gt.xs">
+    <div class="tab-wrapper" v-if="!previousRouteName && $q.screen.gt.sm">
       <NavigationBar :color="leftIconColor" />
     </div>
     <transition

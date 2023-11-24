@@ -72,7 +72,7 @@
               </div>
             </div>
             <div
-              v-if="$q.screen.gt.xs"
+              v-if="$q.screen.gt.sm"
               class="description flex grow ellipsis q-pr-sm q-mt-"
               style="max-width: 100%"
             >
@@ -81,6 +81,9 @@
             <div
               class="flex column grow justify-center card-bottom-text o-070"
               style="font-weight: 400"
+              :class="{
+                'q-mt-sm': $q.screen.gt.sm,
+              }"
             >
               <!--
 
@@ -210,11 +213,12 @@ export default {
   },
   methods: {
     mouseEnter() {
-      this.eventDateHoverMarker = {
-        lat: this.event.location.lat,
-        lng: this.event.location.lng,
-        name: this.event.name,
-      };
+      if (this.$q.screen.gt.xs)
+        this.eventDateHoverMarker = {
+          lat: this.event.location.lat,
+          lng: this.event.location.lng,
+          name: this.event.name,
+        };
     },
     mouseLeave() {
       this.eventDateHoverMarker = null;
@@ -424,7 +428,7 @@ export default {
       overflow: hidden;
       //border-radius: 100%;
       width: 86px;
-      aspect-ratio: 595 / 842;
+      // aspect-ratio: 595 / 842; (this causes serious slowness on ios)
       min-width: 90px;
       z-index: 1;
       border-radius: 9px;
@@ -466,7 +470,7 @@ export default {
 }
 
 // desktop
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 1024px) {
   .ed-card {
     &:before {
       display: none;

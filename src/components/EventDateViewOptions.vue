@@ -14,7 +14,11 @@
       <div class="row no-wrap q-pa-sm">
         <div class="column">
           <div class="q-ma-sm inter bold">View options</div>
-          <q-toggle v-model="compactView" label="Compact view" />
+          <q-toggle
+            v-model="compactView"
+            :false-value="false"
+            label="Show summary"
+          />
           <q-toggle
             v-if="showGroupByMonth"
             v-model="groupEventsByMonth"

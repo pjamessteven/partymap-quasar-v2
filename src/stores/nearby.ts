@@ -43,7 +43,7 @@ interface NearbyState {
 }
 export const useNearbyStore = defineStore('nearby', {
   state: (): NearbyState => ({
-    loadingEverything: true,
+    loadingEverything: false,
 
     queryRadius: null,
     nearbyTags: [],
@@ -88,25 +88,45 @@ export const useNearbyStore = defineStore('nearby', {
 
       // this first request will return the radius
       // needed for the following requests
-      await this.loadNearbyEventDates();
+      const main = useMainStore();
 
-      // do the following concurrently
-      await Promise.all([
-        this.loadNearbyArtists(),
-        this.loadNearbyTags(),
-        this.loadEventDates(),
-        authStore.currentUser
-          ? queryStore.loadUserEventDates('all', 'future')
-          : undefined,
-      ]);
+      if (main.userLocation) await this.loadNearbyEventDates();
 
-      // show global top tags/top artists if there are no few local results
-      if (this.nearbyArtists.length < 6 || this.nearbyTags.length < 10) {
-        const queryStore = useQueryStore();
-        if (this.nearbyArtists.length < 6) await queryStore.loadArtistOptions();
-        if (this.nearbyTags.length < 10) await queryStore.loadTagOptions();
+      try {
+        // do the following concurrently
+        if (main.userLocation) {
+          await Promise.all([
+            this.loadNearbyArtists(),
+            this.loadNearbyTags(),
+            this.loadEventDates(),
+            authStore.currentUser
+              ? queryStore.loadUserEventDates('all', 'future')
+              : undefined,
+          ]);
+        } else {
+          await Promise.all([
+            this.loadEventDates(),
+            authStore.currentUser
+              ? queryStore.loadUserEventDates('all', 'future')
+              : undefined,
+          ]);
+        }
+
+        // show global top tags/top artists if there are no few local results
+        if (
+          this.nearbyArtists.length < 6 ||
+          this.nearbyTags.length < 10 ||
+          !main.userLocation
+        ) {
+          const queryStore = useQueryStore();
+          if (this.nearbyArtists.length < 6)
+            await queryStore.loadArtistOptions();
+          if (this.nearbyTags.length < 10) await queryStore.loadTagOptions();
+        }
+        this.loadingEverything = false;
+      } catch (e) {
+        this.loadingEverything = false;
       }
-      this.loadingEverything = false;
     },
     async loadNearbyTags() {
       const main = useMainStore();
@@ -220,7 +240,7 @@ export const useNearbyStore = defineStore('nearby', {
           date_min: moment().toISOString(),
           date_max: null,
           page: this.eventDatesPage,
-          per_page: 20,
+          per_page: 10,
           distinct: true,
         });
         if (this.eventDatesRequestId === requestId) {

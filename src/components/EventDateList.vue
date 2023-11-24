@@ -150,14 +150,10 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const gridColumns = computed(() => {
-  if (main.showPanel) {
-    if ($q.screen.gt.lg) {
+  if (main.sidebarExpanded) {
+    if ($q.screen.gt.xs) {
       return `
-        grid-template-columns: repeat(1, minmax(0, 1fr));
-        `;
-    } else if ($q.screen.gt.sm) {
-      return `
-        grid-template-columns: repeat(1, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         `;
     } else {
       return `

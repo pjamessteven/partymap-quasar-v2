@@ -9,7 +9,7 @@
       :thumb-style="
         $q.screen.gt.xs
           ? {
-              bottom: '0px',
+              bottom: '8px',
               height: '8px',
               marginLeft: '16px',
             }

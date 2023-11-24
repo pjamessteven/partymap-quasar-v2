@@ -426,6 +426,12 @@ export default {
         background: $b-3 !important;
       }
     }
+    .search-button-wrapper {
+      .search-button {
+        background: $b-3;
+        color: black;
+      }
+    }
   }
 }
 

@@ -34,7 +34,7 @@ export default {
       description: {
         name: 'description',
         content:
-          'PartyMap is a community-driven platform for discovering festivals and events near you and around the world.',
+          'PartyMap is a community-driven and crowd-sourced platform for discovering festivals and events around the world and near you.',
       },
       keywords: {
         name: 'keywords',
@@ -65,10 +65,10 @@ export default {
     },
     screen: {
       handler: function (screen) {
-        if (screen.gt.lg) {
-          this.compactView = false;
+        if (screen.gt.md) {
+          //this.compactView = false;
         } else {
-          this.compactView = true;
+          //this.compactView = true;
         }
       },
       deep: true,
@@ -409,9 +409,9 @@ body {
   }
 
   .nav-button {
-    background: $b-2;
+    background: $b-3;
     &:hover {
-      background: $b-3;
+      background: $b-4;
     }
   }
 
@@ -496,7 +496,7 @@ body {
   }
   .q-separator--dark {
     background: none;
-    border-top: 1px solid rgb(26, 26, 26);
+    border-top: 1px solid rgb(26, 26, 26) !important;
   }
 
   .vc-container {
@@ -565,9 +565,9 @@ body {
   }
 
   .nav-button {
-    background: $bi-2;
+    background: $bi-3;
     &:hover {
-      background: $bi-3;
+      background: $bi-4;
     }
   }
 
@@ -781,7 +781,7 @@ body {
   max-height: 56px;
   transition: all 0.3s;
   &.primary {
-    background: $primary;
+    background: $primary !important;
     color: white;
   }
   //dth: 264px;

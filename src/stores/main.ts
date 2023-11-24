@@ -13,6 +13,7 @@ interface MainStoreState {
   showSearchBox: boolean;
   sidebarPanel: string;
   showPanel: boolean;
+  sidebarExpanded: boolean;
   enablePanelSwipeDown: boolean;
   menubarOpacity: number;
   overlayOpacity: number;
@@ -34,6 +35,7 @@ export const useMainStore = defineStore('main', {
     showSearchBox: false, // for menubar search
     sidebarPanel: 'nearby',
     showPanel: Screen.lt.sm,
+    sidebarExpanded: false,
     enablePanelSwipeDown: true,
     menubarOpacity: 1,
     overlayOpacity: 0,
@@ -48,6 +50,17 @@ export const useMainStore = defineStore('main', {
     compactView: true,
     routerHistory: [],
   }),
+  getters: {
+    computedSidebarWidth: (state) => {
+      if (Screen.lt.sm) {
+        return 'width: 100%';
+      } else if (state.sidebarExpanded && Screen.gt.sm) {
+        return 'width: 1000px!important;';
+      } else {
+        return 'width: 580px';
+      }
+    },
+  },
   actions: {
     darkModeToggle() {
       this.darkMode = !this.darkMode;
@@ -65,7 +78,9 @@ export const useMainStore = defineStore('main', {
         this.userLocationFromSearch = false;
         return;
       } catch (error) {
-        throw error;
+        //fail silently
+        console.log(error);
+        //throw error;
       }
     },
     getFineLocation() {

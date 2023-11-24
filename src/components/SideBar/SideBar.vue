@@ -5,9 +5,10 @@
       v-touch-swipe.mouse.up="!showPanel ? handleSwipe : null"
       class="flex justify-between no-wrap sidebar"
       id="sidebar"
+      :style="computedSidebarWidth"
       v-bind:class="{
-        shadow: panelHiddenDelayed && $q.screen.gt.xs,
-        'sidebar-mobile-expanded': showPanel,
+        shadow: $q.screen.gt.xs,
+        'sidebar-mobile-expanded': showPanel && $q.screen.lt.sm,
         'sidebar-mobile-nearby': sidebarPanel === 'nearby' && $q.screen.gt.xs,
         'sidebar-mobile-hidden': $q.screen.lt.sm && $route.name === 'EventPage',
       }"
@@ -23,12 +24,7 @@
           v-if="$route.name === 'Explore' && $q.screen.gt.xs"
           style="margin-top: 4px"
         >
-          <q-btn
-            v-if="false"
-            class="inter nav-button shadow"
-            no-caps
-            flat
-            @click="showAddEventDialog"
+          <q-btn class="inter o-070" no-caps flat @click="showAddEventDialog"
             >Submit
             <q-icon name="mdi-plus" class="q-ml-sm" size="1rem" />
           </q-btn>
@@ -78,11 +74,7 @@
             </template>
           </q-btn>
         </div>
-        <NavigationBar
-          @click="togglePanel"
-          class="nav-bar"
-          v-if="$q.screen.gt.xs && false"
-        />
+
         <SearchComponent class="search-component" v-if="$q.screen.gt.xs" />
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
           <NearbyView
@@ -98,6 +90,18 @@
             v-show="sidebarPanel === 'search'"
           />
         </div>
+        <NavigationBar
+          @click="togglePanel"
+          class="nav-bar"
+          v-if="$q.screen.gt.xs && $q.screen.lt.md"
+        />
+      </div>
+      <div
+        class="resizer flex row items-center"
+        ref="resizer"
+        v-if="$q.screen.gt.sm"
+      >
+        <q-icon name="las la-grip-lines-vertical" />
       </div>
     </div>
   </div>
@@ -134,6 +138,24 @@ export default {
       preventMouse: false,
     });
     */
+    if (this.$refs.resizer)
+      this.$refs.resizer.addEventListener('mousedown', (event) => {
+        document.addEventListener('mousemove', this.resize, false);
+        document.addEventListener(
+          'mouseup',
+          () => {
+            document.removeEventListener('mousemove', this.resize, false);
+          },
+          false
+        );
+      });
+    window.addEventListener('resize', () => {
+      if (this.$q.screen.gt.lg) {
+        //this.sidebarExpanded = true;
+      } else {
+        //this.sidebarExpanded = false;
+      }
+    });
   },
   data() {
     return {
@@ -144,6 +166,18 @@ export default {
     };
   },
   methods: {
+    resize(event) {
+      if (event.x > 580 && event.x > this.lastx && !this.sidebarExpanded) {
+        this.sidebarExpanded = true;
+      } else if (
+        event.x < 1000 &&
+        event.x < this.lastx &&
+        this.sidebarExpanded
+      ) {
+        this.sidebarExpanded = false;
+      }
+      this.lastx = event.x;
+    },
     showAddEventDialog() {
       this.$q
         .dialog({
@@ -286,8 +320,10 @@ export default {
       'getFineLocation',
       'userLocationLoading',
       'userLocationFromSearch',
+      'computedSidebarWidth',
     ]),
     ...mapWritableState(useMainStore, [
+      'sidebarExpanded',
       'showPanel',
       'sidebarPanel',
       'enablePanelSwipeDown',
@@ -414,7 +450,6 @@ export default {
   pointer-events: none;
   justify-content: start;
   display: flex;
-
   .sidebar {
     position: relative;
     flex-shrink: 0;
@@ -427,7 +462,7 @@ export default {
     max-height: 100%;
     overflow: hidden;
     height: 100%;
-    max-width: 600px;
+    // max-width: 600px;
     pointer-events: all;
     transition: all 0.4s ease;
     //transform: translate3d(0, calc(100% - 226px), 0);
@@ -436,10 +471,21 @@ export default {
     display: flex;
     justify-content: center;
 
+    .resizer {
+      position: absolute;
+      top: 50%;
+      right: 0px;
+      padding-right: 4px;
+      z-index: 5000;
+      cursor: ew-resize;
+      opacity: 0.48;
+    }
     .sidebar-content {
       padding-top: 128px;
       overflow: hidden;
       position: relative;
+      align-items: center;
+
       .add-event-wrapper {
         position: absolute;
         top: 0px;
@@ -573,13 +619,16 @@ export default {
   .body--light {
     .sidebar {
       .search-component {
-        background: white !important;
+        box-shadow: none;
+
         //
         :deep(.controls-wrapper-inner) {
-          background: white !important;
+          //border-top: 1px solid $b-3;
 
+          background: white !important;
+          background: #f5f5f5 !important;
+          // box-shadow: none;
           //background: $b-2;
-          // box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
         }
       }
     }
@@ -587,49 +636,50 @@ export default {
   .body--dark {
     .sidebar {
       .search-component {
-        background: $bi-2;
         box-shadow: none;
 
         :deep(.controls-wrapper-inner) {
           background: $bi-2;
-          //border-bottom: 1px solid rgba(255, 255, 255, 0.1);
           border: none;
+          border: 1px solid rgba(255, 255, 255, 0.1);
         }
       }
     }
   }
   .sidebar {
     .search-component {
-      width: 100%;
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      padding-top: 68px;
+      /// width: unset;
+      /// width: 100%;
+      /// position: absolute;
+      ///top: 0px;
+      ///  left: 0px;
+      /// padding-top: 78px;
       //background: $b-2;
+      border-radius: 9px;
       box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 
       justify-content: center;
       :deep(.controls-wrapper-inner) {
         // width: 100%;
-        border-radius: 0px;
+
+        border-radius: 100px;
         //border-top: none;
         //background: $bi-2;
-        justify-content: center;
-        width: 100%;
-        // border-radius: none !important;
+        ///justify-content: center;
+        //. width: 100%;
+        /// border-radius: none !important;
         .inner-wrapper {
-          border-radius: 0px;
           .control-scroll-area {
-            padding-right: 0px !important;
-            mask-image: none;
+            /// padding-right: 0px !important;
+            ///  mask-image: none;
           }
           .scroll-wrapper {
-            justify-content: start;
-            padding-right: 0px;
-            height: 48px;
+            ///  justify-content: start;
+            /// padding-right: 0px;
+            ///  height: 48px;
           }
           .search-button {
-            display: none;
+            // display: none;
           }
         }
       }
@@ -639,13 +689,13 @@ export default {
 @media only screen and (min-width: 600px) and (max-width: 1280px) {
   .sidebar-wrapper {
     .sidebar {
-      width: 96vw;
-      padding-bottom: 134px;
+      width: 50vw !important;
+      // padding-bottom: 134px;
       &.sidebar-mobile-nearby {
         //transform: translate3d(0, calc(100% - 60vh), 0);
       }
       &.sidebar-mobile-expanded {
-        transform: translate3d(0, 128px, 0);
+        //  transform: translate3d(0, 128px, 0);
       }
     }
   }
@@ -656,7 +706,7 @@ export default {
     .sidebar {
       //padding-bottom: 88px;
       width: 50vw;
-      max-width: 580px;
+      //max-width: 580px;
       .sidebar-content {
       }
       &.sidebar-mobile-expanded {
@@ -788,12 +838,12 @@ export default {
 
     .sidebar {
       box-shadow: none;
+      transition: transform 0.4s ease;
 
       width: 100%;
       background: transparent;
       //margin-top: 48px;
       transform: translate3d(0, calc(100% - 228px), 0);
-
       //will-change: auto;
       padding-bottom: 188px;
       border-left: none;
@@ -802,7 +852,7 @@ export default {
       max-width: 100vw;
       width: 100vwv;
       border-radius: 18px;
-
+      will-change: opacity;
       @supports ((top: var(--safe-area-inset-top))) {
         transform: translate3d(
           0,
@@ -838,8 +888,10 @@ export default {
       }
 
       &.sidebar-mobile-hidden {
-        //transform: translate3d(0, Max(calc(100% - 66%), calc(100% - 228px)), 0);
-        transform: translate3d(0, Max(calc(100% - 66%), calc(100% - 0px)), 0);
+        opacity: 0;
+        //transition: opacity 0.s;
+        //transform: translate3d(0, Max(calc(100% - 66%), calc(100% - 80%)), 0);
+        //transform: translate3d(0, Max(calc(100% - 66%), calc(100% - 0px)), 0);
       }
 
       .sidebar-content {
