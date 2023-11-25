@@ -51,12 +51,13 @@ export const useAuthStore = defineStore('auth', {
         throw error;
       }
     },
-    async login(identifier: string, password: string) {
+    async login(payload: {
+      identifier: string;
+      password: string;
+      token: string;
+    }) {
       try {
-        const response = await loginRequest({
-          identifier,
-          password,
-        });
+        const response = await loginRequest(payload);
         this.currentUser = response.data;
       } catch (error) {
         throw error;

@@ -14,5 +14,8 @@
     "CapacitorHttp": {
       "enabled": true
     }
+  },
+  "ios": {
+    "limitsNavigationsToAppBoundDomains": true
   }
 }

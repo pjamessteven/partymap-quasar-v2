@@ -5,10 +5,18 @@
       params: { id: artist.id },
       query: {
         name: artist.name.replace(/ /g, '_'),
+        thumb_xs_url: artist?.media_items?.[0]?.thumb_xs_url,
       },
     }"
+    :custom="true"
+    v-slot="{ navigate }"
   >
-    <div class="artist-head-wrapper flex column justify-start items-center">
+    <div
+      class="artist-head-wrapper flex column justify-start items-center"
+      @mousedown="navigate($event)"
+      @click="navigate($event)"
+      @mouseover.stop="() => ($q.platform.is.ios ? navigate($event) : false)"
+    >
       <div class="card-bottom-background" :style="getBgImgStyle()" />
       <div class="artist-head flex column no-wrap">
         <div class="artist-head-background shadow-2xl">
@@ -23,7 +31,10 @@
             name="mdi-account-music-outline"
           />
         </div>
-        <div class="artist-name q-mt-sm inter bolder ellipsis">
+        <div
+          class="artist-name q-mt-sm inter bold ellipsis"
+          :class="{ 'text-large': false }"
+        >
           {{ artist.name }}
         </div>
       </div>
@@ -97,6 +108,7 @@ export default {
   overflow: hidden;
   transition: opacity 0.3s;
   transform: translate3d(0, 0, 0);
+  cursor: pointer;
   @supports (font: -apple-system-body) and (-webkit-appearance: none) {
     -webkit-backface-visibility: hidden;
     -webkit-transform: translate3d(0, 0, 0);
@@ -201,8 +213,15 @@ a {
     }
   }
   */
+
   .artist-head-wrapper {
     .artist-head {
+    }
+
+    &:hover {
+      &:before {
+        display: none;
+      }
     }
   }
 }

@@ -140,6 +140,8 @@ interface Props {
   hideHeader?: boolean;
 }
 
+const main = useMainStore();
+
 const props = withDefaults(defineProps<Props>(), {
   eventDates: () => [],
   eventDatesGroupedByMonth: () => {
@@ -152,22 +154,42 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const gridColumns = computed(() => {
-  if ($q.screen.gt.lg) {
-    return `
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        `;
-  } else if ($q.screen.gt.sm) {
-    return `
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        `;
-  } else if ($q.screen.gt.xs) {
-    return `
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        `;
-  } else {
-    return `
+  if (main.showPanel) {
+    if ($q.screen.gt.lg) {
+      return `
         grid-template-columns: repeat(2, minmax(0, 1fr));
         `;
+    } else if ($q.screen.gt.md) {
+      return `
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        `;
+    } else if ($q.screen.gt.xs) {
+      return `
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        `;
+    } else {
+      return `
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        `;
+    }
+  } else {
+    if ($q.screen.gt.lg) {
+      return `
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        `;
+    } else if ($q.screen.gt.md) {
+      return `
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        `;
+    } else if ($q.screen.gt.xs) {
+      return `
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        `;
+    } else {
+      return `
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        `;
+    }
   }
 });
 
@@ -189,7 +211,9 @@ const computedTotalResultMessage = computed(() => {
 </script>
 <style lang="scss" scoped>
 .total-result-header {
-  position: unset;
+  position: sticky;
+
+  top: 0px;
 }
 .ed-poster-grid {
   display: grid;

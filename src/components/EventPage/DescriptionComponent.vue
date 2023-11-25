@@ -1,7 +1,7 @@
 <template>
   <div v-if="!!event">
     <div class="flex column">
-      <div class="inter bolder text-large t2 q-pr-md q-mb event-page-header">
+      <div class="inter bolder text-large t2 q-pr-md q-mb-md event-page-header">
         Description:
       </div>
 

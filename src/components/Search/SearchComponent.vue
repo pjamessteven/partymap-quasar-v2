@@ -170,11 +170,12 @@ export default {
   }
   .controls-wrapper-inner {
     //
-    box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+    //box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
     background: white;
-    //background: #fafafa;
+    background: #f5f5f5;
     color: $t-1;
     //border: 1px solid rgba(0, 0, 0, 0.1);
+    //box-shadow: none;
   }
   .search-popup-wrapper {
     background: white;
@@ -184,27 +185,26 @@ export default {
 .body--dark {
   .controls-wrapper-inner {
     color: $ti-1;
-    background: black;
+    background: $bi-1;
 
     //background: rgba(0, 0, 0, 0.5);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    border-left: 1px solid rgba(255, 255, 255, 0.05);
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
 .search-component {
-  z-index: 4000;
+  z-index: 104;
   position: absolute;
-  top: 38px;
+  top: 78px;
   width: 100%;
   display: flex;
   justify-content: center;
   pointer-events: none;
-
+  //max-width: 33vw;
   .controls-wrapper {
-    z-index: 1000;
+    //z-index: 105;
     width: 100%;
     justify-content: center;
     position: relative;
@@ -217,7 +217,6 @@ export default {
       width: 510px;
       height: 100%;
       border-radius: 48px;
-      backdrop-filter: blur(10px);
       position: relative;
       .location-button-wrapper {
         position: absolute;
@@ -250,6 +249,15 @@ export default {
     left: unset;
     padding: 0 16px;
     top: 72px;
+    //max-width: 50vw;
+  }
+}
+@media only screen and (max-width: 1681px) {
+  .search-component {
+    //width: 50vw;
+    //max-width: 50vw;
+    .sidebar-content {
+    }
   }
 }
 
@@ -267,7 +275,10 @@ export default {
       box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.4);
     }
   }
+
   .search-component {
+    width: 100vw;
+    max-width: 100vw;
     // android
     @supports ((top: var(--safe-area-inset-top))) {
       top: calc(68px + var(--safe-area-inset-top));
@@ -277,10 +288,22 @@ export default {
       (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
         (-webkit-appearance: none)
     ) {
-      top: calc(72px + env(safe-area-inset-top) - 8px);
+      top: calc(68px + env(safe-area-inset-top));
     }
     .controls-wrapper {
       .controls-wrapper-inner {
+      }
+    }
+  }
+
+  .native-mobile {
+    // ios specific padding for capcaitor app
+    .search-component {
+      @supports (
+        (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+          (-webkit-appearance: none)
+      ) {
+        top: calc(68px + env(safe-area-inset-top) - 8px);
       }
     }
   }

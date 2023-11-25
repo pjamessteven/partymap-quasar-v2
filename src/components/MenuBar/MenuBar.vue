@@ -2,18 +2,13 @@
   <div class="flex row menubar justify-between items-center">
     <div class="menubar-background" :style="computedStyle" />
 
-    <MenuBarLogo class="logo" :color="iconColor" v-if="!previousRouteName" />
-
-    <div class="tab-wrapper" v-if="!previousRouteName && $q.screen.gt.xs">
-      <div class="q-py-lg q-pl-sm q-pr-md" style="height: 100%">
-        <div
-          class="separator vertical"
-          :style="
-            iconColor === 'black' ? 'border-color: grey' : 'border-color: grey'
-          "
-        />
-      </div>
-      <NavigationBar :color="iconColor" />
+    <MenuBarLogo
+      class="logo"
+      :color="leftIconColor"
+      v-if="!previousRouteName"
+    />
+    <div class="tab-wrapper" v-if="!previousRouteName && $q.screen.gt.sm">
+      <NavigationBar :color="leftIconColor" />
     </div>
     <transition
       appear
@@ -27,6 +22,8 @@
         <div class="separator vertical" v-if="$q.screen.gt.xs" />
         <q-btn
           class="back-button"
+          style="cursor: pointer"
+          :ripple="false"
           flat
           icon="mdi-chevron-left"
           :label="previousRouteName"
@@ -192,6 +189,34 @@ export default {
         }
       } */ else return 'opacity: 0';
     },
+    leftIconColor() {
+      if (
+        ((this.$route.name === 'EventPage' ||
+          this.$route.name === 'ArtistPage') &&
+          this.$q.screen.gt.xs &&
+          this.menubarOpacity === 1 &&
+          !this.$q.dark.isActive) ||
+        (this.$route.name === 'Explore' &&
+          !this.$q.dark.isActive &&
+          this.$q.screen.gt.xs) ||
+        (this.$route.name === 'Explore' &&
+          !this.$q.dark.isActive &&
+          this.$q.screen.lt.sm &&
+          this.showPanel)
+      ) {
+        return 'black';
+      } else if (
+        this.$q.dark.isActive ||
+        this.$route.name === 'EventPage' ||
+        this.$route.name === 'ArtistPage' ||
+        this.$route.name === 'Explore' ||
+        (this.$route.meta.mapOverlay === true && this.$q.screen.gt.xs)
+      ) {
+        return 'white';
+      } else {
+        return 'black';
+      }
+    },
     iconColor() {
       if (
         ((this.$route.name === 'EventPage' ||
@@ -230,7 +255,7 @@ export default {
   .menubar {
     .menubar-background {
       background: black;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      //border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
       //
     }
@@ -333,6 +358,14 @@ export default {
       //height: calc(env(safe-area-inset-top) + 62px);
       top: var(--safe-area-inset-top);
     }
+    // ios specific top padding
+    @supports (
+      (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
+        (-webkit-appearance: none)
+    ) {
+      top: calc(var(--safe-area-inset-top) - 0px);
+    }
+
     .menubar-background {
       @supports ((top: var(--safe-area-inset-top))) {
         padding-top: var(--safe-area-inset-top);
@@ -351,6 +384,27 @@ export default {
     &.search-expanded {
       .logo {
         opacity: 0;
+      }
+    }
+  }
+
+  .native-mobile {
+    // ios specific padding for capcaitor app
+    .menubar {
+      @supports (
+        (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+          (-webkit-appearance: none)
+      ) {
+        top: calc(env(safe-area-inset-top) - 8px);
+      }
+
+      .menubar-background {
+        @supports ((top: var(--safe-area-inset-top))) {
+          padding-top: var(--safe-area-inset-top);
+          height: calc(env(safe-area-inset-top) + 62px - 8px);
+          position: fixed;
+          top: 0px;
+        }
       }
     }
   }

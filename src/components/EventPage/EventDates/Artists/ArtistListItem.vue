@@ -14,6 +14,7 @@
           name: 'ArtistPage',
           params: {
             id: artist.artist_id ? artist.artist_id : artist.id,
+            thumb_xs_url: artist?.media_items?.[0]?.thumb_xxs_url,
           },
           query: {
             name: (artist.name + '').replace(/ /g, '_'),
@@ -64,6 +65,7 @@
                       name: 'ArtistPage',
                       params: {
                         id: artist.artist_id ? artist.artist_id : artist.id,
+                        thumb_xs_url: artist?.media_items?.[0]?.thumb_xxs_url,
                       },
                       query: {
                         name: (artist.name + '').replace(/ /g, '_'),

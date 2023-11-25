@@ -5409,10 +5409,6 @@
   "resolved" "https://registry.npmjs.org/pend/-/pend-1.2.0.tgz"
   "version" "1.2.0"
 
-"phonegap-plugin-mobile-accessibility@github:phonegap/phonegap-mobile-accessibility":
-  "resolved" "git+ssh://git@github.com/phonegap/phonegap-mobile-accessibility.git#e9821054c38fb203c3fe632bd7bbaa02ca56e544"
-  "version" "1.0.5"
-
 "picocolors@^1.0.0":
   "integrity" "sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ=="
   "resolved" "https://registry.npmjs.org/picocolors/-/picocolors-1.0.0.tgz"

@@ -14,13 +14,15 @@
             event.description_attribute.length > 0
           "
         >
+        </span>
+        <div class="q-mt-sm">
           <a
             class="link-hover o-050"
             target="_blank"
             :href="computedAttributeUrl"
-            >&nbsp;[source]</a
-          ></span
-        >
+            >[source]</a
+          >
+        </div>
       </div>
     </div>
 

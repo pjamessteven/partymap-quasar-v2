@@ -48,7 +48,11 @@
             class="image-thumb"
           />
         </video>
-        <img :src="item?.thumb_xs_url" v-if="!loaded && item" />
+        <img
+          style="width: 100%"
+          :src="item?.thumb_xs_url"
+          v-if="!loaded && item?.thumb_xs_url"
+        />
         <img v-show="loaded" :src="item?.thumb_url" @load="loaded = true" />
       </div>
     </div>
@@ -85,6 +89,7 @@ export default {
   props: {
     item: Object,
     editing: Boolean,
+    preview: String,
   },
   data() {
     return {
@@ -159,6 +164,7 @@ export default {
       justify-content: center;
       align-content: center;
       align-items: center;
+      cursor: pointer;
       // background: white;
       .no-media {
         background: grey;
@@ -169,10 +175,10 @@ export default {
       img,
       video {
         cursor: pointer;
+        // border-radius: 18px !important;
 
         max-height: 100%;
         max-width: 100%;
-        width: 100%;
         object-fit: contain;
         display: block;
         filter: drop-shadow(1px 2px 78px rgba(0, 0, 0, 0.48));
@@ -198,7 +204,7 @@ export default {
     max-width: calc(100vw - 48px);
     width: auto;
     min-height: unset;
-
+    min-width: 600px;
     .item-wrapper {
       position: relative;
       max-height: 100%;
@@ -210,10 +216,31 @@ export default {
       align-items: start;
       .item-wrapper-inner {
         justify-content: flex-start;
+
         img,
         video {
           width: unset;
           filter: none;
+          border-radius: 18px;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .featured-media-component {
+    max-width: unset;
+    min-height: unset;
+    min-width: 100%;
+    .item-wrapper {
+      justify-content: flex-start;
+      .item-wrapper-inner {
+        //width: unset;
+        max-height: unset;
+        img,
+        video {
+          border-radius: 18px;
         }
       }
     }

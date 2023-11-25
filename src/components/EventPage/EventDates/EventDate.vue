@@ -14,7 +14,7 @@
       <q-icon size="1em" name="las la-times" />
     </q-btn>
     <div
-      class="ed-inline-card flex column q-pa-sm justify-center align-center items-center editing-outline"
+      class="ed-inline-card flex column q-pa-sm justify-center align-center items-center"
       :class="expanded ? 'active-card' : 'inactive-card'"
     >
       <div
@@ -178,10 +178,14 @@ export default {
       }
     }
     &.editing {
-      border: 1px dashed rgba(255, 255, 255, 0.3) !important;
-      border-radius: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      border-radius: 9px !important;
+
       .active-card {
         background: $bi-3;
+        border-radius: 9px !important;
+
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
       }
     }
   }
@@ -224,8 +228,13 @@ export default {
       }
     }
     &.editing {
+      border: 1px solid rgba(0, 0, 0, 0.1) !important;
+      border-radius: 9px !important;
+
       .active-card {
         background: $b-2;
+        border: 1px solid rgba(0, 0, 0, 0.3) !important;
+        border-radius: 9px !important;
       }
     }
   }
@@ -290,16 +299,20 @@ export default {
     transition: all 300ms;
     background: transparent;
   }
+  .ed-inline {
+    border-radius: 9px !important;
+
+    &.editing {
+      border-radius: 9px !important;
+      overflow: hidden;
+    }
+  }
   .ed-inline-card {
     width: max-content;
     transition: all 0.5s;
     width: 180px;
     height: 102px;
-    border-radius: 0px;
     position: relative;
-    &.editing {
-      border-radius: 9px !important;
-    }
 
     .date-text {
       z-index: 2;

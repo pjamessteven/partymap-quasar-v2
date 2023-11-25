@@ -37,10 +37,17 @@
       </div>
       <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
         <div class="calendar-header flex row items-start" style="">
-          <q-list dense style="min-width: 100px" v-if="$q.screen.gt.xs">
+          <q-list
+            dense
+            style="min-width: 100px"
+            v-if="$q.screen.gt.xs"
+            class="desktop-shortcuts"
+          >
             <q-item-label header class="q-pb-md">{{
               $t('top_controls.shortcuts')
             }}</q-item-label>
+            <q-separator class="q-mb-sm" />
+
             <q-item
               clickable
               v-close-popup
@@ -157,18 +164,24 @@
               </q-menu>
             </q-item>
           </q-list>
-          <DatePicker
-            title-position="center"
-            @update:model-value="onSelectedCustomDateRange"
-            class="date-picker flex"
-            is-inline="true"
-            v-model="controlDateRange"
-            :model-config="modelConfig"
-            is-range
-            color="gray"
-            :columns="$q.screen.gt.xs ? 2 : 1"
-            :is-dark="$q.dark.isActive"
-          />
+          <div class="flex column date-picker-container">
+            <q-item-label header class="q-pb-md" style="text-align: center"
+              >Select a date range</q-item-label
+            >
+
+            <DatePicker
+              title-position="center"
+              @update:model-value="onSelectedCustomDateRange"
+              class="date-picker flex"
+              is-inline="true"
+              v-model="controlDateRange"
+              :model-config="modelConfig"
+              is-range
+              color="gray"
+              :columns="$q.screen.gt.xs ? 2 : 1"
+              :is-dark="$q.dark.isActive"
+            />
+          </div>
         </div>
       </MenuWrapper>
     </q-btn>
@@ -650,8 +663,30 @@ export default {
 
 <style lang="scss" scoped>
 .body--dark {
+  .date-picker-container {
+    background: $bi-3;
+  }
+  .desktop-shortcuts {
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .calendar-header {
+    .date-picker {
+      border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+  }
 }
 .body--light {
+  .date-picker-container {
+    background: #fafafa;
+  }
+  .desktop-shortcuts {
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  .calendar-header {
+    .date-picker {
+      border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+    }
+  }
 }
 
 .button-control {
@@ -665,30 +700,29 @@ export default {
   }
 }
 .calendar-header {
-  min-width: 654px;
+  min-width: 655px;
   width: 648px;
   overflow: hidden;
   border-radius: 9px;
-  .date-picker {
-    height: 274px;
-    flex-grow: 1;
-    border-radius: 18px;
+
+  .date-picker-container {
+    .date-picker {
+      height: 274px;
+      flex-grow: 1;
+      border-radius: 18px;
+    }
   }
 }
 
 @media only screen and (max-width: 600px) {
   .body--dark {
-    .calendar-header {
-      .date-picker {
-        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-      }
+    .date-picker-container {
+      border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
     }
   }
   .body--light {
-    .calendar-header {
-      .date-picker {
-        border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
-      }
+    .date-picker-container {
+      border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
     }
   }
 
@@ -696,17 +730,18 @@ export default {
     max-width: 100%;
     min-width: unset;
     justify-content: start;
-
-    .date-picker {
-      height: 296px;
-      margin-top: 8px;
-      border-radius: 0px !important;
-      border-top-right-radius: 0px !important;
-      border-top-left-radius: 0px !important;
+    .date-picker-container {
       width: 100%;
-      padding: 16px 16px;
-      :deep(.vc-container) {
-        font-size: larger !important;
+      .date-picker {
+        height: 296px;
+        border-radius: 0px !important;
+        border-top-right-radius: 0px !important;
+        border-top-left-radius: 0px !important;
+        width: 100%;
+        padding: 16px 16px;
+        :deep(.vc-container) {
+          font-size: larger !important;
+        }
       }
     }
   }

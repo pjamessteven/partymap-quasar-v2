@@ -39,6 +39,7 @@ import 'leaflet.tilelayer.colorfilter';
 //import '../../../node_modules/leaflet.tilelayer.colorfilter/src/leaflet-tilelayer-colorfilter.js';
 
 import EventSelectionComponent from './EventSelectionComponent.vue';
+import { useNearbyStore } from 'src/stores/nearby';
 
 export default {
   components: {},
@@ -109,7 +110,16 @@ export default {
         (newv === 'explore' && oldv === 'nearby') ||
         (newv === 'nearby' && oldv === 'explore')
       ) {
-        if (this.userLocation?.lat && !this.userLocationFromSearch)
+        if (this.nearbyEventsDates?.length > 0) {
+          //this.setMapBoundsNearby();
+        }
+        if (
+          this.userLocation?.lat &&
+          !this.userLocationFromSearch &&
+          this.$q.screen.gt.xs &&
+          newv === 'nearby'
+        )
+          // go to users location
           this.fitBoundsForExplorePage(this.userLocation);
       }
     },
@@ -274,8 +284,8 @@ export default {
       },
     },
     eventDateHoverMarker: function (newv) {
-      this.eventDateHoverLayer.unbindTooltip();
-      this.eventDateHoverLayer.clearLayers();
+      toRaw(this.eventDateHoverLayer).unbindTooltip();
+      toRaw(this.eventDateHoverLayer).clearLayers();
       if (newv !== null && toRaw(this.map)) {
         var markers = [
           L.marker([newv.lat, newv.lng], {
@@ -284,7 +294,11 @@ export default {
           }),
         ];
         this.eventDateHoverLayer = L.featureGroup(markers)
-          .bindTooltip(newv.name, { direction: 'top', permanent: true })
+          .bindTooltip(newv.name, {
+            direction: 'top',
+            permanent: true,
+            className: 'hoverToolTip',
+          })
           .addTo(toRaw(this.map));
       }
     },
@@ -307,6 +321,7 @@ export default {
 
   methods: {
     ...mapActions(useQueryStore, ['loadPoints']),
+    ...mapActions(useNearbyStore, ['setMapBoundsNearby']),
     goBack() {
       if (this.routerHistory.length > 0) {
         this.$router.go(-1);
@@ -373,9 +388,10 @@ export default {
       // padding for desktop panel
       var latlng = L.latLng(coords);
       if (this.$q.screen.gt.xs) {
-        if (this.sidebarPanel === 'explore') {
+        if (this.sidebarExpanded) {
+          // padding for sidebar
           toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
-            paddingTopLeft: [0, -128],
+            paddingTopLeft: [1000, 0],
             animate: true,
             duration: 0.3,
             easeLinearity: 1,
@@ -383,7 +399,7 @@ export default {
           });
         } else {
           toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
-            paddingTopLeft: [0, -(this.windowHeight / 3) - 128],
+            paddingTopLeft: [580, 0],
             animate: true,
             duration: 0.3,
             easeLinearity: 1,
@@ -445,13 +461,26 @@ export default {
       }
     },
     setBounds(bounds) {
-      const bottomPanelHeight = '276';
+      if (this.$q.screen.gt.xs) {
+        var pxSw = this.map.getPixelBounds().getBottomLeft();
 
-      var pxSw = this.map.getPixelBounds().getBottomLeft();
+        // Get the width of the overlapping sidebar if on desktop
+        // so that the bounds exclude the sidebar
+        var $cover = document.getElementById('sidebar');
+        var deltaX = $cover.getBoundingClientRect().width;
+        var pxSw = this.map.getPixelBounds().getBottomLeft();
+        pxSw = pxSw.add(L.point(deltaX, 0)); // add the width of the sidebar
+        var sw = this.map.unproject(pxSw);
+        bounds = L.latLngBounds(sw, this.map.getBounds().getNorthEast()); // bounds without the sidebar
+      } else {
+        // padding for mobile bottom panel
+        var pxSw = this.map.getPixelBounds().getBottomLeft();
 
-      pxSw = pxSw.subtract(L.point(0, bottomPanelHeight)); // add the height of the bottom panel
-      var sw = toRaw(this.map).unproject(pxSw);
-      bounds = L.latLngBounds(sw, toRaw(this.map).getBounds().getNorthEast()); // bounds without the bottom panel
+        const bottomPanelHeight = '276';
+        pxSw = pxSw.subtract(L.point(0, bottomPanelHeight)); // add the height of the bottom panel
+        var sw = toRaw(this.map).unproject(pxSw);
+        bounds = L.latLngBounds(sw, toRaw(this.map).getBounds().getNorthEast()); // bounds without the bottom panel
+      }
 
       this.mapBounds = bounds;
       this.mapCenter = bounds;
@@ -705,6 +734,7 @@ export default {
       'sidebarPanel',
       'showPanel',
       'darkMode',
+      'sidebarExpanded',
     ]),
     ...mapState(useMainStore, ['routerHistory']),
     ...mapState(useQueryStore, [
@@ -717,6 +747,7 @@ export default {
       'controlRegion',
       'controlLocality',
       'loadingPoints',
+      'nearbyEventDates',
       'points',
     ]),
     route() {
@@ -921,6 +952,15 @@ img.leaflet-marker-shadow {
   outline: 1px solid transparent;
   /* work-around from here: https://bugs.chromium.org/p/chromium/issues/detail?id=600120 */
   mix-blend-mode: plus-lighter;
+}
+
+.hoverToolTip {
+  background: $primary !important;
+  border: $secondary !important;
+  color: white !important;
+  &:before {
+    border-top-color: $primary !important;
+  }
 }
 </style>
 <style lang="scss" scoped>

@@ -362,7 +362,7 @@ export default {
             });
             // include message and token in request
             try {
-              await suggestEventDateEdit({
+              await this.suggestEventDateEdit({
                 ...update,
                 ...messageAndToken,
               });

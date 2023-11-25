@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="selectedEventDate != null"
-    class="flex row items-center no-wrap ed-inline-card editing-outline"
+    class="flex row items-start no-wrap ed-inline-card editing-outline"
     style="max-width: 100%"
     :class="[editing || showMoreFields ? 'editing q-px-md' : '']"
     @click="editing || showMoreFields ? (showEditingDialog = true) : null"
@@ -16,20 +16,57 @@
     <!--Display grid fixes overflow issues (..somehow...)-->
     <div
       class="ellipsis q-ml-md t2"
-      style="display: grid"
+      style="display: grid; width: 100%"
       :class="$q.screen.gt.sm ? 'text-large' : ''"
     >
       <div
-        class="ellipsis"
-        style="white-space: pre-line"
+        class="ellipsis flex"
+        :class="$q.screen.gt.xs ? 'justify-between' : 'column'"
+        style="white-space: pre-line; width: 100%"
         v-if="computedExternalUrl"
       >
+        <div class="flex column" :class="$q.screen.gt.sm ? 'text-large' : ''">
+          <div class="t2">Link</div>
+          <a
+            class="t3 link-hover"
+            :href="computedExternalUrl"
+            style="text-decoration: none"
+            target="_blank"
+          >
+            {{ selectedEventDate.url }}
+          </a>
+        </div>
+        <!--
         <a
           class="link-hover underline ellipsis"
           target="_blank"
           :href="!editing ? computedExternalUrl : undefined"
           >{{ selectedEventDate.url }}</a
         >
+        -->
+        <a
+          style="text-decoration: none; color: unset"
+          :href="computedExternalUrl"
+          target="_blank"
+          class="q-mt-sm"
+          v-if="computedExternalUrl && !editing"
+        >
+          <q-btn
+            no-caps
+            class="nav-button"
+            flat
+            style="width: 190px"
+            :label="
+              computedExternalUrl &&
+              computedExternalUrl.indexOf('facebook') > -1
+                ? 'Facebook Page'
+                : 'Visit website'
+            "
+            :color="$q.dark.isActive ? 'white' : 'black'"
+            icon="las la-external-link-alt"
+            :class="$q.screen.gt.sm ? '' : 'flex grow'"
+          />
+        </a>
       </div>
       <div
         v-else
@@ -93,4 +130,17 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.body--light {
+  .square-map {
+  }
+}
+.body--dark {
+  .square-map {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .nav-button {
+    background: $bi-3;
+  }
+}
+</style>

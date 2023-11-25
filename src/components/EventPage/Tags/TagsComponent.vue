@@ -5,21 +5,24 @@
     @click="openAddTagDialog()"
   >
     <div
-      class="editing-outline flex row wrap items-center q-gutter-xs"
+      class="editing-outline flex row no-wrap items-center"
       :class="editing ? 'q-pa-md' : ''"
       :style="editing ? 'margin-left: 0px!important;' : ''"
     >
-      <Tag
-        v-for="(et, index) in event?.event_tags"
-        :key="index"
-        :value="et.tag"
-      />
+      <div class="flex row wrap q-gutter-xs">
+        <Tag
+          v-for="(et, index) in event?.event_tags"
+          :key="index"
+          :value="et.tag"
+        />
+      </div>
       <div
         style="color: white"
         v-if="editing && (!event.event_tags || event.event_tags.length == 0)"
       >
         {{ $t('event.add_tags') }}
       </div>
+
       <q-icon
         size="1rem"
         color="white"
@@ -96,7 +99,7 @@ export default {
 }
 :deep(.tag) {
   .tag-inner {
-    opacity: 0.48;
+    opacity: 0.67;
   }
 }
 </style>

@@ -5,9 +5,10 @@
       v-touch-swipe.mouse.up="!showPanel ? handleSwipe : null"
       class="flex justify-between no-wrap sidebar"
       id="sidebar"
+      :style="computedSidebarWidth"
       v-bind:class="{
-        shadow: panelHiddenDelayed && $q.screen.gt.xs,
-        'sidebar-mobile-expanded': showPanel,
+        shadow: $q.screen.gt.xs,
+        'sidebar-mobile-expanded': showPanel && $q.screen.lt.sm,
         'sidebar-mobile-nearby': sidebarPanel === 'nearby' && $q.screen.gt.xs,
         'sidebar-mobile-hidden': $q.screen.lt.sm && $route.name === 'EventPage',
       }"
@@ -18,48 +19,107 @@
         "
         class="sidebar-content flex column no-wrap"
       >
-        <NavigationBar
-          @click="togglePanel"
-          class="nav-bar"
-          v-if="$q.screen.gt.xs && false"
-        />
         <div
-          style="height: 100%; width: 100%"
-          class="sidebar-content-inner"
-          @wheel="handleWheel"
+          class="add-event-wrapper items-center flex justify-center q-px-md q-py-sm"
+          v-if="$route.name === 'Explore' && $q.screen.gt.xs"
+          style="margin-top: 4px"
         >
+          <q-btn class="inter o-070" no-caps flat @click="showAddEventDialog"
+            >Submit
+            <q-icon name="mdi-plus" class="q-ml-sm" size="1rem" />
+          </q-btn>
+          <q-btn
+            v-if="false"
+            flat
+            no-caps
+            class="inter nav-button q-ml-sm"
+            @click.stop="() => getFineLocation()"
+          >
+            <template v-slot:default>
+              <div v-if="!userLocationLoading" class="flex items-center">
+                <q-icon
+                  name="mdi-crosshairs-gps"
+                  class=""
+                  size="1rem"
+                  v-if="fineLocation && !userLocationFromSearch"
+                />
+                <q-icon name="mdi-crosshairs" size="1rem" class="" v-else />
+              </div>
+              <div v-else style="position: relative" class="flex items-center">
+                <q-icon style="z-index: 1" name="mdi-crosshairs" size="1rem" />
+                <q-icon
+                  style="z-index: 2; left: 0px"
+                  size="1rem"
+                  class="animated infinite flash slowest absolute"
+                  name="mdi-crosshairs-gps"
+                />
+              </div>
+              <q-tooltip
+                style="font-size: 1em !important"
+                :content-class="
+                  $q.dark.isActive
+                    ? 'bg-black text-white'
+                    : 'bg-white text-black'
+                "
+                :offset="[10, 10]"
+              >
+                <span v-if="!fineLocation">
+                  Using rough location from your IP address. Click to improve
+                  your location.
+                </span>
+                <span v-else>
+                  {{ $t('landing_page.improve_location') }}
+                </span>
+              </q-tooltip>
+            </template>
+          </q-btn>
+        </div>
+
+        <SearchComponent class="search-component" v-if="$q.screen.gt.xs" />
+        <div style="height: 100%; width: 100%" class="sidebar-content-inner">
           <NearbyView
             style="height: 100%; width: 100%"
             v-if="sidebarPanel === 'nearby'"
           />
-
           <ExploreView
             style="height: 100%; width: 100%"
             v-show="sidebarPanel === 'explore'"
           />
-
           <SearchView
             style="height: 100%; width: 100%"
             v-show="sidebarPanel === 'search'"
           />
         </div>
+        <NavigationBar
+          @click="togglePanel"
+          class="nav-bar"
+          v-if="$q.screen.gt.xs && $q.screen.lt.md"
+        />
+      </div>
+      <div
+        class="resizer flex row items-center"
+        ref="resizer"
+        v-if="$q.screen.gt.sm"
+      >
+        <q-icon name="las la-grip-lines-vertical" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import SearchComponent from 'src/components/Search/SearchComponent.vue';
+import AddEventDialog from 'components/dialogs/AddEventDialog.vue';
+
 import ExploreView from './ExploreView/ExploreView.vue';
 import SearchView from './SearchView/SearchView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
 import NavigationBar from 'components/NavigationBar.vue';
-import MobileSwipeHandle from '../MobileSwipeHandle.vue';
 import { useAuthStore } from 'src/stores/auth';
 import { mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
-
 import WheelIndicator from 'wheel-indicator';
 
 export default {
@@ -69,6 +129,7 @@ export default {
     NavigationBar,
     NearbyView,
     //MobileSwipeHandle,
+    SearchComponent,
   },
   async mounted() {
     this.wheelIndicator = new WheelIndicator({
@@ -76,26 +137,74 @@ export default {
       callback: this.onMouseWheel,
       preventMouse: false,
     });
+    if (this.$refs.resizer)
+      this.$refs.resizer.addEventListener('mousedown', (event) => {
+        document.addEventListener('mousemove', this.resize, false);
+        document.addEventListener(
+          'mouseup',
+          () => {
+            document.removeEventListener('mousemove', this.resize, false);
+          },
+          false
+        );
+      });
+    window.addEventListener('resize', () => {
+      if (this.$q.screen.gt.lg) {
+        //this.sidebarExpanded = true;
+      } else {
+        //this.sidebarExpanded = false;
+      }
+    });
   },
-  beforeUnmount() {
-    this.wheelIndicator.destroy();
+  unmounted() {
+    if (this.wheelIndicator) {
+      this.wheelIndicator.destroy();
+    }
   },
   data() {
     return {
       lastx: 0,
       preventMapInteraction: false,
       wheelIndicator: null,
-      pointerEvents: 'pointer-events: none;',
       panelHiddenDelayed: true,
     };
   },
   methods: {
+    resize(event) {
+      if (event.x > 580 && event.x > this.lastx && !this.sidebarExpanded) {
+        this.sidebarExpanded = true;
+      } else if (
+        event.x < 1000 &&
+        event.x < this.lastx &&
+        this.sidebarExpanded
+      ) {
+        this.sidebarExpanded = false;
+      }
+      this.lastx = event.x;
+    },
+    showAddEventDialog() {
+      this.$q
+        .dialog({
+          parent: this,
+          component: AddEventDialog,
+        })
+        .onOk((data) => {
+          if (!this.currentUser && data.host) {
+            this.$router.push({ name: 'Login' });
+          } else if (data.host) {
+            this.$router.push({
+              name: 'AddEventHost',
+            });
+          } else {
+            this.$router.push({
+              name: 'AddEventPublic',
+            });
+          }
+        });
+    },
     handleWheel(event) {
       // safari behavior fix
-      if (
-        this.pointerEvents === 'pointer-events: none;' &&
-        this.$q.platform.is.safari
-      ) {
+      if (this.$q.platform.is.safari) {
         event.preventDefault();
         return false;
       }
@@ -161,12 +270,8 @@ export default {
     showPanel(newv) {
       // timeouts are so that we wait until the animation is finished
       if (newv === true) {
-        setTimeout(() => {
-          this.pointerEvents = 'pointer-events: all;';
-        }, 350);
         this.panelHiddenDelayed = false;
       } else {
-        this.pointerEvents = 'pointer-events: none;';
         setTimeout(() => {
           this.panelHiddenDelayed = true;
         }, 350);
@@ -213,8 +318,16 @@ export default {
   },
   computed: {
     ...mapState(useAuthStore, ['currentUser']),
-    ...mapState(useMainStore, ['userLocation', 'loadingUserLocation']),
+    ...mapState(useMainStore, [
+      'userLocation',
+      'loadingUserLocation',
+      'getFineLocation',
+      'userLocationLoading',
+      'userLocationFromSearch',
+      'computedSidebarWidth',
+    ]),
     ...mapWritableState(useMainStore, [
+      'sidebarExpanded',
       'showPanel',
       'sidebarPanel',
       'enablePanelSwipeDown',
@@ -235,6 +348,9 @@ export default {
 
 <style lang="scss" scoped>
 .body--dark {
+  .nav-button {
+    background: $bi-4;
+  }
   .hover-indicator-line {
     background: rgba(255, 255, 255, 0.2);
   }
@@ -336,9 +452,8 @@ export default {
   height: 100%;
   width: 100%;
   pointer-events: none;
-  justify-content: center;
+  justify-content: start;
   display: flex;
-
   .sidebar {
     position: relative;
     flex-shrink: 0;
@@ -349,29 +464,38 @@ export default {
     //  rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
     //box-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
     max-height: 100%;
-    //transition: width 0.3s;
     overflow: hidden;
     height: 100%;
+    // max-width: 600px;
     pointer-events: all;
     transition: all 0.4s ease;
-    //transition-timing-function: cubic-bezier(0, 1.3, 0.4, 1);
-
-    transform: translate3d(0, calc(100% - 226px), 0);
+    //transform: translate3d(0, calc(100% - 226px), 0);
     user-select: none;
-    padding-bottom: 64px;
+    //padding-bottom: 64px;
     display: flex;
     justify-content: center;
-    border-top-left-radius: 18px;
-    border-top-right-radius: 18px;
 
-    //box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
-    //  rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
-    //  rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
-
+    .resizer {
+      position: absolute;
+      top: 50%;
+      right: 0px;
+      padding-right: 4px;
+      z-index: 5000;
+      cursor: ew-resize;
+      opacity: 0.48;
+    }
     .sidebar-content {
-      border-top-left-radius: 18px;
-      border-top-right-radius: 18px;
+      padding-top: 128px;
       overflow: hidden;
+      position: relative;
+      align-items: center;
+
+      .add-event-wrapper {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        z-index: 5000;
+      }
       .sidebar-content-inner {
         overflow: hidden;
         isolation: isolate; // lol what?
@@ -387,7 +511,7 @@ export default {
     }
 
     &.sidebar-mobile-nearby {
-      transform: translate3d(0, calc(100% - 66vh), 0);
+      //transform: translate3d(0, calc(100% - 66vh), 0);
     }
 
     &.sidebar-mobile-expanded {
@@ -413,7 +537,6 @@ export default {
     :deep(.scroll-area) {
       overflow: hidden;
       .scroll-content {
-        //padding-top: 32px;
       }
     }
 
@@ -421,7 +544,6 @@ export default {
       padding-top: 8px;
       padding-bottom: 8px;
       color: white;
-      //position: sticky;
       top: 0px;
       z-index: 99;
     }
@@ -429,7 +551,6 @@ export default {
       height: 100%;
       width: 100%;
       position: relative;
-
       overflow: hidden;
       //box-shadow: 0px 0px 64px 32px rgba(0, 0, 0, 0.2);
       .nav-bar {
@@ -498,16 +619,87 @@ export default {
       }
       */
 
+@media only screen and (min-width: 600px) {
+  .body--light {
+    .sidebar {
+      .search-component {
+        box-shadow: none;
+
+        //
+        :deep(.controls-wrapper-inner) {
+          //border-top: 1px solid $b-3;
+
+          background: white !important;
+          background: #f5f5f5 !important;
+          // box-shadow: none;
+          //background: $b-2;
+        }
+      }
+    }
+  }
+  .body--dark {
+    .sidebar {
+      .search-component {
+        box-shadow: none;
+
+        :deep(.controls-wrapper-inner) {
+          background: $bi-2;
+          border: none;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+  }
+  .sidebar {
+    .search-component {
+      /// width: unset;
+      /// width: 100%;
+      /// position: absolute;
+      ///top: 0px;
+      ///  left: 0px;
+      /// padding-top: 78px;
+      //background: $b-2;
+      border-radius: 9px;
+      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+      justify-content: center;
+      :deep(.controls-wrapper-inner) {
+        // width: 100%;
+
+        border-radius: 100px;
+        //border-top: none;
+        //background: $bi-2;
+        ///justify-content: center;
+        //. width: 100%;
+        /// border-radius: none !important;
+        .inner-wrapper {
+          .control-scroll-area {
+            /// padding-right: 0px !important;
+            ///  mask-image: none;
+          }
+          .scroll-wrapper {
+            ///  justify-content: start;
+            /// padding-right: 0px;
+            ///  height: 48px;
+          }
+          .search-button {
+            // display: none;
+          }
+        }
+      }
+    }
+  }
+}
 @media only screen and (min-width: 600px) and (max-width: 1280px) {
   .sidebar-wrapper {
     .sidebar {
-      width: 96vw;
-      padding-bottom: 134px;
+      width: 50vw !important;
+      // padding-bottom: 134px;
       &.sidebar-mobile-nearby {
-        transform: translate3d(0, calc(100% - 60vh), 0);
+        //transform: translate3d(0, calc(100% - 60vh), 0);
       }
       &.sidebar-mobile-expanded {
-        transform: translate3d(0, 128px, 0);
+        //  transform: translate3d(0, 128px, 0);
       }
     }
   }
@@ -516,10 +708,9 @@ export default {
 @media only screen and (min-width: 1280px) {
   .sidebar-wrapper {
     .sidebar {
-      padding-bottom: 88px;
-      width: 66vw;
-      min-width: 920px;
-      max-width: 1024px;
+      //padding-bottom: 88px;
+      width: 50vw;
+      //max-width: 580px;
       .sidebar-content {
       }
       &.sidebar-mobile-expanded {
@@ -532,30 +723,14 @@ export default {
 @media only screen and (min-width: 1080px) {
   .sidebar-wrapper {
     .sidebar {
-      width: 66vw;
-      max-width: 1024px;
+      width: 50vw;
       .sidebar-content {
       }
     }
   }
 }
 
-@media only screen and (min-width: 1921px) {
-  .sidebar-wrapper {
-    .sidebar {
-      padding-bottom: 128px;
-      transform: translate3d(0, calc(100% - 298px), 0);
-      max-width: 1080px;
-
-      .sidebar-content {
-      }
-      &.sidebar-mobile-expanded {
-        transform: translate3d(0, 128px, 0);
-      }
-    }
-  }
-}
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 1681px) {
   .body--dark {
     .sidebar-wrapper {
       .hover-indicator-line {
@@ -599,6 +774,12 @@ export default {
           border-top: none !important;
         }
       }
+    }
+  }
+
+  .sidebar-wrapper {
+    .sidebar {
+      width: 50vw;
     }
   }
 }
@@ -657,21 +838,25 @@ export default {
     padding: 0;
     overflow: hidden;
     box-shadow: none;
+    border-radius: 18px;
+
     .sidebar {
       box-shadow: none;
+      transition: transform 0.4s ease;
 
       width: 100%;
       background: transparent;
       //margin-top: 48px;
       transform: translate3d(0, calc(100% - 228px), 0);
-
       //will-change: auto;
       padding-bottom: 188px;
       border-left: none;
       border-right: none;
-      overflow: visible;
-      width: 100%;
-
+      overflow: none;
+      max-width: 100vw;
+      width: 100vwv;
+      border-radius: 18px;
+      will-change: opacity;
       @supports ((top: var(--safe-area-inset-top))) {
         transform: translate3d(
           0,
@@ -707,7 +892,10 @@ export default {
       }
 
       &.sidebar-mobile-hidden {
-        transform: translate3d(0, calc(100%), 0);
+        opacity: 0;
+        //transition: opacity 0.s;
+        //transform: translate3d(0, Max(calc(100% - 66%), calc(100% - 80%)), 0);
+        //transform: translate3d(0, Max(calc(100% - 66%), calc(100% - 0px)), 0);
       }
 
       .sidebar-content {

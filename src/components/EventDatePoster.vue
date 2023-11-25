@@ -1,6 +1,6 @@
 <template>
   <transition appear enter-active-class="animated fadeIn">
-    <div class="ed-poster">
+    <div class="ed-poster" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
       <router-link
         v-slot="{ navigate }"
         :custom="true"
@@ -12,6 +12,7 @@
           },
           query: {
             name: event.name.replace(/ /g, '_'),
+            thumbXsUrl: imgThumbXsUrl,
           },
         }"
       >
@@ -214,7 +215,7 @@ export default {
     };
   },
   methods: {
-    setFocusMarker() {
+    mouseEnter() {
       if (this.$q.screen.gt.xs)
         this.eventDateHoverMarker = {
           lat: this.event.location.lat,
@@ -222,6 +223,10 @@ export default {
           name: this.event.name,
         };
     },
+    mouseLeave() {
+      this.eventDateHoverMarker = null;
+    },
+
     getImageContainerBgStyle() {
       if (this.$q.dark.isActive) {
         return `background-image:  url("${this.imgThumbXsUrl}");

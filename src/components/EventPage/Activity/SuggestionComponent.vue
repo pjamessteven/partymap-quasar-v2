@@ -19,7 +19,7 @@
         <div class="flex column no-wrap justify-between">
           <div class="t1">
             <span v-if="suggestion.creator"
-              >{{ suggestion.creator.username }}:</span
+              >{{ suggestion.creator.username }}: &nbsp;</span
             >
             <span class="t1"
               >{{ suggestion.action }}
@@ -38,13 +38,34 @@
                   },
                 }"
               >
-                {{ suggestion.event_date_id }}
+                {{ suggestion.event_id }}/{{ suggestion.event_date_id }}
+              </router-link>
+
+              <router-link
+                class="link-hover underline"
+                v-else-if="
+                  suggestion.object_type === 'Event' && suggestion.event_id
+                "
+                :to="{
+                  name: 'EventPage',
+                  params: {
+                    id: suggestion.event_id,
+                  },
+                }"
+              >
+                {{ suggestion.event_id }}
               </router-link>
 
               <span
                 v-else-if="
                   suggestion.object_type === 'EventDate' &&
                   !suggestion.event_date_id
+                "
+                >[TARGET DELETED]</span
+              >
+              <span
+                v-else-if="
+                  suggestion.object_type === 'Event' && !suggestion.event_id
                 "
                 >[TARGET DELETED]</span
               >
@@ -93,7 +114,7 @@
             </div>
           </div>
           <div v-else-if="key === 'rrule'" class="">
-            {{ recurringPatternKebab(suggestion.kwargs[key]) }}
+            {{ recurringPatternKebab(suggestion.kwargs?.[key]) }}
           </div>
           <div v-else-if="key === 'location'" class="">
             {{ suggestion.kwargs[key].description }}
@@ -109,12 +130,12 @@
               <ArtistListItem
                 :artist="item"
                 :key="index"
-                v-for="(item, index) in suggestion.kwargs[key]"
+                v-for="(item, index) in suggestion.kwargs?.[key]"
               />
             </div>
           </div>
           <div v-else>
-            {{ suggestion.kwargs[key] }}
+            {{ suggestion.kwargs?.[key] }}
           </div>
         </div>
       </div>
@@ -203,13 +224,15 @@ export default {
   watch: {},
   computed: {
     computedKeys() {
-      var keys = Object.keys(this.suggestion.kwargs).filter(
-        (key) =>
-          this.ignoredKeys.indexOf(key) === -1 &&
-          this.suggestion.kwargs[key].length !== 0
-      );
-
-      return keys;
+      if (this.suggestion.kwargs) {
+        var keys = Object.keys(this.suggestion.kwargs).filter(
+          (key) =>
+            this.ignoredKeys.indexOf(key) === -1 &&
+            this.suggestion.kwargs?.[key]?.length !== 0
+        );
+        return keys;
+      }
+      return [];
     },
   },
 

@@ -63,3 +63,14 @@ settings.setSupportZoom(false);
 ## Deep linking for Android Info...
 
 This relies on public/.well-known/assetlinks.json to be served at partymap.com/.well-known/assetlinks.json (public folder items are included in build root). Deep linking is used to redirect to the app after oauth, for example.
+
+## Enabling native swipe navigation in iOS
+
+In AppDelegate.swift of the iOS Capacitor project:
+
+func application(\_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+// Override point for customization after application launch.
+(window?.rootViewController as? CAPBridgeViewController)?.loadViewIfNeeded()
+(window?.rootViewController as? CAPBridgeViewController)?.bridge?.webView?.allowsBackForwardNavigationGestures = true
+return true
+}

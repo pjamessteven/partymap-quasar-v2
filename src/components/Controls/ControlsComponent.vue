@@ -33,7 +33,7 @@
               <div class="q-mr-sm">
                 <i class="mdi mdi-magnify" />
               </div>
-              <div>everything</div>
+              <div>search</div>
             </div>
           </div>
         </q-btn>
@@ -400,7 +400,7 @@ export default {
       color: $t-1;
       text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
       /*
-      box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
+      1
       background: rgba(255, 255, 255, 0.9);
       border: 1px solid rgba(255, 255, 255, 0.2);
       */
@@ -424,6 +424,12 @@ export default {
       }
       &.active {
         background: $b-3 !important;
+      }
+    }
+    .search-button-wrapper {
+      .search-button {
+        background: $b-3;
+        color: black;
       }
     }
   }
@@ -459,7 +465,7 @@ export default {
     }
 
     .scroll-wrapper {
-      height: 46px;
+      height: 48px;
       padding-right: 64px;
     }
   }

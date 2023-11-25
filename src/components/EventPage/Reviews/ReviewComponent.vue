@@ -30,7 +30,6 @@
           <q-item
             v-close-popup
             v-ripple
-            v-if="!currentUserIsCreator"
             v-on:click="showingReportDialog = true"
             clickable
           >
@@ -38,13 +37,14 @@
               <q-icon name="mdi-alert-circle-outline" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>Report this contribution</q-item-label>
+              <q-item-label>Report this post</q-item-label>
             </q-item-section>
           </q-item>
         </q-menu>
       </q-btn>
     </div>
     <q-rating
+      v-if="review.rating !== 0"
       :model-value="review.rating"
       size="1rem"
       :max="5"

@@ -8,7 +8,7 @@
         class="flex column"
         :class="{
           'q-pb-lg': event?.event_dates?.length === 0,
-          'q-mb-md': $q.screen.gt.sm,
+          'q-mb-sm': $q.screen.gt.sm,
         }"
       >
         <div
@@ -235,19 +235,29 @@ export default {
       }
     },
     scrollSelectedEdIntoView() {
-      if (this.selectedEventDateIndex > 0) {
-        // scroll to middle
-        this.$refs.scrollArea.setScrollPosition(
-          'horizontal',
-          this.selectedEventDateIndex * (180 + 18) - (180 + 18),
-          100
-        );
-      } else {
-        this.$refs.scrollArea.setScrollPosition(
-          'horizontal',
-          this.selectedEventDateIndex * (180 + 18)
-        );
-      }
+      if (this.$refs.scrollArea)
+        if (this.selectedEventDateIndex > 0) {
+          if (this.$q.screen.gt.xs) {
+            // scroll to middle
+            this.$refs.scrollArea.setScrollPosition(
+              'horizontal',
+              this.selectedEventDateIndex * (180 + 18) - (180 + 18),
+              100
+            );
+          } else {
+            // scroll so item is on the left
+            this.$refs.scrollArea.setScrollPosition(
+              'horizontal',
+              this.selectedEventDateIndex * (180 + 18),
+              100
+            );
+          }
+        } else {
+          this.$refs.scrollArea.setScrollPosition(
+            'horizontal',
+            this.selectedEventDateIndex * (180 + 18)
+          );
+        }
     },
   },
   computed: {

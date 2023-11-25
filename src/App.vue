@@ -1,12 +1,12 @@
 <template>
   <router-view />
   <transition leave-active-class="animated fadeOut">
-    <SplashScreen v-if="!assetsLoaded" />
+    <SplashScreen v-if="!assetsLoaded || loggingInWithToken" />
   </transition>
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia';
+import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useMainStore } from './stores/main';
 import { useAuthStore } from './stores/auth';
 import SplashScreen from './components/SplashScreen.vue';
@@ -19,6 +19,7 @@ export default {
   data() {
     return {
       assetsLoaded: false,
+      loggingInWithToken: false,
     };
   },
   meta: {
@@ -33,7 +34,7 @@ export default {
       description: {
         name: 'description',
         content:
-          'PartyMap is a community-driven platform for discovering festivals and events near you and around the world.',
+          'PartyMap is a community-driven and crowd-sourced platform for discovering festivals and events around the world and near you.',
       },
       keywords: {
         name: 'keywords',
@@ -44,10 +45,15 @@ export default {
   },
   methods: {
     ...mapActions(useMainStore, ['darkModeToggle']),
-    ...mapActions(useAuthStore, ['checkAuthCookie']),
+    ...mapActions(useAuthStore, ['checkAuthCookie', 'login']),
   },
   computed: {
     ...mapState(useMainStore, ['darkMode']),
+    ...mapWritableState(useMainStore, ['compactView', 'groupEventsByMonth']),
+
+    screen() {
+      return this.$q.screen;
+    },
   },
   watch: {
     darkMode: function (newval) {
@@ -57,64 +63,49 @@ export default {
         this.$q.dark.set(false);
       }
     },
+    screen: {
+      handler: function (screen) {
+        if (screen.gt.md) {
+          //this.compactView = false;
+        } else {
+          //this.compactView = true;
+        }
+      },
+      deep: true,
+    },
   },
   mounted() {
     // handle deep links in native app
     if (this.$q.platform.is.capacitor) {
       App.addListener('appUrlOpen', async (event) => {
-        if (event.url.indexOf('?session')) {
-          let session = event.url.split('?session').pop();
+        this.loggingInWithToken = true;
+        Browser.close();
+
+        console.log('APP URL OPEN', event.url);
+        if (event.url.indexOf('?token=')) {
+          let token = event.url.split('?token=').pop();
           // facebook login causes this shit to be appended to the next_url query param
-          if (session.endsWith('#_=_')) {
-            console.log('ends');
-            session = session.replace('#_=_', '');
+          if (token.endsWith('#_=_')) {
+            token = session.replace('#_=_', '');
           }
-          const cookieValue = session + '; HttpOnly; Path=/';
-          console.log('sesh', session);
 
-          // idk lol
-          await CapacitorCookies.setCookie({
-            url: 'api.partymap.com',
-            key: 'session',
-            value: cookieValue,
-          });
-          await CapacitorCookies.setCookie({
-            url: 'partymap.com',
-            key: 'session',
-            value: cookieValue,
-          });
-          await CapacitorCookies.setCookie({
-            url: 'http://partymap.com',
-            key: 'session',
-            value: cookieValue,
-          });
-
-          await CapacitorCookies.setCookie({
-            url: '192.168.1.149',
-            key: 'session',
-            value: cookieValue,
-          });
-
-          await CapacitorCookies.setCookie({
-            url: 'http://192.168.1.149',
-            key: 'session',
-            value: cookieValue,
-          });
-
-          this.checkAuthCookie();
+          // login with one off token
+          await this.login({ token: token });
+          this.loggingInWithToken = false;
         }
 
-        if (event.url.indexOf('api.partymap.com') > 0) {
-          // oauth redirect
-          //await Browser.open({ url: event.url });
-          //window.location.replace(event.url);
+        let slug;
+        if (event.url.indexOf('partymap://') > -1) {
+          // app link
+          slug = event.url.split('partymap://').pop();
         } else {
-          const slug = event.url.split('.com').pop();
-          // We only push to the route if there is a slug present
-          if (slug) {
-            this.$router.push(slug);
-          }
+          slug = event.url.split('.com').pop();
         }
+        // We only push to the route if there is a slug present
+        if (slug) {
+          this.$router.push(slug);
+        }
+        this.loggingInWithToken = false;
       });
     }
   },
@@ -505,7 +496,7 @@ body {
   }
   .q-separator--dark {
     background: none;
-    border-top: 1px solid rgb(26, 26, 26);
+    border-top: 1px solid rgb(26, 26, 26) !important;
   }
 
   .vc-container {
@@ -790,7 +781,7 @@ body {
   max-height: 56px;
   transition: all 0.3s;
   &.primary {
-    background: $primary;
+    background: $primary !important;
     color: white;
   }
   //dth: 264px;

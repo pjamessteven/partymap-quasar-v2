@@ -4,24 +4,6 @@
     style="height: 100%; width: 100%; position: relative; overflow: hidden"
   >
     <div
-      @click="() => (showPanel = !showPanel)"
-      style="pointer-events: all; cursor: pointer"
-      class="inter bolder text-h5 flex items-center justify-between q-pl-lg q-pr-md q-py-md explore-header"
-      v-if="$q.screen.gt.xs && false"
-    >
-      <div>Explore Events</div>
-      <div class="flex items-center q-my-sm show-map">
-        <q-icon
-          flat
-          class="q-mr-md"
-          size="2rem"
-          :class="{ 'rotate-180': showPanel }"
-          name="mdi-chevron-up"
-          style="cursor: pointer"
-        />
-      </div>
-    </div>
-    <div
       :class="{ 'q-px-md': showPanel || true }"
       v-if="$q.screen.gt.xs && false"
     >
@@ -46,36 +28,66 @@
         class="flex row no-wrap items-center justify-between q-px-md q-pt-md q-pb-sm view-options-absolute"
         v-if="$q.screen.gt.xs"
       >
-        <div class="text-h5 inter bolder q-ml-sm q-my-sm">Explore the map</div>
         <div class="flex row items-center no-wrap">
-          <EventDateViewOptions class="q-mr-md" />
+          <EventDateViewOptions class="q-m-md" />
 
           <q-icon
             @click="() => (showPanel = !showPanel)"
-            v-if="$q.screen.gt.xs"
+            v-if="$q.screen.gt.sm && false"
             flat
             size="2.5rem"
-            class="q-mr-md t1"
+            class="q-mx-md t1"
             name="mdi-chevron-up"
             :class="{ 'rotate-180': showPanel }"
             style="cursor: pointer"
           />
         </div>
       </div>
-      <div class="flex column grow no-wrap">
+      <div
+        class="flex column grow no-wrap"
+        :class="$q.screen.gt.sm ? 'q-pt-lg' : ''"
+      >
         <q-scroll-area
           vertical
           @scroll="onScrollMainContent"
           ref="scroll"
-          :thumb-style="{
-            right: $q.screen.gt.xs ? '0px' : '-16px',
-            width: $q.screen.gt.xs ? '8px' : '4px',
-            borderRadius: 0,
-          }"
+          :thumb-style="
+            $q.screen.gt.sm
+              ? {
+                  bottom: '0px',
+                  height: '8px',
+                  right: '-16px',
+                  borderRadius: '0px',
+                  width: '8px',
+                }
+              : {
+                  marginTop: '52px',
+                  height: '0px',
+                  borderRadius: '0px',
+                  width: '4px',
+                }
+          "
           class="scroll-area flex grow"
-          :class="(!showPanel || preventMapZoom) && 'disable-scroll'"
+          :class="
+            (($q.screen.lt.sm && !showPanel) || preventMapZoom) &&
+            'disable-scroll'
+          "
         >
           <div class="flex column no-wrap scroll-content q-px-sm">
+            <!-- theres no point in this 
+            <ArtistsComponent
+              v-if="
+                $q.screen.gt.xs &&
+                artists.length > 0 &&
+                ((groupByMonth &&
+                  Object.keys(eventDatesGroupedByMonth)?.length > 0) ||
+                  (!groupByMonth && eventDates?.length > 0))
+              "
+              :artists="artists"
+              :hasNext="artistsHasNext"
+              :loadMore="loadArtists"
+            />
+            -->
             <transition appear enter-active-class="animated fadeIn slow">
               <div
                 class="flex column"
@@ -83,7 +95,7 @@
               >
                 <EventDateList
                   v-if="compactView"
-                  :groupByMonth="groupEventsByMonth"
+                  :groupByMonth="groupByMonth"
                   :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
                   :eventDates="eventDates"
                   :hasNext="eventDatesHasNext"
@@ -93,7 +105,7 @@
 
                 <EventDatePosterList
                   v-if="!compactView"
-                  :groupByMonth="groupEventsByMonth"
+                  :groupByMonth="groupByMonth"
                   :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
                   :eventDates="eventDates"
                   :hasNext="eventDatesHasNext"
@@ -105,6 +117,7 @@
           </div>
         </q-scroll-area>
       </div>
+      <!--
       <div
         v-if="
           $q.screen.gt.xs && (isLoadingInitial || (mapMoving && !blockUpdates))
@@ -114,17 +127,16 @@
       >
         Loading...
       </div>
+      -->
       <div
         class="event-date-center t2 flex column grow no-wrap justify-center items-center"
         :style="
           $q.screen.lt.sm
             ? 'height: 144px; position: absolute; width: 100%; z-index: 500'
-            : $q.screen.gt.lg
-            ? 'height: 300px; position: absolute; width: 100%; z-index: 500'
-            : 'height: 240px; position: absolute; width: 100%; z-index: 500'
+            : 'height: 100%; position: absolute; width: 100%; z-index: 500'
         "
       >
-        <div class="flex column justify-center items-center no-wrap">
+        <div class="flex column items-center no-wrap">
           <div
             class="inter semibold q-mb-md"
             v-if="
@@ -140,7 +152,7 @@
             Nothing coming up in this area
           </div>
 
-          <div style="height: 28px; width: 200px" class="flex justify-center">
+          <div style="height: 20px; width: 200px" class="flex justify-center">
             <q-linear-progress
               v-if="
                 (isLoadingInitial || (mapMoving && !blockUpdates)) && !showPanel
@@ -156,16 +168,15 @@
               class="flex row no-wrap"
               style="pointer-events: all"
               v-else-if="
-                ((groupEventsByMonth &&
+                ((groupByMonth &&
                   Object.keys(eventDatesGroupedByMonth)?.length == 0) ||
-                  (!groupEventsByMonth &&
-                    eventDates &&
-                    eventDates.length === 0)) &&
+                  (!groupByMonth && eventDates && eventDates.length === 0)) &&
                 !(isLoadingInitial || (mapMoving && !blockUpdates))
               "
             >
               <q-btn
                 no-caps
+                style="border-radius: 48px !important"
                 v-if="anyFiltersEnabled"
                 class="button-plain flex items-center"
                 @click="
@@ -181,6 +192,7 @@
               </q-btn>
               <q-btn
                 no-caps
+                style="border-radius: 48px !important"
                 v-if="mapZoomLevel > 2"
                 class="button-plain flex items-center q-ml-sm"
                 @click="zoomOut()"
@@ -210,7 +222,7 @@ import _ from 'lodash';
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
 import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
-
+//import ArtistsComponent from 'src/components/SideBar/ArtistsComponent.vue';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
 import { useMainStore } from 'src/stores/main';
@@ -221,17 +233,29 @@ export default {
   components: {
     //ControlsComponent,
     //ArtistProfile,
-    //ArtistsComponent,
+    // ArtistsComponent,
     EventDateList,
     EventDatePosterList,
     EventDateViewOptions,
   },
 
-  mounted() {
+  async mounted() {
     setTimeout(() => {
       this.hasLoaded = true;
       // the event listener in q-scroll-area causees a bug in ios that makes you have to click twice on links within
     }, 500);
+    if (this.eventDates?.length === 0) {
+      this.blockUpdates = false;
+      if (!this.userLocation) {
+        await this.loadIpInfo();
+        this.getInitialList();
+      } else {
+        this.getInitialList();
+      }
+    }
+    if (!this.userLocation) {
+      // this.loadIpInfo(); happens in route watcher
+    }
   },
   data() {
     return {
@@ -265,13 +289,10 @@ export default {
       this.eventDatesPage = 1;
       this.eventDatesTotal = null;
       this.eventDates = []; // this is actually quite important
+      this.artists = [];
       this.eventDatesGroupedByMonth = {};
-      if (!this.userLocation) {
-        await this.loadIpInfo();
-        this.loadMore();
-      } else {
-        this.loadMore();
-      }
+
+      this.loadMore();
     },
     async loadMore() {
       if (
@@ -281,6 +302,7 @@ export default {
       ) {
         try {
           await this.loadEventDates();
+          //  await this.loadArtists();
         } catch (error) {}
       }
     },
@@ -318,15 +340,21 @@ export default {
     showPanel(newv) {
       if (newv) {
         this.enablePanelSwipeDown = true;
+      } else {
+        if (this.$refs) this.$refs.scroll.setScrollPercentage('vertical', 0);
       }
+    },
+    sidebarPanel(newv) {
+      this.$refs.scroll.setScrollPercentage('vertical', 0);
     },
     mapMoving(newv) {
       if (newv) this.eventDatesHasNext = false;
     },
     route: {
       handler: async function (to) {
-        if (to.name === 'Explore' && !this.blockUpdates) {
+        if (to.name === 'Explore') {
           if (this.eventDates?.length === 0) {
+            this.blockUpdates = false;
             if (!this.userLocation) {
               await this.loadIpInfo();
               this.getInitialList();
@@ -381,7 +409,7 @@ export default {
       'sidebarPanel',
       'userLocation',
       'compactView',
-      'groupEventsByMonth',
+      'groupByMonth',
     ]),
     ...mapWritableState(useMainStore, ['showPanel', 'enablePanelSwipeDown']),
     ...mapWritableState(useMapStore, ['map', 'blockUpdates', 'preventMapZoom']),
@@ -398,7 +426,6 @@ export default {
       'controlSize',
       'controlDuration',
       'controlArtist',
-      'artists',
       'artistsHasNext',
       'anyFiltersEnabled',
     ]),
@@ -407,6 +434,7 @@ export default {
       'eventDatesTotal',
       'eventDatesPage',
       'eventDatesHasNext',
+      'artists',
       'artistsPage',
       'artistsHasNext',
       'eventDatesLoading',
@@ -527,7 +555,6 @@ export default {
     height: 100%;
     transition: all 0.3s;
     position: relative;
-
     .view-options {
       position: absolute;
       right: 64px;
@@ -536,6 +563,8 @@ export default {
     }
 
     .view-options-absolute {
+      position: absolute;
+      right: 0px;
       z-index: 1000;
     }
 
@@ -666,7 +695,7 @@ export default {
 
 @media only screen and (min-width: 1921px) {
   .linear-progress {
-    margin-top: 32px;
+    // margin-top: 32px;
   }
 }
 

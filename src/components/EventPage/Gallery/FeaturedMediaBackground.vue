@@ -1,6 +1,7 @@
 <template>
   <div class="featured-media">
     <div class="overlay" />
+
     <div class="media-wrapper" v-if="headerBackground">
       <transition
         appear
@@ -28,7 +29,7 @@
         </video>
         <img
           :key="headerBackground.id + 'else'"
-          v-else-if="headerBackground.image_url"
+          v-else-if="headerBackground.thumb_xs_url"
           :src="headerBackground.thumb_xs_url"
           class="item"
         />
@@ -45,6 +46,7 @@ export default {
   components: {},
   props: {
     editing: Boolean,
+    thumbXsUrl: String,
   },
   data() {
     return {
@@ -64,7 +66,11 @@ export default {
   computed: {
     ...mapState(useEventStore, ['event', 'backgroundMediaIndex']),
     headerBackground() {
-      if (this.event?.media_items?.length) {
+      if (this.thumbXsUrl) {
+        return {
+          thumb_xs_url: this.thumbXsUrl,
+        };
+      } else if (this.event?.media_items?.length) {
         return this.event.media_items[this.backgroundMediaIndex];
       } else {
         return null;
@@ -150,7 +156,7 @@ export default {
       backface-visibility: hidden;
       transform: translate3d(0, 0, 0);
       transform: translateZ(0) scale(2);
-      filter: blur(20px);
+      filter: blur(50px);
       // position by top left corner of image
       left: calc(0px + (100% / 2) - 128px);
       top: calc(0px + (100% / 2) - 128px);
@@ -159,6 +165,15 @@ export default {
         -webkit-backface-visibility: hidden;
         -webkit-transform: translate3d(0, 0, 0) scale(2);
         // translate3d is a hack for safari to force gpu rendering of blur()
+      }
+    }
+  }
+}
+@media only screen and (max-width: 600px) {
+  .featured-media {
+    .media-wrapper {
+      .item {
+        filter: blur(30px);
       }
     }
   }

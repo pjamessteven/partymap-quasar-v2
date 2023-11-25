@@ -13,31 +13,26 @@
               marginLeft: '16px',
               borderRadius: '0px',
             }
-          : { bottom: '0px', height: '0px', borderRadius: '0px' }
+          : { bottom: '0px', height: '0px', borderRadius: '0px', width: '4px' }
       "
     >
       <div class="mobile-image-container" v-if="$q.screen.lt.md">
-        <transition appear enter-active-class="animated fadeIn slower">
-          <div class="image-container-background" v-if="artist">
-            <img :src="computedSmImageSrc" style="z-index: 2" />
+        <div class="image-container-background">
+          <img :src="computedSmImageSrc" style="z-index: 2" />
 
-            <img
-              style="z-index: 3"
-              v-show="loadedFullRes"
-              :src="computedImageSrc"
-              @load="loadedFullRes = true"
-            />
+          <img
+            style="z-index: 3"
+            v-show="loadedFullRes"
+            :src="computedImageSrc"
+            @load="loadedFullRes = true"
+          />
 
-            <div class="image-container-overlay" />
-          </div>
-        </transition>
+          <div class="image-container-overlay" />
+        </div>
 
         <div class="flex-column mobile-title q-pa-md">
-          <div class="text-h5 inter bolder">
+          <div class="text-h4 inter bolder">
             <b>{{ computedName }}</b>
-          </div>
-          <div class="o-050" v-if="artist">
-            {{ artist.disambiguation }}
           </div>
         </div>
       </div>
@@ -90,13 +85,21 @@
           </div>
         </div>
       </div>
+      <InnerLoading v-if="loading" :solid="false" style="padding-top: 256px" />
+
       <div
         class="artist-content flex row justify-center no-wrap"
-        style="width: 100%"
+        style="width: 100%; position: relative"
       >
         <div
-          class="main-content q-mb-lg flex col col-xs-12 col-md-10 col-lg-10 col-xl-8"
+          class="main-content q-mb-lg flex column col-xs-12 col-md-10 col-lg-10 col-xl-8"
         >
+          <div
+            class="o-080 q-mt-lg"
+            v-if="artist && artist.disambiguation?.length > 0"
+          >
+            {{ artist.disambiguation }}
+          </div>
           <ArtistDetails
             v-if="$q.screen.lt.md"
             @refreshArtist="refreshArtist()"
@@ -193,6 +196,7 @@
 <script>
 import { getArtistRequest, refreshArtistRequest } from 'src/api';
 import { toRaw } from 'vue';
+import InnerLoading from 'src/components/InnerLoading.vue';
 
 import _ from 'lodash';
 import EventDateCard from 'components/EventDateCard.vue';
@@ -229,6 +233,7 @@ export default {
   components: {
     EventDateCard,
     ArtistDetails,
+    InnerLoading,
   },
   data() {
     return {
@@ -341,7 +346,9 @@ export default {
     },
     computedSmImageSrc() {
       // make things seem faster by showing the thumbnail thats already loaded by ArtistHead component
-      if (this.artist?.media_items?.[0]) {
+      if (this.$route.query.thumb_xs_url) {
+        return this.$route.query.thumb_xs_url;
+      } else if (this.artist?.media_items?.[0]) {
         return this.artist.media_items[0].thumb_xs_url;
       } else {
         return '';
@@ -513,6 +520,9 @@ export default {
 @media only screen and (max-width: 1023px) {
   .body--light {
     .artist-page {
+      .image-container-background {
+        background: $b-2;
+      }
       :deep(.artist-details) {
         .details {
           color: black;
@@ -522,6 +532,10 @@ export default {
   }
   .artist-page {
     padding-top: 0px !important;
+
+    .image-container-background {
+      background: $bi-2;
+    }
     .artist-content {
       .main-content {
         max-width: 100vw;
