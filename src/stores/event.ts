@@ -190,7 +190,10 @@ export const useEventStore = defineStore('event', {
     },
     async suggestEventDateEdit(payload: EventDateUpdate) {
       try {
-        const response = suggestEventDateEditRequest(this.event?.id, payload);
+        const response = suggestEventDateEditRequest(
+          this.selectedEventDate?.id,
+          payload
+        );
         return response;
       } catch (e) {
         throw e;

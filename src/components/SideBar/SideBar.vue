@@ -120,6 +120,7 @@ import { mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
+import WheelIndicator from 'wheel-indicator';
 
 export default {
   components: {
@@ -131,13 +132,11 @@ export default {
     SearchComponent,
   },
   async mounted() {
-    /*
     this.wheelIndicator = new WheelIndicator({
       elem: this.$refs.sidebar,
       callback: this.onMouseWheel,
       preventMouse: false,
     });
-    */
     if (this.$refs.resizer)
       this.$refs.resizer.addEventListener('mousedown', (event) => {
         document.addEventListener('mousemove', this.resize, false);
@@ -156,6 +155,11 @@ export default {
         //this.sidebarExpanded = false;
       }
     });
+  },
+  unmounted() {
+    if (this.wheelIndicator) {
+      this.wheelIndicator.destroy();
+    }
   },
   data() {
     return {

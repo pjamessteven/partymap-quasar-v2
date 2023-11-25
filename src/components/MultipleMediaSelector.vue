@@ -218,6 +218,7 @@ div.file-listing img {
 
 .upload-component {
   z-index: 100;
+  width: 100%;
 }
 
 .file-input {

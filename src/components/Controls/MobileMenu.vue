@@ -19,7 +19,7 @@ export default {
         if (newv) {
           this.showDialog();
         } else if (this.dialog) {
-          //  this.dialog.hide();
+          this.dialog.hide();
         }
       });
     },

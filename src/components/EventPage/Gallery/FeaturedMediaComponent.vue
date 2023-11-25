@@ -175,7 +175,7 @@ export default {
       img,
       video {
         cursor: pointer;
-        border-radius: 18px !important;
+        // border-radius: 18px !important;
 
         max-height: 100%;
         max-width: 100%;

@@ -43,6 +43,7 @@
                 }"
               >
                 <div
+                  style="margin-top: -8px"
                   class="ellipsis text-h4 inter bolder"
                   v-if="$q.screen.lt.md"
                 >
@@ -89,15 +90,16 @@
                   </span>
                   <q-btn
                     flat
-                    class="q-pa-md"
+                    class=""
                     :class="{
-                      'q-ml-md': $q.screen.lt.md,
+                      'q-ml-md q-pa-sm': $q.screen.lt.md,
+                      'q-pa-md': $q.screen.gt.sm,
                     }"
                     @click.stop="() => getFineLocation()"
                     :style="
                       $q.screen.gt.sm
                         ? 'margin-right: -16px; border-radius: 100px!important;'
-                        : 'border-radius: 100px!important;'
+                        : 'margin-right: 0px; border-radius: 100px!important;'
                     "
                   >
                     <template v-slot:default>
@@ -153,14 +155,14 @@
                 class="flex message"
                 :class="{
                   'q-mx-lg  q-mb-md ': $q.screen.gt.sm,
-                  'q-mx-md  ': $q.screen.lt.md,
+                  'q-mx-md q-mt-sm ': $q.screen.lt.md,
                 }"
                 @click="showMessage = !showMessage"
               >
                 <div
                   class="flex grow no-wrap justify-between inter q-pb-md"
                   :class="{
-                    ' q-pt-md t3 items-center ': $q.screen.lt.md,
+                    ' q-pt-sm t3 items-center ': $q.screen.lt.md,
                     ' q-mt-sm  inter text-large semibold t3 ': $q.screen.gt.sm,
 
                     ' items-end': $q.screen.gt.sm,
@@ -180,7 +182,7 @@
                   v-if="showMessage"
                   class="flex column items-start justify-start t1 q-mt-sm q-mb-md"
                 >
-                  PartyMap is a community-driven and crowd-sourced platform for
+                  PartyMap is a community-driven, crowd-sourced platform for
                   finding parties and festivals around the world!
                   <p />
                   Anyone can submit an event that they know about, as long as
@@ -519,7 +521,7 @@
                       class="t1 inter semibold location-header q-py-sm flex row items-center justify-between"
                       :class="
                         $q.screen.gt.sm
-                          ? 'q-pl-lg  t1 inter semibold'
+                          ? 'q-pl-lg q-mt-md t1 inter semibold'
                           : 'q-pl-md'
                       "
                     >

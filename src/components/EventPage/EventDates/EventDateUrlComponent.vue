@@ -20,14 +20,15 @@
       :class="$q.screen.gt.sm ? 'text-large' : ''"
     >
       <div
-        class="ellipsis flex justify-between"
+        class="ellipsis flex"
+        :class="$q.screen.gt.xs ? 'justify-between' : 'column'"
         style="white-space: pre-line; width: 100%"
         v-if="computedExternalUrl"
       >
         <div class="flex column" :class="$q.screen.gt.sm ? 'text-large' : ''">
           <div class="t2">Link</div>
           <a
-            class="t3"
+            class="t3 link-hover"
             :href="computedExternalUrl"
             style="text-decoration: none"
             target="_blank"

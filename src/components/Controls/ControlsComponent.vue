@@ -465,7 +465,7 @@ export default {
     }
 
     .scroll-wrapper {
-      height: 46px;
+      height: 48px;
       padding-right: 64px;
     }
   }

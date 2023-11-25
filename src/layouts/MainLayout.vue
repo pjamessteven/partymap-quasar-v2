@@ -151,7 +151,7 @@ export default {
         }
       } else {
         if (
-          (this.$q.screen.lt.md && this.showPanel) ||
+          (this.$q.screen.lt.sm && this.showPanel) ||
           (this.$route.name !== 'Explore' &&
             this.$route.meta.mapOverlay === false &&
             this.$q.screen.gt.xs)

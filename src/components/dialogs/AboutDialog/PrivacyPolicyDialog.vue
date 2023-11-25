@@ -58,9 +58,7 @@
       </p>
       <p>
         When you connect to PartyMap.com, your IP address, browser user-agent
-        and rough location is logged. This gives me a rough idea about who is
-        actually using this bloody website [laughing crying emoji], where it's
-        popping off, and if they're using a phone or desktop.
+        and rough location is logged.
       </p>
 
       <u><b>Third-party login disclaimer (Google and FaceBook)</b></u>
@@ -68,19 +66,17 @@
       <p>
         When you login with your Google or Facebook account, we don't receive
         your login credentials as these are processed by Google or Facebook (the
-        authentication provider). We only request the bare-minumum information
-        from the authentication provider, which may consist of your full name,
-        email address and date of birth. We only store your email address in our
-        database, as this is the only personal information we require to create
-        a profile.
+        authentication provider). We request the bare-minumum information from
+        the authentication provider, and we store only your email address in our
+        system.
       </p>
       <p>
-        If you delete your PartyMap account, your data (email address) will be
-        removed from our database.
+        If you delete your PartyMap account, your data will be removed
+        completely from our database.
       </p>
       <p>
-        If you originally logged in with Google or Facebook, but you want to
-        move away from it while keeping your PartyMap account, you can add a
+        If you originally logged in with Google or Facebook, but you want to be
+        able to log in with an email and passowrd combination, you can add a
         password from the account page and continue to log in with the email
         address affiliated with the third-party login provider and your newly
         created password.

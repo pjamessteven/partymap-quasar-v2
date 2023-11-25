@@ -264,7 +264,7 @@
                   <div v-else-if="!!event" class="flex row no-wrap">
                     <EventDateSidebarDesktop
                       v-if="$q.screen.gt.sm"
-                      class="q-mr-lg"
+                      class="q-mr-lg q-mt-md"
                     />
                     <div
                       class="flex column grow"
@@ -569,9 +569,12 @@
                         />
                         <EventDates />
 
-                        <DescriptionComponent :editing="editing" />
+                        <DescriptionComponent
+                          :editing="editing"
+                          v-if="editing || event?.full_description?.length > 0"
+                        />
 
-                        <ReviewsComponent class="q-mt-xl q-mb-xl" />
+                        <ReviewsComponent class="q-mt-md q-mb-xl" />
                       </div>
                     </div>
                   </div>
@@ -1352,7 +1355,7 @@ a {
             border-right: 1px solid $b-4 !important;
             border-bottom: 1px solid $b-4 !important;
             background: white;
-            min-height: 20vh;
+            min-height: 50vh;
 
             .event-buttons {
               //background: #fafafa; // z-index: 100;
@@ -1459,6 +1462,7 @@ a {
     .sticky-editing-footer {
       position: fixed;
       bottom: 0px;
+      pointer-events: all;
       left: 0px;
       width: 100%;
       z-index: 1000;
