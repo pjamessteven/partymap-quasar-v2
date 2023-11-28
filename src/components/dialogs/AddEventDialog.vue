@@ -1,10 +1,5 @@
 <template>
-  <q-dialog
-    ref="dialog"
-    @hide="onDialogHide"
-    transition-show="jump-up"
-    transition-hide="jump-down"
-  >
+  <q-dialog ref="dialog" transition-show="jump-up" transition-hide="jump-down">
     <q-card class="q-dialog-plugin dialog-card">
       <q-card-section class="flex items-center dialog-card-header">
         <div class="text-h6 inter bolder">

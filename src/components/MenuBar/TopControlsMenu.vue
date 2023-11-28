@@ -204,7 +204,6 @@ export default {
       mapStyleOptions: [
         { label: this.$t('nav.satellite_map'), value: 'satellite' },
         { label: this.$t('nav.transport_map'), value: 'transport' },
-        { label: 'Toner', value: 'toner' },
       ],
     };
   },

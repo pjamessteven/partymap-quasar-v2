@@ -440,7 +440,7 @@ export default {
   position: relative;
   height: 48px;
   border-radius: 48px;
-  overflow: hidden;
+  overflow: hidden !important;
   .control-scroll-area {
     height: 48px;
     width: 100%;
@@ -455,6 +455,9 @@ export default {
       white 100%
     );
     overflow-y: hidden;
+    :deep(.q-scrollarea__container) {
+      overflow-y: hidden !important;
+    }
 
     &.disable-scroll {
       overflow: visible;

@@ -99,7 +99,7 @@
       <div
         class="resizer flex row items-center"
         ref="resizer"
-        v-if="$q.screen.gt.sm"
+        v-if="$q.screen.gt.lg"
       >
         <q-icon name="las la-grip-lines-vertical" />
       </div>
@@ -558,8 +558,6 @@ export default {
         position: sticky;
         top: 0;
         z-index: 1000;
-        border-top-right-radius: 18px;
-        border-top-left-radius: 18px;
       }
       &.sidebar-desktop-expanded {
         padding: 0 16px;
@@ -695,6 +693,7 @@ export default {
     .sidebar {
       width: 50vw !important;
       // padding-bottom: 134px;
+
       &.sidebar-mobile-nearby {
         //transform: translate3d(0, calc(100% - 60vh), 0);
       }
@@ -866,12 +865,13 @@ export default {
           ),
           0
         );
-        padding-bottom: calc(188px + var(--safe-area-inset-top));
+        padding-bottom: calc(180px + var(--safe-area-inset-top));
       }
       @supports (
-        (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
-          (-webkit-appearance: none)
-      ) {
+          (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+            (-webkit-appearance: none)
+        )
+        and (max-width: 600px) {
         transform: translate3d(
           0,
           calc(

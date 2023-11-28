@@ -1,5 +1,11 @@
 <template>
-  <div class="flex row menubar justify-between items-center">
+  <div
+    class="flex row menubar justify-between items-center"
+    :class="{
+      iphone: $q.platform.is.iphone || $q.platform.is.ipod,
+      ipad: $q.platform.is.ipad && $q.platform.is.capacitor,
+    }"
+  >
     <div class="menubar-background" :style="computedStyle" />
 
     <MenuBarLogo
@@ -74,7 +80,9 @@ export default {
     },
   },
   mounted() {
-    if (this.$q.platform.is.capacitor) {
+    if (this.$q.platform.is.ipad) {
+      StatusBar.hide();
+    } else if (this.$q.platform.is.capacitor) {
       // Display content under transparent status bar (Android only)
       StatusBar.setOverlaysWebView({ overlay: true });
       if (this.iconColor === 'black') {
@@ -278,6 +286,24 @@ export default {
   height: 64px;
   position: relative;
   transition: height 0.3s ease;
+
+  // android
+  @supports ((top: var(--safe-area-inset-top))) {
+    //padding-top: calc(env(safe-area-inset-top));
+    //height: calc(env(safe-area-inset-top) + 62px);
+    top: var(--safe-area-inset-top);
+  }
+  // ios specific top padding
+  @supports (
+    (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
+      (-webkit-appearance: none)
+  ) {
+    top: calc(var(--safe-area-inset-top) - 0px);
+  }
+
+  &.ipad {
+    top: 0px !important;
+  }
   .menubar-background {
     position: absolute;
     height: 100%;
@@ -352,20 +378,6 @@ export default {
     position: fixed;
     top: 0px;
 
-    // android
-    @supports ((top: var(--safe-area-inset-top))) {
-      //padding-top: calc(env(safe-area-inset-top));
-      //height: calc(env(safe-area-inset-top) + 62px);
-      top: var(--safe-area-inset-top);
-    }
-    // ios specific top padding
-    @supports (
-      (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
-        (-webkit-appearance: none)
-    ) {
-      top: calc(var(--safe-area-inset-top) - 0px);
-    }
-
     .menubar-background {
       @supports ((top: var(--safe-area-inset-top))) {
         padding-top: var(--safe-area-inset-top);
@@ -391,13 +403,14 @@ export default {
   .native-mobile {
     // ios specific padding for capcaitor app
     .menubar {
-      @supports (
-        (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
-          (-webkit-appearance: none)
-      ) {
-        top: calc(env(safe-area-inset-top) - 8px);
+      &.iphone {
+        @supports (
+          (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+            (-webkit-appearance: none)
+        ) {
+          top: calc(env(safe-area-inset-top) - 8px);
+        }
       }
-
       .menubar-background {
         @supports ((top: var(--safe-area-inset-top))) {
           padding-top: var(--safe-area-inset-top);

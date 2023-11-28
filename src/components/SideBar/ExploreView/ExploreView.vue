@@ -247,7 +247,10 @@ export default {
     if (this.eventDates?.length === 0) {
       this.blockUpdates = false;
       if (!this.userLocation) {
+        this.blockUpdates = true;
+
         await this.loadIpInfo();
+        this.blockUpdates = false;
         this.getInitialList();
       } else {
         this.getInitialList();

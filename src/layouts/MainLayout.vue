@@ -34,6 +34,7 @@
       <!-- There's two router views because we want different transitions for different pages
   and we're lazy... -->
       <router-view
+        key="1"
         name="event"
         v-slot="{ Component }"
         class="main-layout-router event-router"
@@ -49,6 +50,7 @@
         </transition>
       </router-view>
       <router-view
+        key="2"
         v-slot="{ Component }"
         class="main-layout-router"
         v-bind:class="{
@@ -260,11 +262,13 @@ export default {
     }
     // ios specific top padding
     @supports (
-      (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
-        (-webkit-appearance: none)
-    ) {
+        (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+          (-webkit-appearance: none)
+      )
+      and (max-width: 600px) {
       padding-top: calc(env(safe-area-inset-top) - 8px);
     }
+
     @supports (top: env(safe-area-inset-bottom)) {
       // we only really care about bottom padding when it's overlaying the nav bar
       //padding-bottom: calc(env(safe-area-inset-bottom) - 16px);
@@ -320,7 +324,7 @@ export default {
     }
   }
 }
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 600px) {
   .body--dark {
     .main-layout {
       .overlay {

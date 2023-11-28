@@ -582,7 +582,7 @@ export default {
     SelectTagsComponent,
     SelectArtistsComponent,
   },
-  props: { host: { default: false } },
+  props: { host: { type: Boolean, default: false } },
   data() {
     return {
       descriptionAttribute: null,

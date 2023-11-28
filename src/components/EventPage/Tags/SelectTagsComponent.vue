@@ -9,7 +9,7 @@
       @update:model-value="queryTags"
       :loading="resultsLoading"
       outlined
-      @keyup.enter="search"
+      @keyup.enter="loadInitialList"
       clearable
       clear-icon="las la-times"
     >
@@ -281,7 +281,7 @@ export default {
       }
     },
     resultsLoading() {
-      if (this.loadingOptions || this.loadingQuery) {
+      if (this.loadingQuery) {
         return true;
       } else {
         return false;

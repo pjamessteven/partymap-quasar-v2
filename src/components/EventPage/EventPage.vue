@@ -274,6 +274,7 @@
                         class="flex column"
                         :class="{
                           'q-px-md ': $q.screen.lt.sm,
+                          'q-mt-md': $q.screen.gt.xs && $q.screen.lt.md,
                           'q-px-xl': $q.screen.gt.xs && $q.screen.lt.md,
                         }"
                       >

@@ -35,11 +35,12 @@
           >
             <div class="scroll-stuff flex column">
               <div
-                class="flex column mobile-location-header q-mt-md"
+                class="flex column mobile-location-header"
                 style="width: 100%"
                 :class="{
-                  'q-px-lg q-pt- q-mb-sm': $q.screen.gt.sm,
-                  'q-px-md   ': $q.screen.lt.md,
+                  'q-px-lg q-mb-sm q-mt-md': $q.screen.gt.md,
+                  'q-px-lg q-mt-sm': $q.screen.gt.sm && $q.screen.lt.lg,
+                  'q-px-md  q-mt-md ': $q.screen.lt.md,
                 }"
               >
                 <div
@@ -155,7 +156,7 @@
                 class="flex message"
                 :class="{
                   'q-mx-lg  q-mb-md ': $q.screen.gt.sm,
-                  'q-mx-md q-mt-sm ': $q.screen.lt.md,
+                  'q-mx-md q-mt-xs ': $q.screen.lt.md,
                 }"
                 @click="showMessage = !showMessage"
               >
@@ -1190,9 +1191,6 @@ export default {
       position: relative;
       padding-top: 8px;
 
-      .mobile-location-header {
-        margin-top: 16px;
-      }
       .location-header {
         position: sticky;
         top: -1px;

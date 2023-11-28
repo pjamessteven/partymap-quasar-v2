@@ -5,6 +5,11 @@
       'satellite-enabled': mapStyle === 'satellite',
     }"
   >
+    <div class="location-button-wrapper">
+      <div class="location-button t1" v-on:click="locateMe">
+        <i class="mdi mdi-crosshairs-gps" />
+      </div>
+    </div>
     <div
       ref="map"
       style="height: 100%; z-index: 0"
@@ -79,7 +84,7 @@ export default {
       mapMarkers: null,
       mapMarkersPermanentTooltip: null,
       satelliteMapOpacity: 1,
-      satelliteLabelLayerOpacity: 0.48,
+      satelliteLabelLayerOpacity: 0.9,
       monochromeMapOpactiy: 0.68,
       windowHeight: 0,
       clientHeight: 0,
@@ -320,8 +325,18 @@ export default {
   },
 
   methods: {
+    ...mapActions(useMainStore, ['getFineLocation']),
     ...mapActions(useQueryStore, ['loadPoints']),
     ...mapActions(useNearbyStore, ['setMapBoundsNearby']),
+    async locateMe() {
+      try {
+        await this.getFineLocation();
+        this.fitBoundsForExplorePage(this.userLocation);
+      } catch (e) {
+        this.fitBoundsForExplorePage(this.userLocation);
+      }
+      // go to users location
+    },
     goBack() {
       if (this.routerHistory.length > 0) {
         this.$router.go(-1);
@@ -533,17 +548,22 @@ export default {
       });
 
       toRaw(this.map).on('movestart', () => {
-        /*
-        this.exploreMapView = {
-          latlng: this.map.getCenter(),
-          zoom: this.map.getZoom(),
-        };
-        */
         this.mapMoving = true;
       });
 
       toRaw(this.map).on('moveend', (event) => {
         if (!this.blockUpdates) {
+          // ipad/tablet view doesnt respect mousedown so we also do on move end
+          if (this.$route.name === 'Explore' && this.$q.platform.is.ipad) {
+            // switch to explore view
+            if (
+              this.sidebarPanel !== 'explore' &&
+              this.sidebarPanel !== 'favorites'
+            ) {
+              this.sidebarPanel = 'explore';
+            }
+            this.showPanel = false;
+          }
           /*
           this.exploreMapView = {
             latlng: this.map.getCenter(),
@@ -774,6 +794,14 @@ export default {
 
 <style lang="scss">
 .body--dark {
+  .location-button-wrapper {
+    .location-button {
+      background: black;
+      border-radius: 4px;
+      outline: 2px solid $bi-3 !important;
+      color: $ti-2;
+    }
+  }
   .map {
     background: rgb(0, 0, 0);
     //background: linear-gradient(black, rgb(68, 68, 68));
@@ -857,6 +885,13 @@ export default {
   }
 }
 .body--light {
+  .location-button-wrapper {
+    .location-button {
+      background: white;
+      border-radius: 4px;
+      outline: 2px solid rgba(0, 0, 0, 0.2) !important;
+    }
+  }
   .map {
     background: white;
     .leaflet-map-pane {
@@ -994,6 +1029,29 @@ img.leaflet-marker-shadow {
 }
 */
 
+.location-button-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+
+  .location-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    position: absolute;
+    right: 22px;
+    z-index: 500;
+    pointer-events: all;
+    cursor: pointer;
+    height: 30px;
+    width: 30px;
+    border-radius: 4px;
+    bottom: calc(50vh + 38px);
+  }
+}
+
 canvas {
   opacity: 1;
   transition: opacity 0.5s;
@@ -1072,6 +1130,14 @@ canvas {
     top: unset;
     transform: unset;
     bottom: calc(268px + env(safe-area-inset-bottom));
+  }
+  .location-button-wrapper {
+    .location-button {
+      bottom: 344px;
+      @supports ((top: var(--safe-area-inset-bottom))) {
+        bottom: calc(344px + var(--safe-area-inset-bottom));
+      }
+    }
   }
 }
 </style>

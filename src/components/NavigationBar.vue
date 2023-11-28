@@ -433,6 +433,8 @@ export default {
       position: relative;
       right: unset;
       //height: 64px;
+      border-radius: 0px !important;
+
       .q-tab {
         flex-grow: 1;
         min-height: 68px;
