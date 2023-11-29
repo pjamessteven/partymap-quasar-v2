@@ -56,8 +56,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>PartyMap uses your location to show you what&apos;s nearby</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>PartyMap uses your location to show you what&apos;s nearby</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-
 </dict>
 </plist>

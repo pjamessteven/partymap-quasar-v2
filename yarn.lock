@@ -1077,6 +1077,11 @@
   dependencies:
     "tslib" "^2.1.0"
 
+"@capacitor/geolocation@^5.0.6":
+  "integrity" "sha512-3pB3CBa38aDMk7zouGbjOMBytcaqRMBosMcqNrOQjE5LMBAPUI1cEGrUzmkj+scP0SIyYGA95Tkj0BAnzvNWag=="
+  "resolved" "https://registry.npmjs.org/@capacitor/geolocation/-/geolocation-5.0.6.tgz"
+  "version" "5.0.6"
+
 "@capacitor/status-bar@^5.0.6":
   "integrity" "sha512-7od8CxsBnot1XMK3IeOkproFL4hgoKoWAc3pwUvmDOkQsXoxwQm4SR9mLwQavv1XfxtHbFV9Ukd7FwMxOPSViw=="
   "resolved" "https://registry.npmjs.org/@capacitor/status-bar/-/status-bar-5.0.6.tgz"

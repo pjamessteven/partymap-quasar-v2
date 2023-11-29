@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia';
 import { getIpInfoRequest } from 'src/api';
 import { IpInfo } from 'src/types/ip_info';
-import { Coordinates } from 'src/types/map';
-import NodeGeocoder from 'node-geocoder';
+import { Geolocation } from '@capacitor/geolocation';
 //import HttpsAdapter from 'node-geocoder/lib/httpadapter/fetchadapter';
 import { Notify } from 'quasar';
-import { Screen } from 'quasar';
+import { Screen, Platform } from 'quasar';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 interface MainStoreState {
   darkMode: boolean;
@@ -83,9 +82,40 @@ export const useMainStore = defineStore('main', {
         //throw error;
       }
     },
+    async reverseGecodeUserLocation() {
+      try {
+        const response: any = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${this.userLocation.lat}&lon=${this.userLocation.lng}&format=json&addressdetails=1`,
+          {
+            method: 'GET',
+            headers: {
+              'user-agent': 'PartyMap <info@partymap.com>',
+            },
+          }
+        );
+        const data = await response.json();
+        const address = data.address;
+
+        if (address?.city?.length > 0) {
+          this.userLocationCity = address.city;
+        } else if (address.administrativeLevels?.level1short) {
+          this.userLocationCity = address.administrativeLevels?.level1short;
+        } else if (address.administrativeLevels?.level2short) {
+          this.userLocationCity = address.administrativeLevels?.level2short;
+        }
+        this.userLocationCountry = address.country;
+        this.userLocationLoading = false;
+        this.userLocationFromSearch = false;
+      } catch (e) {
+        // just show the co-ords if reverse geocoding fails
+        this.userLocationCity =
+          this.userLocation?.lat + ', ' + this.userLocation?.lng;
+        this.userLocationLoading = false;
+      }
+    },
     async getFineLocation() {
       return new Promise((resolve, reject) => {
-        if (navigator.geolocation) {
+        if (navigator.geolocation && !Platform.is.capacitor) {
           this.userLocationLoading = true;
           navigator.geolocation.getCurrentPosition(
             async (position) => {
@@ -103,40 +133,8 @@ export const useMainStore = defineStore('main', {
               };
 
               this.userLocationLoading = false;
-
-              try {
-                const response: any = await fetch(
-                  `https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json&addressdetails=1`,
-                  {
-                    method: 'GET',
-                    headers: {
-                      'user-agent': 'PartyMap <info@partymap.com>',
-                    },
-                  }
-                );
-                const data = await response.json();
-                const address = data.address;
-
-                if (address?.city?.length > 0) {
-                  this.userLocationCity = address.city;
-                } else if (address.administrativeLevels?.level1short) {
-                  this.userLocationCity =
-                    address.administrativeLevels?.level1short;
-                } else if (address.administrativeLevels?.level2short) {
-                  this.userLocationCity =
-                    address.administrativeLevels?.level2short;
-                }
-                this.userLocationCountry = address.country;
-                this.userLocationLoading = false;
-                this.userLocationFromSearch = false;
-                resolve(null);
-              } catch (e) {
-                // just show the co-ords if reverse geocoding fails
-                this.userLocationCity =
-                  position.coords.latitude + ', ' + position.coords.longitude;
-                this.userLocationLoading = false;
-                resolve(null);
-              }
+              await this.reverseGecodeUserLocation();
+              resolve(null);
             },
             () => {
               Notify.create('Cannot get your precise location');
@@ -145,6 +143,31 @@ export const useMainStore = defineStore('main', {
             },
             { timeout: 10000 }
           );
+        } else if (Platform.is.capacitor) {
+          Geolocation.getCurrentPosition()
+            .then(async (position) => {
+              this.fineLocation = true;
+              // show coords while loading place name
+              if (!this.userLocation) {
+                const unknownCityCoords =
+                  position.coords.latitude + ', ' + position.coords.longitude;
+                this.userLocationCity = unknownCityCoords;
+              }
+
+              this.userLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              };
+
+              this.userLocationLoading = false;
+              await this.reverseGecodeUserLocation();
+              resolve(null);
+            })
+            .catch((error) => {
+              Notify.create('Cannot get your precise location');
+              this.userLocationLoading = false;
+              resolve(null);
+            });
         } else {
           this.userLocationLoading = false;
           resolve(null);

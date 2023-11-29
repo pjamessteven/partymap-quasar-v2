@@ -52,6 +52,11 @@
   dependencies:
     "tslib" "^2.1.0"
 
+"@capacitor/geolocation@^5.0.6":
+  "integrity" "sha512-3pB3CBa38aDMk7zouGbjOMBytcaqRMBosMcqNrOQjE5LMBAPUI1cEGrUzmkj+scP0SIyYGA95Tkj0BAnzvNWag=="
+  "resolved" "https://registry.npmjs.org/@capacitor/geolocation/-/geolocation-5.0.6.tgz"
+  "version" "5.0.6"
+
 "@capacitor/ios@^5.0.0-beta.0":
   "integrity" "sha512-KsICm57H7rUOcQ+V7IOIPe87VOiXGWFrsCqAYxDWAS++hxTR7sn8Z0pcq7Ir2xS6as0ct1eZva9BokykpYaUXQ=="
   "resolved" "https://registry.npmjs.org/@capacitor/ios/-/ios-5.4.2.tgz"
