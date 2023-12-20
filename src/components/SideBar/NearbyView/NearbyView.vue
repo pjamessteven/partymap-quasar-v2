@@ -255,7 +255,7 @@
                   @click.stop="() => (sidebarPanel = 'explore')"
                   flat
                   no-caps
-                  class="nav-button q-px-md q-py-xs"
+                  class="nav-button primary q-px-md q-py-xs"
                 >
                   <div class="flex justify-center items-center grow">
                     <span>Explore the map </span>

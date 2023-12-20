@@ -55,6 +55,7 @@ export default {
       zoom: 3,
       focusMarkerLayer: L.featureGroup(),
       eventDateHoverLayer: L.featureGroup(),
+      userLocationMarkerLayer: L.featureGroup(),
       withPopup: L.latLng(47.41322, -1.219482),
       withTooltip: L.latLng(47.41422, -1.250482),
       currentZoom: 11.5,
@@ -187,6 +188,10 @@ export default {
     userLocation: {
       handler: function (newval) {
         this.fitBoundsForExplorePage(newval);
+        // add location marker for fine location
+        if (!this.userLocationFromSearch && this.fineLocation) {
+          this.addUserLocationMarker(newval);
+        }
         // wait for animation
         setTimeout(() => {
           if (!this.blockUpdates) {
@@ -328,6 +333,24 @@ export default {
     ...mapActions(useMainStore, ['getFineLocation']),
     ...mapActions(useQueryStore, ['loadPoints']),
     ...mapActions(useNearbyStore, ['setMapBoundsNearby']),
+    addUserLocationMarker(latlng) {
+      if (
+        this.userLocationMarkerLayer &&
+        toRaw(this.map).hasLayer(toRaw(this.userLocationMarkerLayer))
+      ) {
+        this.userLocationMarkerLayer.clearLayers();
+        this.userLocationMarkerLayer.remove();
+      }
+      var markers = [
+        L.marker(latlng, {
+          icon: this.locationIcon,
+          zIndexOffset: 5000,
+        }),
+      ];
+
+      this.userLocationMarkerLayer = L.featureGroup(markers);
+      this.userLocationMarkerLayer.addTo(toRaw(this.map));
+    },
     async locateMe() {
       try {
         await this.getFineLocation();
@@ -733,6 +756,7 @@ export default {
       'currentMapTileUrl',
       'labelsMapTileUrl',
       'defaultIcon',
+      'locationIcon',
     ]),
     ...mapWritableState(useMapStore, [
       'peekMap',
@@ -751,6 +775,7 @@ export default {
     ...mapWritableState(useMainStore, [
       'userLocationFromSearch',
       'userLocation',
+      'fineLocation',
       'sidebarPanel',
       'showPanel',
       'darkMode',
@@ -974,6 +999,60 @@ export default {
             background-position: center !important;
             filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.2));
           }
+        }
+      }
+    }
+  }
+}
+
+:root {
+  --pulseSize: 28px;
+  --blue: rgba(95, 139, 250, 0.65);
+  --transparentBlue: rgba(95, 139, 250, 0);
+}
+.map {
+  .leaflet-map-pane {
+    .leaflet-marker-pane {
+      .location-marker-icon {
+        &::before {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          content: '';
+          background: radial-gradient(
+            circle,
+            rgba(0, 179, 255, 1) 0%,
+            rgba(25, 118, 210, 1) 100%
+          );
+          border-radius: 50%;
+          border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+        /*
+        width: var(--pulseSize);
+        height: var(--pulseSize);
+        border-radius: 50%;
+        background: var(--blue);
+        box-shadow: 0 0 0 var(--blue);
+        animation: pulsing 2s infinite;
+        transition: all 0.2s;
+        pointer-events: none;
+        */
+        pointer-events: none;
+      }
+
+      .location-marker-icon:active {
+        transform: scale(1.5);
+      }
+
+      @keyframes pulsing {
+        from {
+          box-shadow: 0 0 0 0 var(--blue);
+        }
+        70% {
+          box-shadow: 0 0 0 var(--pulseSize) var(--transparentBlue);
+        }
+        to {
+          box-shadow: 0 0 0 0 var(--transparentBlue);
         }
       }
     }

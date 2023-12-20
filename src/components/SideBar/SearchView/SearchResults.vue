@@ -149,13 +149,14 @@ export default {
       }
       this.closeSearchBar();
     },
+
     clickLocationResult(location) {
+      this.userLocationFromSearch = true;
       this.userLocation = {
         lat: parseFloat(location.location.lat),
         lng: parseFloat(location.location.lng),
       };
       let labelParts = location.label.split(',');
-      this.userLocationFromSearch = true;
       this.userLocationCountry = labelParts.pop();
       this.userLocationCity = labelParts?.[0];
       if (!this.userLocationCity) {
