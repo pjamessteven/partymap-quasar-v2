@@ -314,7 +314,9 @@ export default {
     },
     async onAppleDesktopLoginSuccess(data) {
       console.log(data);
-      await appleLogin(data.authorization.id_token);
+      this.loading = true;
+      await this.appleLogin(data.authorization.id_token);
+      this.loading = false;
       this.$router.push('/');
     },
     onAppleDesktopLoginFailure(error) {
