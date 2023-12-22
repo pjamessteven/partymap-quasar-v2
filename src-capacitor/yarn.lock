@@ -7,6 +7,14 @@
   "resolved" "https://registry.npmjs.org/@aashu-dubey/capacitor-statusbar-safe-area/-/capacitor-statusbar-safe-area-2.1.1.tgz"
   "version" "2.1.1"
 
+"@capacitor-community/apple-sign-in@^5.0.0":
+  "integrity" "sha512-Cz0cuJKv/KnIHMy9f4Gbc2kWhpxsLYv/NXNhc9mYRi9pYAdfhLSo/fvkcJSRs/g1PvNMA0FDDk0Hx2GHZLA5SQ=="
+  "resolved" "https://registry.npmjs.org/@capacitor-community/apple-sign-in/-/apple-sign-in-5.0.0.tgz"
+  "version" "5.0.0"
+  dependencies:
+    "@types/scriptjs" "0.0.2"
+    "scriptjs" "^2.5.9"
+
 "@capacitor/android@^5.0.0-beta.0":
   "integrity" "sha512-PlOTWpInXPnrbjoe59fA/a8wSfcoGxfkQQ+Jg4REZKOQelYHUQUP9CI1kn3YvRYNhFuWxnOC8NjCu+67rX9n8Q=="
   "resolved" "https://registry.npmjs.org/@capacitor/android/-/android-5.4.2.tgz"
@@ -167,6 +175,11 @@
   "integrity" "sha512-jxiZQFpb+NlH5kjW49vXxvxTjeeqlbsnTAdBTKpzEdPs9itay7MscYXz3Fo9VYFEsfQ6LJFitHad3faerLAjCw=="
   "resolved" "https://registry.npmjs.org/@types/node/-/node-20.8.3.tgz"
   "version" "20.8.3"
+
+"@types/scriptjs@0.0.2":
+  "integrity" "sha512-GFrUgzGYfNX3VWZwMyzr0JrBwzLv5Kes4BQBvo6hXdRy14/GBbpCiVwwB7v1o2xIEvFf+9GyznmYhuesQQjSag=="
+  "resolved" "https://registry.npmjs.org/@types/scriptjs/-/scriptjs-0.0.2.tgz"
+  "version" "0.0.2"
 
 "@types/slice-ansi@^4.0.0":
   "integrity" "sha512-+OpjSaq85gvlZAYINyzKpLeiFkSC4EsC6IIiT6v6TLSU5k5U83fHGj9Lel8oKEXM0HqgrMVCjXPDPVICtxF7EQ=="
@@ -534,6 +547,11 @@
   "integrity" "sha512-5f3k2PbGGp+YtKJjOItpg3P99IMD84E4HOvcfleTb5joCHNXYLsR9yWFPOYGgaeMPDubQILTCMdsFb2OMeOjtg=="
   "resolved" "https://registry.npmjs.org/sax/-/sax-1.1.4.tgz"
   "version" "1.1.4"
+
+"scriptjs@^2.5.9":
+  "integrity" "sha512-qGVDoreyYiP1pkQnbnFAUIS5AjenNwwQBdl7zeos9etl+hYKWahjRTfzAZZYBv5xNHx7vNKCmaLDQZ6Fr2AEXg=="
+  "resolved" "https://registry.npmjs.org/scriptjs/-/scriptjs-2.5.9.tgz"
+  "version" "2.5.9"
 
 "semver@^7.3.7":
   "integrity" "sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA=="

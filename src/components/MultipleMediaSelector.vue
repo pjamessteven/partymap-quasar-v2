@@ -4,7 +4,7 @@
       type="file"
       id="files"
       ref="files"
-      accept="image/*,video/*"
+      accept="image/*"
       :multiple="singleSelectMode ? false : true"
       v-on:change="appendFiles()"
       class="file-input"

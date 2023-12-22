@@ -832,8 +832,6 @@ export default {
       'Tell us how you would like to verify yourself as the host',
   },
   about: {
-    message:
-      'PartyMap is a community-driven and crowd-sourced platform for discovering festivals and experiences around the world. I basically built this because I wished something like this existed. If you have any thoughts, ideas or suggestions about PartyMap then please contact me through the feedback form or by email to ',
     message_2:
       'If your event has been listed by someone and you would like to have it removed, please look for the report button at the bottom of the event page. ',
     message_3:

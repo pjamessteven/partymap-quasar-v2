@@ -33,7 +33,7 @@
           <div class="flex justify-center items-center">
             <q-btn
               color="white"
-              style="width: 231px"
+              style="width: 231px; font-size: 15px"
               text-color="black "
               no-caps
               class="soft-button-shadow"
@@ -44,25 +44,64 @@
               "
             >
               <img
-                style="height: 20px; width: auto"
+                style="height: 14px; width: auto"
                 src="~assets/g-logo.png"
-                class="q-mr-md"
+                class="q-mr-sm"
               />
-              Continue with Google
+              Sign in with Google
             </q-btn>
             <q-btn
-              style="background: #1877f2; width: 231px"
-              text-color="white"
+              style="width: 231px; font-size: 15px; background: white"
               no-caps
+              text-color="black"
               class="soft-button-shadow q-mt-md"
-              icon="mdi-facebook"
-              v-bind:label="$t('auth.log_in_with_facebook')"
               :type="!$q.platform.is.nativeMobile ? 'a' : undefined"
               :href="
                 !$q.platform.is.nativeMobile ? facebookLoginUrl : undefined
               "
               @click="$q.platform.is.nativeMobile ? nativeFbLogin() : undefined"
-            />
+            >
+              <q-icon
+                name="mdi-facebook"
+                class="q-mr-sm"
+                style="color: #0165e1"
+                size="16px"
+              />
+              Sign in with Facebook
+            </q-btn>
+            <q-btn
+              v-if="$q.platform.is.ios"
+              style="width: 231px; font-size: 15px; background: white"
+              text-color="black"
+              no-caps
+              class="soft-button-shadow q-mt-md"
+              :type="!$q.platform.is.nativeMobile ? 'a' : undefined"
+              :href="
+                !$q.platform.is.nativeMobile ? facebookLoginUrl : undefined
+              "
+              @click="
+                $q.platform.is.nativeMobile ? nativeAppleLogin() : undefined
+              "
+            >
+              <q-icon
+                name="mdi-apple"
+                class="q-mr-sm"
+                style="color: black"
+                size="16px"
+              />
+              Sign in with Apple
+            </q-btn>
+            <vue-apple-login
+              v-else
+              class="apple-desktop-signin q-mt-md"
+              color="white"
+              :border="false"
+              type="sign in"
+              width="231"
+              height="36"
+              :onSuccess="onAppleDesktopLoginSuccess"
+              :onFailure="onAppleDesktopLoginFailure"
+            ></vue-apple-login>
           </div>
           <div
             class="t3 q-mt-md"
@@ -189,13 +228,17 @@
 
 <script>
 import { API_URL } from 'src/api';
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
+import { useMainStore } from 'src/stores/main';
 import { useAuthStore } from 'src/stores/auth';
 import InnerLoading from 'src/components/InnerLoading.vue';
 import TermsAndConditionsDialog from 'src/components/dialogs/AboutDialog/TermsAndConditionsDialog.vue';
 import PrivacyPolicyDialog from 'src/components/dialogs/AboutDialog/PrivacyPolicyDialog.vue';
 import { useQueryStore } from 'src/stores/query';
 import { Browser } from '@capacitor/browser';
+import { SignInWithApple } from '@capacitor-community/apple-sign-in';
+import shajs from 'sha.js';
+
 export default {
   name: 'LoginPage',
   components: { InnerLoading, TermsAndConditionsDialog, PrivacyPolicyDialog },
@@ -211,7 +254,7 @@ export default {
   },
   methods: {
     ...mapActions(useQueryStore, ['loadUserEventDates']),
-    ...mapActions(useAuthStore, ['login']),
+    ...mapActions(useAuthStore, ['login', 'appleLogin']),
     async _login() {
       this.loading = true;
       try {
@@ -239,8 +282,48 @@ export default {
     async nativeFbLogin() {
       await Browser.open({ url: this.facebookLoginUrl });
     },
+    nativeAppleLogin() {
+      const rawNonce = Date.now().toString();
+      const nonce = shajs('sha256').update(rawNonce).digest('hex');
+      let options = {
+        clientId: 'com.partymap.quasar',
+        redirectURI: 'https://www.partymap.com',
+        scopes: 'email name',
+        state: '12345',
+        nonce,
+      };
+      this.loading = true;
+
+      SignInWithApple.authorize(options)
+        .then(async (result) => {
+          console.log('result', result);
+          // Handle user information
+          // Validate token with server and create new session
+          await this.appleLogin(result.response.identityToken);
+          await this.loadUserEventDates('all', 'future');
+          this.$router.push('/');
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$q.notify('Apple login failed, please try again...');
+          this.loading = false;
+
+          // Handle error
+        });
+    },
+    async onAppleDesktopLoginSuccess(data) {
+      console.log(data);
+      await appleLogin(data.authorization.id_token);
+      this.$router.push('/');
+    },
+    onAppleDesktopLoginFailure(error) {
+      console.log(error);
+      this.$q.notify('Apple login failed, please try again...');
+    },
   },
   computed: {
+    ...mapState(useMainStore, ['darkMode']),
     facebookLoginUrl() {
       let url;
       if (this.$route.query.from) {
@@ -283,6 +366,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.apple-desktop-signin {
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.1) 0px 1px 2px 0px !important;
+  border-radius: 9px;
+  overflow: hidden;
+  &:hover {
+    filter: brightness(0.95);
+  }
+}
 .name-not-visible-text {
   text-align: center;
 }

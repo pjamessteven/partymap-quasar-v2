@@ -1032,6 +1032,14 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     "to-fast-properties" "^2.0.0"
 
+"@capacitor-community/apple-sign-in@^5.0.0":
+  "integrity" "sha512-Cz0cuJKv/KnIHMy9f4Gbc2kWhpxsLYv/NXNhc9mYRi9pYAdfhLSo/fvkcJSRs/g1PvNMA0FDDk0Hx2GHZLA5SQ=="
+  "resolved" "https://registry.npmjs.org/@capacitor-community/apple-sign-in/-/apple-sign-in-5.0.0.tgz"
+  "version" "5.0.0"
+  dependencies:
+    "@types/scriptjs" "0.0.2"
+    "scriptjs" "^2.5.9"
+
 "@capacitor/android@^5.4.2":
   "integrity" "sha512-PlOTWpInXPnrbjoe59fA/a8wSfcoGxfkQQ+Jg4REZKOQelYHUQUP9CI1kn3YvRYNhFuWxnOC8NjCu+67rX9n8Q=="
   "resolved" "https://registry.npmjs.org/@capacitor/android/-/android-5.4.2.tgz"
@@ -1778,6 +1786,11 @@
   "integrity" "sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA=="
   "resolved" "https://registry.npmjs.org/@types/retry/-/retry-0.12.0.tgz"
   "version" "0.12.0"
+
+"@types/scriptjs@0.0.2":
+  "integrity" "sha512-GFrUgzGYfNX3VWZwMyzr0JrBwzLv5Kes4BQBvo6hXdRy14/GBbpCiVwwB7v1o2xIEvFf+9GyznmYhuesQQjSag=="
+  "resolved" "https://registry.npmjs.org/@types/scriptjs/-/scriptjs-0.0.2.tgz"
+  "version" "0.0.2"
 
 "@types/semver@^7.3.12":
   "integrity" "sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw=="
@@ -6067,7 +6080,7 @@
   dependencies:
     "tslib" "^2.1.0"
 
-"safe-buffer@^5.1.0", "safe-buffer@>=5.1.0", "safe-buffer@~5.2.0", "safe-buffer@5.2.1":
+"safe-buffer@^5.0.1", "safe-buffer@^5.1.0", "safe-buffer@>=5.1.0", "safe-buffer@~5.2.0", "safe-buffer@5.2.1":
   "integrity" "sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ=="
   "resolved" "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.2.1.tgz"
   "version" "5.2.1"
@@ -6143,6 +6156,11 @@
     "@types/json-schema" "^7.0.4"
     "ajv" "^6.12.2"
     "ajv-keywords" "^3.4.1"
+
+"scriptjs@^2.5.9":
+  "integrity" "sha512-qGVDoreyYiP1pkQnbnFAUIS5AjenNwwQBdl7zeos9etl+hYKWahjRTfzAZZYBv5xNHx7vNKCmaLDQZ6Fr2AEXg=="
+  "resolved" "https://registry.npmjs.org/scriptjs/-/scriptjs-2.5.9.tgz"
+  "version" "2.5.9"
 
 "select-hose@^2.0.0":
   "integrity" "sha512-mEugaLK+YfkijB4fx0e6kImuJdCIt2LxCRcbEYPqRGCs4F2ogyfZU5IAZRdjCP8JPq2AtdNoC/Dux63d9Kiryg=="
@@ -6231,6 +6249,14 @@
   "integrity" "sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw=="
   "resolved" "https://registry.npmjs.org/setprototypeof/-/setprototypeof-1.2.0.tgz"
   "version" "1.2.0"
+
+"sha.js@^2.4.9":
+  "integrity" "sha512-G8zektVqbiPHrylgew9Zg1VRB1L/DtXNUVAM6q4QLy8NE3qtHlFXTf8VLL4k1Yl6c7NMjtZUTdXV+X44nFaT6A=="
+  "resolved" "https://registry.npmjs.org/sha.js/-/sha.js-2.4.9.tgz"
+  "version" "2.4.9"
+  dependencies:
+    "inherits" "^2.0.1"
+    "safe-buffer" "^5.0.1"
 
 "shallow-clone@^3.0.0":
   "integrity" "sha512-/6KqX+GVUdqPuPPd2LxDDxzX6CAbjJehAAOKlNpqqUpAqPM6HeL8f+o3a+JsyGjn2lv0WY8UsTgUJjU9Ok55NA=="
@@ -6803,6 +6829,13 @@
     "rollup" ">=2.59.0 <2.78.0"
   optionalDependencies:
     "fsevents" "~2.3.2"
+
+"vue-apple-login@^2.0.1":
+  "integrity" "sha512-jlMxdJwJF9IaSvRQCxWz2pjh2kR1gII39pNObyh+Qpp97ANzkRqfaJx2K4Tf5CKfwP89uoaVQ6bgqTnAIitXyg=="
+  "resolved" "https://registry.npmjs.org/vue-apple-login/-/vue-apple-login-2.0.1.tgz"
+  "version" "2.0.1"
+  dependencies:
+    "vue" "^3.0.0"
 
 "vue-demi@*":
   "integrity" "sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A=="

@@ -24,7 +24,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.partymap.capacitor</string>
+			<string>com.partymap.quasar</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>partymap</string>
@@ -62,5 +62,9 @@
 	<string>PartyMap uses your location to show you what&apos;s nearby</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+    <key>NSCameraUsageDescription</key>
+    <string>You can take photos attach to your reviews.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>You can record audio and video to attach to your reviews.</string>
 </dict>
 </plist>

@@ -43,6 +43,7 @@
                   'q-px-md  q-mt-md ': $q.screen.lt.md,
                 }"
               >
+                <!--
                 <div
                   style="margin-top: -8px"
                   class="ellipsis text-h4 inter bolder"
@@ -50,6 +51,7 @@
                 >
                   <span class="">Near</span>
                 </div>
+                -->
                 <div
                   class="flex items-center no-wrap"
                   :class="{
@@ -62,7 +64,7 @@
                     v-if="userLocation"
                     class="ellipsis q-mr-sm inter bolder"
                   >
-                    <span class="" v-if="$q.screen.gt.sm">Near&nbsp;</span
+                    <span class="">Near&nbsp;</span
                     ><span v-if="userLocationCity">
                       {{ userLocationCity
                       }}<span
@@ -255,10 +257,10 @@
                   @click.stop="() => (sidebarPanel = 'explore')"
                   flat
                   no-caps
-                  class="nav-button primary q-px-md q-py-xs"
+                  class="nav-button q-px-md q-py-xs"
                 >
                   <div class="flex justify-center items-center grow">
-                    <span>Explore the map </span>
+                    <span>Explore the map! </span>
                     <q-icon
                       name="mdi-chevron-right"
                       size="1rem"

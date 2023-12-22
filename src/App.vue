@@ -12,7 +12,6 @@ import { useAuthStore } from './stores/auth';
 import SplashScreen from './components/SplashScreen.vue';
 import { App } from '@capacitor/app';
 import { Browser } from '@capacitor/browser';
-import { CapacitorCookies } from '@capacitor/core';
 export default {
   components: { SplashScreen },
   name: 'App',
@@ -44,7 +43,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useMainStore, ['darkModeToggle']),
+    ...mapActions(useMainStore, ['darkModeToggle', 'getFineLocation']),
     ...mapActions(useAuthStore, ['checkAuthCookie', 'login']),
   },
   computed: {
@@ -75,8 +74,11 @@ export default {
     },
   },
   mounted() {
-    // handle deep links in native app
+    // check and get location permission
+    this.getFineLocation();
     if (this.$q.platform.is.capacitor) {
+      // handle deep links in native app
+
       App.addListener('appUrlOpen', async (event) => {
         this.loggingInWithToken = true;
         Browser.close();

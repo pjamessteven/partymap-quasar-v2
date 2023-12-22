@@ -43,11 +43,16 @@
       v-if="currentUser"
       class="q-mt-sm"
       v-ripple
-      v-on:click="logout"
+      v-on:click="handleLogout"
       clickable
     >
       <q-item-section avatar>
-        <q-icon name="mdi-logout-variant" />
+        <q-icon name="mdi-logout-variant" v-if="!logoutLoading" />
+        <q-spinner-ios
+          v-else
+          size="1.5rem"
+          :color="$q.dark.isActive ? 'white' : 'black'"
+        />
       </q-item-section>
       <q-item-section>
         <q-item-label>{{ $t('sidebar.logout') }}</q-item-label>
@@ -198,6 +203,7 @@ export default {
   components: { FeedbackDialog, AboutDialog },
   data() {
     return {
+      logoutLoading: false,
       mobilePosterView: false,
       showFeedbackDialog: false,
       showAboutDialog: false,
@@ -209,6 +215,11 @@ export default {
   },
   methods: {
     ...mapActions(useAuthStore, ['logout']),
+    async handleLogout() {
+      this.logoutLoading = true;
+      await this.logout();
+      this.logoutLoading = false;
+    },
     showAddEventDialog() {
       this.$q
         .dialog({

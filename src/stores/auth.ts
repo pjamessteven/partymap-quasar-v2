@@ -6,6 +6,7 @@ import {
   registerRequest,
   editUserRequest,
   passwordResetRequest,
+  appleLoginRequest,
 } from 'src/api';
 import { PrivateUser } from 'src/types/autogen_types';
 
@@ -47,6 +48,14 @@ export const useAuthStore = defineStore('auth', {
       try {
         await registerRequest(payload);
         return;
+      } catch (error) {
+        throw error;
+      }
+    },
+    async appleLogin(identityToken: string) {
+      try {
+        const response = await appleLoginRequest({ id_token: identityToken });
+        this.currentUser = response.data;
       } catch (error) {
         throw error;
       }

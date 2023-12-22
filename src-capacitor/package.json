@@ -6,6 +6,7 @@
   "private": true,
   "dependencies": {
     "@aashu-dubey/capacitor-statusbar-safe-area": "^2.1.1",
+    "@capacitor-community/apple-sign-in": "^5.0.0",
     "@capacitor/android": "^5.0.0-beta.0",
     "@capacitor/app": "^5.0.6",
     "@capacitor/browser": "^5.1.0",

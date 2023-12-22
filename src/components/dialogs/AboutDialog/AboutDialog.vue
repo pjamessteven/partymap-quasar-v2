@@ -9,7 +9,14 @@
     <q-card-section class="t2 dialog-card-content">
       Nau mai, haere mai!
       <p />
-      {{ $t('about.message') }}
+      PartyMap is a community-driven and crowd-sourced platform for discovering
+      festivals and experiences around the world. I basically built this because
+      I wished something like this existed. If you have any thoughts, ideas or
+      suggestions about PartyMap then please contact me through the
+      <span class="link-hover underline" @click="showFeedbackDialog = true"
+        >feedback form</span
+      >
+      or by email to
       <a class="link-hover underline" href="mailto:info@partymap.com"
         >info@partymap.com</a
       >
@@ -67,7 +74,13 @@
         </p>
       </q-card-section>
     </q-card-section>
-
+    <q-dialog
+      v-model="showFeedbackDialog"
+      transition-show="jump-up"
+      transition-hide="jump-down"
+    >
+      <FeedbackDialog @closeDialog="showFeedbackDialog = false" />
+    </q-dialog>
     <q-dialog
       v-model="showPrivacyPolicyDialog"
       transition-show="jump-up"
@@ -108,18 +121,21 @@
 <script>
 import TermsAndConditionsDialog from './TermsAndConditionsDialog.vue';
 import PrivacyPolicyDialog from './PrivacyPolicyDialog.vue';
+import FeedbackDialog from 'components/dialogs/FeedbackDialog.vue';
 
 export default {
   name: 'AboutDialog',
   components: {
     TermsAndConditionsDialog,
     PrivacyPolicyDialog,
+    FeedbackDialog,
   },
   data() {
     return {
       showBtcAddress: false,
       showPrivacyPolicyDialog: false,
       showTermsAndConditionsDialog: false,
+      showFeedbackDialog: false,
       showRigsOut: false,
     };
   },

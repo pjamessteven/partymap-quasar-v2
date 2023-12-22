@@ -52,6 +52,19 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
+        path: '/support',
+        name: 'SupportPage',
+        component: () =>
+          import('src/components/dialogs/AboutDialog/AboutDialog.vue'),
+        props: true,
+        meta: {
+          auth: false,
+          mapOverlay: false,
+          friendlyName: 'Support',
+          noBackNavigation: false,
+        },
+      },
+      {
         path: '/terms_and_conditions',
         name: 'TermsAndConditionsPage',
         component: () =>
