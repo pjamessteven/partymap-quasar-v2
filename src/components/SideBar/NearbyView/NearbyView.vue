@@ -38,8 +38,8 @@
                 class="flex column mobile-location-header"
                 style="width: 100%"
                 :class="{
-                  'q-px-lg q-mb-sm q-mt-md': $q.screen.gt.md,
-                  'q-px-lg q-mt-sm': $q.screen.gt.sm && $q.screen.lt.lg,
+                  'q-px-lg q-mb-sm q-mt-md': $q.screen.gt.lg,
+                  'q-px-lg q-mt-sm': $q.screen.gt.sm && $q.screen.lt.xl,
                   'q-px-md  q-mt-md ': $q.screen.lt.md,
                 }"
               >
@@ -60,11 +60,8 @@
                   }"
                   style="width: 100%"
                 >
-                  <span
-                    v-if="userLocation"
-                    class="ellipsis q-mr-sm inter bolder"
-                  >
-                    <span class="">Near&nbsp;</span
+                  <span v-if="userLocation" class="q-mr-sm inter bolder">
+                    <span class="ellipsis">Near&nbsp;</span
                     ><span v-if="userLocationCity">
                       {{ userLocationCity
                       }}<span
@@ -157,7 +154,8 @@
               <div
                 class="flex message"
                 :class="{
-                  'q-mx-lg  q-mb-md ': $q.screen.gt.sm,
+                  'q-mx-lg  q-mb-md ': $q.screen.gt.lg,
+                  'q-mx-lg  q-mb-sm ': $q.screen.gt.sm && $q.screen.lt.xl,
                   'q-mx-md q-mt-xs ': $q.screen.lt.md,
                 }"
                 @click="showMessage = !showMessage"

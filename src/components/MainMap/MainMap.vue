@@ -546,6 +546,10 @@ export default {
         3
       );
       this.initTileLayers();
+      // add location marker for fine location
+      if (!this.userLocationFromSearch && this.fineLocation) {
+        this.addUserLocationMarker(this.userLocation);
+      }
       toRaw(this.map).on('click', () => {
         if (this.$route.name === 'EventPage') {
           //this.peekMap = false;
