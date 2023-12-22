@@ -70,18 +70,12 @@
               Sign in with Facebook
             </q-btn>
             <q-btn
-              v-if="$q.platform.is.ios"
+              v-if="$q.platform.is.ios && $q.platform.is.capacitor"
               style="width: 231px; font-size: 15px; background: white"
               text-color="black"
               no-caps
               class="soft-button-shadow q-mt-md"
-              :type="!$q.platform.is.nativeMobile ? 'a' : undefined"
-              :href="
-                !$q.platform.is.nativeMobile ? facebookLoginUrl : undefined
-              "
-              @click="
-                $q.platform.is.nativeMobile ? nativeAppleLogin() : undefined
-              "
+              @click="nativeAppleLogin()"
             >
               <q-icon
                 name="mdi-apple"
