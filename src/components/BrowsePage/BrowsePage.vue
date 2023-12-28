@@ -47,8 +47,8 @@ export default {
           tagline: 'Festivals set in idyllic locations',
           description: '',
         },
-        burner: {
-          title: 'Burner',
+        burn: {
+          title: 'Burns',
           tagline:
             'Anarchistic self-organized festivals that follow the ten prinicpals',
           description: '',
@@ -56,6 +56,11 @@ export default {
         beach: {
           title: 'Beach',
           tagline: 'Get your toes wet',
+          description: '',
+        },
+        psychedelic: {
+          title: 'Psychedelic',
+          tagline: 'Think outside the box ',
           description: '',
         },
         sustainability: {
