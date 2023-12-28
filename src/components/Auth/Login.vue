@@ -3,7 +3,7 @@
     <q-card :bordered="$q.screen.gt.sm" class="auth-card">
       <q-card-section
         class="flex column justify-stretch q-px-xl q-pb-sm"
-        :class="$q.screen.gt.xs ? 'q-pt-xl' : 'q-pt-none'"
+        :class="{ 'q-pt-xl': $q.screen.gt.lg, 'q-pt-xl': $q.screen.gt.xs }"
       >
         <div class="flex justify-center items-center q-mt-sm q-mb-lg">
           <div>
@@ -138,9 +138,18 @@
           <div class="flex row grow justify-end items-center q-mt-lg">
             <q-btn
               size="small"
-              color="primary"
               no-caps
-              class="soft-button-shadow nav-btn q-mb-md t1 inter bold text-large"
+              flat
+              class="nav-button q-mb-md inter bold text-large q-mr-sm"
+              type="a"
+              label="Sign up"
+              @click="$router.push({ name: 'Register' })"
+            />
+            <q-btn
+              size="small"
+              flat
+              no-caps
+              class="nav-button primary q-mb-md inter bold text-large"
               v-bind:label="$t('auth.login')"
               type="a"
               @click="_login"
@@ -158,9 +167,10 @@
       <q-card-section class="q-pt-none q-px-lg q-pb-lg bottom-section">
         <div class="separator o-animated" :class="{ 'o-000': loading }" />
         <div
-          class="flex column items-end o-animated"
+          class="flex row no-wrap items-center justify-end o-animated"
           :class="{ 'o-000': loading }"
         >
+          <!--
           <q-btn
             class="q-mt-md t2"
             unelevated
@@ -170,9 +180,9 @@
             v-bind:label="$t('auth.sign_up_for_account')"
             @click="$router.push({ name: 'Register' })"
           />
-
+-->
           <q-btn
-            class="t2"
+            class="t2 q-mt-md"
             unelevated
             no-caps
             size="md"
@@ -252,12 +262,14 @@ export default {
     async _login() {
       this.loading = true;
       try {
-        await this.login({
+        const currentUser = await this.login({
           identifier: this.identifier,
           password: this.password,
         });
         this.loadUserEventDates('all', 'future');
-        if (this.$route.query.from) {
+        if (!currentUser.username) {
+          this.$router.replace({ name: 'ChooseUsername' });
+        } else if (this.$route.query.from) {
           this.$router.replace(this.$route.query.from);
         } else if (this.$route.params.from) {
           this.$router.replace(this.$route.params.from);
@@ -293,9 +305,16 @@ export default {
           console.log('result', result);
           // Handle user information
           // Validate token with server and create new session
-          await this.appleLogin(result.response.identityToken);
-          await this.loadUserEventDates('all', 'future');
-          this.$router.push('/');
+          const currentUser = await this.appleLogin(
+            result.response.identityToken
+          );
+          if (!currentUser.username) {
+            this.$router.replace({ name: 'ChooseUsername' });
+          } else {
+            await this.loadUserEventDates('all', 'future');
+            this.$router.push('/');
+          }
+
           this.loading = false;
         })
         .catch((error) => {
@@ -309,9 +328,14 @@ export default {
     async onAppleDesktopLoginSuccess(data) {
       console.log(data);
       this.loading = true;
-      await this.appleLogin(data.authorization.id_token);
+      const currentUser = await this.appleLogin(data.authorization.id_token);
       this.loading = false;
-      this.$router.push('/');
+      if (!currentUser.username) {
+        this.$router.replace({ name: 'ChooseUsername' });
+      } else {
+        await this.loadUserEventDates('all', 'future');
+        this.$router.push('/');
+      }
     },
     onAppleDesktopLoginFailure(error) {
       console.log(error);
@@ -374,6 +398,11 @@ export default {
 }
 .name-not-visible-text {
   text-align: center;
+}
+.auth-card {
+  // overriding parent styles
+  margin-top: unset !important;
+  margin-bottom: unset !important;
 }
 .bottom-section {
   :deep(.q-btn__wrapper) {

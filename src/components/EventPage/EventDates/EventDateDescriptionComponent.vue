@@ -28,7 +28,7 @@
             "
             >"</span
           ><span
-            style="white-space: pre-line"
+            style="white-space: pre-line; word-break: break-word"
             v-html="selectedEventDate.description"
           ></span
           ><span

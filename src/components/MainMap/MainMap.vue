@@ -1025,7 +1025,7 @@ export default {
           content: '';
           background: radial-gradient(
             circle,
-            rgba(0, 179, 255, 1) 0%,
+            rgb(0, 153, 219) 0%,
             rgba(25, 118, 210, 1) 100%
           );
           border-radius: 50%;

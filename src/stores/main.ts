@@ -61,9 +61,6 @@ export const useMainStore = defineStore('main', {
     },
   },
   actions: {
-    darkModeToggle() {
-      this.darkMode = !this.darkMode;
-    },
     async loadIpInfo() {
       try {
         const response = await getIpInfoRequest();
@@ -95,13 +92,17 @@ export const useMainStore = defineStore('main', {
         );
         const data = await response.json();
         const address = data.address;
-
+        console.log(data);
         if (address?.city?.length > 0) {
           this.userLocationCity = address.city;
         } else if (address.administrativeLevels?.level1short) {
           this.userLocationCity = address.administrativeLevels?.level1short;
         } else if (address.administrativeLevels?.level2short) {
           this.userLocationCity = address.administrativeLevels?.level2short;
+        } else if (address.suburb) {
+          this.userLocationCity = address.suburb;
+        } else if (address.state_district) {
+          this.userLocationCity = address.state_district;
         }
         this.userLocationCountry = address.country;
         this.userLocationLoading = false;
@@ -131,7 +132,7 @@ export const useMainStore = defineStore('main', {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude,
               };
-
+              console.log('ul', this.userLocation);
               this.userLocationLoading = false;
               await this.reverseGecodeUserLocation();
               resolve(null);

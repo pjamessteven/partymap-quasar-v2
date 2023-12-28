@@ -43,11 +43,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useMainStore, ['darkModeToggle', 'getFineLocation']),
+    ...mapActions(useMainStore, ['getFineLocation']),
     ...mapActions(useAuthStore, ['checkAuthCookie', 'login']),
   },
   computed: {
-    ...mapState(useMainStore, ['darkMode']),
     ...mapWritableState(useMainStore, ['compactView', 'groupEventsByMonth']),
 
     screen() {
@@ -55,13 +54,6 @@ export default {
     },
   },
   watch: {
-    darkMode: function (newval) {
-      if (newval) {
-        this.$q.dark.set(true);
-      } else {
-        this.$q.dark.set(false);
-      }
-    },
     screen: {
       handler: function (screen) {
         if (screen.gt.md) {
@@ -80,11 +72,12 @@ export default {
       // handle deep links in native app
 
       App.addListener('appUrlOpen', async (event) => {
-        this.loggingInWithToken = true;
         Browser.close();
 
         console.log('APP URL OPEN', event.url);
         if (event.url.indexOf('?token=')) {
+          this.loggingInWithToken = true;
+
           let token = event.url.split('?token=').pop();
           // facebook login causes this shit to be appended to the next_url query param
           if (token.endsWith('#_=_')) {
@@ -92,8 +85,14 @@ export default {
           }
 
           // login with one off token
-          await this.login({ token: token });
+          const currentUser = await this.login({ token: token });
+
           this.loggingInWithToken = false;
+
+          if (!currentUser.username) {
+            this.$router.replace('/username');
+            return;
+          }
         }
 
         let slug;
@@ -103,15 +102,16 @@ export default {
         } else {
           slug = event.url.split('.com').pop();
         }
-        // We only push to the route if there is a slug present
         if (slug) {
+          // We only push to the route if there is a slug present
           this.$router.push(slug);
         }
-        this.loggingInWithToken = false;
       });
     }
   },
   created() {
+    /* this doesn't work reliably across browsers and sometimes
+     leaves the user hanging too long
     if (document.readyState === 'complete') {
       this.assetsLoaded = true;
     } else {
@@ -121,12 +121,12 @@ export default {
         }
       });
     }
+    */
+
+    setTimeout(() => (this.assetsLoaded = true), 1000);
 
     this.$q.dark.set('auto');
 
-    if (this.$q.dark.isActive) {
-      this.darkModeToggle();
-    }
     this.checkAuthCookie();
   },
 };

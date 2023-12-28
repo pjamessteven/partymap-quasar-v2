@@ -1,9 +1,7 @@
 <template>
   <div
     class="event-page"
-    :style="
-      peekMap || !$q.platform.is.ios ? 'pointer-events: none !important' : ''
-    "
+    :style="peekMap ? 'pointer-events: none !important' : ''"
   >
     <transition appear enter-active-class="animated fadeIn slow">
       <div class="peek-address-wrapper flex row justify-center" v-if="peekMap">
@@ -50,7 +48,7 @@
       >
         <div class="row flex grow main-row no-wrap justify-center">
           <div
-            v-if="scrollPercentage <= 0 && !peekMap && $q.platform.is.ios"
+            v-if="scrollPercentage <= 0 && !peekMap"
             class="clickable-background"
             style="pointer-events: all"
             @click="clickBackground()"

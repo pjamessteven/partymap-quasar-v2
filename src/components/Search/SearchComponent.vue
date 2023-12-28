@@ -4,7 +4,10 @@
       class="controls-wrapper flex no-wrap"
       @click="() => (showSearch = !showSearch)"
     >
-      <div class="controls-wrapper-inner">
+      <div
+        class="controls-wrapper-inner"
+        :class="showPanel ? 'show-panel' : ''"
+      >
         <div
           class="location-button-wrapper q-mr-sm"
           :class="showPanel ? 'show-panel' : ''"
@@ -264,8 +267,12 @@ export default {
 @media only screen and (max-width: 600px) {
   .body--light {
     .controls-wrapper-inner {
-      box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+      box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 1);
       border: 1px solid rgba(0, 0, 0, 0.05);
+
+      &.show-panel {
+        box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+      }
     }
   }
   .body--dark {

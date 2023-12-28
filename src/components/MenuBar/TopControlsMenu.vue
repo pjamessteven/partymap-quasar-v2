@@ -149,7 +149,11 @@
     <q-separator inset class="q-mt-sm q-mb-none" />
 
     <q-item>
-      <q-toggle v-model="darkMode" label="Dark Mode" />
+      <q-toggle
+        :model-value="darkMode"
+        @click="$q.dark.toggle()"
+        label="Dark Mode"
+      />
     </q-item>
     <q-item v-if="$q.screen.lt.sm">
       <q-toggle v-model="mobilePosterView" label="Grid View" />
@@ -257,15 +261,14 @@ export default {
     },
   },
   computed: {
+    darkMode() {
+      return this.$q.dark.isActive;
+    },
     route() {
       return this.$route;
     },
     ...mapState(useAuthStore, ['currentUser']),
-    ...mapWritableState(useMainStore, [
-      'darkMode',
-      'compactView',
-      'groupEventsByMonth',
-    ]),
+    ...mapWritableState(useMainStore, ['compactView', 'groupEventsByMonth']),
     ...mapWritableState(useMapStore, ['mapStyle']),
   },
   beforeMount() {

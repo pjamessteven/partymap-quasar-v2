@@ -94,7 +94,7 @@ export interface User {
 }
 
 export interface PrivateUser {
-  username: string;
+  username?: string;
   role: number;
   id: string;
   version_count: number;

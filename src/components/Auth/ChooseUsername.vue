@@ -2,10 +2,12 @@
   <div class="dialog-page" style="padding-bottom: 60px">
     <q-card :bordered="$q.screen.gt.sm" class="q-pa-md auth-card">
       <q-card-section class="title flex justify-center column">
-        <b class="text-large">{{ $t('auth.choose_username') }}</b>
+        <b class="text-large bold">{{ $t('auth.choose_username') }}</b>
         <p />
         <p class="t3">{{ $t('auth.choose_username_message') }}</p>
-        <p class="t1">{{ $t('auth.choose_username_requirements') }}</p>
+        <p class="t1 inter bold">
+          {{ $t('auth.choose_username_requirements') }}
+        </p>
       </q-card-section>
       <q-card-section class="flex grow q-pt-none">
         <q-input
@@ -28,7 +30,7 @@
           :disable="usernameValidation != true || username.length == 0"
           color="primary"
           v-bind:label="$t('auth.continue')"
-          v-on:click="setUsername"
+          @click="setUsername()"
         />
       </q-card-actions>
       <InnerLoading v-if="loading" :solid="true" />
@@ -44,17 +46,11 @@ import { mapActions, mapState } from 'pinia';
 export default {
   name: 'SetUsername',
   components: { InnerLoading },
-  watch: {
-    username() {
-      if (this.username_taken) {
-        this.username_taken = false;
-      }
-    },
-  },
   data() {
     return {
       username: '',
       username_taken: false,
+      loading: false,
     };
   },
   methods: {
@@ -63,7 +59,7 @@ export default {
       this.loading = true;
       try {
         await this.editUser({ username: this.username });
-        this.$q.notify(this.$t('auth.welcome') + ', ' + this.username + '!');
+        this.$q.notify("You're all set, " + this.username + '!');
         this.loading = false;
         this.$router.push('/');
       } catch (error) {
@@ -76,7 +72,11 @@ export default {
   },
   watch: {
     username(newv, oldv) {
-      if (!newv !== oldv) {
+      // reset username taken flag
+      if (this.username_taken) {
+        this.username_taken = false;
+      }
+      if (newv !== oldv) {
         // force lowercase username
         this.username = this.username.toLowerCase();
       }
@@ -86,11 +86,11 @@ export default {
     ...mapState(useAuthStore, ['currentUser']),
     usernameValidation() {
       if (this.username_taken) {
-        return this.$t('errors.username_already_registered');
+        return 'Username already taken';
       } else if (this.username.length > 25) {
-        return this.$t('validation.username_too_long');
+        return 'Username too long';
       } else if (this.username.length < 3) {
-        return this.$t('validation.username_too_short');
+        return 'Username too short';
       } else if (!/^[A-Za-z0-9_-]+$/.test(this.username)) {
         return this.$t('auth.username_letters_and_numbers');
       } else return true;

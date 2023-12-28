@@ -43,7 +43,6 @@
                   'q-px-md  q-mt-md ': $q.screen.lt.md,
                 }"
               >
-                <!--
                 <div
                   style="margin-top: -8px"
                   class="ellipsis text-h4 inter bolder"
@@ -51,7 +50,6 @@
                 >
                   <span class="">Near</span>
                 </div>
-                -->
                 <div
                   class="flex items-center no-wrap"
                   :class="{
@@ -60,8 +58,11 @@
                   }"
                   style="width: 100%"
                 >
-                  <span v-if="userLocation" class="q-mr-sm inter bolder">
-                    <span class="ellipsis">Near&nbsp;</span
+                  <span
+                    v-if="userLocation"
+                    class="ellipsis q-mr-sm inter bolder"
+                  >
+                    <span class="" v-if="$q.screen.gt.xs">Near&nbsp;</span
                     ><span v-if="userLocationCity">
                       {{ userLocationCity
                       }}<span
@@ -293,7 +294,7 @@
                     <!-- your events-->
                     <div
                       class="flex column"
-                      v-if="currentUser && userEventDates?.length >= 10"
+                      v-if="currentUser && userEventDates?.length > 0"
                     >
                       <div
                         class="q-py-md location-header flex justify-between"
@@ -807,12 +808,7 @@ export default {
     },
     onScroll(info) {
       this.scrollPosition = info.verticalPosition;
-      // prevent swipes
-      if (info.verticalPosition <= 0) {
-        this.enablePanelSwipeDown = true;
-      } else {
-        this.enablePanelSwipeDown = false;
-      }
+
       // infinite scrolling
 
       if (info.verticalPercentage === 1) {
@@ -1005,13 +1001,12 @@ export default {
       this.sidebarPanelReady = true;
     }
 
-    if (this.$route.name === 'Explore' && this.sidebarPanel === 'nearby')
-      if (!this.userLocation) {
-        await this.loadIpInfo();
-        if (this.eventDates.length === 0) this.loadEverything();
-      } else {
-        if (this.eventDates.length === 0) this.loadEverything();
-      }
+    if (!this.userLocation) {
+      await this.loadIpInfo();
+      if (this.eventDates.length === 0) this.loadEverything();
+    } else {
+      if (this.eventDates.length === 0) this.loadEverything();
+    }
     if (this.$route.query.global_page) {
       // used by hidden pagination for SEO
       this.eventDatesPage = Number(this.$route.query.global_page);

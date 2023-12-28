@@ -59,6 +59,7 @@ export const useAuthStore = defineStore('auth', {
       } catch (error) {
         throw error;
       }
+      return this.currentUser;
     },
     async login(payload: {
       identifier: string;
@@ -68,6 +69,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         const response = await loginRequest(payload);
         this.currentUser = response.data;
+        return this.currentUser;
       } catch (error) {
         throw error;
       }

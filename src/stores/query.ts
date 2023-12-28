@@ -233,9 +233,10 @@ export const useQueryStore = defineStore('query', {
       tense: string,
       username?: string | undefined
     ) {
+      let _username = username;
       if (!username) {
         const authStore = useAuthStore();
-        const username = authStore.currentUser?.username;
+        _username = authStore.currentUser?.username;
       }
       try {
         this.userEventDatesLoading = true;
@@ -260,12 +261,12 @@ export const useQueryStore = defineStore('query', {
           page: this.userEventDatesPage,
           per_page: 20,
           distinct: true,
-          all_related_to_user: mode === 'all' ? username : undefined,
-          following_user: mode === 'following' ? username : undefined,
-          going_user: mode === 'going' ? username : undefined,
-          interested_user: mode === 'interested' ? username : undefined,
-          host_user: mode === 'hosting' ? username : undefined,
-          creator_user: mode === 'created' ? username : undefined,
+          all_related_to_user: mode === 'all' ? _username : undefined,
+          following_user: mode === 'following' ? _username : undefined,
+          going_user: mode === 'going' ? _username : undefined,
+          interested_user: mode === 'interested' ? _username : undefined,
+          host_user: mode === 'hosting' ? _username : undefined,
+          creator_user: mode === 'created' ? _username : undefined,
         });
 
         if (this.userEventDatesPage === 1) {

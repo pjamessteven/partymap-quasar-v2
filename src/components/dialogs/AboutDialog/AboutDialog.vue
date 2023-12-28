@@ -7,11 +7,9 @@
     </q-card-section>
 
     <q-card-section class="t2 dialog-card-content">
-      Nau mai, haere mai!
-      <p />
-      PartyMap is a community-driven and crowd-sourced platform for discovering
-      festivals and experiences around the world. I basically built this because
-      I wished something like this existed. If you have any thoughts, ideas or
+      PartyMap is a crowd-sourced, community-driven platform for discovering
+      festivals and experiences around the world. I built this because I wished
+      something like this existed. If you have any thoughts, ideas or
       suggestions about PartyMap then please contact me through the
       <span class="link-hover underline" @click="showFeedbackDialog = true"
         >feedback form</span
@@ -22,10 +20,10 @@
       >
       <p />
       PartyMap would not have been possible without the amazing open source
-      communtiy. Many thanks to the creators and contributors of Vue, Python,
-      Flask, SQLAlchemy, PostgreSQL, PostGIS, the Quasar framework, Leaflet,
-      Open Street Map, Stamen Design and HERE/Nokia. And many thanks to you for
-      submitting your events!
+      communtiy. Many thanks to the contributors of Vue, Python, Flask,
+      SQLAlchemy, PostgreSQL, PostGIS, Quasar and Leaflet. Thanks to Spotify,
+      Last.FM and Musicbrainz for artist info. And many thanks to you for
+      submitting your events and reviews!
       <p />
       {{ $t('about.message_3') }}
       <a

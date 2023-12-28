@@ -71,18 +71,12 @@
                 >
               </div>
             </div>
-            <div
-              v-if="$q.screen.gt.sm"
-              class="description flex grow ellipsis q-pr-sm q-mt-"
-              style="max-width: 100%"
-            >
-              {{ event.event.description }}
-            </div>
+
             <div
               class="flex column grow justify-center card-bottom-text o-070"
               style="font-weight: 400"
               :class="{
-                'q-mt-sm': $q.screen.gt.sm,
+                'q-mt-': $q.screen.gt.sm,
               }"
             >
               <!--
@@ -166,7 +160,13 @@
                 </div>
               </div>
             </div>
-
+            <div
+              v-if="$q.screen.gt.sm"
+              class="description flex grow ellipsis q-my-sm"
+              style="max-width: 100%"
+            >
+              {{ event.event.description }}
+            </div>
             <q-scroll-area vertical style="min-height: 31px" class="q-mt-sm">
               <div
                 class="tag-container flex row no-wrap ellipsis"

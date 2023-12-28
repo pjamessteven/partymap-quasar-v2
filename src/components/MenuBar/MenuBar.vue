@@ -377,6 +377,9 @@ export default {
     z-index: 1;
     position: fixed;
     top: 0px;
+    @supports ((top: var(--safe-area-inset-top))) {
+      top: var(--safe-area-inset-top);
+    }
 
     .menubar-background {
       @supports ((top: var(--safe-area-inset-top))) {
