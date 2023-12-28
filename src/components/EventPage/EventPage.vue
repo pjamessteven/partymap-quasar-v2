@@ -1046,6 +1046,22 @@ export default {
               lng: eventDateResponse.data.location.lng,
             };
           }
+        } else if (
+          !response.data.next_date &&
+          response.data.event_dates &&
+          response.data.event_dates.length > 0
+        ) {
+          // no upcoming event, set current event to be the most recent event
+          const lastIndex = response.data.event_dates.length - 1;
+          this.selectedEventDateIndex = lastIndex;
+          // if no next date, set current event to be the most recent one
+          const eventDateResponse = await this.loadEventDate(
+            this.event?.event_dates?.[lastIndex]?.id + ''
+          );
+          this.focusMarker = {
+            lat: eventDateResponse.data.location.lat,
+            lng: eventDateResponse.data.location.lng,
+          };
         }
       } catch (error) {
         console.log(error);
@@ -1082,7 +1098,11 @@ export default {
     ]),
     ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
     ...mapState(useEventStore, ['loadingEvent', 'selectedEventDate']),
-    ...mapWritableState(useEventStore, ['event', 'editing']),
+    ...mapWritableState(useEventStore, [
+      'event',
+      'selectedEventDateIndex',
+      'editing',
+    ]),
 
     pageViewChars() {
       if (this.event.page_views) {

@@ -181,6 +181,7 @@ export default {
       // reload event when date status changes
       handler(newv, oldv) {
         if (
+          oldv &&
           newv.id === oldv.id &&
           newv.date_confirmed !== oldv.date_confirmed
         ) {

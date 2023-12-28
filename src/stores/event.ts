@@ -88,14 +88,6 @@ export const useEventStore = defineStore('event', {
           if (authStore.currentUser && this.selectedEventDate)
             // bit of a hack, reload date to get going/interested status
             this.loadEventDate(this.selectedEventDate.id + '');
-        } else if (
-          this.event?.event_dates &&
-          this.event?.event_dates.length > 0
-        ) {
-          // no upcoming event, set current event to be the most recent event
-          const lastIndex = this.event.event_dates.length - 1;
-          this.selectedEventDateIndex = lastIndex;
-          this.loadEventDate(this.event?.event_dates?.[lastIndex]?.id + '');
         }
         return response;
       } catch (error) {
