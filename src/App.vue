@@ -12,6 +12,8 @@ import { useAuthStore } from './stores/auth';
 import SplashScreen from './components/SplashScreen.vue';
 import { App } from '@capacitor/app';
 import { Browser } from '@capacitor/browser';
+import { CapacitorCookies } from '@capacitor/core'; // leave this, even though unused, the import is needed for cookies to work on iOS
+
 export default {
   components: { SplashScreen },
   name: 'App',
