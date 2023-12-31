@@ -2,8 +2,7 @@
   <transition appear enter-active-class="animated fadeIn">
     <div class="ed-card" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
       <router-link
-        v-slot="{ navigate }"
-        :custom="true"
+        style="text-decoration: none; color: inherit"
         :to="{
           name: 'EventPage',
           params: {
@@ -13,17 +12,15 @@
           query: {
             name: event.name.replace(/ /g, '_'),
             thumbXsUrl: imgThumbXsUrl,
+            location: JSON.stringify({
+              lat: event.location.lat,
+              lng: event.location.lng,
+            }),
           },
         }"
       >
         <div class="ed-card-bg" :style="getBottomBgImgStyle()" />
-        <div
-          class="ed-card-content flex row no-wrap q-pa-md"
-          @mousedown="() => onClickCard($event, navigate)"
-          @mouseover.stop="
-            () => ($q.platform.is.ios ? onClickCard($event, navigate) : false)
-          "
-        >
+        <div class="ed-card-content flex row no-wrap q-pa-md">
           <!-- mouseover.stop is to fix a stupid ios bug relating to q-scroll-area having a mouseover event and causing the user to have to double click on items-->
           <div
             class="image-container flex justify-center items-center shadow-2xl"
@@ -40,7 +37,7 @@
               v-show="loadedImage"
             />
           </div>
-          <div class="flex column q-pl-md">
+          <div class="flex column grow q-pl-md">
             <div
               class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
             >
@@ -162,7 +159,7 @@
             </div>
             <div
               v-if="$q.screen.gt.sm"
-              class="description flex grow ellipsis q-my-sm"
+              class="description flex grow ellipsis q-my-sm items-center"
               style="max-width: 100%"
             >
               {{ event.event.description }}
@@ -237,16 +234,6 @@ export default {
           background-position: center;
           `;
       }
-    },
-
-    onClickCard(event, navigate) {
-      // blocking map updates on focusMarker watcher in MainMap.vue
-      this.focusMarker = {
-        lat: this.event.location.lat,
-        lng: this.event.location.lng,
-      };
-
-      navigate(event);
     },
   },
   computed: {

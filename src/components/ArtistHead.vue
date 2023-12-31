@@ -8,15 +8,8 @@
         thumb_xs_url: artist?.media_items?.[0]?.thumb_xs_url,
       },
     }"
-    :custom="true"
-    v-slot="{ navigate }"
   >
-    <div
-      class="artist-head-wrapper flex column justify-start items-center"
-      @mousedown="navigate($event)"
-      @click="navigate($event)"
-      @mouseover.stop="() => ($q.platform.is.ios ? navigate($event) : false)"
-    >
+    <div class="artist-head-wrapper flex column justify-start items-center">
       <div class="card-bottom-background" :style="getBgImgStyle()" />
       <div class="artist-head flex column no-wrap">
         <div class="artist-head-background shadow-2xl">

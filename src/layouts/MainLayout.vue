@@ -217,9 +217,6 @@ export default {
       );*/
     }
   }
-  .splash-screen {
-    background: green;
-  }
 }
 
 .main-layout {

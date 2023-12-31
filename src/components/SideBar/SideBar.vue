@@ -24,7 +24,11 @@
           v-if="$route.name === 'Explore' && $q.screen.gt.xs"
           style="margin-top: 4px"
         >
-          <q-btn class="inter o-070" no-caps flat @click="showAddEventDialog"
+          <q-btn
+            class="inter primary nav-button"
+            no-caps
+            flat
+            @click="showAddEventDialog"
             >Submit
             <q-icon name="mdi-plus" class="q-ml-sm" size="1rem" />
           </q-btn>
@@ -132,11 +136,13 @@ export default {
     SearchComponent,
   },
   async mounted() {
+    /*
     this.wheelIndicator = new WheelIndicator({
       elem: this.$refs.sidebar,
       callback: this.onMouseWheel,
       preventMouse: false,
     });
+    */
     if (this.$refs.resizer)
       this.$refs.resizer.addEventListener('mousedown', (event) => {
         document.addEventListener('mousemove', this.resize, false);

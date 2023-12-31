@@ -17,7 +17,7 @@
           <q-toggle
             v-model="compactView"
             :false-value="false"
-            label="Show summary"
+            label="Compact view"
           />
           <q-toggle
             v-if="showGroupByMonth"

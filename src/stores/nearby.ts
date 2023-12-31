@@ -186,6 +186,7 @@ export const useNearbyStore = defineStore('nearby', {
             }
       );
       const mapStore = useMapStore();
+
       if (mapStore.map) {
         const bounds = L.latLngBounds(mappedPoints);
         toRaw(mapStore.map).fitBounds(bounds);

@@ -2,8 +2,7 @@
   <transition appear enter-active-class="animated fadeIn">
     <div class="ed-poster" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
       <router-link
-        v-slot="{ navigate }"
-        :custom="true"
+        style="text-decoration: none; color: inherit"
         :to="{
           name: 'EventPage',
           params: {
@@ -13,15 +12,16 @@
           query: {
             name: event.name.replace(/ /g, '_'),
             thumbXsUrl: imgThumbXsUrl,
+            location: JSON.stringify({
+              lat: event.location.lat,
+              lng: event.location.lng,
+            }),
           },
         }"
       >
         <div class="ed-poster-bg" :style="getBottomBgImgStyle()" />
 
-        <div
-          class="ed-poster-content flex column no-wrap"
-          @mousedown="() => onClickCard($event, navigate)"
-        >
+        <div class="ed-poster-content flex column no-wrap">
           <div
             class="image-container flex justify-center items-center shadow-2xl"
           >
@@ -294,15 +294,6 @@ export default {
         //filter: blur(1px);
         `;
       }
-    },
-    onClickCard(event, navigate) {
-      // blocking map updates on focusMarker watcher in MainMap.vue
-      this.focusMarker = {
-        lat: this.event.location.lat,
-        lng: this.event.location.lng,
-      };
-
-      navigate(event);
     },
   },
   computed: {

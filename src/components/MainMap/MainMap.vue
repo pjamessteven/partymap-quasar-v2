@@ -423,6 +423,7 @@ export default {
     },
 
     fitBoundsForExplorePage(coords) {
+      /*
       // padding for desktop panel
       var latlng = L.latLng(coords);
       if (this.$q.screen.gt.xs) {
@@ -453,7 +454,7 @@ export default {
           easeLinearity: 1,
           maxZoom: 10,
         });
-      }
+      }*/
     },
     invalidateMapSize() {
       setTimeout(() => {
@@ -545,6 +546,7 @@ export default {
         [53.9, 27.6],
         3
       );
+
       this.initTileLayers();
       // add location marker for fine location
       if (!this.userLocationFromSearch && this.fineLocation) {

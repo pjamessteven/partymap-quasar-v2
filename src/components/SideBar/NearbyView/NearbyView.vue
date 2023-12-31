@@ -15,7 +15,6 @@
           </transition>
 
           <q-scroll-area
-            @click.prevent
             @scroll="onScroll"
             vertical
             :thumb-style="{
@@ -855,11 +854,15 @@ export default {
   },
   watch: {
     $route: {
-      handler: function (newval) {
-        if (newval.name === 'Explore' && this.sidebarPanel === 'nearby')
+      handler: async function (newval) {
+        if (newval.name === 'Explore' && this.sidebarPanel === 'nearby') {
           if (!this.userLocation) {
-            this.loadIpInfo();
+            await this.loadIpInfo();
+            if (this.eventDates.length === 0) this.loadEverything();
+          } else {
+            if (this.eventDates.length === 0) this.loadEverything();
           }
+        }
       },
     },
     sidebarPanel: {
@@ -876,15 +879,17 @@ export default {
     },
     userLocation: {
       handler: function (newval, oldval) {
-        if (newval && !oldval) {
-          this.loadEverything();
-          return;
-        } else if (newval && oldval) {
-          const userLocationHasSignficantlyChanged =
-            Math.round(newval.lat) !== Math.round(oldval.lat) ||
-            Math.round(newval.lng) !== Math.round(oldval.lng);
-          if (userLocationHasSignficantlyChanged) {
+        if (this.$route.name === 'Explore') {
+          if (newval && !oldval) {
             this.loadEverything();
+            return;
+          } else if (newval && oldval) {
+            const userLocationHasSignficantlyChanged =
+              Math.round(newval.lat) !== Math.round(oldval.lat) ||
+              Math.round(newval.lng) !== Math.round(oldval.lng);
+            if (userLocationHasSignficantlyChanged) {
+              this.loadEverything();
+            }
           }
         }
       },
@@ -1001,12 +1006,16 @@ export default {
       this.sidebarPanelReady = true;
     }
 
-    if (!this.userLocation) {
-      await this.loadIpInfo();
-      if (this.eventDates.length === 0) this.loadEverything();
-    } else {
-      if (this.eventDates.length === 0) this.loadEverything();
+    if (this.$route.name === 'Explore') {
+      // otherwise will change on route change
+      if (!this.userLocation) {
+        await this.loadIpInfo();
+        if (this.eventDates.length === 0) this.loadEverything();
+      } else {
+        if (this.eventDates.length === 0) this.loadEverything();
+      }
     }
+
     if (this.$route.query.global_page) {
       // used by hidden pagination for SEO
       this.eventDatesPage = Number(this.$route.query.global_page);
@@ -1121,23 +1130,6 @@ export default {
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
-  .lights-wrapper {
-    width: 100%;
-    height: 50px;
-    position: absolute;
-    pointer-events: none;
-    top: 154px;
-    opacity: 0.48;
-    z-index: 5000;
-    display: none;
-    .lights-image {
-      max-width: 400px;
-      height: auto;
-      width: 100%;
-      position: relative;
-      right: 0px;
-    }
-  }
   .banner {
     position: relative;
     overflow: hidden;

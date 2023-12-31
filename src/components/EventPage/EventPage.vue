@@ -1212,6 +1212,11 @@ export default {
     this.editing = this.$route.params.editing;
     // clear previous event
     setTimeout(() => this.load(), 100);
+
+    if (this.$route.query.location) {
+      this.focusMarker = JSON.parse(this.$route.query.location);
+    }
+
     //    this.load();
     if (this.$q.screen.gt.xs) {
       this.wheelIndicator = new WheelIndicator({
