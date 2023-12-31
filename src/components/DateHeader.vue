@@ -3,13 +3,16 @@
     <div
       class="date-header flex row no-wrap justify-between grow ellipsis inter"
       :class="{
-        ' q-px-md q-pb-md  semi-bold t2 inter  ': $q.screen.gt.sm,
+        ' q-px-md q-pb-md  semibold t2 inter  ': $q.screen.gt.sm,
         'q-pt-md': $q.screen.gt.xs && $route.name !== 'Explore',
         'q-px-sm q-ml-xs q-py-md t2 semibold': $q.screen.lt.md,
       }"
     >
       <span v-if="!!altLabel">{{ altLabel }}</span>
-      <span v-else> Events in {{ dateString }}</span>
+      <span v-else
+        ><span v-if="$q.screen.gt.xs">Happening in&nbsp;</span
+        >{{ dateString }}</span
+      >
       <!--
       <q-separator class="grow q-ml-md" v-if="$q.screen.gt.lg" />
       -->
@@ -29,7 +32,7 @@ export default {
   computed: {
     dateString() {
       if (this.date) {
-        return '' + moment(this.date).format('MMM YYYY');
+        return '' + moment(this.date).format('MMMM YYYY');
       } else {
         return '';
       }

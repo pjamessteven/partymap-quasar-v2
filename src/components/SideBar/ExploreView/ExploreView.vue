@@ -95,7 +95,7 @@
               >
                 <EventDateList
                   v-if="compactView"
-                  :groupByMonth="groupByMonth"
+                  :groupByMonth="groupEventsByMonth"
                   :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
                   :eventDates="eventDates"
                   :hasNext="eventDatesHasNext"
@@ -105,7 +105,7 @@
 
                 <EventDatePosterList
                   v-if="!compactView"
-                  :groupByMonth="groupByMonth"
+                  :groupByMonth="groupEventsByMonth"
                   :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
                   :eventDates="eventDates"
                   :hasNext="eventDatesHasNext"
@@ -168,9 +168,11 @@
               class="flex row no-wrap"
               style="pointer-events: all"
               v-else-if="
-                ((groupByMonth &&
+                ((groupEventsByMonth &&
                   Object.keys(eventDatesGroupedByMonth)?.length == 0) ||
-                  (!groupByMonth && eventDates && eventDates.length === 0)) &&
+                  (!groupEventsByMonth &&
+                    eventDates &&
+                    eventDates.length === 0)) &&
                 !(isLoadingInitial || (mapMoving && !blockUpdates))
               "
             >
@@ -412,7 +414,7 @@ export default {
       'sidebarPanel',
       'userLocation',
       'compactView',
-      'groupByMonth',
+      'groupEventsByMonth',
     ]),
     ...mapWritableState(useMainStore, ['showPanel', 'enablePanelSwipeDown']),
     ...mapWritableState(useMapStore, ['map', 'blockUpdates', 'preventMapZoom']),
