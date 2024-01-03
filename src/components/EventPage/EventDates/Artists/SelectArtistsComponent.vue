@@ -21,7 +21,7 @@
         <q-icon name="search" class="q-pa-md" />
       </template>
       <template v-slot:option="scope">
-        <q-item :key="scope.opt.id" v-bind="scope.itemProps">
+        <q-item v-bind="scope.itemProps">
           <q-item-section>
             <q-item-label>
               {{ scope.opt.name }}
@@ -223,7 +223,7 @@ export default {
       value.toAdd = true;
       value.stage = this.selectedList;
       this.artistsList.push(value);
-      this.sortArtistList();
+      //this.sortArtistList();
       this.results = [];
       this.selectValue = '';
     },

@@ -9,10 +9,7 @@
       }"
     >
       <span v-if="!!altLabel">{{ altLabel }}</span>
-      <span v-else
-        ><span v-if="$q.screen.gt.xs">Happening in&nbsp;</span
-        >{{ dateString }}</span
-      >
+      <span v-else>Events in {{ dateString }}</span>
       <!--
       <q-separator class="grow q-ml-md" v-if="$q.screen.gt.lg" />
       -->

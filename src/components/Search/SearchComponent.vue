@@ -173,9 +173,9 @@ export default {
   }
   .controls-wrapper-inner {
     //
-    //box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
-    background: white;
-    background: #f5f5f5;
+    box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+    background: white !important;
+    // background: #f5f5f5;
     color: $t-1;
     //border: 1px solid rgba(0, 0, 0, 0.1);
     //box-shadow: none;

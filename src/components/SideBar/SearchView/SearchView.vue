@@ -11,11 +11,8 @@
     </div>
     -->
     <div
-      class="content flex column grow q-px-md"
-      v-if="
-        (searchResults.length > 0 || locationSearchResults.length > 0) &&
-        !loading
-      "
+      class="flex column grow q-px-md"
+      style="position: relative !important"
       :class="$q.screen.gt.xs ? 'q-px-lg q-pt-lg' : ''"
     >
       <!--
@@ -34,8 +31,27 @@
         :search-results="searchResults"
         :search-location-results="locationSearchResults"
       />
+      <transition
+        appear
+        enter-active-class="animated fadeIn faster"
+        leave-active-class="animated fadeOut faster"
+      >
+        <div
+          style="height: 50%"
+          v-if="
+            searchResults?.length == 0 &&
+            locationSearchResults?.length == 0 &&
+            query?.length > 0 &&
+            currentQuery === query &&
+            !loading
+          "
+          class="flex justify-center items-center t3"
+        >
+          No results
+        </div>
+      </transition>
+      <InnerLoading v-if="loading" :solid="false" style="height: 50%" />
     </div>
-    <InnerLoading v-if="loading" :solid="false" />
   </div>
 </template>
 
@@ -55,6 +71,7 @@ export default {
       searchResults: [],
       locationSearchResults: [],
       loading: false,
+      currentQuery: '',
     };
   },
   methods: {
@@ -62,14 +79,14 @@ export default {
       if (this.query?.length > 0) {
         this.loading = true;
         const provider = new OpenStreetMapProvider();
-        const currentQuery = this.query;
+        this.currentQuery = this.query;
         const [searchResultsResponse, locationSearchResponse] =
           await Promise.all([
             getSearchSuggestionsRequest({ query: this.query }),
             provider.search({ query: this.query }),
           ]);
 
-        if (currentQuery === this.query) {
+        if (this.currentQuery === this.query) {
           //only set results if query hasn't changed
           this.searchResults = searchResultsResponse.data.results;
           this.locationSearchResults = locationSearchResponse.map((res) => ({

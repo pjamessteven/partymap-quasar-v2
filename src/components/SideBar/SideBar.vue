@@ -25,9 +25,9 @@
           style="margin-top: 4px"
         >
           <q-btn
-            class="inter primary nav-button"
+            class="inter nav-button primary"
+            style="font-weight: 400 !important"
             no-caps
-            flat
             @click="showAddEventDialog"
             >Submit
             <q-icon name="mdi-plus" class="q-ml-sm" size="1rem" />
@@ -355,7 +355,6 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .nav-button {
-    background: $bi-4;
   }
   .hover-indicator-line {
     background: rgba(255, 255, 255, 0.2);
@@ -633,8 +632,8 @@ export default {
         :deep(.controls-wrapper-inner) {
           //border-top: 1px solid $b-3;
 
-          background: white !important;
-          background: #f5f5f5 !important;
+          // background: white !important;
+          //  background: #f5f5f5 !important;
           // box-shadow: none;
           //background: $b-2;
         }

@@ -4,7 +4,7 @@
     :class="$q.screen.gt.xs ? ' ' : ' t2'"
   >
     <q-scroll-area
-      v-if="!searchbarShowing"
+      v-show="!searchbarShowing"
       ref="scroll"
       horizontal
       class="control-scroll-area"
@@ -272,7 +272,7 @@ export default {
       this.hideResultsAndPreviousPanel();
     },
     onSearchbarFocus() {
-      if (this.query.length > 0) {
+      if (this.query?.length > 0) {
         this.sidebarPanel = 'search';
         this.showPanel = true;
       }
