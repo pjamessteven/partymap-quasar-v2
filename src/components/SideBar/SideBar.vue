@@ -642,9 +642,9 @@ export default {
         box-shadow: none;
 
         :deep(.controls-wrapper-inner) {
-          background: $bi-2;
+          background: $bi-3;
           border: none;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          //border: 1px solid rgba(255, 255, 255, 0.1);
         }
       }
     }
