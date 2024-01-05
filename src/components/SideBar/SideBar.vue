@@ -24,11 +24,7 @@
           v-if="$route.name === 'Explore' && $q.screen.gt.xs"
           style="margin-top: 4px"
         >
-          <q-btn
-            class="inter nav-button primary"
-            style="font-weight: 400 !important"
-            no-caps
-            @click="showAddEventDialog"
+          <q-btn class="inter o-070" no-caps flat @click="showAddEventDialog"
             >Submit
             <q-icon name="mdi-plus" class="q-ml-sm" size="1rem" />
           </q-btn>

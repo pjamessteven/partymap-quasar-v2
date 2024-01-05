@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <q-select
+      ref="input"
       outlined
       use-input
       clearable
@@ -109,6 +110,14 @@ export default {
 
       this.autoCompleteSessionToken =
         new this.google.maps.places.AutocompleteSessionToken();
+
+      if (
+        !this.locationProp.place_id &&
+        typeof this.locationProp === 'string'
+      ) {
+        // lookup place
+        this.$refs.input.filter(this.locationProp);
+      }
     } catch (error) {
       this.$q.notify(error);
     }

@@ -203,7 +203,7 @@
 
                     <GoogleLocationComponent
                       v-on:location="event.location = $event"
-                      :location="event.location"
+                      :locationProp="event.location"
                     />
 
                     <div
@@ -582,7 +582,10 @@ export default {
     SelectTagsComponent,
     SelectArtistsComponent,
   },
-  props: { host: { type: Boolean, default: false } },
+  props: {
+    host: { type: Boolean, default: false },
+    prepopulate: { type: Object, default: null },
+  },
   data() {
     return {
       descriptionAttribute: null,
@@ -821,6 +824,9 @@ export default {
   },
   mounted() {
     this.initMap();
+    if (this.prepopulate) {
+      this.event = { ...this.event, ...this.prepopulate };
+    }
   },
 };
 </script>

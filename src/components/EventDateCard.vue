@@ -191,7 +191,6 @@ import common, { localDayOfMonth } from 'assets/common';
 import Tag from 'src/components/TagComponent.vue';
 import { mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
-
 export default {
   components: {
     Tag,
@@ -389,7 +388,7 @@ export default {
     .tag-container {
       :deep(.tag) {
         background: transparent !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border: 1px solid rgba(255, 255, 255, 0.48) !important;
       }
     }
 

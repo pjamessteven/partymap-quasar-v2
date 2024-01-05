@@ -1441,7 +1441,7 @@ a {
                 color: white;
 
                 :deep(.tag) {
-                  border-color: rgba(255, 255, 255, 0.2) !important;
+                  border-color: rgba(255, 255, 255, 0.48) !important;
                 }
               }
             }
@@ -1601,7 +1601,7 @@ a {
               }
               :deep(.tag) {
                 background: transparent !important;
-                border: 1px solid rgba(255, 255, 255, 0.2) !important;
+                border: 1px solid rgba(255, 255, 255, 0.48) !important;
 
                 .tag-inner-wrapper {
                   background: transparent;

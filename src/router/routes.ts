@@ -14,6 +14,15 @@ const routes: RouteRecordRaw[] = [
     },
     children: [
       {
+        path: '/scraper',
+        name: 'ScraperPage',
+        component: () => import('src/components/ScraperPage/ScraperPage.vue'),
+        meta: {
+          auth: true,
+          mapOverlay: false,
+        },
+      },
+      {
         path: '/event/:id/:eventDateId?',
         name: 'EventPage',
         components: {
