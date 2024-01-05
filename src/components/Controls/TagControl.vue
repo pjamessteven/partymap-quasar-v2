@@ -83,7 +83,11 @@
           </q-input>
           <div class="separator" style="width: 100%" />
         </div>
-        <div @scroll="onScrollMainContent($event)" class="control-menu">
+        <div
+          @scroll="onScrollMainContent($event)"
+          class="control-menu"
+          style="min-width: 400px !important"
+        >
           <div
             class="flex column grow"
             v-if="tagOptions && tagOptions.length > 0"
@@ -95,8 +99,19 @@
                 v-if="!query || query.length == 0"
                 >Top tags worldwide:</q-item-label
               >
-
-              <div
+              <div class="flex row q-gutter-sm q-px-md q-pt-sm q-pb-lg">
+                <Tag
+                  :value="tag.tag"
+                  :key="index"
+                  @click="clickTag(tag)"
+                  :selected="
+                    controlTag?.findIndex((x) => x.tag === tag.tag) > -1
+                  "
+                  v-for="(tag, index) in tagOptions"
+                />
+              </div>
+              <!--
+                                <div
                 class="flex column"
                 v-for="(tag, index) in tagOptions"
                 :key="index"
@@ -114,20 +129,14 @@
                   <div class="q-py-md">
                     <q-item-label>
                       {{ tag.tag }} &nbsp;
-                      <!--<span class="t4"
-                        >({{ tag.count }})</span-->
+                      <span class="t4"
+                        >({{ tag.count }})</span
                     </q-item-label>
-                    <!--
-                    <q-checkbox
-                      @click="clickTag(tag)"
-                      :model-value="
-                        controlTag?.findIndex((x) => x.tag === tag.tag) > -1
-                      "
-                    />
-                    -->
+
                   </div>
                 </q-item>
-              </div>
+                </div>
+              -->
             </q-list>
             <div
               class="row justify-center q-my-lg"
@@ -159,10 +168,12 @@ import { mapActions, mapWritableState, mapState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
 import MenuWrapper from './MenuWrapper.vue';
+import Tag from 'components/EventPage/Tags/TagComponent.vue';
 
 export default {
   components: {
     MenuWrapper,
+    Tag,
   },
   data() {
     return {

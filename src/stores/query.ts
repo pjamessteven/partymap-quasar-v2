@@ -126,7 +126,7 @@ export const useQueryStore = defineStore('query', {
 
     tagOptions: [],
     tagOptionsHasNext: false,
-    tagOptionsPerPage: 20,
+    tagOptionsPerPage: 50,
     tagOptionsPage: 1,
     tagOptionsLoading: false,
 

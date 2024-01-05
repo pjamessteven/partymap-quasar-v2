@@ -92,6 +92,12 @@
     </q-scroll-area>
     <div class="searchbar-wrapper" v-if="searchbarShowing">
       <q-input
+        @keydown.esc="
+          () => {
+            query = '';
+            $refs.search.blur();
+          }
+        "
         ref="search"
         borderless
         autofocus

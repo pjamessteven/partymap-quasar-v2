@@ -165,8 +165,11 @@
             </q-item>
           </q-list>
           <div class="flex column date-picker-container">
-            <q-item-label header class="q-pb-md" style="text-align: center"
-              >Select a date range</q-item-label
+            <q-item-label
+              header
+              class="q-pb-md t1 inter bold"
+              style="text-align: center"
+              >{{ title }}</q-item-label
             >
 
             <DatePicker
@@ -180,6 +183,7 @@
               color="gray"
               :columns="$q.screen.gt.xs ? 2 : 1"
               :is-dark="$q.dark.isActive"
+              @dayclick="dayclick"
             />
           </div>
         </div>
@@ -210,6 +214,7 @@ export default {
   },
   data() {
     return {
+      title: 'Select date range',
       showing: false,
       customDateRange: null,
       modelConfig: {
@@ -535,6 +540,13 @@ export default {
     },
   },
   methods: {
+    dayclick() {
+      if (this.title === 'Select date range') {
+        this.title = 'Select end date';
+      } else {
+        this.title = 'Select date range';
+      }
+    },
     clearDateRange() {
       this.controlDateRange = { start: moment().toISOString() };
       this.controlDateRangeSelectedOption = null;

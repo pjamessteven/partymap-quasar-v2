@@ -63,7 +63,7 @@ export default {
 .body--light {
   .tag {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.48);
     &:hover {
       background: $b-2 !important;
       box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 3px 0px;
