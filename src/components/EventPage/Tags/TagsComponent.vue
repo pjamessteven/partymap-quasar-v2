@@ -37,25 +37,13 @@
       transition-show="jump-up"
       transition-hide="jump-down"
     >
-      <q-card class="dialog-card event-page-editing-dialog">
-        <q-card-section class="row items-center q-pb-none">
-          <div class="text-h6">{{ $t('tags.tag_event') }}</div>
-          <q-space />
-          <q-btn icon="close" flat round dense v-close-popup />
-        </q-card-section>
-        <q-card-section class="flex column">
-          <SelectTagsComponent
-            :mode="'updateExisting'"
-            @closeDialog="showAddTagDialog = false"
-          />
-        </q-card-section>
-      </q-card>
+      <SelectTagsDialog @closeDialog="showAddTagDialog = false" />
     </q-dialog>
   </div>
 </template>
 
 <script>
-import SelectTagsComponent from 'components/EventPage/Tags/SelectTagsComponent.vue';
+import SelectTagsDialog from 'components/EventPage/Tags/SelectTagsDialog.vue';
 import Tag from 'components/EventPage/Tags/TagComponent.vue';
 import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
@@ -63,7 +51,7 @@ import { useEventStore } from 'src/stores/event';
 export default {
   components: {
     Tag,
-    SelectTagsComponent,
+    SelectTagsDialog,
   },
   props: {
     editing: Boolean,

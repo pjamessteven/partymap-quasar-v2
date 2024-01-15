@@ -340,6 +340,7 @@
                       autogrow
                       :input-style="{ 'min-height': '100px' }"
                       color="bg-grey-7"
+                      maxlength="10000"
                       v-model="event.full_description"
                       :label="$t('description.detailed_description')"
                       style="padding-bottom: 0px"

@@ -2,18 +2,21 @@
   <SolidPage>
     <template v-slot>
       <div class="scraper-page flex column">
-        <div class="text-h6">Ticketmaster Tool</div>
-        <q-input v-model="query" label="Query" />
-        <q-input v-model="keyword" label="Keyword" />
-        <q-input v-model="classificationName" label="Classification name" />
+        <div class="text-h6 q-mb-md">Ticketmaster Tool</div>
+        <q-input dense v-model="keyword" label="Keyword" />
+        <q-input
+          dense
+          v-model="classificationName"
+          label="Classification name"
+        />
         <div class="t3 q-mt-xs">
           Filter by classification name: name of any segment, genre, sub-genre,
           type, sub-type. Negative filtering is supported by using the following
           format '-'. Be aware that negative filters may cause decreased
           performance.
         </div>
-        <div class="flex row q-mt-sm">
-          <q-input filled label="From" v-model="dateRange.start">
+        <div class="flex q-gutter-sm row q-mt-sm">
+          <q-input filled dense label="From" v-model="dateRange.start">
             <template v-slot:prepend>
               <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy cover>
@@ -33,7 +36,7 @@
               />
             </template>
           </q-input>
-          <q-input filled label="To" v-model="dateRange.to" class="q-ml-sm">
+          <q-input filled dense label="To" v-model="dateRange.to">
             <template v-slot:prepend>
               <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy cover>
@@ -54,8 +57,8 @@
             </template>
           </q-input>
           <q-select
+            dense
             filled
-            class="q-ml-sm"
             label="Country"
             style="width: 250px"
             clearable=""
@@ -70,25 +73,33 @@
         <div class="q-mt-md">
           <q-btn @click="search()">Search</q-btn>
         </div>
+        <q-separator class="q-my-md" />
+        <SelectTagsComponent
+          @valueUpdated="($event) => (universalTags = $event)"
+        />
+        <q-separator class="q-my-md" />
         <q-pagination
-          v-if="response?.page.totalPages"
+          v-if="response?.page?.totalPages"
           v-model="page"
           :min="0"
           :max="response?.page.totalPages || 0"
+          :max-pages="10"
+          class="pagination q-py-md"
         />
         <div class="results flex column" v-if="response?._embedded?.events">
           <TicketmasterResult
-            v-for="(result, index) in response?._embedded?.events"
+            v-for="result in response?._embedded?.events"
             :result="result"
-            :key="index"
+            :universalTags="universalTags"
+            :key="result.id"
             @click="selectedResult = result"
           />
         </div>
         <InnerLoading v-if="loading" />
         <q-dialog :model-value="!!mappedSelectedResult">
-          {{ result.dates }}
+          {{ selectedResult.dates }}
           <br />
-          {{ result._embedded?.venues }}
+          {{ selectedResult._embedded?.venues }}
           <AddEventPage :prepopulate="mappedSelectedResult" />
         </q-dialog>
       </div>
@@ -103,6 +114,7 @@ import TicketmasterResult from 'src/components/ScraperPage/TicketmasterResult.vu
 import InnerLoading from 'src/components/InnerLoading.vue';
 import AddEventPage from 'src/components/AddEventPage/AddEventPage.vue';
 import { searchTicketmaster } from 'src/api';
+import SelectTagsComponent from 'components/EventPage/Tags/SelectTagsComponent.vue';
 
 import countryCodes from 'src/assets/country-code';
 export default {
@@ -111,6 +123,7 @@ export default {
     InnerLoading,
     TicketmasterResult,
     AddEventPage,
+    SelectTagsComponent,
   },
   props: {
     username: {
@@ -119,11 +132,11 @@ export default {
   },
   data() {
     return {
+      universalTags: [],
       dateRange: { start: null, end: null },
       countryCode: null,
       city: null,
       loading: false,
-      query: null,
       classificationName: null,
       keyword: undefined,
       page: 0,
@@ -134,7 +147,7 @@ export default {
   methods: {
     async search() {
       this.loading = true;
-      this.response = await searchTicketmaster({
+      const searchResponse = await searchTicketmaster({
         page: this.page,
         keyword: this.keyword,
         countryCode: this.countryCode,
@@ -143,7 +156,8 @@ export default {
         city: this.city,
         countryCode: this.countryCode,
         classificationName: this.classificationName,
-      })?.data?.events_results;
+      });
+      this.response = searchResponse.data;
       this.loading = false;
     },
   },
@@ -275,6 +289,13 @@ export default {
 }
 
 .body--light {
+}
+
+.pagination {
+  position: sticky;
+  top: -1px;
+  background: white;
+  z-index: 100;
 }
 @media only screen and (max-width: 600px) {
 }

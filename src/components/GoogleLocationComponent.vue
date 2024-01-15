@@ -4,6 +4,7 @@
       ref="input"
       outlined
       use-input
+      :loading="loading"
       clearable
       v-model="selectedPlace"
       :label="'Location'"
@@ -19,7 +20,7 @@
       v-on:click="selectedPlace = null"
       v-on:focusout="
         !selectedPlace || selectedPlace.length == 0
-          ? (selectedPlace = locationProp)
+          ? (selectedPlace = locationProp || previouslySelectedPlace)
           : undefined
       "
     >
@@ -38,9 +39,10 @@ import gmapsInit from 'assets/gmaps-script';
 
 export default {
   components: {},
-  props: ['locationProp'],
+  props: ['locationProp', 'preSearch'],
   data() {
     return {
+      loading: false,
       location: null,
       results: [],
       google: null,
@@ -49,6 +51,7 @@ export default {
       autoCompleteSessionToken: null,
       autoCompleteResults: [],
       selectedPlace: this.locationProp,
+      previouslySelectedPlace: this.locationProp,
       locations: {},
       locationSearchResults: [],
     };
@@ -60,6 +63,11 @@ export default {
       },
       deep: true,
       immediate: true,
+    },
+    selectedPlace(newv, oldv) {
+      if (oldv) {
+        this.previouslySelectedPlace = oldv;
+      }
     },
   },
   methods: {
@@ -110,13 +118,35 @@ export default {
 
       this.autoCompleteSessionToken =
         new this.google.maps.places.AutocompleteSessionToken();
-
-      if (
-        !this.locationProp.place_id &&
-        typeof this.locationProp === 'string'
-      ) {
-        // lookup place
-        this.$refs.input.filter(this.locationProp);
+      console.log('pre', this.preSearch);
+      if (this.preSearch) {
+        this.loading = true;
+        // lookup place and select first place
+        this.autoCompleteService.getPlacePredictions(
+          {
+            input: this.preSearch,
+            sessionToken: this.autoCompleteSessionToken,
+          },
+          (results) => {
+            const firstResult = results[0];
+            console.log('fis', firstResult);
+            this.selectedPlace = firstResult;
+            var request = {
+              placeId: firstResult.place_id,
+              fields: ['name', 'type', 'address_component', 'geometry'],
+              sessionToken: this.autoCompleteSessionToken,
+            };
+            this.placesService.getDetails(request, (place) => {
+              let loc = {};
+              loc = place;
+              loc.description = this.selectedPlace.description;
+              loc.place_id = this.selectedPlace.place_id;
+              this.location = loc;
+              this.$emit('location', loc);
+              this.loading = false;
+            });
+          }
+        );
       }
     } catch (error) {
       this.$q.notify(error);

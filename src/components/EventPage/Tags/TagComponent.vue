@@ -10,8 +10,13 @@
       >
         <q-icon
           style="margin-left: -4px; font-size: 18px"
-          name="mdi-close-circle q-mr-xs"
+          name="mdi-minus-circle q-mr-xs"
           v-if="selected"
+        />
+        <q-icon
+          style="margin-left: -4px; font-size: 18px"
+          name="mdi-plus-circle q-mr-xs"
+          v-if="showAddIcon"
         />
         <div>{{ value }}</div>
         <div v-if="count">&nbsp;({{ count }})</div>
@@ -27,6 +32,7 @@ export default {
     disabled: Boolean,
     count: String,
     selected: Boolean,
+    showAddIcon: Boolean,
   },
   data() {
     return {
@@ -46,7 +52,7 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .tag {
-    background: $bi-3 !important;
+    background: $bi-4 !important;
     color: $ti-1 !important;
 
     &:hover {
@@ -54,8 +60,8 @@ export default {
       color: white !important;
     }
     &.selected {
-      background: $b-1 !important;
-      color: $t-1 !important;
+      background: $bi-4 !important;
+      color: $ti-1 !important;
     }
   }
 }
