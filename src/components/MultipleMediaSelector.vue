@@ -10,7 +10,7 @@
       class="file-input"
     />
     <div
-      class="file-previews flex column align-start items-start q-px-md"
+      class="file-previews flex column align-start items-start q-px-md q-mt-md"
       v-if="items.length > 0"
     >
       <div
@@ -55,7 +55,13 @@
         </div>
       </div>
     </div>
-    <div class="bottom-buttons flex row grow justify-end q-mt-md">
+    <div
+      class="bottom-buttons flex row grow justify-end q-mt-md"
+      v-if="
+        (showSelectButton && !(singleSelectMode && items.length >= 1)) ||
+        showUploadButton
+      "
+    >
       <q-btn
         :label="label ? label : $t('media_upload.add_media')"
         v-on:click="openSelectDialog()"

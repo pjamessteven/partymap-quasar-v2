@@ -323,8 +323,7 @@ export default {
     suggested_tags:
       'Some ideas: festival, cultural, spiritual, camping, free, hiphop, trance, metal, alcohol free, psychedelic, drug testing, wheelchair accessible...',
     enter_location: 'Enter location',
-    location_caption:
-      'If this event happens at different locations, you can change the location of each date after creating the event.',
+    location_caption: 'Search for a venue or an address.',
     date: 'Date and Time',
     review: 'Review',
     recurrence: 'Event Schedule',
@@ -372,8 +371,7 @@ export default {
     size: 'Size',
     size_how_many: 'Size',
     url: 'External URL',
-    url_msg:
-      'A link to the website or Facebook page (Click the share button on the Facebook event page to get a nice link).',
+    url_msg: 'A link to the website or Facebook page.',
     add_event_date: 'Add date',
     uploading_event: 'Uploading this event to PartyMap...',
     pending_moderation: 'Pending moderation',
@@ -412,12 +410,11 @@ export default {
     edit_description: 'Update main description',
     keep_it_short: 'Keep it short and sweet.',
     summary: 'Summary',
-    attribute_msg:
-      'Please give the source so we can attribute the original writer',
+    attribute_msg: 'Description source URL',
     attribute_msg_long:
       'If you did not write this yourself, please give the source.',
     summary_msg:
-      'A short description that will be shown at the top of the event page. Keep it short and sweet.',
+      'A short description that will be shown at the top of the event page.',
     detailed_description: 'Detailed description',
     detailed_description_msg: 'A detailed description of this upcoming event.',
     put_more_details_in_event_date:
@@ -614,8 +611,7 @@ export default {
     updating_event_date: 'Updating event date...',
 
     external_url: 'External URL',
-    external_url_msg:
-      'Add a link to the website or Facebook page (Click the share button on the Facebook event page to get a nice link).',
+    external_url_msg: 'Add a link to the website or Facebook page',
     size: 'Size',
     size_msg: 'Roughly how many people will be attending this event?',
     description: 'Description',

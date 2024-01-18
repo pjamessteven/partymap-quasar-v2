@@ -74,7 +74,7 @@ import moment from 'moment-timezone';
 import _ from 'lodash';
 import { useAuthStore } from 'src/stores/auth';
 import { mapState } from 'pinia';
-
+import 'v-calendar/style.css';
 export default {
   components: {
     DatePicker,

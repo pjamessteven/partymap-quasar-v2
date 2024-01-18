@@ -1,42 +1,6 @@
 <template>
   <div class="select-artists-component flex column">
-    <q-select
-      option-label="name"
-      style="max-width: 100%"
-      ref="musicBrainzInput"
-      :loading="loadingResults"
-      outlined
-      use-input
-      menu-anchor="top left"
-      menu-self="bottom left"
-      v-model="selectValue"
-      @update:model-value="onSelectArtist"
-      emit-value
-      map-options
-      :options="results"
-      @filter="filterFn"
-      label="Search for artists"
-    >
-      <template v-slot:append>
-        <q-icon name="search" class="q-pa-md" />
-      </template>
-      <template v-slot:option="scope">
-        <q-item v-bind="scope.itemProps">
-          <q-item-section>
-            <q-item-label>
-              {{ scope.opt.name }}
-              <span v-if="scope.opt.newRecord">(Create new record)</span>
-            </q-item-label>
-            <q-item-label caption>
-              {{ scope.opt.disambiguation }}
-              <span v-if="scope.opt.area && scope.opt.area.name">
-                ({{ scope.opt.area.name }})
-              </span>
-            </q-item-label>
-          </q-item-section>
-        </q-item>
-      </template>
-    </q-select>
+    <SelectArtistsInput @selectedArtist="onSelectArtist($event)" />
     <div
       class="flex row no-wrap items-center q-mt-sm list-select"
       style="max-width: 100%"
@@ -71,39 +35,20 @@
         </q-btn>
       </div>
     </div>
-    <q-list v-if="artistsListWithoutToDelete.length > 0" class="q-mt-md">
+    <q-list v-if="artistsOfList.length > 0" class="q-mt-md">
       <div
         class="flex column"
-        v-for="(artist, index) in artistsListWithoutToDelete"
+        v-for="(artist, index) in artistsOfList"
         :key="artist.id + artist.mbid"
       >
         <q-separator v-if="index !== 0" />
         <ArtistListItem
           :artist="artist"
           :editing="true"
-          @updated="sortArtistList"
           :defaultDate="defaultDate"
-          @delete="
-            () => {
-              artist.toDelete = true;
-              sortArtistList();
-            }
-          "
-          @removeDate="
-            () => {
-              artist.remove_date = true;
-              artist.start_naive = null;
-              artist.toUpdate = true;
-              sortArtistList();
-            }
-          "
-          @updateDate="
-            (newDate) => {
-              artist.start_naive = newDate;
-              artist.toUpdate = true;
-              sortArtistList();
-            }
-          "
+          @delete="deleteArtist(artist)"
+          @removeDate="removeArtistDate(aritst)"
+          @updateDate="updateArtistDate(artist, $event)"
         />
       </div>
     </q-list>
@@ -115,7 +60,10 @@
       icon="mdi-minus"
       @click="removeList"
     />
-    <div class="flex row grow justify-end q-mt-lg" v-if="mode !== 'emit'">
+    <div
+      class="select-artists-bottom flex row grow justify-end q-py-md"
+      v-if="mode !== 'emit'"
+    >
       <q-btn
         :label="$t('general.save_changes')"
         @click="saveChanges()"
@@ -127,10 +75,10 @@
 
 <script>
 import { getMusicBrainzArtist, getArtistsRequest } from 'src/api';
-import _ from 'lodash';
+import _, { update } from 'lodash';
 import ArtistListItem from './ArtistListItem.vue';
 import SubmitSuggestionPrompt from 'components/EventPage/Suggestions/SubmitSuggestionPrompt.vue';
-
+import SelectArtistsInput from './SelectArtistsInput.vue';
 import { mapState, mapActions } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
@@ -138,23 +86,82 @@ import { useAuthStore } from 'src/stores/auth';
 export default {
   components: {
     ArtistListItem,
+    SelectArtistsInput,
   },
   props: { mode: String, artists: Array, defaultDate: String },
   data() {
     return {
-      results: null,
-      loadingResults: false,
-      selectValue: null,
+      originalArtistsList: [],
       artistsList: [],
+      artistsToDelete: [],
+      artistsToAdd: [],
+      artistsToUpdate: [],
       listToAdd: null,
       lists: [],
       selectedList: null,
     };
   },
-  watch: {},
+  watch: {
+    artistsToAdd(newv, oldv) {
+      // for emit mode
+      this.$emit('updated', newv);
+    },
+  },
   methods: {
     ...mapActions(useEventStore, ['updateEventDate', 'suggestEventDateEdit']),
+    removeArtistDate(artist) {
+      artist.remove_date = true;
+      artist.start_naive = null;
+      const existingUpdateIndex = this.artistsToUpdate.findIndex(
+        (x) => x.name === artist.name
+      );
+      if (existingUpdateIndex >= 0) {
+        this.artistsToUpdate[existingUpdateIndex] = artist;
+      } else {
+        this.artistsToUpdate.push(artist);
+      }
+      this.sortArtistList();
+    },
+    updateArtistDate(artist, newDate) {
+      artist.start_naive = newDate;
+      const existingUpdateIndex = this.artistsToUpdate.findIndex(
+        (x) => x.name === artist.name
+      );
+      if (existingUpdateIndex >= 0) {
+        this.artistsToUpdate[existingUpdateIndex] = artist;
+      } else {
+        this.artistsToUpdate.push(artist);
+      }
+      this.sortArtistList();
+    },
+    deleteArtist(artist) {
+      const originalExistingIndex = this.originalArtistsList.findIndex(
+        (x) => x.name === artist.name
+      );
+      const existingIndex = this.artistsList.findIndex(
+        (x) => x.name === artist.name
+      );
+      const existingAddIndex = this.artistsToAdd.findIndex(
+        (x) => x.name === artist.name
+      );
+      const existingUpdateIndex = this.artistsToUpdate.findIndex(
+        (x) => x.name === artist.name
+      );
 
+      if (existingIndex >= 0) {
+        this.artistsList.splice(existingIndex, 1);
+      }
+      if (existingAddIndex >= 0) {
+        this.artistsToAdd.splice(existingAddIndex, 1);
+      }
+      if (existingUpdateIndex >= 0) {
+        this.artistsToUpdate.splice(existingUpdateIndex, 1);
+      }
+      // artist has already been saved so we do need to remove it
+      if (originalExistingIndex >= 0) {
+        this.artistsToDelete.push(artist);
+      }
+    },
     removeList() {
       var index = this.lists.indexOf(this.selectedList);
       this.lists.splice(index, 1);
@@ -216,57 +223,15 @@ export default {
           return new Date(a.start_naive) - new Date(b.start_naive);
         }
       });
-      // for emit mode
-      this.$emit('updated', this.artistsToAdd);
     },
     onSelectArtist(value) {
       value.toAdd = true;
       value.stage = this.selectedList;
       this.artistsList.push(value);
-      //this.sortArtistList();
-      this.results = [];
-      this.selectValue = '';
-    },
-    filterFn(val, update, abort) {
-      // call abort() at any time if you can't retrieve data somehow
-      update(async () => {
-        if (val === '') {
-          this.results = [];
-        } else {
-          this.loadingResults = true;
-          try {
-            // if one of the below calls fails... both will.. :(
-            const [pmResponse, mbResponse] = await Promise.all([
-              getArtistsRequest({
-                query: val,
-                page: 1,
-                sort: 'event_count',
-                desc: true,
-                per_page: 5,
-              }),
-              getMusicBrainzArtist(val),
-            ]);
-            let mappedResponse = mbResponse.data.artists
-              .map(({ id, ...rest }) => ({ ...rest, mbid: id }))
-              .filter(
-                (x) =>
-                  pmResponse.data.items.findIndex((y) => y.mbid === x.mbid) ===
-                  -1
-              );
-            this.results = [
-              ...[{ name: val, newRecord: true }],
-              ...pmResponse.data.items,
-              ...mappedResponse,
-            ];
-            //this.$refs.musicBrainzInput.refresh();
-            this.loadingResults = false;
-          } catch {
-            abort();
-          }
-        }
-      });
+      this.artistsToAdd.push(value);
     },
     loadArtistList() {
+      this.originalArtistsList = _.cloneDeep(this.selectedEventDate.artists);
       this.artistsList = _.cloneDeep(this.selectedEventDate.artists);
       this.sortArtistList();
     },
@@ -351,28 +316,6 @@ export default {
         return this.artistsList.filter((x) => x.stage === this.selectedList);
       }
     },
-    artistsListWithoutToDelete() {
-      // all artists without ones to delete
-      // for UI
-      var list = this.artistsList.filter((x) => !x.toDelete);
-      if (this.selectedList) {
-        list = list.filter((x) => x.stage === this.selectedList);
-      }
-      return list;
-    },
-    artistsToUpdate() {
-      // don't include artists that haven't been added yet or artists to delete
-      return this.artistsList.filter(
-        (x) => x.toUpdate && !x.toAdd && !x.toDelete
-      );
-    },
-    artistsToAdd() {
-      return this.artistsList.filter((x) => x.toAdd && !x.toDelete);
-    },
-    artistsToDelete() {
-      // don't include artists that haven't been added yet
-      return this.artistsList.filter((x) => x.toDelete && !x.toAdd);
-    },
   },
   mounted() {
     if (this.mode !== 'emit') {
@@ -388,22 +331,34 @@ export default {
 
 <style lang="scss" scoped>
 .body--dark {
-  .artist-list {
-    background: $bi-3;
-  }
-  .list-select {
-    //background: $bi-2;
+  .select-artists-component {
+    .artist-list {
+      background: $bi-3;
+    }
+    .select-artists-bottom {
+      background: $bi-2;
+    }
   }
 }
 .body--light {
-  .artist-list {
-    border: 1px solid rgba(0, 0, 0, 0.1);
-  }
-  .list-select {
-    //background: $b-2;
+  .select-artists-component {
+    .artist-list {
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .select-artists-bottom {
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+      background: white;
+    }
   }
 }
-
+.select-artists-component {
+  position: relative;
+  .select-artists-bottom {
+    position: sticky;
+    bottom: 0px;
+  }
+}
 .taggroup-move {
   transition: transform 500ms;
 }

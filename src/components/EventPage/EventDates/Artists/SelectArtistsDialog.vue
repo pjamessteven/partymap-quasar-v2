@@ -6,14 +6,17 @@
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>
 
-    <q-card-section class="flex column no-wrap q-mt-sm dialog-card-content">
+    <div
+      class="flex column no-wrap q-mt-sm q-px-md q-pt-md dialog-card-content"
+      style="position: relative"
+    >
       <div class="t3 q-mb-md">{{ $t('suggestions.artists_msg') }}</div>
       <SelectArtistsComponent
         class="select-artists"
         @hideDialog="$emit('hideDialog')"
         :defaultDate="defaultDate"
       />
-    </q-card-section>
+    </div>
   </q-card>
 </template>
 

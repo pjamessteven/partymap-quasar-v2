@@ -20,7 +20,7 @@
       :class="$q.screen.gt.sm ? 'text-large' : ''"
     >
       <div
-        class="ellipsis flex"
+        class="ellipsis flex no-wrap"
         :class="$q.screen.gt.xs ? 'justify-between' : 'column'"
         style="white-space: pre-line; width: 100%"
         v-if="computedExternalUrl"
@@ -28,12 +28,13 @@
         <div class="flex column" :class="$q.screen.gt.sm ? 'text-large' : ''">
           <div class="t2">Link</div>
           <a
-            class="t3 link-hover"
+            class="t3 link-hover q-mr-sm"
             :href="computedExternalUrl"
-            style="text-decoration: none"
+            style="text-decoration: none; line-break: anywhere"
             target="_blank"
           >
-            {{ selectedEventDate.url }}
+            {{ selectedEventDate.url.substring(0, 40)
+            }}<span v-if="selectedEventDate.url.length > 40">...</span>
           </a>
         </div>
         <!--

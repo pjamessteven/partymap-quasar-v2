@@ -60,7 +60,7 @@ export default {
       color: white !important;
     }
     &.selected {
-      background: $bi-4 !important;
+      //  background: $bi-4 !important;
       color: $ti-1 !important;
     }
   }
@@ -91,6 +91,10 @@ export default {
   align-items: center;
   justify-content: center;
   border-radius: 100px;
+  &.selected {
+    background: $primary !important;
+    color: $ti-1 !important;
+  }
   .tag-inner-wrapper {
     padding: 0px 6px;
     position: relative;

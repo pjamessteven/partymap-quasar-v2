@@ -13,6 +13,70 @@
       name="las la-ticket-alt"
     />
     <div
+      class="q-ml-md t2"
+      style="display: grid; width: 100%"
+      :class="$q.screen.gt.sm ? 'text-large' : ''"
+    >
+      <div
+        class="flex no-wrap"
+        :class="$q.screen.gt.xs ? 'justify-between' : 'column'"
+        style="white-space: pre-line; width: 100%"
+        v-if="selectedEventDate?.ticket_url"
+      >
+        <div class="flex column" :class="$q.screen.gt.sm ? 'text-large' : ''">
+          <div class="t2">Tickets</div>
+          <a
+            v-if="computedTicketSellerName"
+            class="t3 link-hover q-mr-sm"
+            :href="computedExternalUrl"
+            style="text-decoration: none; line-break: anywhere"
+            target="_blank"
+          >
+            <span v-if="computedTicketSellerName"
+              >Get tickets from&nbsp;{{ computedTicketSellerName }}</span
+            ><span v-else>Get tickets to this event</span>
+          </a>
+        </div>
+        <!--
+        <a
+          class="link-hover underline ellipsis"
+          target="_blank"
+          :href="!editing ? computedExternalUrl : undefined"
+          >{{ selectedEventDate.url }}</a
+        >
+        -->
+        <a
+          style="text-decoration: none; color: unset"
+          :href="computedExternalUrl"
+          target="_blank"
+          class="q-mt-sm"
+          v-if="computedExternalUrl && !editing"
+        >
+          <q-btn
+            no-caps
+            class="nav-button"
+            flat
+            style="width: 190px"
+            label="Buy tickets"
+            :color="$q.dark.isActive ? 'white' : 'black'"
+            icon="las la-external-link-alt"
+            :class="$q.screen.gt.sm ? '' : 'flex grow'"
+          />
+        </a>
+      </div>
+      <div
+        v-else
+        class="t4"
+        @click="showEditingDialog = true"
+        style="cursor: pointer"
+      >
+        <span>
+          <u>{{ $t('event_date_inline.add_ticket_url') }}</u>
+        </span>
+      </div>
+    </div>
+    <!--
+    <div
       class="flex column q-ml-md t2"
       :class="$q.screen.gt.sm ? 'text-large' : ''"
     >
@@ -30,6 +94,7 @@
         </span>
       </div>
     </div>
+    -->
     <q-dialog
       v-if="editing"
       v-model="showEditingDialog"
@@ -62,7 +127,6 @@ export default {
   methods: {},
   computed: {
     ...mapState(useEventStore, ['event', 'selectedEventDate']),
-
     computedExternalUrl() {
       if (this.selectedEventDate && this.selectedEventDate.ticket_url) {
         // ensure that there is a protocol prefix
@@ -72,6 +136,26 @@ export default {
         ) {
           return '//' + this.selectedEventDate.ticket_url;
         } else return this.selectedEventDate.ticket_url;
+      } else {
+        return null;
+      }
+    },
+    computedTicketSellerName() {
+      if (this.selectedEventDate && this.selectedEventDate.ticket_url) {
+        // ensure that there is a protocol prefix
+        if (
+          this.selectedEventDate.ticket_url
+            .toLowerCase()
+            .indexOf('ticketmaster')
+        ) {
+          return 'Ticketmaster';
+        } else if (
+          this.selectedEventDate.ticket_url.toLowerCase().indexOf('moshtix')
+        ) {
+          return 'Moshtix';
+        } else {
+          return null;
+        }
       } else {
         return null;
       }

@@ -1,125 +1,130 @@
 <template>
-  <SolidPage>
-    <template v-slot>
-      <div class="scraper-page flex column">
-        <div class="text-h6 q-mb-md">Ticketmaster Tool</div>
-        <q-input dense v-model="keyword" label="Keyword" />
-        <q-input
+  <div class="scraper-page">
+    <div class="flex column q-pa-xl">
+      <div class="text-h6 q-mb-md">Ticketmaster Tool</div>
+      <q-input dense v-model="keyword" label="Keyword" />
+      <q-input dense v-model="classificationName" label="Classification name" />
+      <div class="t3 q-mt-xs">
+        Filter by classification name: name of any segment, genre, sub-genre,
+        type, sub-type. Negative filtering is supported by using the following
+        format '-'. Be aware that negative filters may cause decreased
+        performance.
+      </div>
+      <div class="flex q-gutter-sm row q-mt-sm">
+        <q-input filled dense label="From" v-model="dateRange.start">
+          <template v-slot:prepend>
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy cover>
+                <q-date v-model="dateRange.start">
+                  <div class="row items-center justify-end">
+                    <q-btn v-close-popup label="Close" color="primary" flat />
+                  </div>
+                </q-date>
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+          <template v-slot:append v-if="dateRange.start">
+            <q-icon
+              name="clear"
+              class="cursor-pointer"
+              @click="dateRange.start = null"
+            />
+          </template>
+        </q-input>
+        <q-input filled dense label="To" v-model="dateRange.end">
+          <template v-slot:prepend>
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy cover>
+                <q-date v-model="dateRange.end">
+                  <div class="row items-center justify-end">
+                    <q-btn v-close-popup label="Close" color="primary" flat />
+                  </div>
+                </q-date>
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+          <template v-slot:append v-if="dateRange.start">
+            <q-icon
+              name="clear"
+              class="cursor-pointer"
+              @click="dateRange.start = null"
+            />
+          </template>
+        </q-input>
+        <q-select
           dense
-          v-model="classificationName"
-          label="Classification name"
+          filled
+          label="Country"
+          style="width: 250px"
+          clearable=""
+          :options="countryCodes"
+          option-value="alpha2"
+          option-label="name"
+          options-dense
+          map-options
+          v-model="countryCode"
         />
-        <div class="t3 q-mt-xs">
-          Filter by classification name: name of any segment, genre, sub-genre,
-          type, sub-type. Negative filtering is supported by using the following
-          format '-'. Be aware that negative filters may cause decreased
-          performance.
-        </div>
-        <div class="flex q-gutter-sm row q-mt-sm">
-          <q-input filled dense label="From" v-model="dateRange.start">
-            <template v-slot:prepend>
-              <q-icon name="event" class="cursor-pointer">
-                <q-popup-proxy cover>
-                  <q-date v-model="dateRange.start">
-                    <div class="row items-center justify-end">
-                      <q-btn v-close-popup label="Close" color="primary" flat />
-                    </div>
-                  </q-date>
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-            <template v-slot:append v-if="dateRange.start">
-              <q-icon
-                name="clear"
-                class="cursor-pointer"
-                @click="dateRange.start = null"
-              />
-            </template>
-          </q-input>
-          <q-input filled dense label="To" v-model="dateRange.to">
-            <template v-slot:prepend>
-              <q-icon name="event" class="cursor-pointer">
-                <q-popup-proxy cover>
-                  <q-date v-model="dateRange.to">
-                    <div class="row items-center justify-end">
-                      <q-btn v-close-popup label="Close" color="primary" flat />
-                    </div>
-                  </q-date>
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-            <template v-slot:append v-if="dateRange.start">
-              <q-icon
-                name="clear"
-                class="cursor-pointer"
-                @click="dateRange.start = null"
-              />
-            </template>
-          </q-input>
-          <q-select
-            dense
-            filled
-            label="Country"
-            style="width: 250px"
-            clearable=""
-            :options="countryCodes"
-            option-value="alpha2"
-            option-label="name"
-            options-dense
-            map-options
-            v-model="countryCode"
-          />
-        </div>
-        <div class="q-mt-md">
-          <q-btn @click="search()">Search</q-btn>
-        </div>
-        <q-separator class="q-my-md" />
-        <SelectTagsComponent
-          @valueUpdated="($event) => (universalTags = $event)"
-        />
-        <q-separator class="q-my-md" />
+      </div>
+      <div class="q-mt-md">
+        <q-btn @click="search()">Search</q-btn>
+      </div>
+      <q-separator class="q-my-md" />
+      <SelectTagsComponent
+        :showTopTags="false"
+        @valueUpdated="($event) => (universalTags = $event)"
+      />
+      <q-separator class="q-my-md" />
+      <div class="pagination flex row justify-between">
         <q-pagination
           v-if="response?.page?.totalPages"
           v-model="page"
           :min="0"
-          :max="response?.page.totalPages || 0"
+          :max="response?.page.totalPages - 1 || 0"
           :max-pages="10"
-          class="pagination q-py-md"
+          class="q-py-md"
         />
-        <div class="results flex column" v-if="response?._embedded?.events">
-          <TicketmasterResult
-            v-for="result in response?._embedded?.events"
-            :result="result"
-            :universalTags="universalTags"
-            :key="result.id"
-            @click="selectedResult = result"
-          />
-        </div>
-        <InnerLoading v-if="loading" />
-        <q-dialog :model-value="!!mappedSelectedResult">
-          {{ selectedResult.dates }}
-          <br />
-          {{ selectedResult._embedded?.venues }}
-          <AddEventPage :prepopulate="mappedSelectedResult" />
-        </q-dialog>
+        <q-btn
+          :label="'add ' + validEvents.length + ' events'"
+          @click="addEvents"
+        />
       </div>
-    </template>
-  </SolidPage>
+      <div
+        class="results flex column"
+        style="min-height: 500px; position: relative"
+      >
+        <InnerLoading v-if="loading" />
+
+        <TicketmasterResult
+          class="q-mt-xl"
+          v-for="result in response?._embedded?.events"
+          :result="result"
+          :universalTags="universalTags"
+          :key="result.id"
+          @errorStateChanged="errorStatusChanged(result.id, $event)"
+          @eventData="eventDataChanged(result.id, $event)"
+        />
+      </div>
+      <q-dialog :model-value="!!mappedSelectedResult">
+        {{ selectedResult.dates }}
+        <br />
+        {{ selectedResult._embedded?.venues }}
+        <AddEventPage :prepopulate="mappedSelectedResult" />
+      </q-dialog>
+    </div>
+  </div>
 </template>
 
 <script>
 import common from 'assets/common';
-import SolidPage from 'src/components/dialogs/SolidPage.vue';
 import TicketmasterResult from 'src/components/ScraperPage/TicketmasterResult.vue';
 import InnerLoading from 'src/components/InnerLoading.vue';
 import AddEventPage from 'src/components/AddEventPage/AddEventPage.vue';
-import { searchTicketmaster } from 'src/api';
+import { addEventRequest, searchTicketmaster } from 'src/api';
 import SelectTagsComponent from 'components/EventPage/Tags/SelectTagsComponent.vue';
-
+import moment from 'moment';
 import countryCodes from 'src/assets/country-code';
 export default {
   components: {
-    SolidPage,
     InnerLoading,
     TicketmasterResult,
     AddEventPage,
@@ -132,6 +137,7 @@ export default {
   },
   data() {
     return {
+      events: {},
       universalTags: [],
       dateRange: { start: null, end: null },
       countryCode: null,
@@ -144,17 +150,54 @@ export default {
       selectedResult: null,
     };
   },
+  watch: {
+    page(newv, oldv) {
+      this.search();
+    },
+  },
   methods: {
+    async addEvents() {
+      const progressDialog = this.$q.dialog({
+        title: this.$t('add.uploading_event'),
+        color: 'primary',
+        message: 'Adding event 1 of' + this.validEvents.length,
+        progress: true, // we enable default settings
+        cancel: true,
+        persistent: false, // we want the user to not be able to close it
+        ok: false,
+      });
+
+      for (const [i, value] of this.validEvents.entries()) {
+        progressDialog.update({
+          message: `Uploading event ${i} of ${this.validEvents.length}`,
+        });
+        await addEventRequest(value.eventData);
+      }
+
+      progressDialog.hide();
+    },
+    errorStatusChanged(id, errorStatus) {
+      this.events[id] = { ...this.events[id], errorStatus, id };
+    },
+    eventDataChanged(id, eventData) {
+      this.events[id] = { ...this.events[id], eventData, id };
+    },
     async search() {
       this.loading = true;
+      this.response = null;
       const searchResponse = await searchTicketmaster({
         page: this.page,
         keyword: this.keyword,
-        countryCode: this.countryCode,
-        startDateTime: this.dateRange.start,
-        endDateTime: this.dateRange.end,
+        startDateTime: this.dateRange.start
+          ? moment(this.dateRange.start).format('yyyy-MM-DDTHH:mm:ssZ')
+          : undefined,
+        endDateTime: this.dateRange.end
+          ? moment(this.dateRange.end).format('yyyy-MM-DDTHH:mm:ssZ')
+          : undefined,
+        sort: 'date,asc',
+        size: 20,
         city: this.city,
-        countryCode: this.countryCode,
+        countryCode: this.countryCode?.alpha2,
         classificationName: this.classificationName,
       });
       this.response = searchResponse.data;
@@ -162,6 +205,9 @@ export default {
     },
   },
   computed: {
+    validEvents() {
+      return Object.values(this.events).filter((x) => !x.errorStatus);
+    },
     mappedSelectedResult() {
       if (this.selectedResult || false) {
         // date
@@ -291,9 +337,15 @@ export default {
 .body--light {
 }
 
+.scraper-page {
+  overflow: auto;
+  height: 100%;
+
+  display: block;
+}
 .pagination {
   position: sticky;
-  top: -1px;
+  top: 0px;
   background: white;
   z-index: 100;
 }

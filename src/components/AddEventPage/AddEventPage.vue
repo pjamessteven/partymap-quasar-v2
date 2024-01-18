@@ -1,514 +1,509 @@
 <template>
-  <SolidPage>
+  <SolidPage @scrollPercentage="onScrollMainContent($event)">
     <template v-slot:title>
-      <div :class="$q.screen.gt.xs ? 'q-px-lg' : ''">
-        <div v-if="event.host">
-          {{ $t('add_event.add_your_event') }} &nbsp;<i
-            class="mdi mdi-check-decagram-outline"
-          />
-        </div>
-        <div v-else>
-          {{ $t('add_event.add_public_event') }}
-        </div>
+      <div v-if="event.host">
+        {{ $t('add_event.add_your_event') }} &nbsp;<i
+          class="mdi mdi-check-decagram-outline"
+        />
+      </div>
+      <div v-else>
+        {{ $t('add_event.add_public_event') }}
       </div>
     </template>
     <template v-slot>
-      <div class="q-pb-xl" :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'">
-        <transition
-          appear
-          enter-active-class="animated fadeIn slow"
-          leave-active-class="animated fadeOut"
+      <div class="flex column">
+        <div
+          v-if="event.host"
+          :class="$q.screen.lt.sm ? ' q-mt-md' : 'q-pt-lg'"
         >
-          <div>
-            <div
-              v-if="event.host"
-              :class="$q.screen.lt.sm ? ' q-mt-md' : 'q-pt-lg'"
+          <div class="t2">
+            {{ $t('report.claim_message') }}
+            <a
+              href="https://www.facebook.com/partymap.official"
+              target="_blank"
+              class="link-hover underline"
+              >Facebook</a
             >
-              <div class="t3">
-                {{ $t('report.claim_message') }}
-                <a
-                  href="https://www.facebook.com/partymap.official"
-                  target="_blank"
-                  class="link-hover underline"
-                  >Facebook</a
-                >
-                {{ $t('report.or') }}
-                <a
-                  href="https://www.instagram.com/partymap.official"
-                  class="link-hover underline"
-                  target="_blank"
-                  >Instagram</a
-                >&nbsp;{{ $t('report.or_from_your_email') }}
-              </div>
-              <div class="t3 q-mt-md">
-                {{ $t('report.claim_message_2') }}
-              </div>
-              <br />
-            </div>
-            <div v-else :class="$q.screen.lt.sm ? ' q-mt-sm' : 'q-pt-lg'">
-              <p class="t3">
-                {{ $t('add_event.event_i_know_about_msg_long') }}
-              </p>
-              <p />
-              <p class="t3">
-                Please do not upload copyrighted content to Partymap. If you do
-                it will be removed from the website.
-              </p>
-            </div>
+            {{ $t('report.or') }}
+            <a
+              href="https://www.instagram.com/partymap.official"
+              class="link-hover underline"
+              target="_blank"
+              >Instagram</a
+            >&nbsp;{{ $t('report.or_from_your_email') }}
+          </div>
+          <div class="t2 q-mt-md">
+            {{ $t('report.claim_message_2') }}
+          </div>
+          <br />
+        </div>
+        <div v-else :class="$q.screen.lt.sm ? ' q-mt-sm' : 'q-pt-lg'">
+          <p class="t2">
+            {{ $t('add_event.event_i_know_about_msg_long') }}
+          </p>
+          <p />
+          <p class="t2">
+            Please do not upload copyrighted content to Partymap. If you do it
+            will be removed from the website.
+          </p>
+        </div>
 
-            <div class="flex column">
-              <div class="sticky-header flex column">
-                <p class="text-large inter bolder t1 q-mb-md q-mt-md">
-                  {{ $t('add.required_information') }}:
-                </p>
-              </div>
+        <div class="flex column">
+          <div class="sticky-header flex column">
+            <p class="text-large inter bolder t1 q-mb-md q-mt-md">
+              Event Details:
+            </p>
+          </div>
 
-              <div
-                class="flex column"
-                :class="{
-                  'q-pa-sm q-pb-md': $q.screen.lt.sm,
-                  'q-px-lg q-pb-lg q-pt-sm': $q.screen.gt.xs,
-                }"
-              >
-                <!-- TITLE -->
+          <div
+            class="flex column"
+            :class="{
+              'q-pa-sm q-pb-md': $q.screen.lt.sm,
+              'q-px-lg q-pb-lg q-pt-sm': $q.screen.gt.xs,
+            }"
+          >
+            <!-- TITLE -->
+            <p />
+            <div class="flex row grow no-wrap items-baseline">
+              <q-icon size="xs" name="las la-bullhorn" />
+              <div class="flex column grow q-ml-lg">
+                <p class="text-large inter bold">Event name</p>
+                <q-input
+                  class="grow"
+                  :error="!!validationErrors.name && showValidationErrors"
+                  :errorMessage="validationErrors.name"
+                  style="padding-bottom: 0px"
+                  outlined
+                  debounce="500"
+                  @input="findExistingEvent"
+                  v-model="event.name"
+                  :label="$t('add.name')"
+                  color="bg-grey-7"
+                  :rules="[(val) => !!val]"
+                />
                 <p />
-                <div class="flex row grow no-wrap items-baseline">
-                  <q-icon size="xs" name="las la-bullhorn" />
-                  <div class="flex column grow q-ml-lg">
-                    <p class="text-large inter bold">Event name</p>
-                    <q-input
-                      class="grow"
-                      style="padding-bottom: 0px"
-                      outlined
-                      debounce="500"
-                      @input="findExistingEvent"
-                      v-model="event.name"
-                      :label="$t('add.name')"
-                      color="bg-grey-7"
-                      :rules="[(val) => !!val]"
-                    />
-                    <p />
-                    <div
-                      class="flex column"
-                      v-if="existingEvents && existingEvents.length > 0"
-                    >
-                      <div class="t2 flex row items-baseline no-wrap">
-                        <q-icon name="mdi-alert-circle-outline" />
-                        <div>
-                          <p class="q-ml-sm">
-                            {{ $t('add.an_event_already_exists') }}(
-                            <router-link
-                              :to="{
-                                name: 'EventPage',
-                                params: { id: existingEvents[0].id },
-                              }"
-                              >{{ existingEvents[0].name }}</router-link
-                            >).
-                            <br />
-                            {{ $t('add.dont_add_same_twice') }}
-                            <br />
-                            {{ $t('add.dont_add_same_twice2') }}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Event Description (mandatory for both)-->
-
-                <div class="flex row grow no-wrap items-baseline q-mt-md">
-                  <q-icon size="xs" name="las la-align-left" />
-                  <div class="flex column grow q-ml-lg">
-                    <p class="text-large inter bold">
-                      {{ $t('description.summary') }}
-                    </p>
-                    <p class="t3">
-                      {{ $t('description.summary_msg') }}
-                    </p>
-                    <q-input
-                      outlined
-                      autogrow
-                      counter
-                      maxlength="400"
-                      :input-style="{ 'min-height': '50px' }"
-                      color="bg-grey-7"
-                      :rules="[(val) => !!val]"
-                      v-model="event.description"
-                      :label="$t('description.summary')"
-                      style="padding-bottom: 0px"
-                    />
-                    <div class="flex row q-mt-sm" v-if="event.host === false">
-                      <p />
-                      <q-option-group
-                        v-model="descriptionAttributeOption"
-                        :options="attributeOptions"
-                        color="primary"
-                      />
-                    </div>
-                    <q-input
-                      v-if="descriptionAttributeOption === 'other'"
-                      dense
-                      outlined
-                      maxlength="200"
-                      class="q-mt-sm"
-                      :input-style="{ 'min-height': '50px' }"
-                      color="bg-grey-7"
-                      v-model="descriptionAttribute"
-                      :label="$t('description.attribute_msg')"
-                      :rules="[(val) => !!val]"
-                      style="padding-bottom: 0px"
-                    />
-                    <p />
-                  </div>
-                </div>
-
-                <!-- URL (Mandatory if no host) -->
-
                 <div
-                  class="flex row grow no-wrap items-baseline q-mt-md"
-                  v-if="!event.host"
+                  class="flex column"
+                  v-if="existingEvents && existingEvents.length > 0"
                 >
-                  <q-icon size="xs" name="las la-external-link-alt" />
-                  <div class="flex column grow q-ml-lg">
-                    <p class="text-large inter bold">
-                      {{ $t('add.url') }}
-                    </p>
-                    <p class="t3">
-                      {{ $t('add.url_msg') }}
-                    </p>
-                    <q-input
-                      outlined
-                      :rules="[(val) => !!val]"
-                      color="bg-grey-7"
-                      v-model="event.url"
-                      :label="$t('add.url')"
-                      style="padding-bottom: 0px"
-                    />
-                    <p />
-                  </div>
-                </div>
-
-                <!--LOCATION-->
-
-                <div class="flex row grow no-wrap items-baseline q-mt-md">
-                  <q-icon size="xs" name="las la-map-marker" />
-                  <div class="flex column grow q-ml-lg">
-                    <p class="text-large inter bold">
-                      {{ $t('add.location') }}
-                    </p>
-                    <p class="t3">
-                      {{ $t('add.location_caption') }}
-                    </p>
-
-                    <GoogleLocationComponent
-                      v-on:location="event.location = $event"
-                      :locationProp="event.location"
-                    />
-
-                    <div
-                      class="location-map-wrapper q-mt-md"
-                      v-show="!!event.location"
-                    >
-                      <div class="location-map" ref="map" />
-                      <div
-                        class="location-map-select-msg flex justify-center items-center"
-                      >
-                        <div class="inter bold o-o50">Location preview</div>
-                      </div>
+                  <div class="t2 flex row items-baseline no-wrap">
+                    <q-icon name="mdi-alert-circle-outline" />
+                    <div>
+                      <p class="q-ml-sm">
+                        {{ $t('add.an_event_already_exists') }}(
+                        <router-link
+                          :to="{
+                            name: 'EventPage',
+                            params: { id: existingEvents[0].id },
+                          }"
+                          >{{ existingEvents[0].name }}</router-link
+                        >).
+                        <br />
+                        {{ $t('add.dont_add_same_twice') }}
+                        <br />
+                        {{ $t('add.dont_add_same_twice2') }}
+                      </p>
                     </div>
-
-                    <p />
-                  </div>
-                </div>
-
-                <!-- DATE AND TIME -->
-
-                <div class="flex row grow no-wrap items-baseline q-mt-md">
-                  <q-icon size="xs" name="las la-calendar-day" />
-                  <div class="flex column grow q-ml-lg">
-                    <p class="text-large inter bold">Date and Time</p>
-                    <p class="t3">
-                      {{ $t('add.please_select_date_msg') }}
-                      <br />
-                      {{ $t('add.please_select_date_msg_2') }}
-                    </p>
-
-                    <DateTimePicker
-                      @dateRange="event.date_time = $event"
-                      :inlineCalendar="true"
-                      :isRange="true"
-                    />
-                    <p />
-                  </div>
-                </div>
-                <!-- RECURRENCE -->
-
-                <div class="flex row grow no-wrap items-baseline q-mt-md">
-                  <q-icon size="xs" name="las la-external-link-alt" />
-                  <div class="flex column grow q-ml-lg">
-                    <p class="text-large inter bold">
-                      {{ $t('add.recurrence') }}
-                    </p>
-
-                    <div
-                      v-if="
-                        event.date_time &&
-                        event.date_time.start &&
-                        event.date_time.end
-                      "
-                    >
-                      <p />
-                      <RrulePicker
-                        v-on:updateRrule="event.rrule = $event"
-                        :dateTime="event.date_time"
-                        :disableOneOff="false"
-                      />
-                    </div>
-                    <p v-else class="t3">
-                      {{ $t('add.please_select_date_first') }}
-                    </p>
-                  </div>
-                </div>
-
-                <div
-                  class="flex row grow no-wrap items-baseline q-mt-md"
-                  v-if="event.host"
-                >
-                  <q-icon size="xs" name="las la-images" />
-                  <div class="flex column grow q-ml-lg">
-                    <p class="text-large inter bold">Event poster image</p>
-                    <p class="t3">Upload an image for this event</p>
-                    <MultipleMediaSelector
-                      :singleSelectMode="event.host === false"
-                      :showUploadButton="false"
-                      :disableCaption="true"
-                      @filesSelected="event.media_items = $event"
-                    />
-                    <p />
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div class="sticky-header flex column">
-                <p
-                  class="text-large inter bolder t1 q-mb-md q-mt-md"
-                  :class="{}"
+            <!-- MEDIA -->
+            <div class="flex row grow no-wrap items-baseline q-mt-md">
+              <q-icon size="xs" name="las la-images" />
+              <div class="flex column grow q-ml-lg">
+                <span class="text-large inter bold">Event poster</span>
+                <br />
+                <span class="t2">Upload an image for this event</span>
+                <MultipleMediaSelector
+                  :singleSelectMode="event.host === false"
+                  :showUploadButton="false"
+                  :disableCaption="true"
+                  @filesSelected="event.media_items = $event"
+                />
+                <div
+                  v-if="!!validationErrors.media_items && showValidationErrors"
+                  class="t1 inter no-wrap flex items-center q-mt-md"
+                  style="color: red"
                 >
-                  {{ $t('add.additional_information') }}:
-                </p>
+                  <q-icon
+                    name="mdi-alert-circle"
+                    size="1.5em"
+                    style="color: red"
+                  />
+                  <div class="q-ml-sm">
+                    {{ validationErrors.media_items }}
+                  </div>
+                </div>
+                <p />
               </div>
-              <div
-                class="flex column"
-                :class="{
-                  'card-disabled': event.host === null,
-                  'q-pa-sm q-pb-md': $q.screen.lt.sm,
-                  'q-px-lg q-pb-lg q-pt-sm': $q.screen.gt.xs,
-                }"
-              >
-                <!-- TAGS -->
+            </div>
 
-                <div class="flex row grow no-wrap items-baseline q-mt-md">
-                  <q-icon size="xs" name="las la-tags" />
-                  <div class="flex column grow q-ml-lg">
-                    <p class="text-large inter bold">Tags</p>
-                    <p class="t3">
-                      {{ $t('add.suggested_tags') }}
-                    </p>
-                    <SelectTagsComponent
-                      @valueUpdated="($event) => (event.tags = $event)"
-                      :mode="'emit'"
-                    />
-                    <p />
-                  </div>
+            <!-- Event Description (mandatory for both)-->
+
+            <div class="flex row grow no-wrap items-baseline q-mt-md">
+              <q-icon size="xs" name="las la-align-left" />
+              <div class="flex column grow q-ml-lg">
+                <span class="text-large inter bold">
+                  {{ $t('description.summary') }}
+                </span>
+                <br />
+                <span class="t2 q-mb-md">
+                  {{ $t('description.summary_msg') }}
+                </span>
+                <q-input
+                  outlined
+                  autogrow
+                  counter
+                  :error="
+                    !!validationErrors.description && showValidationErrors
+                  "
+                  maxlength="400"
+                  :input-style="{ 'min-height': '50px' }"
+                  color="bg-grey-7"
+                  :rules="[(val) => !!val]"
+                  v-model="event.description"
+                  :label="$t('description.summary')"
+                  style="padding-bottom: 0px"
+                />
+                <div class="flex row q-mt-sm" v-if="event.host === false">
+                  <p />
+                  <q-option-group
+                    v-model="descriptionAttributeOption"
+                    :options="attributeOptions"
+                    color="primary"
+                  />
                 </div>
+                <q-input
+                  v-if="descriptionAttributeOption === 'other'"
+                  dense
+                  outlined
+                  maxlength="200"
+                  class="q-mt-sm"
+                  :input-style="{ 'min-height': '50px' }"
+                  color="bg-grey-7"
+                  v-model="descriptionAttribute"
+                  :label="$t('description.attribute_msg')"
+                  :rules="[(val) => !!val]"
+                  style="padding-bottom: 0px"
+                />
+                <p />
+              </div>
+            </div>
 
-                <!-- Detailed Description (for next event date) -->
+            <!-- Full Description -->
 
-                <div class="flex row grow no-wrap items-baseline q-mt-md">
-                  <q-icon size="xs" name="las la-align-left" />
-                  <div class="flex column grow q-ml-lg">
-                    <p class="text-large inter bold">
-                      {{ $t('description.detailed_description') }}
-                    </p>
-                    <p class="t3">
-                      {{ $t('description.detailed_description_msg') }}
-                    </p>
-                    <br />
-                    <q-input
-                      outlined
-                      autogrow
-                      :input-style="{ 'min-height': '100px' }"
-                      color="bg-grey-7"
-                      maxlength="10000"
-                      v-model="event.full_description"
-                      :label="$t('description.detailed_description')"
-                      style="padding-bottom: 0px"
-                    />
-                    <div v-if="event.host === false">
-                      <p />
-                      <q-option-group
-                        v-model="FullDescriptionAttributeOption"
-                        :options="attributeOptions"
-                        color="primary"
-                      />
-                    </div>
-                    <p />
-                    <q-input
-                      v-if="FullDescriptionAttributeOption === 'other'"
-                      dense
-                      outlined
-                      maxlength="200"
-                      :input-style="{ 'min-height': '50px' }"
-                      color="bg-grey-7"
-                      v-model="fullDescriptionAttribute"
-                      :label="$t('description.attribute_msg')"
-                      :rules="[(val) => !!val]"
-                      style="padding-bottom: 0px"
-                    />
-                    <p />
-                  </div>
+            <div class="flex row grow no-wrap items-baseline q-mt-md">
+              <q-icon size="xs" name="las la-align-left" />
+              <div class="flex column grow q-ml-lg">
+                <span class="text-large inter bold">
+                  {{ $t('description.detailed_description') }}&nbsp;(Optional)
+                </span>
+                <br />
+                <span class="t2 q-mb-sm">
+                  Here you can tell people what they can expect in detail.
+                  <br />
+                  Please also provide an <b>English translation </b>if the
+                  description is in another languge.
+                </span>
+
+                <q-input
+                  outlined
+                  autogrow
+                  counter
+                  :input-style="{ 'min-height': '100px' }"
+                  color="bg-grey-7"
+                  maxlength="10000"
+                  v-model="event.full_description"
+                  :label="$t('description.detailed_description')"
+                  style="padding-bottom: 0px"
+                />
+                <div v-if="event.host === false">
+                  <p />
+                  <q-option-group
+                    v-model="FullDescriptionAttributeOption"
+                    :options="attributeOptions"
+                    color="primary"
+                  />
                 </div>
+                <p />
+                <q-input
+                  v-if="FullDescriptionAttributeOption === 'other'"
+                  dense
+                  outlined
+                  maxlength="200"
+                  :input-style="{ 'min-height': '50px' }"
+                  color="bg-grey-7"
+                  v-model="fullDescriptionAttribute"
+                  :label="$t('description.attribute_msg')"
+                  :rules="[(val) => !!val]"
+                  style="padding-bottom: 0px"
+                />
+                <p />
+              </div>
+            </div>
+            <!-- URL (Mandatory if no host) -->
 
-                <!-- URL -->
+            <div
+              class="flex row grow no-wrap items-baseline"
+              v-if="!event.host"
+            >
+              <q-icon size="xs" name="las la-external-link-alt" />
+              <div class="flex column grow q-ml-lg">
+                <span class="text-large inter bold">
+                  {{ $t('add.url') }}
+                </span>
+                <br />
+                <span class="t2 q-mb-md">
+                  {{ $t('add.url_msg') }}
+                </span>
+                <q-input
+                  :error="!!validationErrors.url && showValidationErrors"
+                  :error-message="validationErrors.url"
+                  outlined
+                  :rules="[(val) => !!val]"
+                  color="bg-grey-7"
+                  v-model="event.url"
+                  :label="$t('add.url')"
+                  style="padding-bottom: 0px"
+                />
+                <p />
+              </div>
+            </div>
+
+            <!--LOCATION-->
+
+            <div class="flex row grow no-wrap items-baseline q-mt-md">
+              <q-icon size="xs" name="las la-map-marker" />
+              <div class="flex column grow q-ml-lg">
+                <span class="text-large inter bold">
+                  {{ $t('add.location') }}
+                </span>
+                <br />
+                <span class="t2 q-mb-md">
+                  {{ $t('add.location_caption') }}
+                </span>
+
+                <GoogleLocationComponent
+                  v-on:location="event.location = $event"
+                  :locationProp="event.location"
+                  :error-message="validationErrors.location"
+                />
 
                 <div
-                  class="flex row grow no-wrap items-baseline q-mt-md"
-                  v-if="event.host"
+                  class="location-map-wrapper q-mt-md"
+                  v-show="!!event.location"
                 >
-                  <q-icon size="xs" name="las la-external-link-alt" />
-                  <div class="flex column grow q-ml-lg">
-                    <p class="text-large inter bold">
-                      {{ $t('add.url') }}
-                    </p>
-                    <p class="t3">
-                      {{ $t('add.url_msg') }}
-                    </p>
-                    <q-input
-                      outlined
-                      autogrow
-                      color="bg-grey-7"
-                      v-model="event.url"
-                      :label="$t('add.url')"
-                    />
-                    <p />
+                  <div class="location-map" ref="map" />
+                  <div
+                    class="location-map-select-msg flex justify-center items-center"
+                  >
+                    <div class="inter bold o-o50">Location preview</div>
                   </div>
                 </div>
 
-                <!-- MOBILE DATE AND TIME
-              <div class="flex column" v-else>
-                <div class="flex row grow no-wrap items-baseline q-mt-md">
-                  <q-icon size="xs" name="las la-calendar-day" />
-                  <div class="flex column grow q-ml-lg">
-                    <div
-                      class="text-large card-title  flex row no-wrap items-baseline"
-                    >
-                      Date and Time
-                    </div>
-                    <div class="t3">
-                      {{ $t('add.please_select_date_msg') }}
-                    </div>
+                <p />
+              </div>
+            </div>
+
+            <!-- DATE AND TIME -->
+
+            <div class="flex row grow no-wrap items-baseline q-mt-">
+              <q-icon size="xs" name="las la-calendar-day" />
+              <div class="flex column grow q-ml-lg">
+                <span class="text-large inter bold">Date and Time</span>
+                <br />
+                <span class="t2 q-mb-md">
+                  {{ $t('add.please_select_date_msg') }}
+                  <br />
+                  {{ $t('add.please_select_date_msg_2') }}
+                </span>
+                <div
+                  v-if="!!validationErrors.date_time && showValidationErrors"
+                  class="t1 inter no-wrap flex items-center q-mb-md"
+                  style="color: red"
+                >
+                  <q-icon
+                    name="mdi-alert-circle"
+                    size="1.5em"
+                    style="color: red"
+                  />
+                  <div class="q-ml-sm">
+                    {{ validationErrors.date_time }}
                   </div>
                 </div>
                 <DateTimePicker
-                  class="q-mt-md"
                   @dateRange="event.date_time = $event"
                   :inlineCalendar="true"
                   :isRange="true"
                 />
+
+                <p />
               </div>
-              -->
+            </div>
+            <!-- RECURRENCE -->
 
-                <!-- Lineup (for next event date) -->
-
-                <div class="flex row grow no-wrap items-baseline q-mt-md">
-                  <q-icon size="xs" name="las la-align-left" />
-                  <div class="flex column grow q-ml-lg">
-                    <p class="text-large inter bold">
-                      {{ $t('add.lineup') }}
-                    </p>
-                    <div
-                      class="flex column"
-                      v-if="
-                        event.date_time &&
-                        event.date_time.start &&
-                        event.date_time.end
-                      "
-                    >
-                      <p class="t3">
-                        {{ $t('add.lineup_msg') }}
-                      </p>
-                      <br />
-                      <SelectArtistsComponent
-                        :mode="'emit'"
-                        @updated="event.next_event_date_artists = $event"
-                        :defaultDate="event.date_time.start"
-                      />
-                    </div>
-                    <p v-else class="t3">
-                      {{ $t('add.please_select_date_first') }}
-                    </p>
-                  </div>
-                </div>
-
-                <!-- Size -->
-
-                <div class="flex row grow no-wrap items-baseline q-mt-xl">
-                  <q-icon size="xs" name="las la-user-friends" />
-                  <div class="flex column grow q-ml-lg">
-                    <p class="text-large inter bold">
-                      {{ $t('add.size_how_many') }}
-                    </p>
-                    <p class="t3">
-                      {{ $t('add.size_msg') }}
-                      <br />
-                      {{ $t('add.size_msg2') }}
-                    </p>
-                    <q-input
-                      outlined
-                      hide-bottom-space
-                      color="bg-grey-7"
-                      style="max-width: 300px"
-                      v-model="event.next_event_date_size"
-                      :label="$t('add.size')"
-                      type="number"
-                      :rules="[
-                        (val) =>
-                          !val ||
-                          val.length == 0 ||
-                          Number.isInteger(parseInt(val)) ||
-                          'Please input a number',
-                      ]"
-                    />
-                    <p />
-                  </div>
-                </div>
-
-                <!-- IMAGES -->
-
+            <div class="flex row grow no-wrap items-baseline q-mt-md">
+              <q-icon size="xs" name="las la-external-link-alt" />
+              <div class="flex column grow q-ml-lg">
+                <span class="text-large inter bold">
+                  {{ $t('add.recurrence') }}
+                </span>
+                <br />
+                <span class="t2">
+                  Will this event happen again, or is it a one-off?
+                </span>
                 <div
-                  class="flex row grow no-wrap items-baseline q-mt-md q-mb-lg"
-                  v-if="!event.host"
+                  v-if="
+                    event.date_time &&
+                    event.date_time.start &&
+                    event.date_time.end
+                  "
                 >
-                  <q-icon size="xs" name="las la-images" />
-                  <div class="flex column grow q-ml-lg">
-                    <p class="text-large inter bold">
-                      {{ $t('add.event_poster_image') }}
-                    </p>
-                    <p class="t3">
-                      {{ $t('add.event_poster_image_msg') }}
-                    </p>
-                    <MultipleMediaSelector
-                      :singleSelectMode="event.host === false"
-                      :showUploadButton="false"
-                      :disableCaption="true"
-                      @filesSelected="event.media_items = $event"
-                    />
-                  </div>
+                  <p />
+                  <RrulePicker
+                    v-on:updateRrule="event.rrule = $event"
+                    :dateTime="event.date_time"
+                    :disableOneOff="false"
+                  />
                 </div>
+                <p v-else class="t2">
+                  {{ $t('add.please_select_date_first') }}
+                </p>
               </div>
+            </div>
+          </div>
 
-              <!-- Ticket URL (removed from this release)
+          <div class="sticky-header flex column">
+            <p class="text-large inter bolder t1 q-mb-md q-mt-md" :class="{}">
+              {{ $t('add.additional_information') }}:
+            </p>
+          </div>
+          <div
+            class="flex column"
+            :class="{
+              'card-disabled': event.host === null,
+              'q-pa-sm q-pb-md': $q.screen.lt.sm,
+              'q-px-lg q-pb-lg q-pt-sm': $q.screen.gt.xs,
+            }"
+          >
+            <!-- TAGS -->
+
+            <div class="flex row grow no-wrap items-baseline q-mt-md">
+              <q-icon size="xs" name="las la-tags" />
+              <div class="flex column grow q-ml-lg">
+                <span class="text-large inter bold">Tags</span>
+                <br />
+                <span class="t2 q-mb-md">
+                  What makes this event stand out, and what music can one
+                  expect?
+                </span>
+                <SelectTagsComponent
+                  :showTopTags="true"
+                  @valueUpdated="($event) => (event.tags = $event)"
+                  :mode="'emit'"
+                />
+                <p />
+              </div>
+            </div>
+
+            <!-- URL -->
+
+            <div
+              class="flex row grow no-wrap items-baseline q-mt-md"
+              v-if="event.host"
+            >
+              <q-icon size="xs" name="las la-external-link-alt" />
+              <div class="flex column grow q-ml-lg">
+                <span class="text-large inter bold">
+                  {{ $t('add.url') }}
+                </span>
+                <br />
+                <span class="t2 q-mb-md">
+                  {{ $t('add.url_msg') }}
+                </span>
+                <q-input
+                  outlined
+                  autogrow
+                  color="bg-grey-7"
+                  v-model="event.url"
+                  :label="$t('add.url')"
+                />
+                <p />
+              </div>
+            </div>
+
+            <!-- Lineup (for next event date) -->
+
+            <div class="flex row grow no-wrap items-baseline">
+              <q-icon size="xs" name="las la-align-left" />
+              <div class="flex column grow q-ml-lg">
+                <span class="text-large inter bold">
+                  {{ $t('add.lineup') }}
+                </span>
+                <div
+                  class="flex column"
+                  v-if="
+                    event.date_time &&
+                    event.date_time.start &&
+                    event.date_time.end
+                  "
+                >
+                  <br />
+
+                  <span class="t2 q-mb-md">
+                    Search for the talented artists that are playing at this
+                    event.
+                  </span>
+                  <SelectArtistsComponent
+                    :mode="'emit'"
+                    @updated="event.next_event_date_artists = $event"
+                    :defaultDate="event.date_time.start"
+                    class="q-mb-md"
+                  />
+                </div>
+                <span v-else class="t2 q-mb-md">
+                  {{ $t('add.please_select_date_first') }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Size -->
+
+            <div class="flex row grow no-wrap items-baseline q-mt-md">
+              <q-icon size="xs" name="las la-user-friends" />
+              <div class="flex column grow q-ml-lg">
+                <span class="text-large inter bold">
+                  {{ $t('add.size_how_many') }}
+                </span>
+                <br />
+                <span class="t2 q-mb-md">
+                  Give a rough estimate of how many people will be attending
+                  this event.
+                </span>
+                <q-input
+                  outlined
+                  hide-bottom-space
+                  color="bg-grey-7"
+                  style="max-width: 300px"
+                  v-model="event.next_event_date_size"
+                  :label="$t('add.size')"
+                  type="number"
+                  :rules="[
+                    (val) =>
+                      !val ||
+                      val.length == 0 ||
+                      Number.isInteger(parseInt(val)) ||
+                      'Please input a number',
+                  ]"
+                />
+                <p />
+              </div>
+            </div>
+          </div>
+
+          <!-- Ticket URL (removed from this release)
 
           <q-card-section class="flex row justify-between no-wrap">
             <div class=" text-large flex row wrap items-center">
@@ -529,30 +524,52 @@
             />
           </q-card-section>
 -->
-            </div>
-          </div>
-        </transition>
+        </div>
       </div>
+    </template>
+    <template v-slot:footer>
       <div
-        class="flex submit-footer items-center"
+        class="flex solid-page-footer-content items-center"
         :class="
           $q.screen.lt.sm ? 'column justify-center ' : 'row justify-between'
         "
       >
-        <div
-          v-if="!validation"
-          class="t1 inter bold"
-          :class="$q.screen.gt.xs ? 'q-ml-lg' : 'q-mt-lg'"
-        >
-          Please fill out all of the required fields
+        <div>
+          <div
+            v-if="Object.keys(validationErrors).length > 0"
+            class="t1 inter bold text-large no-wrap flex items-center"
+            :class="$q.screen.gt.xs ? 'q-ml-lg' : 'q-mt-lg'"
+          >
+            <q-icon name="mdi-alert-circle" size="2em" style="color: red" />
+            <div class="q-ml-md t1">Some required information is missing..</div>
+          </div>
+          <div
+            v-else
+            class="t1 inter bold text-large no-wrap flex items-center"
+            :class="$q.screen.gt.xs ? 'q-ml-lg' : 'q-mt-lg'"
+          >
+            <q-icon name="mdi-check-outline" size="2em" style="color: green" />
+            <div class="q-ml-md t1">
+              Looks good! Thanks for contributing to PartyMap! .
+            </div>
+          </div>
+          <!--
+    <div
+      v-for="(errorMessage, index) of Object.values(validationErrors)"
+      :key="index"
+    >
+      {{ errorMessage }}
+    </div>
+  </div>
+  -->
         </div>
         <q-btn
           :class="event.host === null ? 'card-disabled' : ''"
           icon-right="mdi-chevron-right"
           color="primary"
           class="soft-button-shadow inter bold q-ma-lg"
-          label="Submit"
-          :disable="!validation"
+          label="Submit Event"
+          :disable="Object.keys(validationErrors).length > 0"
           v-on:click="submitEvent"
         />
       </div>
@@ -589,6 +606,7 @@ export default {
   },
   data() {
     return {
+      showValidationErrors: false,
       descriptionAttribute: null,
       fullDescriptionAttribute: null,
       existingEvents: null,
@@ -640,6 +658,11 @@ export default {
     };
   },
   methods: {
+    onScrollMainContent(percentage) {
+      if (percentage === 1) {
+        this.showValidationErrors = true;
+      }
+    },
     findExistingEvent() {
       getEventsRequest({ query: this.event.name, per_page: 1 }).then(
         (response) => {
@@ -703,9 +726,7 @@ export default {
       } catch {}
       progressDialog.hide();
     },
-    onScrollMainContent(info) {
-      this.mainContentScrollPosition = info.verticalPosition;
-    },
+
     initMap() {
       this.map = null;
       this.map = L.map(this.$refs.map, this.mapOptions);
@@ -787,40 +808,32 @@ export default {
     eventLocation() {
       return this.event.location;
     },
-    validation() {
-      if (this.event.host) {
-        // don't require URL if host
-        if (
-          this.event.name &&
-          this.event.name.length > 1 &&
-          this.event.description &&
-          this.event.description.length > 0 &&
-          this.event.location &&
-          this.event.location.name &&
-          this.event.date_time &&
-          this.event.date_time.start &&
-          this.event.date_time.end &&
-          this.event.media_items.length > 0
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      } else if (
-        this.event.name &&
-        this.event.name.length > 1 &&
-        this.event.url &&
-        this.event.url.length > 0 &&
-        this.event.location &&
-        this.event.location.name &&
-        this.event.date_time &&
-        this.event.date_time.start &&
-        this.event.date_time.end
-      ) {
-        return true;
-      } else {
-        return false;
+    validationErrors() {
+      let errors = {};
+
+      if (!this.event.name || this.event.name.length === 0) {
+        errors.name = 'Event name is required';
       }
+      if (!this.event.description || this.event.description.length === 0) {
+        errors.description = 'Summary is required';
+      }
+      if (!this.event.location || !this.event.location.name) {
+        errors.location = 'Location is required';
+      }
+      if (!this.event.date_time || !this.event.date_time.start) {
+        errors.date_time = 'Date is required';
+      } else if (!this.event.date_time.end) {
+        errors.date_time = 'End date is required';
+      }
+      if (!this.event.media_items || this.event.media_items.length === 0) {
+        errors.media_items = 'Event poster is required';
+      }
+      if (!this.event.host) {
+        if (!this.event.url || this.event.url.length == 0) {
+          errors.url = 'URL is required';
+        }
+      }
+      return errors;
     },
   },
   mounted() {
@@ -843,10 +856,6 @@ export default {
       background: $bi-3;
     }
   }
-  .submit-footer {
-    background: $bi-3;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-  }
 }
 
 .body--light {
@@ -862,18 +871,14 @@ export default {
       }
     }
   }
-  .submit-footer {
-    background: $b-2;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-  }
+
   .q-card {
     border-top: none !important;
   }
 }
 
 .solid-page {
-  :deep(.solid-page-inner) {
-    max-width: 768px;
+  :deep(.solid-page-content) {
     .hover-option {
       cursor: pointer;
     }

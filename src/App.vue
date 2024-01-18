@@ -696,6 +696,9 @@ body {
   .vc-container {
     background-color: $bi-3;
     border-color: rgb(26, 26, 26);
+    .vc-arrow {
+      background: $bi-4;
+    }
   }
   .q-field--dark .q-field__control::before {
     border-color: rgb(64, 64, 64);
@@ -946,6 +949,9 @@ body {
 .vc-container {
   //font-family: chicagoflf !important;
   font-family: Inter;
+  .vc-title {
+    background: transparent;
+  }
   .on-right {
     // override quasar variable that causes ui artifacts
     margin-left: unset !important;

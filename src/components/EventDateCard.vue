@@ -164,7 +164,16 @@
             >
               {{ event.event.description }}
             </div>
-            <q-scroll-area vertical style="min-height: 31px" class="q-mt-sm">
+            <q-scroll-area
+              vertical
+              style="min-height: 39px; margin-bottom: -8px"
+              class="q-mt-sm"
+              :thumb-style="{
+                bottom: '-4px',
+                height: '8px',
+                borderRadius: '0px',
+              }"
+            >
               <div
                 class="tag-container flex row no-wrap ellipsis"
                 v-if="

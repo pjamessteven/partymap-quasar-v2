@@ -8,7 +8,6 @@
       @update:model-value="queryTags"
       :loading="resultsLoading"
       outlined
-      @keyup.enter="loadInitialList"
       clearable
       clear-icon="las la-times"
     >
@@ -50,11 +49,10 @@
           v-on:selected="onSelectTag(query)"
         />
         <Tag
-          v-if="!query || query.length == 0"
+          v-if="(!query || query.length == 0) && hasNext"
           :key="-2"
           :value="'...show more'"
-          :disabled="!hasNext"
-          v-on:selected="loadMore()"
+          v-on:selected="loadMoreTopTags()"
         />
       </div>
     </div>
@@ -62,7 +60,6 @@
       class="q-mt-sm"
       v-if="computedResults?.length > 0 || query?.length > 0"
     />
-
     <div class="flex column q-mt-md" v-if="tagsList?.length > 0">
       <span>
         <span class="t3">{{ $t('tags.selected_tags') }}:</span>
@@ -92,11 +89,12 @@ export default {
   },
   props: {
     existingTags: { type: Array, default: () => [] },
+    showTopTags: { type: Boolean, default: false },
   },
   data() {
     return {
       query: null,
-      queryResults: null,
+      queryResults: [],
       loadingQuery: null,
       hasNext: true,
       topTags: [],
@@ -136,7 +134,7 @@ export default {
     },
     queryTags(val) {
       if (!val || val === '') {
-        this.queryResults = null;
+        this.queryResults = [];
       } else {
         this.loadingQuery = true;
         getTagRequest({
@@ -148,11 +146,10 @@ export default {
         }).then((response) => {
           this.queryResults = response.data.items;
           this.loadingQuery = false;
-          this.hasNext = response.data.has_next;
         });
       }
     },
-    loadInitialList() {
+    loadInitialTopTags() {
       this.loading = true;
       this.page = 1;
       getTagRequest({
@@ -166,7 +163,7 @@ export default {
         this.hasNext = response.data.has_next;
       });
     },
-    loadMore() {
+    loadMoreTopTags() {
       this.page += 1;
       this.loading = true;
       getTagRequest({
@@ -203,6 +200,11 @@ export default {
         return false;
       }
     },
+  },
+  mounted() {
+    if (this.showTopTags) {
+      this.loadInitialTopTags();
+    }
   },
 };
 </script>

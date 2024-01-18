@@ -159,34 +159,15 @@ export default {
         });
     },
     approveEvent(id) {
-      this.$q
-        .dialog({
-          title: 'Approve event',
-          message: 'Are you sure?',
-          color: 'primary',
-          persistent: false, // we want the user to not be able to close it
-        })
-        .onOk(() => {
-          const progressDialog = this.$q.dialog({
-            title: 'Doo do doo..',
-            color: 'primary',
-            progress: true, // we enable default settings
-            cancel: false,
-            persistent: true, // we want the user to not be able to close it
-            ok: false,
-          });
-          editEventRequest(id, { hidden: false }).then(
-            () => {
-              progressDialog.hide();
-              var indexToDelete = this.events.findIndex((x) => x.id === id);
-              this.events.splice(indexToDelete, 1);
-            },
-            () => {
-              // on error
-              progressDialog.hide();
-            }
-          );
-        });
+      editEventRequest(id, { hidden: false }).then(
+        () => {
+          var indexToDelete = this.events.findIndex((x) => x.id === id);
+          this.events.splice(indexToDelete, 1);
+        },
+        () => {
+          // on error
+        }
+      );
     },
     loadMore() {
       this.page += 1;

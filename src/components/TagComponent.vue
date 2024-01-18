@@ -56,8 +56,8 @@ export default {
       color: white !important;
     }
     &.selected {
-      background: $b-1 !important;
-      color: $t-1 !important;
+      // background: $b-1 !important;
+      // color: $t-1 !important;
       .tag-inner-wrapper {
         // background: rgba(255, 255, 255, 0.2);
       }
@@ -111,6 +111,8 @@ export default {
 
   &.selected {
     //font-weight: 500;
+    background: $primary;
+    color: white;
   }
   .tag-inner-wrapper {
     //box-shadow: 0 0px 1px 1px #ffc299, 1px 1px 1px 1px #ff99c2;

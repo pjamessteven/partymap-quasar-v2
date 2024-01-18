@@ -4,6 +4,15 @@ import BrowsePage from 'src/components/BrowsePage/BrowsePage.vue';
 import Login from 'src/components/Auth/Login.vue';
 const routes: RouteRecordRaw[] = [
   {
+    path: '/scraper',
+    name: 'ScraperPage',
+    component: () => import('src/components/ScraperPage/ScraperPage.vue'),
+    meta: {
+      auth: true,
+      mapOverlay: false,
+    },
+  },
+  {
     path: '/',
     name: 'Explore',
     component: () => import('src/layouts/MainLayout.vue'),
@@ -13,15 +22,6 @@ const routes: RouteRecordRaw[] = [
       friendlyName: 'Explore',
     },
     children: [
-      {
-        path: '/scraper',
-        name: 'ScraperPage',
-        component: () => import('src/components/ScraperPage/ScraperPage.vue'),
-        meta: {
-          auth: true,
-          mapOverlay: false,
-        },
-      },
       {
         path: '/event/:id/:eventDateId?',
         name: 'EventPage',

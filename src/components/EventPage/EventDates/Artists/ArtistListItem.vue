@@ -178,8 +178,10 @@
     >
       <q-card class="q-pa-md flex column">
         <DateTimePicker
+          v-if="showDateTimeDialog"
           @singleDate="newDate = $event"
           :singleValue="artist.start_naive || defaultDate"
+          :isRange="false"
         />
         <div class="flex row justify-end q-gutter-sm q-mt-lg">
           <q-btn

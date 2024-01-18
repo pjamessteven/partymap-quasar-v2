@@ -9,6 +9,7 @@
     <q-card-section class="flex column no-wrap q-mt-sm">
       <div class="t3 q-mb-md">{{ $t('suggestions.event_tags_msg') }}</div>
       <SelectTagsComponent
+        :showTopTags="true"
         :existing-tags="existingTags"
         @valueUpdated="($value) => (newTagsList = $value)"
         @closeDialog="$emit('closeDialog')"
