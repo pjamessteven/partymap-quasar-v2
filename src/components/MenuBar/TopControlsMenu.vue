@@ -8,13 +8,22 @@
         $router.push({ name: 'UserPage', params: { id: currentUser.username } })
       "
     >
-      <div class="flex row items-center align-center no-wrap">
-        <q-avatar size="48px" color="primary" icon="las la-user"> </q-avatar>
+      <q-avatar
+        size="32px"
+        color="primary"
+        :icon="currentUser?.avatar?.thumb_url ? undefined : 'las la-user'"
+      >
+        <img
+          v-if="currentUser?.avatar?.thumb_url"
+          :src="currentUser.avatar.thumb_url"
+        />
+      </q-avatar>
 
-        <div class="username text-subtitle1 q-ml-md">
+      <q-item-section>
+        <div class="username inter bold text-large q-ml-md">
           {{ currentUser.username }}
         </div>
-      </div>
+      </q-item-section>
     </q-item>
 
     <q-separator inset class="q-mt-sm" v-if="currentUser && $q.screen.lt.sm" />

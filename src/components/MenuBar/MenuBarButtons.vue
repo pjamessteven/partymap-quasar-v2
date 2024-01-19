@@ -113,6 +113,7 @@
         anchor="bottom right"
         self="top right"
         class="main-menu"
+        max-height="100vh"
       >
         <TopControlsMenu />
       </q-menu>
@@ -328,9 +329,7 @@ export default {
   transition: opacity 0.3s ease;
   pointer-events: all;
 }
-.q-menu {
-  max-height: 100vh !important;
-}
+
 .user-indicator {
   border-radius: 100px;
 }

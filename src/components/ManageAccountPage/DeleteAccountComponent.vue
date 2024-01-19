@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia';
+import { mapActions, mapWritableState } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
 
 import { deleteUserRequest } from 'src/api';
@@ -53,20 +53,19 @@ export default {
         persistent: true, // we want the user to not be able to close it
         ok: false,
       });
-      deleteUserRequest(this.currentUser.id).then(() => {
-        // it can takes a while to delete an account!
+      deleteUserRequest(this.currentUser.id);
+      // it can takes a while to delete an account!
+      setTimeout(() => {
+        progressDialog.hide();
         setTimeout(() => {
-          progressDialog.hide();
-          setTimeout(() => {
-            this.logout();
-            this.$router.push({ name: 'Explore' });
-          }, 350);
-        }, 3000);
-      });
+          this.currentUser = null;
+          this.$router.push({ name: 'Explore' });
+        }, 350);
+      }, 3000);
     },
   },
   computed: {
-    ...mapState(useAuthStore, ['currentUser']),
+    ...mapWritableState(useAuthStore, ['currentUser']),
   },
 };
 </script>
