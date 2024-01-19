@@ -62,7 +62,7 @@
                     class="ellipsis q-mr-sm inter bolder"
                   >
                     <span class="" v-if="$q.screen.gt.xs">Near&nbsp;</span
-                    ><span v-if="userLocationCity">
+                    ><span v-if="userLocationCountry">
                       {{ userLocationCity
                       }}<span
                         v-if="
@@ -72,6 +72,7 @@
                         "
                         >,&nbsp;</span
                       ></span
+                    ><span v-else class="t3">...</span
                     ><span
                       v-if="
                         ($q.screen.gt.sm && sidebarExpanded) ||
@@ -304,12 +305,15 @@
                         "
                       >
                         <div class="text-">Your upcoming events:</div>
-                        <div
+                        <router-link
                           class="link-hover t3 inter semibold"
-                          @click="() => (sidebarPanel = 'favorites')"
+                          :to="{
+                            name: 'UserPage',
+                            params: { username: currentUser.username },
+                          }"
                         >
                           View all <q-icon name="mdi-chevron-right" />
-                        </div>
+                        </router-link>
                       </div>
                       <div
                         class="q-mb-sm"

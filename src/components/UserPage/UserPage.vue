@@ -1,7 +1,10 @@
 <template>
-  <SolidPage>
+  <SolidPage @scrollPercentage="scrollPercentage = $event">
     <template v-slot>
-      <FavoritesView :username="username" />
+      <FavoritesView
+        :scrollPercentage="scrollPercentage"
+        :username="username"
+      />
     </template>
   </SolidPage>
 </template>
@@ -24,6 +27,7 @@ export default {
   },
   data() {
     return {
+      scrollPercentage: 0,
       user: null,
       loading: false,
     };
@@ -58,6 +62,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.solid-page {
+  :deep(.solid-page-content) {
+    padding: 0px !important;
+  }
+}
 .body--dark {
 }
 

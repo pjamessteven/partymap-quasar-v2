@@ -87,6 +87,7 @@
           @scroll="onScrollMainContent($event)"
           class="control-menu"
           style="min-width: 400px !important"
+          :class="$q.screen.lt.sm ? 'q-pb-xl' : undefined"
         >
           <div
             class="flex column grow"
@@ -213,7 +214,9 @@ export default {
       this.loadTagOptions(this.query);
     },
     loadMore() {
-      this.loadTagOptions(this.query);
+      if (this.tagOptionsHasNext) {
+        this.loadTagOptions(this.query);
+      }
     },
 
     clickTag(tag) {

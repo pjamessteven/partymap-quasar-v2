@@ -5,7 +5,10 @@
   >
     <div
       class="inner-loading flex justify-center items-center"
-      :class="solid ? 'solid' : ''"
+      :class="{
+        solid: solid ? 'solid' : undefined,
+        fixed: fixed ? 'fixed' : undefined,
+      }"
     >
       <!--
       <q-spinner-ios color="$a.dark.isActive ? 'white' : 'black'" size="2em" />
@@ -28,6 +31,10 @@ export default {
     solid: {
       type: Boolean,
       default: true,
+    },
+    fixed: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -60,5 +67,14 @@ export default {
   left: 0px;
   height: 100%;
   width: 100%;
+  pointer-events: none;
+
+  &.fixed {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    top: 0px;
+    left: 0px;
+  }
 }
 </style>

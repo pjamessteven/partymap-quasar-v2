@@ -136,6 +136,7 @@ interface Props {
   disableEndOfResultsMessage?: boolean;
   eventDatesTotal?: number;
   hideHeader?: boolean;
+  twoColumnsMd?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -147,10 +148,11 @@ const props = withDefaults(defineProps<Props>(), {
   eventDatesTotal: () => 0,
   loading: () => false,
   hideHeader: () => false,
+  twoColumnsMd: () => false,
 });
 
 const gridColumns = computed(() => {
-  if (main.sidebarExpanded) {
+  if (main.sidebarExpanded || props.twoColumnsMd) {
     if ($q.screen.gt.xs) {
       return `
         grid-template-columns: repeat(2, minmax(0, 1fr));

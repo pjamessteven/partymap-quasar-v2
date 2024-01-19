@@ -2,10 +2,7 @@
   <SolidPage>
     <template v-slot:title> <div>Manage Account</div></template>
     <template v-slot>
-      <div
-        class="flex column"
-        :class="$q.screen.lt.sm ? 'q-px-md q-mt-sm' : 'q-mt-lg'"
-      >
+      <div class="flex column" :class="$q.screen.lt.sm ? 'q-mt-sm' : 'q-mt-lg'">
         <UpdateEmailAddressComponent />
         <UpdatePasswordComponent class="q-mt-lg" />
         <!--<AccessLevelComponent class="q-mt-lg" />-->

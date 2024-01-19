@@ -41,7 +41,11 @@ import gmapsInit from 'assets/gmaps-script';
 
 export default {
   components: {},
-  props: ['locationProp', 'preSearch', 'errorMessage'],
+  props: {
+    locationProp: { type: Object, default: undefined },
+    preSearch: { type: String, default: undefined },
+    errorMessage: { type: String, default: undefined },
+  },
   data() {
     return {
       loading: false,
@@ -52,21 +56,25 @@ export default {
       placesService: null,
       autoCompleteSessionToken: null,
       autoCompleteResults: [],
-      selectedPlace: this.locationProp,
-      previouslySelectedPlace: this.locationProp,
+      selectedPlace: this.locationProp || {},
+      previouslySelectedPlace: this.locationProp || {},
       locations: {},
       locationSearchResults: [],
     };
   },
+  computed: {
+    computedLocationProp() {
+      return this.locationProp;
+    },
+  },
   watch: {
-    locationProp: {
+    computedLocationProp: {
       handler(newv, oldv) {
         this.selectedPlace = newv;
       },
       deep: true,
       immediate: true,
     },
-
     selectedPlace(newv, oldv) {
       if (oldv) {
         this.previouslySelectedPlace = oldv;

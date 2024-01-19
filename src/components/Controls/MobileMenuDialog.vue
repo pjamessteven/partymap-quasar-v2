@@ -74,7 +74,7 @@ export default {
 
 .menu {
   width: 100vw;
-  max-height: 500px;
+  max-height: 600px;
   position: absolute;
   bottom: 0px;
   .card {

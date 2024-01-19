@@ -34,7 +34,7 @@
           </div>
           <div
             class="q-pb-xl solid-page-content solid-page-content-width"
-            :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'"
+            :class="$q.screen.gt.xs ? '' : 'q-px-md'"
           >
             <transition
               appear
@@ -159,8 +159,6 @@ export default {
       width: 100%;
       max-width: 100%;
       .solid-page-content {
-        overflow-y: auto;
-        position: relative;
       }
       .solid-page-content-width {
         max-width: 100%;

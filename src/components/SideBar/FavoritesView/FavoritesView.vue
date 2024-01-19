@@ -1,20 +1,9 @@
 <template>
   <div
-    class="event-list-vertical shadow-0 main-content"
-    style="height: 100%; width: 100%; position: relative; overflow: hidden"
+    class="favorites-view shadow-0 main-content"
+    style="height: 100%; width: 100%; position: relative"
   >
-    <div class="touch-overlay" v-touch-swipe="handleSwipe" />
-    <div
-      class="event-list-inner"
-      v-bind:class="{
-        'event-list-expanded': $q.screen.lt.sm && showPanel,
-      }"
-    >
-      <div
-        class="flex column grow no-wrap"
-        :class="{ 'q-mx-sm': $q.screen.lt.sm, 'q-mx-sm': $q.screen.gt.xs }"
-      >
-        <!--
+    <!--
         <div
           class="flex row no-wrap items-center justify-between q-pa-md view-options-absolute"
           v-if="$q.screen.gt.xs"
@@ -23,252 +12,232 @@
         </div>
         <q-separator />
 -->
-        <q-scroll-area
-          @wheel.stop
-          vertical
-          @scroll="onScrollMainContent"
-          ref="scroll"
-          :thumb-style="{
-            right: $q.screen.gt.xs ? '0px' : '-16px',
-            width: $q.screen.gt.xs ? '4px' : '4px',
+
+    <transition enter-active-class="animated fadeIn">
+      <div
+        class="flex column no-wrap scroll-content"
+        :class="$q.screen.lt.sm ? 'q-px-sm ' : ''"
+      >
+        <UserProfile
+          :username="username"
+          :class="{
+            'q-mt-lg q-mb-lg q-px-md': $q.screen.gt.xs,
+            'q-mx-sm  q-my-md q-mb-md': $q.screen.lt.sm,
           }"
-          class="scroll-area flex grow"
-          :content-style="{
-            'touch-action': showPanel ? 'auto' : 'auto',
-          }"
-        >
-          <transition enter-active-class="animated fadeIn">
-            <div
-              class="flex column no-wrap scroll-content"
-              :class="$q.screen.lt.sm ? 'q-px-sm ' : ''"
+        />
+        <q-separator />
+
+        <div class="flex column no-wrap content">
+          <div
+            class="q-mt-md flex row no-wrap items-center control-bar"
+            :class="$q.screen.gt.xs ? 'q-pl-md q-mb-md' : ''"
+          >
+            <q-scroll-area
+              ref="scroll"
+              horizontal
+              class="scroll-area grow"
+              :style="$q.screen.gt.xs ? 'height: 54px' : 'height: 44px'"
+              :thumb-style="
+                $q.screen.gt.xs
+                  ? { bottom: '2px', height: '4px' }
+                  : { bottom: '-8px', height: '0px' }
+              "
             >
-              <UserProfile
-                :username="username"
-                :class="{
-                  'q-mt-lg q-mb-lg q-px-md': $q.screen.gt.xs,
-                  'q-mx-sm  q-my-md q-mb-md': $q.screen.lt.sm,
-                }"
-              />
-              <q-separator />
-
-              <div class="flex column no-wrap content">
-                <div
-                  class="q-mt-md flex row no-wrap items-center control-bar"
-                  :class="$q.screen.gt.xs ? 'q-pl-md q-mb-md' : ''"
+              <div
+                class="flex row items-center scroll-wrapper"
+                :class="[
+                  $q.screen.gt.xs
+                    ? $q.screen.lt.xl
+                      ? 'q-gutter-sm q-pr-md q-py-xs no-wrap'
+                      : 'q-gutter-sm q-pr-md q-py-xs  no-wrap'
+                    : 'q-gutter-sm q-px-sm  no-wrap',
+                ]"
+              >
+                <q-btn
+                  no-caps
+                  class="button-plain flex items-center"
+                  :class="{
+                    active: mode === 'all',
+                  }"
+                  @click="
+                    () => {
+                      mode = 'all';
+                    }
+                  "
                 >
-                  <q-scroll-area
-                    ref="scroll"
-                    horizontal
-                    class="scroll-area grow"
-                    :style="$q.screen.gt.xs ? 'height: 54px' : 'height: 44px'"
-                    :thumb-style="
-                      $q.screen.gt.xs
-                        ? { bottom: '2px', height: '4px' }
-                        : { bottom: '-8px', height: '0px' }
-                    "
-                    v-touch-swipe.vertical="handleSwipe"
+                  <div class="flex items-center row no-wrap">
+                    <div>All</div>
+                  </div>
+                </q-btn>
+
+                <q-btn
+                  no-caps
+                  class="button-plain flex items-center"
+                  :class="{
+                    active: mode === 'going',
+                  }"
+                  @click="
+                    () => {
+                      mode = 'going';
+                    }
+                  "
+                >
+                  <div class="flex items-center row no-wrap">
+                    <q-icon
+                      name="mdi-check-circle"
+                      class="q-pr-md"
+                      size="1rem"
+                    />
+                    <div>Going</div>
+                  </div>
+                </q-btn>
+
+                <q-btn
+                  no-caps
+                  class="button-plain flex items-center"
+                  :class="{
+                    active: mode === 'interested',
+                  }"
+                  @click="
+                    () => {
+                      mode = 'interested';
+                    }
+                  "
+                >
+                  <div class="flex items-center row no-wrap">
+                    <q-icon
+                      name="mdi-star-outline"
+                      class="q-pr-md"
+                      size="1rem"
+                    />
+                    <div>Interested</div>
+                  </div>
+                </q-btn>
+
+                <q-btn
+                  no-caps
+                  class="button-plain flex items-center"
+                  :class="{
+                    active:
+                      mode === 'hosting' ||
+                      mode === 'created' ||
+                      mode === 'following',
+                  }"
+                  @click="
+                    () => {
+                      showingYouMenu = !showingYouMenu;
+                    }
+                  "
+                >
+                  <div class="flex items-center row no-wrap">
+                    <q-icon
+                      name="mdi-dots-vertical"
+                      class="q-pr-md"
+                      size="1rem"
+                    />
+                    <div>More</div>
+                  </div>
+                  <MenuWrapper
+                    :showing="showingYouMenu"
+                    @hide="() => (showingYouMenu = false)"
+                    @show="() => (showingYouMenu = true)"
+                    class="menu-wrapper inter bold"
                   >
-                    <div
-                      class="flex row items-center scroll-wrapper"
-                      :class="[
-                        $q.screen.gt.xs
-                          ? $q.screen.lt.xl
-                            ? 'q-gutter-sm q-pr-md q-py-xs no-wrap'
-                            : 'q-gutter-sm q-pr-md q-py-xs  no-wrap'
-                          : 'q-gutter-sm q-px-sm  no-wrap',
-                      ]"
-                    >
-                      <q-btn
-                        no-caps
-                        class="button-plain flex items-center"
-                        :class="{
-                          active: mode === 'all',
-                        }"
+                    <q-list :class="$q.screen.lt.sm ? 'q-pb-xl' : undefined">
+                      <q-item
+                        v-close-popup
+                        :active="mode === 'hosting'"
+                        clickable
                         @click="
                           () => {
-                            mode = 'all';
+                            mode = 'hosting';
                           }
                         "
                       >
-                        <div class="flex items-center row no-wrap">
-                          <div>All</div>
-                        </div>
-                      </q-btn>
-
-                      <q-btn
-                        no-caps
-                        class="button-plain flex items-center"
-                        :class="{
-                          active: mode === 'going',
-                        }"
+                        <q-item-section> Hosting</q-item-section>
+                      </q-item>
+                      <q-item
+                        v-close-popup
+                        :active="mode === 'created'"
+                        clickable
                         @click="
                           () => {
-                            mode = 'going';
+                            mode = 'created';
                           }
                         "
                       >
-                        <div class="flex items-center row no-wrap">
-                          <q-icon
-                            name="mdi-check-circle"
-                            class="q-pr-md"
-                            size="1rem"
-                          />
-                          <div>Going</div>
-                        </div>
-                      </q-btn>
-
-                      <q-btn
-                        no-caps
-                        class="button-plain flex items-center"
-                        :class="{
-                          active: mode === 'interested',
-                        }"
+                        <q-item-section> Created</q-item-section>
+                      </q-item>
+                      <q-item
+                        v-close-popup
+                        :active="mode === 'following'"
+                        clickable
                         @click="
                           () => {
-                            mode = 'interested';
+                            mode = 'following';
                           }
                         "
                       >
-                        <div class="flex items-center row no-wrap">
-                          <q-icon
-                            name="mdi-star-outline"
-                            class="q-pr-md"
-                            size="1rem"
-                          />
-                          <div>Interested</div>
-                        </div>
-                      </q-btn>
+                        <q-item-section> Contributed/Reviewed </q-item-section>
+                      </q-item>
+                    </q-list>
+                  </MenuWrapper>
+                </q-btn>
 
-                      <q-btn
-                        no-caps
-                        class="button-plain flex items-center"
-                        :class="{
-                          active:
-                            mode === 'hosting' ||
-                            mode === 'created' ||
-                            mode === 'following',
-                        }"
-                        @click="
-                          () => {
-                            showingYouMenu = !showingYouMenu;
-                          }
-                        "
-                      >
-                        <div class="flex items-center row no-wrap">
-                          <q-icon
-                            name="mdi-dots-vertical"
-                            class="q-pr-md"
-                            size="1rem"
-                          />
-                          <div>More</div>
-                        </div>
-                        <MenuWrapper
-                          :showing="showingYouMenu"
-                          @hide="() => (showingYouMenu = false)"
-                          @show="() => (showingYouMenu = true)"
-                          class="menu-wrapper inter bold"
-                        >
-                          <q-list>
-                            <q-item
-                              v-close-popup
-                              :active="mode === 'hosting'"
-                              clickable
-                              @click="
-                                () => {
-                                  mode = 'hosting';
-                                }
-                              "
-                            >
-                              <q-item-section> Hosting</q-item-section>
-                            </q-item>
-                            <q-item
-                              v-close-popup
-                              :active="mode === 'created'"
-                              clickable
-                              @click="
-                                () => {
-                                  mode = 'created';
-                                }
-                              "
-                            >
-                              <q-item-section> Created</q-item-section>
-                            </q-item>
-                            <q-item
-                              v-close-popup
-                              :active="mode === 'following'"
-                              clickable
-                              @click="
-                                () => {
-                                  mode = 'following';
-                                }
-                              "
-                            >
-                              <q-item-section>
-                                Contributed/Reviewed
-                              </q-item-section>
-                            </q-item>
-                          </q-list>
-                        </MenuWrapper>
-                      </q-btn>
+                <div
+                  class="separator vertical q-ml-md q-mr-sm"
+                  style="height: 32px"
+                />
 
-                      <div
-                        class="separator vertical q-ml-md q-mr-sm"
-                        style="height: 32px"
-                      />
+                <q-btn
+                  no-caps
+                  class="button-plain flex items-center"
+                  :class="{
+                    active: tense === 'future',
+                  }"
+                  @click="
+                    () => {
+                      tense = 'future';
+                    }
+                  "
+                >
+                  <div class="flex items-center row no-wrap">
+                    <q-icon
+                      name="mdi-clock-time-nine-outline"
+                      class="q-pr-md"
+                      size="1rem"
+                    />
+                    <div>Upcoming</div>
+                  </div>
+                </q-btn>
 
-                      <q-btn
-                        no-caps
-                        class="button-plain flex items-center"
-                        :class="{
-                          active: tense === 'future',
-                        }"
-                        @click="
-                          () => {
-                            tense = 'future';
-                          }
-                        "
-                      >
-                        <div class="flex items-center row no-wrap">
-                          <q-icon
-                            name="mdi-clock-time-nine-outline"
-                            class="q-pr-md"
-                            size="1rem"
-                          />
-                          <div>Upcoming</div>
-                        </div>
-                      </q-btn>
+                <q-btn
+                  no-caps
+                  class="button-plain flex items-center"
+                  :class="{
+                    active: tense === 'past',
+                  }"
+                  @click="
+                    () => {
+                      tense = 'past';
+                    }
+                  "
+                >
+                  <div class="flex items-center row no-wrap">
+                    <q-icon name="mdi-history" class="q-pr-md" size="1rem" />
+                    <div>Past</div>
+                  </div>
+                </q-btn>
+              </div>
+            </q-scroll-area>
+            <EventDateViewOptions
+              :showGroupByMonth="false"
+              v-if="$q.screen.gt.xs"
+              class="q-mb-sm"
+            />
+          </div>
 
-                      <q-btn
-                        no-caps
-                        class="button-plain flex items-center"
-                        :class="{
-                          active: tense === 'past',
-                        }"
-                        @click="
-                          () => {
-                            tense = 'past';
-                          }
-                        "
-                      >
-                        <div class="flex items-center row no-wrap">
-                          <q-icon
-                            name="mdi-history"
-                            class="q-pr-md"
-                            size="1rem"
-                          />
-                          <div>Past</div>
-                        </div>
-                      </q-btn>
-                    </div>
-                  </q-scroll-area>
-                  <EventDateViewOptions
-                    :showGroupByMonth="false"
-                    v-if="$q.screen.gt.xs"
-                    class="q-mb-sm"
-                  />
-                </div>
-
-                <!--
+          <!--
                   TODO: ADD USER ARTIST PROFILE
                 <div
                   class="artist-profile-wrapper"
@@ -280,40 +249,33 @@
                   />
                 </div>
                 -->
-                <transition appear enter-active-class="animated fadeIn slower">
-                  <EventDateList
-                    v-if="
-                      userEventDates && compactView && !isLoadingDatesInitial
-                    "
-                    :groupByMonth="false"
-                    :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
-                    :eventDates="userEventDates"
-                    :hasNext="userEventDatesHasNext"
-                  />
-                </transition>
-                <transition appear enter-active-class="animated fadeIn slower">
-                  <EventDatePosterList
-                    v-if="
-                      userEventDates && !compactView && !isLoadingDatesInitial
-                    "
-                    :groupByMonth="false"
-                    :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
-                    :eventDates="userEventDates"
-                    :hasNext="userEventDatesHasNext"
-                  />
-                </transition>
-              </div>
-            </div>
+          <transition appear enter-active-class="animated fadeIn slower">
+            <EventDateList
+              v-if="userEventDates && compactView && !isLoadingDatesInitial"
+              :groupByMonth="$q.screen.lt.md"
+              :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
+              :eventDates="userEventDates"
+              :hasNext="userEventDatesHasNext"
+              :twoColumnsMd="true"
+            />
           </transition>
-        </q-scroll-area>
+          <transition appear enter-active-class="animated fadeIn slower">
+            <EventDatePosterList
+              v-if="userEventDates && !compactView && !isLoadingDatesInitial"
+              :groupByMonth="false"
+              :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
+              :eventDates="userEventDates"
+              :hasNext="userEventDatesHasNext"
+            />
+          </transition>
+        </div>
       </div>
-      <div
-        v-touch-swipe="handleSwipe"
-        class="event-date-center flex grow justify-center"
-        style="height: 100%; position: absolute; width: 100%; margin-top: 0px"
-      >
-        <InnerLoading v-if="isLoadingDatesInitial" :solid="false" />
-      </div>
+    </transition>
+    <div
+      class="event-date-center flex grow justify-center"
+      style="height: 100%; position: absolute; width: 100%; top: 0px"
+    >
+      <InnerLoading v-if="isLoadingDatesInitial" :solid="false" :fixed="true" />
     </div>
   </div>
 </template>
@@ -347,6 +309,7 @@ export default {
     username: {
       default: null,
     },
+    scrollPercentage: { default: 0 },
   },
   mounted() {
     this.getInitialList();
@@ -392,17 +355,6 @@ export default {
         }
       }
     },
-    handleSwipe() {
-      this.showPanel = !this.showPanel;
-    },
-    onScrollMainContent(info) {
-      this.mainContentScrollPosition = info.verticalPosition;
-
-      if (info.verticalPercentage === 1) {
-        // reached bottom
-        this.loadMore();
-      }
-    },
   },
   watch: {
     mode() {
@@ -417,8 +369,16 @@ export default {
         this.getInitialList();
       }
     },
+    computedScrollPercentage(newv) {
+      if (newv === 1) {
+        this.loadMore();
+      }
+    },
   },
   computed: {
+    computedScrollPercentage() {
+      return this.scrollPercentage;
+    },
     ...mapState(useMainStore, [
       'sidebarPanel',
       'userLocation',
@@ -437,10 +397,6 @@ export default {
     ]),
   },
   created() {
-    this.debouncedOnScrollMainContent = _.debounce(
-      this.onScrollMainContent,
-      10
-    );
     this.debouncedGetInitalList = _.debounce(this.getInitialList, 150, {
       leading: false,
       trailing: true,
@@ -486,36 +442,29 @@ export default {
   z-index: 100;
 }
 
-.event-list-vertical {
+.event-list-inner {
+  pointer-events: all;
   display: flex;
   flex-direction: column;
   height: 100%;
-  transition: background 0.3s;
-  //z-index: 3000;
-  position: absolute;
-  pointer-events: none;
-  .controls-component {
+  transition: all 0.3s;
+
+  :deep(.date-header) {
+    padding-top: 16px;
+    .date-header-wrapper {
+      top: 44px;
+      z-index: 1 !important;
+    }
   }
-  .event-list-inner {
-    pointer-events: all;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    transition: all 0.3s;
 
-    :deep(.date-header) {
-      padding-top: 16px;
-    }
-
-    .date-header-bg {
-      // only useful for light theme
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 48px;
-      width: 100%;
-      z-index: 10;
-    }
+  .date-header-bg {
+    // only useful for light theme
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 48px;
+    width: 100%;
+    z-index: 10;
   }
 
   .no-parties-text {
@@ -565,7 +514,7 @@ export default {
     background: transparent;
   }
 
-  .event-list-vertical {
+  .favorites-view {
     pointer-events: none;
     .controls-component {
       background: black;
@@ -597,7 +546,7 @@ export default {
       background: #fafafa;
     }
   }
-  .event-list-vertical {
+  .favorites-view {
     .event-list-inner {
       //background: white;
     }
@@ -620,7 +569,7 @@ export default {
     align-items: start;
   }
 
-  .event-list-vertical {
+  .favorites-view {
     //padding-top: 64px !important;
     padding-bottom: 68px;
     .event-list-inner {

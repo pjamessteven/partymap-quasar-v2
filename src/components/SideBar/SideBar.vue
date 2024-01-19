@@ -2,7 +2,9 @@
   <div class="flex sidebar-wrapper">
     <div
       ref="sidebar"
-      v-touch-swipe.mouse.up="!showPanel ? handleSwipe : null"
+      v-touch-swipe.mouse.up="
+        !showPanel && this.sidebarPanel === 'explore' ? handleSwipe : null
+      "
       class="flex justify-between no-wrap sidebar"
       id="sidebar"
       :style="computedSidebarWidth"
@@ -15,7 +17,9 @@
     >
       <div
         v-touch-swipe.mouse.down="
-          enablePanelSwipeDown && showPanel ? handleSwipe : null
+          enablePanelSwipeDown && this.sidebarPanel === 'explore' && showPanel
+            ? handleSwipe
+            : null
         "
         class="sidebar-content flex column no-wrap"
       >

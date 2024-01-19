@@ -60,9 +60,9 @@
       class="q-mt-sm"
       v-if="computedResults?.length > 0 || query?.length > 0"
     />
-    <div class="flex column q-mt-md" v-if="tagsList?.length > 0">
+    <div class="flex column q-mt-sm q-mb-md" v-if="tagsList?.length > 0">
       <span>
-        <span class="t3">{{ $t('tags.selected_tags') }}:</span>
+        <span class="t1">{{ $t('tags.selected_tags') }}:</span>
       </span>
 
       <div class="q-pt-sm tag-container q-gutter-xs">
@@ -131,6 +131,10 @@ export default {
         this.query = '';
         this.queryResults = [];
       }
+      // reset top tags
+      this.topTags = this.topTags.splice(0, 10);
+      this.page = 1;
+      this.hasNext = true;
     },
     queryTags(val) {
       if (!val || val === '') {
@@ -186,7 +190,7 @@ export default {
   },
   computed: {
     computedResults() {
-      if (this.queryResults?.length > 0 && this.query?.length > 0) {
+      if (this.queryResults?.length > 0 || this.query?.length > 0) {
         return this.queryResults;
       } else {
         // return most popular tags if no search query
@@ -218,18 +222,8 @@ export default {
     :deep(.tag) {
       opacity: 1;
       background: $b-4;
-      color: grey;
+      color: black;
       border: 1px solid rgba(255, 255, 255, 0.2);
-      &.selected {
-        color: black;
-        background: $b-4 !important;
-        .tag-inner-wrapper {
-          opacity: 1;
-          .tag-inner {
-            font-weight: bold;
-          }
-        }
-      }
     }
   }
 }

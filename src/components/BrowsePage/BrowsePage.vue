@@ -115,6 +115,12 @@ export default {
 
 .body--light {
 }
+
+.solid-page {
+  :deep(.solid-page-content) {
+    padding: 0px !important;
+  }
+}
 @media only screen and (max-width: 600px) {
   .browse-page {
     padding-bottom: 68px;

@@ -102,9 +102,12 @@ export default {
     };
   },
   watch: {
-    artistsToAdd(newv, oldv) {
-      // for emit mode
-      this.$emit('updated', newv);
+    artistsToAdd: {
+      handler(newv, oldv) {
+        // for emit mode
+        this.$emit('updated', newv);
+      },
+      deep: true,
     },
   },
   methods: {

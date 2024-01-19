@@ -1,5 +1,5 @@
 <template>
-  <SolidPage @scrollPercentage="onScrollMainContent($event)">
+  <SolidPage @scrollPercentage="onScrollPercentage($event)">
     <template v-slot:title>
       <div v-if="event.host">
         {{ $t('add_event.add_your_event') }} &nbsp;<i
@@ -47,7 +47,6 @@
             will be removed from the website.
           </p>
         </div>
-
         <div class="flex column">
           <div class="sticky-header flex column">
             <p class="text-large inter bolder t1 q-mb-md q-mt-md">
@@ -69,6 +68,7 @@
               <div class="flex column grow q-ml-lg">
                 <p class="text-large inter bold">Event name</p>
                 <q-input
+                  v-if="false"
                   class="grow"
                   :error="!!validationErrors.name && showValidationErrors"
                   :errorMessage="validationErrors.name"
@@ -124,14 +124,9 @@
                 />
                 <div
                   v-if="!!validationErrors.media_items && showValidationErrors"
-                  class="t1 inter no-wrap flex items-center q-mt-md"
-                  style="color: red"
+                  class="inter no-wrap flex items-center q-mt-md text-negative"
                 >
-                  <q-icon
-                    name="mdi-alert-circle"
-                    size="1.5em"
-                    style="color: red"
-                  />
+                  <q-icon name="mdi-alert-circle" size="1.5em" />
                   <div class="q-ml-sm">
                     {{ validationErrors.media_items }}
                   </div>
@@ -286,16 +281,18 @@
                 </span>
 
                 <GoogleLocationComponent
-                  v-on:location="event.location = $event"
+                  @:location="event.location = $event"
                   :locationProp="event.location"
-                  :error-message="validationErrors.location"
+                  :error-message="
+                    showValidationErrors ? validationErrors.location : undefined
+                  "
                 />
 
                 <div
-                  class="location-map-wrapper q-mt-md"
+                  class="location-map-wrapper satellite-enabled q-mt-md q-mb-lg"
                   v-show="!!event.location"
                 >
-                  <div class="location-map" ref="map" />
+                  <div class="map" ref="map" />
                   <div
                     class="location-map-select-msg flex justify-center items-center"
                   >
@@ -321,14 +318,9 @@
                 </span>
                 <div
                   v-if="!!validationErrors.date_time && showValidationErrors"
-                  class="t1 inter no-wrap flex items-center q-mb-md"
-                  style="color: red"
+                  class="inter no-wrap flex items-center q-mb-md text-negative"
                 >
-                  <q-icon
-                    name="mdi-alert-circle"
-                    size="1.5em"
-                    style="color: red"
-                  />
+                  <q-icon name="mdi-alert-circle" size="1.5em" />
                   <div class="q-ml-sm">
                     {{ validationErrors.date_time }}
                   </div>
@@ -541,20 +533,20 @@
             :class="$q.screen.gt.xs ? 'q-ml-lg' : 'q-mt-lg'"
           >
             <q-icon name="mdi-alert-circle" size="2em" style="color: red" />
-            <div class="q-ml-md t1">Some required information is missing..</div>
+            <div class="q-ml-md t1">Missing required information...</div>
           </div>
           <div
             v-else
             class="t1 inter bold text-large no-wrap flex items-center"
             :class="$q.screen.gt.xs ? 'q-ml-lg' : 'q-mt-lg'"
           >
-            <q-icon name="mdi-check-outline" size="2em" style="color: green" />
+            <q-icon name="mdi-check" size="2em" style="color: green" />
             <div class="q-ml-md t1">
-              Looks good! Thanks for contributing to PartyMap! .
+              Looks good! Thank you for contributing!
             </div>
           </div>
           <!--
-    <div
+  <div
       v-for="(errorMessage, index) of Object.values(validationErrors)"
       :key="index"
     >
@@ -589,6 +581,7 @@ import { getEventsRequest, addEventRequest } from 'src/api';
 import { useAuthStore } from 'src/stores/auth';
 import { mapState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
+import { toRaw } from 'vue';
 
 export default {
   components: {
@@ -602,7 +595,6 @@ export default {
   },
   props: {
     host: { type: Boolean, default: false },
-    prepopulate: { type: Object, default: null },
   },
   data() {
     return {
@@ -658,7 +650,7 @@ export default {
     };
   },
   methods: {
-    onScrollMainContent(percentage) {
+    onScrollPercentage(percentage) {
       if (percentage === 1) {
         this.showValidationErrors = true;
       }
@@ -772,25 +764,26 @@ export default {
   watch: {
     eventLocation: {
       handler(newv) {
-        setTimeout(() => {
-          this.map.invalidateSize();
-        }, 100);
-
         if (newv) {
-          const lat = newv.geometry.location.lat();
-          const lng = newv.geometry.location.lng();
+          setTimeout(() => {
+            this.map.invalidateSize();
 
-          // remove previous marker
-          if (this.markers && this.map.hasLayer(this.markers)) {
-            this.map.removeLayer(this.markers);
-          }
-          // add location preview marker
-          this.map.setView([lat, lng], 12);
-          let marker = L.marker([lat, lng], {
-            icon: this.defaultIcon,
-          });
-          this.markers = L.layerGroup([marker]);
-          this.map.addLayer(this.markers);
+            const lat = newv.geometry.location.lat();
+            const lng = newv.geometry.location.lng();
+
+            // remove previous marker
+            if (this.markers && this.map.hasLayer(this.markers)) {
+              toRaw(this.map).removeLayer(this.markers);
+            }
+            // add location preview marker
+            this.map.setView([lat, lng], 12);
+            let marker = L.marker([lat, lng], {
+              icon: this.defaultIcon,
+              zIndexOffset: 5000,
+            });
+            this.mapMarkers = L.featureGroup([marker]);
+            this.mapMarkers.addTo(toRaw(this.map));
+          }, 100);
         }
       },
       deep: true,
@@ -838,9 +831,6 @@ export default {
   },
   mounted() {
     this.initMap();
-    if (this.prepopulate) {
-      this.event = { ...this.event, ...this.prepopulate };
-    }
   },
 };
 </script>
@@ -889,7 +879,7 @@ export default {
       position: relative;
       overflow: hidden;
       border-radius: 18px;
-      .location-map {
+      .map {
         position: absolute;
         width: 100%;
         height: 100%;

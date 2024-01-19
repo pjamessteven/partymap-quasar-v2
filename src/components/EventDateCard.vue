@@ -139,8 +139,10 @@
                   >
                     <q-icon name="las la-map-marker" class="q-mr-sm" />{{
                       event.location.locality.long_name
-                    }},
-                    {{ event.location.locality.region.long_name }}
+                    }}<span v-if="event.location.locality?.region?.long_name"
+                      >,</span
+                    >
+                    {{ event.location.locality?.region?.long_name }}
                   </span>
                   <span v-else class="ellipsis">
                     <q-icon name="las la-map-marker" class="q-mr-sm" />{{

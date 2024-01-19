@@ -423,9 +423,9 @@ export default {
     },
 
     fitBoundsForExplorePage(coords) {
-      /*
       // padding for desktop panel
       var latlng = L.latLng(coords);
+      console.log('coords', coords);
       if (this.$q.screen.gt.xs) {
         if (this.sidebarExpanded) {
           // padding for sidebar
@@ -454,7 +454,7 @@ export default {
           easeLinearity: 1,
           maxZoom: 10,
         });
-      }*/
+      }
     },
     invalidateMapSize() {
       setTimeout(() => {
@@ -546,7 +546,18 @@ export default {
         [53.9, 27.6],
         3
       );
+      if (this.focusMarker !== null) {
+        this.blockUpdates = true;
+        // save current map view so we can return to it
+        if (this.focusMarker.lat && this.focusMarker.lng) {
+          this.exploreMapView = {
+            latlng: toRaw(this.map).getCenter(),
+            zoom: toRaw(this.map).getZoom(),
+          };
 
+          this.setMarkerFocusForEventPage(newval);
+        }
+      }
       this.initTileLayers();
       // add location marker for fine location
       if (!this.userLocationFromSearch && this.fineLocation) {

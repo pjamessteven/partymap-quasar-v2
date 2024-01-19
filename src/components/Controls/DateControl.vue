@@ -36,7 +36,7 @@
         </div>
       </div>
       <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
-        <div class="calendar-header flex row items-start" style="">
+        <div class="calendar-header flex row no-wrap items-start" style="">
           <q-list
             dense
             style="min-width: 100px"
@@ -164,15 +164,20 @@
               </q-menu>
             </q-item>
           </q-list>
-          <div class="flex column date-picker-container">
+          <div
+            class="flex column date-picker-container"
+            :class="$q.screen.lt.sm ? ' q-pb-xl' : ''"
+          >
             <q-item-label
               header
               class="q-pb-md t1 inter bold"
               style="text-align: center"
               >{{ title }}</q-item-label
             >
-
+            <q-separator />
             <DatePicker
+              borderless
+              expanded
               title-position="center"
               @update:model-value="onSelectedCustomDateRange"
               class="date-picker flex"
@@ -214,7 +219,7 @@ export default {
   },
   data() {
     return {
-      title: 'Select date range',
+      title: 'Select a date range',
       showing: false,
       customDateRange: null,
       modelConfig: {
@@ -742,6 +747,7 @@ export default {
     max-width: 100%;
     min-width: unset;
     justify-content: start;
+    flex-wrap: wrap;
     .date-picker-container {
       width: 100%;
       .date-picker {
