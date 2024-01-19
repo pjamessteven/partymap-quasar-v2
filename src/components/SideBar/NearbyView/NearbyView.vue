@@ -19,8 +19,8 @@
             vertical
             :thumb-style="{
               marginTop: '16px',
-              right: $q.screen.gt.sm ? '-16px' : '0px',
-              width: $q.screen.gt.sm ? '8px' : '4px',
+              right: $q.screen.gt.sm ? '0px' : '0px',
+              width: $q.screen.gt.sm ? '12px' : '4px',
               borderRadius: '0px',
             }"
             :class="$q.screen.lt.sm && !showPanel && 'disable-scroll'"
@@ -45,7 +45,6 @@
                 <div
                   style="margin-top: -8px"
                   class="ellipsis text-h4 inter bolder"
-                  v-if="$q.screen.lt.md"
                 >
                   <span class="">Near</span>
                 </div>
@@ -61,24 +60,11 @@
                     v-if="userLocation"
                     class="ellipsis q-mr-sm inter bolder"
                   >
-                    <span class="" v-if="$q.screen.gt.xs">Near&nbsp;</span
-                    ><span v-if="userLocationCountry">
-                      {{ userLocationCity
-                      }}<span
-                        v-if="
-                          userLocationCountry &&
-                          $q.screen.gt.sm &&
-                          sidebarExpanded
-                        "
-                        >,&nbsp;</span
-                      ></span
+                    <span v-if="userLocationCountry">
+                      {{ userLocationCity }}</span
                     ><span v-else class="t3">...</span
-                    ><span
-                      v-if="
-                        ($q.screen.gt.sm && sidebarExpanded) ||
-                        !userLocationCity
-                      "
-                      >{{ userLocationCountry }}</span
+                    ><span v-if="$q.screen.gt.sm || !userLocationCity"
+                      >,&nbsp;{{ userLocationCountry }}</span
                     >
                   </span>
                   <span
@@ -1260,7 +1246,7 @@ export default {
     height: 100%;
     .scroll-stuff {
       .loading-wrapper {
-        pointer-events: none;
+        pointer-events: none !important;
         position: absolute;
         height: 100vh;
         width: 100%;

@@ -56,9 +56,9 @@
               ? {
                   bottom: '0px',
                   height: '8px',
-                  right: '-16px',
+                  right: '0px',
                   borderRadius: '0px',
-                  width: '8px',
+                  width: '12px',
                 }
               : {
                   marginTop: '52px',

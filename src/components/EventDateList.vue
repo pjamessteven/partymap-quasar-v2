@@ -24,8 +24,8 @@
           class="ed-card-grid q-pb-sm"
           :style="gridColumns"
           :class="{
-            'q-px-md q-mb-lg': $q.screen.gt.xs,
-            'q-px-sm  q-mt-': $q.screen.lt.sm,
+            'q-px-md q-mb-lg': $q.screen.gt.sm,
+            'q-px-sm  q-mt-': $q.screen.lt.md,
           }"
         >
           <EventDateCard
@@ -43,8 +43,8 @@
         class="ed-card-grid q-pb-sm q-mt-xs"
         :style="gridColumns"
         :class="{
-          'q-px-md ': $q.screen.gt.xs,
-          'q-px-sm  q-mt-': $q.screen.lt.sm,
+          'q-px-md ': $q.screen.gt.sm,
+          'q-px-sm  q-mt-': $q.screen.lt.md,
         }"
       >
         <EventDateCard

@@ -87,9 +87,9 @@
           @scroll="onScrollMainContent($event)"
           class="control-menu"
           style="min-width: 400px !important"
-          :class="$q.screen.lt.sm ? 'q-pb-xl' : undefined"
         >
           <div
+            :class="$q.screen.lt.sm ? 'q-pb-lg' : undefined"
             class="flex column grow"
             v-if="tagOptions && tagOptions.length > 0"
           >
@@ -170,6 +170,7 @@ import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
 import MenuWrapper from './MenuWrapper.vue';
 import Tag from 'components/EventPage/Tags/TagComponent.vue';
+import _ from 'lodash';
 
 export default {
   components: {
@@ -191,6 +192,7 @@ export default {
   methods: {
     ...mapActions(useQueryStore, ['loadTagOptions']),
     onShow() {
+      console.log('onshow');
       // used to stop the ed list refrshing on mobile viewport size change
       // this.blockUpdates = true;
       if (!this.tagOptions || this.tagOptions.length === 0) {
@@ -202,7 +204,8 @@ export default {
 
       // unload additional pages to reduce render load next time the dialog is opened
       this.tagOptions = this.tagOptions.slice(0, this.tagOptionsPerPage);
-      this.tagOptionsPage = 2;
+      this.tagOptionsPage = 2; // we reset back to page 1
+      this.tagOptionsHasNext = true;
       /*
       setTimeout(() => {
         this.blockUpdates = false;
@@ -229,13 +232,12 @@ export default {
       }
     },
     onScrollMainContent(event) {
-      console.log(event.target);
       if (
         event.target.offsetHeight + event.target.scrollTop >=
         event.target.scrollHeight - 1
       ) {
         // reached bottom
-        this.loadMore();
+        this.debouncedLoadMore();
       }
     },
   },
@@ -245,14 +247,16 @@ export default {
       'controlTag',
       'tagOptionsPage',
       'tagOptions',
-    ]),
-    ...mapState(useQueryStore, [
       'tagOptionsHasNext',
-      'tagOptionsLoading',
-      'tagOptionsPerPage',
     ]),
+    ...mapState(useQueryStore, ['tagOptionsLoading', 'tagOptionsPerPage']),
   },
-
+  created() {
+    this.debouncedLoadMore = _.debounce(this.loadMore, 150, {
+      leading: true,
+      trailing: false,
+    });
+  },
   mounted() {
     setTimeout(() => {
       if (!this.tagOptions) {

@@ -26,7 +26,6 @@
         onHide($event);
       }
     "
-    @show="this.$emit('show')"
   >
     <slot></slot>
   </MobileMenu>

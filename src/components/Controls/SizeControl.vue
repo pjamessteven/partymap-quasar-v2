@@ -37,7 +37,7 @@
       <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
         <div
           class="q-gutter-sm flex column q-pr-md q-pa-xs"
-          :class="$q.screen.lt.sm ? 'q-py-sm q-pb-xl' : 'q-pb-xl'"
+          :class="$q.screen.lt.sm ? 'q-py-sm q-pb-xl' : ''"
         >
           <q-checkbox
             v-model="controlSize"

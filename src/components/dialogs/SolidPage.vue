@@ -8,8 +8,9 @@
         @scroll="onScrollMainContent"
         ref="scroll"
         :thumb-style="{
+          borderRadius: '0px',
           right: $q.screen.gt.xs ? '0px' : '-16px',
-          width: $q.screen.gt.xs ? '8px' : '4px',
+          width: $q.screen.gt.xs ? '12px' : '4px',
         }"
         class="scroll-area flex grow"
         stye="width: 100%;"
@@ -34,7 +35,7 @@
           </div>
           <div
             class="q-pb-xl solid-page-content solid-page-content-width"
-            :class="$q.screen.gt.xs ? '' : 'q-px-md'"
+            :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'"
           >
             <transition
               appear

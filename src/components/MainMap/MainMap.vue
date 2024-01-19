@@ -425,7 +425,6 @@ export default {
     fitBoundsForExplorePage(coords) {
       // padding for desktop panel
       var latlng = L.latLng(coords);
-      console.log('coords', coords);
       if (this.$q.screen.gt.xs) {
         if (this.sidebarExpanded) {
           // padding for sidebar
@@ -594,8 +593,10 @@ export default {
       toRaw(this.map).on('moveend', (event) => {
         if (!this.blockUpdates) {
           // ipad/tablet view doesnt respect mousedown so we also do on move end
+          /*
           if (this.$route.name === 'Explore' && this.$q.platform.is.ipad) {
             // switch to explore view
+
             if (
               this.sidebarPanel !== 'explore' &&
               this.sidebarPanel !== 'favorites'
@@ -604,6 +605,7 @@ export default {
             }
             this.showPanel = false;
           }
+          */
           /*
           this.exploreMapView = {
             latlng: this.map.getCenter(),

@@ -515,7 +515,6 @@ export default {
   }
 
   .favorites-view {
-    pointer-events: none;
     .controls-component {
       background: black;
 

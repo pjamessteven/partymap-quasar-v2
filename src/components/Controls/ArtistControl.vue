@@ -76,6 +76,7 @@
         </div>
         <div class="control-menu" @scroll="onScrollMainContent($event)">
           <div
+            :class="$q.screen.lt.sm ? 'q-pb-xl' : undefined"
             class="flex column grow"
             v-if="artistOptions && artistOptions.length > 0"
           >
@@ -198,6 +199,7 @@
 import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
+import _ from 'lodash';
 
 import MenuWrapper from './MenuWrapper.vue';
 
@@ -248,7 +250,7 @@ export default {
         event.target.scrollHeight - 1
       ) {
         // reached bottom, load more
-        this.loadArtistOptions(this.query);
+        this.debouncedLoadMore(this.query);
       }
     },
     loadInitialList() {
@@ -274,6 +276,12 @@ export default {
       'artistOptionsLoading',
       'artistOptionsPerPage',
     ]),
+  },
+  created() {
+    this.debouncedLoadMore = _.debounce(this.loadArtistOptions, 150, {
+      leading: true,
+      trailing: false,
+    });
   },
 };
 </script>

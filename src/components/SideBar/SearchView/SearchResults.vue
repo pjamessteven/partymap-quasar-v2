@@ -156,7 +156,7 @@ export default {
         lat: parseFloat(location.location.lat),
         lng: parseFloat(location.location.lng),
       };
-      let labelParts = location.label.split(',');
+      let labelParts = location.label.split(', ');
       this.userLocationCountry = labelParts.pop();
       this.userLocationCity = labelParts?.[0];
       if (!this.userLocationCity) {
