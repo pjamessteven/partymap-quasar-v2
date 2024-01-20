@@ -232,7 +232,7 @@
 
 <script>
 import { API_URL } from 'src/api';
-import { mapActions, mapState } from 'pinia';
+import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useAuthStore } from 'src/stores/auth';
 import InnerLoading from 'src/components/InnerLoading.vue';
@@ -266,6 +266,7 @@ export default {
           identifier: this.identifier,
           password: this.password,
         });
+        this.userEventDatesPage = 1;
         this.loadUserEventDates('all', 'future');
         if (!currentUser.username) {
           this.$router.replace({ name: 'ChooseUsername' });
@@ -311,18 +312,15 @@ export default {
           if (!currentUser.username) {
             this.$router.replace({ name: 'ChooseUsername' });
           } else {
+            this.userEventDatesPage = 1;
             await this.loadUserEventDates('all', 'future');
             this.$router.push('/');
           }
-
           this.loading = false;
         })
         .catch((error) => {
           console.log(error);
           this.$q.notify('Apple login failed, please try again...');
-          this.loading = false;
-
-          // Handle error
         });
     },
     async onAppleDesktopLoginSuccess(data) {
@@ -333,6 +331,7 @@ export default {
       if (!currentUser.username) {
         this.$router.replace({ name: 'ChooseUsername' });
       } else {
+        this.userEventDatesPage = 1;
         await this.loadUserEventDates('all', 'future');
         this.$router.push('/');
       }
@@ -344,6 +343,7 @@ export default {
   },
   computed: {
     ...mapState(useMainStore, ['darkMode']),
+    ...mapWritableState(useQueryStore, ['userEventDatesPage']),
     facebookLoginUrl() {
       let url;
       if (this.$route.query.from) {

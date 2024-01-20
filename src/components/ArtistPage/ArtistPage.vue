@@ -67,8 +67,11 @@
                 :artist="artist"
               />
             </div>
-            <div class="image-container q-ml-lg">
-              <div class="image-container-background" v-if="artist">
+            <div
+              class="image-container q-ml-lg"
+              v-if="artist && computedImageSrc"
+            >
+              <div class="image-container-background">
                 <transition appear enter-active-class="animated fadeIn slower">
                   <img :src="computedSmImageSrc" style="z-index: 2" />
                 </transition>
@@ -102,6 +105,7 @@
           </div>
           <ArtistDetails
             v-if="$q.screen.lt.md"
+            class="q-mb-lg"
             @refreshArtist="refreshArtist()"
             :artist="artist"
           />
@@ -126,6 +130,7 @@
                 </div>
                 <div v-else></div>
                 <EventDateCard
+                  style="max-width: 600px"
                   v-for="(ed, index) in artist.future_event_dates"
                   :key="index"
                   :event="ed"
@@ -154,41 +159,42 @@
               </div>
             </div>
           </transition>
+
+          <transition appear enter-active-class="animated fadeIn slower">
+            <div
+              class="q-pb-lg q-mt-xl footer"
+              v-if="artist"
+              :class="$q.screen.gt.sm ? 'q-px-lg' : ''"
+            >
+              <div class="t3">
+                Artist info courtesey of
+                <a
+                  href="https://musicbrainz.org/"
+                  class="link-hover underline"
+                  target="_blank"
+                  >MusicBrainz</a
+                >,
+                <a
+                  href="https://last.fm/"
+                  class="link-hover underline"
+                  target="_blank"
+                  >Last.fm</a
+                >
+                and
+                <a
+                  href="https://spotify.com/"
+                  class="link-hover underline"
+                  target="_blank"
+                  >Spotify</a
+                >.
+                <span class="link-hover" @click="refreshArtist">
+                  [Fetch latest info]</span
+                >
+              </div>
+            </div>
+          </transition>
         </div>
       </div>
-
-      <transition appear enter-active-class="animated fadeIn slower">
-        <div
-          class="q-pb-lg q-px-md q-mt-xl footer"
-          v-if="artist && $q.screen.lt.md"
-        >
-          <div class="t3">
-            Artist info by
-            <a
-              href="https://musicbrainz.org/"
-              class="link-hover underline"
-              target="_blank"
-              >MusicBrainz</a
-            >,
-            <a
-              href="https://last.fm/"
-              class="link-hover underline"
-              target="_blank"
-              >Last.fm</a
-            >
-            and
-            <a
-              href="https://spotify.com/"
-              class="link-hover underline"
-              target="_blank"
-              >Spotify</a
-            >.
-            <span class="link-hover" @click="refreshArtist">
-              [Fetch latest info]</span
-            >
-          </div>
-        </div>
-      </transition>
     </q-scroll-area>
   </div>
 </template>
@@ -441,8 +447,7 @@ export default {
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
-      min-height: 33vh;
+      height: 256px;
       //max-height: 512px;
       overflow: hidden;
       // transform: translate3d(0, 0, 0);

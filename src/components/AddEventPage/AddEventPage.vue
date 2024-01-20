@@ -35,7 +35,6 @@
           <div class="t2 q-mt-md">
             {{ $t('report.claim_message_2') }}
           </div>
-          <br />
         </div>
         <div v-else :class="$q.screen.lt.sm ? ' q-mt-sm' : 'q-pt-lg'">
           <p class="t2">
@@ -68,7 +67,6 @@
               <div class="flex column grow q-ml-lg">
                 <p class="text-large inter bold">Event name</p>
                 <q-input
-                  v-if="false"
                   class="grow"
                   :error="!!validationErrors.name && showValidationErrors"
                   :errorMessage="validationErrors.name"
@@ -114,7 +112,6 @@
               <q-icon size="xs" name="las la-images" />
               <div class="flex column grow q-ml-lg">
                 <span class="text-large inter bold">Event poster</span>
-                <br />
                 <span class="t2">Upload an image for this event</span>
                 <MultipleMediaSelector
                   :singleSelectMode="event.host === false"
@@ -143,7 +140,6 @@
                 <span class="text-large inter bold">
                   {{ $t('description.summary') }}
                 </span>
-                <br />
                 <span class="t2 q-mb-md">
                   {{ $t('description.summary_msg') }}
                 </span>
@@ -195,12 +191,11 @@
                 <span class="text-large inter bold">
                   {{ $t('description.detailed_description') }}&nbsp;(Optional)
                 </span>
-                <br />
                 <span class="t2 q-mb-sm">
                   Here you can tell people what they can expect in detail.
-                  <br />
-                  Please also provide an <b>English translation </b>if the
-                  description is in another languge.
+                  Please also provide an
+                  <u> English translation</u>
+                  if the description is in another languge.
                 </span>
 
                 <q-input
@@ -249,7 +244,6 @@
                 <span class="text-large inter bold">
                   {{ $t('add.url') }}
                 </span>
-                <br />
                 <span class="t2 q-mb-md">
                   {{ $t('add.url_msg') }}
                 </span>
@@ -275,7 +269,6 @@
                 <span class="text-large inter bold">
                   {{ $t('add.location') }}
                 </span>
-                <br />
                 <span class="t2 q-mb-md">
                   {{ $t('add.location_caption') }}
                 </span>
@@ -310,11 +303,8 @@
               <q-icon size="xs" name="las la-calendar-day" />
               <div class="flex column grow q-ml-lg">
                 <span class="text-large inter bold">Date and Time</span>
-                <br />
                 <span class="t2 q-mb-md">
-                  {{ $t('add.please_select_date_msg') }}
-                  <br />
-                  {{ $t('add.please_select_date_msg_2') }}
+                  Select a date range. {{ $t('add.please_select_date_msg_2') }}
                 </span>
                 <div
                   v-if="!!validationErrors.date_time && showValidationErrors"
@@ -342,7 +332,6 @@
                 <span class="text-large inter bold">
                   {{ $t('add.recurrence') }}
                 </span>
-                <br />
                 <span class="t2">
                   Will this event happen again, or is it a one-off?
                 </span>
@@ -360,8 +349,8 @@
                     :disableOneOff="false"
                   />
                 </div>
-                <p v-else class="t2">
-                  {{ $t('add.please_select_date_first') }}
+                <p v-else class="t2 q-mt-sm">
+                  <u>{{ $t('add.please_select_date_first') }}</u>
                 </p>
               </div>
             </div>
@@ -386,7 +375,6 @@
               <q-icon size="xs" name="las la-tags" />
               <div class="flex column grow q-ml-lg">
                 <span class="text-large inter bold">Tags</span>
-                <br />
                 <span class="t2 q-mb-md">
                   What makes this event stand out, and what music can one
                   expect?
@@ -411,7 +399,6 @@
                 <span class="text-large inter bold">
                   {{ $t('add.url') }}
                 </span>
-                <br />
                 <span class="t2 q-mb-md">
                   {{ $t('add.url_msg') }}
                 </span>
@@ -442,8 +429,6 @@
                     event.date_time.end
                   "
                 >
-                  <br />
-
                   <span class="t2 q-mb-md">
                     Search for the talented artists that are playing at this
                     event.
@@ -455,8 +440,8 @@
                     class="q-mb-md"
                   />
                 </div>
-                <span v-else class="t2 q-mb-md">
-                  {{ $t('add.please_select_date_first') }}
+                <span v-else class="t2 q-mb-md q-mt-sm">
+                  <u>{{ $t('add.please_select_date_first') }}</u>
                 </span>
               </div>
             </div>
@@ -469,7 +454,6 @@
                 <span class="text-large inter bold">
                   {{ $t('add.size_how_many') }}
                 </span>
-                <br />
                 <span class="t2 q-mb-md">
                   Give a rough estimate of how many people will be attending
                   this event.

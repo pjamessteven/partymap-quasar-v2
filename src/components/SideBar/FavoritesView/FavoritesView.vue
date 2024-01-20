@@ -442,18 +442,18 @@ export default {
   z-index: 100;
 }
 
-.event-list-inner {
+.favorites-view {
   pointer-events: all;
   display: flex;
   flex-direction: column;
   height: 100%;
   transition: all 0.3s;
 
-  :deep(.date-header) {
-    padding-top: 16px;
-    .date-header-wrapper {
-      top: 44px;
-      z-index: 1 !important;
+  :deep(.date-header-wrapper) {
+    top: 44px !important;
+    z-index: 1 !important;
+    .date-header {
+      padding-top: 16px;
     }
   }
 
@@ -520,7 +520,7 @@ export default {
 
       //background: black;
     }
-    .event-list-inner {
+    .favorites-view {
       //background: $bi-2;
 
       //background: black;
@@ -546,7 +546,7 @@ export default {
     }
   }
   .favorites-view {
-    .event-list-inner {
+    .favorites-view {
       //background: white;
     }
   }
@@ -571,7 +571,7 @@ export default {
   .favorites-view {
     //padding-top: 64px !important;
     padding-bottom: 68px;
-    .event-list-inner {
+    .favorites-view {
       .artists-component {
         height: 178px;
       }

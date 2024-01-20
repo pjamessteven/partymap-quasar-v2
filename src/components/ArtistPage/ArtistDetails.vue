@@ -4,13 +4,8 @@
       <div class="flex column" v-if="artist && !loading">
         <div class="flex column details">
           <div
-            class="o-060 q-mt-sm text-large inter bolder"
-            v-if="artist && $q.screen.gt.xs"
-          >
-            {{ artist.disambiguation }}
-          </div>
-          <div
             class="q-mt-lg q-mb-sm inter bold o-080"
+            style="color: white"
             v-if="artist && artist.tags && artist.tags.length > 0 && !loading"
           >
             {{ $t('artists.tags') }}:
@@ -39,6 +34,13 @@
               :value="at.tag"
               :label="at.label"
             ></Tag>
+          </div>
+
+          <div
+            class="o-060 q-mt-lg text-large inter bolder"
+            v-if="artist && $q.screen.gt.xs"
+          >
+            {{ artist.disambiguation }}
           </div>
 
           <div
@@ -104,35 +106,6 @@
               :class="{ 'q-ml-md': $q.screen.gt.xs }"
             />
           </q-btn>
-        </div>
-      </div>
-    </transition>
-
-    <transition appear enter-active-class="animated fadeIn slower">
-      <div class="q-mt-xl footer" v-if="artist && $q.screen.gt.xs">
-        <div class="o-040">
-          Artist info courtesey of
-          <a
-            href="https://musicbrainz.org/"
-            class="link-hover underline"
-            target="_blank"
-            >MusicBrainz</a
-          >,
-          <a
-            href="https://last.fm/"
-            class="link-hover underline"
-            target="_blank"
-            >Last.fm</a
-          >
-          and
-          <a
-            href="https://spotify.com/"
-            class="link-hover underline"
-            target="_blank"
-            >Spotify</a
-          >&nbsp;<span class="link-hover" @click="$emit('refreshArtist')">
-            [Refetch info]</span
-          >
         </div>
       </div>
     </transition>
@@ -286,8 +259,9 @@ export default {
   z-index: 10;
 
   .details {
-    color: white;
     :deep(.tag) {
+      color: white;
+
       border: 1px solid;
       border-color: rgba(255, 255, 255, 0.1) !important;
       background: transparent !important;

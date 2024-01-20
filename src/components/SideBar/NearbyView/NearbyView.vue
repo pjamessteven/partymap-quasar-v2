@@ -1050,7 +1050,7 @@ export default {
           opacity: 1;
           transition: all 0.3s ease;
           background: black;
-          border: 1px solid rgba(255, 255, 255, 0.3);
+          border: 1px solid rgba(255, 255, 255, 0.25);
 
           &:hover {
             opacity: 1;
@@ -1100,7 +1100,7 @@ export default {
           // opacity: 1;
           transition: all 0.3s ease;
           background: rgba(255, 255, 255, 0);
-          border: 1px solid rgba(0, 0, 0, 0.2);
+          border: 1px solid rgba(0, 0, 0, 0.1);
           //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
 
           //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px 0px;
