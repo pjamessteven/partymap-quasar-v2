@@ -221,8 +221,10 @@ export const useNearbyStore = defineStore('nearby', {
         this.nearbyEventDatesPage += 1;
         this.nearbyArtistsSuccess = true;
 
-        // TODO add sidebar offset
-        this.setMapBoundsNearby();
+        // don't do this when searching for locations
+        if (!main.userLocationFromSearch) {
+          this.setMapBoundsNearby();
+        }
 
         return;
       } catch (error) {

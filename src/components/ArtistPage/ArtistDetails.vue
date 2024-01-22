@@ -5,7 +5,16 @@
         <div class="flex column details">
           <div
             class="q-mt-lg q-mb-sm inter bold o-080"
-            style="color: white"
+            v-if="artist && artist.disambiguation?.length > 0"
+          >
+            Disambiguation:
+          </div>
+          <div class="o-080" v-if="artist && artist.disambiguation?.length > 0">
+            {{ artist.disambiguation }}
+          </div>
+
+          <div
+            class="q-mt-lg q-mb-sm inter bold o-080"
             v-if="artist && artist.tags && artist.tags.length > 0 && !loading"
           >
             {{ $t('artists.tags') }}:
@@ -34,13 +43,6 @@
               :value="at.tag"
               :label="at.label"
             ></Tag>
-          </div>
-
-          <div
-            class="o-060 q-mt-lg text-large inter bolder"
-            v-if="artist && $q.screen.gt.xs"
-          >
-            {{ artist.disambiguation }}
           </div>
 
           <div
@@ -97,6 +99,7 @@
             class="nav-button soft-button-shadow q-mr-sm q-px-md q-mt-lg q-py-sm"
             :class="$q.screen.gt.sm ? 'q-mt-lg' : ''"
             @click="viewOnMap"
+            v-if="artist?.future_event_dates?.length > 0"
           >
             See upcoming on map
             <q-icon
@@ -259,13 +262,6 @@ export default {
   z-index: 10;
 
   .details {
-    :deep(.tag) {
-      color: white;
-
-      border: 1px solid;
-      border-color: rgba(255, 255, 255, 0.1) !important;
-      background: transparent !important;
-    }
   }
 
   .footer {

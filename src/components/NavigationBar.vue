@@ -35,7 +35,7 @@
         key="1"
         name="nearby"
         content-class="tab"
-        label="Nearby"
+        :label="$q.screen.lt.sm ? 'Home' : 'Nearby'"
         :ripple="false"
         :icon="
           $q.screen.lt.md
@@ -59,7 +59,7 @@
               : 'mdi-map-search-outline'
             : undefined
         "
-        label="Explore"
+        :label="$q.screen.lt.md ? 'Map' : 'Explore'"
         content-class="tab"
         :ripple="false"
       />

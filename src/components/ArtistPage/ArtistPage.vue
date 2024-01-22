@@ -62,28 +62,21 @@
               >
                 {{ computedName }}
               </div>
-              <ArtistDetails
-                @refreshArtist="refreshArtist()"
-                :artist="artist"
-              />
             </div>
-            <div
-              class="image-container q-ml-lg"
-              v-if="artist && computedImageSrc"
-            >
-              <div class="image-container-background">
-                <transition appear enter-active-class="animated fadeIn slower">
-                  <img :src="computedSmImageSrc" style="z-index: 2" />
-                </transition>
-                <transition appear enter-active-class="animated fadeIn slower">
-                  <img
-                    style="z-index: 3"
-                    v-show="loadedFullRes"
-                    :src="computedImageSrc"
-                    @load="loadedFullRes = true"
-                  />
-                </transition>
-              </div>
+          </div>
+          <div class="image-container" v-if="artist && computedImageSrc">
+            <div class="image-container-background">
+              <transition appear enter-active-class="animated fadeIn slower">
+                <img :src="computedSmImageSrc" style="z-index: 2" />
+              </transition>
+              <transition appear enter-active-class="animated fadeIn slower">
+                <img
+                  style="z-index: 3"
+                  v-show="loadedFullRes"
+                  :src="computedImageSrc"
+                  @load="loadedFullRes = true"
+                />
+              </transition>
             </div>
           </div>
         </div>
@@ -97,15 +90,8 @@
         <div
           class="main-content q-mb-lg flex column col-xs-12 col-md-10 col-lg-10 col-xl-8"
         >
-          <div
-            class="o-080 q-mt-lg"
-            v-if="artist && artist.disambiguation?.length > 0"
-          >
-            {{ artist.disambiguation }}
-          </div>
           <ArtistDetails
-            v-if="$q.screen.lt.md"
-            class="q-mb-lg"
+            :class="$q.screen.gt.sm ? 'q-ml-lg q-mb-lg' : 'q-mb-sm'"
             @refreshArtist="refreshArtist()"
             :artist="artist"
           />
@@ -116,9 +102,7 @@
               :class="$q.screen.gt.sm ? ' q-px-lg' : ''"
             >
               <div class="flex column" v-if="artist" style="max-width: 100%">
-                <div class="q-mt-lg q-mb-md inter bold t2">
-                  Upcoming events:
-                </div>
+                <div class="q-mb-md inter bold t2">Upcoming events:</div>
                 <div
                   class="t3"
                   v-if="
@@ -437,17 +421,29 @@ export default {
   width: 100%;
   .artist-header {
     position: relative;
-    padding-top: 72px;
+    padding-top: 128px;
+    // height: 200px;
 
     .header-content {
       max-width: 1024px;
+      position: relative;
+
+      .tag {
+        pointer-events: none;
+        cursor: unset;
+        color: white;
+
+        border: 1px solid;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        background: transparent !important;
+      }
     }
     .artist-background {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 256px;
+      height: 100%;
       //max-height: 512px;
       overflow: hidden;
       // transform: translate3d(0, 0, 0);
@@ -484,7 +480,10 @@ export default {
       // max-height: 400px;
       // min-width: 400px;
       //width: auto;
-      position: relative;
+      position: absolute;
+
+      right: 0px;
+      bottom: -150px;
       overflow: hidden;
       aspect-ratio: 1;
       border-radius: 100%;
@@ -508,17 +507,12 @@ export default {
         }
       }
     }
-    .ed-card {
-      max-width: 400px;
-    }
   }
   .main-content {
     max-width: 1024px;
-  }
-
-  .tag {
-    pointer-events: none;
-    cursor: unset;
+    .ed-card {
+      max-width: 600px;
+    }
   }
 }
 

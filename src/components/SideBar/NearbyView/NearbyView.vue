@@ -64,7 +64,8 @@
                       {{ userLocationCity }}</span
                     ><span v-else class="t3">...</span
                     ><span v-if="$q.screen.gt.sm || !userLocationCity"
-                      >,&nbsp;{{ userLocationCountry }}</span
+                      ><span v-if="userLocationCity">,&nbsp;</span
+                      >{{ userLocationCountry }}</span
                     >
                   </span>
                   <span

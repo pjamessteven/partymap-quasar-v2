@@ -274,7 +274,7 @@
                 </span>
 
                 <GoogleLocationComponent
-                  @:location="event.location = $event"
+                  @location="event.location = $event"
                   :locationProp="event.location"
                   :error-message="
                     showValidationErrors ? validationErrors.location : undefined
