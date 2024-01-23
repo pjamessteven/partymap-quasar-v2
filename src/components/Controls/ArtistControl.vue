@@ -87,7 +87,7 @@
                 v-if="
                   (!query || query.length == 0) && topArtistsInArea?.length > 0
                 "
-                >Top in this area:</q-item-label
+                >Top artists in this area:</q-item-label
               >
 
               <div

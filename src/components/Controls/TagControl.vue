@@ -29,9 +29,7 @@
         <div class="button-label flex row items-center row no-wrap">
           <i class="las la-tags q-mr-sm q-ml-none q-pr-none" />
 
-          <div v-if="!controlTag || controlTag.length === 0">
-            {{ $t('top_controls.select_tags') }}
-          </div>
+          <div v-if="!controlTag || controlTag.length === 0">Tags</div>
           <div v-else>
             <span v-for="(tag, index) in controlTag" :key="index"
               >{{ tag.tag
@@ -97,6 +95,26 @@
               <q-item-label
                 header
                 class="t3 q-pb-sm inter"
+                v-if="controlTag?.length > 0"
+                >Selected tags:</q-item-label
+              >
+              <div
+                class="flex row q-gutter-sm q-px-md q-pt-sm q-mb-xs"
+                v-if="controlTag?.length > 0"
+              >
+                <Tag
+                  :value="tag.tag"
+                  :key="index"
+                  @click="clickTag(tag)"
+                  :selected="true"
+                  :showIcons="true"
+                  v-for="(tag, index) in controlTag"
+                />
+              </div>
+
+              <q-item-label
+                header
+                class="t3 q-pb-sm inter"
                 v-if="
                   (!query || query.length == 0) && topTagsInArea?.length > 0
                 "
@@ -112,7 +130,7 @@
                   :value="tag.tag"
                   :key="index"
                   @click="clickTag(tag)"
-                  :selected="
+                  :disabled="
                     controlTag?.findIndex((x) => x.tag === tag.tag) > -1
                   "
                   v-for="(tag, index) in topTagsInArea"
@@ -132,7 +150,7 @@
                   :value="tag.tag"
                   :key="index"
                   @click="clickTag(tag)"
-                  :selected="
+                  :disabled="
                     controlTag?.findIndex((x) => x.tag === tag.tag) > -1
                   "
                   v-for="(tag, index) in tagOptions"

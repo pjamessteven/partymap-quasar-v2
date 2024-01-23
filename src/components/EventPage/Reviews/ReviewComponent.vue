@@ -55,7 +55,7 @@
     <div>
       {{ review.text }}
     </div>
-    <q-scroll-area
+    <CustomQScroll
       horizontal
       class="media-scroll-area q-mt-md"
       style="width: 100%; height: 148px"
@@ -89,7 +89,7 @@
           </div>
         </div>
       </div>
-    </q-scroll-area>
+    </CustomQScroll>
     <GalleryDialog
       v-if="review.media_items?.length > 0"
       :open="currentMediaItemIndex != null"
@@ -110,6 +110,7 @@
 <script>
 import { useAuthStore } from 'src/stores/auth';
 import { mapState } from 'pinia';
+import CustomQScroll from 'components/CustomQScroll.vue';
 
 import common from 'src/assets/common';
 import GalleryDialog from 'components/EventPage/Gallery/GalleryDialog.vue';
@@ -119,6 +120,7 @@ export default {
   components: {
     ReportDialog,
     GalleryDialog,
+    CustomQScroll,
   },
   props: {
     review: { type: Object },

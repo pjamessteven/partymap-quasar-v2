@@ -841,7 +841,7 @@ body {
   */
   //font-family: chicagoflf;
   //font-weight: 100;
-  font-size: small;
+  //font-size: small;
   color: $t-1;
   border-radius: 0px;
   //font-family: chicagoflf;

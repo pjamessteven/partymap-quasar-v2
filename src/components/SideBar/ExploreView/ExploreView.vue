@@ -47,7 +47,7 @@
         class="flex column grow no-wrap"
         :class="$q.screen.gt.sm ? 'q-pt-lg' : ''"
       >
-        <q-scroll-area
+        <CustomQScroll
           vertical
           @scroll="onScrollMainContent"
           ref="scroll"
@@ -115,7 +115,7 @@
               </div>
             </transition>
           </div>
-        </q-scroll-area>
+        </CustomQScroll>
       </div>
       <!--
       <div
@@ -230,6 +230,7 @@ import { useQueryStore } from 'src/stores/query';
 import { useMainStore } from 'src/stores/main';
 import { useAuthStore } from 'src/stores/auth';
 import { mapActions, mapWritableState, mapState } from 'pinia';
+import CustomQScroll from 'components/CustomQScroll.vue';
 
 export default {
   components: {
@@ -239,6 +240,7 @@ export default {
     EventDateList,
     EventDatePosterList,
     EventDateViewOptions,
+    CustomQScroll,
   },
 
   async mounted() {
@@ -331,7 +333,7 @@ export default {
       }
       if (info.verticalPercentage > 0.99) {
         // reached bottom
-        this.loadMore();
+        this.debouncedLoadMore();
       }
     },
     delayedGetInitial() {
@@ -508,6 +510,10 @@ export default {
     this.debouncedGetInitalList = _.debounce(this.getInitialList, 150, {
       leading: false,
       trailing: true,
+    });
+    this.debouncedLoadMore = _.debounce(this.loadMore, 150, {
+      leading: true,
+      trailing: false,
     });
   },
 };

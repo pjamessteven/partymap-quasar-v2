@@ -44,7 +44,7 @@
             v-if="artist.disambiguation || artist.area"
           >
             {{ artist.disambiguation }}
-            <span v-if="artist.area">
+            <span v-if="artist.area && !artist.disambiguation">
               <span v-if="artist.area.name"> ({{ artist.area.name }}) </span>
               <span v-else> ({{ artist.area }}) </span>
             </span>

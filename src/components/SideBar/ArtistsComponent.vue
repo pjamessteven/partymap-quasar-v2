@@ -1,6 +1,6 @@
 <template>
   <div class="scroll-area-wrapper">
-    <q-scroll-area
+    <CustomQScroll
       horizontal
       ref="scrollArea"
       @scroll="onScrollMainContent"
@@ -38,13 +38,14 @@
           />
         </div>
       </div>
-    </q-scroll-area>
+    </CustomQScroll>
   </div>
 </template>
 
 <script setup lang="ts">
 import ArtistHead from 'components/ArtistHead.vue';
 import { Artist } from 'src/types/autogen_types';
+import CustomQScroll from 'components/CustomQScroll.vue';
 
 interface Props {
   hasNext: boolean;

@@ -32,7 +32,7 @@
             class="q-mt-md flex row no-wrap items-center control-bar"
             :class="$q.screen.gt.xs ? 'q-pl-md q-mb-md' : ''"
           >
-            <q-scroll-area
+            <CustomQScroll
               ref="scroll"
               horizontal
               class="scroll-area grow"
@@ -229,7 +229,7 @@
                   </div>
                 </q-btn>
               </div>
-            </q-scroll-area>
+            </CustomQScroll>
             <EventDateViewOptions
               :showGroupByMonth="false"
               v-if="$q.screen.gt.xs"
@@ -285,6 +285,7 @@ import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
 import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
 import UserProfile from './UserProfile.vue';
+import CustomQScroll from 'components/CustomQScroll.vue';
 
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';

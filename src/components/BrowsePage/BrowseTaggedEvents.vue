@@ -14,7 +14,7 @@
         {{ tagline }}
       </div>
       <div :class="$q.screen.gt.xs ? 'q-mt-lg' : 'q-mt-md'">
-        <q-scroll-area
+        <CustomQScroll
           horizontal
           class="user-event-scroll-area"
           style="width: 100%"
@@ -39,7 +39,7 @@
               :event="ed[0]"
             />
           </div>
-        </q-scroll-area>
+        </CustomQScroll>
       </div>
     </div>
   </transition>
@@ -48,9 +48,10 @@
 <script>
 //import InnerLoading from 'src/components/InnerLoading.vue';
 import EventDatePoster from 'src/components/EventDatePoster.vue';
+import CustomQScroll from 'components/CustomQScroll.vue';
 
 export default {
-  components: { EventDatePoster },
+  components: { EventDatePoster, CustomQScroll },
   props: {
     title: { default: '' },
     tagline: { default: '' },

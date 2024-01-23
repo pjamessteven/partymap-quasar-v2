@@ -3,7 +3,7 @@
     class="inner-wrapper flex column grow no-wrap"
     :class="$q.screen.gt.xs ? ' ' : ' t2'"
   >
-    <q-scroll-area
+    <CustomQScroll
       v-show="!searchbarShowing"
       ref="scroll"
       horizontal
@@ -89,7 +89,7 @@
           />
           -->
       </div>
-    </q-scroll-area>
+    </CustomQScroll>
     <div class="searchbar-wrapper" v-if="searchbarShowing">
       <q-input
         @keydown.esc="
@@ -141,6 +141,7 @@ import { useMainStore } from 'src/stores/main';
 import { useQueryStore } from 'src/stores/query';
 import { useSearchStore } from 'src/stores/search';
 import { useMapStore } from 'src/stores/map';
+import CustomQScroll from 'components/CustomQScroll.vue';
 
 export default {
   name: 'ControlsComponent',
@@ -150,6 +151,7 @@ export default {
     SizeControl,
     ArtistControl,
     TagControl,
+    CustomQScroll,
     // LocalityControl,
   },
   watch: {

@@ -9,7 +9,7 @@
       :class="editing ? 'q-pa-md' : ''"
       :style="editing ? 'margin-left: 0px!important;' : ''"
     >
-      <div class="flex row wrap q-gutter-xs">
+      <div class="flex row wrap q-gutter-sm">
         <Tag
           v-for="(et, index) in event?.event_tags"
           :key="index"

@@ -24,7 +24,7 @@
         <HistoryComponent @close="showingHistory = false" />
         -->
       </div>
-      <q-scroll-area
+      <CustomQScroll
         vertical
         ref="scrollArea"
         @scroll="onScrollMainContent"
@@ -283,7 +283,7 @@
                           class="event-buttons flex row items-center wrap o-100"
                           :class="$q.screen.gt.sm ? ' q-py-md' : 'q-py-md'"
                         >
-                          <q-scroll-area
+                          <CustomQScroll
                             horizontal
                             class="event-buttons-scroll"
                             style="width: 100%; height: 36px"
@@ -559,7 +559,7 @@
                                 </q-menu>
                               </q-btn>
                             </div>
-                          </q-scroll-area>
+                          </CustomQScroll>
                         </div>
                         <div
                           v-if="$q.screen.lt.sm"
@@ -664,7 +664,7 @@
             </div>
           </div>
         </div>
-      </q-scroll-area>
+      </CustomQScroll>
       <div class="sticky-editing-footer flex row justify-center" v-if="editing">
         <div
           class="sticky-editing-footer-inner col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12"
@@ -718,6 +718,7 @@ import { useMapStore } from 'src/stores/map';
 import { useEventStore } from 'src/stores/event';
 
 import { mapActions, mapState, mapWritableState } from 'pinia';
+import CustomQScroll from 'components/CustomQScroll.vue';
 
 import _ from 'lodash';
 import common from 'assets/common';
@@ -763,6 +764,7 @@ export default {
     };
   },
   components: {
+    CustomQScroll,
     TagsComponent,
     FeaturedMediaComponent,
     FeaturedMediaBackground,

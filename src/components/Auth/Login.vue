@@ -112,11 +112,11 @@
           <div class="separator"></div>
         </div>
 
-        <div
-          class="flex column o-animated q-mt-md"
-          :class="{ 'o-000': loading }"
-        >
+        <div class="flex column o-animated q-mt-md" style="position: relative">
+          <InnerLoading v-if="loading" :solid="false" />
+
           <q-input
+            :class="{ 'o-000': loading }"
             autocapitalize="off"
             ref="login"
             class=""
@@ -127,6 +127,7 @@
             @keyup.enter="_login"
           />
           <q-input
+            :class="{ 'o-000': loading }"
             outlined
             filled
             class="q-mt-md"
@@ -135,7 +136,10 @@
             v-model="password"
             @keyup.enter="_login"
           />
-          <div class="flex row grow justify-end items-center q-mt-lg">
+          <div
+            class="flex row grow justify-end items-center q-mt-lg"
+            :class="{ 'o-000': loading }"
+          >
             <q-btn
               size="small"
               no-caps
@@ -210,8 +214,6 @@
           </div>
         </div>
       </q-card-section>
-
-      <InnerLoading v-if="loading" :solid="false" />
     </q-card>
     <q-dialog
       v-model="showPrivacyPolicyDialog"
@@ -306,7 +308,9 @@ export default {
           console.log('result', result);
           // Handle user information
           // Validate token with server and create new session
-          await this.appleLogin(result.response.identityToken);
+          const currentUser = await this.appleLogin(
+            result.response.identityToken
+          );
           if (!currentUser.username) {
             this.$router.replace({ name: 'ChooseUsername' });
           } else {

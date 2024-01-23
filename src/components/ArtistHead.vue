@@ -1,5 +1,7 @@
 <template>
   <router-link
+    class="artist-head-link"
+    style="text-decoration: none; color: inherit"
     :to="{
       name: 'ArtistPage',
       params: { id: artist.id },
@@ -9,7 +11,10 @@
       },
     }"
   >
-    <div class="artist-head-wrapper flex column justify-start items-center">
+    <div
+      class="artist-head-wrapper flex column justify-start items-center"
+      :class="$q.platform.is.ios ? 'no-hover' : ''"
+    >
       <div class="card-bottom-background" :style="getBgImgStyle()" />
       <div class="artist-head flex column no-wrap">
         <div class="artist-head-background shadow-2xl">
@@ -90,6 +95,9 @@ export default {
     }
   }
 }
+.artist-head-link {
+  color: unset !important;
+}
 
 .artist-head-wrapper {
   transition: all 0.3s ease;
@@ -107,20 +115,22 @@ export default {
     -webkit-transform: translate3d(0, 0, 0);
     // translate3d is a hack for safari to force gpu rendering of blur()
   }
-  &:before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.1);
-    z-index: 10;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
 
-  &:hover {
+  &:not(.no-hover) {
     &:before {
-      opacity: 1;
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    &:hover {
+      &:before {
+        opacity: 1;
+      }
     }
   }
   .card-bottom-background {
@@ -177,10 +187,6 @@ export default {
     width: 100%;
   }
 }
-a {
-  color: unset;
-  text-decoration: none;
-}
 
 @media only screen and (min-width: 1921px) {
   .artist-head-wrapper {
@@ -195,26 +201,8 @@ a {
 }
 
 @media only screen and (max-width: 600px) {
-  /*
-  .artist-head-wrapper {
-    width: 80px;
-    max-width: 80px;
-    .artist-head {
-      border-radius: 100%;
-      height: 64px;
-      width: 64px;
-    }
-  }
-  */
-
   .artist-head-wrapper {
     .artist-head {
-    }
-
-    &:hover {
-      &:before {
-        display: none;
-      }
     }
   }
 }

@@ -3,7 +3,7 @@
     <InnerLoading v-if="loading" :solid="true" />
 
     <div class="flex column grow no-wrap">
-      <q-scroll-area
+      <CustomQScroll
         vertical
         @scroll="onScrollMainContent"
         ref="scroll"
@@ -54,17 +54,18 @@
             <slot name="footer"></slot>
           </div>
         </div>
-      </q-scroll-area>
+      </CustomQScroll>
     </div>
   </div>
 </template>
 
 <script>
 import InnerLoading from 'src/components/InnerLoading.vue';
+import CustomQScroll from 'components/CustomQScroll.vue';
 
 export default {
   name: 'SolidPage',
-  components: { InnerLoading },
+  components: { InnerLoading, CustomQScroll },
   props: ['title', 'loading'],
   data() {
     return { scrollPosition: 0, scrollPercentage: 0 };

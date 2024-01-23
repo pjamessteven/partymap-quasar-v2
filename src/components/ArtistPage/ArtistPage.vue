@@ -1,6 +1,6 @@
 <template>
   <div class="artist-page jj flex column justify-center">
-    <q-scroll-area
+    <CustomQScroll
       vertical
       ref="scrollArea"
       style="height: 100%; width: 100%"
@@ -179,7 +179,7 @@
           </transition>
         </div>
       </div>
-    </q-scroll-area>
+    </CustomQScroll>
   </div>
 </template>
 
@@ -187,6 +187,7 @@
 import { getArtistRequest, refreshArtistRequest } from 'src/api';
 import { toRaw } from 'vue';
 import InnerLoading from 'src/components/InnerLoading.vue';
+import CustomQScroll from 'components/CustomQScroll.vue';
 
 import _ from 'lodash';
 import EventDateCard from 'components/EventDateCard.vue';
@@ -224,6 +225,7 @@ export default {
     EventDateCard,
     ArtistDetails,
     InnerLoading,
+    CustomQScroll,
   },
   data() {
     return {

@@ -69,7 +69,7 @@ export default {
 .body--light {
   .tag {
     //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     &:hover {
       background: $b-2;
       // box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 3px 0px;
@@ -100,13 +100,14 @@ export default {
     }
   }
   .tag-inner-wrapper {
-    padding: 0px 6px;
+    padding: 6px 12px;
+
     position: relative;
     transition: all 150ms ease-in-out;
     border-radius: 20px;
     .tag-inner {
       width: max-content;
-      padding: 4px;
+      //  padding: 4px;
     }
   }
 }

@@ -60,7 +60,7 @@
           </div>
         </div>
       </div>
-      <q-scroll-area
+      <CustomQScroll
         v-if="this.event?.event_dates?.length > 0"
         horizontal
         ref="scrollArea"
@@ -86,7 +86,7 @@
             v-on:click="onSelectEventDate(ed, index)"
           />
         </div>
-      </q-scroll-area>
+      </CustomQScroll>
     </div>
 
     <q-dialog v-model="showRemoveRruleWarningDialog">
@@ -119,6 +119,7 @@ import EventDate from './EventDate.vue';
 import EditRruleDialog from './EditRruleDialog.vue';
 import RemoveRruleDialog from './RemoveRruleDialog.vue';
 //import Vue from 'vue';
+import CustomQScroll from 'components/CustomQScroll.vue';
 
 import { mapState, mapActions } from 'pinia';
 import { useEventStore } from 'src/stores/event';
@@ -144,6 +145,7 @@ export default {
     EditRruleDialog,
     AddEventDateDialog,
     RemoveRruleDialog,
+    CustomQScroll,
   },
   props: {
     eventDates: Array,

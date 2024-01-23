@@ -14,7 +14,7 @@
             <div class="list-shadow" v-if="scrollPosition > 228 && false" />
           </transition>
 
-          <q-scroll-area
+          <CustomQScroll
             @scroll="onScroll"
             vertical
             :thumb-style="{
@@ -28,9 +28,6 @@
             :content-style="{
               width: '100%',
             }"
-            content-active-style="{
-                'width': '100%'
-              }"
           >
             <div class="scroll-stuff flex column">
               <div
@@ -307,7 +304,7 @@
                         class="q-mb-sm"
                         v-if="userEventDates && userEventDates.length > 0"
                       >
-                        <q-scroll-area
+                        <CustomQScroll
                           horizontal
                           class="user-event-scroll-area"
                           style="width: 100%"
@@ -332,7 +329,7 @@
                               :event="ed[0]"
                             />
                           </div>
-                        </q-scroll-area>
+                        </CustomQScroll>
                       </div>
                       <div
                         :class="
@@ -361,7 +358,7 @@
                         :class="$q.screen.gt.sm ? 'q-pl-lg q-mb-sm' : 'q-pl-md'"
                         v-if="nearbyTags && nearbyTags.length > 0"
                       >
-                        <q-scroll-area
+                        <CustomQScroll
                           horizontal
                           class="tag-scroll-area"
                           style="width: 100%"
@@ -382,6 +379,7 @@
                                 @click="clickTag(tag)"
                                 class="tag t2 text- inter semibold"
                                 style="text-transform: capitalize"
+                                :class="$q.platform.is.ios ? 'no-hover' : ''"
                               >
                                 {{ tag.tag }}
                               </div>
@@ -395,12 +393,13 @@
                                 @click="clickTag(tag)"
                                 class="tag t2 text- inter semibold"
                                 style="text-transform: capitalize"
+                                :class="$q.platform.is.ios ? 'no-hover' : ''"
                               >
                                 {{ tag.tag }}
                               </div>
                             </div>
                           </div>
-                        </q-scroll-area>
+                        </CustomQScroll>
                       </div>
                     </div>
                     <!-- Display global tags if there's not many local tags-->
@@ -420,7 +419,7 @@
                       <div
                         :class="$q.screen.gt.sm ? 'q-pl-lg q-mb-sm' : 'q-pl-md'"
                       >
-                        <q-scroll-area
+                        <CustomQScroll
                           horizontal
                           :style="$q.screen.gt.sm ? 'margin-bottom: -8px' : ''"
                           class="tag-scroll-area"
@@ -441,6 +440,7 @@
                                 @click="clickTag(tag)"
                                 class="tag t2 text- inter semibold"
                                 style="text-transform: capitalize"
+                                :class="$q.platform.is.ios ? 'no-hover' : ''"
                               >
                                 {{ tag.tag }}
                               </div>
@@ -454,12 +454,13 @@
                                 @click="clickTag(tag)"
                                 class="tag t2 text- inter semibold"
                                 style="text-transform: capitalize"
+                                :class="$q.platform.is.ios ? 'no-hover' : ''"
                               >
                                 {{ tag.tag }}
                               </div>
                             </div>
                           </div>
-                        </q-scroll-area>
+                        </CustomQScroll>
                       </div>
                     </div>
                     <!-- artists -->
@@ -656,7 +657,7 @@
                 </transition>
               </div>
             </div>
-          </q-scroll-area>
+          </CustomQScroll>
         </div>
       </div>
     </div>
@@ -665,8 +666,7 @@
 
 <script>
 import ArtistsComponent from './../ArtistsComponent.vue';
-import EventDateCard from 'components/EventDateCard.vue';
-
+import CustomQScroll from 'components/CustomQScroll.vue';
 import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useQueryStore } from 'src/stores/query';
 import { useMainStore } from 'src/stores/main';
@@ -679,6 +679,8 @@ import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
 import InnerLoading from 'src/components/InnerLoading.vue';
 import { useAuthStore } from 'src/stores/auth';
 import EventDatePoster from 'src/components/EventDatePoster.vue';
+
+import _ from 'lodash';
 
 export default {
   name: 'LandingPage',
@@ -703,6 +705,7 @@ export default {
   },
 
   components: {
+    CustomQScroll,
     ArtistsComponent,
     EventDateList,
     EventDatePosterList,
@@ -774,6 +777,15 @@ export default {
       'loadNearbyEventDates',
       'loadEventDates',
     ]),
+    scrollMouseEnter(event) {
+      console.log(event);
+      event.stopImmediatePropagation();
+      event.preventDefault();
+      return false;
+    },
+    scrollMouseLeave(event) {
+      console.log(event);
+    },
     showAddEventDialog() {
       this.$q
         .dialog({
@@ -804,9 +816,9 @@ export default {
 
       if (info.verticalPercentage === 1) {
         if (this.nearbyEventDatesHasNext && this.userLocation) {
-          this.loadNearbyEventDates();
+          this.debouncedLoadNearbyEventDates();
         } else if (this.eventDatesHasNext) {
-          this.loadEventDates();
+          this.debouncedLoadEventDates();
         }
       }
     },
@@ -984,7 +996,20 @@ export default {
   beforeMount() {
     window.prerenderReady = false;
   },
-
+  created() {
+    this.debouncedLoadNearbyEventDates = _.debounce(
+      this.loadNearbyEventDates,
+      150,
+      {
+        leading: true,
+        trailing: false,
+      }
+    );
+    this.debouncedLoadEventDates = _.debounce(this.loadEventDates, 150, {
+      leading: true,
+      trailing: false,
+    });
+  },
   unmounted() {
     this.menuBarOpacity = 1;
   },
@@ -1053,10 +1078,11 @@ export default {
           transition: all 0.3s ease;
           background: black;
           border: 1px solid rgba(255, 255, 255, 0.25);
-
-          &:hover {
-            opacity: 1;
-            background: rgba(36, 36, 36, 1);
+          &:not(.no-hover) {
+            &:hover {
+              opacity: 1;
+              background: rgba(36, 36, 36, 1);
+            }
           }
           &.selected {
             background: rgba(24, 24, 24, 1);
@@ -1106,9 +1132,10 @@ export default {
           //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
 
           //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px 0px;
-
-          &:hover {
-            background: rgba(0, 0, 0, 0.1);
+          &:not(.no-hover) {
+            &:hover {
+              background: rgba(0, 0, 0, 0.1);
+            }
           }
         }
       }
@@ -1332,10 +1359,6 @@ export default {
         padding: 6px 12px;
         border-radius: 18px;
 
-        //font-size: small;
-        &:hover {
-          // opacity: 0.48;
-        }
         &.selected {
           text-decoration: underline;
         }
@@ -1385,32 +1408,6 @@ export default {
     }
   }
   .landing-page {
-    //padding-top: 124px;
-    .map-gap {
-      height: 150px;
-      //font-size: 8pt;
-      background: none;
-      min-height: unset;
-      //background: radial-gradient(rgba(0, 0, 0, 0.48), transparent);
-      background: radial-gradient(
-        ellipse at center 88px,
-        rgba(0, 0, 0, 0.9),
-        transparent 50%
-      );
-      //margin-top: 8px;
-      .explore {
-      }
-      .text-wrapper {
-        position: relative;
-        overflow: hidden;
-        width: 220px;
-        .anim-text-flow {
-          $animationDuration: 30 !important;
-          $delayBetweenLetters: 0.8 !important;
-          width: 360px;
-        }
-      }
-    }
     .main-content {
       .scroll-stuff {
         .loading-wrapper {
