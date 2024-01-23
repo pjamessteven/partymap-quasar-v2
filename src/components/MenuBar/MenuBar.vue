@@ -13,7 +13,10 @@
       :color="leftIconColor"
       v-if="!previousRouteName"
     />
-    <div class="tab-wrapper" v-if="!previousRouteName && $q.screen.gt.sm">
+    <div
+      class="tab-wrapper"
+      v-if="!previousRouteName && $q.screen.gt.sm && false"
+    >
       <NavigationBar :color="leftIconColor" />
     </div>
     <transition
@@ -44,14 +47,18 @@
       enter-active-class="animated fadeIn"
       leave-active-class="animated fadeOut"
     >
-      <MenuBarButtons :color="iconColor" class="right-buttons" />
+      <MenuBarButtons
+        :color="iconColor"
+        class="right-buttons"
+        v-if="$q.screen.lt.sm"
+      />
     </transition>
   </div>
 </template>
 
 <script>
 import MenuBarLogo from './MenuBarLogo.vue';
-import MenuBarButtons from './MenuBarButtons.vue';
+//import MenuBarButtons from './MenuBarButtons.vue';
 import NavigationBar from 'src/components/NavigationBar.vue';
 import { useMainStore } from 'stores/main';
 import { mapState, mapWritableState } from 'pinia';
@@ -61,7 +68,7 @@ export default {
   name: 'MenuBar',
   components: {
     MenuBarLogo,
-    MenuBarButtons,
+    //  MenuBarButtons,
     NavigationBar,
   },
 
@@ -283,7 +290,7 @@ export default {
 
 .menubar {
   //transition: opacity 0.15s;
-  height: 64px;
+  height: 72px;
   position: relative;
   transition: height 0.3s ease;
 

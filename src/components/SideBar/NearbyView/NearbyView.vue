@@ -534,11 +534,13 @@
                           :options="queryRadiusOptions"
                         />
                       </div>
+                      <!--
                       <EventDateViewOptions
                         style="margin-right: 16px"
                         :show-group-by-month="false"
-                        v-if="$q.screen.gt.sm"
+                        v-if="$q.screen.gt.sm "
                       />
+                      -->
                     </div>
                     <transition
                       appear
@@ -605,11 +607,13 @@
                           {{ $t('landing_page.all_upcoming_events') }}:
                         </div>
                       </div>
+                      <!--
                       <EventDateViewOptions
                         style="margin-right: 16px"
                         :show-group-by-month="false"
                         v-if="$q.screen.gt.sm"
                       />
+                      -->
                     </div>
 
                     <transition
@@ -675,7 +679,7 @@ import { useNearbyStore } from 'src/stores/nearby';
 import AddEventDialog from 'components/dialogs/AddEventDialog.vue';
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
-import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
+//import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
 import InnerLoading from 'src/components/InnerLoading.vue';
 import { useAuthStore } from 'src/stores/auth';
 import EventDatePoster from 'src/components/EventDatePoster.vue';
@@ -709,7 +713,7 @@ export default {
     ArtistsComponent,
     EventDateList,
     EventDatePosterList,
-    EventDateViewOptions,
+    // EventDateViewOptions,
     InnerLoading,
     EventDatePoster,
   },

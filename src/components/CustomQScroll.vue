@@ -20,7 +20,7 @@ export default {
   },
   computed: {},
   mounted() {
-    // on ios, the mouseover event in the q-scroll component causes useres
+    // on ios, the mouseover event in the q-scroll component causes users
     // to have to click twice on their target
     // so we remove these events
     if (this.$q.platform.is.ios) {

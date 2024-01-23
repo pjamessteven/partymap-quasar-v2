@@ -24,11 +24,16 @@
         class="sidebar-content flex column no-wrap"
       >
         <div
-          class="add-event-wrapper items-center flex justify-center q-px-md q-py-sm"
+          class="add-event-wrapper items-center flex justify-center q-px-md"
           v-if="$route.name === 'Explore' && $q.screen.gt.xs"
-          style="margin-top: 4px"
+          style="height: 72px"
         >
-          <q-btn class="inter o-070" no-caps flat @click="showAddEventDialog"
+          <q-btn
+            v-if="false"
+            class="inter o-070"
+            no-caps
+            flat
+            @click="showAddEventDialog"
             >Submit
             <q-icon name="mdi-plus" class="q-ml-sm" size="1rem" />
           </q-btn>
@@ -77,6 +82,10 @@
               </q-tooltip>
             </template>
           </q-btn>
+          <MenuBarButtons
+            :color="$q.dark.isActive ? 'white' : 'black'"
+            class="right-buttons"
+          />
         </div>
 
         <SearchComponent class="search-component" v-if="$q.screen.gt.xs" />
@@ -97,7 +106,7 @@
         <NavigationBar
           @click="togglePanel"
           class="nav-bar"
-          v-if="$q.screen.gt.xs && $q.screen.lt.md"
+          v-if="$q.screen.gt.xs"
         />
       </div>
       <div
@@ -125,7 +134,7 @@ import { useMainStore } from 'src/stores/main';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
 import WheelIndicator from 'wheel-indicator';
-
+import MenuBarButtons from 'components/MenuBar/MenuBarButtons.vue';
 export default {
   components: {
     ExploreView,
@@ -134,6 +143,7 @@ export default {
     NearbyView,
     //MobileSwipeHandle,
     SearchComponent,
+    MenuBarButtons,
   },
   async mounted() {
     /*

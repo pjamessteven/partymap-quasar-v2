@@ -3,7 +3,7 @@
     <q-tabs
       :class="{
         'light-button': color === 'white',
-        'inter bolder desktop-tabs': $q.screen.gt.sm,
+        'inter bolder desktop-tabs': $q.screen.gt.sm && false,
       }"
       class="tabs"
       @click.stop
@@ -20,7 +20,7 @@
           : 'transparent'
       "
       :active-class="
-        $q.screen.lt.md
+        $q.screen.lt.md || true
           ? $route.name === 'Explore' ||
             $route.name === 'UserPage' ||
             $route.name === 'BrowsePage'
@@ -35,10 +35,10 @@
         key="1"
         name="nearby"
         content-class="tab"
-        :label="$q.screen.lt.sm ? 'Home' : 'Nearby'"
+        :label="$q.screen.lt.sm ? 'Home' : 'Home'"
         :ripple="false"
         :icon="
-          $q.screen.lt.md
+          $q.screen.lt.md || true
             ? sidebarPanel === 'nearby'
               ? 'mdi-home'
               : 'mdi-home-outline'
@@ -53,7 +53,7 @@
         key="2"
         name="explore"
         :icon="
-          $q.screen.lt.md
+          $q.screen.lt.md || true
             ? sidebarPanel === 'explore'
               ? 'mdi-map-search'
               : 'mdi-map-search-outline'
@@ -71,7 +71,7 @@
         name="browse"
         label="Browse"
         :icon="
-          $q.screen.lt.md
+          $q.screen.lt.md || true
             ? $route.name === 'BrowsePage'
               ? 'mdi-feature-search'
               : 'mdi-feature-search-outline'
@@ -82,11 +82,11 @@
       />
 
       <q-route-tab
-        v-if="$q.screen.lt.md"
+        v-if="$q.screen.lt.md || true"
         name="profile"
         key="4"
         :icon="
-          $route.name === 'UserPage'
+          $route.name === 'UserPage' || true
             ? 'mdi-calendar-star'
             : 'mdi-calendar-star-outline'
         "

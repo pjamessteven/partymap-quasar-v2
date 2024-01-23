@@ -89,7 +89,7 @@
           <div class="q-px-md q-pl-md" v-else>@{{ currentUser.username }}</div>
           <q-avatar
             :color="color"
-            class="o-080"
+            class="o-070"
             :text-color="color === 'white' ? 'black' : 'white'"
             icon="mdi-account-circle"
             font-size="14px"
