@@ -97,8 +97,35 @@
               <q-item-label
                 header
                 class="t3 q-pb-sm inter"
+                v-if="
+                  (!query || query.length == 0) && topTagsInArea?.length > 0
+                "
+                >Top tags in this area:</q-item-label
+              >
+              <div
+                class="flex row q-gutter-sm q-px-md q-pt-sm q-mb-xs"
+                v-if="
+                  (!query || query.length == 0) && topTagsInArea?.length > 0
+                "
+              >
+                <Tag
+                  :value="tag.tag"
+                  :key="index"
+                  @click="clickTag(tag)"
+                  :selected="
+                    controlTag?.findIndex((x) => x.tag === tag.tag) > -1
+                  "
+                  v-for="(tag, index) in topTagsInArea"
+                />
+              </div>
+              <q-item-label
+                header
+                class="t3 q-pb-sm inter"
                 v-if="!query || query.length == 0"
                 >Top tags worldwide:</q-item-label
+              >
+              <q-item-label header class="t3 q-pb-sm inter" v-else
+                >Search results:</q-item-label
               >
               <div class="flex row q-gutter-sm q-px-md q-pt-sm q-pb-lg">
                 <Tag
@@ -248,6 +275,7 @@ export default {
       'tagOptionsPage',
       'tagOptions',
       'tagOptionsHasNext',
+      'topTagsInArea',
     ]),
     ...mapState(useQueryStore, ['tagOptionsLoading', 'tagOptionsPerPage']),
   },

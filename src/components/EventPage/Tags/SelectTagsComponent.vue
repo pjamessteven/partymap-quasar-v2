@@ -32,7 +32,7 @@
         <Tag
           v-for="(tag, index) in computedResults"
           :key="index"
-          :showAddIcon="true"
+          :showIcons="true"
           :value="tag.tag"
           :disabled="tagsList.indexOf(tag.tag) > -1"
           v-on:selected="onSelectTag(tag.tag)"
@@ -43,7 +43,7 @@
             computedResults.findIndex((tag) => tag.tag == query) === -1
           "
           :key="-1"
-          :showAddIcon="true"
+          :showIcons="true"
           :value="query"
           :disabled="tagsList.indexOf(query) > -1"
           v-on:selected="onSelectTag(query)"
@@ -70,6 +70,7 @@
           v-for="(tag, index) in tagsList"
           :key="index"
           :value="tag"
+          :showIcons="true"
           @selected="onSelectTag(tag)"
           :selected="true"
         >

@@ -39,11 +39,15 @@ interface QueryState {
 
   // the following state is for dynamic options shown in control dropdowns
 
+  topArtistsInArea: Artist[];
+
   artistOptions: Artist[];
   artistOptionsHasNext: boolean;
   artistOptionsPerPage: number;
   artistOptionsPage: number;
   artistOptionsLoading: boolean;
+
+  topTagsInArea: Tag[];
 
   tagOptions: Tag[];
   tagOptionsHasNext: boolean;
@@ -118,11 +122,15 @@ export const useQueryStore = defineStore('query', {
     controlLocality: null,
     controlRegion: null,
 
+    topArtistsInArea: [],
+
     artistOptions: [],
     artistOptionsHasNext: false,
     artistOptionsPerPage: 20,
     artistOptionsPage: 1,
     artistOptionsLoading: false,
+
+    topTagsInArea: [],
 
     tagOptions: [],
     tagOptionsHasNext: false,
@@ -238,6 +246,7 @@ export const useQueryStore = defineStore('query', {
         const authStore = useAuthStore();
         _username = authStore.currentUser?.username;
       }
+
       try {
         this.userEventDatesLoading = true;
         const response = await getEventDatesRequest({
@@ -346,6 +355,9 @@ export const useQueryStore = defineStore('query', {
               {},
               response.data.items
             );
+            // these things are only returned on first page
+            this.topTagsInArea = response.data.top_tags;
+            this.topArtistsInArea = response.data.top_artists;
           } else {
             this.eventDates = this.eventDates.concat(response.data.items);
             groupEventDatesByMonth(

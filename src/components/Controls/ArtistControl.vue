@@ -76,11 +76,36 @@
         </div>
         <div class="control-menu" @scroll="onScrollMainContent($event)">
           <div
-            :class="$q.screen.lt.sm ? 'q-pb-xl' : undefined"
+            :class="$q.screen.lt.sm ? 'q-pb-lg' : undefined"
             class="flex column grow"
             v-if="artistOptions && artistOptions.length > 0"
           >
             <q-list>
+              <q-item-label
+                header
+                class="t3 q-pb-sm"
+                v-if="
+                  (!query || query.length == 0) && topArtistsInArea?.length > 0
+                "
+                >Top in this area:</q-item-label
+              >
+
+              <div
+                class="flex column"
+                v-for="(artist, index) in topArtistsInArea"
+                :key="index + 'a'"
+              >
+                <div class="q-px-md">
+                  <q-separator v-if="index > 0" />
+                </div>
+                <ArtistControlListItem
+                  @click="clickArtist(artist)"
+                  :artist="artist"
+                  :isActive="
+                    controlArtist.findIndex((x) => x.id == artist.id) > -1
+                  "
+                />
+              </div>
               <q-item-label
                 header
                 class="t3 q-pb-sm"
@@ -96,80 +121,16 @@
                 <div class="q-px-md">
                   <q-separator v-if="index > 0" />
                 </div>
-                <router-link
-                  style="text-decoration: none; color: inherit"
-                  :to="{
-                    name: 'ArtistPage',
-                    params: { id: artist.id },
-                    query: {
-                      name: artist.name.replace(/ /g, '_'),
-                      thumb_xs_url: artist?.media_items?.[0]?.thumb_xxs_url,
-                    },
-                  }"
-                >
-                  <q-item
-                    :active="
-                      controlArtist.findIndex((x) => x.id == artist.id) > -1
-                    "
-                    clickable
-                    @click="clickArtist(artist)"
-                  >
-                    <q-item-section avatar>
-                      <q-avatar class="avatar">
-                        <img
-                          v-if="
-                            artist &&
-                            artist.media_items &&
-                            artist.media_items[0] &&
-                            artist.media_items[0].thumb_xxs_url
-                          "
-                          :src="artist.media_items[0].thumb_xxs_url"
-                        />
-                        <q-icon
-                          v-else
-                          size="1em"
-                          class="t3"
-                          name="mdi-account-music-outline"
-                        />
-                      </q-avatar>
-                    </q-item-section>
-                    <q-item-section>
-                      <div class="flex row justify-between no-wrap">
-                        <div class="flex column justify-center no-wrap">
-                          <q-item-label>
-                            {{ artist.name }}
-                          </q-item-label>
-
-                          <q-item-label
-                            caption
-                            class="t4 ellipsis-2-lines"
-                            v-if="artist.disambiguation || artist.area"
-                          >
-                            {{ artist.disambiguation }}
-                            <span v-if="artist.area">
-                              <span v-if="artist.area.name">
-                                ({{ artist.area.name }})
-                              </span>
-                              <span v-else> ({{ artist.area }}) </span>
-                            </span>
-                          </q-item-label>
-                        </div>
-                        <!--
-                        <q-checkbox
-                          :value="
-                            controlArtist.findIndex(
-                              x => x.id == artist.id
-                            ) > -1
-                          "
-                          @update:model-value="clickArtist(artist)"
-                        />
-                        -->
-                      </div>
-                    </q-item-section>
-                  </q-item>
-                </router-link>
+                <ArtistControlListItem
+                  @click="clickArtist(artist)"
+                  :artist="artist"
+                  :isActive="
+                    controlArtist.findIndex((x) => x.id == artist.id) > -1
+                  "
+                />
               </div>
             </q-list>
+
             <div
               class="row justify-center q-my-lg"
               v-if="artistOptionsHasNext && artistOptions?.length > 0"
@@ -200,12 +161,13 @@ import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
 import _ from 'lodash';
-
+import ArtistControlListItem from './ArtistControlListItem.vue';
 import MenuWrapper from './MenuWrapper.vue';
 
 export default {
   components: {
     MenuWrapper,
+    ArtistControlListItem,
   },
   data() {
     return {
@@ -219,7 +181,11 @@ export default {
       'loadMoreArtistOptions',
     ]),
     clickArtist(artist) {
-      //this.controlArtist = [artist];
+      if (this.controlArtist.findIndex((x) => x.id === artist.id) > -1) {
+        this.controlArtist = [];
+      } else {
+        this.controlArtist = [artist];
+      }
 
       this.onHide();
     },
@@ -272,6 +238,7 @@ export default {
       'artistOptions',
     ]),
     ...mapState(useQueryStore, [
+      'topArtistsInArea',
       'artistOptionsHasNext',
       'artistOptionsLoading',
       'artistOptionsPerPage',
@@ -288,15 +255,9 @@ export default {
 
 <style lang="scss" scoped>
 .body--dark {
-  .avatar {
-    background: $bi-4;
-  }
 }
 
 .body--light {
-  .avatar {
-    background: $b-4;
-  }
 }
 
 .avatar {

@@ -101,7 +101,7 @@
             @click="viewOnMap"
             v-if="artist?.future_event_dates?.length > 0"
           >
-            See upcoming on map
+            View on the map
             <q-icon
               name="mdi-chevron-right"
               size="1rem"

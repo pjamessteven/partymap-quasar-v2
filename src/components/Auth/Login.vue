@@ -306,14 +306,14 @@ export default {
           console.log('result', result);
           // Handle user information
           // Validate token with server and create new session
-          const currentUser = await this.appleLogin(
-            result.response.identityToken
-          );
+          await this.appleLogin(result.response.identityToken);
           if (!currentUser.username) {
             this.$router.replace({ name: 'ChooseUsername' });
           } else {
             this.userEventDatesPage = 1;
-            await this.loadUserEventDates('all', 'future');
+            try {
+              await this.loadUserEventDates('all', 'future');
+            } catch {}
             this.$router.push('/');
           }
           this.loading = false;
@@ -332,7 +332,9 @@ export default {
         this.$router.replace({ name: 'ChooseUsername' });
       } else {
         this.userEventDatesPage = 1;
-        await this.loadUserEventDates('all', 'future');
+        try {
+          await this.loadUserEventDates('all', 'future');
+        } catch {}
         this.$router.push('/');
       }
     },

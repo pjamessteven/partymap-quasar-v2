@@ -45,6 +45,7 @@
                 <div
                   style="margin-top: -8px"
                   class="ellipsis text-h4 inter bolder"
+                  v-if="$q.screen.lt.md"
                 >
                   <span class="">Near</span>
                 </div>
@@ -60,13 +61,13 @@
                     v-if="userLocation"
                     class="ellipsis q-mr-sm inter bolder"
                   >
-                    <span v-if="userLocationCountry">
+                    <span v-if="$q.screen.gt.sm" class="">Near&nbsp;</span
+                    ><span v-if="userLocationCountry">
                       {{ userLocationCity }}</span
                     ><span v-else class="t3">...</span
-                    ><span v-if="$q.screen.gt.sm || !userLocationCity"
-                      ><span v-if="userLocationCity">,&nbsp;</span
-                      >{{ userLocationCountry }}</span
-                    >
+                    ><span v-if="!userLocationCity">{{
+                      userLocationCountry
+                    }}</span>
                   </span>
                   <span
                     class="ellipsis text-h4 inter bolder t4"

@@ -11,12 +11,12 @@
         <q-icon
           style="margin-left: -4px; font-size: 18px"
           name="mdi-minus-circle q-mr-xs"
-          v-if="selected"
+          v-if="showIcons && selected"
         />
         <q-icon
           style="margin-left: -4px; font-size: 18px"
           name="mdi-plus-circle q-mr-xs"
-          v-if="showAddIcon"
+          v-if="showIcons && !selected"
         />
         <div>{{ value }}</div>
         <div v-if="count">&nbsp;({{ count }})</div>
@@ -32,7 +32,7 @@ export default {
     disabled: Boolean,
     count: String,
     selected: Boolean,
-    showAddIcon: Boolean,
+    showIcons: Boolean,
   },
   data() {
     return {
@@ -52,12 +52,12 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .tag {
-    background: $bi-4 !important;
-    color: $ti-1 !important;
+    background: $bi-3;
+    color: $ti-1;
 
     &:hover {
-      background: $bi-4 !important;
-      color: white !important;
+      background: $bi-4;
+      color: white;
     }
     &.selected {
       //  background: $bi-4 !important;
@@ -68,11 +68,11 @@ export default {
 
 .body--light {
   .tag {
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
-    border: 1px solid rgba(0, 0, 0, 0.48);
+    //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
     &:hover {
-      background: $b-2 !important;
-      box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 3px 0px;
+      background: $b-2;
+      // box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 3px 0px;
     }
   }
 }
@@ -91,9 +91,13 @@ export default {
   align-items: center;
   justify-content: center;
   border-radius: 100px;
+  transition: all 0.3s;
   &.selected {
     background: $primary !important;
     color: $ti-1 !important;
+    &:hover {
+      filter: brightness(1.1);
+    }
   }
   .tag-inner-wrapper {
     padding: 0px 6px;

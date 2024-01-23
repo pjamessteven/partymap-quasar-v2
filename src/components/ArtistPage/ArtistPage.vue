@@ -99,7 +99,7 @@
             <div
               class="flex column events"
               v-if="artist && !loading"
-              :class="$q.screen.gt.sm ? ' q-px-lg' : ''"
+              :class="$q.screen.gt.sm ? ' q-px-lg' : ' q-mt-md'"
             >
               <div class="flex column" v-if="artist" style="max-width: 100%">
                 <div class="q-mb-md inter bold t2">Upcoming events:</div>
