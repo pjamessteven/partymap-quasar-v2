@@ -407,19 +407,30 @@ export default {
     // ios specific padding for capcaitor app
     .menubar {
       &.iphone {
-        @supports (
-          (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
-            (-webkit-appearance: none)
-        ) {
-          top: calc(env(safe-area-inset-top) - 8px);
+        @supports ((top: var(--safe-area-inset-top))) {
+          @media screen and (max-width: 375px) {
+            //  iphone 7
+            top: env(safe-area-inset-top);
+          }
+          @media screen and (min-width: 375px) {
+            top: calc(env(safe-area-inset-top) - 8px);
+          }
         }
       }
       .menubar-background {
-        @supports ((top: var(--safe-area-inset-top))) {
-          padding-top: var(--safe-area-inset-top);
-          height: calc(env(safe-area-inset-top) + 62px - 8px);
-          position: fixed;
-          top: 0px;
+        &.iphone {
+          @supports ((top: var(--safe-area-inset-top))) {
+            @media screen and (max-width: 375px) {
+              //  iphone 7
+              top: env(safe-area-inset-top);
+            }
+            @media screen and (min-width: 375px) {
+              padding-top: var(--safe-area-inset-top);
+              height: calc(env(safe-area-inset-top) + 62px - 8px);
+              position: fixed;
+              top: 0px;
+            }
+          }
         }
       }
     }

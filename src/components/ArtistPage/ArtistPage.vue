@@ -91,7 +91,7 @@
           class="main-content q-mb-lg flex column col-xs-12 col-md-10 col-lg-10 col-xl-8"
         >
           <ArtistDetails
-            :class="$q.screen.gt.sm ? 'q-ml-lg q-mb-lg' : 'q-mb-sm'"
+            :class="$q.screen.gt.sm ? 'q-ml-lg q-mb-lg' : 'q-mb-sm q-px-md'"
             @refreshArtist="refreshArtist()"
             :artist="artist"
           />
@@ -99,7 +99,7 @@
             <div
               class="flex column events"
               v-if="artist && !loading"
-              :class="$q.screen.gt.sm ? ' q-px-lg' : ' q-mt-md'"
+              :class="$q.screen.gt.sm ? ' q-px-lg' : ' q-mt-md q-px-md'"
             >
               <div class="flex column" v-if="artist" style="max-width: 100%">
                 <div class="q-mb-md inter bold t2">Upcoming events:</div>
@@ -532,6 +532,7 @@ export default {
     }
   }
   .artist-page {
+    width: 100%;
     padding-top: 0px !important;
 
     .image-container-background {
@@ -539,7 +540,14 @@ export default {
     }
     .artist-content {
       .main-content {
-        max-width: 100vw;
+        width: 100%;
+
+        .events {
+          width: 100%;
+          :deep(.ed-card) {
+            width: calc(100vw - 32px);
+          }
+        }
       }
     }
     .mobile-image-container {
@@ -582,13 +590,6 @@ export default {
           width: 100%;
           width: 100%;
         }
-      }
-    }
-    .main-content {
-      padding-left: 16px;
-      padding-right: 16px;
-      .events {
-        width: 100%;
       }
     }
 

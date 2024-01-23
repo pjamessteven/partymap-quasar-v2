@@ -1510,7 +1510,7 @@ a {
       height: 100%;
       overflow-x: hidden;
       overflow-y: auto;
-      -webkit-overflow-scrolling: touch; // WOW THIS ACTUALLY HELPS ON IOS
+      // -webkit-overflow-scrolling: touch; // WOW THIS ACTUALLY HELPS ON IOS
 
       .main-row {
         position: relative;
@@ -1708,6 +1708,10 @@ a {
   }
   .content-card {
     max-width: 96vw !important;
+
+    // stupid border radius fix for ios 15
+    -webkit-transform: translateZ(0);
+    -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
   }
   .sticky-editing-footer-inner {
     max-width: 96vw;

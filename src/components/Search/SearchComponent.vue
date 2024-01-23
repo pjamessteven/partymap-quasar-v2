@@ -220,6 +220,14 @@ export default {
       width: 510px;
       height: 100%;
       border-radius: 48px;
+      // stupid border radius fix for ios 15
+      -webkit-transform: translateZ(0);
+      -webkit-mask-image: -webkit-radial-gradient(
+        circle,
+        white 100%,
+        black 100%
+      );
+
       position: relative;
       .location-button-wrapper {
         position: absolute;

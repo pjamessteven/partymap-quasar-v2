@@ -325,6 +325,7 @@ export default {
         .catch((error) => {
           console.log(error);
           this.$q.notify('Apple login failed, please try again...');
+          this.loading = false;
         });
     },
     async onAppleDesktopLoginSuccess(data) {
