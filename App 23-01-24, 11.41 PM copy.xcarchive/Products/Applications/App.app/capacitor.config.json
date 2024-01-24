@@ -1,0 +1,21 @@
+{
+	"appId": "org.partymap.com",
+	"appName": "PartyMap",
+	"server": {
+		"hostname": "api.partymap.com"
+	},
+	"bundledWebRuntime": false,
+	"npmClient": "yarn",
+	"webDir": "www",
+	"plugins": {
+		"CapacitorCookies": {
+			"enabled": true
+		},
+		"CapacitorHttp": {
+			"enabled": true
+		}
+	},
+	"ios": {
+		"limitsNavigationsToAppBoundDomains": true
+	}
+}

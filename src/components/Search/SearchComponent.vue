@@ -155,6 +155,8 @@ export default {
 .body--light {
   .search-component {
     .controls-wrapper {
+      box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+
       .controls-wrapper-inner {
         .location-button-wrapper {
           //background: white;
@@ -173,7 +175,6 @@ export default {
   }
   .controls-wrapper-inner {
     //
-    box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
     background: white !important;
     //background: #f5f5f5;
     color: $t-1;
@@ -211,22 +212,23 @@ export default {
     width: 100%;
     justify-content: center;
     position: relative;
+    border-radius: 48px;
 
+    overflow: hidden;
     .controls-wrapper-inner {
-      pointer-events: all;
-
-      transition: all 0.3s;
-      cursor: pointer;
-      width: 510px;
-      height: 100%;
-      border-radius: 48px;
-      // stupid border radius fix for ios 15
+      pointer-events: all; // stupid border radius fix for ios 15
       -webkit-transform: translateZ(0);
       -webkit-mask-image: -webkit-radial-gradient(
         circle,
         white 100%,
         black 100%
       );
+
+      transition: all 0.3s;
+      cursor: pointer;
+      width: 510px;
+      height: 100%;
+      border-radius: 48px;
 
       position: relative;
       .location-button-wrapper {

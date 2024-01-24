@@ -412,7 +412,7 @@ export default {
             //  iphone 7
             top: env(safe-area-inset-top);
           }
-          @media screen and (min-width: 375px) {
+          @media screen and (min-width: 376px) {
             top: calc(env(safe-area-inset-top) - 8px);
           }
         }
