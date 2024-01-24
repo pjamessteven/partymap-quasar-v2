@@ -29,7 +29,7 @@
 
         <div class="flex column no-wrap content">
           <div
-            class="q-mt-md flex row no-wrap items-center control-bar"
+            class="q-pt-sm q-mt-sm flex row no-wrap items-center control-bar"
             :class="$q.screen.gt.xs ? 'q-pl-md q-mb-md' : ''"
           >
             <CustomQScroll
@@ -304,6 +304,7 @@ export default {
     MenuWrapper,
     InnerLoading,
     UserProfile,
+    CustomQScroll,
   },
   props: {
     showControls: { default: false },
@@ -451,7 +452,7 @@ export default {
   transition: all 0.3s;
 
   :deep(.date-header-wrapper) {
-    top: 44px !important;
+    top: 48px !important;
     z-index: 1 !important;
     .date-header {
       padding-top: 16px;
