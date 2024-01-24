@@ -14,7 +14,10 @@
       v-if="!previousRouteName"
     />
 
-    <div class="tab-wrapper" v-if="!previousRouteName && $q.screen.gt.sm">
+    <div
+      class="tab-wrapper flex items-center"
+      v-if="!previousRouteName && $q.screen.gt.sm"
+    >
       <div
         class="q-py-md q-mr-sm"
         v-if="$q.screen.gt.xs && false"
@@ -338,7 +341,7 @@ export default {
   .tab-wrapper {
     pointer-events: all;
     position: absolute;
-    left: 160px;
+    left: 168px;
     top: 0px;
     height: 72px;
     display: flex;

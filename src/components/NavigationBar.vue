@@ -20,7 +20,7 @@
           : 'transparent'
       "
       :active-class="
-        $q.screen.lt.md || true
+        $q.screen.lt.md
           ? $route.name === 'Explore' ||
             $route.name === 'UserPage' ||
             $route.name === 'BrowsePage'
@@ -35,10 +35,10 @@
         key="1"
         name="nearby"
         content-class="tab"
-        :label="$q.screen.lt.sm ? 'Home' : 'Home'"
+        label="Home"
         :ripple="false"
         :icon="
-          $q.screen.lt.md || true
+          $q.screen.lt.md
             ? sidebarPanel === 'nearby'
               ? 'mdi-home'
               : 'mdi-home-outline'
@@ -53,13 +53,13 @@
         key="2"
         name="explore"
         :icon="
-          $q.screen.lt.md || true
+          $q.screen.lt.md
             ? sidebarPanel === 'explore'
               ? 'mdi-map-search'
               : 'mdi-map-search-outline'
             : undefined
         "
-        :label="$q.screen.lt.md ? 'Map' : 'Explore'"
+        label="Explore"
         content-class="tab"
         :ripple="false"
       />
@@ -71,10 +71,10 @@
         name="browse"
         label="Browse"
         :icon="
-          $q.screen.lt.md || true
+          $q.screen.lt.md
             ? $route.name === 'BrowsePage'
-              ? 'mdi-pound'
-              : 'mdi-pound'
+              ? 'mdi-feature-search'
+              : 'mdi-feature-search-outline'
             : undefined
         "
         content-class="tab"
@@ -82,11 +82,16 @@
       />
 
       <q-route-tab
-        v-if="$q.screen.lt.md || true"
         name="profile"
         key="4"
-        :icon="$route.name === 'UserPage' ? 'mdi-heart' : 'mdi-heart-outline'"
-        label="Calendar"
+        :icon="
+          $q.screen.lt.md
+            ? $route.name === 'UserPage'
+              ? 'mdi-heart'
+              : 'mdi-heart-outline'
+            : undefined
+        "
+        label="Profile"
         content-class="tab"
         :ripple="false"
         :to="
@@ -227,7 +232,6 @@ export default {
         .q-tab__label {
           // text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
         }
-
         &.q-tab--active {
           color: white;
         }
@@ -286,8 +290,8 @@ export default {
     .q-tab {
       //padding-top: 4px;
       //padding-bottom: 4px;
-      padding: 2px;
-      margin: 0px;
+      padding: 0px !important;
+      margin: 6px;
       //margin: 4px 4px;
       //border-radius: 64px;
       transition: all 0.3s;
@@ -301,17 +305,41 @@ export default {
       $distance: 10px;
       $easeOutBack: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
+      &:before,
+      &:after {
+        display: none;
+        content: '';
+        position: absolute;
+        bottom: 4px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        //background-color: black;
+      }
+      &:before {
+        opacity: 0;
+        transform: translateY(-$distance);
+        transition: transform 0s $easeOutBack, opacity 0s;
+      }
+      &:after {
+        opacity: 0;
+        transform: translateY($distance/2);
+        transition: transform $duration $easeOutBack, opacity $duration;
+      }
+
       .q-focus-helper {
         display: none;
       }
-      .q-tab__content {
-        .q-tab__label {
-          display: none;
-        }
+      .q-tab__label {
+        font-weight: 500 !important;
       }
-
       &.q-tab--active {
         background: none !important;
+        font-weight: 600 !important;
+
+        .q-tab__label {
+          font-weight: 600 !important;
+        }
       }
       &.q-tab--inactive {
         color: grey;

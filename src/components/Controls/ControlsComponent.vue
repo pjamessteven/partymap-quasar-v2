@@ -178,11 +178,12 @@ export default {
         if (newVal && newVal.length > 0) {
           this.goToExplore();
           setTimeout(() => {
-            this.$refs.scroll.setScrollPosition(
-              'horizontal',
-              this.$refs.artistControl.$el.offsetLeft,
-              150
-            );
+            if ($q.screen.lt.sm)
+              this.$refs.scroll.setScrollPosition(
+                'horizontal',
+                this.$refs.artistControl.$el.offsetLeft,
+                150
+              );
           }, 100);
         }
       },
@@ -192,11 +193,12 @@ export default {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
           this.goToExplore();
-          this.$refs.scroll.setScrollPosition(
-            'horizontal',
-            this.$refs.tagControl.$el.offsetLeft,
-            150
-          );
+          if ($q.screen.lt.sm)
+            this.$refs.scroll.setScrollPosition(
+              'horizontal',
+              this.$refs.tagControl.$el.offsetLeft,
+              150
+            );
         }
       },
       deep: true,
@@ -205,11 +207,12 @@ export default {
       handler(newVal) {
         if (newVal && newVal.end) {
           this.goToExplore();
-          this.$refs.scroll.setScrollPosition(
-            'horizontal',
-            this.$refs.dateControl.$el.offsetLeft,
-            150
-          );
+          if ($q.screen.lt.sm)
+            this.$refs.scroll.setScrollPosition(
+              'horizontal',
+              this.$refs.dateControl.$el.offsetLeft,
+              150
+            );
         }
       },
       deep: true,
@@ -218,11 +221,12 @@ export default {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
           this.goToExplore();
-          this.$refs.scroll.setScrollPosition(
-            'horizontal',
-            this.$refs.sizeControl.$el.offsetLeft - 16,
-            150
-          );
+          if ($q.screen.lt.sm)
+            this.$refs.scroll.setScrollPosition(
+              'horizontal',
+              this.$refs.sizeControl.$el.offsetLeft - 16,
+              150
+            );
         }
       },
       deep: true,
@@ -231,11 +235,12 @@ export default {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
           this.goToExplore();
-          this.$refs.scroll.setScrollPosition(
-            'horizontal',
-            this.$refs.durationControl.$el.offsetLeft,
-            150
-          );
+          if ($q.screen.lt.sm)
+            this.$refs.scroll.setScrollPosition(
+              'horizontal',
+              this.$refs.durationControl.$el.offsetLeft,
+              150
+            );
         }
       },
       deep: true,
