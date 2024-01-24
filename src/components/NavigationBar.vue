@@ -331,7 +331,7 @@ export default {
         display: none;
       }
       .q-tab__label {
-        font-weight: 500 !important;
+        font-weight: 400 !important;
       }
       &.q-tab--active {
         background: none !important;

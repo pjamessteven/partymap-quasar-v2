@@ -341,7 +341,7 @@ export default {
   .tab-wrapper {
     pointer-events: all;
     position: absolute;
-    left: 168px;
+    left: 164px;
     top: 0px;
     height: 72px;
     display: flex;
