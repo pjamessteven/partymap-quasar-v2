@@ -13,10 +13,15 @@
       :color="leftIconColor"
       v-if="!previousRouteName"
     />
-    <div
-      class="tab-wrapper"
-      v-if="!previousRouteName && $q.screen.gt.sm && false"
-    >
+
+    <div class="tab-wrapper" v-if="!previousRouteName && $q.screen.gt.sm">
+      <div
+        class="q-py-md q-mr-sm"
+        v-if="$q.screen.gt.xs && false"
+        style="height: 100%"
+      >
+        <div class="separator vertical" />
+      </div>
       <NavigationBar :color="leftIconColor" />
     </div>
     <transition
@@ -50,7 +55,7 @@
       <MenuBarButtons
         :color="iconColor"
         class="right-buttons"
-        v-if="$q.screen.lt.sm"
+        :onlyLogin="$q.screen.gt.xs"
       />
     </transition>
   </div>
@@ -58,7 +63,7 @@
 
 <script>
 import MenuBarLogo from './MenuBarLogo.vue';
-//import MenuBarButtons from './MenuBarButtons.vue';
+import MenuBarButtons from './MenuBarButtons.vue';
 import NavigationBar from 'src/components/NavigationBar.vue';
 import { useMainStore } from 'stores/main';
 import { mapState, mapWritableState } from 'pinia';
@@ -68,7 +73,7 @@ export default {
   name: 'MenuBar',
   components: {
     MenuBarLogo,
-    //  MenuBarButtons,
+    MenuBarButtons,
     NavigationBar,
   },
 
@@ -268,6 +273,9 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .menubar {
+    .separator {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
     .menubar-background {
       background: black;
       //border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -279,6 +287,9 @@ export default {
 
 .body--light {
   .menubar {
+    .separator {
+      //   border-color: rgba(0, 0, 0, 0.2);
+    }
     .menubar-background {
       background: white;
       //`border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -293,7 +304,7 @@ export default {
   height: 72px;
   position: relative;
   transition: height 0.3s ease;
-
+  padding-left: 8px;
   // android
   @supports ((top: var(--safe-area-inset-top))) {
     //padding-top: calc(env(safe-area-inset-top));
@@ -327,9 +338,9 @@ export default {
   .tab-wrapper {
     pointer-events: all;
     position: absolute;
-    left: 155px;
+    left: 160px;
     top: 0px;
-    height: 64px;
+    height: 72px;
     display: flex;
     align-items: center;
   }
@@ -384,6 +395,7 @@ export default {
     z-index: 1;
     position: fixed;
     top: 0px;
+    padding-left: unset;
     @supports ((top: var(--safe-area-inset-top))) {
       top: var(--safe-area-inset-top);
     }

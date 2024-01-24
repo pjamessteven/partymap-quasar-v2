@@ -62,7 +62,7 @@
       <!-- <div class="separator vertical"></div>-->
     </div>
     <router-link
-      v-if="$q.screen.gt.xs"
+      v-if="$q.screen.gt.xs || onlyLogin"
       class="flex link-hover"
       :to="
         currentUser
@@ -99,6 +99,7 @@
       </q-btn>
     </router-link>
     <q-btn
+      v-if="!onlyLogin"
       class="menubar-button"
       icon="mdi-menu"
       flat
@@ -145,6 +146,9 @@ export default {
   props: {
     color: {
       type: String,
+    },
+    onlyLogin: {
+      type: Boolean,
     },
   },
   watch: {},

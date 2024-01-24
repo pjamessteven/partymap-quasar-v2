@@ -3,7 +3,7 @@
     <q-tabs
       :class="{
         'light-button': color === 'white',
-        'inter bolder desktop-tabs': $q.screen.gt.sm && false,
+        'inter bolder desktop-tabs': $q.screen.gt.sm,
       }"
       class="tabs"
       @click.stop
@@ -73,8 +73,8 @@
         :icon="
           $q.screen.lt.md || true
             ? $route.name === 'BrowsePage'
-              ? 'mdi-feature-search'
-              : 'mdi-feature-search-outline'
+              ? 'mdi-pound'
+              : 'mdi-pound'
             : undefined
         "
         content-class="tab"
@@ -85,11 +85,7 @@
         v-if="$q.screen.lt.md || true"
         name="profile"
         key="4"
-        :icon="
-          $route.name === 'UserPage' || true
-            ? 'mdi-calendar-star'
-            : 'mdi-calendar-star-outline'
-        "
+        :icon="$route.name === 'UserPage' ? 'mdi-heart' : 'mdi-heart-outline'"
         label="Calendar"
         content-class="tab"
         :ripple="false"
@@ -231,6 +227,7 @@ export default {
         .q-tab__label {
           // text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
         }
+
         &.q-tab--active {
           color: white;
         }
@@ -290,7 +287,7 @@ export default {
       //padding-top: 4px;
       //padding-bottom: 4px;
       padding: 2px;
-      margin: 6px;
+      margin: 0px;
       //margin: 4px 4px;
       //border-radius: 64px;
       transition: all 0.3s;
@@ -304,33 +301,15 @@ export default {
       $distance: 10px;
       $easeOutBack: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
-      &:before,
-      &:after {
-        content: '';
-        position: absolute;
-        bottom: 2px;
-        left: 0;
-        right: 0;
-        height: 1px;
-        //background-color: black;
-      }
-      &:before {
-        opacity: 0;
-        transform: translateY(-$distance);
-        transition: transform 0s $easeOutBack, opacity 0s;
-      }
-      &:after {
-        opacity: 0;
-        transform: translateY($distance/2);
-        transition: transform $duration $easeOutBack, opacity $duration;
-      }
-
       .q-focus-helper {
         display: none;
       }
-      .q-tab__label {
-        font-weight: 500 !important;
+      .q-tab__content {
+        .q-tab__label {
+          display: none;
+        }
       }
+
       &.q-tab--active {
         background: none !important;
       }

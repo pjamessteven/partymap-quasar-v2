@@ -82,10 +82,36 @@
               </q-tooltip>
             </template>
           </q-btn>
-          <MenuBarButtons
-            :color="$q.dark.isActive ? 'white' : 'black'"
-            class="right-buttons"
-          />
+          <q-btn
+            v-if="!onlyLogin"
+            class="menubar-button"
+            icon="mdi-menu"
+            flat
+            :class="{
+              'light-button': color === 'white',
+            }"
+            style="position: relative"
+          >
+            <q-menu
+              transition-show="jump-down"
+              transition-hide="jump-up"
+              anchor="bottom right"
+              self="top right"
+              class="main-menu"
+              max-height="100vh"
+            >
+              <TopControlsMenu />
+            </q-menu>
+            <q-tooltip
+              :content-class="
+                $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
+              "
+              :offset="[10, 10]"
+              content-style="font-size: 16px"
+            >
+              {{ $t('sidebar.more') }}
+            </q-tooltip>
+          </q-btn>
         </div>
 
         <SearchComponent class="search-component" v-if="$q.screen.gt.xs" />
@@ -103,11 +129,6 @@
             v-show="sidebarPanel === 'search'"
           />
         </div>
-        <NavigationBar
-          @click="togglePanel"
-          class="nav-bar"
-          v-if="$q.screen.gt.xs"
-        />
       </div>
       <div
         class="resizer flex row items-center"
@@ -123,27 +144,25 @@
 <script>
 import SearchComponent from 'src/components/Search/SearchComponent.vue';
 import AddEventDialog from 'components/dialogs/AddEventDialog.vue';
+import TopControlsMenu from 'components/MenuBar/TopControlsMenu.vue';
 
 import ExploreView from './ExploreView/ExploreView.vue';
 import SearchView from './SearchView/SearchView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
-import NavigationBar from 'components/NavigationBar.vue';
 import { useAuthStore } from 'src/stores/auth';
 import { mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
 import WheelIndicator from 'wheel-indicator';
-import MenuBarButtons from 'components/MenuBar/MenuBarButtons.vue';
 export default {
   components: {
     ExploreView,
     SearchView,
-    NavigationBar,
     NearbyView,
     //MobileSwipeHandle,
     SearchComponent,
-    MenuBarButtons,
+    TopControlsMenu,
   },
   async mounted() {
     /*
