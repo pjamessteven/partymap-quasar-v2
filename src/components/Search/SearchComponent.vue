@@ -209,7 +209,6 @@ export default {
   //max-width: 33vw;
   .controls-wrapper {
     //z-index: 105;
-    width: 100%;
     justify-content: center;
     position: relative;
     border-radius: 48px;
