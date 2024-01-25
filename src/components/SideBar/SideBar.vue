@@ -24,11 +24,16 @@
         class="sidebar-content flex column no-wrap"
       >
         <div
-          class="add-event-wrapper items-center flex justify-center q-px-md q-py-sm"
+          class="add-event-wrapper items-center flex justify-center q-px-md"
           v-if="$route.name === 'Explore' && $q.screen.gt.xs"
-          style="margin-top: 4px"
+          style="height: 72px"
         >
-          <q-btn class="inter o-070" no-caps flat @click="showAddEventDialog"
+          <q-btn
+            v-if="false"
+            class="inter o-070"
+            no-caps
+            flat
+            @click="showAddEventDialog"
             >Submit
             <q-icon name="mdi-plus" class="q-ml-sm" size="1rem" />
           </q-btn>
@@ -77,6 +82,36 @@
               </q-tooltip>
             </template>
           </q-btn>
+          <q-btn
+            v-if="!onlyLogin"
+            class="menubar-button"
+            icon="mdi-menu"
+            flat
+            :class="{
+              'light-button': color === 'white',
+            }"
+            style="position: relative"
+          >
+            <q-menu
+              transition-show="jump-down"
+              transition-hide="jump-up"
+              anchor="bottom right"
+              self="top right"
+              class="main-menu"
+              max-height="100vh"
+            >
+              <TopControlsMenu />
+            </q-menu>
+            <q-tooltip
+              :content-class="
+                $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
+              "
+              :offset="[10, 10]"
+              content-style="font-size: 16px"
+            >
+              {{ $t('sidebar.more') }}
+            </q-tooltip>
+          </q-btn>
         </div>
 
         <SearchComponent class="search-component" v-if="$q.screen.gt.xs" />
@@ -94,11 +129,6 @@
             v-show="sidebarPanel === 'search'"
           />
         </div>
-        <NavigationBar
-          @click="togglePanel"
-          class="nav-bar"
-          v-if="$q.screen.gt.xs && $q.screen.lt.md"
-        />
       </div>
       <div
         class="resizer flex row items-center"
@@ -114,26 +144,25 @@
 <script>
 import SearchComponent from 'src/components/Search/SearchComponent.vue';
 import AddEventDialog from 'components/dialogs/AddEventDialog.vue';
+import TopControlsMenu from 'components/MenuBar/TopControlsMenu.vue';
 
 import ExploreView from './ExploreView/ExploreView.vue';
 import SearchView from './SearchView/SearchView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
-import NavigationBar from 'components/NavigationBar.vue';
 import { useAuthStore } from 'src/stores/auth';
 import { mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
 import WheelIndicator from 'wheel-indicator';
-
 export default {
   components: {
     ExploreView,
     SearchView,
-    NavigationBar,
     NearbyView,
     //MobileSwipeHandle,
     SearchComponent,
+    TopControlsMenu,
   },
   async mounted() {
     /*

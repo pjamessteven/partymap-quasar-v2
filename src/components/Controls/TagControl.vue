@@ -81,11 +81,7 @@
           </q-input>
           <div class="separator" style="width: 100%" />
         </div>
-        <div
-          @scroll="onScrollMainContent($event)"
-          class="control-menu"
-          style="min-width: 400px !important"
-        >
+        <div @scroll="onScrollMainContent($event)" class="control-menu">
           <div
             :class="$q.screen.lt.sm ? 'q-pb-lg' : undefined"
             class="flex column grow"

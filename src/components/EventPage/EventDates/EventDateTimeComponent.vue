@@ -414,9 +414,6 @@ export default {
     border: none;
     box-shadow: 0 0.5em 1em -0.125em rgba(0, 0, 0, 0.1),
       0 0px 0 1px rgba(0, 0, 0, 0.02);
-    .vc-arrow {
-      background: transparent;
-    }
   }
 }
 

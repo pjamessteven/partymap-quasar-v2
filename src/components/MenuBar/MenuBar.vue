@@ -13,7 +13,18 @@
       :color="leftIconColor"
       v-if="!previousRouteName"
     />
-    <div class="tab-wrapper" v-if="!previousRouteName && $q.screen.gt.sm">
+
+    <div
+      class="tab-wrapper flex items-center"
+      v-if="!previousRouteName && $q.screen.gt.sm"
+    >
+      <div
+        class="q-py-md q-mr-sm"
+        v-if="$q.screen.gt.xs && false"
+        style="height: 100%"
+      >
+        <div class="separator vertical" />
+      </div>
       <NavigationBar :color="leftIconColor" />
     </div>
     <transition
@@ -44,7 +55,11 @@
       enter-active-class="animated fadeIn"
       leave-active-class="animated fadeOut"
     >
-      <MenuBarButtons :color="iconColor" class="right-buttons" />
+      <MenuBarButtons
+        :color="iconColor"
+        class="right-buttons"
+        :onlyLogin="$q.screen.gt.xs"
+      />
     </transition>
   </div>
 </template>
@@ -261,6 +276,9 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .menubar {
+    .separator {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
     .menubar-background {
       background: black;
       //border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -272,6 +290,9 @@ export default {
 
 .body--light {
   .menubar {
+    .separator {
+      //   border-color: rgba(0, 0, 0, 0.2);
+    }
     .menubar-background {
       background: white;
       //`border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -283,10 +304,10 @@ export default {
 
 .menubar {
   //transition: opacity 0.15s;
-  height: 64px;
+  height: 72px;
   position: relative;
   transition: height 0.3s ease;
-
+  padding-left: 8px;
   // android
   @supports ((top: var(--safe-area-inset-top))) {
     //padding-top: calc(env(safe-area-inset-top));
@@ -320,9 +341,9 @@ export default {
   .tab-wrapper {
     pointer-events: all;
     position: absolute;
-    left: 155px;
+    left: 164px;
     top: 0px;
-    height: 64px;
+    height: 72px;
     display: flex;
     align-items: center;
   }
@@ -377,6 +398,7 @@ export default {
     z-index: 1;
     position: fixed;
     top: 0px;
+    padding-left: unset;
     @supports ((top: var(--safe-area-inset-top))) {
       top: var(--safe-area-inset-top);
     }

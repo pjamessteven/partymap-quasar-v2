@@ -304,6 +304,7 @@ export default {
     MenuWrapper,
     InnerLoading,
     UserProfile,
+    CustomQScroll,
   },
   props: {
     showControls: { default: false },

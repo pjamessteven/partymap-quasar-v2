@@ -35,7 +35,7 @@
         key="1"
         name="nearby"
         content-class="tab"
-        :label="$q.screen.lt.sm ? 'Home' : 'Nearby'"
+        label="Home"
         :ripple="false"
         :icon="
           $q.screen.lt.md
@@ -59,7 +59,7 @@
               : 'mdi-map-search-outline'
             : undefined
         "
-        :label="$q.screen.lt.md ? 'Map' : 'Explore'"
+        label="Explore"
         content-class="tab"
         :ripple="false"
       />
@@ -82,15 +82,16 @@
       />
 
       <q-route-tab
-        v-if="$q.screen.lt.md"
         name="profile"
         key="4"
         :icon="
-          $route.name === 'UserPage'
-            ? 'mdi-calendar-star'
-            : 'mdi-calendar-star-outline'
+          $q.screen.lt.md
+            ? $route.name === 'UserPage'
+              ? 'mdi-heart'
+              : 'mdi-heart-outline'
+            : undefined
         "
-        label="Calendar"
+        label="Profile"
         content-class="tab"
         :ripple="false"
         :to="
@@ -289,7 +290,7 @@ export default {
     .q-tab {
       //padding-top: 4px;
       //padding-bottom: 4px;
-      padding: 2px;
+      padding: 0px !important;
       margin: 6px;
       //margin: 4px 4px;
       //border-radius: 64px;
@@ -306,9 +307,10 @@ export default {
 
       &:before,
       &:after {
+        display: none;
         content: '';
         position: absolute;
-        bottom: 2px;
+        bottom: 4px;
         left: 0;
         right: 0;
         height: 1px;
@@ -329,10 +331,15 @@ export default {
         display: none;
       }
       .q-tab__label {
-        font-weight: 500 !important;
+        font-weight: 400 !important;
       }
       &.q-tab--active {
         background: none !important;
+        font-weight: 600 !important;
+
+        .q-tab__label {
+          font-weight: 600 !important;
+        }
       }
       &.q-tab--inactive {
         color: grey;

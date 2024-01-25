@@ -29,8 +29,9 @@
         v-if="$q.screen.gt.xs"
       >
         <div class="flex row items-center no-wrap">
+          <!--
           <EventDateViewOptions class="q-m-md" />
-
+-->
           <q-icon
             @click="() => (showPanel = !showPanel)"
             v-if="$q.screen.gt.sm && false"
@@ -223,7 +224,7 @@ import _ from 'lodash';
 
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
-import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
+//import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
 //import ArtistsComponent from 'src/components/SideBar/ArtistsComponent.vue';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
@@ -239,7 +240,7 @@ export default {
     // ArtistsComponent,
     EventDateList,
     EventDatePosterList,
-    EventDateViewOptions,
+    //   EventDateViewOptions,
     CustomQScroll,
   },
 
