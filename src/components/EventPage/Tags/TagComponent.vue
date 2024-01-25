@@ -74,6 +74,9 @@ export default {
       background: $b-2;
       // box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 3px 0px;
     }
+    &.disabled {
+      background: $b-3;
+    }
   }
 }
 

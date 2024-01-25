@@ -1,5 +1,5 @@
 <template>
-  <q-scroll-area ref="scroll" v-bind="$attrs">
+  <q-scroll-area ref="scroll" v-bind="{ ...$attrs, ...$props }">
     <slot></slot>
   </q-scroll-area>
 </template>

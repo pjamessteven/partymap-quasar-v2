@@ -178,7 +178,7 @@ export default {
         if (newVal && newVal.length > 0) {
           this.goToExplore();
           setTimeout(() => {
-            if ($q.screen.lt.sm)
+            if (this.$q.screen.lt.sm)
               this.$refs.scroll.setScrollPosition(
                 'horizontal',
                 this.$refs.artistControl.$el.offsetLeft,
@@ -193,7 +193,7 @@ export default {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
           this.goToExplore();
-          if ($q.screen.lt.sm)
+          if (this.$q.screen.lt.sm)
             this.$refs.scroll.setScrollPosition(
               'horizontal',
               this.$refs.tagControl.$el.offsetLeft,
@@ -207,7 +207,7 @@ export default {
       handler(newVal) {
         if (newVal && newVal.end) {
           this.goToExplore();
-          if ($q.screen.lt.sm)
+          if (this.$q.screen.lt.sm)
             this.$refs.scroll.setScrollPosition(
               'horizontal',
               this.$refs.dateControl.$el.offsetLeft,
@@ -221,7 +221,7 @@ export default {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
           this.goToExplore();
-          if ($q.screen.lt.sm)
+          if (this.$q.screen.lt.sm)
             this.$refs.scroll.setScrollPosition(
               'horizontal',
               this.$refs.sizeControl.$el.offsetLeft - 16,
@@ -235,7 +235,7 @@ export default {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
           this.goToExplore();
-          if ($q.screen.lt.sm)
+          if (this.$q.screen.lt.sm)
             this.$refs.scroll.setScrollPosition(
               'horizontal',
               this.$refs.durationControl.$el.offsetLeft,

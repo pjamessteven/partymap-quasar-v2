@@ -696,9 +696,6 @@ body {
   .vc-container {
     background-color: $bi-3;
     border-color: rgb(26, 26, 26);
-    .vc-arrow {
-      background: $bi-4;
-    }
   }
   .q-field--dark .q-field__control::before {
     border-color: rgb(64, 64, 64);
@@ -949,6 +946,9 @@ body {
 .vc-container {
   //font-family: chicagoflf !important;
   font-family: Inter;
+  .vc-arrow {
+    background: transparent !important;
+  }
   .vc-title {
     background: transparent;
   }

@@ -25,9 +25,6 @@
             }"
             :class="$q.screen.lt.sm && !showPanel && 'disable-scroll'"
             class="scroll-area flex grow"
-            :content-style="{
-              width: '100%',
-            }"
           >
             <div class="scroll-stuff flex column">
               <div
@@ -49,31 +46,11 @@
                 <div
                   class="flex items-center no-wrap"
                   :class="{
-                    'justify-between text-h4': $q.screen.gt.sm,
-                    'justify-between  text-h4': $q.screen.lt.md,
+                    'justify-start text-h4': $q.screen.gt.sm,
+                    'justify-between row reverse  text-h4': $q.screen.lt.md,
                   }"
                   style="width: 100%"
                 >
-                  <span
-                    v-if="userLocation"
-                    class="ellipsis q-mr-sm inter bolder"
-                  >
-                    <span v-if="$q.screen.gt.sm" class="">Near&nbsp;</span
-                    ><span v-if="userLocationCountry">
-                      {{ userLocationCity }}</span
-                    ><span v-else class="t3">...</span
-                    ><span v-if="!userLocationCity">{{
-                      userLocationCountry
-                    }}</span>
-                  </span>
-                  <span
-                    class="ellipsis text-h4 inter bolder t4"
-                    v-else-if="userLocationLoading"
-                    ><span v-if="$q.screen.gt.sm">Finding location</span>...
-                  </span>
-                  <span class="ellipsis text-h4 inter bolder t1" v-else
-                    >Unknown Location...
-                  </span>
                   <q-btn
                     flat
                     class=""
@@ -84,8 +61,8 @@
                     @click.stop="() => getFineLocation()"
                     :style="
                       $q.screen.gt.sm
-                        ? 'margin-right: -16px; border-radius: 100px!important;'
-                        : 'margin-right: 0px; border-radius: 100px!important;'
+                        ? 'margin-left: -16px; border-radius: 100px!important;'
+                        : 'margin-left: 0px; border-radius: 100px!important;'
                     "
                   >
                     <template v-slot:default>
@@ -135,6 +112,30 @@
                       </q-tooltip>
                     </template>
                   </q-btn>
+                  <span
+                    v-if="userLocation"
+                    class="ellipsis q-mr-sm inter bolder"
+                  >
+                    <span v-if="userLocationCountry">
+                      {{ userLocationCity }}</span
+                    ><span v-else class="t3">...</span
+                    ><span
+                      v-if="
+                        (userLocationCountry && $q.screen.gt.sm) ||
+                        !userLocationCity
+                      "
+                      ><span v-if="userLocationCity">,&nbsp;</span
+                      >{{ userLocationCountry }}</span
+                    >
+                  </span>
+                  <span
+                    class="ellipsis text-h4 inter bolder t4"
+                    v-else-if="userLocationLoading"
+                    ><span v-if="$q.screen.gt.sm">Finding location</span>...
+                  </span>
+                  <span class="ellipsis text-h4 inter bolder t1" v-else
+                    >Unknown Location...
+                  </span>
                 </div>
               </div>
               <div
@@ -1188,6 +1189,12 @@ export default {
   .scroll-area {
     height: 100%;
     overflow: hidden;
+    :deep(.q-scrollarea__container) {
+      .q-scrollarea__content {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+    }
     :deep(.scroll) {
       //overflow-x: hidden;
       overflow-y: auto;
