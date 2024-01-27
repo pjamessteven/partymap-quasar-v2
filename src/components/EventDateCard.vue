@@ -424,7 +424,8 @@ export default {
       position: relative;
       overflow: hidden;
       //border-radius: 100%;
-      width: 86px;
+      width: 90px;
+      height: 127px;
       // aspect-ratio: 595 / 842; (this causes serious slowness on ios)
       min-width: 90px;
       z-index: 1;

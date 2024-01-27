@@ -67,10 +67,15 @@ export default {
         maxBounds: L.latLngBounds(
           // L.latLng(-89.98155760646617, -Infinity),
           // L.latLng(89.99346179538875, Infinity)
-          [
-            [-90, -180],
-            [90, 220],
-          ]
+          this.$q.screen.gt.xs
+            ? [
+                [-90, -350], // account for sidebar
+                [90, 220],
+              ]
+            : [
+                [-90, -180],
+                [90, 220],
+              ]
         ),
         maxBoundsViscosity: 0.5,
         worldCopyJump: false,
@@ -770,6 +775,9 @@ export default {
     },
   },
   computed: {
+    darkMode() {
+      return this.$q.dark.isActive;
+    },
     ...mapState(useMapStore, [
       'currentMapTileAttribution',
       'currentMapTileUrl',
@@ -797,7 +805,6 @@ export default {
       'fineLocation',
       'sidebarPanel',
       'showPanel',
-      'darkMode',
       'sidebarExpanded',
     ]),
     ...mapState(useMainStore, ['routerHistory']),
@@ -1232,7 +1239,10 @@ canvas {
   .location-button-wrapper {
     .location-button {
       bottom: 344px;
-      @supports ((top: var(--safe-area-inset-bottom))) {
+      @supports (
+        (top: var(--safe-area-inset-bottom)) and (font: -apple-system-body) and
+          (-webkit-appearance: none)
+      ) {
         bottom: calc(344px + var(--safe-area-inset-bottom));
       }
     }

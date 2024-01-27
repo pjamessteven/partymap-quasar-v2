@@ -4,9 +4,11 @@
       <div>Administration</div>
     </template>
     <template v-slot>
-      <PendingEventsComponent class="q-mt-lg" />
-      <PendingReportsComponent class="q-mt-lg" />
-      <PendingSuggestionsComponent class="q-mt-lg q-mb-xl" />
+      <div class="flex column">
+        <PendingEventsComponent class="q-mt-lg" />
+        <PendingReportsComponent class="q-mt-lg" />
+        <PendingSuggestionsComponent class="q-mt-lg q-mb-xl" />
+      </div>
     </template>
   </SolidPage>
 </template>

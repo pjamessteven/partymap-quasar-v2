@@ -17,16 +17,18 @@
               style="white-space: pre-line; word-break: break-word"
               >{{ event.full_description }}</span
             ><span
+              class="o-050"
               v-if="
                 event.full_description_attribute &&
                 event.full_description_attribute.length > 0
               "
-              >&nbsp;
-              <a
-                class="link-hover o-050"
+            >
+              <br />
+              -&nbsp;<a
+                class="link-hover"
                 target="_blank"
                 :href="computedAttributeUrl"
-                >[source]</a
+                >{{ computedAttributeDomain }}</a
               ></span
             ></span
           ><span v-else class="t4 inter text-large q-mt-sm">
@@ -82,6 +84,30 @@ export default {
       } else {
         return null;
       }
+    },
+    computedAttributeDomain() {
+      if (this.event?.full_description_attribute?.length > 0) {
+        let domain = this.event.full_description_attribute;
+
+        if (
+          domain.indexOf('facebook.com') > -1 ||
+          domain.indexOf('fb.me') > -1
+        ) {
+          return 'Facebook page';
+        }
+        // ensure that there is a protocol prefix
+        if (domain.indexOf('http://') > -1 || domain.indexOf('https://') > -1) {
+          domain = domain.split('://')[1];
+        }
+        if (domain.indexOf('www.') > -1) {
+          domain = domain.split('www.')[1];
+        }
+        if (domain.indexOf('/')) {
+          domain = domain.split('/')[0];
+        }
+        return domain;
+      }
+      return null;
     },
   },
 };

@@ -49,6 +49,7 @@
         :class="$q.screen.gt.sm ? 'q-pt-lg' : ''"
       >
         <CustomQScroll
+          :useRegularScroll="$q.screen.lt.sm"
           vertical
           @scroll="onScrollMainContent"
           ref="scroll"

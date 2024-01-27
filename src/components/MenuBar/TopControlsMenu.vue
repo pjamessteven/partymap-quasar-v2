@@ -1,5 +1,165 @@
 <template>
-  <div>
+  <div v-if="onlyUserItems">
+    <q-item
+      v-if="!currentUser"
+      class="q-mt-sm -item"
+      v-ripple
+      v-on:click="
+        $router.push({
+          path: '/login',
+          query: { from: $route.path },
+        })
+      "
+      clickable
+    >
+      <q-item-section avatar>
+        <q-icon name="las la-sign-in-alt" />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>{{ $t('sidebar.login') }}</q-item-label>
+      </q-item-section>
+    </q-item>
+
+    <q-item
+      v-if="currentUser"
+      class="q-mt-sm"
+      v-ripple
+      v-on:click="handleLogout"
+      clickable
+    >
+      <q-item-section avatar>
+        <q-icon name="mdi-logout-variant" v-if="!logoutLoading" />
+        <q-spinner-ios
+          v-else
+          size="1.5rem"
+          :color="$q.dark.isActive ? 'white' : 'black'"
+        />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>{{ $t('sidebar.logout') }}</q-item-label>
+      </q-item-section>
+    </q-item>
+    <q-item
+      v-ripple
+      v-on:click="
+        $router.push({ name: 'UserPage', params: { id: currentUser.username } })
+      "
+      clickable
+      v-if="currentUser"
+    >
+      <q-item-section avatar>
+        <q-icon name="las la-user" />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>{{ $t('sidebar.profile') }}</q-item-label>
+      </q-item-section>
+    </q-item>
+    <q-item
+      v-if="currentUser && currentUser.role >= 20"
+      v-ripple
+      v-on:click="$router.push({ name: 'AdminPage' })"
+      clickable
+    >
+      <q-item-section avatar>
+        <q-icon name="mdi-shield-account-outline" />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>Administration</q-item-label>
+      </q-item-section>
+    </q-item>
+
+    <q-item
+      v-if="currentUser"
+      v-ripple
+      v-on:click="$router.push({ name: 'ManageAccount' })"
+      clickable
+    >
+      <q-item-section avatar>
+        <q-icon name="las la-cog" />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>{{ $t('sidebar.my_account') }}</q-item-label>
+      </q-item-section>
+    </q-item>
+  </div>
+  <div v-else-if="noUserItems">
+    <q-item v-ripple @click="showAddEventDialog()" clickable class="q-mt-sm">
+      <q-item-section avatar>
+        <q-icon name="mdi-plus" />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>Submit Event</q-item-label>
+      </q-item-section>
+    </q-item>
+
+    <q-separator inset class="q-my-sm" />
+
+    <q-item v-ripple v-on:click="showAboutDialog = true" clickable>
+      <q-item-section avatar>
+        <q-icon name="las la-hand-peace" />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>{{ $t('sidebar.about') }}</q-item-label>
+      </q-item-section>
+    </q-item>
+
+    <q-item v-ripple v-on:click="showFeedbackDialog = true" clickable>
+      <q-item-section avatar>
+        <q-icon name="las la-comment" />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>{{ $t('feedback.give_feedback') }}</q-item-label>
+      </q-item-section>
+    </q-item>
+
+    <q-separator inset class="q-mt-sm q-mb-none" />
+
+    <q-item>
+      <q-toggle
+        :model-value="darkMode"
+        @click="$q.dark.toggle()"
+        label="Dark Mode"
+      />
+    </q-item>
+    <q-item v-if="$q.screen.lt.sm">
+      <q-toggle v-model="mobilePosterView" label="Grid View" />
+    </q-item>
+
+    <q-separator inset class="q-mb-xs" />
+
+    <q-item-label header class="q-pb-none">{{
+      $t('top_controls.map_options')
+    }}</q-item-label>
+    <q-item>
+      <q-select
+        style="margin-top: -8px"
+        borderless
+        behavior="menu"
+        class="flex grow"
+        v-model="mapStyle"
+        :options="mapStyleOptions"
+        emit-value
+        square
+        map-options
+      />
+    </q-item>
+
+    <q-dialog
+      v-model="showFeedbackDialog"
+      transition-show="jump-up"
+      transition-hide="jump-down"
+    >
+      <FeedbackDialog @closeDialog="showFeedbackDialog = false" />
+    </q-dialog>
+    <q-dialog
+      v-model="showAboutDialog"
+      transition-show="jump-up"
+      transition-hide="jump-down"
+    >
+      <AboutDialog />
+    </q-dialog>
+  </div>
+  <div v-else>
     <q-item
       class="q-mt-sm"
       clickable
@@ -109,29 +269,13 @@
         <q-item-label>{{ $t('sidebar.my_account') }}</q-item-label>
       </q-item-section>
     </q-item>
-    <!--
-    <q-item
-      v-ripple
-      v-on:click="
-        $router.push({ name: 'UserPage', params: { id: currentUser.username } })
-      "
-      clickable
-      v-if="currentUser"
-    >
-      <q-item-section avatar>
-        <q-icon name="las la-user" />
-      </q-item-section>
-      <q-item-section>
-        <q-item-label>{{ $t('sidebar.profile') }}</q-item-label>
-      </q-item-section>
-    </q-item>
--->
+
     <q-item v-ripple @click="showAddEventDialog()" clickable>
       <q-item-section avatar>
-        <q-icon name="mdi-shape-square-plus" />
+        <q-icon name="mdi-plus" />
       </q-item-section>
       <q-item-section>
-        <q-item-label>Add event</q-item-label>
+        <q-item-label>Submit Event</q-item-label>
       </q-item-section>
     </q-item>
 
@@ -175,6 +319,7 @@
     }}</q-item-label>
     <q-item>
       <q-select
+        style="margin-top: -8px"
         borderless
         behavior="menu"
         class="flex grow"
@@ -213,6 +358,7 @@ import { useMapStore } from 'src/stores/map';
 
 export default {
   name: 'TopControlsMenu',
+  props: ['onlyUserItems', 'noUserItems'],
   components: { FeedbackDialog, AboutDialog },
   data() {
     return {

@@ -52,7 +52,7 @@
           style="padding-bottom: 0px"
           outlined
           debounce="500"
-          @input="findExistingEvent"
+          @update:model-value="findExistingEvent"
           v-model="event.name"
           :label="$t('add.name')"
           color="bg-grey-7"

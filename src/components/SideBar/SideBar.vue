@@ -100,7 +100,7 @@
               class="main-menu"
               max-height="100vh"
             >
-              <TopControlsMenu />
+              <TopControlsMenu :noUserItems="true" />
             </q-menu>
             <q-tooltip
               :content-class="
@@ -129,6 +129,11 @@
             v-show="sidebarPanel === 'search'"
           />
         </div>
+        <NavigationBar
+          @click="togglePanel"
+          class="nav-bar"
+          v-if="$q.screen.gt.xs && $q.screen.lt.md"
+        />
       </div>
       <div
         class="resizer flex row items-center"
@@ -145,6 +150,7 @@
 import SearchComponent from 'src/components/Search/SearchComponent.vue';
 import AddEventDialog from 'components/dialogs/AddEventDialog.vue';
 import TopControlsMenu from 'components/MenuBar/TopControlsMenu.vue';
+import NavigationBar from 'components/NavigationBar.vue';
 
 import ExploreView from './ExploreView/ExploreView.vue';
 import SearchView from './SearchView/SearchView.vue';
@@ -163,6 +169,7 @@ export default {
     //MobileSwipeHandle,
     SearchComponent,
     TopControlsMenu,
+    NavigationBar,
   },
   async mounted() {
     /*
@@ -893,10 +900,7 @@ export default {
       @supports ((top: var(--safe-area-inset-top))) {
         transform: translate3d(
           0,
-          calc(
-            100% - 228px - var(--safe-area-inset-top) -
-              var(--safe-area-inset-bottom)
-          ),
+          calc(100% - 228px - var(--safe-area-inset-top)),
           0
         );
         padding-bottom: calc(180px + var(--safe-area-inset-top));
@@ -923,6 +927,7 @@ export default {
       &.sidebar-mobile-expanded {
         transform: translate3d(0, 120px, 0);
         //padding-bottom: 128px;
+        border-radius: 0px;
       }
 
       &.sidebar-mobile-hidden {

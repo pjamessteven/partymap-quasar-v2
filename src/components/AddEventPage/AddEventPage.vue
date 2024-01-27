@@ -72,8 +72,7 @@
                   :errorMessage="validationErrors.name"
                   style="padding-bottom: 0px"
                   outlined
-                  debounce="500"
-                  @input="findExistingEvent"
+                  @update:model-value="debouncedFindExistingEvent"
                   v-model="event.name"
                   :label="$t('add.name')"
                   color="bg-grey-7"
@@ -88,17 +87,16 @@
                     <q-icon name="mdi-alert-circle-outline" />
                     <div>
                       <p class="q-ml-sm">
-                        {{ $t('add.an_event_already_exists') }}(
-                        <router-link
+                        {{ $t('add.an_event_already_exists') }}(<router-link
                           :to="{
                             name: 'EventPage',
                             params: { id: existingEvents[0].id },
                           }"
                           >{{ existingEvents[0].name }}</router-link
-                        >).
-                        <br />
-                        {{ $t('add.dont_add_same_twice') }}
-                        <br />
+                        >).&nbsp;{{ $t('add.dont_add_same_twice') }}
+                      </p>
+
+                      <p class="q-ml-sm">
                         {{ $t('add.dont_add_same_twice2') }}
                       </p>
                     </div>
@@ -566,6 +564,7 @@ import { useAuthStore } from 'src/stores/auth';
 import { mapState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import { toRaw } from 'vue';
+import _ from 'lodash';
 
 export default {
   components: {
@@ -640,11 +639,17 @@ export default {
       }
     },
     findExistingEvent() {
-      getEventsRequest({ query: this.event.name, per_page: 1 }).then(
-        (response) => {
+      console.log(this.event.name);
+      if (this.event.name?.length > 0) {
+        getEventsRequest({
+          query: this.event.name.replace(/[^a-z0-9]/gi, ' '),
+          per_page: 1,
+        }).then((response) => {
           this.existingEvents = response.data.items;
-        }
-      );
+        });
+      } else {
+        this.existingEvents = [];
+      }
     },
     selectHostMode() {
       if (this.currentUser) {
@@ -815,6 +820,12 @@ export default {
   },
   mounted() {
     this.initMap();
+  },
+  created() {
+    this.debouncedFindExistingEvent = _.debounce(this.findExistingEvent, 150, {
+      leading: false,
+      trailing: true,
+    });
   },
 };
 </script>

@@ -15,12 +15,12 @@
           "
         >
         </span>
-        <div class="q-mt-sm">
-          <a
-            class="link-hover o-050"
+        <div class="q-mt-sm o-050">
+          -&nbsp;<a
+            class="link-hover"
             target="_blank"
             :href="computedAttributeUrl"
-            >[source]</a
+            >{{ computedAttributeDomain }}</a
           >
         </div>
       </div>
@@ -73,6 +73,30 @@ export default {
       } else {
         return null;
       }
+    },
+    computedAttributeDomain() {
+      if (this.event?.description_attribute?.length > 0) {
+        let domain = this.event.description_attribute;
+
+        if (
+          domain.indexOf('facebook.com') > -1 ||
+          domain.indexOf('fb.me') > -1
+        ) {
+          return 'Facebook page';
+        }
+        // ensure that there is a protocol prefix
+        if (domain.indexOf('http://') > -1 || domain.indexOf('https://') > -1) {
+          domain = domain.split('://')[1];
+        }
+        if (domain.indexOf('www.') > -1) {
+          domain = domain.split('www.')[1];
+        }
+        if (domain.indexOf('/')) {
+          domain = domain.split('/')[0];
+        }
+        return domain;
+      }
+      return null;
     },
   },
 };

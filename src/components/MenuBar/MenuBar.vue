@@ -438,15 +438,15 @@ export default {
             top: calc(env(safe-area-inset-top) - 8px);
           }
         }
-      }
-      .menubar-background {
-        &.iphone {
+        .menubar-background {
           @supports ((top: var(--safe-area-inset-top))) {
             @media screen and (max-width: 375px) {
               //  iphone 7
-              top: env(safe-area-inset-top);
+              padding-top: var(--safe-area-inset-top);
+              height: calc(env(safe-area-inset-top) + 62px);
+              top: 0px;
             }
-            @media screen and (min-width: 375px) {
+            @media screen and (min-width: 376px) {
               padding-top: var(--safe-area-inset-top);
               height: calc(env(safe-area-inset-top) + 62px - 8px);
               position: fixed;

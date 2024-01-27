@@ -119,6 +119,19 @@
           <div v-else-if="key === 'location'" class="">
             {{ suggestion.kwargs[key].description }}
           </div>
+          <div v-else-if="key === 'date_time'" class="">
+            Start:
+            {{
+              moment(suggestion.kwargs[key].start).format(
+                'MMMM Do YYYY, h:mm a'
+              )
+            }}
+            <br />
+            End:
+            {{
+              moment(suggestion.kwargs[key].end).format('MMMM Do YYYY, h:mm a')
+            }}
+          </div>
           <div
             v-else-if="
               key === 'add_artists' ||
@@ -181,6 +194,7 @@
 import ArtistListItem from 'src/components/EventPage/EventDates/Artists/ArtistListItem.vue';
 import common from 'assets/common';
 import { updateSuggestionRequest } from 'src/api';
+import moment from 'moment-timezone';
 
 import { mapActions } from 'pinia';
 import { useEventStore } from 'src/stores/event';
@@ -240,6 +254,7 @@ export default {
     this.dateTimeUTCToLocal = common.dateTimeUTCToLocal;
     this.recurringPatternKebab = common.recurringPatternKebab;
     this.timeAgo = common.timeAgo;
+    this.moment = moment;
   },
 };
 </script>

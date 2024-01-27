@@ -15,6 +15,7 @@
           </transition>
 
           <CustomQScroll
+            :useRegularScroll="$q.screen.lt.sm"
             @scroll="onScroll"
             vertical
             :thumb-style="{
@@ -115,13 +116,13 @@
                   <span
                     v-if="userLocation"
                     class="ellipsis q-mr-sm inter bolder"
-                  >
+                    ><span v-if="$q.screen.gt.sm && false">Near&nbsp;</span>
                     <span v-if="userLocationCountry">
                       {{ userLocationCity }}</span
-                    ><span v-else class="t3">...</span
+                    ><span v-else class="t3">Loading location</span
                     ><span
                       v-if="
-                        (userLocationCountry && $q.screen.gt.sm) ||
+                        (userLocationCountry && $q.screen.gt.sm & false) ||
                         !userLocationCity
                       "
                       ><span v-if="userLocationCity">,&nbsp;</span
@@ -151,7 +152,7 @@
                   class="flex grow no-wrap justify-between inter q-pb-md"
                   :class="{
                     ' q-pt-sm t3 items-center ': $q.screen.lt.md,
-                    ' q-mt-sm  inter text-large semibold t3 ': $q.screen.gt.sm,
+                    ' q-mt-sm  inter text-large  t3 ': $q.screen.gt.sm,
 
                     ' items-end': $q.screen.gt.sm,
                   }"
@@ -1355,6 +1356,7 @@ export default {
       width: 100%;
       :deep(.ed-poster) {
         width: 150px;
+        min-width: 150px;
       }
     }
     .tag-scroll-area {
@@ -1418,6 +1420,14 @@ export default {
       }
     }
   }
+  .body--light {
+    .landing-page {
+      .location-header {
+        background: white;
+      }
+    }
+  }
+
   .landing-page {
     .main-content {
       .scroll-stuff {

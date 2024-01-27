@@ -61,8 +61,35 @@
       </div>
       <!-- <div class="separator vertical"></div>-->
     </div>
+
+    <!--
+    <q-btn
+      flat
+      v-if="$q.screen.gt.sm && $route.name === 'Explore'"
+      @click="showAddEventDialog"
+      no-caps
+      class="profile-button t2 q-mr-sm"
+      :class="{
+        'light-button': color === 'white',
+      }"
+    >
+      <div class="profile-button-inner flex row items-center">
+
+        <div class="q-pr-sm q-pl-md">Submit Event</div>
+
+        <q-avatar
+          :color="'transparent'"
+          class="o-070"
+          :text-color="color === 'black' ? 'black' : 'white'"
+          icon="mdi-plus"
+          font-size="14px"
+          size="36px"
+        />
+      </div>
+    </q-btn>
+  -->
     <router-link
-      v-if="$q.screen.gt.xs || onlyLogin"
+      v-if="($q.screen.gt.xs || onlyLogin) && !currentUser"
       class="flex link-hover"
       :to="
         currentUser
@@ -76,7 +103,7 @@
       <q-btn
         flat
         no-caps
-        class="profile-button t2"
+        class="profile-button t2 q-mr-md"
         :class="{
           'light-button': color === 'white',
         }"
@@ -85,8 +112,7 @@
           <!--
           <q-icon name="mdi-calendar-star" class="q-mr-md q-ml-md t2" />
           -->
-          <div class="q-px-md q-pl-md" v-if="!currentUser">Sign in</div>
-          <div class="q-px-md q-pl-md" v-else>@{{ currentUser.username }}</div>
+          <div class="q-px-md q-pl-md">Sign in</div>
           <q-avatar
             :color="color"
             class="o-070"
@@ -98,6 +124,41 @@
         </div>
       </q-btn>
     </router-link>
+
+    <q-btn
+      v-else-if="($q.screen.gt.xs || onlyLogin) && currentUser"
+      flat
+      no-caps
+      class="profile-button t2 q-mr-md"
+      :class="{
+        'light-button': color === 'white',
+      }"
+    >
+      <div class="profile-button-inner flex row items-center">
+        <!--
+          <q-icon name="mdi-calendar-star" class="q-mr-md q-ml-md t2" />
+          -->
+        <div class="q-px-md q-pl-md">@{{ currentUser.username }}</div>
+        <q-avatar
+          :color="color"
+          class="o-070"
+          :text-color="color === 'white' ? 'black' : 'white'"
+          icon="mdi-account-circle"
+          font-size="14px"
+          size="36px"
+        />
+      </div>
+      <q-menu
+        transition-show="jump-down"
+        transition-hide="jump-up"
+        anchor="bottom right"
+        self="top right"
+        class="main-menu"
+        max-height="100vh"
+      >
+        <TopControlsMenu :onlyUserItems="true" />
+      </q-menu>
+    </q-btn>
     <q-btn
       v-if="!onlyLogin"
       class="menubar-button"
@@ -226,7 +287,8 @@ export default {
     .profile-button {
       .profile-button-inner {
         border: 1px solid rgba(255, 255, 255, 0.1);
-        background: $bi-2;
+        background: transparent;
+        //  backdrop-filter: blur(5px);
       }
       &:hover {
         .profile-button-inner {
@@ -275,7 +337,7 @@ export default {
     .profile-button {
       .profile-button-inner {
         border: 1px solid rgba(0, 0, 0, 0.1);
-        background: #fafafa;
+        //    backdrop-filter: blur(5px);
       }
       &:hover {
         .profile-button-inner {
@@ -303,7 +365,7 @@ export default {
 }
 .profile-button {
   border-radius: 0px !important;
-
+  padding: 0px !important;
   background: none !important;
   :deep(.q-focus-helper) {
     display: none;

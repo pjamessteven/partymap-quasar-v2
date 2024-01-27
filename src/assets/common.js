@@ -529,7 +529,7 @@ export default {
           );
         }
       }
-    } else if (rrule.recurring_type === 3) {
+    } else if (rrule.recurringType === 3) {
       // annual
       if (rrule.weekOfMonth) {
         // relative recurrence
