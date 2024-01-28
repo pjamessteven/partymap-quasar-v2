@@ -15,7 +15,6 @@
           </transition>
 
           <CustomQScroll
-            :useRegularScroll="$q.screen.lt.sm"
             @scroll="onScroll"
             vertical
             :thumb-style="{

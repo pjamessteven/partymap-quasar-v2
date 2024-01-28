@@ -37,7 +37,7 @@
               v-show="loadedImage"
             />
           </div>
-          <div class="flex column grow q-pl-md">
+          <div class="flex column grow q-pl-md" style="width: 100%">
             <div
               class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
             >
@@ -166,8 +166,10 @@
             >
               {{ event.event.description }}
             </div>
+            <!-- scroll area here (qscroll or regular) area causes performance issues on android-->
             <q-scroll-area
-              vertical
+              v-if="!$q.platform.is.android"
+              horizontal
               style="min-height: 39px; margin-bottom: -8px"
               class="q-mt-sm"
               :thumb-style="{
@@ -190,6 +192,22 @@
                 ></Tag>
               </div>
             </q-scroll-area>
+            <div v-else class="flex">
+              <div
+                class="tag-container flex row no-wrap"
+                style="overflow-x: hidden"
+                v-if="
+                  event.event.event_tags && event.event.event_tags.length > 0
+                "
+              >
+                <Tag
+                  class="q-mr-xs"
+                  v-for="(et, index) in event.event.event_tags"
+                  :key="index"
+                  :value="et.tag"
+                ></Tag>
+              </div>
+            </div>
           </div>
         </div>
       </router-link>
@@ -449,7 +467,7 @@ export default {
       display: flex;
       flex-direction: row;
       width: 100%;
-      overflow: hidden;
+      //overflow: hidden;
     }
   }
 }
@@ -480,6 +498,7 @@ export default {
     .ed-card-content {
       .image-container {
         min-width: 144px;
+        height: 203px;
       }
       .description {
         white-space: nowrap;

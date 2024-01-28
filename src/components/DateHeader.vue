@@ -40,7 +40,7 @@ export default {
 <style lang="scss" scoped>
 .date-header-wrapper {
   position: sticky;
-  top: 0px;
+  top: -1px;
   width: 100%;
   z-index: 501;
 

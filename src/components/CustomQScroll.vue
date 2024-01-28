@@ -1,16 +1,11 @@
 <template>
-  <div class="scroll" @scroll="onScroll" v-if="useRegularScroll">
-    <slot></slot>
-  </div>
-
-  <q-scroll-area v-else ref="scroll" v-bind="{ ...$attrs, ...$props }">
+  <q-scroll-area ref="scroll" v-bind="{ ...$attrs, ...$props }">
     <slot></slot>
   </q-scroll-area>
 </template>
 
 <script>
 export default {
-  props: ['useRegularScroll'],
   data() {
     return {};
   },
@@ -19,12 +14,10 @@ export default {
       console.log(event);
     },
     setScrollPosition(direction, x, y) {
-      if (!this.useRegularScroll)
-        this.$refs.scroll.setScrollPosition(direction, x, y);
+      this.$refs.scroll.setScrollPosition(direction, x, y);
     },
     setScrollPercentage(direction, percentage) {
-      if (!this.useRegularScroll)
-        this.$refs.scroll.setScrollPercentage(direction, percentage);
+      this.$refs.scroll.setScrollPercentage(direction, percentage);
     },
   },
   computed: {},
