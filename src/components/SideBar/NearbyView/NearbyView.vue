@@ -1455,9 +1455,9 @@ export default {
       }
       .user-event-scroll-area {
         mask-image: unset;
-        height: 256px;
+        height: 288px;
         :deep(.ed-poster) {
-          width: 128px;
+          max-width: 128px;
         }
       }
 

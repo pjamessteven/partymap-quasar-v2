@@ -9,8 +9,9 @@
       :class="editing ? 'q-pa-md' : ''"
       :style="editing ? 'margin-left: 0px!important;' : ''"
     >
-      <div class="flex row wrap q-gutter-sm">
+      <div class="flex row wrap" :class="small ? 'q-gutter-xs' : 'q-gutter-sm'">
         <Tag
+          :class="small ? 'small' : ''"
           v-for="(et, index) in event?.event_tags"
           :key="index"
           :value="et.tag"
@@ -55,6 +56,7 @@ export default {
   },
   props: {
     editing: Boolean,
+    small: Boolean,
   },
   data() {
     return {
@@ -88,6 +90,13 @@ export default {
 :deep(.tag) {
   .tag-inner {
     opacity: 0.67;
+  }
+
+  &.small {
+    .tag-inner-wrapper {
+      padding: 3px 8px;
+      font-size: small;
+    }
   }
 }
 </style>

@@ -79,22 +79,13 @@ export default {
     };
   },
   async mounted() {
-    if (
-      Object.keys(this.taggedEvents).length !== Object.keys(this.items).length
-    ) {
-      for (const tag of Object.keys(this.items)) {
-        try {
-          await this.loadEventDates(tag);
-          this.ready = true;
-        } catch (e) {
-          console.log(e);
-        }
-      }
-    } else {
-      setTimeout(() => {
-        // wait for transition before displaying content for smoothness
+    for (const tag of Object.keys(this.items)) {
+      try {
+        await this.loadEventDates(tag);
         this.ready = true;
-      }, 350);
+      } catch (e) {
+        console.log(e);
+      }
     }
   },
   methods: { ...mapActions(useBrowseStore, ['loadEventDates']) },

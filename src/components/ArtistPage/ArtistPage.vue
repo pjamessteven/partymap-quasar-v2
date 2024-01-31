@@ -146,9 +146,9 @@
 
           <transition appear enter-active-class="animated fadeIn slower">
             <div
-              class="q-pb-lg q-mt-xl footer"
+              class="q-mt-xl footer"
               v-if="artist"
-              :class="$q.screen.gt.sm ? 'q-px-lg' : ''"
+              :class="$q.screen.gt.sm ? 'q-px-lg q-pb-lg' : 'q-px-md '"
             >
               <div class="t3">
                 Artist info courtesey of
@@ -285,7 +285,7 @@ export default {
       //this.overlayOpacity = ((info.target.scrollTop * 0.5) / 100) * 1;
     },
   },
-  mounted() {
+  activated() {
     this.menubarOpacity = 0;
     this.loading = true;
     getArtistRequest(this.id).then((response) => {
@@ -301,6 +301,10 @@ export default {
         });
       }
     });
+  },
+  deactivated() {
+    this.artist = null;
+    this.menubarOpacity = 0;
   },
   computed: {
     ...mapWritableState(useMainStore, ['menubarOpacity']),

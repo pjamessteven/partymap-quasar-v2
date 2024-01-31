@@ -1,9 +1,9 @@
 <template>
   <div class="flex column">
     <div class="inter bolder text-large t2 q-pr-md q-mb event-page-header">
-      Reviews and media:
+      Reviews and experiences:
     </div>
-    <div class="new-review q-mt-md">
+    <div class="new-review q-mt-sm">
       <q-tabs
         v-model="tab"
         class="text-grey"
@@ -127,7 +127,7 @@
       <InnerLoading v-if="loading" />
     </div>
     <div
-      class="no-reviews t4 inter text-large q-mt-lg"
+      class="no-reviews t4 inter q-mt-lg"
       v-if="event?.event_contributions?.length === 0"
     >
       No one has shared their experience yet... be the first!

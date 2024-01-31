@@ -37,7 +37,6 @@
             v-if="artist && artist.tags"
           >
             <Tag
-              class="soft-shadow"
               v-for="(at, index) in artist.tags"
               :key="index"
               :value="at.tag"

@@ -30,6 +30,7 @@ import { useAuthStore } from './auth';
 interface EventState {
   event: Event | null;
   loadingEvent: boolean;
+  loadingEventId: number | null;
   selectedEventDate: EventDate | null;
   selectedEventDateIndex: number;
   loadingEventDate: boolean;
@@ -41,6 +42,7 @@ export const useEventStore = defineStore('event', {
   state: (): EventState => ({
     event: null,
     loadingEvent: false,
+    loadingEventId: null,
     selectedEventDate: null,
     selectedEventDateIndex: 0,
     loadingEventDate: false,
@@ -73,23 +75,27 @@ export const useEventStore = defineStore('event', {
     },
     async loadEvent(id: number) {
       const authStore = useAuthStore();
-
+      this.loadingEventId = id;
       try {
         this.event = null;
         this.loadingEvent = true;
         const response = await getEventRequest(id);
-        this.event = response.data;
-        if (this.event?.next_date) {
-          const index = this.event?.event_dates.findIndex(
-            (x) => x.id === response.data.next_date.id
-          );
-          this.selectedEventDate = this.event?.next_date;
-          this.selectedEventDateIndex = index;
-          if (authStore.currentUser && this.selectedEventDate)
-            // bit of a hack, reload date to get going/interested status
-            this.loadEventDate(this.selectedEventDate.id + '');
+        if (this.loadingEventId == id) {
+          this.event = response.data;
+          if (this.event?.next_date) {
+            const index = this.event?.event_dates.findIndex(
+              (x) => x.id === response.data.next_date.id
+            );
+            this.selectedEventDate = this.event?.next_date;
+            this.selectedEventDateIndex = index;
+            if (authStore.currentUser && this.selectedEventDate)
+              // bit of a hack, reload date to get going/interested status
+              this.loadEventDate(this.selectedEventDate.id + '');
+          }
+          return response;
+        } else {
+          throw new Error('Event loading cancelled');
         }
-        return response;
       } catch (error) {
         this.loadingEvent = false;
         throw error;

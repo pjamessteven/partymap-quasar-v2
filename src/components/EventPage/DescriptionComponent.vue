@@ -1,11 +1,11 @@
 <template>
   <div v-if="!!event">
     <div class="flex column">
-      <div class="inter bolder text-large t2 q-pr-md q-mb-md event-page-header">
+      <div class="inter bolder text-large t2 q-pr-md q-mb-sm event-page-header">
         Description:
       </div>
 
-      <div class="description text-large" :class="editing ? 'editing ' : ''">
+      <div class="description" :class="editing ? 'editing ' : ''">
         <div
           @click="openEditorDialog()"
           class="editing-outline"
@@ -23,7 +23,7 @@
                 event.full_description_attribute.length > 0
               "
             >
-              <br />
+              <p />
               -&nbsp;<a
                 class="link-hover"
                 target="_blank"

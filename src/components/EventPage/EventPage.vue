@@ -1,6 +1,7 @@
 <template>
   <div
     class="event-page"
+    :class="showPage ? 'show-page' : ''"
     :style="peekMap ? 'pointer-events: none !important' : ''"
   >
     <transition appear enter-active-class="animated fadeIn slow">
@@ -29,7 +30,7 @@
         ref="scrollArea"
         @scroll="onScrollMainContent"
         class="scroll-area flex grow"
-        :style="peekMapDelayed ? 'overflow: hidden; ' : ''"
+        :style="disableScroll ? 'overflow: hidden; ;' : ''"
         :thumb-style="
           $q.screen.gt.xs
             ? {
@@ -108,7 +109,6 @@
                           :class="{
                             'q-pt-lg q-pr-xl q-mr-xl': $q.screen.lt.sm,
                           }"
-                          style="text-transform: "
                           :style="
                             $q.screen.lt.sm
                               ? 'font-size: x-large; line-height: unset;'
@@ -163,14 +163,14 @@
                             'o-050': editing,
                           }"
                           class=""
-                          v-if="event && selectedEventDate"
+                          v-if="!!event && selectedEventDate"
                           :key="selectedEventDate.id"
                           :ed="selectedEventDate"
                         />
                       </div>
 
                       <FeaturedMediaComponent
-                        v-if="$q.screen.lt.md"
+                        v-if="!!event && $q.screen.lt.md"
                         :editing="editing"
                         class="q-mt-lg"
                         :item="event?.media_items?.[0]"
@@ -191,6 +191,7 @@
                         :href="computedExternalUrl"
                         target="_blank"
                         v-if="
+                          !!event &&
                           computedExternalUrl &&
                           !editing &&
                           $q.screen.gt.xs &&
@@ -210,11 +211,11 @@
                       </a>
 
                       <div
-                        class="flex row justify-between items-end no-wrap tags-wrapper"
+                        class="flex row justify-between items-end no-wrap tags-wrapper o-080"
                         :class="$q.screen.gt.sm ? 'q-pt-lg' : 'q-mt-lg'"
                         v-if="event?.event_tags"
                       >
-                        <TagsComponent :editing="editing" />
+                        <TagsComponent :small="true" :editing="editing" />
                       </div>
 
                       <!--
@@ -248,7 +249,7 @@
                 >
                   <div
                     v-if="
-                      event &&
+                      !!event &&
                       (!event.event_dates || event.event_dates.length === 0)
                     "
                     class="q-px-xl q-pt-xl q-pb-xl flex row items-center justify-center"
@@ -568,12 +569,21 @@
                         />
                         <EventDates />
 
+                        <YoutubeVideoComponent
+                          :editing="editing"
+                          v-if="
+                            (editing || event?.youtube_url?.length > 0) &&
+                            !!event
+                          "
+                        />
+
                         <DescriptionComponent
+                          class="q-mt-md"
                           :editing="editing"
                           v-if="editing || event?.full_description?.length > 0"
                         />
-
-                        <ReviewsComponent class="q-mt-md q-mb-xl" />
+                        <q-separator class="q-mt-lg" />
+                        <ReviewsComponent class="q-mt-sm q-mb-xl" />
                       </div>
                     </div>
                   </div>
@@ -723,6 +733,7 @@ import CustomQScroll from 'components/CustomQScroll.vue';
 import _ from 'lodash';
 import common from 'assets/common';
 import DescriptionComponent from 'components/EventPage/DescriptionComponent.vue';
+import YoutubeVideoComponent from 'components/EventPage/YoutubeVideoComponent.vue';
 import SummaryComponent from 'components/EventPage/SummaryComponent.vue';
 import EventDates from 'components/EventPage/EventDates/EventDates.vue';
 import EventDateSidebarDesktop from 'components/EventPage/EventDates/EventDateSidebarDesktop.vue';
@@ -780,6 +791,7 @@ export default {
     SuggestionsDialog,
     InnerLoading,
     DescriptionComponent,
+    YoutubeVideoComponent,
   },
   props: {
     id: {
@@ -794,10 +806,11 @@ export default {
   },
   data() {
     return {
-      peekMapDelayed: false,
+      disableScroll: true,
       enableSwipeDown: true,
       wheelIndicator: null,
       bottomImagePadding: 0,
+      showPage: false,
       scrollPercentage: 0,
       showingReportDialog: false,
       showingClaimDialog: false,
@@ -870,6 +883,8 @@ export default {
         });
     },
     goBack() {
+      this.disableScroll = true; // helps animation be smoother on android
+      this.event = null;
       if (this.routerHistory.length > 0) {
         this.$router.go(-1);
       } else {
@@ -1075,17 +1090,33 @@ export default {
       }, 300);
     },
   },
+  activated() {
+    // called on initial mount
+    // and every time it is re-inserted from the cache
+    if (this.$route.query.location) {
+      this.focusMarker = JSON.parse(this.$route.query.location);
+    }
+    this.disableScroll = true; // helps animation be smoother on android
+
+    this.showPage = true;
+    // wait for animation before loading
+    // to avoid performance issues
+    this.load();
+  },
+  deactivated() {
+    // called when removed from the DOM into the cache
+    // and also when unmounted
+    this.event = null;
+    this.showPage = false;
+  },
   watch: {
-    id: function () {
-      // this.loadEvent();
-    },
     peekMap(newv) {
       // timeouts are so that we wait until the animation is finished
       if (newv === true) {
-        this.peekMapDelayed = true;
+        this.disableScroll = true;
       } else {
         setTimeout(() => {
-          this.peekMapDelayed = newv;
+          this.disableScroll = newv;
         }, 350);
       }
     },
@@ -1105,7 +1136,9 @@ export default {
       'selectedEventDateIndex',
       'editing',
     ]),
-
+    currentRoute() {
+      return this.$route.name;
+    },
     pageViewChars() {
       if (this.event.page_views) {
         var chars = this.event.page_views.toString().split('');
@@ -1208,12 +1241,19 @@ export default {
   },
   beforeMount() {
     window.prerenderReady = false;
+    setTimeout(() => {
+      this.disableScroll = false;
+    }, 300);
   },
   mounted() {
     this.menubarOpacity = 0;
     this.editing = this.$route.params.editing;
-    // clear previous event
-    setTimeout(() => this.load(), 100);
+
+    // wait for animation before loading
+    // to avoid performance issues
+    this.disableScroll = true; // helps animation be smoother on android
+
+    setTimeout(() => this.load(), 1000);
 
     if (this.$route.query.location) {
       this.focusMarker = JSON.parse(this.$route.query.location);
@@ -1462,6 +1502,15 @@ a {
 }
 
 .event-page {
+  transform: translate3d(
+    0,
+    calc(100vh - Max(calc((100vh - 66vh) - 64px), 0px)),
+    0
+  );
+  transition: transform 0.3s ease;
+  &.show-page {
+    transform: translate3d(0, 0, 0);
+  }
   .peek-address-wrapper {
     position: absolute;
     top: 0px;
@@ -1604,7 +1653,6 @@ a {
               :deep(.tag) {
                 background: transparent !important;
                 border: 1px solid rgba(255, 255, 255, 0.48) !important;
-
                 .tag-inner-wrapper {
                   background: transparent;
                   //border-color: rgba(0, 0, 0, 0.8) !important;
@@ -1709,9 +1757,18 @@ a {
   .content-card {
     max-width: 96vw !important;
 
-    // stupid border radius fix for ios 15
-    -webkit-transform: translateZ(0);
-    -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
+    @supports (
+      (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+        (-webkit-appearance: none)
+    ) {
+      // stupid border radius fix for ios 15
+      -webkit-transform: translateZ(0);
+      -webkit-mask-image: -webkit-radial-gradient(
+        circle,
+        white 100%,
+        black 100%
+      );
+    }
   }
   .sticky-editing-footer-inner {
     max-width: 96vw;

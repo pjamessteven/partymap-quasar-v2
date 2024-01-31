@@ -576,7 +576,7 @@ export default {
     }
 
     :deep(.scroll-area) {
-      overflow: hidden;
+      // overflow: hidden;
       .scroll-content {
       }
     }
@@ -882,7 +882,7 @@ export default {
 
     .sidebar {
       box-shadow: none;
-      transition: transform 0.4s ease;
+      transition: transform 0.4s ease, opacity 0s ease;
 
       width: 100%;
       background: transparent;
@@ -896,7 +896,7 @@ export default {
       max-width: 100vw;
       width: 100vwv;
       border-radius: 18px;
-      will-change: opacity;
+      will-change: opacity, transform;
       @supports ((top: var(--safe-area-inset-top))) {
         transform: translate3d(
           0,
@@ -932,9 +932,10 @@ export default {
 
       &.sidebar-mobile-hidden {
         opacity: 0;
-        //transition: opacity 0.s;
+        //=transition: opacity 0.s;
         //transform: translate3d(0, Max(calc(100% - 66%), calc(100% - 80%)), 0);
         //transform: translate3d(0, Max(calc(100% - 66%), calc(100% - 0px)), 0);
+        // transform: translate3d(0, calc(100% - 228px), 0);
       }
 
       .sidebar-content {

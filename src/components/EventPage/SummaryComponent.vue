@@ -7,15 +7,14 @@
         style="white-space: pre-line; word-break: break-word"
         :class="editing ? 'q-pa-md' : ''"
       >
-        <span class="o-080">{{ event.description }}</span
-        ><span
+        <span class="o-080">{{ event.description }}</span>
+        <div
+          class="q-mt-sm o-050"
           v-if="
             event.description_attribute &&
             event.description_attribute.length > 0
           "
         >
-        </span>
-        <div class="q-mt-sm o-050">
           -&nbsp;<a
             class="link-hover"
             target="_blank"

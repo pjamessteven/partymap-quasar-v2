@@ -68,6 +68,33 @@ export default {
     },
   },
   mounted() {
+    // performance is like molassys on old versions of webview
+    if (this.$q.platform.is.android && this.$q.platform.is.capacitor) {
+      let androidWebviewVersion = navigator.userAgent
+        .split('Chrome/')[1]
+        .split(' ')[0]
+        .split('.')[0];
+
+      if (androidWebviewVersion < 120) {
+        this.$q
+          .dialog({
+            cancel: { label: 'Ignore', flat: true },
+            ok: { label: 'Update on Play Store', flat: true },
+            title: 'System WebView out of date!',
+            message: `Your Android System WebView is at version v${androidWebviewVersion}. The minimum version required for PartyMap to work smoothly is v120.`,
+            color: 'primary',
+          })
+          .onOk(() => {
+            window
+              .open(
+                'https://play.google.com/store/apps/details?id=com.google.android.webview',
+                '_blank'
+              )
+              .focus();
+          });
+      }
+    }
+    console.log('ua', navigator.userAgent);
     // check and get location permission
     this.getFineLocation();
     if (this.$q.platform.is.capacitor) {

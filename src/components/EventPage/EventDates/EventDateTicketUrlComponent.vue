@@ -8,7 +8,9 @@
     <q-icon
       :size="$q.screen.gt.sm ? '2em' : '1.5rem'"
       :class="
-        selectedEventDate.url && selectedEventDate.url.length > 0 ? ' t2' : 't4'
+        selectedEventDate.ticket_url && selectedEventDate.ticket_url.length > 0
+          ? ' t2'
+          : 't4'
       "
       name="las la-ticket-alt"
     />

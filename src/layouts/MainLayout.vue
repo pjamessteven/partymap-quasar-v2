@@ -4,6 +4,7 @@
     <div class="default-overlay" />
     <div
       class="overlay"
+      :class="overlayOpacityTransition ? 'overlay-transition' : ''"
       :style="computedOverlayStyle"
       @click="clickOverlay()"
     />
@@ -28,6 +29,7 @@
           :class="{ hide: $q.screen.lt.sm && $route.name === 'EventPage' }"
         />
       </Transition>
+
       <SearchComponent
         v-show="$q.screen.lt.sm && $route.name !== 'EventPage'"
       />
@@ -42,12 +44,9 @@
           'mobile-map-view-router': $q.screen.lt.sm,
         }"
       >
-        <transition
-          enter-active-class="animated slideInUp"
-          leave-active-class="animated slideOutDown"
-        >
+        <keep-alive>
           <component :is="Component" />
-        </transition>
+        </keep-alive>
       </router-view>
       <router-view
         key="2"
@@ -57,7 +56,9 @@
           'mobile-map-view-router': $q.screen.lt.sm,
         }"
       >
-        <component :is="Component" />
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
       </router-view>
       <NavigationBar
         class="nav-bar"
@@ -84,6 +85,7 @@ import NavigationBar from 'src/components/NavigationBar.vue';
 import { mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import { useMainStore } from 'src/stores/main';
+import { useEventStore } from 'src/stores/event';
 import { SafeAreaController } from '@aashu-dubey/capacitor-statusbar-safe-area';
 import { SafeArea } from '@aashu-dubey/capacitor-statusbar-safe-area';
 
@@ -100,6 +102,7 @@ export default {
     return {
       androidStatusbarHeight: 0,
       insets: {},
+      overlayOpacityTransition: true,
     };
   },
   methods: {
@@ -122,7 +125,14 @@ export default {
       // blockUpdates is re-enabled in Map.vue at map.
     }
     if (to.name === 'Explore') {
-      setTimeout(() => (this.blockUpdates = false), 500);
+      setTimeout(() => {
+        this.overlayOpacityTransition = true;
+        this.blockUpdates = false;
+      }, 500);
+    }
+
+    if (to.name === 'EventPage') {
+      this.overlayOpacityTransition = false;
     }
     this.$nextTick(() => {
       next();
@@ -136,6 +146,7 @@ export default {
       'showPanel',
       'sidebarPanel',
     ]),
+    ...mapWritableState(useEventStore, ['event']),
     computedOverlayStyle() {
       if (this.$route.name === 'EventPage') {
         if (this.$q.screen.lt.sm) {
@@ -241,8 +252,10 @@ export default {
     opacity: 0;
     pointer-events: none;
     //will-change: auto;
-    transition: opacity 0.4s;
     cursor: grab;
+    &.overlay-transition {
+      transition: opacity 0.4s;
+    }
     @supports (font: -apple-system-body) and (-webkit-appearance: none) {
       -webkit-backface-visibility: hidden;
       -webkit-transform: translate3d(0, 0, 0);

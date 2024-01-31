@@ -231,6 +231,25 @@
                 <p />
               </div>
             </div>
+
+            <!-- TAGS -->
+
+            <div class="flex row grow no-wrap items-baseline q-mb-lg">
+              <q-icon size="xs" name="las la-tags" />
+              <div class="flex column grow q-ml-lg">
+                <span class="text-large inter bold">Tags</span>
+                <span class="t2 q-mb-md">
+                  What makes this event stand out, and what music can one
+                  expect?
+                </span>
+                <SelectTagsComponent
+                  :showTopTags="true"
+                  @valueUpdated="($event) => (event.tags = $event)"
+                  :mode="'emit'"
+                />
+              </div>
+            </div>
+
             <!-- URL (Mandatory if no host) -->
 
             <div
@@ -356,7 +375,7 @@
 
           <div class="sticky-header flex column">
             <p class="text-large inter bolder t1 q-mb-md q-mt-md" :class="{}">
-              {{ $t('add.additional_information') }}:
+              Optional Information:
             </p>
           </div>
           <div
@@ -367,25 +386,6 @@
               'q-px-lg q-pb-lg q-pt-sm': $q.screen.gt.xs,
             }"
           >
-            <!-- TAGS -->
-
-            <div class="flex row grow no-wrap items-baseline q-mt-md">
-              <q-icon size="xs" name="las la-tags" />
-              <div class="flex column grow q-ml-lg">
-                <span class="text-large inter bold">Tags</span>
-                <span class="t2 q-mb-md">
-                  What makes this event stand out, and what music can one
-                  expect?
-                </span>
-                <SelectTagsComponent
-                  :showTopTags="true"
-                  @valueUpdated="($event) => (event.tags = $event)"
-                  :mode="'emit'"
-                />
-                <p />
-              </div>
-            </div>
-
             <!-- URL -->
 
             <div
@@ -413,7 +413,7 @@
 
             <!-- Lineup (for next event date) -->
 
-            <div class="flex row grow no-wrap items-baseline">
+            <div class="flex row grow no-wrap items-baseline q-mt-md">
               <q-icon size="xs" name="las la-align-left" />
               <div class="flex column grow q-ml-lg">
                 <span class="text-large inter bold">
@@ -471,6 +471,24 @@
                       Number.isInteger(parseInt(val)) ||
                       'Please input a number',
                   ]"
+                />
+                <p />
+              </div>
+            </div>
+
+            <div class="flex row grow no-wrap items-baseline q-mt-sm">
+              <q-icon size="xs" name="las la-external-link-alt" />
+              <div class="flex column grow q-ml-lg">
+                <span class="text-large inter bold"> YouTube URL </span>
+                <span class="t2 q-mb-md">
+                  Paste the YouTube link to the after-movie or promo video here.
+                </span>
+                <q-input
+                  outlined
+                  color="bg-grey-7"
+                  v-model="event.youtube_url"
+                  label="YouTube URL"
+                  style="padding-bottom: 0px"
                 />
                 <p />
               </div>
@@ -610,6 +628,7 @@ export default {
         full_description_attribute: null,
         next_event_date_size: null,
         next_event_date_artists: null,
+        youtube_url: null,
         media_items: [],
         url: '',
         ticket_url: null,
