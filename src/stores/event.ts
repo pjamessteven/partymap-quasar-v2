@@ -77,7 +77,6 @@ export const useEventStore = defineStore('event', {
       const authStore = useAuthStore();
       this.loadingEventId = id;
       try {
-        this.event = null;
         this.loadingEvent = true;
         const response = await getEventRequest(id);
         if (this.loadingEventId == id) {

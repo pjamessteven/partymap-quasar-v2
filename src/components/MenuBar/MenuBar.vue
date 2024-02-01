@@ -6,7 +6,11 @@
       ipad: $q.platform.is.ipad && $q.platform.is.capacitor,
     }"
   >
-    <div class="menubar-background" :style="computedStyle" />
+    <div
+      class="menubar-background"
+      :style="computedStyle"
+      v-if="$q.screen.gt.xs || $route.name !== 'EventPage'"
+    />
 
     <MenuBarLogo
       class="logo"
@@ -428,6 +432,15 @@ export default {
   .native-mobile {
     // ios specific padding for capcaitor app
     .menubar {
+      .menubar-background {
+        // android
+        @supports ((top: var(--safe-area-inset-top))) {
+          padding-top: var(--safe-area-inset-top);
+          height: calc(env(safe-area-inset-top) + 96px);
+          position: fixed;
+          top: 0px;
+        }
+      }
       &.iphone {
         @supports ((top: var(--safe-area-inset-top))) {
           @media screen and (max-width: 375px) {

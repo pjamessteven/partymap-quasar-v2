@@ -118,7 +118,7 @@
                     ><span v-if="$q.screen.gt.sm && false">Near&nbsp;</span>
                     <span v-if="userLocationCountry">
                       {{ userLocationCity }}</span
-                    ><span v-else class="t3">Loading location</span
+                    ><span v-else class="t3">...</span
                     ><span
                       v-if="
                         (userLocationCountry && $q.screen.gt.sm & false) ||

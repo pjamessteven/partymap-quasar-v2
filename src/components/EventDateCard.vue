@@ -26,6 +26,7 @@
             class="image-container flex justify-center items-center shadow-2xl"
           >
             <img
+              style="filter: blur(5px)"
               :src="imgThumbXsUrl"
               class="image not-loaded"
               v-show="!loadedImage"

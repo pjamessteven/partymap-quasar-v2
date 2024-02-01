@@ -25,7 +25,7 @@ export default {
     // on ios, the mouseover event in the q-scroll component causes users
     // to have to click twice on their target
     // so we remove these events
-    if (this.$q.platform.is.ios) {
+    if (this.$q.platform.is.capacitor) {
       this.$refs.scroll.$el.removeEventListener(
         'mouseleave',
         this.$refs.scroll.$el._vei.onMouseleave

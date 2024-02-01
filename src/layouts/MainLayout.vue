@@ -35,6 +35,7 @@
       />
       <!-- There's two router views because we want different transitions for different pages
   and we're lazy... -->
+
       <router-view
         key="1"
         name="event"
@@ -44,9 +45,14 @@
           'mobile-map-view-router': $q.screen.lt.sm,
         }"
       >
-        <keep-alive>
-          <component :is="Component" />
-        </keep-alive>
+        <Transition
+          :name="eventPageTransition ? 'event-page' : ''"
+          :mode="eventPageTransition ? 'out-in' : undefined"
+        >
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
+        </Transition>
       </router-view>
       <router-view
         key="2"
@@ -64,6 +70,7 @@
         class="nav-bar"
         v-if="$q.screen.lt.sm"
         :style="
+          $route.name === 'EventPage' ||
           $route.name === 'Explore' ||
           $route.name === 'UserPage' ||
           $route.name === 'BrowsePage'
@@ -103,6 +110,7 @@ export default {
       androidStatusbarHeight: 0,
       insets: {},
       overlayOpacityTransition: true,
+      eventPageTransition: false,
     };
   },
   methods: {
@@ -133,7 +141,20 @@ export default {
 
     if (to.name === 'EventPage') {
       this.overlayOpacityTransition = false;
+      if (from.name === 'Explore' || this.$q.screen.lt.sm) {
+        this.eventPageTransition = true;
+      } else {
+        this.eventPageTransition = false;
+      }
     }
+    if (from.name === 'EventPage') {
+      if (to.name === 'Explore' || this.$q.screen.lt.sm) {
+        this.eventPageTransition = true;
+      } else {
+        this.eventPageTransition = false;
+      }
+    }
+
     this.$nextTick(() => {
       next();
     });
@@ -230,6 +251,39 @@ export default {
   }
 }
 
+.event-page-enter-active,
+.event-page-leave-active {
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.3s ease;
+  will-change: transform;
+  z-index: 5000;
+  backface-visibility: hidden;
+  overflow: hidden;
+  //opacity: 1;
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+}
+.event-page-enter-from,
+.event-page-leave-to {
+  z-index: 5000;
+  /*
+  transform: translate3d(
+    0,
+    calc(100vh - Max(calc((100vh - 66vh) - 64px), 0px)),
+    0
+  );
+  */
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+
+  backface-visibility: hidden;
+  overflow: hidden;
+  transform: translate3d(0, 100vh, 0);
+  transition: transform 0.3s ease;
+  will-change: transform;
+  //opacity: 0;
+}
+
 .main-layout {
   height: 100%;
   width: 100%;
@@ -288,9 +342,9 @@ export default {
       width: 100%;
       min-height: 62px !important;
       position: absolute;
-      z-index: 1000 !important;
+
       pointer-events: none;
-      z-index: 102;
+      z-index: 5000;
     }
     .menubar-logo {
       position: absolute;
@@ -322,13 +376,14 @@ export default {
       pointer-events: all;
     }
     .event-router {
-      //   z-index: 5000;
+      z-index: 4000 !important;
     }
 
     .mobile-map-view-router {
       z-index: 106;
     }
     .nav-bar {
+      z-index: 3000 !important;
       opacity: 1;
       transition: opacity 4s;
     }

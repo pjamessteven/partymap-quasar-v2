@@ -1,5 +1,5 @@
 <template>
-  <div class="artist-page jj flex column justify-center">
+  <div class="artist-page flex column justify-center">
     <CustomQScroll
       vertical
       ref="scrollArea"
@@ -67,7 +67,10 @@
           <div class="image-container" v-if="artist && computedImageSrc">
             <div class="image-container-background">
               <transition appear enter-active-class="animated fadeIn slower">
-                <img :src="computedSmImageSrc" style="z-index: 2" />
+                <img
+                  :src="computedSmImageSrc"
+                  style="filter: blur(5px); z-index: 2"
+                />
               </transition>
               <transition appear enter-active-class="animated fadeIn slower">
                 <img
@@ -233,6 +236,7 @@ export default {
       loading: false,
       showFullDescription: false,
       loadedFullRes: false, // full resolution image loaded, hide smaller placeholder
+      previousMenubarOpacity: 0,
     };
   },
   props: {
@@ -274,7 +278,6 @@ export default {
       this.scrollPercentage = info.verticalPercentage;
       let verticalPostion = info.verticalPosition;
       // menubar should always show on large screens (when sidebar is open)c
-
       if (verticalPostion > 8) {
         this.overlayOpacity = 1;
         this.menubarOpacity = 1;
@@ -286,25 +289,34 @@ export default {
     },
   },
   activated() {
-    this.menubarOpacity = 0;
-    this.loading = true;
-    getArtistRequest(this.id).then((response) => {
-      this.loading = false;
-      this.artist = response.data;
+    if (!this.artist || this.artist.id + '' !== this.id + '') {
+      this.artist = null;
+      this.menubarOpacity = 0;
+      this.loading = true;
+      this.$refs.scrollArea.setScrollPercentage('vertical', 0);
 
-      var queryString = '?name=' + response.data.name.replace(/ /g, '_');
+      getArtistRequest(this.id).then((response) => {
+        this.loading = false;
+        this.artist = response.data;
 
-      if (window.location.pathname.indexOf(queryString) === -1) {
-        this.$router.resolve({
-          path: this.$route.path,
-          query: { name: response.data.name.replace(/ /g, '_') },
-        });
-      }
-    });
+        var queryString = '?name=' + response.data.name.replace(/ /g, '_');
+
+        if (window.location.pathname.indexOf(queryString) === -1) {
+          this.$router.resolve({
+            path: this.$route.path,
+            query: { name: response.data.name.replace(/ /g, '_') },
+          });
+        }
+      });
+    } else {
+      this.menubarOpacity = this.previousMenubarOpacity;
+      console.log('seto', this.previousMenubarOpacity);
+    }
   },
   deactivated() {
-    this.artist = null;
-    this.menubarOpacity = 0;
+    console.log('setpm', this.previousMenubarOpacity);
+
+    this.previousMenubarOpacity = this.menubarOpacity;
   },
   computed: {
     ...mapWritableState(useMainStore, ['menubarOpacity']),

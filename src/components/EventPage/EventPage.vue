@@ -1,7 +1,6 @@
 <template>
   <div
     class="event-page"
-    :class="showPage ? 'show-page' : ''"
     :style="peekMap ? 'pointer-events: none !important' : ''"
   >
     <transition appear enter-active-class="animated fadeIn slow">
@@ -16,7 +15,7 @@
         </div>
       </div>
     </transition>
-    <div class="flex row no-wrap event-page-content">
+    <div class="event-page-content">
       <div
         class="flex history-container col-4 col-xs-12 col-sm-6 col-md-5 col-lg-4 col-xl-4"
         v-if="showingHistory"
@@ -30,7 +29,7 @@
         ref="scrollArea"
         @scroll="onScrollMainContent"
         class="scroll-area flex grow"
-        :style="disableScroll ? 'overflow: hidden; ;' : ''"
+        :style="disableScroll ? 'overflow: hidden!important;' : ''"
         :thumb-style="
           $q.screen.gt.xs
             ? {
@@ -170,10 +169,13 @@
                       </div>
 
                       <FeaturedMediaComponent
-                        v-if="!!event && $q.screen.lt.md"
+                        style="computedThumbXsUrl && !event ? 'filter: blur(5px)' : ''"
+                        v-if="
+                          (!!event || computedThumbXsUrl) && $q.screen.lt.md
+                        "
                         :editing="editing"
                         class="q-mt-lg"
-                        :item="event?.media_items?.[0]"
+                        :item="event?.media_items?.[0] || computedThumbXsUrl"
                         :preview="computedThumbXsUrl"
                       />
 
@@ -806,11 +808,12 @@ export default {
   },
   data() {
     return {
+      previousMenubarOpacity: 0,
       disableScroll: true,
       enableSwipeDown: true,
       wheelIndicator: null,
       bottomImagePadding: 0,
-      showPage: false,
+      showPage: true,
       scrollPercentage: 0,
       showingReportDialog: false,
       showingClaimDialog: false,
@@ -883,8 +886,9 @@ export default {
         });
     },
     goBack() {
-      this.disableScroll = true; // helps animation be smoother on android
-      this.event = null;
+      // if (this.$q.platform.is.android) this.event = null;
+      // this.disableScroll = true; // helps animation be smoother on android
+
       if (this.routerHistory.length > 0) {
         this.$router.go(-1);
       } else {
@@ -1000,9 +1004,6 @@ export default {
       }
     },
     async load() {
-      if (this.event && this.event.id !== this.id) {
-        this.event = null;
-      }
       this.loading = true;
 
       try {
@@ -1093,21 +1094,36 @@ export default {
   activated() {
     // called on initial mount
     // and every time it is re-inserted from the cache
+    this.disableScroll = true; // helps animation be smoother on android
+
+    if (!this.event || (this.event && this.event?.id + '' !== this.id + '')) {
+      this.event = null;
+      this.$refs.scrollArea.setScrollPercentage('vertical', 0);
+      if (this.$q.platform.is.android) {
+        setTimeout(() => {
+          this.load();
+        }, 350);
+      } else {
+        this.load();
+      }
+    } else {
+      this.menubarOpacity = this.previousMenubarOpacity;
+    }
     if (this.$route.query.location) {
       this.focusMarker = JSON.parse(this.$route.query.location);
     }
-    this.disableScroll = true; // helps animation be smoother on android
-
-    this.showPage = true;
     // wait for animation before loading
     // to avoid performance issues
-    this.load();
   },
   deactivated() {
     // called when removed from the DOM into the cache
     // and also when unmounted
-    this.event = null;
-    this.showPage = false;
+    // this.event = null;
+
+    this.mapOverlay = false;
+    this.previousMenubarOpacity = this.menubarOpacity;
+    this.overlayOpacity = 0;
+    this.focusMarker = null;
   },
   watch: {
     peekMap(newv) {
@@ -1253,8 +1269,6 @@ export default {
     // to avoid performance issues
     this.disableScroll = true; // helps animation be smoother on android
 
-    setTimeout(() => this.load(), 1000);
-
     if (this.$route.query.location) {
       this.focusMarker = JSON.parse(this.$route.query.location);
     }
@@ -1279,13 +1293,7 @@ export default {
       }
     );
   },
-  beforeUnmount() {
-    this.mapOverlay = false;
-    this.menubarOpacity = 0;
-    this.overlayOpacity = 0;
-    this.focusMarker = null;
-    this.event = null;
-  },
+
   unmounted() {
     if (this.wheelIndicator) {
       this.wheelIndicator.destroy();
@@ -1502,15 +1510,9 @@ a {
 }
 
 .event-page {
-  transform: translate3d(
-    0,
-    calc(100vh - Max(calc((100vh - 66vh) - 64px), 0px)),
-    0
-  );
-  transition: transform 0.3s ease;
-  &.show-page {
-    transform: translate3d(0, 0, 0);
-  }
+  //transform: translate3d(0, 0, 0);
+  //backface-visibility: hidden;
+
   .peek-address-wrapper {
     position: absolute;
     top: 0px;

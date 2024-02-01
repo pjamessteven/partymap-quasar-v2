@@ -83,13 +83,9 @@
             </template>
           </q-btn>
           <q-btn
-            v-if="!onlyLogin"
             class="menubar-button"
             icon="mdi-menu"
             flat
-            :class="{
-              'light-button': color === 'white',
-            }"
             style="position: relative"
           >
             <q-menu
