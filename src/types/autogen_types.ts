@@ -9,6 +9,9 @@ export interface Event {
   updated_at: Date;
   description: string;
   description_attribute: string;
+
+  full_description?: string;
+  full_description_attribute?: string;
   tz: string;
   event_dates: MiniEventDate[];
   next_date: EventDate;
@@ -20,6 +23,8 @@ export interface Event {
   last_transaction: Transaction;
   is_favorited: boolean;
   page_views: number;
+  transaction?: any;
+  youtube_url?: string;
 }
 
 export interface EventVersion {
@@ -133,7 +138,7 @@ export interface EventDate {
   description: string;
   description_attribute: string;
   url: string;
-  ticket_url: string;
+  ticket_url?: string;
   cancelled: boolean;
   distance: number;
   duration: number;

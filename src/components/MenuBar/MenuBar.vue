@@ -14,8 +14,8 @@
 
     <MenuBarLogo
       class="logo"
-      :color="leftIconColor"
-      v-if="!previousRouteName"
+      :color="$q.screen.gt.xs ? leftIconColor : iconColor"
+      v-if="!previousRouteName || swipingDownMenuPageMobile"
     />
 
     <div
@@ -38,7 +38,11 @@
     >
       <div
         class="back-button-wrapper flex items-center no-wrap"
-        v-if="previousRouteName && this.$route.name !== 'Explore'"
+        v-if="
+          previousRouteName &&
+          this.$route.name !== 'Explore' &&
+          !swipingDownMenuPageMobile
+        "
       >
         <div class="separator vertical" v-if="$q.screen.gt.xs" />
         <q-btn
@@ -159,12 +163,19 @@ export default {
     ...mapState(useMainStore, [
       'showSidebar',
       'menubarOpacity',
+      'sidebarOpacity',
       'routerHistory',
     ]),
     ...mapWritableState(useMainStore, ['sidebarPanel', 'showPanel']),
 
     ...mapWritableState(useMainStore, ['routerHistory']),
-
+    swipingDownMenuPageMobile() {
+      return (
+        this.$route.name === 'EventPage' &&
+        this.$q.screen.lt.sm &&
+        this.sidebarOpacity === 1
+      );
+    },
     previousRouteName() {
       if (this.routerHistory.length == 1) return null;
       const previousRoute = this.routerHistory[this.routerHistory.length - 1];
@@ -220,16 +231,9 @@ export default {
       if (
         ((this.$route.name === 'EventPage' ||
           this.$route.name === 'ArtistPage') &&
-          this.$q.screen.gt.xs &&
           this.menubarOpacity === 1 &&
           !this.$q.dark.isActive) ||
-        (this.$route.name === 'Explore' &&
-          !this.$q.dark.isActive &&
-          this.$q.screen.gt.xs) ||
-        (this.$route.name === 'Explore' &&
-          !this.$q.dark.isActive &&
-          this.$q.screen.lt.sm &&
-          this.showPanel)
+        (this.$route.name === 'Explore' && !this.$q.dark.isActive)
       ) {
         return 'black';
       } else if (
@@ -237,7 +241,7 @@ export default {
         this.$route.name === 'EventPage' ||
         this.$route.name === 'ArtistPage' ||
         this.$route.name === 'Explore' ||
-        (this.$route.meta.mapOverlay === true && this.$q.screen.gt.xs)
+        this.$route.meta.mapOverlay === true
       ) {
         return 'white';
       } else {
@@ -258,6 +262,9 @@ export default {
         (this.$route.name === 'Explore' &&
           !this.$q.dark.isActive &&
           this.$q.screen.lt.sm &&
+          this.showPanel) ||
+        (this.swipingDownMenuPageMobile &&
+          !this.$q.dark.isActive &&
           this.showPanel)
       ) {
         return 'black';

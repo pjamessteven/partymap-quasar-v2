@@ -1,7 +1,9 @@
 <template>
   <div class="main-layout">
-    <MainMap />
-    <div class="default-overlay" />
+    <div class="map-container">
+      <MainMap />
+      <div class="map-overlay" />
+    </div>
     <div
       class="overlay"
       :class="overlayOpacityTransition ? 'overlay-transition' : ''"
@@ -12,27 +14,36 @@
       <MenuBar class="menubar" />
 
       <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
-      <Transition
-        appear
-        :enter-active-class="
-          $q.screen.gt.xs ? 'animated  slideInLeft' : 'animated fadeIn'
-        "
-        :leave-active-class="
-          $q.screen.gt.xs ? 'animated slideOutLeft' : undefined
-        "
+      <div
+        class="sidebar-wrapper"
+        :style="$q.screen.lt.sm && computedSidebarOpacity"
       >
-        <SideBar
-          class="sidebar-component"
-          v-show="
-            $q.screen.lt.sm || ($q.screen.gt.xs && $route.name == 'Explore')
+        <SearchComponent class="search-component" v-show="$q.screen.lt.sm" />
+        <Transition
+          appear
+          :enter-active-class="
+            $q.screen.gt.xs ? 'animated  slideInLeft' : 'animated fadeIn'
           "
-          :class="{ hide: $q.screen.lt.sm && $route.name === 'EventPage' }"
+          :leave-active-class="
+            $q.screen.gt.xs ? 'animated slideOutLeft' : undefined
+          "
+        >
+          <SideBar
+            class="sidebar-component"
+            v-show="
+              $q.screen.lt.sm || ($q.screen.gt.xs && $route.name == 'Explore')
+            "
+            :class="{ hide: $q.screen.lt.sm && $route.name === 'EventPage' }"
+          />
+        </Transition>
+        <div
+          v-if="$q.screen.lt.sm"
+          class="sidebar-overlay"
+          :style="computedSidebarOverlayStyle"
+          @click="clickOverlay()"
         />
-      </Transition>
+      </div>
 
-      <SearchComponent
-        v-show="$q.screen.lt.sm && $route.name !== 'EventPage'"
-      />
       <!-- There's two router views because we want different transitions for different pages
   and we're lazy... -->
 
@@ -140,6 +151,7 @@ export default {
     }
 
     if (to.name === 'EventPage') {
+      this.sidebarOpacity = 0;
       this.overlayOpacityTransition = false;
       if (from.name === 'Explore' || this.$q.screen.lt.sm) {
         this.eventPageTransition = true;
@@ -148,6 +160,8 @@ export default {
       }
     }
     if (from.name === 'EventPage') {
+      this.sidebarOpacity = 1;
+
       if (to.name === 'Explore' || this.$q.screen.lt.sm) {
         this.eventPageTransition = true;
       } else {
@@ -166,8 +180,19 @@ export default {
       'overlayOpacity',
       'showPanel',
       'sidebarPanel',
+      'sidebarOpacity',
     ]),
     ...mapWritableState(useEventStore, ['event']),
+    computedSidebarOpacity() {
+      return `opacity: ${this.sidebarOpacity}`;
+    },
+    computedSidebarOverlayStyle() {
+      if (!this.showPanel) {
+        return 'opacity: 0';
+      } else {
+        return 'opacity: 1';
+      }
+    },
     computedOverlayStyle() {
       if (this.$route.name === 'EventPage') {
         if (this.$q.screen.lt.sm) {
@@ -185,10 +210,9 @@ export default {
         }
       } else {
         if (
-          (this.$q.screen.lt.sm && this.showPanel) ||
-          (this.$route.name !== 'Explore' &&
-            this.$route.meta.mapOverlay === false &&
-            this.$q.screen.gt.xs)
+          this.$route.name !== 'Explore' &&
+          this.$route.meta.mapOverlay === false &&
+          this.$q.screen.gt.xs
         )
           return 'opacity: 1; pointer-events: all';
         else return 'opacity: 0';
@@ -200,7 +224,7 @@ export default {
 <style lang="scss">
 .body--dark {
   .main-layout {
-    .default-overlay {
+    .map-overlay {
       background: linear-gradient(
         rgba(0, 0, 0, 0.68),
         rgba(0, 0, 0, 0.6) 48px,
@@ -226,7 +250,7 @@ export default {
 }
 .body--light {
   .main-layout {
-    .default-overlay {
+    .map-overlay {
       background: linear-gradient(
         rgba(0, 0, 0, 0.68),
         rgba(0, 0, 0, 0.6) 48px,
@@ -251,19 +275,17 @@ export default {
   }
 }
 
-.event-page-enter-active,
-.event-page-leave-active {
-  transform: translate3d(0, 0, 0);
+.event-page-enter-active {
+  transform: translate3d(0, 0, 0) !important;
   transition: transform 0.3s ease;
-  will-change: transform;
   z-index: 5000;
-  backface-visibility: hidden;
-  overflow: hidden;
   //opacity: 1;
-  -webkit-backface-visibility: hidden;
-  -webkit-perspective: 1000;
 }
-.event-page-enter-from,
+
+.event-page-enter-from {
+  transform: translate3d(0, 100vh, 0) !important;
+}
+
 .event-page-leave-to {
   z-index: 5000;
   /*
@@ -273,14 +295,9 @@ export default {
     0
   );
   */
-  -webkit-backface-visibility: hidden;
-  -webkit-perspective: 1000;
 
-  backface-visibility: hidden;
-  overflow: hidden;
-  transform: translate3d(0, 100vh, 0);
-  transition: transform 0.3s ease;
-  will-change: transform;
+  transform: translate3d(0, 100vh, 0) !important;
+  transition: transform 0.5s ease;
   //opacity: 0;
 }
 
@@ -290,13 +307,16 @@ export default {
   position: relative;
   overflow: hidden;
 
-  .default-overlay {
-    z-index: 103;
-    position: absolute;
-    height: 100%;
-    width: 100%;
+  .map-container {
+    z-index: 0;
+    .map-overlay {
+      z-index: 0;
+      position: absolute;
+      height: 100%;
+      width: 100%;
 
-    pointer-events: none;
+      pointer-events: none;
+    }
   }
   .overlay {
     z-index: 103;
@@ -395,15 +415,22 @@ export default {
       .overlay {
         background: black;
       }
-      .default-overlay {
-        background: linear-gradient(
-          rgba(0, 0, 0, 0.68),
-          rgba(0, 0, 0, 0.6) 62px,
-          transparent 128px,
-          transparent calc(100% - 274px),
-          rgba(0, 0, 0, 0.68) calc(100% - 200px),
-          rgba(0, 0, 0, 0.68) 100%
-        );
+      .map-container {
+        .map-overlay {
+          background: linear-gradient(
+            rgba(0, 0, 0, 0.68),
+            rgba(0, 0, 0, 0.6) 62px,
+            transparent 128px,
+            transparent calc(100% - 274px),
+            rgba(0, 0, 0, 0.68) calc(100% - 200px),
+            rgba(0, 0, 0, 0.68) 100%
+          );
+        }
+      }
+      .sidebar-wrapper {
+        .sidebar-overlay {
+          background: black;
+        }
       }
     }
   }
@@ -412,15 +439,22 @@ export default {
       .overlay {
         background: white;
       }
-      .default-overlay {
-        background: linear-gradient(
-          rgba(0, 0, 0, 0.68),
-          rgba(0, 0, 0, 0.6) 62px,
-          transparent 128px,
-          transparent calc(100% - 274px),
-          rgba(0, 0, 0, 0.68) calc(100% - 200px),
-          rgba(0, 0, 0, 0.68) 100%
-        );
+      .map-container {
+        .map-overlay {
+          background: linear-gradient(
+            rgba(0, 0, 0, 0.68),
+            rgba(0, 0, 0, 0.6) 62px,
+            transparent 128px,
+            transparent calc(100% - 274px),
+            rgba(0, 0, 0, 0.68) calc(100% - 200px),
+            rgba(0, 0, 0, 0.68) 100%
+          );
+        }
+      }
+      .sidebar-wrapper {
+        .sidebar-overlay {
+          background: white;
+        }
       }
     }
   }
@@ -443,6 +477,24 @@ export default {
 
     .overlay {
       // transition: opacity 0.3s;
+    }
+    .sidebar-wrapper {
+      transition: opacity 0.3s ease;
+
+      .search-component {
+        z-index: 105;
+      }
+      .sidebar-overlay {
+        opacity: 1;
+        transition: opacity 0.3s ease;
+        z-index: 103;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        pointer-events: none;
+
+        margin-top: calc(0px - var(--safe-area-inset-top)) !important;
+      }
     }
   }
 }

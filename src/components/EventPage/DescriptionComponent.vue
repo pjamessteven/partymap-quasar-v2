@@ -36,6 +36,7 @@
           </span>
         </div>
       </div>
+      <q-separator class="q-mt-lg" />
     </div>
     <q-dialog
       v-model="showEditingDialog"

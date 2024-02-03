@@ -215,7 +215,9 @@ export default {
 
     overflow: hidden;
     .controls-wrapper-inner {
-      pointer-events: all; // stupid border radius fix for ios 15
+      pointer-events: all;
+
+      // stupid border radius fix for ios 15
       -webkit-transform: translateZ(0);
       -webkit-mask-image: -webkit-radial-gradient(
         circle,
@@ -223,7 +225,7 @@ export default {
         black 100%
       );
 
-      transition: all 0.3s;
+      //transition: all 0.3s;
       cursor: pointer;
       width: 510px;
       height: 100%;

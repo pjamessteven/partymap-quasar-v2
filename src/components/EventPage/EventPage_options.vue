@@ -1,20 +1,16 @@
 <template>
   <div
-    ref="eventPage"
     class="event-page"
-    :style="mapStore.peekMap ? 'pointer-events: none !important' : ''"
+    :style="peekMap ? 'pointer-events: none !important' : ''"
   >
     <transition appear enter-active-class="animated fadeIn slow">
-      <div
-        class="peek-address-wrapper flex row justify-center"
-        v-if="mapStore.peekMap && selectedEventDate"
-      >
+      <div class="peek-address-wrapper flex row justify-center" v-if="peekMap">
         <div
           class="peek-address inter flex column justify-start items-stretch col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12"
           :class="$q.screen.gt.xs ? 'text-h5' : 'text-h6'"
         >
           <div class="o-070">
-            {{ selectedEventDate?.location.description }}
+            {{ selectedEventDate.location.description }}
           </div>
         </div>
       </div>
@@ -52,43 +48,45 @@
       >
         <div class="row flex grow main-row no-wrap justify-center">
           <div
-            v-if="scrollPercentage <= 0 && !mapStore.peekMap"
+            v-if="scrollPercentage <= 0 && !peekMap"
             class="clickable-background"
             style="pointer-events: all"
             @click="clickBackground()"
           />
           <div
-            v-drag="dragHandler"
-            ref="contentCard"
+            ref="contentcard"
             class="content-card flex column no-wrap"
             :class="{
               'col-12 no-margin-top': showingHistory,
               'col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12':
                 !showingHistory,
-              shadow: mainStore.overlayOpacity === 0 || $q.screen.lt.sm,
-              'peek-map': mapStore.peekMap,
+              shadow: overlayOpacity === 0 || $q.screen.lt.sm,
+              'peek-map': peekMap,
             }"
           >
             <div
               class="peek-map-overlay"
               @click="swipeUp"
-              v-if="mapStore.peekMap"
+              v-if="peekMap"
               v-touch-swipe="swipe"
             />
 
             <MobileSwipeHandle
               v-if="$q.screen.lt.sm && false"
-              @swipe="handleSwipe"
+              @swipe="handleSwipe($event)"
               class="mobile-swipe-handle"
             />
 
-            <div class="content flex column">
+            <div
+              class="content flex column"
+              v-touch-swipe.down="scrollPercentage <= 0 ? swipeDown : null"
+            >
               <div class="flex column grow">
                 <div class="header flex column">
                   <InnerLoading v-if="loading" :solid="false" />
 
                   <FeaturedMediaBackground
-                    :thumbXsUrl="route.query?.thumbXsUrl + ''"
+                    :thumbXsUrl="computedThumbXsUrl"
                     class="featured-media"
                     :editing="editing"
                   />
@@ -132,7 +130,7 @@
                             :offset="[10, 10]"
                             content-style="font-size: 16px"
                           >
-                            {{ t('event.official_page') }}
+                            {{ $t('event.official_page') }}
                           </q-tooltip></q-icon
                         >
                       -->
@@ -171,19 +169,14 @@
                       </div>
 
                       <FeaturedMediaComponent
-                        style="route.query?.thumbXsUrl && !event ? 'filter: blur(5px)' : ''"
+                        style="computedThumbXsUrl && !event ? 'filter: blur(5px)' : ''"
                         v-if="
-                          (!!event || route.query?.thumbXsUrl) &&
-                          $q.screen.lt.md
+                          (!!event || computedThumbXsUrl) && $q.screen.lt.md
                         "
                         :editing="editing"
                         class="q-mt-lg"
-                        :item="event?.media_items?.[0]"
-                        :preview="
-                          route.query?.thumbXsUrl
-                            ? route.query.thumbXsUrl + ''
-                            : undefined
-                        "
+                        :item="event?.media_items?.[0] || computedThumbXsUrl"
+                        :preview="computedThumbXsUrl"
                       />
 
                       <div
@@ -265,7 +258,7 @@
                   >
                     <div class="t3">
                       {{
-                        t('event_dates.this_event_doesnt_have_upcoming_dates')
+                        $t('event_dates.this_event_doesnt_have_upcoming_dates')
                       }}
                     </div>
                   </div>
@@ -348,7 +341,7 @@
                                     :disable="editing"
                                     color="grey-3"
                                     text-color="black"
-                                    :label="t('event.get_tickets')"
+                                    :label="$t('event.get_tickets')"
                                     size="md"
                                     class="border-radius"
                                     icon="las la-ticket-alt"
@@ -362,7 +355,9 @@
                                 <q-btn
                                   class="button-light"
                                   :label="
-                                    $q.screen.gt.xs ? t('event.share') : 'Share'
+                                    $q.screen.gt.xs
+                                      ? $t('event.share')
+                                      : 'Share'
                                   "
                                   no-caps
                                   flat
@@ -400,7 +395,7 @@
                                   :text-color="
                                     $q.dark.isActive ? 'grey-4' : 'grey-3'
                                   "
-                                  :label="t('event.edit_event')"
+                                  :label="$t('event.edit_event')"
                                   no-caps
                                   :icon="
                                     $q.screen.gt.xs
@@ -432,7 +427,7 @@
                                   :offset="[10, 10]"
                                   content-style="font-size: 16px"
                                 >
-                                  {{ t('sidebar.more') }}
+                                  {{ $t('sidebar.more') }}
                                 </q-tooltip>
                                 <q-menu
                                   transition-show="jump-down"
@@ -453,7 +448,7 @@
                                     </q-item-section>
                                     <q-item-section>
                                       <q-item-label>{{
-                                        t('report.report_event')
+                                        $t('report.report_event')
                                       }}</q-item-label>
                                     </q-item-section>
                                   </q-item>
@@ -479,7 +474,7 @@
                                     </q-item-section>
                                     <q-item-section>
                                       <q-item-label>{{
-                                        t('report.are_you_host')
+                                        $t('report.are_you_host')
                                       }}</q-item-label>
                                     </q-item-section>
                                   </q-item>
@@ -499,7 +494,7 @@
                                     </q-item-section>
                                     <q-item-section>
                                       <q-item-label>{{
-                                        t('suggestions.improve_this_page')
+                                        $t('suggestions.improve_this_page')
                                       }}</q-item-label>
                                     </q-item-section>
                                   </q-item>
@@ -517,7 +512,7 @@
                                     <q-item-section>
                                       <q-item-label
                                         >{{
-                                          t('event.edit_event')
+                                          $t('event.edit_event')
                                         }}
                                         &nbsp;(admin)</q-item-label
                                       >
@@ -537,7 +532,7 @@
                                     </q-item-section>
                                     <q-item-section>
                                       <q-item-label
-                                        >{{ t('event.delete_event') }}
+                                        >{{ $t('event.delete_event') }}
                                         <span
                                           v-if="
                                             currentUserIsStaff &&
@@ -577,24 +572,19 @@
                         <EventDates />
 
                         <YoutubeVideoComponent
-                          class="q-mb-md"
                           :editing="editing"
                           v-if="
-                            (editing ||
-                              (event?.youtube_url &&
-                                event?.youtube_url?.length > 0)) &&
+                            (editing || event?.youtube_url?.length > 0) &&
                             !!event
                           "
                         />
 
                         <DescriptionComponent
+                          class="q-mt-md"
                           :editing="editing"
-                          v-if="
-                            editing ||
-                            (event.full_description &&
-                              event?.full_description?.length > 0)
-                          "
+                          v-if="editing || event?.full_description?.length > 0"
                         />
+                        <q-separator class="q-mt-lg" />
                         <ReviewsComponent class="q-mt-sm q-mb-xl" />
                       </div>
                     </div>
@@ -641,7 +631,7 @@
                       <span
                         class="link-hover underline"
                         @click="showingHistory = showingHistory"
-                        >{{ t('event.last_updated') }}</span
+                        >{{ $t('event.last_updated') }}</span
                       ><span>
                         &nbsp;{{
                           timeAgo(event.last_transaction.issued_at + 'Z')
@@ -664,10 +654,10 @@
                       <span
                         class="link-hover underline"
                         @click="showingHistory = !showingHistory"
-                        >{{ t('event.last_updated') }}</span
+                        >{{ $t('event.last_updated') }}</span
                       >
                       {{ timeAgo(event.transaction.issued_at + 'Z') }}
-                      {{ t('event.by') }}
+                      {{ $t('event.by') }}
                       <router-link
                         class="link-hover underline"
                         :to="{
@@ -731,7 +721,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script>
 import { deleteEventRequest, API_URL } from 'src/api';
 
 import { useMainStore } from 'src/stores/main';
@@ -739,10 +729,7 @@ import { useAuthStore } from 'src/stores/auth';
 import { useMapStore } from 'src/stores/map';
 import { useEventStore } from 'src/stores/event';
 
-import { computed, ref, onActivated, onDeactivated } from 'vue';
-import { useQuasar } from 'quasar';
-import { useRouter, useRoute } from 'vue-router';
-import { storeToRefs } from 'pinia';
+import { mapActions, mapState, mapWritableState } from 'pinia';
 import CustomQScroll from 'components/CustomQScroll.vue';
 
 import _ from 'lodash';
@@ -763,10 +750,10 @@ import MobileSwipeHandle from '../MobileSwipeHandle.vue';
 import InterestedComponent from './InterestedComponent.vue';
 import SuggestionsDialog from './Suggestions/SuggestionsDialog.vue';
 import InnerLoading from 'components/InnerLoading.vue';
-import { useI18n } from 'vue-i18n';
-import { useDrag } from '@vueuse/gesture';
-import { useMotionProperties, useSpring } from '@vueuse/motion';
-/*
+import WheelIndicator from 'wheel-indicator';
+
+export default {
+  name: 'EventPage',
   meta() {
     return {
       // this accesses the "title" property in your Vue "data";
@@ -789,399 +776,530 @@ import { useMotionProperties, useSpring } from '@vueuse/motion';
       },
     };
   },
-  */
+  components: {
+    CustomQScroll,
+    TagsComponent,
+    FeaturedMediaComponent,
+    FeaturedMediaBackground,
+    SummaryComponent,
+    NextEventDateSummary,
+    ReviewsComponent,
+    ReportDialog,
+    //HistoryComponent,
+    EventDates,
+    EventDateSidebarDesktop,
+    MobileSwipeHandle,
+    InterestedComponent,
+    SuggestionsDialog,
+    InnerLoading,
+    DescriptionComponent,
+    YoutubeVideoComponent,
+  },
+  props: {
+    id: {
+      default: null,
+    },
+    eventDateId: {
+      default: null,
+    },
+    name: {
+      default: null,
+    },
+  },
+  data() {
+    return {
+      previousMenubarOpacity: 0,
+      disableScroll: true,
+      enableSwipeDown: true,
+      wheelIndicator: null,
+      bottomImagePadding: 0,
+      showPage: true,
+      scrollPercentage: 0,
+      showingReportDialog: false,
+      showingClaimDialog: false,
+      loading: false,
+      windowHeight: window.innerHeight,
+      epSectionTopPosition: {
+        top: null,
+        bottom: null,
+      },
+      epSectionMiddlePosition: {
+        top: 0,
+        bottom: null,
+      },
+      showingHistory: false,
+      showingSuggestionsDialog: false,
+    };
+  },
+  methods: {
+    ...mapActions(useEventStore, [
+      'loadEvent',
+      'toggleFavorite',
+      'loadEventDate',
+    ]),
 
-interface Props {
-  id: string;
-  eventDateId?: string;
-  name?: string;
-}
-
-const props = withDefaults(defineProps<Props>(), {});
-
-const router = useRouter();
-const route = useRoute();
-const $q = useQuasar();
-const { t } = useI18n();
-
-const previousMenubarOpacity = ref(0);
-const disableScroll = ref(true);
-const enableSwipeDown = ref(true);
-const scrollPercentage = ref(0);
-const showingReportDialog = ref(false);
-const showingClaimDialog = ref(false);
-const loading = ref(false);
-const showingHistory = ref(false);
-const showingSuggestionsDialog = ref(false);
-
-const eventStore = useEventStore();
-const authStore = useAuthStore();
-const mainStore = useMainStore();
-const mapStore = useMapStore();
-
-const timeAgo = common.timeAgo;
-
-const { currentUser, currentUserIsStaff } = storeToRefs(authStore);
-let { event, selectedEventDate, currentUserIsHost, editing } =
-  storeToRefs(eventStore);
-
-const scrollArea = ref<HTMLElement>();
-
-const eventPage = ref();
-
-const spring = ref();
-
-const dragHandler = ({ movement: [x, y], dragging }) => {
-  if (!dragging) {
-    if (y > 150 && scrollPercentage.value <= 0) {
-      goBack();
-    } else {
-      spring.value.set({ x: 0, y: 0, cursor: 'grab' });
-    }
-    return;
-  }
-  // only allow dragging down
-  if (y > 0 && scrollPercentage.value <= 0) {
-    if (
-      y > 150 &&
-      mainStore.routerHistory?.[mainStore.routerHistory.length - 1]?.name ===
-        'Explore'
-    ) {
-      mainStore.sidebarOpacity = 1;
-    } else {
-      mainStore.sidebarOpacity = 0;
-    }
-    // mainStore.sidebarOpacity = 0 + ((y - 150) / 100) * 1;
-    spring.value.set({
-      cursor: 'grabbing',
-      x,
-      y,
-    });
-  }
-};
-
-useDrag(dragHandler, {
-  domTarget: eventPage,
-  axis: 'y',
-  //preventWindowScrollY: true,
-});
-
-const clickBackground = () => {
-  /*
+    clickBackground() {
+      /*
       if (this.$q.platform.is.mobile || true) {
         this.peekMap = !this.peekMap;
       } else {
         this.goBack();
       }
       */
-  goBack();
-};
-
-const swipeUp = () => {
-  mapStore.peekMap = false;
-};
-
-const swipe = (event: any) => {
-  if (event.direction === 'up') {
-    swipeUp();
-  } else if (event.direction === 'down') {
-    goBack();
-  }
-};
-
-const deleteEvent = () => {
-  $q.dialog({
-    title: t('event_dates.delete_event'),
-    message: t('event_dates.delete_event_confirm'),
-    cancel: true,
-    persistent: false,
-  }).onOk(() => {
-    deleteEventRequest(event.value?.id).then(() => {
-      router.push({ name: 'Explore' });
-    });
-  });
-};
-
-const goBack = () => {
-  // if (this.$q.platform.is.android) event = null;
-  // this.disableScroll = true; // helps animation be smoother on android
-
-  if (mainStore.routerHistory.length > 0) {
-    router.go(-1);
-  } else {
-    router.push({ name: 'Explore' });
-  }
-};
-
-const handleSwipe = () => {
-  goBack();
-};
-
-const onScrollMainContent = (info: any) => {
-  // console.log(info);
-  // var height = window.innerHeight / 3 - 120; // this is the height of the gap between menu bar and top of event card
-  scrollPercentage.value = info.verticalPercentage;
-  let verticalPostion = info.verticalPosition;
-  // menubar should always show on large screens (when sidebar is open)c
-  if ($q.screen.lt.sm) {
-    //this.menubarOpacity = ((info.target.scrollTop * 1.5) / 100) * -1 + 1;
-    //this.menubarOpacity = ((info.target.scrollTop * 1.5) / 100) * 1;
-    if (verticalPostion > 64) {
-      mainStore.menubarOpacity = 1;
-    } else {
-      mainStore.menubarOpacity = 0;
-    }
-    mainStore.overlayOpacity = ((verticalPostion * 1.5) / 100) * 1;
-  } else {
-    if (
-      verticalPostion >
-      window.innerHeight - window.innerHeight * 0.66 - 196
-    ) {
-      mainStore.overlayOpacity = 1;
-      mainStore.menubarOpacity = 1;
-    } else {
-      mainStore.overlayOpacity = 0;
-      mainStore.menubarOpacity = 0;
-    }
-    //this.overlayOpacity = ((info.target.scrollTop * 0.5) / 100) * 1;
-  }
-
-  if (scrollPercentage.value <= 0) {
-    setTimeout(() => {
-      // behavior fix for desktop scroll
-      enableSwipeDown.value = true;
-    }, 250);
-  } else {
-    enableSwipeDown.value = false;
-  }
-};
-
-const getIcalFile = () => {
-  window.location.assign(`${API_URL}/date/${selectedEventDate.value?.id}/ics`);
-};
-
-const copyUrlInput = ref(null);
-
-const share = () => {
-  if (navigator.share) {
-    navigator.share({
-      title: event.value?.name,
-      text: 'Check out ' + event.value?.name + ' on PartyMap',
-      url: computedUrl.value,
-    });
-  } else {
-    if (!navigator.clipboard) {
-      // try the old way
-      try {
-        // copy url to clipboard
-        var copyText = copyUrlInput as any;
-        /* Select the text field */
-        copyText.value.select();
-        copyText.value.setSelectionRange(0, 99999); /* For mobile devices */
-
-        /* Copy the text inside the text field */
-        document.execCommand('copy');
-
-        /* Alert the copied text */
-        $q.notify('Copied event link to clipboard');
-      } catch (err) {
-        $q.notify('Sharing not supported in this browser :(');
+      this.goBack();
+    },
+    swipeDown() {
+      this.goBack();
+    },
+    swipeUp() {
+      this.peekMap = false;
+    },
+    swipe(event) {
+      if (event.direction === 'up') {
+        this.swipeUp();
+      } else if (event.direction === 'down') {
+        this.swipeDown();
       }
-      return;
+    },
+    toggleFavorite() {
+      if (this.currentUser) {
+        this.toggleFavorite();
+      } else {
+        this.$router.push({
+          path: '/login',
+          query: { from: this.$route.path },
+        });
+      }
+    },
+    deleteEvent() {
+      this.$q
+        .dialog({
+          title: this.$t('event_dates.delete_event'),
+          message: this.$t('event_dates.delete_event_confirm'),
+          cancel: true,
+          persistent: false,
+        })
+        .onOk(() => {
+          deleteEventRequest(this.event.id).then(() => {
+            this.$router.push({ name: 'Explore' });
+          });
+        });
+    },
+    goBack() {
+      // if (this.$q.platform.is.android) this.event = null;
+      // this.disableScroll = true; // helps animation be smoother on android
+
+      if (this.routerHistory.length > 0) {
+        this.$router.go(-1);
+      } else {
+        this.$router.push({ name: 'Explore' });
+      }
+    },
+    handleSwipe() {
+      this.goBack();
+    },
+    onMouseWheel(e) {
+      const up = e.direction === 'up';
+      if (this.enableSwipeDown && up && this.$q.screen.gt.xs) {
+        this.preventMapZoom = true;
+
+        //this.goBack();
+        //this.swipeUp();
+        this.peekMap = true;
+        setTimeout(() => {
+          // wait for animation - stop map from zooming uncontrolably
+          this.preventMapZoom = false;
+        }, 1000);
+
+        /* disabled this behavior because it's too confusing
+        if (
+          this.sidebarPanel !== 'explore'
+        ) {
+          this.sidebarPanel = 'explore';
+        } */
+        return false;
+      } else if (this.peekMap && !up && this.$q.screen.gt.xs) {
+        this.swipeUp();
+        return false;
+      }
+    },
+    onScrollMainContent(info) {
+      // console.log(info);
+      // var height = window.innerHeight / 3 - 120; // this is the height of the gap between menu bar and top of event card
+      this.scrollPercentage = info.verticalPercentage;
+      let verticalPostion = info.verticalPosition;
+      // menubar should always show on large screens (when sidebar is open)c
+      if (this.$q.screen.lt.sm) {
+        //this.menubarOpacity = ((info.target.scrollTop * 1.5) / 100) * -1 + 1;
+        //this.menubarOpacity = ((info.target.scrollTop * 1.5) / 100) * 1;
+        if (verticalPostion > 64) {
+          this.menubarOpacity = 1;
+        } else {
+          this.menubarOpacity = 0;
+        }
+        this.overlayOpacity = ((verticalPostion * 1.5) / 100) * 1;
+      } else {
+        if (
+          verticalPostion >
+          window.innerHeight - window.innerHeight * 0.66 - 196
+        ) {
+          this.overlayOpacity = 1;
+          this.menubarOpacity = 1;
+        } else {
+          this.overlayOpacity = 0;
+          this.menubarOpacity = 0;
+        }
+        //this.overlayOpacity = ((info.target.scrollTop * 0.5) / 100) * 1;
+      }
+
+      if (this.scrollPercentage <= 0) {
+        setTimeout(() => {
+          // behavior fix for desktop scroll
+          this.enableSwipeDown = true;
+        }, 250);
+      } else {
+        this.enableSwipeDown = false;
+      }
+    },
+    getIcalFile() {
+      window.location.assign(
+        `${API_URL}/date/${this.selectedEventDate.id}/ics`
+      );
+    },
+    share() {
+      if (navigator.share) {
+        navigator.share({
+          title: this.event.name,
+          text: 'Check out ' + this.event.name + ' on PartyMap',
+          url: this.computedUrl,
+        });
+      } else {
+        if (!navigator.clipboard) {
+          // try the old way
+          try {
+            // copy url to clipboard
+            var copyText = this.$refs.copyUrlInput;
+            /* Select the text field */
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+            /* Copy the text inside the text field */
+            document.execCommand('copy');
+
+            /* Alert the copied text */
+            this.$q.notify('Copied event link to clipboard');
+          } catch (err) {
+            this.$q.notify('Sharing not supported in this browser :(');
+          }
+          return;
+        } else {
+          // do it the modern way
+          navigator.clipboard
+            .writeText(this.computedUrl)
+            .then(() => this.$q.notify('Copied event link to clipboard'))
+            .catch(() =>
+              this.$q.notify('Sharing not supported in this browser :(')
+            );
+        }
+      }
+    },
+    async load() {
+      this.loading = true;
+
+      try {
+        const response = await this.loadEvent(this.id);
+
+        this.editing = this.$route.params.editing;
+        this.loading = false;
+        // add name to url if not already there
+        var queryString = '?name=' + response.data.name.replace(/ /g, '_');
+        if (
+          window.location.pathname.indexOf(queryString) === -1 &&
+          this.$route.name === 'EventPage'
+        ) {
+          this.$router.resolve({
+            path: this.$route.path,
+            query: { name: response.data.name.replace(/ /g, '_') },
+          });
+        }
+
+        // are we navigating to a specific event date?
+        var eventDateId;
+        if (this.$route.params.eventDateId) {
+          eventDateId = this.$route.params.eventDateId;
+        } else if (this.$route.query.eventDateId) {
+          eventDateId = this.$route.query.eventDateId;
+        } else {
+          eventDateId = null;
+        }
+        if (
+          (response.data.next_date && !eventDateId) ||
+          (response.data.next_date &&
+            response.data.next_date.id === eventDateId)
+        ) {
+          if (!this.focusMarker && this.$route.name === 'EventPage') {
+            // // weird but necessary
+            // only do this if focusedlatlng not already set before mounting this component
+            // (by eventdatecard)
+            this.focusMarker = {
+              lat: response.data.next_date.location.lat,
+              lng: response.data.next_date.location.lng,
+            };
+          }
+        } else if (
+          eventDateId &&
+          (!response.data.next_date ||
+            response.data.next_date.id !== eventDateId)
+        ) {
+          // if navigating to specific date, load it
+
+          const eventDateResponse = await this.loadEventDate(eventDateId);
+
+          if (!this.focusMarker && this.$route.name === 'EventPage') {
+            // weird but necessary
+            // only do this if focusedlatlng not already set before mounting this component
+            // (by eventdatecard)
+            this.focusMarker = {
+              lat: eventDateResponse.data.location.lat,
+              lng: eventDateResponse.data.location.lng,
+            };
+          }
+        } else if (
+          !response.data.next_date &&
+          response.data.event_dates &&
+          response.data.event_dates.length > 0
+        ) {
+          // no upcoming event, set current event to be the most recent event
+          const lastIndex = response.data.event_dates.length - 1;
+          this.selectedEventDateIndex = lastIndex;
+          // if no next date, set current event to be the most recent one
+          const eventDateResponse = await this.loadEventDate(
+            this.event?.event_dates?.[lastIndex]?.id + ''
+          );
+          this.focusMarker = {
+            lat: eventDateResponse.data.location.lat,
+            lng: eventDateResponse.data.location.lng,
+          };
+        }
+      } catch (error) {
+        console.log(error);
+      }
+
+      // for prerender.io
+      setTimeout(() => {
+        window.prerenderReady = true;
+      }, 300);
+    },
+  },
+  activated() {
+    // called on initial mount
+    // and every time it is re-inserted from the cache
+    this.disableScroll = true; // helps animation be smoother on android
+
+    if (!this.event || (this.event && this.event?.id + '' !== this.id + '')) {
+      this.event = null;
+      this.$refs.scrollArea.setScrollPercentage('vertical', 0);
+      if (this.$q.platform.is.android) {
+        setTimeout(() => {
+          this.load();
+        }, 350);
+      } else {
+        this.load();
+      }
     } else {
-      // do it the modern way
-      navigator.clipboard
-        .writeText(computedUrl.value)
-        .then(() => $q.notify('Copied event link to clipboard'))
-        .catch(() => $q.notify('Sharing not supported in this browser :('));
+      this.menubarOpacity = this.previousMenubarOpacity;
     }
-  }
-};
+    if (this.$route.query.location) {
+      this.focusMarker = JSON.parse(this.$route.query.location);
+    }
+    // wait for animation before loading
+    // to avoid performance issues
+  },
+  deactivated() {
+    // called when removed from the DOM into the cache
+    // and also when unmounted
+    // this.event = null;
 
-const load = async () => {
-  loading.value = true;
+    this.mapOverlay = false;
+    this.previousMenubarOpacity = this.menubarOpacity;
+    this.overlayOpacity = 0;
+    this.focusMarker = null;
+  },
+  watch: {
+    peekMap(newv) {
+      // timeouts are so that we wait until the animation is finished
+      if (newv === true) {
+        this.disableScroll = true;
+      } else {
+        setTimeout(() => {
+          this.disableScroll = newv;
+        }, 350);
+      }
+    },
+  },
+  computed: {
+    ...mapWritableState(useMainStore, ['menubarOpacity', 'overlayOpacity']),
+    ...mapState(useMainStore, ['routerHistory']),
+    ...mapWritableState(useMapStore, [
+      'focusMarker',
+      'preventMapZoom',
+      'peekMap',
+    ]),
+    ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
+    ...mapState(useEventStore, ['loadingEvent', 'selectedEventDate']),
+    ...mapWritableState(useEventStore, [
+      'event',
+      'selectedEventDateIndex',
+      'editing',
+    ]),
+    currentRoute() {
+      return this.$route.name;
+    },
+    pageViewChars() {
+      if (this.event.page_views) {
+        var chars = this.event.page_views.toString().split('');
+        return chars;
+      } else {
+        return [];
+      }
+    },
+    description() {
+      if (this.event) {
+        return this.event.description;
+      } else {
+        return '';
+      }
+    },
+    computedUrl() {
+      if (this.event) {
+        return (
+          'https://partymap.com/event/' +
+          this.event.id +
+          '?' +
+          this.$route.query.name
+        );
+      } else {
+        return '';
+      }
+    },
+    /* this funciton will fade as you scroll
+    getReverseOpacity () {
 
-  try {
-    const response = await eventStore.loadEvent(Number(props.id));
+    box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.2)
+    box-shadow: 0 1px 5px rgba(0, 0, 0, ${0.2 *
+      opacity}), 0 2px 2px rgba(0, 0, 0,${0.14 *
+      opacity}), 0 3px 1px -2px rgba(0, 0, 0, ${0.12 * opacity});
 
-    editing.value = !!route.params.editing;
-    loading.value = false;
-    // add name to url if not already there
-    var queryString = '?name=' + response.data.name.replace(/ /g, '_');
-    if (
-      window.location.pathname.indexOf(queryString) === -1 &&
-      route.name === 'EventPage'
-    ) {
-      router.resolve({
-        path: route.path,
-        query: { name: response.data.name.replace(/ /g, '_') },
+      var scroll
+      if (this.mainContentScrollPosition < 200) {
+        scroll = 0
+      } else {
+        scroll = this.mainContentScrollPosition - 200
+      }
+      return `
+      opacity: ${opacity}`
+    },
+    */
+
+    currentUserIsHost() {
+      if (
+        this.event?.host?.username &&
+        this.currentUser?.username === this.event.host.username
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    computedThumbXsUrl() {
+      if (this.$route.query.thumbXsUrl) {
+        return this.$route.query.thumbXsUrl;
+      } else {
+        return null;
+      }
+    },
+    computedName() {
+      if (this.event?.name) {
+        return this.event.name;
+      } else if (this.$route.query.name) {
+        return this.$route.query.name.replace(/_/g, ' ');
+      } else {
+        return null;
+      }
+    },
+    computedExternalUrl() {
+      if (this.selectedEventDate?.url) {
+        // ensure that there is a protocol prefix
+        if (
+          this.selectedEventDate.url.indexOf('http://') < 0 &&
+          this.selectedEventDate.url.indexOf('https://') < 0
+        ) {
+          return '//' + this.selectedEventDate.url;
+        } else return this.selectedEventDate.url;
+      } else {
+        return null;
+      }
+    },
+    computedTicketUrl() {
+      const ticketUrl = this.event?.event_dates?.[0]?.ticket_url;
+      if (ticketUrl) {
+        // ensure that there is a protocol prefix
+        if (
+          ticketUrl.indexOf('http://') < 0 &&
+          ticketUrl.indexOf('https://') < 0
+        ) {
+          return '//' + ticketUrl;
+        } else return ticketUrl;
+      } else {
+        return null;
+      }
+    },
+  },
+  beforeMount() {
+    window.prerenderReady = false;
+    setTimeout(() => {
+      this.disableScroll = false;
+    }, 300);
+  },
+  mounted() {
+    this.menubarOpacity = 0;
+    this.editing = this.$route.params.editing;
+
+    // wait for animation before loading
+    // to avoid performance issues
+    this.disableScroll = true; // helps animation be smoother on android
+
+    if (this.$route.query.location) {
+      this.focusMarker = JSON.parse(this.$route.query.location);
+    }
+
+    //    this.load();
+    if (this.$q.screen.gt.xs) {
+      this.wheelIndicator = new WheelIndicator({
+        elem: this.$refs.contentcard,
+        callback: this.onMouseWheel,
+        preventMouse: false,
       });
     }
-
-    // are we navigating to a specific event date?
-    var eventDateId;
-    if (route.params.eventDateId) {
-      eventDateId = route.params.eventDateId;
-    } else if (route.query.eventDateId) {
-      eventDateId = route.query.eventDateId;
-    } else {
-      eventDateId = null;
-    }
-    if (
-      (response.data.next_date && !eventDateId) ||
-      (response.data.next_date && response.data.next_date.id === eventDateId)
-    ) {
-      if (!mapStore.focusMarker && route.name === 'EventPage') {
-        // // weird but necessary
-        // only do this if focusedlatlng not already set before mounting this component
-        // (by eventdatecard)
-        mapStore.focusMarker = {
-          lat: response.data.next_date.location.lat,
-          lng: response.data.next_date.location.lng,
-        };
+  },
+  created() {
+    this.timeAgo = common.timeAgo;
+    this.throttledOnScrollMainContent = _.throttle(
+      this.onScrollMainContent,
+      50,
+      {
+        leading: false,
+        trailing: true,
       }
-    } else if (
-      props.eventDateId &&
-      (!response.data.next_date ||
-        response.data.next_date.id !== props.eventDateId)
-    ) {
-      // if navigating to specific date, load it
-
-      const eventDateResponse = await eventStore.loadEventDate(
-        props.eventDateId
-      );
-
-      if (!mapStore.focusMarker && route.name === 'EventPage') {
-        // weird but necessary
-        // only do this if focusedlatlng not already set before mounting this component
-        // (by eventdatecard)
-        mapStore.focusMarker = {
-          lat: eventDateResponse.data.location.lat,
-          lng: eventDateResponse.data.location.lng,
-        };
-      }
-    } else if (
-      !response.data.next_date &&
-      response.data.event_dates &&
-      response.data.event_dates.length > 0
-    ) {
-      // no upcoming event, set current event to be the most recent event
-      const lastIndex = response.data.event_dates.length - 1;
-      eventStore.selectedEventDateIndex = lastIndex;
-      // if no next date, set current event to be the most recent one
-      const eventDateResponse = await eventStore.loadEventDate(
-        eventStore.event?.event_dates?.[lastIndex]?.id + ''
-      );
-      mapStore.focusMarker = {
-        lat: eventDateResponse.data.location.lat,
-        lng: eventDateResponse.data.location.lng,
-      };
-    }
-  } catch (error) {
-    console.log(error);
-  }
-
-  // for prerender.io
-  setTimeout(() => {
-    (window as any).prerenderReady = true;
-  }, 300);
-};
-
-onActivated(() => {
-  // called on initial mount
-  // and every time it is re-inserted from the cache
-
-  // we need to reset spring state every time we open the event page
-  const { motionProperties } = useMotionProperties(eventPage, { x: 0, y: 0 });
-  spring.value = useSpring(motionProperties);
-
-  // ensure sidebar is transparent on mobile
-  mainStore.sidebarOpacity = 0;
-
-  disableScroll.value = true; // helps animation be smoother on android
-
-  if (!event.value || (event.value && event.value?.id + '' !== props.id + '')) {
-    event.value = null;
-    if (scrollArea.value) {
-      (scrollArea.value as any).setScrollPercentage('vertical', 0);
-    }
-    if ($q.platform.is.android) {
-      setTimeout(() => {
-        load();
-      }, 350);
-    } else {
-      load();
-    }
-  } else {
-    mainStore.menubarOpacity = previousMenubarOpacity.value;
-  }
-  if (route.query.location) {
-    mapStore.focusMarker = JSON.parse(route.query.location as string);
-  }
-  // wait for animation before loading
-  // to avoid performance issues
-});
-
-onDeactivated(() => {
-  //  set({ x: 0, y: window.innerHeight, cursor: 'grab' });
-
-  // called when removed from the DOM into the cache
-  // and also when unmounted
-  // event = null;
-
-  previousMenubarOpacity.value = mainStore.menubarOpacity;
-  mainStore.overlayOpacity = 0;
-  mapStore.focusMarker = null;
-});
-
-const computedUrl = computed(() => {
-  if (eventStore.event) {
-    return (
-      'https://partymap.com/event/' +
-      eventStore.event.id +
-      '?' +
-      route.query.name
     );
-  } else {
-    return '';
-  }
-});
+  },
 
-const computedName = computed(() => {
-  if (eventStore.event?.name) {
-    return eventStore.event.name;
-  } else if (route.query.name) {
-    return (route.query.name as string).replace(/_/g, ' ');
-  } else {
-    return null;
-  }
-});
-
-const computedExternalUrl = computed(() => {
-  if (eventStore.selectedEventDate?.url) {
-    // ensure that there is a protocol prefix
-    if (
-      eventStore.selectedEventDate.url.indexOf('http://') < 0 &&
-      eventStore.selectedEventDate.url.indexOf('https://') < 0
-    ) {
-      return '//' + eventStore.selectedEventDate.url;
-    } else return eventStore.selectedEventDate.url;
-  } else {
-    return undefined;
-  }
-});
-
-const computedTicketUrl = computed(() => {
-  const ticketUrl = selectedEventDate.value?.ticket_url;
-  if (ticketUrl) {
-    // ensure that there is a protocol prefix
-    if (ticketUrl.indexOf('http://') < 0 && ticketUrl.indexOf('https://') < 0) {
-      return '//' + ticketUrl;
-    } else return ticketUrl;
-  } else {
-    return null;
-  }
-});
+  unmounted() {
+    if (this.wheelIndicator) {
+      this.wheelIndicator.destroy();
+    }
+  },
+};
 </script>
 
 <style lang="scss">
@@ -1241,7 +1359,7 @@ a {
               .page-view-char {
                 border-color: $bi-4 !important;
                 background: linear-gradient($bi-1, $bi-4, $bi-1) !important;
-                color: ti-2 !important;
+                color: $ti-2 !important;
               }
             }
           }
@@ -1319,7 +1437,7 @@ a {
               z-index: 1;
               .event-buttons-scroll {
                 .button-light {
-                  color: t-1 !important;
+                  color: $t-1 !important;
                   text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
                   border: 1px solid rgba(0, 0, 0, 0.1);
                   background: rgba(255, 255, 255, 0.9);
@@ -1386,7 +1504,7 @@ a {
     }
 
     .t2 {
-      color: t-2;
+      color: $t-2;
     }
   }
 }

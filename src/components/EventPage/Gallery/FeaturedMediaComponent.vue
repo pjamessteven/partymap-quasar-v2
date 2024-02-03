@@ -49,9 +49,9 @@
           />
         </video>
         <img
-          style="width: 100%"
-          :src="item?.thumb_xs_url"
-          v-if="!loaded && item?.thumb_xs_url"
+          style="width: 100%; filter: blur(10px); transform: scale(1.2)"
+          :src="item?.thumb_xs_url || thumbXsUrl"
+          v-if="!loaded && (item?.thumb_xs_url || thumbXsUrl)"
         />
         <img v-show="loaded" :src="item?.thumb_url" @load="loaded = true" />
       </div>
@@ -90,6 +90,7 @@ export default {
     item: Object,
     editing: Boolean,
     preview: String,
+    thumbXsUrl: String,
   },
   data() {
     return {
@@ -166,6 +167,9 @@ export default {
       align-items: center;
       cursor: pointer;
       // background: white;
+      overflow: hidden;
+      filter: drop-shadow(1px 2px 78px rgba(0, 0, 0, 0.48));
+
       .no-media {
         background: grey;
         width: 100%;
@@ -181,7 +185,6 @@ export default {
         max-width: 100%;
         object-fit: contain;
         display: block;
-        filter: drop-shadow(1px 2px 78px rgba(0, 0, 0, 0.48));
         transition: opacity 0.3s;
         opacity: 1;
         pointer-events: none;
@@ -216,12 +219,12 @@ export default {
       align-items: start;
       .item-wrapper-inner {
         justify-content: flex-start;
+        border-radius: 18px;
 
         img,
         video {
           width: unset;
           filter: none;
-          border-radius: 18px;
         }
       }
     }

@@ -25,7 +25,6 @@ export default {
     EventDateTimeComponent,
     EventDateLocationComponent,
   },
-  props: {},
   data() {
     return {
       loading: false,

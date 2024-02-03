@@ -12,7 +12,8 @@
         shadow: $q.screen.gt.xs,
         'sidebar-mobile-expanded': showPanel && $q.screen.lt.sm,
         'sidebar-mobile-nearby': sidebarPanel === 'nearby' && $q.screen.gt.xs,
-        'sidebar-mobile-hidden': $q.screen.lt.sm && $route.name === 'EventPage',
+        'sidebar-mobile-hidden':
+          false && $q.screen.lt.sm && $route.name === 'EventPage',
       }"
     >
       <div

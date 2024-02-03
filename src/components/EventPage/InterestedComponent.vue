@@ -69,7 +69,6 @@ import MenuWrapper from 'src/components/Controls/MenuWrapper.vue';
 
 export default {
   components: { MenuWrapper },
-  props: {},
   data() {
     return {
       loading: false,

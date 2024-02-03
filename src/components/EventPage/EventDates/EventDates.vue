@@ -163,7 +163,6 @@ export default {
     EventDateSizeComponent,
     ArtistsComponent,
   },
-  props: {},
   data() {
     return {
       loading: false,
