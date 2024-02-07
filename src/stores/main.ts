@@ -7,6 +7,7 @@ import { Notify } from 'quasar';
 import { Screen, Platform } from 'quasar';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 interface MainStoreState {
+  disableAnimations: boolean;
   darkMode: boolean;
   showSidebar: boolean;
   showSearchBox: boolean;
@@ -15,6 +16,7 @@ interface MainStoreState {
   sidebarOpacity: number;
   sidebarExpanded: boolean;
   enablePanelSwipeDown: boolean;
+  disablePanelScroll: boolean;
   menubarOpacity: number;
   overlayOpacity: number;
   ipInfo: IpInfo | null;
@@ -30,6 +32,7 @@ interface MainStoreState {
 }
 export const useMainStore = defineStore('main', {
   state: (): MainStoreState => ({
+    disableAnimations: false,
     darkMode: false,
     showSidebar: true,
     showSearchBox: false, // for menubar search
@@ -37,6 +40,7 @@ export const useMainStore = defineStore('main', {
     showPanel: Screen.lt.sm,
     sidebarExpanded: false,
     enablePanelSwipeDown: true,
+    disablePanelScroll: false,
     menubarOpacity: 1,
     sidebarOpacity: 1,
     overlayOpacity: 0,
@@ -140,7 +144,7 @@ export const useMainStore = defineStore('main', {
               resolve(null);
             },
             () => {
-              Notify.create('Cannot get your precise location');
+              Notify.create('Cannot get your location');
               this.userLocationLoading = false;
               resolve(null);
             },
@@ -167,7 +171,7 @@ export const useMainStore = defineStore('main', {
               resolve(null);
             })
             .catch((error) => {
-              Notify.create('Cannot get your precise location');
+              Notify.create('Cannot get your location');
               this.userLocationLoading = false;
               resolve(null);
             });

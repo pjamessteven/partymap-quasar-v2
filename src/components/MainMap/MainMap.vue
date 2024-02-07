@@ -242,7 +242,13 @@ export default {
             if (this.exploreMapView) {
               toRaw(this.map).setView(
                 this.exploreMapView.latlng,
-                this.exploreMapView.zoom
+                this.exploreMapView.zoom,
+                {
+                  animate:
+                    !this.disableAnimations &&
+                    (this.$q.screen.gt.xs ||
+                      (this.$q.screen.lt.sm && !this.showPanel)),
+                }
               );
             }
 
@@ -413,7 +419,7 @@ export default {
       if (this.peekMap) {
         toRaw(this.map).fitBounds(bounds, {
           paddingTopLeft: [0, -128],
-          animate: true,
+          animate: !this.disableAnimations,
           duration: 0.3,
           easeLinearity: 1,
           maxZoom: 10,
@@ -421,7 +427,7 @@ export default {
       } else {
         toRaw(this.map).fitBounds(bounds, {
           paddingBottomRight: [paddingRight, paddingBottom],
-          animate: true,
+          animate: !this.disableAnimations,
           maxZoom: zoom,
         });
       }
@@ -435,7 +441,7 @@ export default {
           // padding for sidebar
           toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
             paddingTopLeft: [1000, 0],
-            animate: true,
+            animate: !this.disableAnimations,
             duration: 0.3,
             easeLinearity: 1,
             maxZoom: 10,
@@ -443,7 +449,7 @@ export default {
         } else {
           toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
             paddingTopLeft: [580, 0],
-            animate: true,
+            animate: !this.disableAnimations,
             duration: 0.3,
             easeLinearity: 1,
             maxZoom: 10,
@@ -453,7 +459,7 @@ export default {
         // padding for mobile bottom panel
         toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
           paddingTopLeft: [0, -150],
-          animate: true,
+          animate: !this.disableAnimations,
           duration: 0.3,
           easeLinearity: 1,
           maxZoom: 10,
@@ -548,7 +554,8 @@ export default {
     initMap() {
       this.map = L.map(this.$refs.map, this.mapOptions).setView(
         [53.9, 27.6],
-        3
+        3,
+        { animate: !this.disableAnimations }
       );
       if (this.focusMarker !== null) {
         this.blockUpdates = true;
@@ -806,6 +813,7 @@ export default {
       'sidebarPanel',
       'showPanel',
       'sidebarExpanded',
+      'disableAnimations',
     ]),
     ...mapState(useMainStore, ['routerHistory']),
     ...mapState(useQueryStore, [

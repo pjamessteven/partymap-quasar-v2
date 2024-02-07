@@ -4,12 +4,11 @@
       ref="sidebar"
       class="flex justify-between no-wrap sidebar"
       id="sidebar"
-      :style="mainStore.computedSidebarWidth"
+      :style="computedSidebarWidth"
       v-bind:class="{
         shadow: $q.screen.gt.xs,
-        'sidebar-mobile-expanded': mainStore.showPanel && $q.screen.lt.sm,
-        'sidebar-mobile-nearby':
-          mainStore.sidebarPanel === 'nearby' && $q.screen.gt.xs,
+        'sidebar-mobile-expanded': showPanel && $q.screen.lt.sm,
+        'sidebar-mobile-nearby': sidebarPanel === 'nearby' && $q.screen.gt.xs,
         'sidebar-mobile-hidden':
           false && $q.screen.lt.sm && $route.name === 'EventPage',
       }"
@@ -20,7 +19,6 @@
           v-if="$route.name === 'Explore' && $q.screen.gt.xs"
           style="height: 72px"
         >
-          <!--
           <q-btn
             v-if="false"
             class="inter o-070"
@@ -30,26 +28,20 @@
             >Submit
             <q-icon name="mdi-plus" class="q-ml-sm" size="1rem" />
           </q-btn>
-          -->
           <q-btn
             v-if="false"
             flat
             no-caps
             class="inter nav-button q-ml-sm"
-            @click.stop="() => mainStore.getFineLocation()"
+            @click.stop="() => getFineLocation()"
           >
             <template v-slot:default>
-              <div
-                v-if="!mainStore.userLocationLoading"
-                class="flex items-center"
-              >
+              <div v-if="!userLocationLoading" class="flex items-center">
                 <q-icon
                   name="mdi-crosshairs-gps"
                   class=""
                   size="1rem"
-                  v-if="
-                    mainStore.fineLocation && !mainStore.userLocationFromSearch
-                  "
+                  v-if="fineLocation && !userLocationFromSearch"
                 />
                 <q-icon name="mdi-crosshairs" size="1rem" class="" v-else />
               </div>
@@ -71,7 +63,7 @@
                 "
                 :offset="[10, 10]"
               >
-                <span v-if="!mainStore.fineLocation">
+                <span v-if="!fineLocation">
                   Using rough location from your IP address. Click to improve
                   your location.
                 </span>
@@ -113,17 +105,15 @@
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
           <NearbyView
             style="height: 100%; width: 100%"
-            v-if="mainStore.sidebarPanel === 'nearby'"
+            v-if="sidebarPanel === 'nearby'"
           />
           <ExploreView
             style="height: 100%; width: 100%"
-            @hidePanel="hidePanel"
-            @showPanel="showPanel"
-            v-show="mainStore.sidebarPanel === 'explore'"
+            v-show="sidebarPanel === 'explore'"
           />
           <SearchView
             style="height: 100%; width: 100%"
-            v-show="mainStore.sidebarPanel === 'search'"
+            v-show="sidebarPanel === 'search'"
           />
         </div>
         <NavigationBar
@@ -143,195 +133,301 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script>
 import SearchComponent from 'src/components/Search/SearchComponent.vue';
+import AddEventDialog from 'components/dialogs/AddEventDialog.vue';
 import TopControlsMenu from 'components/MenuBar/TopControlsMenu.vue';
 import NavigationBar from 'components/NavigationBar.vue';
 
 import ExploreView from './ExploreView/ExploreView.vue';
 import SearchView from './SearchView/SearchView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
+import { useAuthStore } from 'src/stores/auth';
+import { mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
-import { useRouter, useRoute } from 'vue-router';
-
+import { useMapStore } from 'src/stores/map';
+import { useQueryStore } from 'src/stores/query';
+import WheelIndicator from 'wheel-indicator';
 import { useDrag } from '@vueuse/gesture';
 import { useMotionProperties, useSpring } from '@vueuse/motion';
-import { ref, watch, toRaw, onMounted } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { useQuasar } from 'quasar';
-import { SafeArea } from '@aashu-dubey/capacitor-statusbar-safe-area';
+import { ref, onMounted } from 'vue';
 
-const $q = useQuasar();
-const { t } = useI18n();
-const route = useRoute();
+export default {
+  components: {
+    ExploreView,
+    SearchView,
+    NearbyView,
+    //MobileSwipeHandle,
+    SearchComponent,
+    TopControlsMenu,
+    NavigationBar,
+  },
+  setup() {
+    const sidebar = ref();
+    const mainStore = useMainStore();
 
-const sidebar = ref();
-const mainStore = useMainStore();
-
-const spring = ref();
-
-/*
-onMounted(async () => {
-  const { height } = await SafeArea.getStatusBarHeight();
-  return height; // Ex. 29.090909957885742
-})
-
-*/
-
-const preventSwipe = (event) => {
-  if (
-    mainStore.enablePanelSwipeDown &&
-    mainStore.sidebarPanel === 'explore' &&
-    mainStore.showPanel
-  ) {
-    return;
-  } else {
-    return;
-  }
-};
-const hiddenYPosition = window.innerHeight - 228;
-const showingYPosition = 120;
-
-const showPanel = () => {
-  mainStore.showPanel = true;
-  spring.value.set({ x: 0, y: showingYPosition, cursor: 'grab' });
-};
-
-const hidePanel = () => {
-  mainStore.showPanel = false;
-  spring.value.set({ x: 0, y: hiddenYPosition, cursor: 'grab' });
-};
-
-const dragHandler = ({
-  event,
-  movement: [x, y],
-  dragging,
-}: {
-  event: any;
-  movement: [x: number, y: number];
-  dragging: boolean;
-}) => {
-  if ($q.screen.lt.sm && mainStore.sidebarPanel === 'explore') {
-    if (!dragging) {
-      if (y > 100 && mainStore.enablePanelSwipeDown) {
-        hidePanel();
-      } else {
-        if (mainStore.showPanel) {
-          spring.value.set({
+    onMounted(() => {
+      const { motionProperties } = useMotionProperties(sidebar, {
+        x: 0,
+        y: window.innerHeight - 228,
+      });
+      const spring = useSpring(motionProperties);
+      console.log(mainStore.enablePanelSwipeDown, motionProperties);
+      const dragHandler = ({ movement: [x, y], dragging }) => {
+        console.log('draggin');
+        if (!dragging) {
+          if (y > 150) {
+            mainStore.showPanel = false;
+          } else {
+            spring.set({ x: 0, y: 0, cursor: 'grab' });
+          }
+          return;
+        }
+        // only allow dragging down
+        if (y > 0 && mainStore.enablePanelSwipeDown) {
+          if (
+            y > 150 &&
+            mainStore.routerHistory?.[mainStore.routerHistory.length - 1]
+              ?.name === 'Explore'
+          ) {
+            mainStore.showPanel = false;
+          } else {
+            mainStore.showPanel = true;
+          }
+          // mainStore.sidebarOpacity = 0 + ((y - 150) / 100) * 1;
+          spring.set({
             cursor: 'grabbing',
             x,
-            y: showingYPosition,
+            y,
           });
-        } else {
-          showPanel();
         }
-      }
-      return;
-    }
-    if (y < 0 && !mainStore.showPanel) {
-      // dragging up from hidden position
-      if (y + hiddenYPosition < showingYPosition) {
-        spring.value.set({
-          cursor: 'grabbing',
-          x,
-          y: showingYPosition,
-        });
-      } else {
-        spring.value.set({
-          cursor: 'grabbing',
-          x,
-          y: y + hiddenYPosition,
-        });
-      }
-    } else if (
-      mainStore.enablePanelSwipeDown &&
-      y + showingYPosition > showingYPosition
-    ) {
-      // dragging down
-
-      mainStore.showPanel = false;
-
-      spring.value.set({
-        cursor: 'grabbing',
-        x,
-        y: y + showingYPosition,
+      };
+      console.log('use drag', sidebar);
+      useDrag(dragHandler, {
+        domTarget: sidebar,
+        axis: 'y',
       });
+    });
+
+    return { sidebar };
+  },
+  /*
+  async mounted() {
+    /*
+    this.wheelIndicator = new WheelIndicator({
+      elem: this.$refs.sidebar,
+      callback: this.onMouseWheel,
+      preventMouse: false,
+    });
+    if (this.$refs.resizer)
+      this.$refs.resizer.addEventListener('mousedown', (event) => {
+        document.addEventListener('mousemove', this.resize, false);
+        document.addEventListener(
+          'mouseup',
+          () => {
+            document.removeEventListener('mousemove', this.resize, false);
+          },
+          false
+        );
+      });
+    window.addEventListener('resize', () => {
+      if (this.$q.screen.gt.lg) {
+        //this.sidebarExpanded = true;
+      } else {
+        //this.sidebarExpanded = false;
+      }
+    });
+  },
+  */
+  unmounted() {
+    if (this.wheelIndicator) {
+      this.wheelIndicator.destroy();
     }
-  }
-};
-useDrag(dragHandler, {
-  domTarget: sidebar,
-  axis: 'y',
-});
+  },
+  data() {
+    return {
+      lastx: 0,
+      preventMapInteraction: false,
+      wheelIndicator: null,
+      panelHiddenDelayed: true,
+      spring: null,
+    };
+  },
+  methods: {
+    resize(event) {
+      if (event.x > 580 && event.x > this.lastx && !this.sidebarExpanded) {
+        this.sidebarExpanded = true;
+      } else if (
+        event.x < 1000 &&
+        event.x < this.lastx &&
+        this.sidebarExpanded
+      ) {
+        this.sidebarExpanded = false;
+      }
+      this.lastx = event.x;
+    },
+    showAddEventDialog() {
+      this.$q
+        .dialog({
+          parent: this,
+          component: AddEventDialog,
+        })
+        .onOk((data) => {
+          if (!this.currentUser && data.host) {
+            this.$router.push({ name: 'Login' });
+          } else if (data.host) {
+            this.$router.push({
+              name: 'AddEventHost',
+            });
+          } else {
+            this.$router.push({
+              name: 'AddEventPublic',
+            });
+          }
+        });
+    },
+    handleWheel(event) {
+      // safari behavior fix
+      if (this.$q.platform.is.safari) {
+        event.preventDefault();
+        return false;
+      }
+    },
+    onMouseWheel(e) {
+      const up = e.direction === 'up';
+      const down = e.direction === 'down';
+      console.log(e);
+      if (e.wheelDeltaY > 2 || e.wheelDeltaY < -2)
+        if (!this.showPanel && down) {
+          // defined minimum sensitivity
+          this.showPanel = true;
+        } else if (this.enablePanelSwipeDown && up && !this.preventMapZoom) {
+          this.preventMapZoom = true;
+          this.showPanel = false;
 
-const setupSpring = () => {
-  const { motionProperties } = useMotionProperties(sidebar, {
-    y:
-      mainStore.sidebarPanel === 'Explore' ? hiddenYPosition : showingYPosition,
-  });
+          setTimeout(() => {
+            // wait for animation - stop map from zooming uncontrolably
 
-  spring.value = useSpring(motionProperties, { stiffness: 400, damping: 30 });
-};
+            this.preventMapZoom = false;
+          }, 1000);
 
-onMounted(() => {
-  if ($q.screen.lt.sm) {
-    setupSpring();
-  }
-});
+          if (this.sidebarPanel !== 'explore' && this.$q.screen.lt.sm) {
+            this.sidebarPanel = 'explore';
+          }
+          return false;
+        }
+    },
 
-const togglePanel = () => {
-  mainStore.showPanel = !mainStore.showPanel;
+    hideDialog() {
+      this.$router.push({ name: 'Explore' });
+    },
+    handleSwipe({ evt, ...info }) {
+      if (info.direction === 'down' && this.showPanel) {
+        this.showPanel = false;
 
-  if (mainStore.sidebarPanel !== 'explore') {
-    mainStore.sidebarPanel = 'explore';
-  }
-};
+        if (this.sidebarPanel !== 'explore' && this.$q.screen.lt.sm) {
+          this.sidebarPanel = 'explore';
+        }
+      } else {
+        this.showPanel = true;
+      }
+    },
+    togglePanel(event) {
+      this.showPanel = !this.showPanel;
 
-/*
-watch(
-  () => mainStore.showPanel,
-  (to: string, from: string) => {
-    if (to) {
-      spring.set({ x: 0, y: showingYPosition, cursor: 'grab' });
-    } else {
-      spring.set({ x: 0, y: hiddenYPosition, cursor: 'grab' });
-    }
-  }
-);
-*/
+      if (this.sidebarPanel !== 'explore') {
+        this.sidebarPanel = 'explore';
+      }
+    },
+    onMobileSwipeHandle(direction) {
+      if (!direction) {
+        this.showPanel = !this.showPanel;
+      }
 
-watch(
-  () => mainStore.sidebarPanel,
-  (to: string, from: string) => {
-    if (from === 'explore') {
-      /*
+      if (this.sidebarPanel !== 'explore') {
+        this.sidebarPanel = 'explore';
+      }
+      this.showPanel = !this.showPanel;
+    },
+  },
+  watch: {
+    showPanel(newv) {
+      // timeouts are so that we wait until the animation is finished
+      if (newv === true) {
+        this.panelHiddenDelayed = false;
+      } else {
+        setTimeout(() => {
+          this.panelHiddenDelayed = true;
+        }, 350);
+      }
+    },
+
+    mapMoving() {
+      if (this.view === 'nearby' && !this.loadingUserLocation) {
+        this.view = 'explore';
+      }
+    },
+    userLocation() {
+      if (this.view === 'explore') {
+        this.view = 'nearby';
+      }
+    },
+
+    sidebarPanel(to, from) {
+      if (from === 'explore') {
+        /*
         this.eventDates = [];
         this.eventDatesGroupedByMonth = {};
         this.eventDatesLoading = true;
         */
-    }
-    if (to === 'explore') {
-      spring.value?.set({ x: 0, y: hiddenYPosition, cursor: 'grab' });
-      mainStore.showPanel = false;
-      if (from === 'nearby') {
       }
-    }
-    if (to === 'search') {
-      mainStore.showPanel = true;
-      spring.value?.set({ x: 0, y: showingYPosition, cursor: 'grab' });
-    }
-    if (to === 'nearby') {
-      if ($q.screen.lt.sm) {
-        spring.value?.set({ x: 0, y: showingYPosition, cursor: 'grab' });
-        mainStore.showPanel = true;
-        mainStore.enablePanelSwipeDown = true;
-      } else {
-        mainStore.showPanel = false;
-        mainStore.enablePanelSwipeDown = true;
+      if (to === 'explore') {
+        this.showPanel = false;
+        if (from === 'nearby') {
+        }
       }
-    }
-  }
-);
+      if (to === 'search') {
+        this.showPanel = true;
+      }
+      if (to === 'nearby') {
+        if (this.$q.screen.lt.sm) {
+          this.showPanel = true;
+          this.enablePanelSwipeDown = true;
+        } else {
+          this.showPanel = false;
+          this.enablePanelSwipeDown = true;
+        }
+      }
+    },
+  },
+  computed: {
+    ...mapState(useAuthStore, ['currentUser']),
+    ...mapState(useMainStore, [
+      'userLocation',
+      'loadingUserLocation',
+      'getFineLocation',
+      'userLocationLoading',
+      'userLocationFromSearch',
+      'computedSidebarWidth',
+    ]),
+    ...mapWritableState(useMainStore, [
+      'sidebarExpanded',
+      'showPanel',
+      'sidebarPanel',
+      'enablePanelSwipeDown',
+    ]),
+    ...mapState(useMapStore, ['mapMoving']),
+    ...mapWritableState(useMapStore, ['preventMapZoom']),
+    ...mapWritableState(useQueryStore, [
+      'eventDates',
+      'eventDatesGroupedByMonth',
+      'eventDatesLoading',
+    ]),
+    route() {
+      return this.$route;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -455,7 +551,7 @@ watch(
     height: 100%;
     // max-width: 600px;
     pointer-events: all;
-    // transition: all 0.4s ease;
+    transition: all 0.4s ease;
     //transform: translate3d(0, calc(100% - 226px), 0);
     user-select: none;
     //padding-bottom: 64px;
@@ -502,7 +598,7 @@ watch(
     }
 
     &.sidebar-mobile-expanded {
-      //   transform: translate3d(0, 64px, 0);
+      transform: translate3d(0, 64px, 0);
     }
 
     &:not(.sidebar-mobile-expanded):hover {
@@ -648,7 +744,6 @@ watch(
       box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 
       justify-content: center;
-
       :deep(.controls-wrapper-inner) {
         // width: 100%;
 
@@ -701,7 +796,7 @@ watch(
       .sidebar-content {
       }
       &.sidebar-mobile-expanded {
-        //     transform: translate3d(0, 88px, 0);
+        transform: translate3d(0, 88px, 0);
       }
     }
   }
@@ -829,12 +924,12 @@ watch(
 
     .sidebar {
       box-shadow: none;
-      //  transition: transform 0.4s ease, opacity 0s ease;
+      transition: transform 0.4s ease, opacity 0s ease;
 
       width: 100%;
       background: transparent;
       //margin-top: 48px;
-      //     transform: translate3d(0, calc(100% - 228px), 0);
+      transform: translate3d(0, calc(100% - 228px), 0);
       //will-change: auto;
       padding-bottom: 188px;
       border-left: none;
@@ -843,15 +938,13 @@ watch(
       max-width: 100vw;
       width: 100vwv;
       border-radius: 18px;
-      will-change: opacity, transform; //important for smoothness on android
+      will-change: opacity, transform;
       @supports ((top: var(--safe-area-inset-top))) {
-        /*
         transform: translate3d(
           0,
           calc(100% - 228px - var(--safe-area-inset-top)),
           0
         );
-        */
         padding-bottom: calc(180px + var(--safe-area-inset-top));
       }
       @supports (
@@ -859,7 +952,6 @@ watch(
             (-webkit-appearance: none)
         )
         and (max-width: 600px) {
-        /*
         transform: translate3d(
           0,
           calc(
@@ -868,7 +960,6 @@ watch(
           ),
           0
         );
-        */
         // below value -8px is correct for iphone 7, + 16px is correct for iphone x in app mode, 0px correct for iphone x in browser
         // padding-bottom: calc(188px + env(safe-area-inset-top));
       }
@@ -876,7 +967,7 @@ watch(
       .sidebar-content {
       }
       &.sidebar-mobile-expanded {
-        //  transform: translate3d(0, 120px, 0);
+        transform: translate3d(0, 120px, 0);
         //padding-bottom: 128px;
         border-radius: 0px;
       }

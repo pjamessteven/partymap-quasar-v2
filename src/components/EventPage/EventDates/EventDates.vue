@@ -118,7 +118,7 @@
         </div>
       </q-list>
       <div
-        class="inter bolder text-large t2 q-pr-md q-mt-md event-page-header"
+        class="inter bolder text-large t2 q-pr-md event-page-header"
         v-if="selectedEventDate?.artists?.length > 0"
       >
         {{ $t('event_dates.lineup') }}

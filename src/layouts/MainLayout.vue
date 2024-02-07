@@ -44,7 +44,7 @@
         />
       </div>
 
-      <!-- There's two router views because we want different transitions for different pages
+      <!-- There's two router views beca   we want different transitions for different pages
   and we're lazy... -->
 
       <router-view
@@ -57,8 +57,16 @@
         }"
       >
         <Transition
-          :name="eventPageTransition ? 'event-page' : ''"
-          :mode="eventPageTransition ? 'out-in' : undefined"
+          :name="eventPageTransition && !disableAnimations ? 'event-page' : ''"
+          :mode="
+            eventPageTransition && !disableAnimations ? 'out-in' : undefined
+          "
+          :enter-active-class="
+            eventPageTransition ? undefined : 'animated fadeIn'
+          "
+          :leave-active-class="
+            eventPageTransition ? undefined : 'animated fadeOut'
+          "
         >
           <keep-alive>
             <component :is="Component" />
@@ -73,9 +81,19 @@
           'mobile-map-view-router': $q.screen.lt.sm,
         }"
       >
-        <keep-alive>
-          <component :is="Component" />
-        </keep-alive>
+        <Transition
+          :enter-active-class="
+            $q.screen.gt.xs ? 'animated  fadeIn' : 'animated fadeIn'
+          "
+          :leave-active-class="
+            $q.screen.gt.xs ? 'animated fadeOut' : 'animated fadeOut'
+          "
+          mode="in-out"
+        >
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
+        </Transition>
       </router-view>
       <NavigationBar
         class="nav-bar"
@@ -104,8 +122,6 @@ import { mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import { useMainStore } from 'src/stores/main';
 import { useEventStore } from 'src/stores/event';
-import { SafeAreaController } from '@aashu-dubey/capacitor-statusbar-safe-area';
-import { SafeArea } from '@aashu-dubey/capacitor-statusbar-safe-area';
 
 export default {
   components: {
@@ -118,8 +134,6 @@ export default {
   },
   data() {
     return {
-      androidStatusbarHeight: 0,
-      insets: {},
       overlayOpacityTransition: true,
       eventPageTransition: false,
     };
@@ -129,14 +143,6 @@ export default {
       this.showPanel = false;
       this.sidebarPanel = 'explore';
     },
-  },
-  async beforeMount() {
-    // this package is specifically to get the statusbar padding on android
-    SafeAreaController.injectCSSVariables();
-    const { height } = await SafeArea.getStatusBarHeight();
-    this.androidStatusbarHeight = height;
-    const insets = await SafeArea.getSafeAreaInsets();
-    this.insets = insets;
   },
   beforeRouteUpdate(to, from, next) {
     if (from.name === 'Explore') {
@@ -153,7 +159,8 @@ export default {
     if (to.name === 'EventPage') {
       this.sidebarOpacity = 0;
       this.overlayOpacityTransition = false;
-      if (from.name === 'Explore' || this.$q.screen.lt.sm) {
+      if (from.name === 'Explore') {
+        // dont transition to eventpage from explore/artist pages on desktop
         this.eventPageTransition = true;
       } else {
         this.eventPageTransition = false;
@@ -162,7 +169,8 @@ export default {
     if (from.name === 'EventPage') {
       this.sidebarOpacity = 1;
 
-      if (to.name === 'Explore' || this.$q.screen.lt.sm) {
+      if (to.name === 'Explore') {
+        // dont transition to eventpage from explore/artist pages on desktop
         this.eventPageTransition = true;
       } else {
         this.eventPageTransition = false;
@@ -181,6 +189,7 @@ export default {
       'showPanel',
       'sidebarPanel',
       'sidebarOpacity',
+      'disableAnimations',
     ]),
     ...mapWritableState(useEventStore, ['event']),
     computedSidebarOpacity() {
@@ -480,7 +489,8 @@ export default {
     }
     .sidebar-wrapper {
       transition: opacity 0.3s ease;
-
+      will-change: opacity;
+      //transform: translate3d(0, 0, 0);
       .search-component {
         z-index: 105;
       }
@@ -492,7 +502,6 @@ export default {
         height: 100%;
         width: 100%;
         pointer-events: none;
-
         margin-top: calc(0px - var(--safe-area-inset-top)) !important;
       }
     }

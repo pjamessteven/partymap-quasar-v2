@@ -105,7 +105,6 @@ import ControlsComponent from 'src/components/Controls/ControlsComponent.vue';
 
 export default {
   components: { ControlsComponent },
-  props: {},
   data() {
     return { showSearch: false };
   },

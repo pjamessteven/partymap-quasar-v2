@@ -121,8 +121,8 @@
         label="Dark Mode"
       />
     </q-item>
-    <q-item v-if="$q.screen.lt.sm">
-      <q-toggle v-model="mobilePosterView" label="Grid View" />
+    <q-item v-if="$q.screen.lt.sm && false">
+      <q-toggle v-model="disableAnimations" label="Animations" />
     </q-item>
 
     <q-separator inset class="q-mb-xs" />
@@ -308,8 +308,8 @@
         label="Dark Mode"
       />
     </q-item>
-    <q-item v-if="$q.screen.lt.sm">
-      <q-toggle v-model="mobilePosterView" label="Grid View" />
+    <q-item v-if="$q.screen.lt.sm && false">
+      <q-toggle v-model="disableAnimations" label="Slow phone" />
     </q-item>
 
     <q-separator inset class="q-mb-xs" />
@@ -423,7 +423,11 @@ export default {
       return this.$route;
     },
     ...mapState(useAuthStore, ['currentUser']),
-    ...mapWritableState(useMainStore, ['compactView', 'groupEventsByMonth']),
+    ...mapWritableState(useMainStore, [
+      'compactView',
+      'groupEventsByMonth',
+      'disableAnimations',
+    ]),
     ...mapWritableState(useMapStore, ['mapStyle']),
   },
   beforeMount() {

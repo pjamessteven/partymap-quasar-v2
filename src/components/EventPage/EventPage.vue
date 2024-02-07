@@ -33,7 +33,7 @@
         ref="scrollArea"
         @scroll="onScrollMainContent"
         class="scroll-area flex grow"
-        :style="disableScroll ? 'overflow: hidden!important;' : ''"
+        :class="disableScroll ? 'disable-scroll' : ''"
         :thumb-style="
           $q.screen.gt.xs
             ? {
@@ -831,12 +831,38 @@ const eventPage = ref();
 
 const spring = ref();
 
-const dragHandler = ({ movement: [x, y], dragging }) => {
+const hiddenYPosition = window.innerHeight - window.innerHeight * 0.2;
+const dragHandler = ({
+  movement: [x, y],
+  dragging,
+  swipe: [swipeX, swipeY],
+}) => {
+  // handle swipe
+  if (swipeY == 1 && scrollPercentage.value <= 0) {
+    spring.value.set({
+      cursor: 'grabbing',
+      x,
+      y: hiddenYPosition,
+    });
+    setTimeout(() => {
+      goBack();
+    }, 50);
+    return;
+  }
+
   if (!dragging) {
     if (y > 150 && scrollPercentage.value <= 0) {
-      goBack();
+      spring.value.set({
+        cursor: 'grabbing',
+        x,
+        y: hiddenYPosition,
+      });
+      setTimeout(() => {
+        goBack();
+      }, 50);
     } else {
       spring.value.set({ x: 0, y: 0, cursor: 'grab' });
+      mainStore.sidebarOpacity = 0;
     }
     return;
   }
@@ -848,8 +874,6 @@ const dragHandler = ({ movement: [x, y], dragging }) => {
         'Explore'
     ) {
       mainStore.sidebarOpacity = 1;
-    } else {
-      mainStore.sidebarOpacity = 0;
     }
     // mainStore.sidebarOpacity = 0 + ((y - 150) / 100) * 1;
     spring.value.set({
@@ -1090,6 +1114,7 @@ const load = async () => {
 onActivated(() => {
   // called on initial mount
   // and every time it is re-inserted from the cache
+  disableScroll.value = true; // helps animation be smoother on android
 
   // we need to reset spring state every time we open the event page
   const { motionProperties } = useMotionProperties(eventPage, { x: 0, y: 0 });
@@ -1098,7 +1123,7 @@ onActivated(() => {
   // ensure sidebar is transparent on mobile
   mainStore.sidebarOpacity = 0;
 
-  disableScroll.value = true; // helps animation be smoother on android
+  setTimeout(() => (disableScroll.value = false), 400);
 
   if (!event.value || (event.value && event.value?.id + '' !== props.id + '')) {
     event.value = null;
@@ -1445,6 +1470,11 @@ a {
       overflow-y: auto;
       // -webkit-overflow-scrolling: touch; // WOW THIS ACTUALLY HELPS ON IOS
 
+      &.disable-scroll {
+        :deep(.scroll) {
+          overflow: hidden !important;
+        }
+      }
       .main-row {
         position: relative;
 

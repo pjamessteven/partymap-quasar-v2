@@ -1023,7 +1023,7 @@ export default {
     if (this.$q.screen.lt.sm || true) {
       setTimeout(() => {
         this.sidebarPanelReady = true;
-      }, 300);
+      }, 400);
     } else {
       this.sidebarPanelReady = true;
     }

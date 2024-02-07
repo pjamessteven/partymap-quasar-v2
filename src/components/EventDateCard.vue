@@ -31,12 +31,14 @@
               class="image not-loaded"
               v-show="!loadedImage"
             />
-            <img
-              :src="imgThumbUrl"
-              class="image"
-              @load="() => (loadedImage = true)"
-              v-show="loadedImage"
-            />
+            <transition enter-active-class="animated fadeIn">
+              <img
+                :src="imgThumbUrl"
+                class="image"
+                @load="() => (loadedImage = true)"
+                v-show="loadedImage"
+              />
+            </transition>
           </div>
           <div class="flex column grow q-pl-md" style="width: 100%">
             <div

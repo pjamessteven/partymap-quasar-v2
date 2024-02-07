@@ -31,11 +31,13 @@
               class="not-loaded"
               v-show="!loadedImage"
             />
-            <img
-              :src="imgThumbUrl"
-              @load="() => (loadedImage = true)"
-              v-show="loadedImage"
-            />
+            <transition enter-active-class="animated fadeIn">
+              <img
+                :src="imgThumbUrl"
+                @load="() => (loadedImage = true)"
+                v-show="loadedImage"
+              />
+            </transition>
           </div>
           <div class="card-bottom-content">
             <div class="flex column ellipsis q-pa-sm" v-if="hideInfo">

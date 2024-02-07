@@ -12,7 +12,7 @@
 
     <div class="mobile-panel-button">
       <q-icon
-        @click="() => (showPanel = !showPanel)"
+        @click="showPanel ? $emit('hidePanel') : $emit('showPanel')"
         v-if="$q.screen.lt.sm"
         flat
         size="1.5rem"

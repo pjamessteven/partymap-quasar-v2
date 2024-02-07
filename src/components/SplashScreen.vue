@@ -64,12 +64,12 @@
 
     .logo {
       position: absolute;
-      top: 0px;
-      left: 0px;
+      top: 5px;
+      left: 8px;
       z-index: 1;
 
-      @supports ((top: var(--safe-area-inset-top))) {
-        top: var(--safe-area-inset-top);
+      @supports ((top: env(safe-area-inset-top))) {
+        top: calc(env(safe-area-inset-top) + 5px);
       }
 
       &.ipad {
@@ -82,6 +82,23 @@
             (-webkit-appearance: none)
         ) {
           top: calc(env(safe-area-inset-top) - 8px);
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .splash-screen {
+    .splash-inner {
+      .logo {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        z-index: 1;
+
+        @supports ((top: var(--safe-area-inset-top))) {
+          top: calc(var(--safe-area-inset-top) + 0px);
         }
       }
     }
