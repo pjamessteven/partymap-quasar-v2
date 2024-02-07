@@ -1,6 +1,7 @@
 <template>
   <div
     ref="eventPage"
+    v-drag="dragHandler"
     class="event-page"
     :style="mapStore.peekMap ? 'pointer-events: none !important' : ''"
   >
@@ -58,7 +59,6 @@
             @click="clickBackground()"
           />
           <div
-            v-drag="dragHandler"
             ref="contentCard"
             class="content-card flex column no-wrap"
             :class="{
@@ -836,51 +836,58 @@ const dragHandler = ({
   movement: [x, y],
   dragging,
   swipe: [swipeX, swipeY],
+  offset,
+  delta,
+  initial,
 }) => {
-  // handle swipe
-  if (swipeY == 1 && scrollPercentage.value <= 0) {
-    spring.value.set({
-      cursor: 'grabbing',
-      x,
-      y: hiddenYPosition,
-    });
-    setTimeout(() => {
-      goBack();
-    }, 50);
-    return;
-  }
-
-  if (!dragging) {
-    if (y > 150 && scrollPercentage.value <= 0) {
+  if (scrollPercentage.value <= 0) {
+    if (swipeY == 1) {
       spring.value.set({
         cursor: 'grabbing',
         x,
         y: hiddenYPosition,
       });
-      setTimeout(() => {
-        goBack();
-      }, 50);
-    } else {
-      spring.value.set({ x: 0, y: 0, cursor: 'grab' });
-      mainStore.sidebarOpacity = 0;
+      //  spring.value.stop();
+      setTimeout(() => (mainStore.sidebarOpacity = 1), 150);
+
+      //spring.value.stop();
+      setTimeout(() => goBack(), 150);
+      return;
     }
-    return;
-  }
-  // only allow dragging down
-  if (y > 0 && scrollPercentage.value <= 0) {
-    if (
-      y > 150 &&
-      mainStore.routerHistory?.[mainStore.routerHistory.length - 1]?.name ===
-        'Explore'
-    ) {
-      mainStore.sidebarOpacity = 1;
+
+    if (!dragging) {
+      if (y > 150) {
+        spring.value.set({
+          cursor: 'grabbing',
+          x,
+          y: hiddenYPosition,
+        });
+
+        setTimeout(() => (mainStore.sidebarOpacity = 1), 150);
+
+        //spring.value.stop();
+        setTimeout(() => goBack(), 150);
+      } else {
+        spring.value.set({ x: 0, y: 0, cursor: 'grab' });
+      }
+      return;
     }
-    // mainStore.sidebarOpacity = 0 + ((y - 150) / 100) * 1;
-    spring.value.set({
-      cursor: 'grabbing',
-      x,
-      y,
-    });
+    // only allow dragging down
+    if (y > 0) {
+      if (
+        y > 150 &&
+        mainStore.routerHistory?.[mainStore.routerHistory.length - 1]?.name ===
+          'Explore'
+      ) {
+        // mainStore.sidebarOpacity = 1;
+      }
+      // mainStore.sidebarOpacity = 0 + ((y - 150) / 100) * 1;
+      spring.value.set({
+        cursor: 'grabbing',
+        x,
+        y,
+      });
+    }
   }
 };
 
@@ -1114,16 +1121,7 @@ const load = async () => {
 onActivated(() => {
   // called on initial mount
   // and every time it is re-inserted from the cache
-  disableScroll.value = true; // helps animation be smoother on android
-
-  // we need to reset spring state every time we open the event page
-  const { motionProperties } = useMotionProperties(eventPage, { x: 0, y: 0 });
-  spring.value = useSpring(motionProperties);
-
-  // ensure sidebar is transparent on mobile
   mainStore.sidebarOpacity = 0;
-
-  setTimeout(() => (disableScroll.value = false), 400);
 
   if (!event.value || (event.value && event.value?.id + '' !== props.id + '')) {
     event.value = null;
@@ -1140,6 +1138,39 @@ onActivated(() => {
   } else {
     mainStore.menubarOpacity = previousMenubarOpacity.value;
   }
+
+  disableScroll.value = true; // helps animation be smoother on android
+
+  // we need to reset spring state every time we open the event page
+  const { motionProperties } = useMotionProperties(eventPage, {
+    x: 0,
+    y: hiddenYPosition,
+  });
+  // ...and then animate in
+
+  spring.value = useSpring(motionProperties, { stiffness: 400, damping: 30 });
+
+  // if android then do this for performance
+  if ($q.platform.is.android) {
+    setTimeout(
+      () =>
+        spring.value.set({
+          cursor: 'grabbing',
+          y: 0,
+        }),
+      150
+    );
+  } else {
+    spring.value.set({
+      cursor: 'grabbing',
+      y: 0,
+    });
+  }
+
+  // ensure sidebar is transparent on mobile
+
+  setTimeout(() => (disableScroll.value = false), 300);
+
   if (route.query.location) {
     mapStore.focusMarker = JSON.parse(route.query.location as string);
   }
@@ -1287,6 +1318,7 @@ a {
   }
 
   .event-page {
+    will-change: tranform;
     .scroll-area {
       .edit-event-dates {
         background: $bi-2;

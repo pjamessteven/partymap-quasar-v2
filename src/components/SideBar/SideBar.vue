@@ -2,6 +2,7 @@
   <div class="flex sidebar-wrapper">
     <div
       ref="sidebar"
+      v-drag="dragHandler"
       class="flex justify-between no-wrap sidebar"
       id="sidebar"
       :style="mainStore.computedSidebarWidth"
@@ -111,20 +112,26 @@
 
         <SearchComponent class="search-component" v-if="$q.screen.gt.xs" />
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
-          <NearbyView
-            style="height: 100%; width: 100%"
-            v-if="mainStore.sidebarPanel === 'nearby'"
-          />
-          <ExploreView
-            style="height: 100%; width: 100%"
-            @hidePanel="hidePanel"
-            @showPanel="showPanel"
-            v-show="mainStore.sidebarPanel === 'explore'"
-          />
-          <SearchView
-            style="height: 100%; width: 100%"
-            v-show="mainStore.sidebarPanel === 'search'"
-          />
+          <keep-alive>
+            <NearbyView
+              style="height: 100%; width: 100%"
+              v-if="mainStore.sidebarPanel === 'nearby'"
+            />
+          </keep-alive>
+          <keep-alive>
+            <ExploreView
+              style="height: 100%; width: 100%"
+              @hidePanel="hidePanel"
+              @showPanel="showPanel"
+              v-if="mainStore.sidebarPanel === 'explore'"
+            />
+          </keep-alive>
+          <keep-alive>
+            <SearchView
+              style="height: 100%; width: 100%"
+              v-if="mainStore.sidebarPanel === 'search'"
+            />
+          </keep-alive>
         </div>
         <NavigationBar
           @click="togglePanel"
@@ -156,7 +163,7 @@ import { useRouter, useRoute } from 'vue-router';
 
 import { useDrag } from '@vueuse/gesture';
 import { useMotionProperties, useSpring } from '@vueuse/motion';
-import { ref, watch, toRaw, onMounted } from 'vue';
+import { ref, watch, toRaw, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useQuasar } from 'quasar';
 import { SafeArea } from '@aashu-dubey/capacitor-statusbar-safe-area';
@@ -275,6 +282,16 @@ const setupSpring = () => {
 
 onMounted(() => {
   if ($q.screen.lt.sm) {
+    setupSpring();
+  }
+});
+
+const isMobile = computed(() => {
+  return $q.screen.lt.sm;
+});
+
+watch(isMobile, (newv) => {
+  if (newv) {
     setupSpring();
   }
 });

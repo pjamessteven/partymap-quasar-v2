@@ -285,28 +285,36 @@ export default {
 }
 
 .event-page-enter-active {
-  transform: translate3d(0, 0, 0) !important;
-  transition: transform 0.3s ease;
+  // transform: translate3d(0, 0, 0) !important;
+  // transition: transform 0.3s ease;
   z-index: 5000;
   //opacity: 1;
 }
 
 .event-page-enter-from {
-  transform: translate3d(0, 100vh, 0) !important;
+  // transform: translate3d(0, 100vh, 0) !important;
 }
 
 .event-page-leave-to {
   z-index: 5000;
+
   /*
   transform: translate3d(
     0,
     calc(100vh - Max(calc((100vh - 66vh) - 64px), 0px)),
     0
-  );
-  */
+  ) !important;
 
-  transform: translate3d(0, 100vh, 0) !important;
-  transition: transform 0.5s ease;
+   transform: translate3d(0, 100vh, 0) !important;
+  transition: transform 0.3s ease;
+  */
+  transform: translate3d(
+    0,
+    calc(100vh - Max(calc((100vh - 66vh) - 64px), 0px)),
+    0
+  ) !important;
+  transition: transform 0.3s ease;
+
   //opacity: 0;
 }
 
