@@ -106,8 +106,6 @@ export default {
     if (this.$q.platform.is.ipad) {
       StatusBar.hide();
     } else if (this.$q.platform.is.capacitor) {
-      // Display content under transparent status bar (Android only)
-      StatusBar.setOverlaysWebView({ overlay: true });
       if (this.iconColor === 'black') {
         StatusBar.setStyle({ style: Style.Light });
       } else {

@@ -24,6 +24,7 @@
             :src="event.youtube_url"
             :width="clientWidth"
             :height="computedHeight"
+            @onStateChange="onStateChange"
           />
 
           <div v-else-if="editing" class="t4 flex items-center">
@@ -71,6 +72,14 @@ export default {
     };
   },
   methods: {
+    onStateChange(event) {
+      // playback state of -1 is 'unstarted'
+      //  https://developers.google.com/youtube/iframe_api_reference#Events
+      // once video is started we want to allow auto rotation on mobile
+      if (event.data > -1) {
+        window.screen.orientation.unlock();
+      }
+    },
     openEditorDialog() {
       if (this.editing) {
         this.showEditingDialog = true;
@@ -94,6 +103,9 @@ export default {
     this.clientWidth = this.$refs.container.clientWidth;
   },
   beforeUnmount: function () {
+    if (!this.$q.platform.is.ipad) {
+      window.screen.orientation.lock('portrait');
+    }
     window.removeEventListener('resize', this.debouncedHandleResize);
   },
 

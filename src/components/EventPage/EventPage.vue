@@ -832,6 +832,13 @@ const eventPage = ref();
 const spring = ref();
 
 const hiddenYPosition = window.innerHeight - window.innerHeight * 0.2;
+
+const previousRouteIsExplore = computed(
+  () =>
+    mainStore.routerHistory[mainStore.routerHistory.length - 1]?.name ===
+    'Explore'
+);
+
 const dragHandler = ({
   movement: [x, y],
   dragging,
@@ -847,11 +854,18 @@ const dragHandler = ({
         x,
         y: hiddenYPosition,
       });
-      //  spring.value.stop();
-      setTimeout(() => (mainStore.sidebarOpacity = 1), 150);
 
-      //spring.value.stop();
-      setTimeout(() => goBack(), 150);
+      if ($q.platform.is.android) {
+        if (previousRouteIsExplore.value) {
+          setTimeout(() => (mainStore.sidebarOpacity = 1), 150);
+        }
+        setTimeout(() => goBack(), 300);
+      } else {
+        if (previousRouteIsExplore.value) {
+          mainStore.sidebarOpacity = 1;
+        }
+        goBack();
+      }
       return;
     }
 
@@ -863,10 +877,17 @@ const dragHandler = ({
           y: hiddenYPosition,
         });
 
-        setTimeout(() => (mainStore.sidebarOpacity = 1), 150);
-
-        //spring.value.stop();
-        setTimeout(() => goBack(), 150);
+        if ($q.platform.is.android) {
+          if (previousRouteIsExplore.value) {
+            setTimeout(() => (mainStore.sidebarOpacity = 1), 150);
+          }
+          setTimeout(() => goBack(), 300);
+        } else {
+          if (previousRouteIsExplore.value) {
+            mainStore.sidebarOpacity = 1;
+          }
+          goBack();
+        }
       } else {
         spring.value.set({ x: 0, y: 0, cursor: 'grab' });
       }

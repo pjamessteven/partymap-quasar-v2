@@ -150,6 +150,7 @@ export default {
       // blockUpdates is re-enabled in Map.vue at map.
     }
     if (to.name === 'Explore') {
+      this.sidebarOpacity = 1;
       setTimeout(() => {
         this.overlayOpacityTransition = true;
         this.blockUpdates = false;
@@ -167,7 +168,7 @@ export default {
       }
     }
     if (from.name === 'EventPage') {
-      this.sidebarOpacity = 1;
+      //this.sidebarOpacity = 1;
 
       if (to.name === 'Explore') {
         // dont transition to eventpage from explore/artist pages on desktop

@@ -31,6 +31,7 @@
     "@vueuse/gesture": "^2.0.0-beta.1",
     "@vueuse/motion": "^2.0.0",
     "axios": "^0.21.1",
+    "cordova-plugin-screen-orientation": "^3.0.4",
     "hcaptcha": "^0.1.1",
     "leaflet": "^1.9.3",
     "leaflet-geosearch": "^3.7.0",

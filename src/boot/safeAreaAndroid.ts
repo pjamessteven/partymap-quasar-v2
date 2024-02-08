@@ -11,8 +11,11 @@ export default boot(({ app }) => {
   // so we have a custom flow, similar to the flows for facebook/google on ios.
   SafeAreaController.injectCSSVariables();
   if (Platform.is.capacitor) {
+    // force portrait orientation for phones
+    if (!Platform.is.ipad) {
+      window.screen.orientation.lock('portrait');
+    }
     // Display content under transparent status bar (Android only)
-
     StatusBar.setOverlaysWebView({ overlay: true });
     if (Dark.isActive) {
       StatusBar.setStyle({ style: Style.Dark });

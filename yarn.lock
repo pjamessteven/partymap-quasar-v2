@@ -3173,6 +3173,11 @@ copy-webpack-plugin@11.0.0:
     schema-utils "^4.0.0"
     serialize-javascript "^6.0.0"
 
+cordova-plugin-screen-orientation@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-screen-orientation/-/cordova-plugin-screen-orientation-3.0.4.tgz#2527870c95019ddf42af495f0e8a29a1d5ec728f"
+  integrity sha512-AswRuUKJ8J3HycUilTJsIB50aa9TLrwndPNBFG+wfAPhHEqIBF0HaD0q3HbAK7ypgmaj0cvbzk84qP51IcTfrQ==
+
 core-js-compat@^3.31.0, core-js-compat@^3.33.1, core-js-compat@^3.6.5:
   version "3.33.1"
   resolved "https://registry.npmjs.org/core-js-compat/-/core-js-compat-3.33.1.tgz"
