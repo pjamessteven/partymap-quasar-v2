@@ -441,7 +441,7 @@ export default {
         // android
         @supports ((top: var(--safe-area-inset-top))) {
           padding-top: var(--safe-area-inset-top);
-          height: calc(env(safe-area-inset-top) + 96px);
+          height: calc(env(safe-area-inset-top) + 100px);
           position: fixed;
           top: 0px;
         }

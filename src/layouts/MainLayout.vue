@@ -285,40 +285,6 @@ export default {
   }
 }
 
-.event-page-enter-active {
-  // transform: translate3d(0, 0, 0) !important;
-  // transition: transform 0.3s ease;
-  z-index: 5000;
-  //opacity: 1;
-}
-
-.event-page-enter-from {
-  // transform: translate3d(0, 100vh, 0) !important;
-}
-
-.event-page-leave-to {
-  z-index: 5000;
-
-  /*
-  transform: translate3d(
-    0,
-    calc(100vh - Max(calc((100vh - 66vh) - 64px), 0px)),
-    0
-  ) !important;
-
-   transform: translate3d(0, 100vh, 0) !important;
-  transition: transform 0.3s ease;
-  */
-  transform: translate3d(
-    0,
-    calc(100vh - Max(calc((100vh - 66vh) - 64px), 0px)),
-    0
-  ) !important;
-  transition: transform 0.3s ease;
-
-  //opacity: 0;
-}
-
 .main-layout {
   height: 100%;
   width: 100%;
@@ -427,6 +393,45 @@ export default {
     }
   }
 }
+
+@media only screen and (min-width: 600px) {
+  // basic CSS transitions for desktop EventPage
+  // mobile uses fancy useMotion/useGesture packages
+
+  .event-page-enter-active {
+    transform: translate3d(0, 0, 0) !important;
+    transition: transform 0.3s ease;
+    z-index: 5000;
+    //opacity: 1;
+  }
+
+  .event-page-enter-from {
+    transform: translate3d(0, 100vh, 0) !important;
+  }
+
+  .event-page-leave-to {
+    z-index: 5000;
+
+    transform: translate3d(
+      0,
+      calc(100vh - Max(calc((100vh - 66vh) - 64px), 0px)),
+      0
+    ) !important;
+    /*
+
+   transform: translate3d(0, 100vh, 0) !important;
+  transition: transform 0.3s ease;
+  */
+    transform: translate3d(
+      0,
+      calc(100vh - Max(calc((100vh - 66vh) - 64px), 0px)),
+      0
+    ) !important;
+    transition: transform 0.3s ease;
+
+    //opacity: 0;
+  }
+}
 @media only screen and (max-width: 600px) {
   .body--dark {
     .main-layout {
@@ -476,6 +481,7 @@ export default {
       }
     }
   }
+
   .main-layout {
     .main-layout-router {
       padding-top: calc(62px + var(--safe-area-inset-top));

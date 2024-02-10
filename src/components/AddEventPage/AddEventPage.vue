@@ -1,5 +1,5 @@
 <template>
-  <SolidPage @scrollPercentage="onScrollPercentage($event)">
+  <SolidPage @scrollPercentage="onScrollPercentage($event)" ref="solidPage">
     <template v-slot:title>
       <div v-if="event.host">
         {{ $t('add_event.add_your_event') }} &nbsp;<i
@@ -555,15 +555,23 @@
   </div>
   -->
         </div>
-        <q-btn
-          :class="event.host === null ? 'card-disabled' : ''"
-          icon-right="mdi-chevron-right"
-          color="primary"
-          class="soft-button-shadow inter bold q-ma-lg"
-          label="Submit Event"
-          :disable="Object.keys(validationErrors).length > 0"
-          v-on:click="submitEvent"
-        />
+        <div class="flex row no-wrap q-ma-lg">
+          <q-btn
+            icon-right="mdi-undo"
+            class="soft-button-shadow inter bold q-mr-md"
+            label="Reset"
+            v-on:click="reset"
+          />
+          <q-btn
+            :class="event.host === null ? 'card-disabled' : ''"
+            icon-right="mdi-chevron-right"
+            color="primary"
+            class="soft-button-shadow inter bold"
+            label="Submit event"
+            :disable="Object.keys(validationErrors).length > 0"
+            v-on:click="submitEvent"
+          />
+        </div>
       </div>
     </template>
   </SolidPage>
@@ -652,6 +660,35 @@ export default {
     };
   },
   methods: {
+    reset() {
+      this.event = {
+        host: this.host !== undefined ? this.host : false,
+        name: '',
+        description: '',
+        description_attribute: null,
+        full_description: '',
+        full_description_attribute: null,
+        next_event_date_size: null,
+        next_event_date_artists: null,
+        youtube_url: null,
+        media_items: [],
+        url: '',
+        ticket_url: null,
+        tags: [],
+        location: null,
+        date_time: null,
+        rrule: {
+          recurringType: 1,
+          separationCount: 0,
+          weekOfMonth: null,
+          dayOfMonth: null,
+          dayOfWeek: null,
+          monthOfYear: null,
+        },
+      };
+      this.showValidationErrors = false;
+      this.$refs.solidPage.setScrollPercentage('vertical', 0);
+    },
     onScrollPercentage(percentage) {
       if (percentage === 1) {
         this.showValidationErrors = true;

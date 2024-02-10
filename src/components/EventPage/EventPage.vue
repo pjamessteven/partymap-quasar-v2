@@ -1,7 +1,6 @@
 <template>
   <div
     ref="eventPage"
-    v-drag="dragHandler"
     class="event-page"
     :style="mapStore.peekMap ? 'pointer-events: none !important' : ''"
   >
@@ -741,7 +740,7 @@ import { useEventStore } from 'src/stores/event';
 
 import { computed, ref, onActivated, onDeactivated } from 'vue';
 import { useQuasar } from 'quasar';
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import CustomQScroll from 'components/CustomQScroll.vue';
 
@@ -849,45 +848,13 @@ const dragHandler = ({
 }) => {
   if (scrollPercentage.value <= 0) {
     if (swipeY == 1) {
-      spring.value.set({
-        cursor: 'grabbing',
-        x,
-        y: hiddenYPosition,
-      });
-
-      if ($q.platform.is.android) {
-        if (previousRouteIsExplore.value) {
-          setTimeout(() => (mainStore.sidebarOpacity = 1), 150);
-        }
-        setTimeout(() => goBack(), 300);
-      } else {
-        if (previousRouteIsExplore.value) {
-          mainStore.sidebarOpacity = 1;
-        }
-        goBack();
-      }
+      goBack();
       return;
     }
 
     if (!dragging) {
       if (y > 150) {
-        spring.value.set({
-          cursor: 'grabbing',
-          x,
-          y: hiddenYPosition,
-        });
-
-        if ($q.platform.is.android) {
-          if (previousRouteIsExplore.value) {
-            setTimeout(() => (mainStore.sidebarOpacity = 1), 150);
-          }
-          setTimeout(() => goBack(), 300);
-        } else {
-          if (previousRouteIsExplore.value) {
-            mainStore.sidebarOpacity = 1;
-          }
-          goBack();
-        }
+        goBack();
       } else {
         spring.value.set({ x: 0, y: 0, cursor: 'grab' });
       }
@@ -953,6 +920,24 @@ const deleteEvent = () => {
     });
   });
 };
+
+onBeforeRouteLeave((to, from, next) => {
+  // transition out before going back on mobile
+  if ($q.screen.lt.sm) {
+    spring.value.set({
+      cursor: 'grabbing',
+      x: 0,
+      y: hiddenYPosition,
+    });
+
+    if (previousRouteIsExplore.value) {
+      setTimeout(() => (mainStore.sidebarOpacity = 1), 150);
+    }
+    setTimeout(() => {
+      next();
+    }, 300);
+  }
+});
 
 const goBack = () => {
   // if (this.$q.platform.is.android) event = null;
@@ -1149,7 +1134,7 @@ onActivated(() => {
     if (scrollArea.value) {
       (scrollArea.value as any).setScrollPercentage('vertical', 0);
     }
-    if ($q.platform.is.android) {
+    if ($q.platform.is.mobile) {
       setTimeout(() => {
         load();
       }, 350);
@@ -1162,24 +1147,24 @@ onActivated(() => {
 
   disableScroll.value = true; // helps animation be smoother on android
 
-  // we need to reset spring state every time we open the event page
+  // we need to reset spring state every time we open the event page on mobile
   const { motionProperties } = useMotionProperties(eventPage, {
     x: 0,
-    y: hiddenYPosition,
+    y: $q.screen.gt.xs ? 0 : hiddenYPosition,
   });
   // ...and then animate in
 
   spring.value = useSpring(motionProperties, { stiffness: 400, damping: 30 });
 
   // if android then do this for performance
-  if ($q.platform.is.android) {
+  if ($q.platform.is.mobile) {
     setTimeout(
       () =>
         spring.value.set({
           cursor: 'grabbing',
           y: 0,
         }),
-      150
+      300
     );
   } else {
     spring.value.set({

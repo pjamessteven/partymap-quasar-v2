@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container flex column">
     <q-select
       ref="input"
       outlined
@@ -7,13 +7,11 @@
       :error="!!errorMessage"
       :error-message="errorMessage"
       :loading="loading"
-      clearable
       v-model="selectedPlace"
       :label="'Location'"
       :options="autoCompleteResults"
       @filter="locationSearchFilter"
       @update:model-value="getPlaceInformation"
-      style="width: 100%"
       option-label="description"
       map-options
       emit-value

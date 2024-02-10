@@ -2,7 +2,6 @@
   <div class="flex sidebar-wrapper">
     <div
       ref="sidebar"
-      v-drag="dragHandler"
       class="flex justify-between no-wrap sidebar"
       id="sidebar"
       :style="mainStore.computedSidebarWidth"
@@ -177,14 +176,6 @@ const mainStore = useMainStore();
 
 const spring = ref();
 
-/*
-onMounted(async () => {
-  const { height } = await SafeArea.getStatusBarHeight();
-  return height; // Ex. 29.090909957885742
-})
-
-*/
-
 const preventSwipe = (event) => {
   if (
     mainStore.enablePanelSwipeDown &&
@@ -196,7 +187,7 @@ const preventSwipe = (event) => {
     return;
   }
 };
-const hiddenYPosition = window.innerHeight - 228;
+const hiddenYPosition = window.innerHeight - 228 - mainStore.safeAreaInsets.top;
 const showingYPosition = 120;
 
 const showPanel = () => {

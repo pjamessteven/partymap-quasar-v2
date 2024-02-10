@@ -7,6 +7,7 @@ import { Notify } from 'quasar';
 import { Screen, Platform } from 'quasar';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 interface MainStoreState {
+  safeAreaInsets: { [key: string]: number };
   disableAnimations: boolean;
   darkMode: boolean;
   showSidebar: boolean;
@@ -32,6 +33,7 @@ interface MainStoreState {
 }
 export const useMainStore = defineStore('main', {
   state: (): MainStoreState => ({
+    safeAreaInsets: { top: 0, bottom: 0, left: 0, right: 0 },
     disableAnimations: false,
     darkMode: false,
     showSidebar: true,

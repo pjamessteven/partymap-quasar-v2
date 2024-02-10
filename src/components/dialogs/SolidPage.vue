@@ -71,6 +71,9 @@ export default {
     return { scrollPosition: 0, scrollPercentage: 0 };
   },
   methods: {
+    setScrollPercentage(axis, percentage) {
+      this.$refs.scroll.setScrollPercentage(axis, percentage);
+    },
     onScrollMainContent(info) {
       this.scrollPosition = info.verticalPosition;
       this.scrollPercentage = info.verticalPercentage;

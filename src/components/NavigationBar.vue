@@ -87,11 +87,11 @@
         :icon="
           $q.screen.lt.md
             ? $route.name === 'UserPage'
-              ? 'mdi-heart'
-              : 'mdi-heart-outline'
+              ? 'mdi-account-circle'
+              : 'mdi-account-circle-outline'
             : undefined
         "
-        label="Profile"
+        label="You"
         content-class="tab"
         :ripple="false"
         :to="

@@ -1059,6 +1059,12 @@ body {
     }
   }
 
+  .platform-android {
+    .q-select__dialog {
+      padding-top: var(--safe-area-inset-top) !important;
+    }
+  }
+
   .edit-card {
     min-width: 100%;
     max-width: 100%;
