@@ -111,7 +111,7 @@ export default {
     };
   },
   methods: {},
-  activated() {
+  mounted() {
     this.loaded = false;
   },
   computed: {
