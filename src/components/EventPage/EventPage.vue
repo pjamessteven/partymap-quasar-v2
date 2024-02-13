@@ -1155,7 +1155,7 @@ onActivated(() => {
   // ...and then animate in
 
   //spring.value = useSpring(motionProperties, { stiffness: 400, damping: 30 });
-  spring.value = useSpring(motionProperties, { stiffness: 400, damping: 40 });
+  spring.value = useSpring(motionProperties, { stiffness: 400, damping: 35 });
 
   // if android then do this for performance
   if ($q.platform.is.mobile) {
