@@ -1325,6 +1325,9 @@ a {
   }
 
   .event-page {
+    // seems to speed up animations a bit on iphone
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
     will-change: tranform;
     .scroll-area {
       .edit-event-dates {
