@@ -1,5 +1,5 @@
 <template>
-  <div class="ed-summary flex column ellipsis">
+  <div class="ed-summary flex column ellipsis" :class="{ transparent: !ed }">
     <div
       class="flex row items-center ellipsis"
       :class="{ reverse: alignRight }"
@@ -16,16 +16,18 @@
       >
         <div>
           <q-badge
-            v-if="ed.cancelled"
+            v-if="ed?.cancelled"
             class="q-my-xs"
             color="red"
             :label="$t('event_date_inline.cancelled')"
           />
-          <span v-else-if="ed.date_confirmed">
+          <span v-else-if="ed?.date_confirmed == true">
             {{ localDay(ed?.start_naive, ed.tz) }}
             {{ localDate(ed?.start_naive, ed.tz) }}
           </span>
-          <span v-else>Date needs to be confirmed</span>
+          <span v-else-if="ed?.date_confirmed == false"
+            >Date needs to be confirmed</span
+          ><span v-else>...</span>
           <!--
           <span class="t3">
             [{{ timeZoneAbbreviention(ed.event_start, ed.tz) }}]
@@ -45,10 +47,12 @@
         :right="alignRight"
       />
       <span
+        v-if="ed?.location.name"
         class="ellipsis"
         :class="$q.screen.gt.xs ? 'text-large' : 'inter bold'"
         >{{ ed?.location.name }}</span
       >
+      <span v-else>...</span>
     </div>
   </div>
 </template>
@@ -86,6 +90,15 @@ export default {
 .body--light {
   .ed-summary {
     color: $ti-3;
+  }
+}
+
+.ed-summary {
+  opacity: 1;
+
+  transition: opacity 5s ease;
+  &.transparent {
+    opacity: 0;
   }
 }
 </style>

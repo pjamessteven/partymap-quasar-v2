@@ -53,7 +53,8 @@
           style="
             width: 100%;
             height: auto;
-            // filter: blur(10px);
+
+            filter: blur(20px);
             transform: scale(1.2);
           "
           :src="thumbXsUrl"
@@ -253,6 +254,8 @@ export default {
       .item-wrapper-inner {
         //width: unset;
         max-height: unset;
+        -webkit-backface-visibility: hidden;
+        -webkit-transform: translate3d(0, 0, 0);
         img,
         video {
           border-radius: 18px;

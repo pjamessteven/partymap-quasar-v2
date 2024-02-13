@@ -28,7 +28,7 @@
           />
         </video>
         <img
-          :key="headerBackground.id + 'else'"
+          :key="headerBackground.thumb_xs_url"
           v-else-if="headerBackground.thumb_xs_url"
           :src="headerBackground.thumb_xs_url"
           class="item"
@@ -66,11 +66,11 @@ export default {
   computed: {
     ...mapState(useEventStore, ['event', 'backgroundMediaIndex']),
     headerBackground() {
-      if (this.thumbXsUrl) {
+      if (this.thumbXsUrl?.length > 0) {
         return {
           thumb_xs_url: this.thumbXsUrl,
         };
-      } else if (this.event?.media_items?.length) {
+      } else if (this.event?.media_items?.length > 0) {
         return this.event.media_items[this.backgroundMediaIndex];
       } else {
         return null;

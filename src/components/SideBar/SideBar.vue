@@ -268,7 +268,11 @@ const setupSpring = () => {
       mainStore.sidebarPanel === 'Explore' ? hiddenYPosition : showingYPosition,
   });
 
-  spring.value = useSpring(motionProperties, { stiffness: 400, damping: 35 });
+  spring.value = useSpring(motionProperties, {
+    stiffness: 600,
+    damping: 50,
+    mass: 1.8,
+  });
 };
 
 onMounted(() => {

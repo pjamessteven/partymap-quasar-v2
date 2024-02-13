@@ -87,7 +87,7 @@
                   <InnerLoading v-if="loading" :solid="false" />
 
                   <FeaturedMediaBackground
-                    :thumbXsUrl="route.query?.thumbXsUrl + ''"
+                    :thumbXsUrl="route.query?.thumbXsUrl"
                     class="featured-media"
                     :editing="editing"
                   />
@@ -167,6 +167,14 @@
                           :key="selectedEventDate.id"
                           :ed="selectedEventDate"
                         />
+                        <NextEventDateSummary
+                          :class="{
+                            'o-050': editing,
+                          }"
+                          class=""
+                          v-else
+                          key="placeholder"
+                        />
                       </div>
 
                       <FeaturedMediaComponent
@@ -178,11 +186,7 @@
                         :editing="editing"
                         class="q-mt-lg"
                         :item="event?.media_items?.[0]"
-                        :thumbXsUrl="
-                          route.query?.thumbXsUrl
-                            ? route.query.thumbXsUrl + ''
-                            : undefined
-                        "
+                        :thumbXsUrl="route.query?.thumbXsUrl"
                       />
 
                       <div
@@ -1155,7 +1159,11 @@ onActivated(() => {
   // ...and then animate in
 
   //spring.value = useSpring(motionProperties, { stiffness: 400, damping: 30 });
-  spring.value = useSpring(motionProperties, { stiffness: 400, damping: 35 });
+  spring.value = useSpring(motionProperties, {
+    stiffness: 600,
+    damping: 50,
+    mass: 1.8,
+  });
 
   // if android then do this for performance
   if ($q.platform.is.mobile) {
