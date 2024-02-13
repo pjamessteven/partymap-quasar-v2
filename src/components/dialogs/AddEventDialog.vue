@@ -143,7 +143,7 @@ export default {
 }
 
 // sm
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .q-dialog-plugin {
     min-width: unset;
     max-width: 90vw;

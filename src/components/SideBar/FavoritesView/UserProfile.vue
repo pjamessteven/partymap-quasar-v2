@@ -399,7 +399,7 @@ export default {
   min-width: 300px;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .profile-view {
     .avatar-wrapper {
       margin-right: 16px;

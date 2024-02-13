@@ -45,7 +45,7 @@ export default {
   min-width: 400px;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .select-artists {
     min-width: unset;
   }

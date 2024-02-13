@@ -88,7 +88,7 @@
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .splash-screen {
     .splash-inner {
       .logo {

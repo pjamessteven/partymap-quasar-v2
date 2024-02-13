@@ -888,7 +888,7 @@ export default {
 
 <style lang="scss" scoped>
 .add-event-card {
-  max-width: 600px;
+  max-width: 599px;
 }
 
 .body--dark {
@@ -953,7 +953,7 @@ export default {
 }
 
 // sm
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .solid-page {
     .q-card {
       box-shadow: none;

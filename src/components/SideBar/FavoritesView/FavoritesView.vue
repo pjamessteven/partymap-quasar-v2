@@ -564,7 +564,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .event-date-center {
     //margin-top: 74px;
     align-items: start;

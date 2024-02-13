@@ -81,7 +81,7 @@ export default {
             cancel: { label: 'Ignore', flat: true },
             ok: { label: 'Update on Play Store', flat: true },
             title: 'System WebView out of date!',
-            message: `Your Android System WebView is at version v${androidWebviewVersion}. The minimum version required for PartyMap to work smoothly is v120.`,
+            message: `Your Android System WebView is at version v${androidWebviewVersion}. PartyMap works best with at least version 20.`,
             color: 'primary',
           })
           .onOk(() => {
@@ -1004,7 +1004,6 @@ body {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
-
 .shadow-xl {
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -1015,7 +1014,7 @@ body {
 }
 
 // sm
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   html {
     // font-size: 0.9rem !important;
   }

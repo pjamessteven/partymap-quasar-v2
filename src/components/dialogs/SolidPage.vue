@@ -153,11 +153,11 @@ export default {
 @media only screen and (max-width: 1024px) {
   .solid-page {
     .solid-page-content-width {
-      max-width: 600px;
+      max-width: 599px;
     }
   }
   // sm
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 599px) {
     .solid-page {
       //: 16px !important;
       overflow: hidden;

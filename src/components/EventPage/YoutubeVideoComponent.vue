@@ -104,7 +104,7 @@ export default {
     this.clientWidth = this.$refs.container.clientWidth;
   },
   beforeUnmount: function () {
-    if (!this.$q.platform.is.ipad) {
+    if (this.$q.platform.is.capacitor && this.$q.screen.lt.sm) {
       window.screen.orientation.lock('portrait');
     }
     window.removeEventListener('resize', this.debouncedHandleResize);

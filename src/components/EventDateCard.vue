@@ -26,7 +26,7 @@
             class="image-container flex justify-center items-center shadow-2xl"
           >
             <img
-              style="filter: blur(10px); transform: scale(1.2)"
+              style="filter: blur(2px); transform: scale(1.2)"
               :src="imgThumbXsUrl"
               class="image not-loaded"
               v-show="!loadedImage"
@@ -73,7 +73,7 @@
             </div>
 
             <div
-              class="flex column grow justify-center card-bottom-text o-070"
+              class="flex column grow justify-center card-bottom-text o-070 q-mb-sm"
               style="font-weight: 400"
               :class="{
                 'q-mt-': $q.screen.gt.sm,
@@ -104,15 +104,16 @@
                     color="red"
                     :label="$t('event_date_inline.cancelled')"
                   />
-                  <span v-else-if="event.date_confirmed">{{
-                    relativeHumanTime(
-                      event.start_naive,
-                      event.end_naive,
-                      event.tz
-                    )
-                  }}</span>
 
-                  <span v-else>Date TBC</span>
+                  <span v-else
+                    >{{
+                      relativeHumanTime(
+                        event.start_naive,
+                        event.end_naive,
+                        event.tz
+                      )
+                    }}
+                  </span>
                 </span>
                 <div class="flex row items-center no-wrap ellipsis">
                   <q-icon name="las la-calendar" class="q-mr-sm" />
@@ -121,7 +122,7 @@
                       {{ localDateWithWeekday(event.start_naive, event.tz) }}
                     </span>
                     <span v-else>
-                      {{ monthYear(event.start_naive, event.tz) }}
+                      {{ monthYear(event.start_naive, event.tz) }} (Date TBC)
                     </span>
                     <span
                       v-if="
@@ -164,7 +165,7 @@
             </div>
             <div
               v-if="$q.screen.gt.sm"
-              class="description flex grow ellipsis q-my-sm items-center"
+              class="description flex grow ellipsis q-mb-sm items-center"
               style="max-width: 100%"
             >
               {{ event.event.description }}
@@ -476,7 +477,7 @@ export default {
 }
 
 // sm
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .ed-card {
     &:before {
       display: none;

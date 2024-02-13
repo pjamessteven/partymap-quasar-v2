@@ -229,7 +229,7 @@ const computedTotalResultMessage = computed(() => {
     }
   }
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .ed-poster-grid {
     grid-gap: 0.5re m;
   }

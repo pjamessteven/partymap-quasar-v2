@@ -1238,7 +1238,7 @@ canvas {
     opacity: 0.2;
   }
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   :deep(.leaflet-top) {
     top: unset;
     transform: unset;

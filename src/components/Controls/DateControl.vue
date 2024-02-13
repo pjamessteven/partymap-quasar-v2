@@ -731,7 +731,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .body--dark {
     .date-picker-container {
       border-top: 1px solid rgba(255, 255, 255, 0.1) !important;

@@ -1304,7 +1304,7 @@ export default {
 
 <style lang="scss">
 .q-dialog {
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 599px) {
     min-width: unset;
   }
 }
@@ -1776,7 +1776,7 @@ a {
     max-width: 96vw;
   }
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .body--light {
     .action-buttons-wrapper {
       background: $b-2 !important;

@@ -26,7 +26,7 @@
             class="image-container flex justify-center items-center shadow-2xl"
           >
             <img
-              style="filter: blur(10px); transform: scale(1.2)"
+              style="filter: blur(2px); transform: scale(1.2)"
               :src="imgThumbXsUrl"
               class="not-loaded"
               v-show="!loadedImage"
@@ -544,7 +544,7 @@ export default {
 }
 
 // sm
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .card {
     &:active {
       transform: none;

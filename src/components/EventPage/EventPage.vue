@@ -931,11 +931,11 @@ onBeforeRouteLeave((to, from, next) => {
     });
 
     if (previousRouteIsExplore.value) {
-      setTimeout(() => (mainStore.sidebarOpacity = 1), 150);
+      setTimeout(() => (mainStore.sidebarOpacity = 1), 100);
     }
-    setTimeout(() => {
-      next();
-    }, 300);
+    setTimeout(() => next(), 300);
+  } else {
+    next();
   }
 });
 
@@ -960,7 +960,7 @@ const onScrollMainContent = (info: any) => {
   scrollPercentage.value = info.verticalPercentage;
   let verticalPostion = info.verticalPosition;
   // menubar should always show on large screens (when sidebar is open)c
-  if ($q.screen.lt.sm) {
+  if ($q.screen.lt.md) {
     //this.menubarOpacity = ((info.target.scrollTop * 1.5) / 100) * -1 + 1;
     //this.menubarOpacity = ((info.target.scrollTop * 1.5) / 100) * 1;
     if (verticalPostion > 64) {
@@ -1137,7 +1137,7 @@ onActivated(() => {
     if ($q.platform.is.mobile) {
       setTimeout(() => {
         load();
-      }, 350);
+      }, 150);
     } else {
       load();
     }
@@ -1154,7 +1154,8 @@ onActivated(() => {
   });
   // ...and then animate in
 
-  spring.value = useSpring(motionProperties, { stiffness: 400, damping: 30 });
+  //spring.value = useSpring(motionProperties, { stiffness: 400, damping: 30 });
+  spring.value = useSpring(motionProperties, { stiffness: 400, damping: 40 });
 
   // if android then do this for performance
   if ($q.platform.is.mobile) {
@@ -1248,7 +1249,7 @@ const computedTicketUrl = computed(() => {
 
 <style lang="scss">
 .q-dialog {
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 599px) {
     min-width: unset;
   }
 }
@@ -1726,7 +1727,7 @@ a {
     max-width: 96vw;
   }
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .body--light {
     .action-buttons-wrapper {
       background: $b-2 !important;

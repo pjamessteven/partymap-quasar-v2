@@ -2,8 +2,7 @@
   "appId": "org.partymap.com",
   "appName": "PartyMap",
   "server": {
-    "hostname": "api.partymap.com",
-    "url": "http://172.20.10.2:9500"
+    "hostname": "api.partymap.com"
   },
   "bundledWebRuntime": false,
   "npmClient": "yarn",
@@ -14,6 +13,9 @@
     },
     "CapacitorHttp": {
       "enabled": true
+    },
+    "SplashScreen": {
+      "backgroundColor": "#282828"
     }
   },
   "ios": {

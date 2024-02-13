@@ -243,7 +243,7 @@ export default {
   justify-content: flex-start;
   flex-wrap: wrap;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .select-tags-component {
     max-width: 400px;
     min-width: unset;

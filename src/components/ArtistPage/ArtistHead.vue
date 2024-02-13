@@ -191,7 +191,7 @@ a {
   color: unset;
   text-decoration: none;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   /*
   .artist-head-wrapper {
     width: 80px;

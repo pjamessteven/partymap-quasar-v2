@@ -15,7 +15,7 @@
 
       <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
       <div
-        class="sidebar-wrapper"
+        class="sidebar-component-wrapper"
         :style="$q.screen.lt.sm && computedSidebarOpacity"
       >
         <SearchComponent class="search-component" v-show="$q.screen.lt.sm" />
@@ -333,7 +333,7 @@ export default {
         (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
           (-webkit-appearance: none)
       )
-      and (max-width: 600px) {
+      and (max-width: 599px) {
       padding-top: calc(env(safe-area-inset-top) - 8px);
     }
 
@@ -360,16 +360,20 @@ export default {
       top: 64px;
       width: 100%;
     }
-    .sidebar-component {
-      z-index: 104;
-      opacity: 1;
-      // transition: opacity 0.3s ease;
-      /*
+    .sidebar-component-wrapper {
+      position: relative;
+      height: 100%;
+      .sidebar-component {
+        z-index: 104;
+        opacity: 1;
+        // transition: opacity 0.3s ease;
+        /*
       &.hide {
         opacity: 0;
         pointer-events: none;
       }
       */
+      }
     }
     .main-layout-router {
       position: absolute;
@@ -432,7 +436,7 @@ export default {
     //opacity: 0;
   }
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .body--dark {
     .main-layout {
       .overlay {
@@ -450,7 +454,7 @@ export default {
           );
         }
       }
-      .sidebar-wrapper {
+      .sidebar-component-wrapper {
         .sidebar-overlay {
           background: black;
         }
@@ -474,7 +478,7 @@ export default {
           );
         }
       }
-      .sidebar-wrapper {
+      .sidebar-component-wrapper {
         .sidebar-overlay {
           background: white;
         }
@@ -502,22 +506,26 @@ export default {
     .overlay {
       // transition: opacity 0.3s;
     }
-    .sidebar-wrapper {
-      transition: opacity 0.3s ease;
-      will-change: opacity;
-      //transform: translate3d(0, 0, 0);
-      .search-component {
-        z-index: 105;
-      }
-      .sidebar-overlay {
-        opacity: 1;
+    .main-inner-layout {
+      .sidebar-component-wrapper {
+        position: unset;
+        height: unset;
         transition: opacity 0.3s ease;
-        z-index: 103;
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        pointer-events: none;
-        margin-top: calc(0px - var(--safe-area-inset-top)) !important;
+        will-change: opacity;
+        //transform: translate3d(0, 0, 0);
+        .search-component {
+          z-index: 105;
+        }
+        .sidebar-overlay {
+          opacity: 1;
+          transition: opacity 0.3s ease;
+          z-index: 103;
+          position: absolute;
+          height: 100%;
+          width: 100%;
+          pointer-events: none;
+          margin-top: calc(0px - var(--safe-area-inset-top)) !important;
+        }
       }
     }
   }

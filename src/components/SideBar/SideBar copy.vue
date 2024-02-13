@@ -147,7 +147,6 @@ import { mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
-import WheelIndicator from 'wheel-indicator';
 import { useDrag } from '@vueuse/gesture';
 import { useMotionProperties, useSpring } from '@vueuse/motion';
 import { ref, onMounted } from 'vue';
@@ -157,7 +156,6 @@ export default {
     ExploreView,
     SearchView,
     NearbyView,
-    //MobileSwipeHandle,
     SearchComponent,
     TopControlsMenu,
     NavigationBar,
@@ -239,16 +237,11 @@ export default {
     });
   },
   */
-  unmounted() {
-    if (this.wheelIndicator) {
-      this.wheelIndicator.destroy();
-    }
-  },
+
   data() {
     return {
       lastx: 0,
       preventMapInteraction: false,
-      wheelIndicator: null,
       panelHiddenDelayed: true,
       spring: null,
     };
@@ -549,7 +542,7 @@ export default {
     max-height: 100%;
     overflow: hidden;
     height: 100%;
-    // max-width: 600px;
+    // max-width: 599px;
     pointer-events: all;
     transition: all 0.4s ease;
     //transform: translate3d(0, calc(100% - 226px), 0);
@@ -866,7 +859,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .body--dark {
     .sidebar-wrapper {
       .hover-indicator-line {
@@ -951,7 +944,7 @@ export default {
           (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
             (-webkit-appearance: none)
         )
-        and (max-width: 600px) {
+        and (max-width: 599px) {
         transform: translate3d(
           0,
           calc(

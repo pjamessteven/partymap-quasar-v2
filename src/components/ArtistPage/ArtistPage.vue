@@ -117,7 +117,7 @@
                 </div>
                 <div v-else></div>
                 <EventDateCard
-                  style="max-width: 600px"
+                  style="max-width: 599px"
                   v-for="(ed, index) in artist.future_event_dates"
                   :key="index"
                   :event="ed"
@@ -529,7 +529,7 @@ export default {
   .main-content {
     max-width: 1024px;
     .ed-card {
-      max-width: 600px;
+      max-width: 599px;
     }
   }
 }

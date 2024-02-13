@@ -103,7 +103,7 @@ export default {
 
 <style lang="scss" scoped>
 // sm
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .feedback-dialog {
     height: 100vh !important;
     max-height: unset !important;

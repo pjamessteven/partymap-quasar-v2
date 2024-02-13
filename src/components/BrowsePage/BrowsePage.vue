@@ -112,7 +112,7 @@ export default {
     padding: 0px !important;
   }
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .browse-page {
     padding-bottom: 68px;
   }

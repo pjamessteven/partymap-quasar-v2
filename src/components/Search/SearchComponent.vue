@@ -274,7 +274,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .body--light {
     .controls-wrapper-inner {
       box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 1);

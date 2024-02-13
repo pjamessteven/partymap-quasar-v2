@@ -15,6 +15,7 @@
           </transition>
 
           <CustomQScroll
+            ref="scroll"
             @scroll="onScroll"
             vertical
             :thumb-style="{
@@ -877,9 +878,6 @@ export default {
     sidebarPanel: {
       handler: function (newval) {
         if (this.$route.name === 'Explore' && newval === 'nearby') {
-          setTimeout(() => {
-            this.sidebarPanelReady = true;
-          }, 150);
           if (!this.userLocation) {
             this.loadIpInfo();
           }
@@ -890,6 +888,7 @@ export default {
       handler: function (newval, oldval) {
         if (this.$route.name === 'Explore') {
           if (newval && !oldval) {
+            console.log('location 1');
             this.loadEverything();
             return;
           } else if (newval && oldval) {
@@ -897,6 +896,7 @@ export default {
               Math.round(newval.lat) !== Math.round(oldval.lat) ||
               Math.round(newval.lng) !== Math.round(oldval.lng);
             if (userLocationHasSignficantlyChanged) {
+              console.log('location has_sig_changed');
               this.loadEverything();
             }
           }
@@ -908,6 +908,8 @@ export default {
       handler: function (newval, oldval) {
         console.log('qq qr', newval, oldval);
         if (oldval !== null && oldval != newval) {
+          console.log('location 2');
+
           this.loadEverything();
           console.log('qq called', newval, oldval);
         }
@@ -1019,21 +1021,24 @@ export default {
     this.menuBarOpacity = 1;
   },
 
-  async mounted() {
+  activated() {
     if (this.$q.screen.lt.sm || true) {
+      this.$refs.scroll.setScrollPercentage('vertical', 0);
       setTimeout(() => {
         this.sidebarPanelReady = true;
-      }, 400);
+      }, 350);
     } else {
       this.sidebarPanelReady = true;
     }
-
+  },
+  deactivated() {
+    this.sidebarPanelReady = false;
+  },
+  async mounted() {
     if (this.$route.name === 'Explore') {
       // otherwise will change on route change
+      await this.loadIpInfo();
       if (!this.userLocation) {
-        await this.loadIpInfo();
-        if (this.eventDates.length === 0) this.loadEverything();
-      } else {
         if (this.eventDates.length === 0) this.loadEverything();
       }
     }
@@ -1411,7 +1416,7 @@ export default {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 599px) {
   .body--dark {
     .landing-page {
       .location-header {

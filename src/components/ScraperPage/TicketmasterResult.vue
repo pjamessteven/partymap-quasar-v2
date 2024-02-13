@@ -496,6 +496,6 @@ export default {
     border-color: red;
   }
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
 }
 </style>

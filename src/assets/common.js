@@ -135,9 +135,11 @@ export default {
   // this funciton assumes t1 and t2 are in UTC
   // t2 is an option end date
   relativeHumanTime: function (t1, t2 = null, timezone) {
-    var ONE_DAY = 86400000;
-    var ONE_HOUR = 3600000;
-    var ONE_MINUTE = 600000;
+    const ONE_MINUTE = 600000;
+    const ONE_HOUR = ONE_MINUTE * 60;
+    const ONE_DAY = ONE_HOUR * 24;
+    const ONE_WEEK = ONE_DAY * 7;
+    const ONE_MONTH = ONE_WEEK * 4.35;
 
     moment.locale(locale);
     t1 = moment.tz(t1, timezone).valueOf();
@@ -147,30 +149,51 @@ export default {
     }
 
     // mins and hours must be chopped off of day measure so we're measuring from the start of each day.
-    var t1DateNoTime = moment
+    const t1DateNoTime = moment
       .tz(t1, timezone)
       .hour(0)
       .minute(0)
       .seconds(0)
       .valueOf();
 
-    var now = moment().valueOf();
+    const now = moment().valueOf();
 
-    var nowDateNoTime = moment
+    const nowDateNoTime = moment
       .tz(timezone)
       .hour(0)
       .minute(0)
       .seconds(0)
       .valueOf();
 
-    var differenceMs = Math.abs(t1 - now);
-    var differenceDaysMs = Math.abs(t1DateNoTime - nowDateNoTime);
-    var daysDifference = Math.round(differenceDaysMs / ONE_DAY);
-    var hoursDifference = Math.round(differenceMs / ONE_HOUR);
-    var minutesDifference = Math.round(differenceMs / ONE_MINUTE);
+    const differenceMs = Math.abs(t1 - now);
+    const differenceDaysMs = Math.abs(t1DateNoTime - nowDateNoTime);
+
+    const monthsDifference = Math.floor(
+      differenceDaysMs / 1000 / 60 / (60 * 24 * 7 * 4)
+    );
+
+    const weeksDifference = Math.floor(
+      differenceDaysMs / 1000 / 60 / (60 * 24 * 7)
+    );
+    const daysDifference = Math.floor(differenceDaysMs / 1000 / 60 / (60 * 24));
+    const hoursDifference = Math.round(differenceMs / ONE_HOUR);
+    const minutesDifference = Math.round(differenceMs / ONE_MINUTE);
+
     if (now > t1) {
       if (t2 && now < t2) {
         return this.$t('time.happening_now');
+      } else if (monthsDifference >= 1) {
+        if (monthsDifference === 1) {
+          return monthsDifference + ' ' + this.$t('time.month_ago');
+        } else {
+          return monthsDifference + ' ' + this.$t('time.months_ago');
+        }
+      } else if (weeksDifference >= 1) {
+        if (weeksDifference === 1) {
+          return weeksDifference + ' ' + this.$t('time.week_ago');
+        } else {
+          return weeksDifference + ' ' + this.$t('time.weeks_ago');
+        }
       } else if (daysDifference >= 1) {
         if (daysDifference === 1) {
           return daysDifference + ' ' + this.$t('time.day_ago');
@@ -187,7 +210,7 @@ export default {
         if (minutesDifference < 1) {
           return minutesDifference + ' ' + this.$t('time.seconds_ago');
         } else if (minutesDifference === 1) {
-          return minutesDifference + ' ' + this.$t('time.min_ago');
+          return minutesDifference + ' ' + this.$t('time.minute_ago');
         } else {
           return minutesDifference + ' ' + this.$t('time.minutes_ago');
         }
@@ -195,6 +218,18 @@ export default {
     } else {
       if (daysDifference === 0) {
         return this.$t('time.happening_today');
+      } else if (monthsDifference >= 1) {
+        if (monthsDifference === 1) {
+          return monthsDifference + ' ' + this.$t('time.month_away');
+        } else {
+          return monthsDifference + ' ' + this.$t('time.months_away');
+        }
+      } else if (weeksDifference >= 1) {
+        if (weeksDifference === 1) {
+          return weeksDifference + ' ' + this.$t('time.week_away');
+        } else {
+          return weeksDifference + ' ' + this.$t('time.weeks_away');
+        }
       } else if (daysDifference === 1) {
         return daysDifference + ' ' + this.$t('time.day_away');
       } else {

@@ -74,3 +74,20 @@ func application(\_ application: UIApplication, didFinishLaunchingWithOptions la
 (window?.rootViewController as? CAPBridgeViewController)?.bridge?.webView?.allowsBackForwardNavigationGestures = true
 return true
 }
+
+## Android release notes
+
+upload key was generated with following command:
+
+> keytool -genkey -v -keystore my-release-key.keystore -alias partymap -keyalg RSA -keysize 2048 -validity 20000
+
+key is located at
+/Users/peter/development/partymap-git/partymap-quasarv2/my-release-key.keystore
+
+Generate an .aab file as well as an .apk file to upload to google play
+
+> quasar build -m capacitor -T android -- bundleRelease
+
+Then sign it before uploading it to Google Play
+
+> jarsigner -keystore ~/development/partymap-git/partymap-quasarv2/my-release-key.keystore /Users/peter/development/partymap-git/partymap-quasarv2/dist/capacitor/android/bundle/release/app-release.aab partymap

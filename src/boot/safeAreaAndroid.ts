@@ -1,6 +1,6 @@
 import { boot } from 'quasar/wrappers';
 import VueAppleLogin from 'vue-apple-login';
-import { Platform } from 'quasar';
+import { Platform, Screen } from 'quasar';
 import {
   SafeArea,
   SafeAreaController,
@@ -23,7 +23,7 @@ export default boot(async ({ app, store }) => {
     mainStore.safeAreaInsets = await SafeArea.getSafeAreaInsets();
 
     // force portrait orientation for phones
-    if (!Platform.is.ipad) {
+    if (Platform.is.capacitor && Screen.lt.sm) {
       window.screen.orientation.lock('portrait');
     }
     // Display content under transparent status bar (Android only)

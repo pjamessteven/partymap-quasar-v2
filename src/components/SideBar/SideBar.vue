@@ -268,7 +268,7 @@ const setupSpring = () => {
       mainStore.sidebarPanel === 'Explore' ? hiddenYPosition : showingYPosition,
   });
 
-  spring.value = useSpring(motionProperties, { stiffness: 400, damping: 30 });
+  spring.value = useSpring(motionProperties, { stiffness: 400, damping: 40 });
 };
 
 onMounted(() => {
@@ -461,7 +461,7 @@ watch(
     max-height: 100%;
     overflow: hidden;
     height: 100%;
-    // max-width: 600px;
+    // max-width: 599px;
     pointer-events: all;
     // transition: all 0.4s ease;
     //transform: translate3d(0, calc(100% - 226px), 0);
@@ -779,7 +779,7 @@ watch(
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .body--dark {
     .sidebar-wrapper {
       .hover-indicator-line {
@@ -866,7 +866,7 @@ watch(
           (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
             (-webkit-appearance: none)
         )
-        and (max-width: 600px) {
+        and (max-width: 599px) {
         /*
         transform: translate3d(
           0,

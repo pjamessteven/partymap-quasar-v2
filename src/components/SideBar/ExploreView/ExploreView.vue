@@ -69,10 +69,7 @@
                 }
           "
           class="scroll-area flex grow"
-          :class="
-            (($q.screen.lt.sm && !showPanel) || preventMapZoom) &&
-            'disable-scroll'
-          "
+          :disableScroll="($q.screen.lt.sm && !showPanel) || preventMapZoom"
         >
           <div class="flex column no-wrap scroll-content q-px-sm">
             <!-- theres no point in this 
@@ -140,9 +137,7 @@
         <div class="flex column items-center no-wrap">
           <div
             class="inter semibold q-mb-md"
-            v-if="
-              (isLoadingInitial || (mapMoving && !blockUpdates)) && !showPanel
-            "
+            v-if="isLoadingInitial || (mapMoving && !blockUpdates)"
           >
             Finding what's good...
           </div>
@@ -155,9 +150,7 @@
 
           <div style="height: 20px; width: 200px" class="flex justify-center">
             <q-linear-progress
-              v-if="
-                (isLoadingInitial || (mapMoving && !blockUpdates)) && !showPanel
-              "
+              v-if="isLoadingInitial || (mapMoving && !blockUpdates)"
               class="linear-progress q-mt-md"
               indeterminate
               size="2px"
@@ -628,11 +621,6 @@ export default {
     :deep(.q-scrollarea__thumb) {
       z-index: 1000;
     }
-    &.disable-scroll {
-      :deep(.scroll) {
-        overflow: hidden !important;
-      }
-    }
   }
 
   .touch-overlay {
@@ -711,7 +699,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .body--dark {
     .header {
       background: black !important;

@@ -480,7 +480,7 @@ export default {
 .light-button {
   color: white;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .light-button {
     color: white;
   }

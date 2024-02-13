@@ -236,7 +236,7 @@ export default {
 .search-results {
   overflow-y: auto;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .body--light {
     .search-popup-fullwidth {
       background: rgba(255, 255, 255, 0.48);

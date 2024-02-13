@@ -67,7 +67,7 @@ export default {
     background: black !important;
   }
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
   .body--light {
     .date-header {
       background: white !important;
