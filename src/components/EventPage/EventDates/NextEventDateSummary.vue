@@ -25,9 +25,9 @@
             {{ localDay(ed?.start_naive, ed.tz) }}
             {{ localDate(ed?.start_naive, ed.tz) }}
           </span>
-          <span v-else-if="ed?.date_confirmed == false"
+          <span v-else-if="!ed?.date_confirmed"
             >Date needs to be confirmed</span
-          ><span v-else>...</span>
+          >
           <!--
           <span class="t3">
             [{{ timeZoneAbbreviention(ed.event_start, ed.tz) }}]
