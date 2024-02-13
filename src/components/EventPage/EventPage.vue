@@ -178,7 +178,7 @@
                         :editing="editing"
                         class="q-mt-lg"
                         :item="event?.media_items?.[0]"
-                        :preview="
+                        :thumbXsUrl="
                           route.query?.thumbXsUrl
                             ? route.query.thumbXsUrl + ''
                             : undefined
@@ -1134,7 +1134,7 @@ onActivated(() => {
     if (scrollArea.value) {
       (scrollArea.value as any).setScrollPercentage('vertical', 0);
     }
-    if ($q.platform.is.mobile) {
+    if ($q.platform.is.android) {
       setTimeout(() => {
         load();
       }, 150);

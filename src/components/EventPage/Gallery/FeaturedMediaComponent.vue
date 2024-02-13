@@ -49,11 +49,22 @@
           />
         </video>
         <img
-          style="width: 100%; filter: blur(10px); transform: scale(1.2)"
-          :src="item?.thumb_xs_url || thumbXsUrl"
-          v-if="!loaded && (item?.thumb_xs_url || thumbXsUrl)"
+          v-show="!loaded && thumbXsUrl && false"
+          style="
+            width: 100%;
+            height: auto;
+            // filter: blur(10px);
+            transform: scale(1.2);
+          "
+          :src="thumbXsUrl"
         />
-        <img v-show="loaded" :src="item?.thumb_url" @load="loaded = true" />
+
+        <img
+          style="width: 100%; height: auto"
+          v-show="loaded"
+          :src="item?.thumb_url"
+          @load="loaded = true"
+        />
       </div>
     </div>
     <q-dialog v-model="showEditDialog" v-if="currentUserCanEdit">
@@ -89,7 +100,6 @@ export default {
   props: {
     item: Object,
     editing: Boolean,
-    preview: String,
     thumbXsUrl: String,
   },
   data() {
@@ -100,7 +110,9 @@ export default {
     };
   },
   methods: {},
-
+  activated() {
+    this.loaded = false;
+  },
   computed: {
     ...mapState(useEventStore, ['event', 'currentUserCanEdit']),
     ...mapState(useAuthStore, ['currentUser']),

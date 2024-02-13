@@ -117,7 +117,7 @@
                     v-if="userLocation"
                     class="ellipsis q-mr-sm inter bolder"
                     ><span v-if="$q.screen.gt.sm && false">Near&nbsp;</span>
-                    <span v-if="userLocationCountry">
+                    <span v-if="userLocationCountry && !userLocationLoading">
                       {{ userLocationCity }}</span
                     ><span v-else class="t3">...</span
                     ><span
@@ -262,7 +262,11 @@
 
               <div
                 class="flex row justify-center items-center loading-wrapper"
-                v-if="loadingEverything || !computedSidebarPanelReady"
+                v-if="
+                  loadingEverything ||
+                  !computedSidebarPanelReady ||
+                  userLocationLoading
+                "
               >
                 <!--
                   <q-spinner-ios
@@ -867,7 +871,11 @@ export default {
       handler: async function (newval) {
         if (newval.name === 'Explore' && this.sidebarPanel === 'nearby') {
           if (!this.userLocation) {
-            await this.loadIpInfo();
+            try {
+              //  await this.getFineLocation();
+            } catch {
+              //  await this.loadIpInfo();
+            }
             if (this.eventDates.length === 0) this.loadEverything();
           } else {
             if (this.eventDates.length === 0) this.loadEverything();
@@ -879,7 +887,11 @@ export default {
       handler: function (newval) {
         if (this.$route.name === 'Explore' && newval === 'nearby') {
           if (!this.userLocation) {
-            this.loadIpInfo();
+            try {
+              //    this.getFineLocation();
+            } catch {
+              //     this.loadIpInfo();
+            }
           }
         }
       },
@@ -923,7 +935,6 @@ export default {
       'enablePanelSwipeDown',
       'sidebarPanel',
       'menubarOpacity',
-      'userLocationLoading',
       'sidebarExpanded',
     ]),
     ...mapState(useMainStore, [
@@ -1037,8 +1048,16 @@ export default {
   async mounted() {
     if (this.$route.name === 'Explore') {
       // otherwise will change on route change
-      await this.loadIpInfo();
+      // await this.loadIpInfo();
+
       if (!this.userLocation) {
+        try {
+          await this.getFineLocation();
+        } catch {
+          await this.loadIpInfo();
+        }
+        if (this.eventDates.length === 0) this.loadEverything();
+      } else {
         if (this.eventDates.length === 0) this.loadEverything();
       }
     }

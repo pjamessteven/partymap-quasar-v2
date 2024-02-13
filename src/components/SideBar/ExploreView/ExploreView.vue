@@ -247,7 +247,7 @@ export default {
       if (!this.userLocation) {
         this.blockUpdates = true;
 
-        await this.loadIpInfo();
+        /// await this.loadIpInfo();
         this.blockUpdates = false;
         this.getInitialList();
       } else {

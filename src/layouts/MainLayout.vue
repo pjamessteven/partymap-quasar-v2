@@ -153,7 +153,7 @@ export default {
       this.sidebarOpacity = 1;
       setTimeout(() => {
         this.overlayOpacityTransition = true;
-        this.blockUpdates = false;
+        //   this.blockUpdates = false; // not needed, causes problems with refreshoing list
       }, 500);
     }
 

@@ -45,7 +45,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useMainStore, ['getFineLocation']),
+    ...mapActions(useMainStore, ['getFineLocation', 'loadIpInfo']),
     ...mapActions(useAuthStore, ['checkAuthCookie', 'login']),
   },
   computed: {
@@ -96,7 +96,12 @@ export default {
     }
     console.log('ua', navigator.userAgent);
     // check and get location permission
-    this.getFineLocation();
+    try {
+      this.getFineLocation();
+    } catch {
+      this.loadIpInfo();
+    }
+
     if (this.$q.platform.is.capacitor) {
       // handle deep links in native app
 

@@ -341,7 +341,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(useMainStore, ['getFineLocation']),
+    ...mapActions(useMainStore, ['getFineLocation', 'loadIpInfo']),
     ...mapActions(useQueryStore, ['loadPoints']),
     ...mapActions(useNearbyStore, ['setMapBoundsNearby']),
     addUserLocationMarker(latlng) {
@@ -364,7 +364,11 @@ export default {
     },
     async locateMe() {
       try {
-        await this.getFineLocation();
+        try {
+          await this.getFineLocation();
+        } catch {
+          await this.loadIpInfo();
+        }
         this.fitBoundsForExplorePage(this.userLocation);
       } catch (e) {
         this.fitBoundsForExplorePage(this.userLocation);
