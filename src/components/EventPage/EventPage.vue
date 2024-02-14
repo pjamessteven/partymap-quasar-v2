@@ -87,7 +87,7 @@
                   <InnerLoading v-if="loading" :solid="false" />
 
                   <FeaturedMediaBackground
-                    :thumbXsUrl="route.query?.thumbXsUrl + ''"
+                    :thumbXsUrl="route.query?.thumbXsUrl"
                     class="featured-media"
                     :editing="editing"
                   />
