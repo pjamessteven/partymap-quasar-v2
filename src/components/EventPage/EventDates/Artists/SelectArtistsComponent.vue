@@ -52,6 +52,16 @@
         />
       </div>
     </q-list>
+    <span
+      class="link-hover t3 q-mt-md"
+      @click="copyLineupFromExistingEvent = !copyLineupFromExistingEvent"
+      >[Copy lineup from a similar event?]</span
+    >
+    <SelectEventInput
+      class="q-mt-sm"
+      v-if="copyLineupFromExistingEvent"
+      @event="loadArtistListFromExistingEvent($event)"
+    />
     <q-btn
       v-if="lists?.length > 1"
       class="q-mt-md"
@@ -62,7 +72,7 @@
     />
     <div
       class="select-artists-bottom flex row grow justify-end q-py-md"
-      v-if="mode !== 'emit'"
+      v-if="mode !== 'newEvent'"
     >
       <q-btn
         :label="$t('general.save_changes')"
@@ -74,7 +84,8 @@
 </template>
 
 <script>
-import { getMusicBrainzArtist, getArtistsRequest } from 'src/api';
+import SelectEventInput from 'src/components/SelectEventInput.vue';
+
 import _, { update } from 'lodash';
 import ArtistListItem from './ArtistListItem.vue';
 import SubmitSuggestionPrompt from 'components/EventPage/Suggestions/SubmitSuggestionPrompt.vue';
@@ -87,10 +98,19 @@ export default {
   components: {
     ArtistListItem,
     SelectArtistsInput,
+    SelectEventInput,
   },
-  props: { mode: String, artists: Array, defaultDate: String },
+  props: {
+    mode: String,
+    artists: Array,
+    defaultDate: String,
+    prepopulateArtistsToAdd: Array,
+  },
   data() {
     return {
+      copyLineupFromExistingEvent: false,
+      copyLineupFromExistingEventArtists: null,
+
       originalArtistsList: [],
       artistsList: [],
       artistsToDelete: [],
@@ -102,9 +122,17 @@ export default {
     };
   },
   watch: {
+    prepopulateArtistsToAdd: {
+      handler(newv, oldv) {
+        if (newv.length > 0) {
+          this.loadArtistListToAddFromProps();
+        }
+      },
+      deep: true,
+    },
     artistsToAdd: {
       handler(newv, oldv) {
-        // for emit mode
+        // for new event mode
         this.$emit('updated', newv);
       },
       deep: true,
@@ -238,6 +266,18 @@ export default {
       this.artistsList = _.cloneDeep(this.selectedEventDate.artists);
       this.sortArtistList();
     },
+    loadArtistListFromExistingEvent(event) {
+      console.log(event);
+      // got map the event_date_artist artist_id to the id field
+      const artistsMapped = event.next_date.artists.map((artist) => ({
+        id: artist.artist_id,
+        ...artist,
+      }));
+      this.originalArtistsList = _.cloneDeep(artistsMapped);
+      this.artistsList = _.cloneDeep(artistsMapped);
+      this.artistsToAdd = _.cloneDeep(artistsMapped);
+      this.sortArtistList();
+    },
     async saveChanges() {
       if (this.currentUserCanEdit) {
         const progressDialog = this.$q.dialog({
@@ -321,12 +361,14 @@ export default {
     },
   },
   mounted() {
-    if (this.mode !== 'emit') {
+    if (this.mode !== 'newEvent') {
       this.loadArtistList();
       this.loadLists();
     } else {
       this.lists = ['main stage'];
       this.selectedList = 'main stage';
+      // prepopulate the 'artists to add' list from props
+      // used when copying one lineup from one event to a new event
     }
   },
 };

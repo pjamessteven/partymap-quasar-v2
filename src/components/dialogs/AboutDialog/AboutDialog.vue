@@ -7,6 +7,11 @@
     </q-card-section>
 
     <q-card-section class="t2 dialog-card-content">
+      <span
+        >Welcome to the global directory of festivals, doofs, and underground
+        parties!
+      </span>
+      <p />
       PartyMap is a crowd-sourced, community-driven platform for discovering
       festivals and experiences around the world. I built this because I wished
       something like this existed. If you have any thoughts, ideas or

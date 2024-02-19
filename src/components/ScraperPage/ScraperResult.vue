@@ -1,10 +1,14 @@
 <template>
   <div
     class="ticketmaster-result q-pa-md flex row"
+    style="width: 100%"
     :class="Object.keys(errors).length > 0 ? 'error' : ''"
   >
-    <div class="flex column" @click="expanded = !expanded">
-      <div class="flex row justify-between grow">
+    <div class="flex column" @click="expanded = !expanded" style="width: 100%">
+      <div
+        class="scraper-header flex row justify-between grow"
+        style="width: 100%"
+      >
         <div class="errors flex column">
           <div
             style="color: darkred"
@@ -29,7 +33,10 @@
                 <q-icon name="mdi-alert-circle-outline" class="q-mr-md" />
                 {{ $t('add.an_event_already_exists') }}
               </div>
-              <q-btn label="Don't care" @click="eventExistsWarning = false" />
+              <q-btn
+                label="Don't care"
+                @click.stop="eventExistsWarning = false"
+              />
             </div>
             <div v-for="(event, index) of existingEvents" :key="index">
               <router-link
@@ -39,6 +46,8 @@
                 }"
                 >{{ event.name }}</router-link
               >
+              -
+              <a @click.stop="copyInfoFromExistingEvent(event)">[Copy info]</a>
             </div>
           </div>
         </div>
@@ -89,7 +98,7 @@
           outlined
           autogrow
           counter
-          maxlength="400"
+          maxlength="10000"
           :input-style="{ 'min-height': '50px' }"
           color="bg-grey-7"
           v-model="event.full_description"
@@ -128,14 +137,24 @@
           style="padding-bottom: 0px"
         />
 
+        <q-input
+          class="q-mb-md"
+          outlined
+          dense
+          color="bg-grey-7"
+          v-model="event.youtube_url"
+          label="Youtube URL"
+          style="padding-bottom: 0px"
+        />
+
         <div class="flex row items-center">
           <GoogleLocationComponent
-            v-if="computedLocationString"
-            :preSearch="computedLocationString"
+            v-if="locationString"
+            :preSearch="locationString"
             @location="event.location = $event"
             :error-message="errors.location"
           />
-          <div class="q-ml-md t3">{{ computedLocationString }}</div>
+          <div class="q-ml-md t3">{{ locationString }}</div>
         </div>
 
         <SelectTagsComponent
@@ -156,13 +175,13 @@
 
         <div class="q-mt-md">Dates:</div>
         <div class="flex column" @click="showDatePicker = !showDatePicker">
-          Start: {{ event.date_time?.start }} <br />
-          End: {{ event.date_time?.end }}
+          Start: {{ result.dates?.start }} <br />
+          End: {{ result.dates?.end }}
           <DateTimePicker
-            v-if="computedDateValue"
+            v-if="result.dates"
             :inlineCalendar="true"
             :isRange="true"
-            :value="computedDateValue"
+            :value="result.dates"
             @dateRange="event.date_time = $event"
           />
           <DateTimePicker
@@ -170,6 +189,17 @@
             :inlineCalendar="true"
             :isRange="true"
             @dateRange="event.date_time = $event"
+          />
+        </div>
+
+        <div
+          v-if="event.date_time && event.date_time.start && event.date_time.end"
+        >
+          <p />
+          <RrulePicker
+            v-on:updateRrule="event.rrule = $event"
+            :dateTime="event.date_time"
+            :disableOneOff="false"
           />
         </div>
 
@@ -237,17 +267,19 @@
 </template>
 
 <script>
-import { getEventsRequest, addEventRequest } from 'src/api';
+import { getEventsRequest, getMusicBrainzPlace } from 'src/api';
 import GoogleLocationComponent from 'components/GoogleLocationComponent.vue';
 import SelectTagsComponent from 'components/EventPage/Tags/SelectTagsComponent.vue';
 import DateTimePicker from 'components/DateTimePicker.vue';
 import SelectArtistsInput from 'components/EventPage/EventDates/Artists/SelectArtistsInput.vue';
+import RrulePicker from 'components/RrulePicker.vue';
 export default {
   components: {
     GoogleLocationComponent,
     SelectTagsComponent,
     DateTimePicker,
     SelectArtistsInput,
+    RrulePicker,
   },
   props: {
     result: {
@@ -267,6 +299,7 @@ export default {
       selectedImageIndex: null,
       sortedImages: null,
       eventExistsWarning: false,
+      locationString: this.result.locationString,
       event: {
         host: false,
         name: this.result.name,
@@ -281,8 +314,9 @@ export default {
         location: null,
         url: '',
         ticket_url: this.result.url,
+        youtube_url: '',
         tags: [],
-        next_event_date_artists: [],
+        next_event_date_artists: this.result.artists || [],
         next_event_date_size: null,
         rrule: {
           recurringType: 1,
@@ -296,6 +330,14 @@ export default {
     };
   },
   methods: {
+    copyInfoFromExistingEvent(event) {
+      this.event.description = event.description;
+      this.event.description_attribute = event.description_attribute;
+      this.event.full_description = event.full_description;
+      this.event.full_description_attribute = event.full_description_attribute;
+      this.event.url = event.next_date.url;
+      this.event.youtube_url = event.youtube_url;
+    },
     deleteArtist(index) {
       this.event.next_event_date_artists.splice(index, 1);
       this.editArtist = null;
@@ -343,6 +385,8 @@ export default {
         this.existingEvents = response.data.items;
         if (response.data.items.length > 0) {
           this.eventExistsWarning = true;
+        } else {
+          this.eventExistsWarning = false;
         }
       });
     },
@@ -365,7 +409,7 @@ export default {
       },
       deep: true,
     },
-    expanded(newv, oldv) {
+    async expanded(newv, oldv) {
       if (newv && !this.hasBeenExpanded) {
         this.hasBeenExpanded = true;
         // sort images by size (largest first) and select largest
@@ -377,15 +421,6 @@ export default {
           this.selectImage(0);
         }
 
-        if (this.result?._embedded?.attractions) {
-          this.event.next_event_date_artists =
-            this.result?._embedded?.attractions
-              .filter((x) => x.name !== this.event.name)
-              .map((x) => ({
-                name: x.name,
-                mbid: x.externalLinks?.musicbrainz?.[0]?.id,
-              }));
-        }
         // already exists?
         this.findExistingEvent();
 
@@ -393,6 +428,17 @@ export default {
         this.event.tags = [
           ...new Set([...this.event.tags, ...this.universalTags]),
         ];
+
+        // location lookup for musicbrainz results
+        if (this.result.locationMbid) {
+          const response = await getMusicBrainzPlace(
+            `pid:${this.result.locationMbid}`
+          );
+          this.locationString =
+            response.data.places?.[0]?.name +
+            ' ' +
+            response.data.places?.[0]?.address;
+        }
       }
     },
   },
@@ -419,57 +465,6 @@ export default {
       }
       return errors;
     },
-    computedLocationString() {
-      let string = '';
-      const venue = this.result._embedded?.venues?.[0];
-      if (venue) {
-        if (venue.name) {
-          string += venue.name;
-        }
-        if (venue.address) {
-          if (string.length > 0) {
-            string += ', ';
-          }
-          string += venue.address.line1;
-          if (venue.address.line2) {
-            if (string.length > 0) {
-              string += ', ';
-            }
-            string += venue.address.line2;
-          }
-        }
-        if (venue.city?.name) {
-          if (string.length > 0) {
-            string += ', ';
-          }
-          string += venue.city.name;
-        }
-      }
-      return string;
-    },
-    computedDateValue() {
-      if (this.result.dates?.start?.localDate) {
-        let start = this.result.dates.start.localDate;
-        if (this.result.dates?.start?.localTime) {
-          start += ' ' + this.result.dates?.start?.localTime;
-        } else {
-          // just set time to midday if time doesn't exist
-          start += ' 12:00:00';
-        }
-        let end = start;
-        if (this.result.dates?.end?.localDate) {
-          end = this.result.dates.end.localDate;
-          if (this.result.dates?.end?.localTime) {
-            end += ' ' + this.result.dates?.end?.localTime;
-          } else {
-            // just set time to midday if time doesn't exist
-            end += ' 12:00:00';
-          }
-        }
-        return { start, end };
-      }
-      return null;
-    },
   },
 };
 </script>
@@ -491,11 +486,17 @@ export default {
     border: 1px solid $bi-1;
   }
 }
+
 .ticketmaster-result {
+  border-radius: 9px;
   &.error {
     border-color: red;
   }
 }
+
+.scraper-header {
+}
+
 @media only screen and (max-width: 599px) {
 }
 </style>

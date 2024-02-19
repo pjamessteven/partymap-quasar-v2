@@ -2,6 +2,7 @@
   <div class="select-tags-component flex column">
     <q-input
       class="nav-input"
+      :dense="dense"
       v-bind:label="$t('tags.search_for_tag')"
       v-model="query"
       debounce="200"
@@ -91,6 +92,7 @@ export default {
   props: {
     existingTags: { type: Array, default: () => [] },
     showTopTags: { type: Boolean, default: false },
+    dense: { type: Boolean, default: false },
   },
   data() {
     return {

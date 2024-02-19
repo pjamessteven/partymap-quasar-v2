@@ -1,6 +1,6 @@
 <template>
   <div class="featured-media">
-    <div class="overlay" />
+    <div class="featured-media-overlay" />
 
     <div class="media-wrapper" v-if="headerBackground">
       <transition
@@ -83,7 +83,7 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .featured-media {
-    .overlay {
+    .featured-media-overlay {
       background: linear-gradient(
         0deg,
         rgba(0, 0, 0, 0.68) 0%,
@@ -95,10 +95,10 @@ export default {
 
 .body--light {
   .featured-media {
-    .overlay {
+    .featured-media-overlay {
       background: linear-gradient(
         0deg,
-        rgba(0, 0, 0, 0.48) 0%,
+        rgba(0, 0, 0, 0.68) 0%,
         rgba(0, 0, 0, 0) 150%
       );
     }
@@ -109,7 +109,7 @@ export default {
   max-width: 100%;
   overflow: hidden;
   min-height: 400px;
-  .overlay {
+  .featured-media-overlay {
     position: absolute;
     pointer-events: none;
     height: 100%;
@@ -119,7 +119,7 @@ export default {
       rgba(80, 80, 80, 0.8),
       rgba(0, 0, 0, 0) 150%
     );
-    z-index: 2;
+    z-index: 20;
   }
 
   .media-wrapper {

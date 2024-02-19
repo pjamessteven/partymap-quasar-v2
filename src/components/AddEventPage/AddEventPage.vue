@@ -432,7 +432,7 @@
                     event.
                   </span>
                   <SelectArtistsComponent
-                    :mode="'emit'"
+                    :mode="'newEvent'"
                     @updated="event.next_event_date_artists = $event"
                     :defaultDate="event.date_time.start"
                     class="q-mb-md"
@@ -613,6 +613,7 @@ export default {
       existingEvents: null,
       descriptionAttributeOption: 'self',
       FullDescriptionAttributeOption: 'self',
+
       attributeOptions: [
         {
           label: 'I wrote this myself',

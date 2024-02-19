@@ -170,8 +170,11 @@ export default {
     sortArtistList() {
       // sort by name
       this.artistsList.sort((a, b) => {
-        var nameA = a.name.toUpperCase(); // ignore upper and lowercase
-        var nameB = b.name.toUpperCase();
+        if (!a.name) {
+          console.log('!!!', a);
+        }
+        var nameA = a.name?.toUpperCase(); // ignore upper and lowercase
+        var nameB = b.name?.toUpperCase();
         if (nameA < nameB) {
           return -1;
         }

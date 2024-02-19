@@ -46,7 +46,7 @@
       </div>
       <div
         class="flex column grow no-wrap"
-        :class="$q.screen.gt.sm ? 'q-pt-lg' : ''"
+        :class="$q.screen.gt.sm ? 'q-pt-md' : ''"
       >
         <CustomQScroll
           vertical
@@ -72,6 +72,93 @@
           :disableScroll="($q.screen.lt.sm && !showPanel) || preventMapZoom"
         >
           <div class="flex column no-wrap scroll-content q-px-sm">
+            <!-- tags -->
+            <div
+              class="flex column q-mb-md"
+              v-if="
+                topTagsInArea?.length >= 1 && !eventDatesLoading && !mapMoving
+              "
+            >
+              <div
+                class="q-pb-md location-header"
+                :class="
+                  $q.screen.gt.sm
+                    ? 'q-px-md  t1 inter semibold'
+                    : ' t1 inter semibold'
+                "
+              >
+                <div class="text-">Top tags in this area:</div>
+              </div>
+              <div
+                class=""
+                :class="$q.screen.gt.sm ? 'q-pl-md ' : 'q-pl-md'"
+                v-if="topTagsInArea && topTagsInArea.length > 0"
+              >
+                <CustomQScroll
+                  horizontal
+                  class="tag-scroll-area"
+                  style="width: 100%"
+                  :style="$q.screen.gt.sm ? 'margin-bottom: -8px' : ''"
+                  :thumb-style="
+                    $q.screen.gt.sm
+                      ? { bottom: '0px', height: '0px' }
+                      : { bottom: '0px', height: '0px' }
+                  "
+                >
+                  <div class="flex column">
+                    <div class="flex row no-wrap q-gutter-sm">
+                      <div
+                        v-for="(tag, index) in topTagsInArea.filter(
+                          (x, i) => i % 2
+                        )"
+                        :key="index"
+                        @click="clickTag(tag)"
+                        class="tag t2 text- inter semibold"
+                        style="text-transform: capitalize"
+                        :class="$q.platform.is.ios ? 'no-hover' : ''"
+                      >
+                        {{ tag.tag }}
+                      </div>
+                    </div>
+                    <div class="flex row no-wrap q-gutter-sm q-pt-sm">
+                      <div
+                        v-for="(tag, index) in topTagsInArea.filter(
+                          (x, i) => i % 2 !== 1
+                        )"
+                        :key="index"
+                        @click="clickTag(tag)"
+                        class="tag t2 text- inter semibold"
+                        style="text-transform: capitalize"
+                        :class="$q.platform.is.ios ? 'no-hover' : ''"
+                      >
+                        {{ tag.tag }}
+                      </div>
+                    </div>
+                  </div>
+                </CustomQScroll>
+              </div>
+            </div>
+            <div
+              class="flex column"
+              v-if="
+                topArtistsInArea?.length > 5 && !eventDatesLoading && !mapMoving
+              "
+            >
+              <div
+                class="location-header q-pb-md inter"
+                :class="
+                  $q.screen.gt.sm
+                    ? 'q-px-md t1 inter semibold'
+                    : 'q-pl-md t1 semibold'
+                "
+              >
+                Top artists in this area:
+              </div>
+              <ArtistsComponent
+                :class="$q.screen.gt.sm ? 'q-pl- q-mb-' : ''"
+                :artists="topArtistsInArea"
+              />
+            </div>
             <!-- theres no point in this 
             <ArtistsComponent
               v-if="
@@ -218,7 +305,7 @@ import _ from 'lodash';
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
 //import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
-//import ArtistsComponent from 'src/components/SideBar/ArtistsComponent.vue';
+import ArtistsComponent from 'src/components/SideBar/ArtistsComponent.vue';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
 import { useMainStore } from 'src/stores/main';
@@ -230,7 +317,7 @@ export default {
   components: {
     //ControlsComponent,
     //ArtistProfile,
-    // ArtistsComponent,
+    ArtistsComponent,
     EventDateList,
     EventDatePosterList,
     //   EventDateViewOptions,
@@ -429,6 +516,8 @@ export default {
       'controlArtist',
       'artistsHasNext',
       'anyFiltersEnabled',
+      'topTagsInArea',
+      'topArtistsInArea',
     ]),
     ...mapWritableState(useQueryStore, [
       'eventDates',
@@ -617,6 +706,25 @@ export default {
       width: 100%;
       min-height: 100%;
       -webkit-overflow-scrolling: auto;
+
+      .tag-scroll-area {
+        height: 90px;
+        mask-image: linear-gradient(to left, transparent 0px, white 64px);
+        width: 100%;
+        .tag {
+          opacity: 1;
+          transition: all 0.3s ease;
+          white-space: nowrap;
+          cursor: pointer;
+          border-radius: 18px;
+          padding: 6px 12px;
+          border-radius: 18px;
+
+          &.selected {
+            text-decoration: underline;
+          }
+        }
+      }
     }
     :deep(.q-scrollarea__thumb) {
       z-index: 1000;
@@ -642,6 +750,24 @@ export default {
 .body--dark {
   .scroll-area {
     background: transparent;
+
+    .tag-scroll-area {
+      .tag {
+        opacity: 1;
+        transition: all 0.3s ease;
+        background: black;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        &:not(.no-hover) {
+          &:hover {
+            opacity: 1;
+            background: rgba(36, 36, 36, 1);
+          }
+        }
+        &.selected {
+          background: rgba(24, 24, 24, 1);
+        }
+      }
+    }
   }
   .event-list-vertical {
     pointer-events: none;
@@ -669,6 +795,22 @@ export default {
 .body--light {
   .scroll-area {
     background: transparent;
+    .tag-scroll-area {
+      .tag {
+        // opacity: 1;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+
+        //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px 0px;
+        &:not(.no-hover) {
+          &:hover {
+            background: rgba(0, 0, 0, 0.1);
+          }
+        }
+      }
+    }
     .search-input {
       background: #fafafa;
     }

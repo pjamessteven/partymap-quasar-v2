@@ -104,7 +104,7 @@
         </div>
         <SelectArtistsComponent
           class="q-px-lg"
-          :mode="'emit'"
+          :mode="'newEvent'"
           @updated="eventDate.artists = $event"
         />
       </q-card-section>

@@ -1,21 +1,128 @@
 <template>
   <div class="scraper-page">
     <div class="flex column q-pa-xl">
-      <div class="text-h6 q-mb-md">Ticketmaster Tool</div>
-      <q-input dense v-model="keyword" label="Keyword" />
-      <q-input dense v-model="classificationName" label="Classification name" />
-      <div class="t3 q-mt-xs">
-        Filter by classification name: name of any segment, genre, sub-genre,
-        type, sub-type. Negative filtering is supported by using the following
-        format '-'. Be aware that negative filters may cause decreased
-        performance.
+      <div class="flex row items-center justify-between q-mb-xl">
+        <div class="flex row">
+          <a
+            class="link-hover text-h6"
+            :class="mode === 'ticketmaster' ? '' : 'o-050'"
+            @click="mode = 'ticketmaster'"
+            >Ticketmaster Tool</a
+          >
+          <a
+            class="link-hover text-h6 q-ml-md"
+            :class="mode === 'musicbrainz' ? '' : 'o-050'"
+            @click="mode = 'musicbrainz'"
+            >Musicbrainz Tool</a
+          >
+        </div>
+        <SelectTagsComponent
+          :dense="true"
+          :showTopTags="false"
+          @valueUpdated="($event) => (universalTags = $event)"
+        />
       </div>
-      <div class="flex q-gutter-sm row q-mt-sm">
-        <q-input filled dense label="From" v-model="dateRange.start">
+
+      <q-card
+        class="flex row q-pa-sm justify-between q-gutter-md"
+        :class="{ 'no-wrap': $q.screen.gt.xs }"
+        v-if="mode == 'ticketmaster'"
+      >
+        <div class="flex column grow">
+          <q-input dense v-model="ticketMasterSearch.keyword" label="Keyword" />
+          <q-input
+            dense
+            v-model="ticketMasterSearch.classificationName"
+            label="Classification name"
+          />
+          <div class="t3 q-mt-xs flex column s">
+            Filter by classification name: name of any segment, genre,
+            sub-genre, type, sub-type. Negative filtering is supported by using
+            the following format '-'. Be aware that negative filters may cause
+            decreased performance.
+          </div>
+        </div>
+        <div class="flex q-gutter-sm column grow q-mt-sm">
+          <q-input
+            outlined
+            dense
+            label="From"
+            v-model="ticketMasterSearch.dateRange.start"
+          >
+            <template v-slot:prepend>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy cover>
+                  <q-date v-model="ticketMasterSearch.dateRange.start">
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+            <template v-slot:append v-if="ticketMasterSearch.dateRange.start">
+              <q-icon
+                name="clear"
+                class="cursor-pointer"
+                @click="ticketMasterSearch.dateRange.start = null"
+              />
+            </template>
+          </q-input>
+          <q-input
+            outlined
+            dense
+            label="To"
+            v-model="ticketMasterSearch.dateRange.end"
+          >
+            <template v-slot:prepend>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy cover>
+                  <q-date v-model="ticketMasterSearch.dateRange.end">
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+            <template v-slot:append v-if="ticketMasterSearch.dateRange.start">
+              <q-icon
+                name="clear"
+                class="cursor-pointer"
+                @click="ticketMasterSearch.dateRange.start = null"
+              />
+            </template>
+          </q-input>
+          <q-select
+            outlined
+            dense
+            label="Country"
+            style="width: 250px"
+            clearable=""
+            :options="countryCodes"
+            option-value="alpha2"
+            option-label="name"
+            options-dense
+            map-options
+            v-model="ticketMasterSearch.countryCode"
+          />
+        </div>
+        <div class="flex grow items-end justify-end">
+          <q-btn @click="search()" class="nav-button primary" no-caps
+            >Search</q-btn
+          >
+        </div>
+      </q-card>
+      <q-card
+        class="flex row q-gutter-sm q-pa-sm"
+        v-else-if="mode == 'musicbrainz'"
+      >
+        <!--
+        <q-input filled dense label="From" v-model="musicbrainzSearch.begin">
           <template v-slot:prepend>
             <q-icon name="event" class="cursor-pointer">
               <q-popup-proxy cover>
-                <q-date v-model="dateRange.start">
+                <q-date v-model="musicbrainzSearch.begin">
                   <div class="row items-center justify-end">
                     <q-btn v-close-popup label="Close" color="primary" flat />
                   </div>
@@ -23,67 +130,44 @@
               </q-popup-proxy>
             </q-icon>
           </template>
-          <template v-slot:append v-if="dateRange.start">
+          <template v-slot:append v-if="musicbrainzSearch.begin">
             <q-icon
               name="clear"
               class="cursor-pointer"
-              @click="dateRange.start = null"
+              @click="musicbrainzSearch.begin = null"
             />
           </template>
         </q-input>
-        <q-input filled dense label="To" v-model="dateRange.end">
-          <template v-slot:prepend>
-            <q-icon name="event" class="cursor-pointer">
-              <q-popup-proxy cover>
-                <q-date v-model="dateRange.end">
-                  <div class="row items-center justify-end">
-                    <q-btn v-close-popup label="Close" color="primary" flat />
-                  </div>
-                </q-date>
-              </q-popup-proxy>
-            </q-icon>
-          </template>
-          <template v-slot:append v-if="dateRange.start">
-            <q-icon
-              name="clear"
-              class="cursor-pointer"
-              @click="dateRange.start = null"
-            />
-          </template>
-        </q-input>
-        <q-select
-          dense
-          filled
-          label="Country"
-          style="width: 250px"
-          clearable=""
-          :options="countryCodes"
-          option-value="alpha2"
-          option-label="name"
-          options-dense
-          map-options
-          v-model="countryCode"
-        />
-      </div>
-      <div class="q-mt-md">
-        <q-btn @click="search()">Search</q-btn>
-      </div>
-      <q-separator class="q-my-md" />
-      <SelectTagsComponent
-        :showTopTags="false"
-        @valueUpdated="($event) => (universalTags = $event)"
-      />
-      <q-separator class="q-my-md" />
-      <div class="pagination flex row justify-between">
-        <q-pagination
-          v-if="response?.page?.totalPages"
-          v-model="page"
-          :min="0"
-          :max="response?.page.totalPages - 1 || 0"
-          :max-pages="10"
-          class="q-py-md"
-        />
+-->
+        <div class="flex column grow">
+          <q-input dense v-model="musicbrainzSearch.name" label="Event name" />
+          <q-input dense v-model="musicbrainzSearch.begin" label="Begin" />
+        </div>
+        <div class="flex column grow">
+          <q-input dense v-model="musicbrainzSearch.place" label="Place" />
+          <q-input dense v-model="musicbrainzSearch.tag" label="Tag" />
+        </div>
+        <div class="flex grow items-end justify-end">
+          <q-btn class="nav-button primary" no-caps @click="search()"
+            >Search Musicbranz</q-btn
+          >
+        </div>
+      </q-card>
+
+      <div class="pagination flex row justify-between q-mt-md">
+        <div>
+          <q-pagination
+            v-if="totalPages"
+            v-model="page"
+            :min="0"
+            :max="totalPages - 1 || 0"
+            :max-pages="10"
+            class="q-py-md"
+          />
+        </div>
         <q-btn
+          class="nav-button"
+          :class="validEvents.length > 0 ? 'primary' : ''"
           :label="'add ' + validEvents.length + ' events'"
           @click="addEvents"
         />
@@ -93,10 +177,9 @@
         style="min-height: 500px; position: relative"
       >
         <InnerLoading v-if="loading" />
-
-        <TicketmasterResult
-          class="q-mt-xl"
-          v-for="result in response?._embedded?.events"
+        <ScraperResult
+          class="q-mt-md"
+          v-for="result in mappedResponse"
           :result="result"
           :universalTags="universalTags"
           :key="result.id"
@@ -116,17 +199,21 @@
 
 <script>
 import common from 'assets/common';
-import TicketmasterResult from 'src/components/ScraperPage/TicketmasterResult.vue';
+import ScraperResult from 'src/components/ScraperPage/ScraperResult.vue';
 import InnerLoading from 'src/components/InnerLoading.vue';
 import AddEventPage from 'src/components/AddEventPage/AddEventPage.vue';
-import { addEventRequest, searchTicketmaster } from 'src/api';
+import {
+  addEventRequest,
+  getMusicBrainzEvents,
+  searchTicketmaster,
+} from 'src/api';
 import SelectTagsComponent from 'components/EventPage/Tags/SelectTagsComponent.vue';
 import moment from 'moment';
 import countryCodes from 'src/assets/country-code';
 export default {
   components: {
     InnerLoading,
-    TicketmasterResult,
+    ScraperResult,
     AddEventPage,
     SelectTagsComponent,
   },
@@ -137,16 +224,27 @@ export default {
   },
   data() {
     return {
+      totalPages: 0,
+      mode: 'ticketmaster',
       events: {},
       universalTags: [],
-      dateRange: { start: null, end: null },
-      countryCode: null,
-      city: null,
-      loading: false,
-      classificationName: null,
-      keyword: undefined,
+      ticketMasterSearch: {
+        dateRange: { start: null, end: null },
+        countryCode: null,
+        city: null,
+        loading: false,
+        classificationName: null,
+        keyword: 'music festival',
+      },
+      musicbrainzSearch: {
+        begin: moment().year(),
+        name: null,
+        place: null,
+        tag: null,
+      },
       page: 0,
       response: null,
+      mappedResponse: null,
       selectedResult: null,
     };
   },
@@ -174,6 +272,8 @@ export default {
         await addEventRequest(value.eventData);
       }
 
+      this.events = {};
+
       progressDialog.hide();
     },
     errorStatusChanged(id, errorStatus) {
@@ -182,25 +282,166 @@ export default {
     eventDataChanged(id, eventData) {
       this.events[id] = { ...this.events[id], eventData, id };
     },
-    async search() {
+    search() {
+      if (this.mode === 'ticketmaster') {
+        this.searchTicketmaster();
+      } else if (this.mode === 'musicbrainz') {
+        this.searchMusicbrainz();
+      }
+    },
+    async searchMusicbrainz() {
       this.loading = true;
       this.response = null;
+      this.mappedResponse = null;
+      let queryString = 'type:Festival';
+
+      /*
+      if (this.musicbrainzSearch.begin) {
+        queryString +=
+          ' AND begin:' +
+          moment(this.musicbrainzSearch.begin).format('yyyy-MM-DD');
+      }
+      */
+
+      if (this.musicbrainzSearch.begin) {
+        queryString += ' AND begin:' + this.musicbrainzSearch.begin;
+      }
+
+      if (this.musicbrainzSearch.name) {
+        queryString += ' AND name:' + this.musicbrainzSearch.name;
+      }
+      if (this.musicbrainzSearch.place) {
+        queryString += ' AND place:' + this.musicbrainzSearch.place;
+      }
+      if (this.musicbrainzSearch.tag) {
+        queryString += ' AND tag:' + this.musicbrainzSearch.tag;
+      }
+
+      const searchResponse = await getMusicBrainzEvents({
+        query: queryString,
+        offset: this.page * 25,
+      }); // 25 is default items per page
+
+      console.log(searchResponse.data);
+
+      this.totalPages = Math.ceil(78 / 25);
+
+      this.mappedResponse = searchResponse.data.events.map((event) => {
+        const locationMbid = event.relations.find((x) => x.type === 'held at')
+          ?.place?.id;
+
+        const start = event?.['life-span']?.begin
+          ? event?.['life-span']?.begin + ' 12:00:00'
+          : undefined;
+        const end = event?.['life-span']?.end
+          ? event?.['life-span']?.end + ' 12:00:00'
+          : undefined;
+        return {
+          id: event.id,
+          dates: { start, end },
+          locationMbid,
+          name: event.name,
+          description: event.description,
+          url: event.url,
+          images: event.images,
+          artists: event.relations
+            ?.filter((x) => !!x.artist)
+            .map((x) => ({
+              name: x.artist.name,
+              mbid: x.artist.id,
+            })),
+        };
+      });
+      this.loading = false;
+    },
+    async searchTicketmaster() {
+      this.loading = true;
+      this.response = null;
+
       const searchResponse = await searchTicketmaster({
         page: this.page,
-        keyword: this.keyword,
-        startDateTime: this.dateRange.start
-          ? moment(this.dateRange.start).format('yyyy-MM-DDTHH:mm:ssZ')
+        keyword: this.ticketMasterSearch.keyword,
+        startDateTime: this.ticketMasterSearch.dateRange.start
+          ? moment(this.ticketMasterSearch.dateRange.start).format(
+              'yyyy-MM-DDTHH:mm:ssZ'
+            )
           : undefined,
-        endDateTime: this.dateRange.end
-          ? moment(this.dateRange.end).format('yyyy-MM-DDTHH:mm:ssZ')
+        endDateTime: this.ticketMasterSearch.dateRange.end
+          ? moment(this.ticketMasterSearch.dateRange.end).format(
+              'yyyy-MM-DDTHH:mm:ssZ'
+            )
           : undefined,
         sort: 'date,asc',
         size: 20,
-        city: this.city,
-        countryCode: this.countryCode?.alpha2,
+        city: this.ticketMasterSearch.city,
+        countryCode: this.ticketMasterSearch.countryCode?.alpha2,
         classificationName: this.classificationName,
       });
       this.response = searchResponse.data;
+
+      this.totalPages = this.response?.page.totalPages;
+
+      this.mappedResponse = this.response?._embedded?.events.map((event) => {
+        let locationString = '';
+        const venue = event._embedded?.venues?.[0];
+        if (venue) {
+          if (venue.name) {
+            locationString += venue.name;
+          }
+          if (venue.address) {
+            if (locationString.length > 0) {
+              locationString += ', ';
+            }
+            locationString += venue.address.line1;
+            if (venue.address.line2) {
+              if (locationString.length > 0) {
+                locationString += ', ';
+              }
+              locationString += venue.address.line2;
+            }
+          }
+          if (venue.city?.name) {
+            if (locationString.length > 0) {
+              locationString += ', ';
+            }
+            locationString += venue.city.name;
+          }
+        }
+
+        let start = event.dates.start.localDate;
+        if (event.dates?.start?.localTime) {
+          start += ' ' + event.dates?.start?.localTime;
+        } else {
+          // just set time to midday if time doesn't exist
+          start += ' 12:00:00';
+        }
+        let end = start;
+        if (event.dates?.end?.localDate) {
+          end = event.dates.end.localDate;
+          if (event.dates?.end?.localTime) {
+            end += ' ' + event.dates?.end?.localTime;
+          } else {
+            // just set time to midday if time doesn't exist
+            end += ' 12:00:00';
+          }
+        }
+        return {
+          id: event.id,
+          dates: { start, end },
+          locationString: locationString,
+          name: event.name,
+          description: event.description,
+          url: event.url,
+          images: event.images,
+          artists: event._embedded?.attractions
+            ?.filter((x) => x.name !== event.name)
+            .map((x) => ({
+              name: x.name,
+              mbid: x.externalLinks?.musicbrainz?.[0]?.id,
+            })),
+        };
+      });
+      console.log(this.mappedResponse);
       this.loading = false;
     },
   },
@@ -332,9 +573,15 @@ export default {
 
 <style lang="scss" scoped>
 .body--dark {
+  .pagination {
+    background: black;
+  }
 }
 
 .body--light {
+  .pagination {
+    background: white;
+  }
 }
 
 .scraper-page {
