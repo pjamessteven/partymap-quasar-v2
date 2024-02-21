@@ -160,7 +160,7 @@
       transition-show="jump-up"
       transition-hide="jump-down"
     >
-      <SuggestNewCoverDialog @closeDialog="closeDialog()" />
+      <UploadNewLogoDialog @closeDialog="closeDialog()" />
     </q-dialog>
     <q-dialog
       :model-value="editMode === 'artists'"
@@ -184,7 +184,7 @@ import EditRruleDialog from 'components/EventPage/EventDates/EditRruleDialog.vue
 import RemoveRruleDialog from 'components/EventPage/EventDates/RemoveRruleDialog.vue';
 import SelectArtistsDialog from 'components/EventPage/EventDates/Artists/SelectArtistsDialog.vue';
 import SelectTagsDialog from 'components/EventPage/Tags/SelectTagsDialog.vue';
-import SuggestNewCoverDialog from 'components/EventPage/Gallery/SuggestNewCoverDialog.vue';
+import UploadNewLogoDialog from 'src/components/EventPage/Gallery/UploadNewLogoDialog.vue';
 //import { Vue } from 'vue';
 
 import { useEventStore } from 'src/stores/event';
@@ -200,7 +200,7 @@ export default {
     SelectTagsDialog,
     EditSummaryDialog,
     EditNameDialog,
-    SuggestNewCoverDialog,
+    UploadNewLogoDialog,
     SelectArtistsDialog,
   },
   data() {

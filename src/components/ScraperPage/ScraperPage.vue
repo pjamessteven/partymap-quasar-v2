@@ -15,6 +15,12 @@
             @click="mode = 'musicbrainz'"
             >Musicbrainz Tool</a
           >
+          <a
+            class="link-hover text-h6 q-ml-md"
+            :class="mode === 'facebook' ? '' : 'o-050'"
+            @click="mode = 'facebook'"
+            >Facebook Tool</a
+          >
         </div>
         <SelectTagsComponent
           :dense="true"
@@ -154,6 +160,21 @@
         </div>
       </q-card>
 
+      <q-card
+        class="flex row q-gutter-sm q-pa-sm"
+        v-else-if="mode == 'facebook'"
+      >
+        <div class="flex column grow">
+          <q-input dense v-model="facebook.URL" label="Facebook URL" />
+          <q-btn
+            class="nav-button primary"
+            no-caps
+            @click="scrapeFacebookEvent()"
+            >Go</q-btn
+          >
+        </div>
+      </q-card>
+
       <div class="pagination flex row justify-between q-mt-md">
         <div>
           <q-pagination
@@ -210,6 +231,8 @@ import {
 import SelectTagsComponent from 'components/EventPage/Tags/SelectTagsComponent.vue';
 import moment from 'moment';
 import countryCodes from 'src/assets/country-code';
+import { scrapeFbEvent, scrapeFbEventFromFbid } from 'facebook-event-scraper';
+
 export default {
   components: {
     InnerLoading,
@@ -242,9 +265,12 @@ export default {
         place: null,
         tag: null,
       },
+      facebook: {
+        URL: '',
+      },
       page: 0,
       response: null,
-      mappedResponse: null,
+      mappedResponse: [],
       selectedResult: null,
     };
   },
@@ -254,6 +280,35 @@ export default {
     },
   },
   methods: {
+    async scrapeFacebookEvent() {
+      try {
+        const event = await scrapeFbEvent(this.facebook.URL);
+        let locationString = '';
+        if (event.location.name) {
+          locationString += event.location.name;
+        }
+        if (event.location.address) {
+          locationString += ' ' + event.location.address;
+        }
+        this.mappedResponse = [
+          {
+            dates: {
+              start: moment(event.startTimestamp).format(),
+              end: event.endTimestamp
+                ? moment(event.moment(event.endTimestamp)).format()
+                : undefined,
+            },
+            name: event.name,
+            description: event.description,
+            url: event.url,
+            images: [{ width: 0, height: 0, url: event.photo.imageUri }],
+          },
+        ];
+        console.log(eventData);
+      } catch (err) {
+        console.error(err);
+      }
+    },
     async addEvents() {
       const progressDialog = this.$q.dialog({
         title: this.$t('add.uploading_event'),

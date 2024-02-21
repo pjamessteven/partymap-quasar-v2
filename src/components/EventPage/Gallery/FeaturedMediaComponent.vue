@@ -10,7 +10,7 @@
         color="white"
         class="border-radius"
       >
-        {{ $t('event.edit_media_gallery') }}
+        {{ $t('event.upload_new_logo') }}
       </q-btn>
     </div>
     <GalleryDialog
@@ -49,15 +49,27 @@
           />
         </video>
         <img
-          style="width: 100%; filter: blur(10px); transform: scale(1.2)"
-          :src="item?.thumb_xs_url || thumbXsUrl"
-          v-if="!loaded && (item?.thumb_xs_url || thumbXsUrl)"
+          v-show="!loaded && thumbXsUrl && false"
+          style="
+            width: 100%;
+            height: auto;
+
+            filter: blur(20px);
+            transform: scale(1.2);
+          "
+          :src="thumbXsUrl"
         />
-        <img v-show="loaded" :src="item?.thumb_url" @load="loaded = true" />
+
+        <img
+          style="width: 100%; height: auto"
+          v-show="loaded"
+          :src="item?.thumb_url"
+          @load="loaded = true"
+        />
       </div>
     </div>
     <q-dialog v-model="showEditDialog" v-if="currentUserCanEdit">
-      <EditGalleryComponent />
+      <EditGalleryComponent @closeDialog="showEditDialog = false" />
     </q-dialog>
     <q-dialog
       v-else
@@ -66,14 +78,14 @@
       transition-show="jump-up"
       transition-hide="jump-down"
     >
-      <SuggestNewCoverDialog @closeDialog="() => (showEditDialog = false)" />
+      <UploadNewLogoDialog @closeDialog="() => (showEditDialog = false)" />
     </q-dialog>
   </div>
 </template>
 
 <script>
 import EditGalleryComponent from 'components/EventPage/Gallery/EditGalleryComponent.vue';
-import SuggestNewCoverDialog from 'components/EventPage/Gallery/SuggestNewCoverDialog.vue';
+import UploadNewLogoDialog from 'components/EventPage/Gallery/UploadNewLogoDialog.vue';
 
 import GalleryDialog from './GalleryDialog.vue';
 import { mapState, mapWritableState } from 'pinia';
@@ -84,12 +96,11 @@ export default {
   components: {
     EditGalleryComponent,
     GalleryDialog,
-    SuggestNewCoverDialog,
+    UploadNewLogoDialog,
   },
   props: {
     item: Object,
     editing: Boolean,
-    preview: String,
     thumbXsUrl: String,
   },
   data() {
@@ -100,7 +111,9 @@ export default {
     };
   },
   methods: {},
-
+  mounted() {
+    this.loaded = false;
+  },
   computed: {
     ...mapState(useEventStore, ['event', 'currentUserCanEdit']),
     ...mapState(useAuthStore, ['currentUser']),
@@ -241,6 +254,8 @@ export default {
       .item-wrapper-inner {
         //width: unset;
         max-height: unset;
+        -webkit-backface-visibility: hidden;
+        -webkit-transform: translate3d(0, 0, 0);
         img,
         video {
           border-radius: 18px;

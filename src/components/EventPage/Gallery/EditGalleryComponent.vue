@@ -45,11 +45,7 @@
         </transition-group>
       </div>
       <q-card-section class="flex justify-end">
-        <q-btn
-          label="done"
-          @click="window.bus.$emit('closeDialog')"
-          color="primary"
-        />
+        <q-btn label="done" @click="closeDialog" color="primary" />
       </q-card-section>
     </div>
     <q-dialog v-model="showUploadDialog">
@@ -99,7 +95,9 @@ export default {
   },
   methods: {
     ...mapActions(useEventStore, ['updateEvent']),
-
+    closeDialog() {
+      this.$emit('closeDialog');
+    },
     async uploadMedia() {
       var videoInUploads =
         this.filesToUpload.findIndex((x) => x.mimeType.indexOf('video') > -1) >

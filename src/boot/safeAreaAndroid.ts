@@ -13,14 +13,12 @@ export default boot(async ({ app, store }) => {
   // this is used for non-ios devices
   // on android it's not possible to use a popup,
   // so we have a custom flow, similar to the flows for facebook/google on ios.
+  SafeAreaController.injectCSSVariables();
+  const mainStore = useMainStore(store);
+  mainStore.safeAreaInsets = await SafeArea.getSafeAreaInsets();
 
   if (Platform.is.capacitor) {
-    SafeAreaController.injectCSSVariables();
-
-    const mainStore = useMainStore(store);
-
     //const { height } = await SafeArea.getStatusBarHeight();
-    mainStore.safeAreaInsets = await SafeArea.getSafeAreaInsets();
 
     // force portrait orientation for phones
     if (Platform.is.capacitor && Screen.lt.sm) {

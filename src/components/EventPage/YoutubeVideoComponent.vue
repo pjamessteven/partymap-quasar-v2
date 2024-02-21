@@ -19,7 +19,7 @@
         >
           <YouTube
             style="position: absolute"
-            :key="clientWidth + event.youtube_url"
+            :key="event.youtube_url"
             v-if="event.youtube_url?.length > 0 && clientWidth > 0 && !editing"
             :src="event.youtube_url"
             :width="clientWidth"

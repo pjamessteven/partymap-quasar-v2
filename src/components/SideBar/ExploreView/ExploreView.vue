@@ -76,7 +76,10 @@
             <div
               class="flex column q-mb-md"
               v-if="
-                topTagsInArea?.length >= 1 && !eventDatesLoading && !mapMoving
+                topTagsInArea?.length >= 1 &&
+                !eventDatesLoading &&
+                !mapMoving &&
+                false
               "
             >
               <div
@@ -141,7 +144,10 @@
             <div
               class="flex column"
               v-if="
-                topArtistsInArea?.length > 5 && !eventDatesLoading && !mapMoving
+                topArtistsInArea?.length > 5 &&
+                !eventDatesLoading &&
+                !mapMoving &&
+                false
               "
             >
               <div
@@ -334,7 +340,7 @@ export default {
       if (!this.userLocation) {
         this.blockUpdates = true;
 
-        await this.loadIpInfo();
+        /// await this.loadIpInfo();
         this.blockUpdates = false;
         this.getInitialList();
       } else {

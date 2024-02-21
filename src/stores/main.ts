@@ -80,6 +80,7 @@ export const useMainStore = defineStore('main', {
         this.userLocationCity = response.data.city;
         this.userLocationCountry = response.data.country;
         this.userLocationFromSearch = false;
+        this.userLocationLoading = false;
         return;
       } catch (error) {
         //fail silently
@@ -89,6 +90,7 @@ export const useMainStore = defineStore('main', {
     },
     async reverseGecodeUserLocation() {
       try {
+        console.log('reverse', this.userLocation);
         const response: any = await fetch(
           `https://nominatim.openstreetmap.org/reverse?lat=${this.userLocation.lat}&lon=${this.userLocation.lng}&format=json&addressdetails=1`,
           {
@@ -103,12 +105,20 @@ export const useMainStore = defineStore('main', {
         console.log(data);
         if (address?.city?.length > 0) {
           this.userLocationCity = address.city;
+        } else if (address?.town?.length > 0) {
+          this.userLocationCity = address.town;
+        } else if (address?.village?.length > 0) {
+          this.userLocationCity = address.village;
+        } else if (address.municipality) {
+          this.userLocationCity = address.municipality;
         } else if (address.administrativeLevels?.level1short) {
           this.userLocationCity = address.administrativeLevels?.level1short;
         } else if (address.administrativeLevels?.level2short) {
           this.userLocationCity = address.administrativeLevels?.level2short;
         } else if (address.suburb) {
           this.userLocationCity = address.suburb;
+        } else if (address.suburb) {
+          this.userLocationCity = address.neighbourhood;
         } else if (address.state_district) {
           this.userLocationCity = address.state_district;
         }
@@ -140,15 +150,13 @@ export const useMainStore = defineStore('main', {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude,
               };
-              console.log('ul', this.userLocation);
-              this.userLocationLoading = false;
               await this.reverseGecodeUserLocation();
+
               resolve(null);
             },
             () => {
               Notify.create('Cannot get your location');
-              this.userLocationLoading = false;
-              resolve(null);
+              reject(null);
             },
             { timeout: 10000 }
           );
@@ -168,14 +176,13 @@ export const useMainStore = defineStore('main', {
                 lng: position.coords.longitude,
               };
 
-              this.userLocationLoading = false;
               await this.reverseGecodeUserLocation();
+
               resolve(null);
             })
             .catch((error) => {
               Notify.create('Cannot get your location');
-              this.userLocationLoading = false;
-              resolve(null);
+              reject(null);
             });
         } else {
           this.userLocationLoading = false;

@@ -167,6 +167,14 @@
                           :key="selectedEventDate.id"
                           :ed="selectedEventDate"
                         />
+                        <NextEventDateSummary
+                          :class="{
+                            'o-050': editing,
+                          }"
+                          class=""
+                          v-else
+                          key="placeholder"
+                        />
                       </div>
 
                       <FeaturedMediaComponent
@@ -178,11 +186,7 @@
                         :editing="editing"
                         class="q-mt-lg"
                         :item="event?.media_items?.[0]"
-                        :preview="
-                          route.query?.thumbXsUrl
-                            ? route.query.thumbXsUrl + ''
-                            : undefined
-                        "
+                        :thumbXsUrl="route.query?.thumbXsUrl"
                       />
 
                       <div
@@ -223,7 +227,7 @@
                         :class="$q.screen.gt.sm ? 'q-pt-lg' : 'q-mt-lg'"
                         v-if="event?.event_tags"
                       >
-                        <TagsComponent :small="true" :editing="editing" />
+                        <TagsComponent :small="false" :editing="editing" />
                       </div>
 
                       <!--
@@ -389,6 +393,73 @@
                                   }}
                                 </q-btn>
 
+                                <q-btn
+                                  class="button-light"
+                                  flat
+                                  no-caps
+                                  icon="mdi-image-plus-outline"
+                                  :label="t('event.upload_images')"
+                                >
+                                  <q-menu
+                                    transition-show="jump-down"
+                                    transition-hide="jump-up"
+                                    anchor="bottom right"
+                                    self="top right"
+                                  >
+                                    <q-item
+                                      v-close-popup
+                                      v-ripple
+                                      @click="
+                                        showingAddEventPhotosDialog = true
+                                      "
+                                      clickable
+                                    >
+                                      <q-item-section avatar>
+                                        <q-icon name="mdi-camera-plus-outline" />
+                                      </q-item-section>
+                                      <q-item-section>
+                                        <q-item-label>{{
+                                          t('event.add_photos')
+                                        }}</q-item-label>
+                                      </q-item-section>
+                                    </q-item>
+                                    <q-item
+                                      v-close-popup
+                                      v-ripple
+                                      @click="
+                                        showingAddEventPhotosDialog = true
+                                      "
+                                      clickable
+                                    >
+                                      <q-item-section avatar>
+                                        <q-icon name="mdi-image-plus-outline" />
+                                      </q-item-section>
+                                      <q-item-section>
+                                        <q-item-label>{{
+                                          t('event.add_lineup_poster')
+                                        }}</q-item-label>
+                                      </q-item-section>
+                                    </q-item>
+                                    <q-item
+                                      v-close-popup
+                                      v-ripple
+                                      @click="
+                                        showingAddEventPhotosDialog = true
+                                      "
+                                      clickable
+                                    >
+                                      <q-item-section avatar>
+                                        <q-icon name="mdi-image-plus-outline" />
+                                      </q-item-section>
+                                      <q-item-section>
+                                        <q-item-label>{{
+                                          t('event.update_event_logo')
+                                        }}</q-item-label>
+                                      </q-item-section>
+                                    </q-item>
+                                  </q-menu>
+                                </q-btn>
+
                                 <!-- show EDIT BUTTON if user is host or user is staff and public event -->
                                 <q-btn
                                   flat
@@ -409,7 +480,6 @@
                                   style="padding-left: 4px"
                                   :size="$q.screen.gt.xs ? '1em' : 'md'"
                                   @click="editing = !editing"
-                                  v-if="currentUserIsHost && !editing"
                                 />
                               </div>
                               <q-btn
@@ -726,6 +796,12 @@
       <q-dialog v-model="showingSuggestionsDialog">
         <SuggestionsDialog @closeDialog="showingSuggestionsDialog = false" />
       </q-dialog>
+
+      <q-dialog v-model="showingAddEventPhotosDialog">
+        <AddEventPhotosDialog
+          @closeDialog="showingAddEventPhotosDialog = false"
+        />
+      </q-dialog>
     </div>
   </div>
 </template>
@@ -761,6 +837,7 @@ import ReviewsComponent from './Reviews/ReviewsComponent.vue';
 import MobileSwipeHandle from '../MobileSwipeHandle.vue';
 import InterestedComponent from './InterestedComponent.vue';
 import SuggestionsDialog from './Suggestions/SuggestionsDialog.vue';
+import AddEventPhotosDialog from 'components/EventPage/Gallery/AddEventPhotosDialog.vue';
 import InnerLoading from 'components/InnerLoading.vue';
 import { useI18n } from 'vue-i18n';
 import { useDrag } from '@vueuse/gesture';
@@ -809,10 +886,11 @@ const enableSwipeDown = ref(true);
 const scrollPercentage = ref(0);
 const showingReportDialog = ref(false);
 const showingClaimDialog = ref(false);
+
 const loading = ref(false);
 const showingHistory = ref(false);
 const showingSuggestionsDialog = ref(false);
-
+const showingAddEventPhotosDialog = ref(false);
 const eventStore = useEventStore();
 const authStore = useAuthStore();
 const mainStore = useMainStore();
@@ -1134,7 +1212,7 @@ onActivated(() => {
     if (scrollArea.value) {
       (scrollArea.value as any).setScrollPercentage('vertical', 0);
     }
-    if ($q.platform.is.mobile) {
+    if ($q.platform.is.android) {
       setTimeout(() => {
         load();
       }, 150);
@@ -1155,7 +1233,11 @@ onActivated(() => {
   // ...and then animate in
 
   //spring.value = useSpring(motionProperties, { stiffness: 400, damping: 30 });
-  spring.value = useSpring(motionProperties, { stiffness: 400, damping: 40 });
+  spring.value = useSpring(motionProperties, {
+    stiffness: 600,
+    damping: 50,
+    mass: 1.8,
+  });
 
   // if android then do this for performance
   if ($q.platform.is.mobile) {
@@ -1325,6 +1407,9 @@ a {
   }
 
   .event-page {
+    // seems to speed up animations a bit on iphone
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
     will-change: tranform;
     .scroll-area {
       .edit-event-dates {
