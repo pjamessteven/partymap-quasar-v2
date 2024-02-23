@@ -240,8 +240,8 @@ export default {
   methods: {
     ...mapActions(useEventStore, [
       'deleteEventDate',
-      'updateEventDate',
-      'suggestEventDateEdit',
+      'updateSelectedEventDate',
+      'suggestSelectedEventDateEdit',
     ]),
     toggleCancelEvent() {
       this.cancelled = !this.ed.cancelled;
@@ -338,7 +338,7 @@ export default {
           ok: false,
         });
         try {
-          await this.updateEventDate(update);
+          await this.updateSelectedEventDate(update);
           this.$emit('closeDialog');
         } catch (e) {}
         this.loading = false;
@@ -362,7 +362,7 @@ export default {
             });
             // include message and token in request
             try {
-              await this.suggestEventDateEdit({
+              await this.suggestSelectedEventDateEdit({
                 ...update,
                 ...messageAndToken,
               });

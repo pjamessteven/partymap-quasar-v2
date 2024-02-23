@@ -24675,7 +24675,7 @@ const yp = kc('map', {
           throw c;
         }
       },
-      async updateEventDate(e) {
+      async updateSelectedEventDate(e) {
         var t;
         try {
           const n = await pX(
@@ -24696,7 +24696,7 @@ const yp = kc('map', {
           throw n;
         }
       },
-      async suggestEventDateEdit(e) {
+      async suggestSelectedEventDateEdit(e) {
         var t;
         try {
           return uX((t = this.selectedEventDate) == null ? void 0 : t.id, e);
@@ -51430,7 +51430,7 @@ const Xc0 = {
       },
     },
     methods: {
-      ...pt(v1, ['updateEventDate', 'suggestEventDateEdit']),
+      ...pt(v1, ['updateSelectedEventDate', 'suggestSelectedEventDateEdit']),
       removeArtistDate(e) {
         (e.remove_date = !0), (e.start_naive = null);
         const t = this.artistsToUpdate.findIndex((n) => n.name === e.name);
@@ -51520,7 +51520,7 @@ const Xc0 = {
             ok: !1,
           });
           try {
-            await this.updateEventDate({
+            await this.updateSelectedEventDate({
               add_artists: this.artistsToAdd,
               remove_artists: this.artistsToDelete,
               update_artists: this.artistsToUpdate,
@@ -51540,7 +51540,7 @@ const Xc0 = {
               ok: !1,
             });
             try {
-              await this.suggestEventDateEdit({
+              await this.suggestSelectedEventDateEdit({
                 ...e,
                 add_artists: this.artistsToAdd,
                 remove_artists: this.artistsToDelete,
@@ -52580,7 +52580,11 @@ const hl0 = {
       };
     },
     methods: {
-      ...pt(v1, ['deleteEventDate', 'updateEventDate', 'suggestEventDateEdit']),
+      ...pt(v1, [
+        'deleteEventDate',
+        'updateSelectedEventDate',
+        'suggestSelectedEventDateEdit',
+      ]),
       toggleCancelEvent() {
         (this.cancelled = !this.ed.cancelled), this.updateEd();
       },
@@ -52656,7 +52660,7 @@ const hl0 = {
             ok: !1,
           });
           try {
-            await this.updateEventDate(e), this.$emit('closeDialog');
+            await this.updateSelectedEventDate(e), this.$emit('closeDialog');
           } catch {}
           (this.loading = !1), t.hide();
         } else
@@ -52670,7 +52674,7 @@ const hl0 = {
               ok: !1,
             });
             try {
-              await this.suggestEventDateEdit({ ...e, ...t }),
+              await this.suggestSelectedEventDateEdit({ ...e, ...t }),
                 this.$q
                   .dialog({
                     title: this.$t('edit_event_date.submitted'),

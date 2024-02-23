@@ -6,7 +6,7 @@ import {
   editEventRequest,
   suggestEventEditRequest,
   addEventDateRequest,
-  suggestEventDateEditRequest,
+  suggestSelectedEventDateEditRequest,
   editEventDateRequest,
   updateMediaItemRequest,
   deleteMediaItemRequest,
@@ -162,8 +162,16 @@ export const useEventStore = defineStore('event', {
         throw e;
       }
     },
+    async updateEventDate(payload: EventDateUpdate, eventDateId: number) {
+      try {
+        const response = await editEventDateRequest(eventDateId, payload);
 
-    async updateEventDate(payload: EventDateUpdate) {
+        return response;
+      } catch (e) {
+        throw e;
+      }
+    },
+    async updateSelectedEventDate(payload: EventDateUpdate) {
       try {
         const response = await editEventDateRequest(
           this.selectedEventDate?.id,
@@ -185,9 +193,20 @@ export const useEventStore = defineStore('event', {
         throw e;
       }
     },
-    async suggestEventDateEdit(payload: EventDateUpdate) {
+    async suggestEventDateEdit(payload: EventDateUpdate, eventDateId: number) {
       try {
-        const response = suggestEventDateEditRequest(
+        const response = suggestSelectedEventDateEditRequest(
+          eventDateId,
+          payload
+        );
+        return response;
+      } catch (e) {
+        throw e;
+      }
+    },
+    async suggestSelectedEventDateEdit(payload: EventDateUpdate) {
+      try {
+        const response = suggestSelectedEventDateEditRequest(
           this.selectedEventDate?.id,
           payload
         );

@@ -119,7 +119,7 @@
       </q-list>
       <div
         class="inter bolder text-large t2 q-pr-md event-page-header"
-        v-if="selectedEventDate?.artists?.length > 0"
+        v-if="selectedEventDate?.artists?.length > 0 || lineupImages.length > 0"
       >
         {{ $t('event_dates.lineup') }}
       </div>
@@ -128,12 +128,30 @@
         class="q-mb-lg"
         v-if="selectedEventDate?.artists?.length > 0"
       />
+      <div class="flex row no-wrap q-gutter-sm">
+        <GalleryDialog
+          v-if="lineupImages.length > 0"
+          :open="lineupGalleryIndex != null"
+          :items="lineupImages"
+          :showThumbnails="false"
+          :currentItemIndex="lineupGalleryIndex"
+          @onClose="lineupGalleryIndex = null"
+        />
+        <div v-for="(media_item, index) of lineupImages" :key="index">
+          <img
+            @click="lineupGalleryIndex = index"
+            style="cursor: pointer; width: 100%"
+            :src="media_item.image_med_url"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import common from 'assets/common';
+import GalleryDialog from './../Gallery/GalleryDialog.vue';
 
 import ArtistsComponent from 'components/EventPage/EventDates/Artists/ArtistsComponent.vue';
 import EventDateAddArtistsComponent from 'components/EventPage/EventDates/EventDateAddArtistsComponent.vue';
@@ -162,11 +180,13 @@ export default {
     EventDateLocationComponent,
     EventDateSizeComponent,
     ArtistsComponent,
+    GalleryDialog,
   },
   data() {
     return {
       loading: false,
       showMoreFields: false,
+      lineupGalleryIndex: null,
     };
   },
   methods: {
@@ -200,6 +220,11 @@ export default {
     ]),
     ...mapWritableState(useEventStore, ['editing']),
     ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
+    lineupImages() {
+      return this.selectedEventDate?.media_items?.filter(
+        (x) => x.attributes?.isLineupImage
+      );
+    },
     rruleStatus() {
       if (this.event?.rrule?.separation_count > 0) {
         return true;

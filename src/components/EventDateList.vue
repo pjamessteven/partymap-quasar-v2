@@ -24,7 +24,7 @@
           class="ed-card-grid q-pb-sm"
           :style="gridColumns"
           :class="{
-            'q-px-md q-mb-sm': $q.screen.gt.sm,
+            'q-px-md q-mb-lg': $q.screen.gt.sm,
             'q-px-sm  q-mt-': $q.screen.lt.md,
           }"
         >
@@ -210,6 +210,6 @@ const computedTotalResultMessage = computed(() => {
     }
   }
 }
-@media only screen and (max-width: 599px) {
+@media only screen and (max-width: 600px) {
 }
 </style>

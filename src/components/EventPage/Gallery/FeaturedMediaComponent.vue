@@ -14,26 +14,27 @@
       </q-btn>
     </div>
     <GalleryDialog
-      v-if="item"
-      :open="showFullscreen"
-      :items="[item]"
+      v-if="!!otherImages"
+      :open="galleryIndex !== null"
+      :items="otherImages"
       :showThumbnails="false"
-      :currentItemIndex="0"
-      @onClose="showFullscreen = false"
+      :currentItemIndex="galleryIndex"
+      @onClose="galleryIndex = null"
     />
 
-    <div class="item-wrapper">
+    <div class="item-wrapper flex column no-wrap">
       <div
-        class="item-wrapper-inner"
+        class="item-wrapper-inner justify-start flex"
         ref="itemWrapperInner"
-        @click="showFullscreen = true"
+        @click="galleryIndex = 0"
       >
         <div
           class="no-media t4 flex items-center justify-center"
-          v-if="!item && event"
+          v-if="!logo && event"
         >
-          <div>No poster image... add one?</div>
+          <div>No logo image... add one?</div>
         </div>
+        <!--
         <video
           v-if="item?.v_low_url && item?.v_low_url.length > 0"
           class="video"
@@ -48,11 +49,12 @@
             class="image-thumb"
           />
         </video>
+-->
         <img
           v-show="!loaded && thumbXsUrl && false"
           style="
-            width: 100%;
             height: auto;
+            border-radius: 18px;
 
             filter: blur(20px);
             transform: scale(1.2);
@@ -61,11 +63,32 @@
         />
 
         <img
-          style="width: 100%; height: auto"
+          style="height: auto; border-radius: 18px"
           v-show="loaded"
-          :src="item?.thumb_url"
+          :src="logo?.thumb_url"
           @load="loaded = true"
         />
+      </div>
+      <div
+        class="flex row no-wrap justify-center grow q-pt-sm"
+        style="width: 100%"
+      >
+        <div
+          :class="index > 0 ? 'q-pl-sm' : ''"
+          v-for="(media_item, index) of otherImages.slice(1, 4)"
+          :key="index"
+        >
+          <img
+            @click="galleryIndex = index + 1"
+            style="
+              cursor: pointer;
+              width: 100%;
+              max-height: 150px;
+              border-radius: 18px;
+            "
+            :src="media_item.image_med_url"
+          />
+        </div>
       </div>
     </div>
     <q-dialog v-model="showEditDialog" v-if="currentUserCanEdit">
@@ -105,6 +128,7 @@ export default {
   },
   data() {
     return {
+      galleryIndex: null,
       loaded: false,
       showFullscreen: false,
       showEditDialog: false,
@@ -118,6 +142,16 @@ export default {
     ...mapState(useEventStore, ['event', 'currentUserCanEdit']),
     ...mapState(useAuthStore, ['currentUser']),
     ...mapWritableState(useEventStore, ['backgroundMediaIndex']),
+    logo() {
+      const logo = this.event?.media_items?.find((x) => x?.attributes?.isLogo);
+      return logo || this.event?.media_items?.[0];
+    },
+    otherImages() {
+      const otherImages = this.event?.media_items?.filter(
+        (x) => !x?.attributes?.isLineupImage
+      );
+      return otherImages;
+    },
     noCache() {
       // disable cache if it's the event creator
       // because the server side conversion process make it seem like it fucked up
@@ -182,6 +216,7 @@ export default {
       // background: white;
       overflow: hidden;
       filter: drop-shadow(1px 2px 78px rgba(0, 0, 0, 0.48));
+      border-radius: 18px !important;
 
       .no-media {
         background: grey;
@@ -193,8 +228,6 @@ export default {
       video {
         cursor: pointer;
         // border-radius: 18px !important;
-
-        max-height: 100%;
         max-width: 100%;
         object-fit: contain;
         display: block;

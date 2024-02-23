@@ -139,7 +139,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useEventStore, ['updateEventDate', 'suggestEventDateEdit']),
+    ...mapActions(useEventStore, [
+      'updateSelectedEventDate',
+      'suggestSelectedEventDateEdit',
+    ]),
     removeArtistDate(artist) {
       artist.remove_date = true;
       artist.start_naive = null;
@@ -289,7 +292,7 @@ export default {
           ok: false,
         });
         try {
-          await this.updateEventDate({
+          await this.updateSelectedEventDate({
             add_artists: this.artistsToAdd,
             remove_artists: this.artistsToDelete,
             update_artists: this.artistsToUpdate,
@@ -317,7 +320,7 @@ export default {
               ok: false,
             });
             try {
-              await this.suggestEventDateEdit({
+              await this.suggestSelectedEventDateEdit({
                 ...messageAndToken,
                 ...{
                   add_artists: this.artistsToAdd,

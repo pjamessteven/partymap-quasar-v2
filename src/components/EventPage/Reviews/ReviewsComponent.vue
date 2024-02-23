@@ -60,16 +60,39 @@
               v-if="currentUser && review.text.length > 0"
             >
               <div class="flex column items-start">
-                <div class="t2 q-mt-md" v-if="review.rating === 0">
+                <div class="t2 q-mt-sm" v-if="review.rating === 0">
                   Select a rating
                 </div>
-                <q-btn
-                  class="q-mt-md"
-                  color="primary"
-                  :disabled="review.rating === 0 || loading"
-                  @click="handleSubmitReview"
-                  >Submit review</q-btn
+                <div
+                  class="flex row justify-between items-end grow no-wrap"
+                  style="width: 100%"
                 >
+                  <q-select
+                    class="q-mt-md q-mr-md"
+                    option-label="label"
+                    style="max-width: 100%"
+                    outlined
+                    use-input
+                    menu-anchor="top left"
+                    menu-self="bottom left"
+                    v-model="selectedDate"
+                    emit-value
+                    map-options
+                    :options="pastEventDates"
+                    label="Select Event Date"
+                  >
+                    <template v-slot:append>
+                      <q-icon name="mdi-calendar-outline" class="q-pa-md" />
+                    </template>
+                  </q-select>
+                  <q-btn
+                    class="q-mt-md"
+                    color="primary"
+                    :disabled="review.rating === 0 || loading"
+                    @click="handleSubmitReview"
+                    >Submit
+                  </q-btn>
+                </div>
               </div>
             </div>
             <q-btn
@@ -150,6 +173,7 @@ import { mapState, mapActions } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
 import common from 'src/assets/common';
+import moment from 'moment-timezone';
 
 export default {
   components: { MultipleMediaSelector, InnerLoading, ReviewComponent },
@@ -158,8 +182,10 @@ export default {
   },
   data() {
     return {
+      selectedDate: null,
+
       dialog: null,
-      review: { media_items: [], text: '', rating: 0 },
+      review: { media_items: [], text: '', rating: 0, event_date_id: null },
       loading: false,
       tab: 'review',
     };
@@ -168,15 +194,44 @@ export default {
   computed: {
     ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
     ...mapState(useEventStore, ['event', 'selectedEventDate']),
+    pastEventDates() {
+      if (this.event.event_dates) {
+        return [
+          { id: null, label: 'Date not listed' },
+          ...this.event?.event_dates
+            .filter((x) => moment(x.start_naive) < moment())
+            .map((x) => ({ id: x.id, label: this.getEdLabel(x) })),
+        ];
+      } else return [];
+    },
   },
   methods: {
+    getEdLabel(ed) {
+      if (this.event.rrule?.recurring_type === 1) {
+        // weekly recurring event, return full date
+        this.localDay(ed.start_naive, ed.tz) +
+          ' ' +
+          this.localDate(ed.start_naive, ed.tz);
+      } else if (this.event.rrule?.recurring_type === 2) {
+        // monthly
+        // return month year
+        return this.event.name + ' ' + moment(ed.start_naive).format('MM YYYY');
+      } else if (this.event.rrule?.recurring_type === 3) {
+        // yearly
+        // return year
+        return this.event.name + ' ' + moment(ed.start_naive).format('YYYY');
+      }
+    },
     ...mapActions(useEventStore, ['addReview']),
     async handleSubmitReview() {
       this.loading = true;
       if (!this.review.rating) {
         this.review.rating = 0;
       }
-      await this.addReview(this.review);
+      await this.addReview({
+        ...this.review,
+        event_date_id: this.selectedDate?.id,
+      });
       this.loading = false;
     },
   },

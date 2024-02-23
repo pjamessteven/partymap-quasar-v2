@@ -162,7 +162,7 @@ export default {
     favorite: 'Save to favorites',
     favorited: 'Remove from favorites',
     edit_event: 'Edit Event',
-    add_photos: 'Upload photos from a previous event',
+    add_photos: 'Upload photos of this event',
     add_lineup_poster: 'Add lineup poster',
     upload_images: 'Add photos',
     update_event_logo: 'Update event logo',
@@ -405,7 +405,7 @@ export default {
   media_upload: {
     caption: 'Caption',
     remove: 'Remove',
-    add_media: 'Upload photos',
+    add_media: 'Select photos',
     add_media_msg:
       'Please make sure you have the consent of all identifiable people in any photos uploaded, and make sure you have the rights to upload the image. ',
     upload_media: 'Upload media',

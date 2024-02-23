@@ -2,12 +2,7 @@
   <q-card class="upload-dialog q-pa-md">
     <div class="flex row wrap items-center no-wrap q-mb-md">
       <div class="flex column">
-        <div class="text-h6 card-title q-pr-md">
-          {{ $t('media_upload.add_media') }}
-        </div>
-        <div class="q-pr-md q-mt-sm t2">
-          {{ $t('media_upload.add_media_msg') }}
-        </div>
+        <div class="text-h6 card-title q-pr-md">Add lineup poster</div>
       </div>
     </div>
     <q-select
@@ -20,7 +15,7 @@
       v-model="selectedDate"
       emit-value
       map-options
-      :options="pastEventDates"
+      :options="eventDates"
       label="Event Date"
     >
       <template v-slot:append>
@@ -47,6 +42,7 @@ export default {
   components: { MultipleMediaSelector },
   props: {
     editing: Boolean,
+    isLineup: Boolean,
   },
   data() {
     return {
@@ -54,7 +50,6 @@ export default {
       showGallery: false,
       reordering: false,
       filesToUpload: [],
-      showUploadDialog: true,
       selectedEventDateId: null,
     };
   },
@@ -64,21 +59,12 @@ export default {
   },
   mounted() {
     if (this.event) {
-      // we want to have the previous date pre-selected
-      const indexOfNextDate = this.event.event_dates.findIndex(
-        (x) => x.id === this.event.next_date.id
-      );
-      let indexOfPreviousDate = 0;
-
-      if (indexOfNextDate > 0) {
-        indexOfPreviousDate = indexOfNextDate - 1;
-      }
-
-      const previousDate = this.event.event_dates[indexOfPreviousDate];
+      // we want to have the upcoming date pre-selected
+      const next_date = this.event.next_date;
 
       this.selectedDate = {
-        id: previousDate.id,
-        label: this.getEdLabel(previousDate),
+        id: next_date.id,
+        label: this.getEdLabel(next_date),
       };
     }
   },
@@ -103,21 +89,15 @@ export default {
       'updateEvent',
       'addReview',
       'updateEventDate',
-      'reloadEvent',
+      'suggestEventDateEdit',
     ]),
     closeDialog() {
       this.$emit('closeDialog');
     },
     async uploadMedia() {
-      var videoInUploads =
-        this.filesToUpload.findIndex((x) => x.mimeType.indexOf('video') > -1) >
-        -1;
-
       const progressDialog = this.$q.dialog({
         title: this.$t('gallery.uploading_media'),
-        message: videoInUploads
-          ? this.$t('gallery.video_conversion_msg')
-          : this.$t('gallery.do_do_do'),
+        message: 'Uploading...',
         color: 'primary',
         progress: true, // we enable default settings
         cancel: false,
@@ -129,39 +109,66 @@ export default {
         // append directly to event
         // if event_date selected
         try {
-          if (this.selectedDate?.id) {
-            // add images to event date
-            const response = await this.updateEventDate(
-              {
-                media_items: this.filesToUpload,
-              },
-              this.selectedDate?.id
-            );
-            if (this.selectedDate.id === this.selectedEventDate.id) {
-              // update current event date
-              this.selectedEventDate = response;
-            }
-          } else {
-            // add images to event body
-            await this.updateEvent({
-              media_items: this.filesToUpload,
-            });
+          // add images to event date
+          const response = await this.updateEventDate(
+            {
+              lineup_images: this.filesToUpload,
+            },
+            this.selectedDate?.id
+          );
+          if (this.selectedDate.id === this.selectedEventDate.id) {
+            // update current event date
+            this.selectedEventDate = response.data;
           }
 
-          this.showUploadDialog = false;
           progressDialog.hide();
         } catch (e) {
           progressDialog.hide();
         }
+        this.$emit('closeDialog');
       } else {
-        // append as review if unprivileged
-        await this.addReview({
-          media_items: this.filesToUpload,
-          event_date_id: this.selectedDate?.id,
-        });
-        progressDialog.hide();
+        // make suggestion
+        this.$q
+          .dialog({
+            parent: this,
+            component: SubmitSuggestionPrompt,
+          })
+          .onOk(async (messageAndToken) => {
+            // suggest edit instead of editing directly
+            const progressDialog = this.$q.dialog({
+              title: this.$t('edit_event_date.submitting'),
+              color: 'primary',
+              progress: true, // we enable default settings
+              cancel: false,
+              persistent: true, // we want the user to not be able to close it
+              ok: false,
+            });
+            // include message and token in request
+            try {
+              await this.suggestEventDateEdit(
+                {
+                  lineup_images: this.filesToUpload,
+                  ...messageAndToken,
+                },
+                this.selectedDate?.id
+              );
+
+              this.$q
+                .dialog({
+                  title: this.$t('edit_event_date.submitted'),
+                  message: this.$t('edit_event_date.submitted_msg'),
+                  color: 'primary',
+                  persistent: false, // we want the user to not be able to close it
+                })
+                .onDismiss(() => {
+                  this.$emit('closeDialog');
+                });
+            } catch (e) {}
+
+            this.loading = false;
+            progressDialog.hide();
+          });
       }
-      this.reloadEvent();
 
       this.$emit('closeDialog');
     },
@@ -181,14 +188,13 @@ export default {
       'selectedEventDate',
       'currentUserCanEdit',
     ]),
-    pastEventDates() {
+    eventDates() {
       if (this.event.event_dates) {
         return [
-          { id: null, label: 'No previous date' },
-
-          ...this.event?.event_dates
-            .filter((x) => moment(x.start_naive) < moment())
-            .map((x) => ({ id: x.id, label: this.getEdLabel(x) })),
+          ...this.event?.event_dates.map((x) => ({
+            id: x.id,
+            label: this.getEdLabel(x),
+          })),
         ];
       } else return [];
     },

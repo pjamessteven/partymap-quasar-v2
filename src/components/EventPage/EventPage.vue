@@ -415,7 +415,9 @@
                                       clickable
                                     >
                                       <q-item-section avatar>
-                                        <q-icon name="mdi-camera-plus-outline" />
+                                        <q-icon
+                                          name="mdi-camera-plus-outline"
+                                        />
                                       </q-item-section>
                                       <q-item-section>
                                         <q-item-label>{{
@@ -427,7 +429,7 @@
                                       v-close-popup
                                       v-ripple
                                       @click="
-                                        showingAddEventPhotosDialog = true
+                                        showingAddLineupPosterDialog = true
                                       "
                                       clickable
                                     >
@@ -443,9 +445,7 @@
                                     <q-item
                                       v-close-popup
                                       v-ripple
-                                      @click="
-                                        showingAddEventPhotosDialog = true
-                                      "
+                                      @click="showingUploadNewLogoDialog = true"
                                       clickable
                                     >
                                       <q-item-section avatar>
@@ -802,6 +802,16 @@
           @closeDialog="showingAddEventPhotosDialog = false"
         />
       </q-dialog>
+      <q-dialog v-model="showingAddLineupPosterDialog">
+        <AddLineupPosterDialog
+          @closeDialog="showingAddLineupPosterDialog = false"
+        />
+      </q-dialog>
+      <q-dialog v-model="showingUploadNewLogoDialog">
+        <UploadNewLogoDialog
+          @closeDialog="() => (showingUploadNewLogoDialog = false)"
+        />
+      </q-dialog>
     </div>
   </div>
 </template>
@@ -838,6 +848,9 @@ import MobileSwipeHandle from '../MobileSwipeHandle.vue';
 import InterestedComponent from './InterestedComponent.vue';
 import SuggestionsDialog from './Suggestions/SuggestionsDialog.vue';
 import AddEventPhotosDialog from 'components/EventPage/Gallery/AddEventPhotosDialog.vue';
+import AddLineupPosterDialog from 'components/EventPage/Gallery/AddLineupPosterDialog.vue';
+import UploadNewLogoDialog from 'components/EventPage/Gallery/UploadNewLogoDialog.vue';
+
 import InnerLoading from 'components/InnerLoading.vue';
 import { useI18n } from 'vue-i18n';
 import { useDrag } from '@vueuse/gesture';
@@ -891,6 +904,8 @@ const loading = ref(false);
 const showingHistory = ref(false);
 const showingSuggestionsDialog = ref(false);
 const showingAddEventPhotosDialog = ref(false);
+const showingAddLineupPosterDialog = ref(false);
+const showingUploadNewLogoDialog = ref(false);
 const eventStore = useEventStore();
 const authStore = useAuthStore();
 const mainStore = useMainStore();

@@ -189,6 +189,7 @@
                 "
               >
                 <Tag
+                  :small="true"
                   class="q-mr-xs"
                   v-for="(et, index) in event.event.event_tags"
                   :key="index"

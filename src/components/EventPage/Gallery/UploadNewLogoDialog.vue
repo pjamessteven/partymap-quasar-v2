@@ -8,10 +8,7 @@
       <q-card class="upload-dialog q-pa-md">
         <div class="flex row wrap items-center q-mb-md q-mb-lg">
           <q-icon left size="1.25em" name="las la-upload" />
-          <div
-            class="flex column"
-            v-if="!currentUserIsHost && !currentUserIsStaff"
-          >
+          <div class="flex column" v-if="!currentUserCanEdit">
             <div class="text-h6 card-title q-pr-md">
               {{ $t('suggestions.upload_new_logo') }}
             </div>
@@ -39,7 +36,7 @@ import { suggestEventEditRequest } from 'src/api';
 import MultipleMediaSelector from 'components/MultipleMediaSelector.vue';
 import SubmitSuggestionPrompt from 'components/EventPage/Suggestions/SubmitSuggestionPrompt.vue';
 
-import { mapState } from 'pinia';
+import { mapState, mapActions } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
 
@@ -58,12 +55,9 @@ export default {
     };
   },
   methods: {
+    ...mapActions(useEventStore, ['updateEvent']),
     async uploadMedia() {
-      for (let file of this.filesToUpload) {
-        file.isLogo = true;
-      }
-
-      if (!this.currentUserIsHost || !this.currentUserIsStaff) {
+      if (!this.currentUserCanEdit) {
         // make suggestion
         this.$q
           .dialog({
@@ -83,7 +77,7 @@ export default {
             });
             suggestEventEditRequest(this.event.id, {
               ...messageAndToken,
-              ...{ media_items: this.filesToUpload },
+              ...{ logo: this.filesToUpload[0] },
             }).then(() => {
               progressDialog.hide();
               this.loading = false;
@@ -101,16 +95,8 @@ export default {
             });
           });
       } else {
-        var videoInUploads =
-          this.filesToUpload.findIndex(
-            (x) => x.mimeType.indexOf('video') > -1
-          ) > -1;
-
         const progressDialog = this.$q.dialog({
           title: this.$t('gallery.uploading_media'),
-          message: videoInUploads
-            ? this.$t('gallery.video_conversion_msg')
-            : this.$t('gallery.do_do_do'),
           color: 'primary',
           progress: true, // we enable default settings
           cancel: false,
@@ -120,11 +106,12 @@ export default {
 
         try {
           await this.updateEvent({
-            media_items: this.filesToUpload,
+            logo: this.filesToUpload[0],
           });
           this.loading = false;
           this.showUploadDialog = false;
           progressDialog.hide();
+          this.$emit('closeDialog');
         } catch (e) {
           progressDialog.hide();
         }
@@ -141,8 +128,7 @@ export default {
   },
   watch: {},
   computed: {
-    ...mapState(useEventStore, ['event', 'currentUserIsHost']),
-    ...mapState(useAuthStore, ['currentUserIsStaff']),
+    ...mapState(useEventStore, ['event', 'currentUserCanEdit']),
   },
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div
     class="tag flex column"
-    :class="{ disabled: disabled, selected: selected }"
+    :class="{ disabled: disabled, selected: selected, small: small }"
     @click="clickTag()"
   >
     <div class="tag-inner-wrapper flex">
@@ -33,6 +33,7 @@ export default {
     count: String,
     selected: Boolean,
     showIcons: Boolean,
+    small: Boolean,
   },
   data() {
     return {
@@ -111,6 +112,12 @@ export default {
     .tag-inner {
       width: max-content;
       //  padding: 4px;
+    }
+  }
+  &.small {
+    .tag-inner-wrapper {
+      padding: 3px 8px;
+      font-size: small;
     }
   }
 }
