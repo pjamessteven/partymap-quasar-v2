@@ -479,7 +479,6 @@
                                 />
                               </div>
                               <q-btn
-                                v-if="currentUserCanEdit"
                                 flat
                                 :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
                                 :text-color="
