@@ -365,7 +365,7 @@
                                 <q-btn
                                   class="button-light"
                                   :label="
-                                    $q.screen.gt.xs ? t('event.share') : 'Share'
+                                    $q.screen.gt.xs ? 'Share' : t('event.share')
                                   "
                                   no-caps
                                   flat
@@ -388,7 +388,7 @@
                                   ></q-icon>
                                   {{
                                     $q.screen.gt.xs
-                                      ? 'Save to device'
+                                      ? 'Download'
                                       : 'Save to device'
                                   }}
                                 </q-btn>
@@ -398,7 +398,7 @@
                                   flat
                                   no-caps
                                   icon="mdi-image-plus-outline"
-                                  :label="t('event.upload_images')"
+                                  :label="'Photos'"
                                 >
                                   <q-menu
                                     transition-show="jump-down"
@@ -425,6 +425,7 @@
                                         }}</q-item-label>
                                       </q-item-section>
                                     </q-item>
+                                    <q-separator />
                                     <q-item
                                       v-close-popup
                                       v-ripple
@@ -449,7 +450,7 @@
                                       clickable
                                     >
                                       <q-item-section avatar>
-                                        <q-icon name="mdi-image-plus-outline" />
+                                        <q-icon name="mdi-image-sync-outline" />
                                       </q-item-section>
                                       <q-item-section>
                                         <q-item-label>{{
@@ -462,15 +463,10 @@
 
                                 <!-- show EDIT BUTTON if user is host or user is staff and public event -->
                                 <q-btn
+                                  v-if="false"
                                   flat
                                   class="button-light"
-                                  :color="
-                                    $q.dark.isActive ? 'grey-10' : 'grey-1'
-                                  "
-                                  :text-color="
-                                    $q.dark.isActive ? 'grey-4' : 'grey-3'
-                                  "
-                                  :label="t('event.edit_event')"
+                                  :label="'Edit'"
                                   no-caps
                                   :icon="
                                     $q.screen.gt.xs
@@ -483,6 +479,7 @@
                                 />
                               </div>
                               <q-btn
+                                v-if="currentUserCanEdit"
                                 flat
                                 :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
                                 :text-color="
@@ -558,7 +555,7 @@
                                     v-close-popup
                                     v-ripple
                                     v-if="
-                                      !currentUserIsHost && event.host == null
+                                      !currentUserCanEdit && event.host == null
                                     "
                                     @click="editing = true"
                                     clickable
@@ -574,7 +571,7 @@
                                   </q-item>
                                   <!-- SHOW EDIT if currentUserIsStaff -->
                                   <q-item
-                                    v-if="currentUserIsStaff"
+                                    v-if="currentUserCanEdit"
                                     v-ripple
                                     v-close-popup
                                     v-on:click="editing = !editing"
@@ -643,8 +640,15 @@
                           class="separator"
                           :class="$q.screen.lt.sm ? 'q-mb-sm' : 'q-mb-md'"
                         />
+
                         <EventDates />
 
+                        <div
+                          class="inter bolder text-large t2 q-pr-md event-page-header"
+                          v-if="event?.youtube_url?.length > 0"
+                        >
+                          Aftermovie:
+                        </div>
                         <YoutubeVideoComponent
                           class="q-mb-md"
                           :editing="editing"
@@ -914,8 +918,13 @@ const mapStore = useMapStore();
 const timeAgo = common.timeAgo;
 
 const { currentUser, currentUserIsStaff } = storeToRefs(authStore);
-let { event, selectedEventDate, currentUserIsHost, editing } =
-  storeToRefs(eventStore);
+let {
+  event,
+  selectedEventDate,
+  currentUserIsHost,
+  currentUserCanEdit,
+  editing,
+} = storeToRefs(eventStore);
 
 const scrollArea = ref<HTMLElement>();
 

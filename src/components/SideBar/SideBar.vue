@@ -323,14 +323,18 @@ watch(
         */
     }
     if (to === 'explore') {
-      spring.value?.set({ x: 0, y: hiddenYPosition, cursor: 'grab' });
+      if ($q.screen.lt.sm) {
+        spring.value?.set({ x: 0, y: hiddenYPosition, cursor: 'grab' });
+      }
       mainStore.showPanel = false;
       if (from === 'nearby') {
       }
     }
     if (to === 'search') {
       mainStore.showPanel = true;
-      spring.value?.set({ x: 0, y: showingYPosition, cursor: 'grab' });
+      if ($q.screen.lt.sm) {
+        spring.value?.set({ x: 0, y: showingYPosition, cursor: 'grab' });
+      }
     }
     if (to === 'nearby') {
       if ($q.screen.lt.sm) {

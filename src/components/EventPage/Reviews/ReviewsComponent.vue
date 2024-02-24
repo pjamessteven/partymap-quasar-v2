@@ -3,150 +3,102 @@
     <div class="inter bolder text-large t2 q-pr-md q-mb event-page-header">
       Reviews and experiences:
     </div>
-    <div class="new-review q-mt-sm">
-      <q-tabs
-        v-model="tab"
-        class="text-grey"
-        active-color="primary"
-        indicator-color="primary"
-        align="left"
-        no-caps
-      >
-        <q-tab name="review" label="Write a review" />
-        <q-tab name="media" label="Upload photos and videos" />
-      </q-tabs>
-      <q-separator />
-      <q-tab-panels v-model="tab">
-        <q-tab-panel name="review" class="panel">
-          <div class="flex column grow">
-            <div class="flex row items-end">
-              <q-input
-                label="Share your experience!"
-                rounded
-                autogrow
-                class="grow"
-                v-model="review.text"
-              ></q-input>
+    <div class="new-review q-m-sm q-pl-md q-pb-md">
+      <div class="flex column grow">
+        <div class="flex row items-end">
+          <q-input
+            label="Share your experience!"
+            rounded
+            autogrow
+            class="grow"
+            v-model="review.text"
+          ></q-input>
 
-              <q-btn
-                class="q-my-sm q-ml-md"
-                flat
-                icon="mdi-camera-plus-outline"
-                @click="$refs.mediaSelector.openSelectDialog()"
-              />
-            </div>
+          <q-btn
+            class="q-my-sm q-ml-md"
+            flat
+            icon="mdi-camera-plus-outline"
+            @click="$refs.mediaSelector.openSelectDialog()"
+          />
+        </div>
 
-            <q-rating
-              v-model="review.rating"
-              size="2em"
-              :max="5"
-              color="primary"
-              class="q-mt-md"
-            />
-            <MultipleMediaSelector
-              v-show="review.media_items?.length > 0"
-              class="media-select q-mt-lg"
-              ref="mediaSelector"
-              :showUploadButton="false"
-              :showSelectButton="false"
-              @filesSelected="review.media_items = $event"
-            />
-            <div class="t2 q-mt-md" v-show="review.media_items.length > 0">
-              Please make sure that you have the consent of all people in your
-              photos before uploading.
+        <q-rating
+          v-model="review.rating"
+          size="2em"
+          :max="5"
+          color="primary"
+          class="q-mt-md"
+        />
+        <MultipleMediaSelector
+          v-show="review.media_items?.length > 0"
+          class="media-select q-mt-lg"
+          ref="mediaSelector"
+          :showUploadButton="false"
+          :showSelectButton="false"
+          @filesSelected="review.media_items = $event"
+        />
+        <div class="t2 q-mt-md" v-show="review.media_items.length > 0">
+          Please make sure that you have the consent of all people in your
+          photos before uploading.
+        </div>
+        <div class="flex column" v-if="currentUser && review.text.length > 0">
+          <div class="flex column items-start">
+            <div class="t2 q-mt-sm" v-if="review.rating === 0">
+              Select a rating
             </div>
             <div
-              class="flex column"
-              v-if="currentUser && review.text.length > 0"
+              class="flex row justify-between items-end grow no-wrap"
+              style="width: 100%"
             >
-              <div class="flex column items-start">
-                <div class="t2 q-mt-sm" v-if="review.rating === 0">
-                  Select a rating
-                </div>
-                <div
-                  class="flex row justify-between items-end grow no-wrap"
-                  style="width: 100%"
-                >
-                  <q-select
-                    class="q-mt-md q-mr-md"
-                    option-label="label"
-                    style="max-width: 100%"
-                    outlined
-                    use-input
-                    menu-anchor="top left"
-                    menu-self="bottom left"
-                    v-model="selectedDate"
-                    emit-value
-                    map-options
-                    :options="pastEventDates"
-                    label="Select Event Date"
-                  >
-                    <template v-slot:append>
-                      <q-icon name="mdi-calendar-outline" class="q-pa-md" />
-                    </template>
-                  </q-select>
-                  <q-btn
-                    class="q-mt-md"
-                    color="primary"
-                    :disabled="review.rating === 0 || loading"
-                    @click="handleSubmitReview"
-                    >Submit
-                  </q-btn>
-                </div>
-              </div>
-            </div>
-            <q-btn
-              class="q-mt-md"
-              v-if="!currentUser && review.text.length > 0"
-              color="primary"
-              @click="
-                $router.push({
-                  path: '/login',
-                  query: { from: $route.path },
-                })
-              "
-              >Login to post reviews</q-btn
-            >
-            <transition
-              appear
-              enter-active-class="animated fadeIn"
-              leave-active-class="animated fadeOut"
-            >
-              <InnerLoading v-if="loading" class="loading" />
-            </transition>
-          </div>
-        </q-tab-panel>
-        <q-tab-panel name="media" class="panel">
-          <q-btn
-            class="q-mt-md"
-            v-if="!currentUser"
-            color="primary"
-            @click="
-              $router.push({
-                path: '/login',
-                query: { from: $route.path },
-              })
-            "
-            >Login to post photos and videos</q-btn
-          >
-          <div class="flex column items-center" v-else>
-            <MultipleMediaSelector
-              v-show="!loading"
-              class="media-select"
-              ref="mediaSelector"
-              :label="'Select files'"
-              :showUploadButton="true"
-              :showSelectButton="true"
-              @upload="handleSubmitReview"
-              @filesSelected="review.media_items = $event"
-            />
-            <div class="t2 q-mt-md">
-              Please make sure that you have the consent of all identifiable
-              people in your photos and videos before uploading.
+              <q-select
+                class="q-mt-md q-mr-md"
+                option-label="label"
+                style="max-width: 100%"
+                outlined
+                use-input
+                menu-anchor="top left"
+                menu-self="bottom left"
+                v-model="selectedDate"
+                emit-value
+                map-options
+                :options="pastEventDates"
+                label="Select Event Date"
+              >
+                <template v-slot:append>
+                  <q-icon name="mdi-calendar-outline" class="q-pa-md" />
+                </template>
+              </q-select>
+              <q-btn
+                class="q-mt-md"
+                color="primary"
+                :disabled="review.rating === 0 || loading"
+                @click="handleSubmitReview"
+                >Submit
+              </q-btn>
             </div>
           </div>
-        </q-tab-panel>
-      </q-tab-panels>
+        </div>
+        <q-btn
+          class="q-mt-md"
+          v-if="!currentUser && review.text.length > 0"
+          color="primary"
+          @click="
+            $router.push({
+              path: '/login',
+              query: { from: $route.path },
+            })
+          "
+          >Login to post reviews</q-btn
+        >
+        <transition
+          appear
+          enter-active-class="animated fadeIn"
+          leave-active-class="animated fadeOut"
+        >
+          <InnerLoading v-if="loading" class="loading" />
+        </transition>
+      </div>
+
       <InnerLoading v-if="loading" />
     </div>
     <div

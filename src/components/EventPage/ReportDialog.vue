@@ -10,6 +10,9 @@
       <div v-else-if="mode === 'reportContribution'" class="text-h6">
         Report contribution
       </div>
+      <div v-else-if="mode === 'reportMediaItem'" class="text-h6">
+        Report photo
+      </div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>
@@ -104,6 +107,7 @@ export default {
   props: {
     mode: String,
     contributionId: String,
+    mediaItemId: String,
   },
   methods: {
     verify(token) {
@@ -170,6 +174,11 @@ export default {
         payload = {
           ...payload,
           event_contribution_id: this.contributionId,
+        };
+      } else if (this.mode === 'reportMediaItem') {
+        payload = {
+          ...payload,
+          media_item_id: this.mediaItemId,
         };
       }
       return payload;

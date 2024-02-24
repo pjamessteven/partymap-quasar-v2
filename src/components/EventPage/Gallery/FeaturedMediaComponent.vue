@@ -17,7 +17,7 @@
       v-if="!!otherImages"
       :open="galleryIndex !== null"
       :items="otherImages"
-      :showThumbnails="false"
+      :showThumbnails="true"
       :currentItemIndex="galleryIndex"
       @onClose="galleryIndex = null"
     />
@@ -54,7 +54,6 @@
           v-show="!loaded && thumbXsUrl && false"
           style="
             height: auto;
-            border-radius: 18px;
 
             filter: blur(20px);
             transform: scale(1.2);
@@ -63,14 +62,15 @@
         />
 
         <img
-          style="height: auto; border-radius: 18px"
+          style="height: auto"
           v-show="loaded"
           :src="logo?.thumb_url"
           @load="loaded = true"
         />
       </div>
+      <!--
       <div
-        class="flex row no-wrap justify-center grow q-pt-sm"
+        class="flex row no-wrap justify-start grow q-pt-sm"
         style="width: 100%"
       >
         <div
@@ -80,16 +80,12 @@
         >
           <img
             @click="galleryIndex = index + 1"
-            style="
-              cursor: pointer;
-              width: 100%;
-              max-height: 150px;
-              border-radius: 18px;
-            "
+            style="cursor: pointer; width: 100%; max-height: 150px"
             :src="media_item.image_med_url"
           />
         </div>
       </div>
+      -->
     </div>
     <q-dialog v-model="showEditDialog" v-if="currentUserCanEdit">
       <EditGalleryComponent @closeDialog="showEditDialog = false" />
@@ -147,10 +143,18 @@ export default {
       return logo || this.event?.media_items?.[0];
     },
     otherImages() {
+      const nextEventDateLineupImages =
+        this.event?.next_date?.media_items.filter(
+          (x) => x.attributes?.isLineupImage
+        );
       const otherImages = this.event?.media_items?.filter(
         (x) => !x?.attributes?.isLineupImage
       );
-      return otherImages;
+      return [
+        ...otherImages.slice(0, 1),
+        ...nextEventDateLineupImages,
+        ...otherImages.slice(1),
+      ];
     },
     noCache() {
       // disable cache if it's the event creator
@@ -216,7 +220,7 @@ export default {
       // background: white;
       overflow: hidden;
       filter: drop-shadow(1px 2px 78px rgba(0, 0, 0, 0.48));
-      border-radius: 18px !important;
+      // border-radius: 18px !important;
 
       .no-media {
         background: grey;

@@ -19,6 +19,52 @@
           -->
 
     <div
+      class="inter bolder t2 text-large q-pr-md event-page-header"
+      v-if="computedImages?.length > 0"
+    >
+      <span v-if="selectedDateImages.length > 0">Photos from this date:</span>
+      <span v-else>All photos:</span>
+    </div>
+
+    <CustomQScroll
+      class="q-mb-lg"
+      v-if="computedImages?.length > 0"
+      horizontal
+      ref="scrollArea"
+      style="height: 134px"
+      :bar-style="{
+        height: '2px',
+      }"
+      :thumb-style="{
+        bottom: '0px',
+        height: '4px',
+      }"
+    >
+      <div class="flex row no-wrap" style="height: 128px; overflow: none">
+        <GalleryDialog
+          v-if="computedImages.length > 0"
+          :open="computedImagesGalleryIndex != null"
+          :items="computedImages"
+          :showThumbnails="true"
+          :currentItemIndex="computedImagesGalleryIndex"
+          @onClose="computedImagesGalleryIndex = null"
+        />
+        <div
+          v-for="(media_item, index) of computedImages"
+          :key="index"
+          style="height: 100%; position: relative"
+          :class="index > 0 ? 'q-ml-sm' : ''"
+        >
+          <img
+            @click="computedImagesGalleryIndex = index"
+            style="cursor: pointer; height: 100%"
+            :src="media_item.thumb_url"
+          />
+        </div>
+      </div>
+    </CustomQScroll>
+
+    <div
       class="flex row wrap items-center event-page-header"
       v-if="event.event_dates.length > 1"
     >
@@ -117,18 +163,14 @@
           </div>
         </div>
       </q-list>
+
       <div
         class="inter bolder text-large t2 q-pr-md event-page-header"
         v-if="selectedEventDate?.artists?.length > 0 || lineupImages.length > 0"
       >
         {{ $t('event_dates.lineup') }}
       </div>
-      <ArtistsComponent
-        :editing="editing"
-        class="q-mb-lg"
-        v-if="selectedEventDate?.artists?.length > 0"
-      />
-      <div class="flex row no-wrap q-gutter-sm">
+      <div class="flex row no-wrap q-gutter-sm q-mb-lg">
         <GalleryDialog
           v-if="lineupImages.length > 0"
           :open="lineupGalleryIndex != null"
@@ -145,6 +187,11 @@
           />
         </div>
       </div>
+      <ArtistsComponent
+        :editing="editing"
+        class="q-mb-lg"
+        v-if="selectedEventDate?.artists?.length > 0"
+      />
     </div>
   </div>
 </template>
@@ -163,6 +210,7 @@ import EventDateSizeComponent from 'components/EventPage/EventDates/EventDateSiz
 import EventDateTimeComponent from 'components/EventPage/EventDates/EventDateTimeComponent.vue';
 import EventDateUrlComponent from 'components/EventPage/EventDates/EventDateUrlComponent.vue';
 import EventDateTicketUrlComponent from 'components/EventPage/EventDates/EventDateTicketUrlComponent.vue';
+import CustomQScroll from 'components/CustomQScroll.vue';
 
 import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
@@ -180,6 +228,7 @@ export default {
     EventDateLocationComponent,
     EventDateSizeComponent,
     ArtistsComponent,
+    CustomQScroll,
     GalleryDialog,
   },
   data() {
@@ -187,6 +236,7 @@ export default {
       loading: false,
       showMoreFields: false,
       lineupGalleryIndex: null,
+      computedImagesGalleryIndex: null,
     };
   },
   methods: {
@@ -224,6 +274,23 @@ export default {
       return this.selectedEventDate?.media_items?.filter(
         (x) => x.attributes?.isLineupImage
       );
+    },
+    computedImages() {
+      if (this.selectedDateImages.length > 0) {
+        return this.selectedDateImages;
+      } else {
+        return this.allEventImages;
+      }
+    },
+    selectedDateImages() {
+      return this.selectedEventDate?.media_items?.filter(
+        (x) => !x.attributes?.isLineupImage
+      );
+    },
+    allEventImages() {
+      return this.event?.media_items
+        ?.filter((x) => !x.attributes?.isLineupImage)
+        ?.slice(1);
     },
     rruleStatus() {
       if (this.event?.rrule?.separation_count > 0) {

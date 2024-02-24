@@ -602,7 +602,7 @@ export default {
       "This event doesn't have any dates so it won't show on the map. If the event has not been completely cancelled, add a date for the next occurance of this event.",
     add_a_date: 'Add a date',
     ignore_add_date: 'Ignore (Event will be hidden)',
-    upcoming_dates: 'Upcoming dates:',
+    upcoming_dates: 'Event dates:',
     past_dates: 'No upcoming dates.',
     change_schedule: 'Change schedule',
     remove_schedule: 'Remove schedule',

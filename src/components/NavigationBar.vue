@@ -91,7 +91,7 @@
               : 'mdi-account-circle-outline'
             : undefined
         "
-        label="You"
+        label="Profile"
         content-class="tab"
         :ripple="false"
         :to="
