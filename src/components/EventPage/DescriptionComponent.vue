@@ -5,17 +5,30 @@
         Description:
       </div>
 
-      <div class="description" :class="editing ? 'editing ' : ''">
+      <div class="description text-large" :class="editing ? 'editing ' : ''">
         <div
           @click="openEditorDialog()"
           class="editing-outline"
           :class="editing ? 'q-pa-md' : ''"
         >
-          <span v-if="event.full_description?.length > 0">
-            <span
-              class="o-080"
-              style="white-space: pre-line; word-break: break-word"
-              >{{ event.full_description }}</span
+          <span
+            v-if="event.full_description?.length > 0"
+            style="white-space: pre-line; word-break: break-word"
+          >
+            <span v-if="!readMore && shouldTruncate" class="o-080">{{
+              truncatedDescription
+            }}</span
+            ><span v-else>{{ event.full_description }}</span
+            >&nbsp;<span
+              class="link-hover underline"
+              @click="readMore = !readMore"
+              v-if="!readMore && shouldTruncate"
+              >Read more...</span
+            ><span
+              class="link-hover underline"
+              @click="readMore = !readMore"
+              v-if="readMore && shouldTruncate"
+              >Show less...</span
             ><span
               class="o-050"
               v-if="
@@ -61,6 +74,7 @@ export default {
   data() {
     return {
       showEditingDialog: false,
+      readMore: false,
     };
   },
   methods: {
@@ -73,6 +87,35 @@ export default {
   watch: {},
   computed: {
     ...mapState(useEventStore, ['event']),
+    shouldTruncate() {
+      return this.event?.full_description?.length > 300;
+    },
+    truncatedDescription() {
+      // consider descriptions with short paragraphs at the beginning
+      const paragraphs = this.event.full_description
+        ?.split('\n')
+        .filter((x) => x.length > 0);
+      console.log(paragraphs);
+      const firstParagraph = paragraphs?.[0];
+      const secondParagraph = paragraphs?.[1];
+      const thirdParagraph = paragraphs?.[2];
+
+      if (firstParagraph?.length > 300) {
+        return firstParagraph;
+      } else if ((firstParagraph + secondParagraph).length > 300) {
+        return firstParagraph + '\n\n' + secondParagraph;
+      } else {
+        const amalagamtion = firstParagraph;
+
+        if (secondParagraph) {
+          amalagamtion += '\n\n' + secondParagraph;
+        }
+        if (thirdParagraph) {
+          amalagamtion += '\n\n' + thirdParagraph;
+        }
+        return amalagamtion;
+      }
+    },
     computedAttributeUrl() {
       if (this.event?.full_description_attribute?.length > 0) {
         // ensure that there is a protocol prefix

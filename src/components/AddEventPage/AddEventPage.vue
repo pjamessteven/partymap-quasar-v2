@@ -109,23 +109,62 @@
             <div class="flex row grow no-wrap items-baseline q-mt-md">
               <q-icon size="xs" name="las la-images" />
               <div class="flex column grow q-ml-lg">
-                <span class="text-large inter bold">Event poster</span>
-                <span class="t2">Upload an image for this event</span>
-                <MultipleMediaSelector
-                  :singleSelectMode="event.host === false"
-                  :showUploadButton="false"
-                  :disableCaption="true"
-                  @filesSelected="event.media_items = $event"
-                />
-                <div
-                  v-if="!!validationErrors.media_items && showValidationErrors"
-                  class="inter no-wrap flex items-center q-mt-md text-negative"
-                >
-                  <q-icon name="mdi-alert-circle" size="1.5em" />
-                  <div class="q-ml-sm">
-                    {{ validationErrors.media_items }}
-                  </div>
+                <span class="text-large inter bold">Event images</span>
+                <div class="flex row q-gutter-sm q-mt-sm">
+                  <q-card class="b2 shadow-1 flex column q-pa-md grow">
+                    <div class="text-large inter bold">Event logo</div>
+                    <span class="t2"
+                      >Upload the logo/main image (required).</span
+                    >
+                    <MultipleMediaSelector
+                      :singleSelectMode="true"
+                      :showUploadButton="false"
+                      :disableCaption="true"
+                      @filesSelected="event.logo = $event?.[0]"
+                    />
+                    <div
+                      v-if="!!validationErrors.logo && showValidationErrors"
+                      class="inter no-wrap flex items-center q-mt-md text-negative"
+                    >
+                      <q-icon name="mdi-alert-circle" size="1.5em" />
+                      <div class="q-ml-sm">
+                        {{ validationErrors.logo }}
+                      </div>
+                    </div>
+                  </q-card>
+                  <q-card class="b2 shadow-1 flex column q-pa-md grow">
+                    <div class="text-large inter bold">Lineup poster</div>
+                    <span class="t2">Upload a lineup poster (optional)</span>
+                    <MultipleMediaSelector
+                      :singleSelectMode="false"
+                      :showUploadButton="false"
+                      :disableCaption="true"
+                      @filesSelected="
+                        event.next_event_date_lineup_images = $event
+                      "
+                    />
+                  </q-card>
+                  <q-card class="b2 shadow-1 flex column q-pa-md grow">
+                    <div class="text-large inter bold">Other photos</div>
+                    <span class="t2"
+                      >Upload some photos from previous editions of this event
+                      (optional)</span
+                    >
+                    <span class="t2"
+                      >Please make sure that you have consent of all
+                      identifiable people before uploading photos from parties
+                      and festivals.</span
+                    >
+
+                    <MultipleMediaSelector
+                      :singleSelectMode="false"
+                      :showUploadButton="false"
+                      :disableCaption="true"
+                      @filesSelected="event.media_items = $event"
+                    />
+                  </q-card>
                 </div>
+
                 <p />
               </div>
             </div>
@@ -637,6 +676,8 @@ export default {
         full_description_attribute: null,
         next_event_date_size: null,
         next_event_date_artists: null,
+        next_event_date_lineup_images: null,
+        logo: null,
         youtube_url: null,
         media_items: [],
         url: '',
@@ -864,8 +905,8 @@ export default {
       } else if (!this.event.date_time.end) {
         errors.date_time = 'End date is required';
       }
-      if (!this.event.media_items || this.event.media_items.length === 0) {
-        errors.media_items = 'Event poster is required';
+      if (!this.event.logo) {
+        errors.logo = 'Event logo is required';
       }
       if (!this.event.host) {
         if (!this.event.url || this.event.url.length == 0) {

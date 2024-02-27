@@ -316,7 +316,10 @@ export default {
   height: 72px;
   position: relative;
   transition: height 0.3s ease;
-  padding-left: 8px;
+  //padding-left: 8px;
+  .logo {
+    margin-left: 8px;
+  }
   // android
   @supports ((top: var(--safe-area-inset-top))) {
     //padding-top: calc(env(safe-area-inset-top));
@@ -407,7 +410,9 @@ export default {
     z-index: 1;
     position: fixed;
     top: 0px;
-    padding-left: unset;
+    .logo {
+      margin-left: unset;
+    }
     @supports ((top: var(--safe-area-inset-top))) {
       top: var(--safe-area-inset-top);
     }

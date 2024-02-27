@@ -67,21 +67,30 @@
       top: 5px;
       left: 8px;
       z-index: 1;
+    }
+  }
+}
 
-      @supports ((top: env(safe-area-inset-top))) {
-        top: calc(env(safe-area-inset-top) + 5px);
-      }
+.native-mobile {
+  .splash-screen {
+    .splash-inner {
+      .logo {
+        // android
+        @supports ((top: env(safe-area-inset-top))) {
+          top: calc(env(safe-area-inset-top) + 5px);
+        }
 
-      &.ipad {
-        top: 0px !important;
-      }
+        &.ipad {
+          top: 0px !important;
+        }
 
-      &.iphone {
-        @supports (
-          (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
-            (-webkit-appearance: none)
-        ) {
-          top: calc(env(safe-area-inset-top) - 8px);
+        &.iphone {
+          @supports (
+            (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+              (-webkit-appearance: none)
+          ) {
+            top: calc(env(safe-area-inset-top) - 8px);
+          }
         }
       }
     }

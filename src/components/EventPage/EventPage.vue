@@ -639,8 +639,18 @@
                           class="separator"
                           :class="$q.screen.lt.sm ? 'q-mb-sm' : 'q-mb-md'"
                         />
-
                         <EventDates />
+
+                        <DescriptionComponent
+                          :editing="editing"
+                          v-if="
+                            editing ||
+                            (event.full_description &&
+                              event?.full_description?.length > 0)
+                          "
+                        />
+
+                        <EventDateLineupComponent />
 
                         <div
                           class="inter bolder text-large t2 q-pr-md event-page-header"
@@ -659,14 +669,6 @@
                           "
                         />
 
-                        <DescriptionComponent
-                          :editing="editing"
-                          v-if="
-                            editing ||
-                            (event.full_description &&
-                              event?.full_description?.length > 0)
-                          "
-                        />
                         <ReviewsComponent class="q-mt-sm q-mb-xl" />
                       </div>
                     </div>
@@ -842,6 +844,7 @@ import EventDates from 'components/EventPage/EventDates/EventDates.vue';
 import EventDateSidebarDesktop from 'components/EventPage/EventDates/EventDateSidebarDesktop.vue';
 import FeaturedMediaBackground from 'components/EventPage/Gallery/FeaturedMediaBackground.vue';
 import FeaturedMediaComponent from 'components/EventPage/Gallery/FeaturedMediaComponent.vue';
+import EventDateLineupComponent from 'components/EventPage/EventDates/EventDateLineupComponent.vue';
 // import HistoryComponent from 'components/EventPage/Activity/HistoryComponent.vue';
 import NextEventDateSummary from 'components/EventPage/EventDates/NextEventDateSummary.vue';
 import ReportDialog from './ReportDialog.vue';
@@ -1230,11 +1233,13 @@ onActivated(() => {
   // and every time it is re-inserted from the cache
   mainStore.sidebarOpacity = 0;
 
+  if (scrollArea.value) {
+    (scrollArea.value as any).setScrollPercentage('vertical', 0);
+  }
+
   if (!event.value || (event.value && event.value?.id + '' !== props.id + '')) {
     event.value = null;
-    if (scrollArea.value) {
-      (scrollArea.value as any).setScrollPercentage('vertical', 0);
-    }
+
     if ($q.platform.is.android) {
       setTimeout(() => {
         load();

@@ -1,13 +1,6 @@
 <template>
   <div>
     <div class="flex column" ref="container">
-      <div
-        v-if="editing"
-        class="inter bolder text-large t2 q-pr-md q-mb-md event-page-header"
-      >
-        Aftermovie/Promo video:
-      </div>
-
       <div class="description text-large" :class="editing ? 'editing ' : ''">
         <div
           :style="

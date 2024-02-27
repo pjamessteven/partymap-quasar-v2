@@ -53,7 +53,7 @@
       </div>
     </q-list>
     <span
-      class="link-hover t3 q-mt-md"
+      class="link-hover t3 q-mt-lg q-mb-sm"
       @click="copyLineupFromExistingEvent = !copyLineupFromExistingEvent"
       >[Copy lineup from a similar event?]</span
     >

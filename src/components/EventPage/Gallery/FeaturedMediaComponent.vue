@@ -150,11 +150,17 @@ export default {
       const otherImages = this.event?.media_items?.filter(
         (x) => !x?.attributes?.isLineupImage
       );
-      return [
-        ...otherImages.slice(0, 1),
-        ...nextEventDateLineupImages,
-        ...otherImages.slice(1),
-      ];
+      if (otherImages?.length > 0 && nextEventDateLineupImages.length > 0) {
+        return [
+          ...otherImages?.slice(0, 1), // logo
+          ...nextEventDateLineupImages, // next lineup images
+          ...otherImages?.slice(1), // other images
+        ];
+      } else if (otherImages?.length > 0) {
+        return otherImages;
+      } else if (nextEventDateLineupImages?.length > 0) {
+        return nextEventDateLineupImages;
+      } else return [];
     },
     noCache() {
       // disable cache if it's the event creator

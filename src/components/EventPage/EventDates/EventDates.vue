@@ -27,7 +27,7 @@
     </div>
 
     <CustomQScroll
-      class="q-mb-lg"
+      class="q-mb-sm"
       v-if="computedImages?.length > 0"
       horizontal
       ref="scrollArea"
@@ -63,6 +63,8 @@
         </div>
       </div>
     </CustomQScroll>
+
+    <q-separator v-if="computedImages?.length > 0" class="q-mb-md" />
 
     <div
       class="flex row wrap items-center event-page-header"
@@ -163,35 +165,6 @@
           </div>
         </div>
       </q-list>
-
-      <div
-        class="inter bolder text-large t2 q-pr-md event-page-header"
-        v-if="selectedEventDate?.artists?.length > 0 || lineupImages.length > 0"
-      >
-        {{ $t('event_dates.lineup') }}
-      </div>
-      <div class="flex row no-wrap q-gutter-sm q-mb-lg">
-        <GalleryDialog
-          v-if="lineupImages.length > 0"
-          :open="lineupGalleryIndex != null"
-          :items="lineupImages"
-          :showThumbnails="false"
-          :currentItemIndex="lineupGalleryIndex"
-          @onClose="lineupGalleryIndex = null"
-        />
-        <div v-for="(media_item, index) of lineupImages" :key="index">
-          <img
-            @click="lineupGalleryIndex = index"
-            style="cursor: pointer; width: 100%"
-            :src="media_item.image_med_url"
-          />
-        </div>
-      </div>
-      <ArtistsComponent
-        :editing="editing"
-        class="q-mb-lg"
-        v-if="selectedEventDate?.artists?.length > 0"
-      />
     </div>
   </div>
 </template>
