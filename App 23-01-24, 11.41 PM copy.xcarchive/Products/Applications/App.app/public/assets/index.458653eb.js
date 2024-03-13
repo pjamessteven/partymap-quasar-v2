@@ -11860,7 +11860,7 @@ var QP = {
       done: 'Done',
       edit_message: 'Edit info about this specific date',
       edit_event_rrule: 'Edit recurrance',
-      set_up_recurring_dates: 'Set up schedule',
+      set_up_recurring_dates: 'Recurring schedule',
       set_up_recurring_dates_warning:
         'If you set an automatic recurrence rule, all future manual dates will be lost.',
       select_date_time_of_next_event:

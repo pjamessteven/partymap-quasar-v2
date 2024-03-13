@@ -13,12 +13,12 @@
       >
         <div
           class="inter bolder text-large t2 event-page-header"
-          v-if="editing && event?.event_dates?.length === 0"
+          v-if="editing & (event?.event_dates?.length === 0)"
         >
           Event Dates:
         </div>
-        <div
-          class="flex row justify-start grow no-wrap schedule-msg-buttons q-mt-md q-pa-md"
+        <q-card
+          class="flex row justify-start grow no-wrap schedule-msg-buttons q-mt-sm q-pa-md q-mb-md"
           v-if="editing"
           :class="$q.screen.gt.xs ? 'q-mr-xl' : ''"
         >
@@ -54,11 +54,12 @@
             <q-btn
               class="soft-button-shadow"
               no-caps
+              icon="mdi-repeat"
               @click="enableRrule"
               :label="$t('event_dates.set_up_recurring_dates')"
             />
           </div>
-        </div>
+        </q-card>
       </div>
       <CustomQScroll
         v-if="this.event?.event_dates?.length > 0"
@@ -319,7 +320,7 @@ export default {
 .body--light {
   .event-dates-component {
     .schedule-msg-buttons {
-      background: $b-3;
+      //background: $b-3;
       border: rgba(0, 0, 0, 0.05);
       border-radius: 9px;
     }
@@ -340,7 +341,7 @@ export default {
     min-width: 400px;
   }
   .list-container {
-    overflow: hidden;
+    // overflow: hidden;
     width: 100%;
   }
 

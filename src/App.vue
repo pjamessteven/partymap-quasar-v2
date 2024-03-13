@@ -776,6 +776,9 @@ body {
   &.underline {
     text-decoration: underline !important;
   }
+  &.primary {
+    color: $primary;
+  }
 }
 
 .disabled {

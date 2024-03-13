@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="(selectedEventDate && selectedEventDate.ticket_url) || editing"
+    v-if="(selectedEventDate && selectedEventDate.tickets) || editing"
     class="flex row items-center no-wrap ed-inline-card editing-outline q-py-md"
     :class="[editing ? 'editing q-px-md' : '']"
     @click="editing ? (showEditingDialog = true) : null"
@@ -8,7 +8,7 @@
     <q-icon
       :size="$q.screen.gt.sm ? '2em' : '1.5rem'"
       :class="
-        selectedEventDate.ticket_url && selectedEventDate.ticket_url.length > 0
+        selectedEventDate.tickets && selectedEventDate.tickets.length > 0
           ? ' t2'
           : 't4'
       "
@@ -20,43 +20,32 @@
       :class="$q.screen.gt.sm ? 'text-large' : ''"
     >
       <div
-        class="flex no-wrap"
+        class="flex no-wrap items-center"
         :class="$q.screen.gt.xs ? 'justify-between' : 'column'"
         style="white-space: pre-line; width: 100%"
-        v-if="selectedEventDate?.ticket_url"
+        v-if="selectedEventDate?.tickets?.length > 0"
       >
         <div class="flex column" :class="$q.screen.gt.sm ? 'text-large' : ''">
           <div class="t2">Tickets</div>
-          <a
-            v-if="computedTicketSellerName"
-            class="t3 link-hover q-mr-sm"
-            :href="computedExternalUrl"
-            style="text-decoration: none; line-break: anywhere"
-            target="_blank"
-          >
+          <span class="t3">
             <span v-if="computedTicketSellerName"
               >Get tickets from&nbsp;{{ computedTicketSellerName }}</span
-            ><span v-else>Get tickets to this event</span>
-          </a>
+            ><span v-else>Get tickets to this event</span></span
+          >
         </div>
         <!--
-        <a
-          class="link-hover underline ellipsis"
-          target="_blank"
-          :href="!editing ? computedExternalUrl : undefined"
-          >{{ selectedEventDate.url }}</a
-        >
+Direct link when only one ticket available
         -->
         <a
+          v-if="selectedEventDate.tickets.length === 1 && !editing"
           style="text-decoration: none; color: unset"
-          :href="computedExternalUrl"
+          :href="selectedEventDate.tickets[0].url"
           target="_blank"
           class="q-mt-sm"
-          v-if="computedExternalUrl && !editing"
         >
           <q-btn
             no-caps
-            class="nav-button"
+            class="nav-button primary"
             flat
             style="width: 190px"
             label="Buy tickets"
@@ -65,6 +54,17 @@
             :class="$q.screen.gt.sm ? '' : 'flex grow'"
           />
         </a>
+        <q-btn
+          @click="showTicketDialog = true"
+          v-else-if="!editing && selectedEventDate.tickets.length > 1"
+          no-caps
+          class="nav-button primary"
+          flat
+          style="width: 190px"
+          label="Buy tickets"
+          icon="las la-external-link-alt"
+          :class="$q.screen.gt.sm ? '' : 'flex grow'"
+        />
       </div>
       <div
         v-else
@@ -105,6 +105,51 @@
     >
       <EditEventDateDialog :ed="selectedEventDate" mode="ticketUrl" />
     </q-dialog>
+    <q-dialog
+      v-model="showTicketDialog"
+      transition-show="jump-up"
+      transition-hide="jump-down"
+    >
+      <q-card class="flex column q-pa-md">
+        <div
+          class="flex column"
+          v-for="(ticket, index) of selectedEventDate.tickets"
+          :key="index"
+        >
+          <div class="flex row items-center justify-between">
+            <div class="flex column">
+              <div class="inter bold">{{ ticket.description }}</div>
+              <div class="t2" v-if="ticket.price_min">
+                {{ ticket.price_min
+                }}<span class="t2" v-if="ticket.price_max"
+                  >&nbsp;-&nbsp;{{ ticket.price_max }}</span
+                >&nbsp;{{ ticket.price_currency_code }}
+              </div>
+            </div>
+            <a
+              style="text-decoration: none; color: unset"
+              :href="ticket.url"
+              target="_blank"
+              class="q-ml-xl"
+            >
+              <q-btn
+                no-caps
+                class="nav-button primary"
+                flat
+                style="width: 190px"
+                label="Buy tickets"
+                icon="las la-external-link-alt"
+                :class="$q.screen.gt.sm ? '' : 'flex grow'"
+              />
+            </a>
+          </div>
+          <q-separator
+            v-if="index !== selectedEventDate.tickets.length - 1"
+            class="q-my-sm"
+          />
+        </div>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -121,7 +166,7 @@ export default {
   },
   watch: {},
   data() {
-    return { showEditingDialog: false };
+    return { showEditingDialog: false, showTicketDialog: false };
   },
   props: {
     editing: Boolean,
@@ -129,6 +174,7 @@ export default {
   methods: {},
   computed: {
     ...mapState(useEventStore, ['event', 'selectedEventDate']),
+    /*
     computedExternalUrl() {
       if (this.selectedEventDate && this.selectedEventDate.ticket_url) {
         // ensure that there is a protocol prefix
@@ -142,17 +188,21 @@ export default {
         return null;
       }
     },
+    */
     computedTicketSellerName() {
-      if (this.selectedEventDate && this.selectedEventDate.ticket_url) {
+      if (
+        this.selectedEventDate &&
+        this.selectedEventDate.tickets?.length > 0
+      ) {
         // ensure that there is a protocol prefix
         if (
-          this.selectedEventDate.ticket_url
+          this.selectedEventDate.tickets[0].url
             .toLowerCase()
             .indexOf('ticketmaster')
         ) {
           return 'Ticketmaster';
         } else if (
-          this.selectedEventDate.ticket_url.toLowerCase().indexOf('moshtix')
+          this.selectedEventDate.tickets[0].url.toLowerCase().indexOf('moshtix')
         ) {
           return 'Moshtix';
         } else {

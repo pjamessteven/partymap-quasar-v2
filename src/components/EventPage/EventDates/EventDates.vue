@@ -355,10 +355,9 @@ export default {
             editing: this.editing,
             showMoreFields: this.showMoreFields,
           },
-          active:
-            eventDate.ticket_url != null && eventDate.ticket_url.length > 0,
+          active: eventDate.tickets != null && eventDate.tickets.length > 0,
           visible:
-            (eventDate.ticket_url != null && eventDate.ticket_url.length > 0) ||
+            (eventDate.tickets != null && eventDate.tickets.length > 0) ||
             (this.eventHasHost && this.showMoreFields) ||
             this.editing,
         },

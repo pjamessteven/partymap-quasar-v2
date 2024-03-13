@@ -6,6 +6,7 @@
     <q-btn
       @click="deleteEd"
       size="sm"
+      color="red"
       class="delete-button"
       round
       v-if="editing"

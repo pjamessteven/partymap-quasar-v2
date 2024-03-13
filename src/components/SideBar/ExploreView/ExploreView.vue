@@ -74,11 +74,12 @@
           <div class="flex column no-wrap scroll-content q-px-sm">
             <!-- tags -->
             <div
-              class="flex column q-mb-md"
+              class="flex column q-mb-lg q-mt-xs"
               v-if="
                 topTagsInArea?.length >= 1 &&
                 !eventDatesLoading &&
                 !mapMoving &&
+                $q.screen.gt.xs &&
                 false
               "
             >
@@ -90,18 +91,21 @@
                     : ' t1 inter semibold'
                 "
               >
-                <div class="text-">Top tags in this area:</div>
+                <div class="text-">Narrow down your search...</div>
               </div>
+
               <div
-                class=""
+                :style="$q.screen.gt.sm ? 'margin-bottom: -8px' : ''"
                 :class="$q.screen.gt.sm ? 'q-pl-md ' : 'q-pl-md'"
                 v-if="topTagsInArea && topTagsInArea.length > 0"
               >
                 <CustomQScroll
                   horizontal
                   class="tag-scroll-area"
+                  :style="
+                    topTagsInArea.length > 14 ? 'height: 90px' : 'height: 45px'
+                  "
                   style="width: 100%"
-                  :style="$q.screen.gt.sm ? 'margin-bottom: -8px' : ''"
                   :thumb-style="
                     $q.screen.gt.sm
                       ? { bottom: '0px', height: '0px' }
@@ -109,11 +113,9 @@
                   "
                 >
                   <div class="flex column">
-                    <div class="flex row no-wrap q-gutter-sm">
+                    <div class="flex row no-wrap q-gutter-sm q-pr-xl">
                       <div
-                        v-for="(tag, index) in topTagsInArea.filter(
-                          (x, i) => i % 2
-                        )"
+                        v-for="(tag, index) in computedTags1"
                         :key="index"
                         @click="clickTag(tag)"
                         class="tag t2 text- inter semibold"
@@ -123,11 +125,12 @@
                         {{ tag.tag }}
                       </div>
                     </div>
-                    <div class="flex row no-wrap q-gutter-sm q-pt-sm">
+                    <div
+                      class="flex row no-wrap q-gutter-sm q-pt-sm"
+                      v-if="computedTags2.length > 0"
+                    >
                       <div
-                        v-for="(tag, index) in topTagsInArea.filter(
-                          (x, i) => i % 2 !== 1
-                        )"
+                        v-for="(tag, index) in computedTags2"
                         :key="index"
                         @click="clickTag(tag)"
                         class="tag t2 text- inter semibold"
@@ -236,11 +239,13 @@
           </div>
           <div
             class="inter semibold q-mb-md"
-            v-else-if="!isLoadingInitial && eventDatesTotal === 0"
+            v-else-if="
+              !isLoadingInitial &&
+              (eventDatesTotal === 0 || !eventDates || eventDates.length === 0)
+            "
           >
             Nothing coming up in this area
           </div>
-
           <div style="height: 20px; width: 200px" class="flex justify-center">
             <q-linear-progress
               v-if="isLoadingInitial || (mapMoving && !blockUpdates)"
@@ -252,7 +257,7 @@
               :style="$q.screen.gt.xs ? 'max-width: 200px' : 'max-width: 120px'"
             />
             <div
-              class="flex row no-wrap"
+              class="flex column no-wrap"
               style="pointer-events: all"
               v-else-if="
                 ((groupEventsByMonth &&
@@ -263,38 +268,40 @@
                 !(isLoadingInitial || (mapMoving && !blockUpdates))
               "
             >
-              <q-btn
-                no-caps
-                style="border-radius: 48px !important"
-                v-if="anyFiltersEnabled"
-                class="button-plain flex items-center"
-                @click="
-                  () => {
-                    clearAllFilters();
-                  }
-                "
-              >
-                <div class="flex items-center row no-wrap">
-                  <q-icon name="mdi-close" size="1rem" class="q-pr-md" />
-                  <div>Clear filters</div>
-                </div>
-              </q-btn>
-              <q-btn
-                no-caps
-                style="border-radius: 48px !important"
-                v-if="mapZoomLevel > 2"
-                class="button-plain flex items-center q-ml-sm"
-                @click="zoomOut()"
-              >
-                <div class="flex items-center row no-wrap">
-                  <q-icon
-                    name="mdi-magnify-minus-outline"
-                    size="1rem"
-                    class="q-pr-md"
-                  />
-                  <div>Zoom out</div>
-                </div>
-              </q-btn>
+              <div class="flex row no-wrap">
+                <q-btn
+                  no-caps
+                  style="border-radius: 48px !important"
+                  v-if="anyFiltersEnabled"
+                  class="button-plain flex items-center"
+                  @click="
+                    () => {
+                      clearAllFilters();
+                    }
+                  "
+                >
+                  <div class="flex items-center row no-wrap">
+                    <q-icon name="mdi-close" size="1rem" class="q-pr-md" />
+                    <div>Clear filters</div>
+                  </div>
+                </q-btn>
+                <q-btn
+                  no-caps
+                  style="border-radius: 48px !important"
+                  v-if="mapZoomLevel > 2"
+                  class="button-plain flex items-center q-ml-sm"
+                  @click="zoomOut()"
+                >
+                  <div class="flex items-center row no-wrap">
+                    <q-icon
+                      name="mdi-magnify-minus-outline"
+                      size="1rem"
+                      class="q-pr-md"
+                    />
+                    <div>Zoom out</div>
+                  </div>
+                </q-btn>
+              </div>
             </div>
           </div>
         </div>
@@ -371,6 +378,14 @@ export default {
       'clearAllFilters',
     ]),
     ...mapActions(useMainStore, ['loadIpInfo']),
+    clickTag(tag) {
+      let index = this.controlTag?.findIndex((x) => x.tag === tag.tag);
+      if (index > -1) {
+        // tag already selected, do nothing
+      } else {
+        this.controlTag.push(tag);
+      }
+    },
     zoomOut() {
       toRaw(this.map).setZoom(1);
       this.showPanel = false;
@@ -515,7 +530,6 @@ export default {
       'mapZoomLevel',
     ]),
     ...mapState(useQueryStore, [
-      'controlTag',
       'controlDateRange',
       'controlSize',
       'controlDuration',
@@ -526,6 +540,8 @@ export default {
       'topArtistsInArea',
     ]),
     ...mapWritableState(useQueryStore, [
+      'controlTag',
+
       'eventDates',
       'eventDatesTotal',
       'eventDatesPage',
@@ -536,6 +552,25 @@ export default {
       'eventDatesLoading',
       'eventDatesGroupedByMonth',
     ]),
+    topTagsWithoutSelected() {
+      return this.topTagsInArea.filter(
+        (x) => this.controlTag.findIndex((y) => y.tag === x.tag) === -1
+      );
+    },
+    computedTags1() {
+      if (this.topTagsWithoutSelected.length > 14) {
+        return this.topTagsWithoutSelected.filter((x, i) => i % 2);
+      } else {
+        return this.topTagsWithoutSelected;
+      }
+    },
+    computedTags2() {
+      if (this.topTagsWithoutSelected.length > 14) {
+        return this.topTagsWithoutSelected.filter((x, i) => i % 2 !== 1);
+      } else {
+        return [];
+      }
+    },
     noFiltersSelected() {
       return (
         this.controlDateRange.end === null &&
@@ -714,7 +749,6 @@ export default {
       -webkit-overflow-scrolling: auto;
 
       .tag-scroll-area {
-        height: 90px;
         mask-image: linear-gradient(to left, transparent 0px, white 64px);
         width: 100%;
         .tag {
@@ -751,6 +785,7 @@ export default {
   z-index: 1;
   align-items: center;
   pointer-events: none;
+  margin-top: -48px;
 }
 
 .body--dark {
@@ -854,6 +889,7 @@ export default {
     }
   }
   .event-date-center {
+    margin-top: 0px;
   }
 
   .event-list-vertical {

@@ -172,6 +172,7 @@ const { t } = useI18n();
 const route = useRoute();
 
 const sidebar = ref();
+const resizer = ref();
 const mainStore = useMainStore();
 
 const spring = ref();
@@ -279,7 +280,33 @@ onMounted(() => {
   if ($q.screen.lt.sm) {
     setupSpring();
   }
+  // setup sidebar resizer for desktop view
+  resizer.value?.addEventListener('mousedown', (event: any) => {
+    document.addEventListener('mousemove', resize, false);
+    document.addEventListener(
+      'mouseup',
+      () => {
+        document.removeEventListener('mousemove', resize, false);
+      },
+      false
+    );
+  });
 });
+
+const lastx = ref();
+
+const resize = (event: any) => {
+  if (event.x > 580 && event.x > lastx.value && !mainStore.sidebarExpanded) {
+    mainStore.sidebarExpanded = true;
+  } else if (
+    event.x < 1000 &&
+    event.x < lastx.value &&
+    mainStore.sidebarExpanded
+  ) {
+    mainStore.sidebarExpanded = false;
+  }
+  lastx.value = event.x;
+};
 
 const isMobile = computed(() => {
   return $q.screen.lt.sm;
@@ -471,7 +498,7 @@ watch(
     height: 100%;
     // max-width: 599px;
     pointer-events: all;
-    // transition: all 0.4s ease;
+    transition: width 0.4s ease;
     //transform: translate3d(0, calc(100% - 226px), 0);
     user-select: none;
     //padding-bottom: 64px;
@@ -692,7 +719,7 @@ watch(
     }
   }
 }
-@media only screen and (min-width: 600px) and (max-width: 1280px) {
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
   .sidebar-wrapper {
     .sidebar {
       width: 50vw !important;
@@ -857,7 +884,7 @@ watch(
       border-right: none;
       overflow: none;
       max-width: 100vw;
-      width: 100vwv;
+      width: 100vw;
       border-radius: 18px;
       will-change: opacity, transform; //important for smoothness on android
       @supports ((top: var(--safe-area-inset-top))) {

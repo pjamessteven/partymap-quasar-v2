@@ -275,7 +275,6 @@ export default {
               this.eventDateHoverLayer.clearLayers();
               this.eventDateHoverLayer.remove();
             }
-
             // possible performance issue
             if (toRaw(this.mapMarkers)) {
               toRaw(this.mapMarkers).addTo(toRaw(this.map));

@@ -299,13 +299,16 @@
                           <CustomQScroll
                             horizontal
                             class="event-buttons-scroll"
-                            style="width: 100%; height: 36px"
+                            style="
+                              width: 100%;
+                              height: 44px;
+                              margin-bottom: -16px;
+                            "
                             :thumb-style="
                               $q.screen.gt.xs
                                 ? {
                                     bottom: '0px',
-                                    height: '8px',
-                                    marginLeft: '24px',
+                                    height: '4px',
                                   }
                                 : { bottom: '0px', height: '0px' }
                             "
@@ -463,7 +466,7 @@
 
                                 <!-- show EDIT BUTTON if user is host or user is staff and public event -->
                                 <q-btn
-                                  v-if="false"
+                                  v-if="currentUserCanEdit"
                                   flat
                                   class="button-light"
                                   :label="'Edit'"
@@ -637,7 +640,9 @@
                         <div
                           v-if="$q.screen.lt.sm"
                           class="separator"
-                          :class="$q.screen.lt.sm ? 'q-mb-sm' : 'q-mb-md'"
+                          :class="
+                            $q.screen.lt.sm ? 'q-mb-sm q-mt-sm' : 'q-mb-md'
+                          "
                         />
                         <EventDates />
 
@@ -1045,7 +1050,7 @@ onBeforeRouteLeave((to, from, next) => {
 
 const goBack = () => {
   // if (this.$q.platform.is.android) event = null;
-  // this.disableScroll = true; // helps animation be smoother on android
+  //this.disableScroll = true; // helps animation be smoother on android
 
   if (mainStore.routerHistory.length > 0) {
     router.go(-1);
@@ -1262,9 +1267,8 @@ onActivated(() => {
 
   //spring.value = useSpring(motionProperties, { stiffness: 400, damping: 30 });
   spring.value = useSpring(motionProperties, {
-    stiffness: 600,
-    damping: 50,
-    mass: 1.8,
+    stiffness: 400,
+    damping: 40,
   });
 
   // if android then do this for performance
@@ -1275,7 +1279,7 @@ onActivated(() => {
           cursor: 'grabbing',
           y: 0,
         }),
-      300
+      500
     );
   } else {
     spring.value.set({

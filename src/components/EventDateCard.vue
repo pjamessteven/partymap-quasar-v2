@@ -73,7 +73,7 @@
             </div>
 
             <div
-              class="flex column grow justify-center card-bottom-text o-070 q-mb-sm"
+              class="flex column justify-center card-bottom-text o-070 q-mb-sm"
               style="font-weight: 400"
               :class="{
                 'q-mt-': $q.screen.gt.sm,
@@ -165,7 +165,7 @@
             </div>
             <div
               v-if="$q.screen.gt.sm"
-              class="description flex grow ellipsis q-mb-sm items-center"
+              class="description flex ellipsis q-mb-sm items-center"
               style="max-width: 100%"
             >
               {{ event.event.description }}
@@ -175,7 +175,7 @@
               v-if="!$q.platform.is.android"
               horizontal
               style="min-height: 39px; margin-bottom: -8px"
-              class="q-mt-sm"
+              class="q-mt-xs"
               :thumb-style="{
                 bottom: '-4px',
                 height: '8px',
@@ -509,7 +509,7 @@ export default {
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
-        height: 60px; // height of 3 lines of text
+        max-height: 60px; // height of 3 lines of text
         @supports (-webkit-line-clamp: 3) {
           overflow: hidden;
           text-overflow: ellipsis;

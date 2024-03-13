@@ -322,7 +322,7 @@ export default {
     tags: 'Tags',
     tags_msg: 'For example: free, drum and bass, burn',
     url: 'Optional link to main event webpage',
-    ticketing_url: 'Optional link to ticketing page',
+    ticketing_url: 'Link to ticketing page',
     select_location: 'Select location',
     suggested_tags:
       'Some ideas: festival, cultural, spiritual, camping, free, hiphop, trance, metal, alcohol free, psychedelic, drug testing, wheelchair accessible...',
@@ -589,9 +589,9 @@ export default {
     done: 'Done',
     edit_message: 'Edit info about this specific date',
     edit_event_rrule: 'Edit recurrance',
-    set_up_recurring_dates: 'Set up schedule',
+    set_up_recurring_dates: 'Recurring schedule',
     set_up_recurring_dates_warning:
-      'If you set an automatic recurrence rule, all future manual dates will be lost.',
+      'If you set an automatic recurrence rule, all upcoming dates will be deleted and replaced!',
     select_date_time_of_next_event:
       'Select the date and time of the next event',
     edit_event_rrule_message: 'Change how often this event occurs',

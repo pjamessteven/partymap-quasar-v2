@@ -27,13 +27,66 @@
       </div>
 
       <div v-if="mode === 'ticketUrl'">
-        <q-input
-          outlined
-          autogrow
-          color="bg-grey-7"
-          v-model="ticketUrl"
-          :label="$t('add.ticketing_url')"
-        />
+        <q-btn @click="addTicketUrl">Add ticket URL</q-btn>
+        <q-card
+          class="flex column q-pa-sm q-mt-sm"
+          v-for="(ticket, index) of tickets"
+          :key="index"
+        >
+          <q-btn
+            @click="removeTicketUrl(key)"
+            size="sm"
+            class="delete-button"
+            round
+            color="red"
+          >
+            <q-icon size="1em" name="las la-times" />
+          </q-btn>
+          <q-input
+            class="q-mb-sm"
+            outlined
+            autogrow
+            color="bg-grey-7"
+            v-model="ticket.url"
+            :label="$t('add.ticketing_url')"
+          />
+          <q-input
+            class="q-mb-sm"
+            outlined
+            autogrow
+            color="bg-grey-7"
+            v-model="ticket.description"
+            label="Ticket description"
+          />
+          <div class="flex row no-wrap">
+            <q-input
+              class="q-mr-sm"
+              dense
+              outlined
+              autogrow
+              color="bg-grey-7"
+              v-model="ticket.price_min"
+              label="Min Price"
+            />
+            <q-input
+              class="q-mr-sm"
+              dense
+              outlined
+              autogrow
+              color="bg-grey-7"
+              v-model="ticket.price_max"
+              label="Max Price"
+            />
+            <q-input
+              dense
+              outlined
+              autogrow
+              color="bg-grey-7"
+              v-model="ticket.price_currency_code"
+              label="Ticket Currency"
+            />
+          </div>
+        </q-card>
       </div>
 
       <div v-if="mode === 'size'">
@@ -123,18 +176,17 @@
         </q-card-actions>
       </div>
     </q-card-section>
-
     <q-card-section
       v-if="mode !== 'delete' && mode !== 'cancel'"
       class="dialog-card-footer"
     >
       <div class="flex row justify-end">
         <q-btn
-          flat
+          class="q-mr-sm"
           color="secondary"
           label="Undo"
           @click="undo()"
-          :disabled="this.disableSaveButton"
+          :disabled="disableSaveButton"
         />
         <q-btn
           :disabled="disableSaveButton"
@@ -183,7 +235,8 @@ export default {
       description: null,
       descriptionAttribute: null,
       url: null,
-      ticketUrl: null,
+      // ticketUrl: null,
+      tickets: [],
       dateTime: null,
       dateTimeUnchanged: null,
       results: [],
@@ -202,8 +255,9 @@ export default {
           message: this.$t('edit_event_date.external_url_msg'),
         },
         ticketUrl: {
-          title: 'Ticket URL',
-          message: 'A link for users to directly access tickets for this event',
+          title: 'Tickets',
+          message:
+            'Add links for users to directly access tickets for this event',
         },
         size: {
           title: 'Size',
@@ -246,6 +300,18 @@ export default {
     toggleCancelEvent() {
       this.cancelled = !this.ed.cancelled;
       this.updateEd();
+    },
+    addTicketUrl() {
+      this.tickets.push({
+        description: '',
+        url: '',
+        price_min: 0,
+        price_max: 0,
+        price_currency_code: 'USD',
+      });
+    },
+    removeTicketUrl(index) {
+      this.tickets.splice(index, 1);
     },
     async deleteEd() {
       if (this.currentUserCanEdit) {
@@ -319,8 +385,8 @@ export default {
       if (this.ed.url !== this.url) {
         update.url = this.url;
       }
-      if (this.ed.ticket_url !== this.ticketUrl) {
-        update.ticket_url = this.ticketUrl;
+      if (!_.isEqual(this.ed.tickets, this.tickets)) {
+        update.tickets = this.tickets;
       }
       if (this.dateTimeHasChanged) {
         update.date_time = this.dateTime;
@@ -403,7 +469,7 @@ export default {
     loadEverything() {
       this.size = this.ed.size;
       this.url = this.ed.url;
-      this.ticketUrl = this.ed.ticket_url;
+      this.tickets = _.cloneDeep(this.ed.tickets) || [];
       this.description = this.ed.description;
       this.descriptionAttribute = this.ed.description_attribute;
       this.edId = this.ed.id;
@@ -416,7 +482,7 @@ export default {
       if (this.mode == 'url') {
         this.url = this.ed.url;
       } else if (this.mode === 'ticketUrl') {
-        this.ticketUrl = this.ed.ticketUrl;
+        this.tickets = this.ed.tickets;
       } else if (this.mode === 'size') {
         this.size = this.ed.size;
       } else if (this.mode === 'description') {
@@ -441,7 +507,7 @@ export default {
       if (this.mode === 'url') {
         return this.url == this.ed.url;
       } else if (this.mode === 'ticketUrl') {
-        return this.ticketUrl == this.ed.ticketUrl;
+        return _.isEqual(this.tickets, this.ed.tickets);
       } else if (this.mode === 'size') {
         return this.size === this.ed.size;
       } else if (this.mode === 'description') {
@@ -480,6 +546,14 @@ export default {
 }
 .edit-card {
   max-width: 460px;
+}
+
+.delete-button {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  z-index: 2;
+  border-radius: 100px !important;
 }
 
 @media only screen and (max-width: 1023px) {

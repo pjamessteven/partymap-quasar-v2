@@ -596,7 +596,7 @@
         </div>
         <div class="flex row no-wrap q-ma-lg">
           <q-btn
-            icon-right="mdi-undo"
+            icon-right="las la-undo"
             class="soft-button-shadow inter bold q-mr-md"
             label="Reset"
             v-on:click="reset"

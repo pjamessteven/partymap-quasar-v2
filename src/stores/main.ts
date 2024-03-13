@@ -64,7 +64,7 @@ export const useMainStore = defineStore('main', {
       } else if (state.sidebarExpanded && Screen.gt.sm) {
         return 'width: 1000px!important;';
       } else {
-        return 'width: 580px';
+        return 'width: 554px';
       }
     },
   },

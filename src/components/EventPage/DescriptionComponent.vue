@@ -20,15 +20,15 @@
             }}</span
             ><span v-else>{{ event.full_description }}</span
             >&nbsp;<span
-              class="link-hover underline"
+              class="link-hover underline primary"
               @click="readMore = !readMore"
               v-if="!readMore && shouldTruncate"
               >Read more...</span
             ><span
-              class="link-hover underline"
+              class="link-hover underline primary"
               @click="readMore = !readMore"
               v-if="readMore && shouldTruncate"
-              >Show less...</span
+              >Show less</span
             ><span
               class="o-050"
               v-if="
@@ -88,7 +88,9 @@ export default {
   computed: {
     ...mapState(useEventStore, ['event']),
     shouldTruncate() {
-      return this.event?.full_description?.length > 300;
+      return (
+        this.truncatedDescription?.length < this.event?.full_description?.length
+      );
     },
     truncatedDescription() {
       // consider descriptions with short paragraphs at the beginning

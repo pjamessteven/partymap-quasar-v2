@@ -50,7 +50,11 @@
           No results
         </div>
       </transition>
-      <InnerLoading v-if="loading" :solid="false" style="height: 50%" />
+      <InnerLoading
+        v-if="loading"
+        :solid="false"
+        :style="$q.screen.gt.xs ? '' : 'height: 50%'"
+      />
     </div>
   </div>
 </template>

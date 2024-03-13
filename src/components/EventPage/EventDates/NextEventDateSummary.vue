@@ -25,8 +25,8 @@
             {{ localDay(ed?.start_naive, ed.tz) }}
             {{ localDate(ed?.start_naive, ed.tz) }}
           </span>
-          <span v-else-if="!ed?.date_confirmed"
-            >Date needs to be confirmed</span
+          <span v-else-if="!ed?.date_confirmed">
+            {{ monthYear(ed?.start_naive, ed?.tz) }}&nbsp;(Date TBC)</span
           >
           <!--
           <span class="t3">
@@ -76,6 +76,7 @@ export default {
     this.localDateLong = common.localDateLong;
     this.localTimeCompact = common.localTimeCompact;
     this.timeZoneAbbreviention = common.timeZoneAbbreviention;
+    this.monthYear = common.monthYear;
   },
 };
 </script>
