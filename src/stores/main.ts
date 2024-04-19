@@ -14,6 +14,7 @@ interface MainStoreState {
   showSearchBox: boolean;
   sidebarPanel: string;
   showPanel: boolean;
+  showPanelBackground: boolean;
   sidebarOpacity: number;
   sidebarExpanded: boolean;
   enablePanelSwipeDown: boolean;
@@ -40,6 +41,7 @@ export const useMainStore = defineStore('main', {
     showSearchBox: false, // for menubar search
     sidebarPanel: 'nearby',
     showPanel: Screen.lt.sm,
+    showPanelBackground: Screen.lt.sm,
     sidebarExpanded: false,
     enablePanelSwipeDown: true,
     disablePanelScroll: false,

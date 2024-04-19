@@ -17,7 +17,7 @@
         flat
         size="1.5rem"
         class="q-pa-md q-mr-xs t2"
-        :class="{ 'rotate-180': showPanel }"
+        :class="{ 'rotate-180': showPanelBackground }"
         name="mdi-chevron-up"
         style="pointer-events: all"
       />
@@ -39,11 +39,13 @@
             size="2.5rem"
             class="q-mx-md t1"
             name="mdi-chevron-up"
-            :class="{ 'rotate-180': showPanel }"
+            :class="{ 'rotate-180': showPanelBackground }"
             style="cursor: pointer"
           />
         </div>
       </div>
+      <SearchComponent class="search-component" />
+
       <div
         class="flex column grow no-wrap"
         :class="$q.screen.gt.sm ? 'q-pt-md' : ''"
@@ -314,6 +316,7 @@ import { toRaw } from 'vue';
 
 import _ from 'lodash';
 //import ArtistProfile from 'components/ArtistProfile.vue';
+import SearchComponent from 'src/components/Search/SearchComponent.vue';
 
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
@@ -333,7 +336,7 @@ export default {
     ArtistsComponent,
     EventDateList,
     EventDatePosterList,
-    //   EventDateViewOptions,
+    SearchComponent,
     CustomQScroll,
   },
 
@@ -520,7 +523,11 @@ export default {
       'compactView',
       'groupEventsByMonth',
     ]),
-    ...mapWritableState(useMainStore, ['showPanel', 'enablePanelSwipeDown']),
+    ...mapWritableState(useMainStore, [
+      'showPanel',
+      'showPanelBackground',
+      'enablePanelSwipeDown',
+    ]),
     ...mapWritableState(useMapStore, ['map', 'blockUpdates', 'preventMapZoom']),
     ...mapState(useAuthStore, ['currentUser']),
     ...mapState(useMapStore, [

@@ -644,7 +644,16 @@
                             $q.screen.lt.sm ? 'q-mb-sm q-mt-sm' : 'q-mb-md'
                           "
                         />
+
                         <EventDates />
+                        <!--
+                        <div
+                          class="inter bolder text-large t2 q-pr-md event-page-header"
+                          v-if="event?.youtube_url?.length > 0"
+                        >
+                          Aftermovie:
+                        </div>
+                        -->
 
                         <DescriptionComponent
                           :editing="editing"
@@ -657,12 +666,6 @@
 
                         <EventDateLineupComponent />
 
-                        <div
-                          class="inter bolder text-large t2 q-pr-md event-page-header"
-                          v-if="event?.youtube_url?.length > 0"
-                        >
-                          Aftermovie:
-                        </div>
                         <YoutubeVideoComponent
                           class="q-mb-md"
                           :editing="editing"
@@ -1042,7 +1045,7 @@ onBeforeRouteLeave((to, from, next) => {
     if (previousRouteIsExplore.value) {
       setTimeout(() => (mainStore.sidebarOpacity = 1), 100);
     }
-    setTimeout(() => next(), 300);
+    setTimeout(() => next(), 400);
   } else {
     next();
   }

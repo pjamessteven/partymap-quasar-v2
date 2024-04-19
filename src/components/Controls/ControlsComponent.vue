@@ -15,28 +15,6 @@
       "
     >
       <div class="flex row scroll-wrapper items-center justify-start no-wrap">
-        <q-btn
-          no-caps
-          @click="
-            () => {
-              searchbarShowing = true;
-            }
-          "
-          style="padding-left: 8px"
-          class="button-control flex items-center"
-          :class="{
-            active: sidebarPanel === 'search',
-          }"
-        >
-          <div class="flex items-center row no-wrap">
-            <div class="button-label flex row items-center row no-wrap">
-              <div class="q-mr-sm">
-                <i class="mdi mdi-magnify" />
-              </div>
-              <div>search</div>
-            </div>
-          </div>
-        </q-btn>
         <div class="separator vertical" />
 
         <DateControl v-if="showDateControl" ref="dateControl" :key="1" />

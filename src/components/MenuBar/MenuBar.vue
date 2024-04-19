@@ -164,7 +164,11 @@ export default {
       'sidebarOpacity',
       'routerHistory',
     ]),
-    ...mapWritableState(useMainStore, ['sidebarPanel', 'showPanel']),
+    ...mapWritableState(useMainStore, [
+      'sidebarPanel',
+      'showPanel',
+      'showPanelBackground',
+    ]),
 
     ...mapWritableState(useMainStore, ['routerHistory']),
     swipingDownMenuPageMobile() {
@@ -260,7 +264,7 @@ export default {
         (this.$route.name === 'Explore' &&
           !this.$q.dark.isActive &&
           this.$q.screen.lt.sm &&
-          this.showPanel) ||
+          this.showPanelBackground) ||
         (this.swipingDownMenuPageMobile &&
           !this.$q.dark.isActive &&
           this.showPanel)

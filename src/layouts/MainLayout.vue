@@ -112,7 +112,7 @@
 </template>
 
 <script lang="ts">
-import MainMap from 'components/MainMap/MainMap.vue';
+import MainMap from 'src/components/MainMap/MainMap_pixi.vue';
 import SideBar from 'components/SideBar/SideBar.vue';
 import MenuBar from 'components/MenuBar/MenuBar.vue';
 import SearchComponent from 'src/components/Search/SearchComponent.vue';
@@ -150,7 +150,7 @@ export default {
       // blockUpdates is re-enabled in Map.vue at map.
     }
     if (to.name === 'Explore') {
-      this.sidebarOpacity = 1;
+      // this.sidebarOpacity = 1;
       setTimeout(() => {
         this.overlayOpacityTransition = true;
 
@@ -189,6 +189,7 @@ export default {
       'showSidebar',
       'overlayOpacity',
       'showPanel',
+      'showPanelBackground', //mobile only
       'sidebarPanel',
       'sidebarOpacity',
       'disableAnimations',
@@ -198,7 +199,7 @@ export default {
       return `opacity: ${this.sidebarOpacity}`;
     },
     computedSidebarOverlayStyle() {
-      if (!this.showPanel) {
+      if (!this.showPanelBackground) {
         return 'opacity: 0';
       } else {
         return 'opacity: 1';
@@ -516,6 +517,19 @@ export default {
         //transform: translate3d(0, 0, 0);
         .search-component {
           z-index: 105;
+          width: 100vw;
+          max-width: 100vw;
+          // android
+          @supports ((top: var(--safe-area-inset-top))) {
+            top: calc(68px + var(--safe-area-inset-top));
+          }
+          // ios specific padding
+          @supports (
+            (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+              (-webkit-appearance: none)
+          ) {
+            top: calc(68px + env(safe-area-inset-top));
+          }
         }
         .sidebar-overlay {
           opacity: 1;
@@ -526,6 +540,21 @@ export default {
           width: 100%;
           pointer-events: none;
           margin-top: calc(0px - var(--safe-area-inset-top)) !important;
+        }
+      }
+    }
+  }
+  .native-mobile {
+    .main-inner-layout {
+      .sidebar-component-wrapper {
+        // ios specific padding for capcaitor app
+        .search-component {
+          @supports (
+            (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+              (-webkit-appearance: none)
+          ) {
+            top: calc(68px + env(safe-area-inset-top) - 8px);
+          }
         }
       }
     }

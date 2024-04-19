@@ -7,7 +7,8 @@
       :style="mainStore.computedSidebarWidth"
       v-bind:class="{
         shadow: $q.screen.gt.xs,
-        'sidebar-mobile-expanded': mainStore.showPanel && $q.screen.lt.sm,
+        'sidebar-mobile-expanded':
+          mainStore.showPanelBackground && $q.screen.lt.sm,
         'sidebar-mobile-nearby':
           mainStore.sidebarPanel === 'nearby' && $q.screen.gt.xs,
         'sidebar-mobile-hidden':
@@ -109,7 +110,11 @@
           </q-btn>
         </div>
 
-        <SearchComponent class="search-component" v-if="$q.screen.gt.xs" />
+        <DesktopSearchComponent
+          class="desktop-search-component"
+          v-if="$q.screen.gt.xs"
+        />
+
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
           <keep-alive>
             <NearbyView
@@ -161,12 +166,17 @@ import { useMainStore } from 'src/stores/main';
 import { useRouter, useRoute } from 'vue-router';
 
 import { useDrag } from '@vueuse/gesture';
-import { useMotionProperties, useSpring } from '@vueuse/motion';
+import {
+  MotionVariants,
+  useMotionControls,
+  useMotionProperties,
+  useMotionTransitions,
+  useSpring,
+} from '@vueuse/motion';
 import { ref, watch, toRaw, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useQuasar } from 'quasar';
-import { SafeArea } from '@aashu-dubey/capacitor-statusbar-safe-area';
-
+import DesktopSearchComponent from 'src/components/Search/DesktopSearchComponent.vue';
 const $q = useQuasar();
 const { t } = useI18n();
 const route = useRoute();
@@ -175,7 +185,17 @@ const sidebar = ref();
 const resizer = ref();
 const mainStore = useMainStore();
 
-const spring = ref();
+const motion = ref();
+const motionProperties = ref();
+const motionControls = ref();
+const motionTransitions = ref();
+const currentYPos = ref(0);
+
+const variants = ref<MotionVariants>({
+  custom: {
+    transition: { type: 'spring', stiffness: 100 },
+  },
+});
 
 const preventSwipe = (event) => {
   if (
@@ -188,17 +208,34 @@ const preventSwipe = (event) => {
     return;
   }
 };
+
 const hiddenYPosition = window.innerHeight - 228 - mainStore.safeAreaInsets.top;
 const showingYPosition = 120;
 
 const showPanel = () => {
+  motionTransitions.value.push('y', showingYPosition, motionProperties.value, {
+    type: 'spring',
+    stiffness: 600,
+    damping: 50,
+    mass: 1.8,
+  });
+  mainStore.showPanelBackground = true;
+
   mainStore.showPanel = true;
-  spring.value.set({ x: 0, y: showingYPosition, cursor: 'grab' });
+  //motion.value.set({ x: 0, y: showingYPosition, cursor: 'grab' });
 };
 
 const hidePanel = () => {
+  motionTransitions.value.push('y', hiddenYPosition, motionProperties.value, {
+    type: 'spring',
+    stiffness: 600,
+    damping: 50,
+    mass: 1.8,
+  });
+  mainStore.showPanelBackground = false;
+
   mainStore.showPanel = false;
-  spring.value.set({ x: 0, y: hiddenYPosition, cursor: 'grab' });
+  //motion.value.set({ x: 0, y: hiddenYPosition, cursor: 'grab' });
 };
 
 const dragHandler = ({
@@ -210,52 +247,79 @@ const dragHandler = ({
   movement: [x: number, y: number];
   dragging: boolean;
 }) => {
-  if ($q.screen.lt.sm && mainStore.sidebarPanel === 'explore') {
-    if (!dragging) {
-      if (y > 100 && mainStore.enablePanelSwipeDown) {
+  // if ($q.screen.lt.sm && mainStore.sidebarPanel === 'explore') {
+  if (!dragging) {
+    if (mainStore.showPanel && mainStore.enablePanelSwipeDown) {
+      if (y > 100) {
         hidePanel();
       } else {
-        if (mainStore.showPanel) {
-          spring.value.set({
-            cursor: 'grabbing',
-            x,
-            y: showingYPosition,
-          });
-        } else {
-          showPanel();
-        }
+        showPanel();
       }
-      return;
-    }
-    if (y < 0 && !mainStore.showPanel) {
-      // dragging up from hidden position
-      if (y + hiddenYPosition < showingYPosition) {
-        spring.value.set({
-          cursor: 'grabbing',
-          x,
-          y: showingYPosition,
-        });
+    } else if (!mainStore.showPanel) {
+      if (y < -100) {
+        showPanel();
       } else {
-        spring.value.set({
-          cursor: 'grabbing',
-          x,
-          y: y + hiddenYPosition,
-        });
+        hidePanel();
       }
-    } else if (
-      mainStore.enablePanelSwipeDown &&
-      y + showingYPosition > showingYPosition
-    ) {
-      // dragging down
-
-      mainStore.showPanel = false;
-
-      spring.value.set({
-        cursor: 'grabbing',
-        x,
-        y: y + showingYPosition,
-      });
     }
+
+    return;
+  }
+
+  if (y < 0 && !mainStore.showPanel) {
+    // dragging up from hidden position
+    if (y + hiddenYPosition < showingYPosition) {
+      sidebar.value.style.transform = `translate3d(${x}px, ${showingYPosition}px, 0px)`;
+
+      currentYPos.value = showingYPosition;
+      mainStore.showPanelBackground = true;
+    } else {
+      sidebar.value.style.transform = `translate3d(${x}, ${
+        y + hiddenYPosition
+      }px, 0px)`;
+      currentYPos.value = y + hiddenYPosition;
+      mainStore.showPanelBackground = false;
+    }
+
+    // update motion position but don't animate
+    motionTransitions.value.push(
+      'y',
+      currentYPos.value,
+      motionProperties.value,
+      {
+        type: 'keyframes',
+        duration: 0,
+      }
+    );
+  } else if (
+    mainStore.enablePanelSwipeDown &&
+    y + showingYPosition > showingYPosition &&
+    mainStore.showPanel
+  ) {
+    // dragging down
+
+    // show background when dragging back up after drag down started
+    if (y + showingYPosition - 10 <= showingYPosition) {
+      mainStore.showPanelBackground = true;
+    } else {
+      mainStore.showPanelBackground = false;
+    }
+
+    sidebar.value.style.transform = `translate3d(${x}px, ${
+      y + showingYPosition
+    }px, 0px)`;
+    currentYPos.value = y + showingYPosition;
+
+    // update motion position but don't animate
+    motionTransitions.value.push(
+      'y',
+      currentYPos.value,
+      motionProperties.value,
+      {
+        type: 'keyframes',
+        duration: 0,
+      }
+    );
   }
 };
 useDrag(dragHandler, {
@@ -263,22 +327,20 @@ useDrag(dragHandler, {
   axis: 'y',
 });
 
-const setupSpring = () => {
-  const { motionProperties } = useMotionProperties(sidebar, {
-    y:
-      mainStore.sidebarPanel === 'Explore' ? hiddenYPosition : showingYPosition,
+const setupSpring = (initialYPos: number) => {
+  const { motionProperties: mp } = useMotionProperties(sidebar, {
+    y: initialYPos,
   });
-
-  spring.value = useSpring(motionProperties, {
-    stiffness: 600,
-    damping: 50,
-    mass: 1.8,
-  });
+  motionProperties.value = mp;
+  motionControls.value = useMotionControls(motionProperties.value);
+  motionTransitions.value = useMotionTransitions();
 };
 
 onMounted(() => {
   if ($q.screen.lt.sm) {
-    setupSpring();
+    setupSpring(
+      mainStore.sidebarPanel === 'Explore' ? hiddenYPosition : showingYPosition
+    );
   }
   // setup sidebar resizer for desktop view
   resizer.value?.addEventListener('mousedown', (event: any) => {
@@ -314,7 +376,9 @@ const isMobile = computed(() => {
 
 watch(isMobile, (newv) => {
   if (newv) {
-    setupSpring();
+    setupSpring(
+      mainStore.sidebarPanel === 'Explore' ? hiddenYPosition : showingYPosition
+    );
   }
 });
 
@@ -351,7 +415,7 @@ watch(
     }
     if (to === 'explore') {
       if ($q.screen.lt.sm) {
-        spring.value?.set({ x: 0, y: hiddenYPosition, cursor: 'grab' });
+        hidePanel();
       }
       mainStore.showPanel = false;
       if (from === 'nearby') {
@@ -360,13 +424,13 @@ watch(
     if (to === 'search') {
       mainStore.showPanel = true;
       if ($q.screen.lt.sm) {
-        spring.value?.set({ x: 0, y: showingYPosition, cursor: 'grab' });
+        showPanel();
       }
     }
     if (to === 'nearby') {
       if ($q.screen.lt.sm) {
-        spring.value?.set({ x: 0, y: showingYPosition, cursor: 'grab' });
-        mainStore.showPanel = true;
+        showPanel();
+
         mainStore.enablePanelSwipeDown = true;
       } else {
         mainStore.showPanel = false;

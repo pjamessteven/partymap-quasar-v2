@@ -137,7 +137,7 @@ export default {
     border-radius: 9px;
     overflow: hidden;
     z-index: -1;
-    filter: blur(12px);
+    filter: blur(50px) brightness(0.8);
     transform: rotate(180deg) scaleX(-1) scale(2);
     position: absolute;
     height: 100%;

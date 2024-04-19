@@ -165,7 +165,7 @@
             </div>
             <div
               v-if="$q.screen.gt.sm"
-              class="description flex ellipsis q-mb-sm items-center"
+              class="description grow flex ellipsis q-mb-sm items-center"
               style="max-width: 100%"
             >
               {{ event.event.description }}
@@ -190,7 +190,7 @@
               >
                 <Tag
                   :small="true"
-                  class="q-mr-xs"
+                  class="q-mr-xs o-060"
                   v-for="(et, index) in event.event.event_tags"
                   :key="index"
                   :value="et.tag"
@@ -398,7 +398,7 @@ export default {
   .ed-card-bg {
     //border-radius: 9px;
     z-index: 1;
-    filter: blur(12px);
+    filter: blur(50px);
     transform: rotate(180deg) scaleX(-1) scale(2);
     position: absolute;
     height: 100%;

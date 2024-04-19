@@ -115,6 +115,23 @@ export default {
       this.getFineLocation();
       this.sidebarPanel = 'nearby';
     },
+    /*
+    showDialog() {
+      //this.sidebarPanel = 'explore';
+      this.dialog = this.$q.dialog({
+        component: SearchDialog,
+        parent: this, // becomes child of this Vue node
+        // ("this" points to your Vue component)
+        // (prop was called "root" in < 1.1.0 and
+        // still works, but recommending to switch
+        // to the more appropriate "parent" name)
+
+        transitionShow: 'slide-down',
+        transitionHide: 'side-up',
+        // props forwarded to component
+      });
+    },
+    */
   },
   computed: {
     ...mapWritableState(useSearchStore, ['query']),
@@ -273,6 +290,38 @@ export default {
       border: 1px solid $bi-3;
       background: $bi-2;
       box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .search-component {
+    width: 100vw;
+    max-width: 100vw;
+    // android
+    @supports ((top: var(--safe-area-inset-top))) {
+      top: calc(68px + var(--safe-area-inset-top));
+    }
+    // ios specific padding
+    @supports (
+      (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+        (-webkit-appearance: none)
+    ) {
+      top: calc(68px + env(safe-area-inset-top));
+    }
+    .controls-wrapper {
+      .controls-wrapper-inner {
+      }
+    }
+  }
+
+  .native-mobile {
+    // ios specific padding for capcaitor app
+    .search-component {
+      @supports (
+        (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+          (-webkit-appearance: none)
+      ) {
+        top: calc(68px + env(safe-area-inset-top) - 8px);
+      }
     }
   }
 }
