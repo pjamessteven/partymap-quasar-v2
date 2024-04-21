@@ -22,10 +22,10 @@
         <Transition
           appear
           :enter-active-class="
-            $q.screen.gt.xs ? 'animated  slideInLeft' : 'animated fadeIn'
+            $q.screen.gt.xs ? 'animated  slideInUp' : 'animated fadeIn'
           "
           :leave-active-class="
-            $q.screen.gt.xs ? 'animated slideOutLeft' : undefined
+            $q.screen.gt.xs ? 'animated slideOutDown' : undefined
           "
         >
           <SideBar
@@ -37,7 +37,6 @@
           />
         </Transition>
         <div
-          v-if="$q.screen.lt.sm"
           class="sidebar-overlay"
           :style="computedSidebarOverlayStyle"
           @click="clickOverlay()"
@@ -236,6 +235,11 @@ export default {
 <style lang="scss">
 .body--dark {
   .main-layout {
+    .sidebar-component-wrapper {
+      .sidebar-overlay {
+        background: black;
+      }
+    }
     .map-overlay {
       background: linear-gradient(
         rgba(0, 0, 0, 0.68),
@@ -283,6 +287,11 @@ export default {
         rgba(0, 0, 0, 0) calc(100% - 256px),
         rgba(0, 0, 0, 0.48) 100%
       );*/
+    }
+    .sidebar-component-wrapper {
+      .sidebar-overlay {
+        background: white;
+      }
     }
   }
 }
@@ -342,6 +351,16 @@ export default {
     @supports (top: env(safe-area-inset-bottom)) {
       // we only really care about bottom padding when it's overlaying the nav bar
       //padding-bottom: calc(env(safe-area-inset-bottom) - 16px);
+    }
+    .sidebar-overlay {
+      opacity: 1;
+      transition: opacity 0.3s ease;
+      z-index: 103;
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      pointer-events: none;
+      margin-top: calc(0px - var(--safe-area-inset-top)) !important;
     }
 
     .menubar {
@@ -456,11 +475,6 @@ export default {
           );
         }
       }
-      .sidebar-component-wrapper {
-        .sidebar-overlay {
-          background: black;
-        }
-      }
     }
   }
   .body--light {
@@ -478,11 +492,6 @@ export default {
             rgba(0, 0, 0, 0.68) calc(100% - 200px),
             rgba(0, 0, 0, 0.68) 100%
           );
-        }
-      }
-      .sidebar-component-wrapper {
-        .sidebar-overlay {
-          background: white;
         }
       }
     }
@@ -530,16 +539,6 @@ export default {
           ) {
             top: calc(68px + env(safe-area-inset-top));
           }
-        }
-        .sidebar-overlay {
-          opacity: 1;
-          transition: opacity 0.3s ease;
-          z-index: 103;
-          position: absolute;
-          height: 100%;
-          width: 100%;
-          pointer-events: none;
-          margin-top: calc(0px - var(--safe-area-inset-top)) !important;
         }
       }
     }

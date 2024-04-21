@@ -152,16 +152,17 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const gridColumns = computed(() => {
-  if (main.sidebarExpanded || props.twoColumnsMd) {
-    if ($q.screen.gt.xs) {
-      return `
+  //if ( props.twoColumnsMd) {
+  if ($q.screen.gt.xs) {
+    return `
         grid-template-columns: repeat(2, minmax(0, 1fr));
         `;
-    } else {
-      return `
+  } else {
+    return `
         grid-template-columns: repeat(1, minmax(0, 1fr));
         `;
-    }
+  }
+  /*
   } else {
     if ($q.screen.gt.lg) {
       return `
@@ -177,6 +178,7 @@ const gridColumns = computed(() => {
         `;
     }
   }
+  */
 });
 
 const computedTotalResultMessage = computed(() => {

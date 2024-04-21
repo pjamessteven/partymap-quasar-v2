@@ -4,11 +4,9 @@
       ref="sidebar"
       class="flex justify-between no-wrap sidebar"
       id="sidebar"
-      :style="mainStore.computedSidebarWidth"
       v-bind:class="{
-        shadow: $q.screen.gt.xs,
-        'sidebar-mobile-expanded':
-          mainStore.showPanelBackground && $q.screen.lt.sm,
+        shadow: $q.screen.gt.xs && false,
+        'sidebar-mobile-expanded': mainStore.showPanelBackground,
         'sidebar-mobile-nearby':
           mainStore.sidebarPanel === 'nearby' && $q.screen.gt.xs,
         'sidebar-mobile-hidden':
@@ -82,38 +80,7 @@
               </q-tooltip>
             </template>
           </q-btn>
-          <q-btn
-            class="menubar-button"
-            icon="mdi-menu"
-            flat
-            style="position: relative"
-          >
-            <q-menu
-              transition-show="jump-down"
-              transition-hide="jump-up"
-              anchor="bottom right"
-              self="top right"
-              class="main-menu"
-              max-height="100vh"
-            >
-              <TopControlsMenu :noUserItems="true" />
-            </q-menu>
-            <q-tooltip
-              :content-class="
-                $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
-              "
-              :offset="[10, 10]"
-              content-style="font-size: 16px"
-            >
-              {{ $t('sidebar.more') }}
-            </q-tooltip>
-          </q-btn>
         </div>
-
-        <DesktopSearchComponent
-          class="desktop-search-component"
-          v-if="$q.screen.gt.xs"
-        />
 
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
           <keep-alive>
@@ -143,13 +110,6 @@
           v-if="$q.screen.gt.xs && $q.screen.lt.md"
         />
       </div>
-      <div
-        class="resizer flex row items-center"
-        ref="resizer"
-        v-if="$q.screen.gt.lg"
-      >
-        <q-icon name="las la-grip-lines-vertical" />
-      </div>
     </div>
   </div>
 </template>
@@ -165,7 +125,7 @@ import NearbyView from './NearbyView/NearbyView.vue';
 import { useMainStore } from 'src/stores/main';
 import { useRouter, useRoute } from 'vue-router';
 
-import { useDrag } from '@vueuse/gesture';
+import { useDrag, useWheel } from '@vueuse/gesture';
 import {
   MotionVariants,
   useMotionControls,
@@ -176,7 +136,6 @@ import {
 import { ref, watch, toRaw, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useQuasar } from 'quasar';
-import DesktopSearchComponent from 'src/components/Search/DesktopSearchComponent.vue';
 const $q = useQuasar();
 const { t } = useI18n();
 const route = useRoute();
@@ -209,24 +168,33 @@ const preventSwipe = (event) => {
   }
 };
 
-const hiddenYPosition = window.innerHeight - 228 - mainStore.safeAreaInsets.top;
-const showingYPosition = 120;
+const hiddenYPosition = () => {
+  return window.innerHeight - 228 - mainStore.safeAreaInsets.top;
+};
+const showingYPosition = () => {
+  return $q.screen.lt.md ? 120 : 76;
+};
 
 const showPanel = () => {
-  motionTransitions.value.push('y', showingYPosition, motionProperties.value, {
-    type: 'spring',
-    stiffness: 600,
-    damping: 50,
-    mass: 1.8,
-  });
+  motionTransitions.value.push(
+    'y',
+    showingYPosition(),
+    motionProperties.value,
+    {
+      type: 'spring',
+      stiffness: 600,
+      damping: 50,
+      mass: 1.8,
+    }
+  );
   mainStore.showPanelBackground = true;
 
   mainStore.showPanel = true;
-  //motion.value.set({ x: 0, y: showingYPosition, cursor: 'grab' });
+  //motion.value.set({ x: 0, y: showingYPosition(), cursor: 'grab' });
 };
 
 const hidePanel = () => {
-  motionTransitions.value.push('y', hiddenYPosition, motionProperties.value, {
+  motionTransitions.value.push('y', hiddenYPosition(), motionProperties.value, {
     type: 'spring',
     stiffness: 600,
     damping: 50,
@@ -235,8 +203,38 @@ const hidePanel = () => {
   mainStore.showPanelBackground = false;
 
   mainStore.showPanel = false;
-  //motion.value.set({ x: 0, y: hiddenYPosition, cursor: 'grab' });
+  //motion.value.set({ x: 0, y: hiddenYPosition(), cursor: 'grab' });
 };
+const wheelHandler = ({
+  event,
+  movement: [x, y],
+  wheeling,
+}: {
+  event: any;
+  movement: [x: number, y: number];
+  wheeling: boolean;
+}) => {
+  if (y > 0 && !mainStore.showPanel) {
+    // wheeling up from hidden position
+    showPanel();
+    return;
+  } else if (
+    y < 0 &&
+    mainStore.enablePanelSwipeDown &&
+    //    y + showingYPosition() > showingYPosition() &&
+    mainStore.showPanel
+  ) {
+    // dragging down
+    hidePanel();
+    return;
+  }
+};
+
+// Composable usage
+useWheel(wheelHandler, {
+  domTarget: sidebar,
+  axis: 'y',
+});
 
 const dragHandler = ({
   event,
@@ -268,16 +266,16 @@ const dragHandler = ({
 
   if (y < 0 && !mainStore.showPanel) {
     // dragging up from hidden position
-    if (y + hiddenYPosition < showingYPosition) {
-      sidebar.value.style.transform = `translate3d(${x}px, ${showingYPosition}px, 0px)`;
+    if (y + hiddenYPosition() < showingYPosition()) {
+      sidebar.value.style.transform = `translate3d(${x}px, ${showingYPosition()}px, 0px)`;
 
-      currentYPos.value = showingYPosition;
+      currentYPos.value = showingYPosition();
       mainStore.showPanelBackground = true;
     } else {
       sidebar.value.style.transform = `translate3d(${x}, ${
-        y + hiddenYPosition
+        y + hiddenYPosition()
       }px, 0px)`;
-      currentYPos.value = y + hiddenYPosition;
+      currentYPos.value = y + hiddenYPosition();
       mainStore.showPanelBackground = false;
     }
 
@@ -293,22 +291,22 @@ const dragHandler = ({
     );
   } else if (
     mainStore.enablePanelSwipeDown &&
-    y + showingYPosition > showingYPosition &&
+    y + showingYPosition() > showingYPosition() &&
     mainStore.showPanel
   ) {
     // dragging down
 
     // show background when dragging back up after drag down started
-    if (y + showingYPosition - 10 <= showingYPosition) {
+    if (y + showingYPosition() - 10 <= showingYPosition()) {
       mainStore.showPanelBackground = true;
     } else {
       mainStore.showPanelBackground = false;
     }
 
     sidebar.value.style.transform = `translate3d(${x}px, ${
-      y + showingYPosition
+      y + showingYPosition()
     }px, 0px)`;
-    currentYPos.value = y + showingYPosition;
+    currentYPos.value = y + showingYPosition();
 
     // update motion position but don't animate
     motionTransitions.value.push(
@@ -337,21 +335,15 @@ const setupSpring = (initialYPos: number) => {
 };
 
 onMounted(() => {
-  if ($q.screen.lt.sm) {
-    setupSpring(
-      mainStore.sidebarPanel === 'Explore' ? hiddenYPosition : showingYPosition
-    );
-  }
-  // setup sidebar resizer for desktop view
-  resizer.value?.addEventListener('mousedown', (event: any) => {
-    document.addEventListener('mousemove', resize, false);
-    document.addEventListener(
-      'mouseup',
-      () => {
-        document.removeEventListener('mousemove', resize, false);
-      },
-      false
-    );
+  setupSpring(
+    mainStore.sidebarPanel === 'Explore'
+      ? hiddenYPosition()
+      : showingYPosition()
+  );
+  window.addEventListener('resize', () => {
+    if (!mainStore.showPanel) {
+      hidePanel();
+    }
   });
 });
 
@@ -374,14 +366,6 @@ const isMobile = computed(() => {
   return $q.screen.lt.sm;
 });
 
-watch(isMobile, (newv) => {
-  if (newv) {
-    setupSpring(
-      mainStore.sidebarPanel === 'Explore' ? hiddenYPosition : showingYPosition
-    );
-  }
-});
-
 const togglePanel = () => {
   mainStore.showPanel = !mainStore.showPanel;
 
@@ -395,9 +379,9 @@ watch(
   () => mainStore.showPanel,
   (to: string, from: string) => {
     if (to) {
-      spring.set({ x: 0, y: showingYPosition, cursor: 'grab' });
+      spring.set({ x: 0, y: showingYPosition(), cursor: 'grab' });
     } else {
-      spring.set({ x: 0, y: hiddenYPosition, cursor: 'grab' });
+      spring.set({ x: 0, y: hiddenYPosition(), cursor: 'grab' });
     }
   }
 );
@@ -546,7 +530,7 @@ watch(
   height: 100%;
   width: 100%;
   pointer-events: none;
-  justify-content: start;
+  justify-content: center;
   display: flex;
   .sidebar {
     position: relative;
@@ -568,7 +552,7 @@ watch(
     //padding-bottom: 64px;
     display: flex;
     justify-content: center;
-
+    border-radius: 18px;
     .resizer {
       position: absolute;
       top: 50%;
@@ -579,7 +563,7 @@ watch(
       opacity: 0.48;
     }
     .sidebar-content {
-      padding-top: 128px;
+      padding-top: 4px;
       overflow: hidden;
       position: relative;
       align-items: center;
@@ -744,72 +728,33 @@ watch(
   }
   .sidebar {
     .search-component {
-      /// width: unset;
-      /// width: 100%;
-      /// position: absolute;
-      ///top: 0px;
-      ///  left: 0px;
-      /// padding-top: 78px;
-      //background: $b-2;
       border-radius: 9px;
       box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 
       justify-content: center;
 
       :deep(.controls-wrapper-inner) {
-        // width: 100%;
-
         border-radius: 100px;
-        //border-top: none;
-        //background: $bi-2;
-        ///justify-content: center;
-        //. width: 100%;
-        /// border-radius: none !important;
-        .inner-wrapper {
-          .control-scroll-area {
-            /// padding-right: 0px !important;
-            ///  mask-image: none;
-          }
-          .scroll-wrapper {
-            ///  justify-content: start;
-            /// padding-right: 0px;
-            ///  height: 48px;
-          }
-          .search-button {
-            // display: none;
-          }
-        }
-      }
-    }
-  }
-}
-@media only screen and (min-width: 600px) and (max-width: 1024px) {
-  .sidebar-wrapper {
-    .sidebar {
-      width: 50vw !important;
-      // padding-bottom: 134px;
-
-      &.sidebar-mobile-nearby {
-        //transform: translate3d(0, calc(100% - 60vh), 0);
-      }
-      &.sidebar-mobile-expanded {
-        //  transform: translate3d(0, 128px, 0);
       }
     }
   }
 }
 
-@media only screen and (min-width: 1280px) {
+@media only screen and (min-width: 600px) and (max-width: 1280px) {
   .sidebar-wrapper {
     .sidebar {
-      //padding-bottom: 88px;
-      width: 50vw;
-      //max-width: 580px;
-      .sidebar-content {
-      }
-      &.sidebar-mobile-expanded {
-        //     transform: translate3d(0, 88px, 0);
-      }
+      width: 96vw;
+      padding-bottom: 134px;
+    }
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .sidebar-wrapper {
+    .sidebar {
+      padding-bottom: 88px;
+      min-width: 920px;
+      max-width: 1280px;
     }
   }
 }
@@ -817,63 +762,23 @@ watch(
 @media only screen and (min-width: 1080px) {
   .sidebar-wrapper {
     .sidebar {
-      width: 50vw;
-      .sidebar-content {
-      }
+      width: 66vw;
+      max-width: 1280px;
     }
   }
 }
 
-@media only screen and (max-width: 1681px) {
-  .body--dark {
-    .sidebar-wrapper {
-      .hover-indicator-line {
-      }
-      .sidebar {
-        border: none;
-        box-shadow: none;
-        border-top: 1px solid transparent;
-        border-top: none;
-
-        .sidebar-content {
-          background: black;
-
-          .sidebar-content-inner {
-            .sidebar-content-inner-shadow {
-              background: black;
-            }
-          }
-        }
-        :deep(.panels) {
-          width: 100%;
-        }
-      }
-    }
-  }
-  .body--light {
-    .sidebar-wrapper {
-      .sidebar {
-        box-shadow: none;
-        border: none;
-        .sidebar-content {
-          background: white;
-          .sidebar-content-inner {
-            .sidebar-content-inner-shadow {
-              display: none;
-            }
-          }
-        }
-        :deep(.panels) {
-          //box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
-          border-top: none !important;
-        }
-      }
-    }
-  }
-
+@media only screen and (min-width: 1280px) {
   .sidebar-wrapper {
     .sidebar {
-      width: 50vw;
+      width: 1024px;
+      min-width: 920px;
+      max-width: 1024px;
+      .sidebar-content {
+      }
+      &.sidebar-mobile-expanded {
+        //     transform: translate3d(0, 88px, 0);
+      }
     }
   }
 }

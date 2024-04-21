@@ -25,10 +25,9 @@
         >
           <q-icon style="font-size: 18px" name="mdi-close" />
         </div>
+        <i class="las la-user-friends q-mr-sm q-ml-none q-pr-none" />
 
         <div class="button-label flex row items-center row no-wrap">
-          <i class="las la-user-friends q-mr-sm q-ml-none q-pr-none" />
-
           <div>
             {{ $t('top_controls.select_size') }}
           </div>

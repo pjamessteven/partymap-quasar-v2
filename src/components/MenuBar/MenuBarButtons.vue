@@ -108,11 +108,11 @@
           'light-button': color === 'white',
         }"
       >
-        <div class="profile-button-inner flex row items-center">
+        <div class="profile-button-inner flex row items-center no-wrap">
           <!--
           <q-icon name="mdi-calendar-star" class="q-mr-md q-ml-md t2" />
           -->
-          <div class="q-px-md q-pl-md">Sign in</div>
+          <div class="q-px-md q-pl-md" style="white-space: nowrap">Sign in</div>
           <q-avatar
             :color="color"
             class="o-070"
@@ -134,7 +134,10 @@
         'light-button': color === 'white',
       }"
     >
-      <div class="profile-button-inner flex row items-center">
+      <div
+        class="profile-button-inner flex row items-center no-wrap"
+        style="white-space: nowrap"
+      >
         <!--
           <q-icon name="mdi-calendar-star" class="q-mr-md q-ml-md t2" />
           -->
@@ -160,7 +163,6 @@
       </q-menu>
     </q-btn>
     <q-btn
-      v-if="!onlyLogin"
       class="menubar-button"
       icon="mdi-menu"
       flat

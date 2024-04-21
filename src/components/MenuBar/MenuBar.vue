@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex row menubar justify-between items-center"
+    class="flex row menubar no-wrap justify-between items-center"
     :class="{
       iphone: $q.platform.is.iphone || $q.platform.is.ipod,
       ipad: $q.platform.is.ipad && $q.platform.is.capacitor,
@@ -11,26 +11,36 @@
       :style="computedStyle"
       v-if="$q.screen.gt.xs || $route.name !== 'EventPage'"
     />
+    <div class="flex items-center no-wrap">
+      <MenuBarLogo
+        class="logo"
+        :color="iconColor"
+        :style="
+          !previousRouteName || swipingDownMenuPageMobile
+            ? 'opacity: 1'
+            : 'opacity: 0'
+        "
+      />
 
-    <MenuBarLogo
-      class="logo"
-      :color="$q.screen.gt.xs ? leftIconColor : iconColor"
-      v-if="!previousRouteName || swipingDownMenuPageMobile"
-    />
-
-    <div
-      class="tab-wrapper flex items-center"
-      v-if="!previousRouteName && $q.screen.gt.sm"
-    >
       <div
-        class="q-py-md q-mr-sm"
-        v-if="$q.screen.gt.xs && false"
-        style="height: 100%"
+        class="tab-wrapper flex items-center"
+        v-if="!previousRouteName && $q.screen.gt.sm"
       >
-        <div class="separator vertical" />
+        <div
+          class="q-py-md q-mr-sm"
+          v-if="$q.screen.gt.xs && false"
+          style="height: 100%"
+        >
+          <div class="separator vertical" />
+        </div>
+        <NavigationBar :color="iconColor" />
       </div>
-      <NavigationBar :color="leftIconColor" />
     </div>
+    <DesktopSearchComponent
+      class="desktop-search-component"
+      v-if="$q.screen.gt.xs && showSearchForRoute"
+      :overlayingMap="overlayingMap"
+    />
     <transition
       appear
       enter-active-class="animated fadeIn slow"
@@ -79,6 +89,7 @@ import NavigationBar from 'src/components/NavigationBar.vue';
 import { useMainStore } from 'stores/main';
 import { mapState, mapWritableState } from 'pinia';
 import { StatusBar, Style } from '@capacitor/status-bar';
+import DesktopSearchComponent from 'src/components/Search/DesktopSearchComponent.vue';
 
 export default {
   name: 'MenuBar',
@@ -86,6 +97,7 @@ export default {
     MenuBarLogo,
     MenuBarButtons,
     NavigationBar,
+    DesktopSearchComponent,
   },
 
   data() {
@@ -169,14 +181,16 @@ export default {
       'showPanel',
       'showPanelBackground',
     ]),
-
+    showSearchForRoute() {
+      return (
+        this.$route.name === 'Explore' ||
+        this.$route.name === 'Browse' ||
+        this.$route.name === 'profile'
+      );
+    },
     ...mapWritableState(useMainStore, ['routerHistory']),
     swipingDownMenuPageMobile() {
-      return (
-        this.$route.name === 'EventPage' &&
-        this.$q.screen.lt.sm &&
-        this.sidebarOpacity === 1
-      );
+      return this.$route.name === 'EventPage' && this.sidebarOpacity === 1;
     },
     previousRouteName() {
       if (this.routerHistory.length == 1) return null;
@@ -229,45 +243,14 @@ export default {
         }
       } */ else return 'opacity: 0';
     },
-    leftIconColor() {
-      if (
-        ((this.$route.name === 'EventPage' ||
-          this.$route.name === 'ArtistPage') &&
-          this.menubarOpacity === 1 &&
-          !this.$q.dark.isActive) ||
-        (this.$route.name === 'Explore' && !this.$q.dark.isActive)
-      ) {
-        return 'black';
-      } else if (
-        this.$q.dark.isActive ||
-        this.$route.name === 'EventPage' ||
-        this.$route.name === 'ArtistPage' ||
-        this.$route.name === 'Explore' ||
-        this.$route.meta.mapOverlay === true
-      ) {
-        return 'white';
-      } else {
-        return 'black';
-      }
-    },
+
     iconColor() {
       if (
-        ((this.$route.name === 'EventPage' ||
-          this.$route.name === 'ArtistPage') &&
-          this.$q.screen.gt.xs &&
-          this.menubarOpacity === 1 &&
-          !this.$q.dark.isActive) ||
-        (this.$route.name === 'Explore' &&
-          !this.$q.dark.isActive &&
-          this.$q.screen.gt.xs &&
-          this.showPanel) ||
-        (this.$route.name === 'Explore' &&
-          !this.$q.dark.isActive &&
-          this.$q.screen.lt.sm &&
-          this.showPanelBackground) ||
-        (this.swipingDownMenuPageMobile &&
-          !this.$q.dark.isActive &&
-          this.showPanel)
+        (!this.overlayingMap ||
+          (this.$route.name === 'ArtistPage' &&
+            this.$q.screen.gt.xs &&
+            this.menubarOpacity === 1)) &&
+        !this.$q.dark.isActive
       ) {
         return 'black';
       } else if (
@@ -281,6 +264,13 @@ export default {
       } else {
         return 'black';
       }
+    },
+    overlayingMap() {
+      return (
+        (this.$route.name === 'Explore' && !this.showPanel) ||
+        (this.$route.name === 'Explore' && !this.showPanelBackground) ||
+        (this.swipingDownMenuPageMobile && !this.showPanel)
+      );
     },
   },
 };
@@ -356,9 +346,9 @@ export default {
   }
   .tab-wrapper {
     pointer-events: all;
-    position: absolute;
-    left: 164px;
-    top: 0px;
+    // position: absolute;
+    // left: 164px;
+    //top: 0px;
     height: 72px;
     display: flex;
     align-items: center;
@@ -380,8 +370,6 @@ export default {
   }
 
   .right-buttons {
-    position: absolute;
-    right: 0px;
     height: 100%;
   }
 }

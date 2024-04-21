@@ -25,10 +25,9 @@
         >
           <q-icon style="font-size: 18px" name="mdi-close" />
         </div>
+        <i class="las la-tags q-mr-sm q-ml-none q-pr-none" />
 
         <div class="button-label flex row items-center row no-wrap">
-          <i class="las la-tags q-mr-sm q-ml-none q-pr-none" />
-
           <div v-if="!controlTag || controlTag.length === 0">Tags</div>
           <div v-else>
             <span v-for="(tag, index) in controlTag" :key="index"

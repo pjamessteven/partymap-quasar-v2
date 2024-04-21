@@ -25,9 +25,9 @@
         >
           <q-icon style="font-size: 18px" name="mdi-close" />
         </div>
-        <div class="button-label flex row items-center row no-wrap">
-          <i class="las la-music q-mr-sm q-ml-none q-pr-none" />
+        <i class="las la-music q-mr-sm q-ml-none q-pr-none" />
 
+        <div class="button-label flex row items-center row no-wrap">
           <div v-if="!controlArtist || controlArtist.length === 0">
             {{ $t('top_controls.select_artist') }}
           </div>

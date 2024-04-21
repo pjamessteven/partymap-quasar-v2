@@ -1,13 +1,16 @@
 <template>
-  <div class="search-component flex row items-center">
+  <div
+    class="desktop-search-component flex row items-center no-wrap"
+    :class="{
+      'overlaying-map': overlayingMap,
+      'center-absolute': $route.name !== 'Explore',
+    }"
+  >
     <div
       class="controls-wrapper flex no-wrap"
       @click="() => (showSearch = !showSearch)"
     >
-      <div
-        class="controls-wrapper-inner"
-        :class="showPanel ? 'show-panel' : ''"
-      >
+      <div class="controls-wrapper-inner">
         <q-btn
           no-caps
           @click="
@@ -16,20 +19,59 @@
             }
           "
           style="padding-left: 8px; width: 100%"
-          class="button-control flex grow items-start q-py-sm"
+          class="button-control flex grow items-start"
           :class="{
             active: sidebarPanel === 'search',
           }"
         >
-          <div class="flex items-center row no-wrap t2">
-            <div class="button-label flex row items-center row no-wrap">
-              <div class="q-mr-sm q-ml-md">
+          <div class="flex items-center row no-wrap">
+            <div class="flex row items-center row no-wrap">
+              <div class="q-mr-sm q-ml-sm">
                 <i class="mdi mdi-magnify" />
               </div>
-              <div>Search for places, artists or events</div>
+              <div
+                class="q-mr-sm"
+                v-if="$q.screen.gt.sm"
+                style="white-space: nowrap"
+              >
+                Search for places, artists or events
+              </div>
+              <div class="q-mr-sm" style="white-space: nowrap" v-else>
+                Search everything
+              </div>
             </div>
           </div>
         </q-btn>
+      </div>
+    </div>
+    <div class="flex row items-center no-wrap" v-if="$route.name === 'Explore'">
+      <div class="controls-wrapper flex no-wrap q-ml-sm">
+        <div class="controls-wrapper-inner">
+          <DateControl />
+        </div>
+      </div>
+      <div class="controls-wrapper flex no-wrap q-ml-sm">
+        <div class="controls-wrapper-inner">
+          <TagControl />
+        </div>
+      </div>
+      <div class="controls-wrapper flex no-wrap q-ml-sm">
+        <div class="controls-wrapper-inner">
+          <ArtistControl />
+        </div>
+      </div>
+      <div class="controls-wrapper flex no-wrap q-ml-sm" v-if="$q.screen.lt.xl">
+        <div class="controls-wrapper-inner q-pa-sm q-ma-xs q-px-md">...</div>
+      </div>
+      <div class="controls-wrapper flex no-wrap q-ml-sm" v-if="$q.screen.gt.lg">
+        <div class="controls-wrapper-inner">
+          <SizeControl />
+        </div>
+      </div>
+      <div class="controls-wrapper flex no-wrap q-ml-sm" v-if="$q.screen.gt.lg">
+        <div class="controls-wrapper-inner">
+          <DurationControl />
+        </div>
       </div>
     </div>
   </div>
@@ -39,9 +81,20 @@
 import { mapState, mapActions, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useSearchStore } from 'src/stores/search';
-
+import ArtistControl from 'src/components/Controls/ArtistControl.vue';
+import DateControl from 'src/components/Controls/DateControl.vue';
+import DurationControl from 'src/components/Controls/DurationControl.vue';
+import SizeControl from 'src/components/Controls/SizeControl.vue';
+import TagControl from 'src/components/Controls/TagControl.vue';
 export default {
-  components: {},
+  components: {
+    ArtistControl,
+    DateControl,
+    DurationControl,
+    SizeControl,
+    TagControl,
+  },
+  props: ['overlayingMap'],
   data() {
     return { showSearch: false };
   },
@@ -72,11 +125,14 @@ export default {
 
 <style lang="scss" scoped>
 .body--light {
-  .search-component {
+  .desktop-search-component {
     .controls-wrapper {
-      box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+      //box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
 
       .controls-wrapper-inner {
+        background: $b-3;
+        color: $t-1;
+
         .location-button-wrapper {
           //background: white;
           color: $ti-1;
@@ -92,14 +148,7 @@ export default {
       }
     }
   }
-  .controls-wrapper-inner {
-    //
-    background: white !important;
-    //background: #f5f5f5;
-    color: $t-1;
-    //border: 1px solid rgba(0, 0, 0, 0.1);
-    //box-shadow: none;
-  }
+
   .search-popup-wrapper {
     background: white;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -107,25 +156,31 @@ export default {
 }
 .body--dark {
   .controls-wrapper-inner {
-    color: $ti-1;
-    background: $bi-1;
+    color: $ti-2;
+    background: $bi-3;
 
     //background: rgba(0, 0, 0, 0.5);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     border-left: 1px solid rgba(255, 255, 255, 0.1);
     border-right: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
-.search-component {
+.desktop-search-component {
   z-index: 104;
-  position: absolute;
-  top: 72px;
+  //position: absolute;
+  //top: 16px;
+  margin-right: 228px;
   width: 100%;
   display: flex;
   justify-content: center;
   pointer-events: none;
   //max-width: 33vw;
+  &.center-absolute {
+    position: absolute;
+    width: 100%;
+    justify-content: center;
+  }
   .controls-wrapper {
     //z-index: 105;
     justify-content: center;
@@ -135,28 +190,41 @@ export default {
     overflow: hidden;
     .controls-wrapper-inner {
       pointer-events: all;
-
-      // stupid border radius fix for ios 15
-      -webkit-transform: translateZ(0);
-      -webkit-mask-image: -webkit-radial-gradient(
-        circle,
-        white 100%,
-        black 100%
-      );
-
+      overflow: hidden;
       //transition: all 0.3s;
       cursor: pointer;
-      width: 510px;
+      // width: 510px;
       height: 100%;
       border-radius: 48px;
 
       position: relative;
+      :deep(.q-btn::before) {
+        box-shadow: none !important;
+      }
+      :deep(.q-btn) {
+        .button-label {
+          white-space: nowrap;
+        }
+      }
+
       .location-button-wrapper {
         position: absolute;
         left: -80px;
         top: 4px;
         border-radius: 24px;
         background: transparent;
+      }
+    }
+  }
+  &.overlaying-map {
+    .controls-wrapper {
+      backdrop-filter: blur(40px);
+      box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+
+      .controls-wrapper-inner {
+        background: rgba(255, 255, 255, 0.3) !important;
+        color: $ti-2 !important;
+        border: 1px solid rgba(255, 255, 255, 0.1);
       }
     }
   }
@@ -173,74 +241,23 @@ export default {
   .search-component {
   }
 }
-
-@media only screen and (max-width: 1280px) {
-  .search-component {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    left: unset;
-    padding: 0 16px;
-    top: 72px;
-    //max-width: 50vw;
+@media only screen and (max-width: 1576px) {
+  .desktop-search-component {
+    margin-right: 0px;
   }
 }
-@media only screen and (max-width: 1681px) {
-  .search-component {
-    //width: 50vw;
+@media only screen and (max-width: 1376px) {
+  .desktop-search-component {
+    //top: 72px;
     //max-width: 50vw;
-    .sidebar-content {
-    }
-  }
-}
-
-@media only screen and (max-width: 599px) {
-  .body--light {
-    .controls-wrapper-inner {
-      box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 1);
-      border: 1px solid rgba(0, 0, 0, 0.05);
-
-      &.show-panel {
-        box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
-      }
-    }
-  }
-  .body--dark {
-    .controls-wrapper-inner {
-      border: 1px solid $bi-3;
-      background: $bi-2;
-      box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.4);
-    }
-  }
-
-  .search-component {
-    width: 100vw;
-    max-width: 100vw;
-    // android
-    @supports ((top: var(--safe-area-inset-top))) {
-      top: calc(68px + var(--safe-area-inset-top));
-    }
-    // ios specific padding
-    @supports (
-      (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
-        (-webkit-appearance: none)
-    ) {
-      top: calc(68px + env(safe-area-inset-top));
-    }
+    margin-right: 0px;
     .controls-wrapper {
       .controls-wrapper-inner {
-      }
-    }
-  }
-
-  .native-mobile {
-    // ios specific padding for capcaitor app
-    .search-component {
-      @supports (
-        (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
-          (-webkit-appearance: none)
-      ) {
-        top: calc(68px + env(safe-area-inset-top) - 8px);
+        :deep(.q-btn) {
+          .button-label {
+            // display: none;
+          }
+        }
       }
     }
   }

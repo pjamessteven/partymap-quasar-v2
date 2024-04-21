@@ -22,17 +22,15 @@
         >
           <q-icon style="font-size: 18px" name="mdi-close" />
         </div>
+        <div v-if="!controlDateRangeSelectedOption?.value" class="q-mr-sm">
+          <i class="las la-calendar" />
+        </div>
         <div class="button-label flex row items-center row no-wrap">
-          <div v-if="!controlDateRangeSelectedOption?.value" class="q-mr-sm">
-            <i class="las la-calendar" />
-          </div>
           <div v-if="!!controlDateRangeSelectedOption?.value">
             {{ controlDateRangeSelectedOption.label }}
           </div>
-          <div v-else-if="$q.screen.lt.sm">dates</div>
-          <div v-else>
-            {{ $t('top_controls.select_dates') }}
-          </div>
+          <div v-else-if="$q.screen.lt.xl">Dates</div>
+          <div v-else>Dates</div>
         </div>
       </div>
       <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">

@@ -13,7 +13,6 @@
     <div class="mobile-panel-button">
       <q-icon
         @click="showPanel ? $emit('hidePanel') : $emit('showPanel')"
-        v-if="$q.screen.lt.sm"
         flat
         size="1.5rem"
         class="q-pa-md q-mr-xs t2"
@@ -44,7 +43,6 @@
           />
         </div>
       </div>
-      <SearchComponent class="search-component" />
 
       <div
         class="flex column grow no-wrap"
@@ -71,7 +69,7 @@
                 }
           "
           class="scroll-area flex grow"
-          :disableScroll="($q.screen.lt.sm && !showPanel) || preventMapZoom"
+          :disableScroll="!showPanel || preventMapZoom"
         >
           <div class="flex column no-wrap scroll-content q-px-sm">
             <!-- tags -->
@@ -316,7 +314,6 @@ import { toRaw } from 'vue';
 
 import _ from 'lodash';
 //import ArtistProfile from 'components/ArtistProfile.vue';
-import SearchComponent from 'src/components/Search/SearchComponent.vue';
 
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
@@ -336,7 +333,6 @@ export default {
     ArtistsComponent,
     EventDateList,
     EventDatePosterList,
-    SearchComponent,
     CustomQScroll,
   },
 
@@ -689,7 +685,15 @@ export default {
   //z-index: 3000;
   position: absolute;
   pointer-events: none;
-
+  .mobile-panel-button {
+    position: absolute;
+    right: 0px;
+    top: -4px;
+    z-index: 5000;
+    @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+      -webkit-transform: translate3d(0, 0, 0);
+    }
+  }
   .event-list-inner {
     pointer-events: all;
     display: flex;
@@ -902,15 +906,6 @@ export default {
   .event-list-vertical {
     margin-top: 4px;
 
-    .mobile-panel-button {
-      position: absolute;
-      right: 0px;
-      top: -4px;
-      z-index: 5000;
-      @supports (font: -apple-system-body) and (-webkit-appearance: none) {
-        -webkit-transform: translate3d(0, 0, 0);
-      }
-    }
     .event-list-inner {
       .artists-component {
         height: 178px;

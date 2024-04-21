@@ -15,9 +15,38 @@
       "
     >
       <div class="flex row scroll-wrapper items-center justify-start no-wrap">
+        <!--
+        <q-btn
+          no-caps
+          @click="
+            () => {
+              searchbarShowing = true;
+            }
+          "
+          style="padding-left: 8px"
+          class="button-control flex items-center"
+          :class="{
+            active: sidebarPanel === 'search',
+          }"
+        >
+          <div class="flex items-center row no-wrap">
+            <div class="button-label flex row items-center row no-wrap">
+              <div class="q-mr-sm">
+                <i class="mdi mdi-magnify" />
+              </div>
+              <div>everything</div>
+            </div>
+          </div>
+        </q-btn>
+-->
         <div class="separator vertical" />
 
-        <DateControl v-if="showDateControl" ref="dateControl" :key="1" />
+        <DateControl
+          v-if="showDateControl"
+          ref="dateControl"
+          :key="1"
+          style="padding-left: 8px"
+        />
         <!--
         <div class="separator vertical" />
         <q-btn
@@ -68,7 +97,8 @@
           -->
       </div>
     </CustomQScroll>
-    <div class="searchbar-wrapper" v-if="searchbarShowing">
+    <!-- show searchbar here on mobile-->
+    <div class="searchbar-wrapper" v-if="searchbarShowing && $q.screen.lt.md">
       <q-input
         @keydown.esc="
           () => {

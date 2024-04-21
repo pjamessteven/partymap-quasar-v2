@@ -59,17 +59,7 @@ export const useMainStore = defineStore('main', {
     compactView: true,
     routerHistory: [],
   }),
-  getters: {
-    computedSidebarWidth: (state) => {
-      if (Screen.lt.sm) {
-        return 'width: 100%';
-      } else if (state.sidebarExpanded && Screen.gt.sm) {
-        return 'width: 1000px!important;';
-      } else {
-        return 'width: 554px';
-      }
-    },
-  },
+  getters: {},
   actions: {
     async loadIpInfo() {
       try {
