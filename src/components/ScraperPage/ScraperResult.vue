@@ -22,6 +22,15 @@
                 >,&nbsp;
               </span></span
             >
+
+            <span
+              :key="index + 'w'"
+              v-for="(error, index) of Object.values(warnings)"
+              >WARN: {{ error
+              }}<span v-if="index !== Object.keys(errors).length - 1"
+                >,&nbsp;
+              </span></span
+            >
           </div>
           <div
             class="flex column items-baseline no-wrap q-mb-lg"
@@ -305,20 +314,29 @@ export default {
         name: this.result.name,
         description: this.result.description?.substring(0, 300),
         description_attribute:
-          this.result.description?.length > 0 ? this.result.url : undefined,
-        full_description: this.result.description?.substring(0, 10000) || '',
+          this.result.description_attribute ||
+          this.result.description?.length > 0
+            ? this.result.url
+            : undefined,
+        full_description:
+          this.result.full_description ||
+          this.result.description?.substring(0, 10000) ||
+          '',
         full_description_attribute:
-          this.result.description?.length > 0 ? this.result.url : '',
+          this.result.full_description_attribute ||
+          this.result.description?.length > 0
+            ? this.result.url
+            : '',
         media_items: [],
         date_time: null,
         location: null,
-        url: '',
-        ticket_url: this.result.url,
-        youtube_url: '',
-        tags: [],
+        url: this.result.url || '',
+        ticket_url: this.result.ticket_url || '',
+        youtube_url: this.result.youtube_url || '',
+        tags: this.result.tags || [],
         next_event_date_artists: this.result.artists || [],
         next_event_date_size: null,
-        rrule: {
+        rrule: this.result.rrule || {
           recurringType: 1,
           separationCount: 0,
           weekOfMonth: null,
@@ -413,6 +431,7 @@ export default {
       if (newv && !this.hasBeenExpanded) {
         this.hasBeenExpanded = true;
         // sort images by size (largest first) and select largest
+        /*
         if (this.result.images) {
           this.sortedImages = this.result.images;
           this.sortedImages.sort(function (a, b) {
@@ -420,7 +439,7 @@ export default {
           });
           this.selectImage(0);
         }
-
+*/
         // already exists?
         this.findExistingEvent();
 
@@ -443,6 +462,14 @@ export default {
     },
   },
   computed: {
+    warnings() {
+      let warnings = {};
+
+      if (this.event.media_items.length === 0) {
+        warnings.media = 'Media missing';
+      }
+      return warnings;
+    },
     errors() {
       let errors = {};
       if (!this.computedDateValue && !this.event.date_time) {
@@ -451,9 +478,7 @@ export default {
       if (!this.event.location) {
         errors.location = 'Location missing';
       }
-      if (this.event.media_items.length === 0) {
-        errors.media = 'Media missing';
-      }
+
       if (!this.event.url || this.event.url.length === 0) {
         errors.url = 'URL missing';
       }

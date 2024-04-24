@@ -11,7 +11,7 @@
       :style="computedStyle"
       v-if="$q.screen.gt.xs || $route.name !== 'EventPage'"
     />
-    <div class="flex items-center no-wrap">
+    <div class="flex items-center no-wrap q-mr-md">
       <MenuBarLogo
         class="logo"
         :color="iconColor"
@@ -184,7 +184,9 @@ export default {
     showSearchForRoute() {
       return (
         this.$route.name === 'Explore' ||
-        this.$route.name === 'Browse' ||
+        this.$route.name === 'BrowsePage' ||
+        this.$route.name === 'EventPage' ||
+        this.$route.name === 'ArtistPage' ||
         this.$route.name === 'profile'
       );
     },
@@ -245,13 +247,7 @@ export default {
     },
 
     iconColor() {
-      if (
-        (!this.overlayingMap ||
-          (this.$route.name === 'ArtistPage' &&
-            this.$q.screen.gt.xs &&
-            this.menubarOpacity === 1)) &&
-        !this.$q.dark.isActive
-      ) {
+      if (!this.overlayingMap && !this.$q.dark.isActive) {
         return 'black';
       } else if (
         this.$q.dark.isActive ||
@@ -267,6 +263,10 @@ export default {
     },
     overlayingMap() {
       return (
+        ((this.$route.name === 'EventPage' ||
+          this.$route.name === 'ArtistPage') &&
+          this.$q.screen.gt.xs &&
+          this.menubarOpacity === 0) ||
         (this.$route.name === 'Explore' && !this.showPanel) ||
         (this.$route.name === 'Explore' && !this.showPanelBackground) ||
         (this.swipingDownMenuPageMobile && !this.showPanel)

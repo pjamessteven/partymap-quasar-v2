@@ -14,87 +14,15 @@
           : { bottom: '-8px', height: '0px' }
       "
     >
-      <div class="flex row scroll-wrapper items-center justify-start no-wrap">
-        <!--
-        <q-btn
-          no-caps
-          @click="
-            () => {
-              searchbarShowing = true;
-            }
-          "
-          style="padding-left: 8px"
-          class="button-control flex items-center"
-          :class="{
-            active: sidebarPanel === 'search',
-          }"
-        >
-          <div class="flex items-center row no-wrap">
-            <div class="button-label flex row items-center row no-wrap">
-              <div class="q-mr-sm">
-                <i class="mdi mdi-magnify" />
-              </div>
-              <div>everything</div>
-            </div>
-          </div>
-        </q-btn>
--->
-        <div class="separator vertical" />
+      <div class="flex row scroll-wrapper items-center justify-between no-wrap">
+        <DateControl v-if="showDateControl" ref="dateControl" :key="1" />
 
-        <DateControl
-          v-if="showDateControl"
-          ref="dateControl"
-          :key="1"
-          style="padding-left: 8px"
-        />
-        <!--
-        <div class="separator vertical" />
-        <q-btn
-          no-caps
-          @click="
-            () => {
-              showing = !showing;
-            }
-          "
-          class="button-control flex items-center"
-          :class="{
-            active: sidebarPanel === 'search',
-          }"
-        >
-          <div class="flex items-center row no-wrap">
-            <div class="button-label flex row items-center row no-wrap">
-              <div class="q-mr-sm">
-                <i class="las la-map-marker" />
-              </div>
-              <div>Places</div>
-            </div>
-          </div>
-        </q-btn>
--->
         <div class="separator vertical" />
 
         <TagControl v-if="showTagControl" :key="2" ref="tagControl" />
         <div class="separator vertical" />
 
         <ArtistControl v-if="showArtistControl" :key="3" ref="artistControl" />
-        <div class="separator vertical" />
-
-        <SizeControl v-if="showSizeControl" ref="sizeControl" :key="4" />
-        <div class="separator vertical" />
-
-        <DurationControl
-          v-if="showDurationControl"
-          ref="durationControl"
-          :key="5"
-        />
-
-        <!--
-          <LocalityControl
-            v-if="showLocalityControl"
-            :key="6"
-            :showSelectedValue="showSelectedValue"
-          />
-          -->
       </div>
     </CustomQScroll>
     <!-- show searchbar here on mobile-->
@@ -122,7 +50,10 @@
         </template>
       </q-input>
     </div>
-    <div class="search-button-wrapper q-ml-md flex items-center justify-center">
+    <div
+      class="search-button-wrapper q-ml-md flex items-center justify-center"
+      v-if="false"
+    >
       <div
         class="search-button"
         v-if="!searchbarShowing"
@@ -155,8 +86,8 @@ export default {
   name: 'ControlsComponent',
   components: {
     DateControl,
-    DurationControl,
-    SizeControl,
+    // DurationControl,
+    // SizeControl,
     ArtistControl,
     TagControl,
     CustomQScroll,
@@ -467,30 +398,19 @@ export default {
     width: 100%;
     padding-right: 32px;
 
-    mask-image: linear-gradient(
-      to left,
-      transparent 0%,
-      transparent 64px,
-      white 96px,
-      white calc(100% - 64px),
-      white 100%
-    );
     overflow-y: hidden;
     :deep(.q-scrollarea__container) {
       overflow-y: hidden !important;
     }
 
-    &.disable-scroll {
-      overflow: visible;
-      height: 200px;
-      .scroll-wrapper {
-        padding: 4px;
-      }
-    }
-
     .scroll-wrapper {
       height: 48px;
       padding-right: 64px;
+
+      :deep(.button-control) > :first-child {
+        padding-left: 16px;
+        background: green;
+      }
     }
   }
 
@@ -543,7 +463,7 @@ export default {
         align-items: center;
       }
       .button-label {
-        padding: 0px 12px;
+        //   padding: 0px 12px;
       }
       white-space: nowrap;
       .q-icon {
@@ -578,20 +498,13 @@ export default {
     .control-scroll-area {
       margin-top: -2px;
       overflow-y: hidden !important;
-      mask-image: linear-gradient(
-        to left,
-        transparent 0%,
-        transparent 48px,
-        white 96px,
-        white calc(100% - 64px),
-        white 100%
-      );
+
       overflow-y: hidden;
 
       .scroll-wrapper {
         //height: 44px;
         overflow-y: hidden;
-        padding-left: 0px;
+
         padding-right: 24px;
       }
     }

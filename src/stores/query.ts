@@ -474,7 +474,7 @@ export const groupEventDatesByMonth = (
   for (const ed of eventDates) {
     // assumes eventDates are sorted by time
     const start = moment(ed?.[0].start_naive);
-    const yearMonth = start.year() + start.month(); // should be int
+    const yearMonth = Number(start.format('YYMM')); // should be int
     if (!existingDates[yearMonth]) {
       existingDates[yearMonth] = [];
     }

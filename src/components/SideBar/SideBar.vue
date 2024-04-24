@@ -81,8 +81,11 @@
             </template>
           </q-btn>
         </div>
-
-        <div style="height: 100%; width: 100%" class="sidebar-content-inner">
+        <div
+          style="height: 100%; width: 100%"
+          class="sidebar-content-inner"
+          @wheel="handleInnerWheel"
+        >
           <keep-alive>
             <NearbyView
               style="height: 100%; width: 100%"
@@ -104,11 +107,6 @@
             />
           </keep-alive>
         </div>
-        <NavigationBar
-          @click="togglePanel"
-          class="nav-bar"
-          v-if="$q.screen.gt.xs && $q.screen.lt.md"
-        />
       </div>
     </div>
   </div>
@@ -117,8 +115,7 @@
 <script setup lang="ts">
 import SearchComponent from 'src/components/Search/SearchComponent.vue';
 import TopControlsMenu from 'components/MenuBar/TopControlsMenu.vue';
-import NavigationBar from 'components/NavigationBar.vue';
-
+import { Lethargy } from 'lethargy-ts';
 import ExploreView from './ExploreView/ExploreView.vue';
 import SearchView from './SearchView/SearchView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
@@ -136,6 +133,7 @@ import {
 import { ref, watch, toRaw, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useQuasar } from 'quasar';
+import { useMapStore } from 'src/stores/map';
 const $q = useQuasar();
 const { t } = useI18n();
 const route = useRoute();
@@ -143,12 +141,15 @@ const route = useRoute();
 const sidebar = ref();
 const resizer = ref();
 const mainStore = useMainStore();
+const mapStore = useMapStore();
 
 const motion = ref();
 const motionProperties = ref();
 const motionControls = ref();
 const motionTransitions = ref();
 const currentYPos = ref(0);
+
+const lethargy = ref(new Lethargy({ sensitivity: 0.5 }));
 
 const variants = ref<MotionVariants>({
   custom: {
@@ -169,7 +170,21 @@ const preventSwipe = (event) => {
 };
 
 const hiddenYPosition = () => {
-  return window.innerHeight - 228 - mainStore.safeAreaInsets.top;
+  if ($q.screen.gt.sm && mainStore.sidebarPanel === 'nearby') {
+    return 256;
+  }
+
+  if ($q.screen.gt.xl) {
+    return window.innerHeight - 448 - mainStore.safeAreaInsets.top;
+  }
+  if ($q.screen.gt.lg) {
+    return window.innerHeight - 408 - mainStore.safeAreaInsets.top;
+  }
+  if ($q.screen.gt.sm) {
+    return window.innerHeight - 260 - mainStore.safeAreaInsets.top;
+  }
+
+  return window.innerHeight - 234 - mainStore.safeAreaInsets.top;
 };
 const showingYPosition = () => {
   return $q.screen.lt.md ? 120 : 76;
@@ -205,6 +220,11 @@ const hidePanel = () => {
   mainStore.showPanel = false;
   //motion.value.set({ x: 0, y: hiddenYPosition(), cursor: 'grab' });
 };
+
+const handleInnerWheel = (event) => {
+  // even though this is empty this handler helps
+};
+
 const wheelHandler = ({
   event,
   movement: [x, y],
@@ -214,19 +234,31 @@ const wheelHandler = ({
   movement: [x: number, y: number];
   wheeling: boolean;
 }) => {
-  if (y > 0 && !mainStore.showPanel) {
-    // wheeling up from hidden position
-    showPanel();
-    return;
-  } else if (
-    y < 0 &&
-    mainStore.enablePanelSwipeDown &&
-    //    y + showingYPosition() > showingYPosition() &&
-    mainStore.showPanel
-  ) {
-    // dragging down
-    hidePanel();
-    return;
+  // check if scroll is intentional or inertia
+  if (lethargy.value.check(event)) {
+    // Do something with the scroll event
+
+    if (wheeling && y > 0 && !mainStore.showPanel) {
+      // wheeling up from hidden position
+      showPanel();
+      return;
+    } else if (
+      wheeling &&
+      y < 0 &&
+      mainStore.enablePanelSwipeDown &&
+      //    y + showingYPosition() > showingYPosition() &&
+      mainStore.showPanel
+    ) {
+      mapStore.preventMapZoom = true;
+
+      // dragging down
+      hidePanel();
+      setTimeout(() => {
+        // wait for animation - stop map from zooming uncontrolably
+        mapStore.preventMapZoom = false;
+      }, 1000);
+      return;
+    }
   }
 };
 
@@ -340,11 +372,26 @@ onMounted(() => {
       ? hiddenYPosition()
       : showingYPosition()
   );
+  $q.screen.gt.sm && hidePanel();
   window.addEventListener('resize', () => {
     if (!mainStore.showPanel) {
       hidePanel();
     }
   });
+  /*
+  // check scroll inertia
+  window.addEventListener(
+    'mousewheel DOMMouseScroll wheel MozMousePixelScroll',
+    function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var lethargy = new Lethargy(); // Use defaults
+      if (lethargy.check(e) !== false) {
+        // Do something with the scroll event
+      }
+    }
+  );
+  */
 });
 
 const lastx = ref();
@@ -374,18 +421,16 @@ const togglePanel = () => {
   }
 };
 
-/*
 watch(
   () => mainStore.showPanel,
   (to: string, from: string) => {
     if (to) {
-      spring.set({ x: 0, y: showingYPosition(), cursor: 'grab' });
+      showPanel();
     } else {
-      spring.set({ x: 0, y: hiddenYPosition(), cursor: 'grab' });
+      hidePanel();
     }
   }
 );
-*/
 
 watch(
   () => mainStore.sidebarPanel,
@@ -398,9 +443,8 @@ watch(
         */
     }
     if (to === 'explore') {
-      if ($q.screen.lt.sm) {
-        hidePanel();
-      }
+      hidePanel();
+
       mainStore.showPanel = false;
       if (from === 'nearby') {
       }
@@ -417,6 +461,7 @@ watch(
 
         mainStore.enablePanelSwipeDown = true;
       } else {
+        hidePanel();
         mainStore.showPanel = false;
         mainStore.enablePanelSwipeDown = true;
       }
@@ -679,63 +724,6 @@ watch(
       height: 40px;
       width: 1px;
       margin-left: 2px;
-    }
-  }
-}
-
-/*
-      if (this.$q.screen.gt.md) {
-        return 'width: 66vw; min-width: 854px; max-width: 1024px';
-      } else if (this.$q.screen.gt.sm) {
-        return 'width: 66vw; min-width: 854px; max-width: 960px';
-      } else if (this.$q.screen.gt.xs) {
-        return 'width: 66vw; min-width: 640px; max-width: 100%';
-      } else {
-        return 'width: 100%';
-      }
-      */
-
-@media only screen and (min-width: 600px) {
-  .body--light {
-    .sidebar {
-      .search-component {
-        box-shadow: none;
-
-        //
-        :deep(.controls-wrapper-inner) {
-          //border-top: 1px solid $b-3;
-
-          // background: white !important;
-          //  background: #f5f5f5 !important;
-          // box-shadow: none;
-          //background: $b-2;
-        }
-      }
-    }
-  }
-  .body--dark {
-    .sidebar {
-      .search-component {
-        box-shadow: none;
-
-        :deep(.controls-wrapper-inner) {
-          background: $bi-3;
-          border: none;
-          //border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-      }
-    }
-  }
-  .sidebar {
-    .search-component {
-      border-radius: 9px;
-      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-
-      justify-content: center;
-
-      :deep(.controls-wrapper-inner) {
-        border-radius: 100px;
-      }
     }
   }
 }

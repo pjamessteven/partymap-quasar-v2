@@ -117,13 +117,7 @@ export default {
       if (this.$route.name === 'EventPage') this.fitBoundsForFocusMarker();
     },
     sidebarPanel(newv, oldv) {
-      if (
-        (newv === 'explore' && oldv === 'nearby') ||
-        (newv === 'nearby' && oldv === 'explore')
-      ) {
-        if (this.nearbyEventsDates?.length > 0) {
-          //this.setMapBoundsNearby();
-        }
+      if (newv === 'nearby' && oldv === 'explore') {
         if (
           this.userLocation?.lat &&
           !this.userLocationFromSearch &&
@@ -131,7 +125,10 @@ export default {
           newv === 'nearby'
         )
           // go to users location
-          this.fitBoundsForExplorePage(this.userLocation);
+          this.fitBoundsForNearbyPage(this.userLocation);
+      }
+      if (newv === 'explore' && oldv === 'nearby') {
+        this.fitBoundsForExplorePage(this.userLocation);
       }
     },
     darkMode() {
@@ -192,7 +189,7 @@ export default {
     },
     userLocation: {
       handler: function (newval) {
-        this.fitBoundsForExplorePage(newval);
+        this.fitBoundsForNearbyPage(newval);
         // add location marker for fine location
         if (!this.userLocationFromSearch && this.fineLocation) {
           this.addUserLocationMarker(newval);
@@ -236,10 +233,13 @@ export default {
               zoom: this.map.getZoom(),
             };
           } else if (to.name === 'Explore') {
-            //
+            if (!to.query.view) {
+              // gone to nearby page
+              this.fitBoundsForNearbyPage(this.userLocation);
+            }
 
             // restore previous map view
-            if (this.exploreMapView) {
+            else if (this.exploreMapView) {
               toRaw(this.map).setView(
                 this.exploreMapView.latlng,
                 this.exploreMapView.zoom,
@@ -275,6 +275,7 @@ export default {
               this.eventDateHoverLayer.clearLayers();
               this.eventDateHoverLayer.remove();
             }
+
             // possible performance issue
             if (toRaw(this.mapMarkers)) {
               toRaw(this.mapMarkers).addTo(toRaw(this.map));
@@ -368,9 +369,9 @@ export default {
         } catch {
           await this.loadIpInfo();
         }
-        this.fitBoundsForExplorePage(this.userLocation);
+        this.fitBoundsForNearbyPage(this.userLocation);
       } catch (e) {
-        this.fitBoundsForExplorePage(this.userLocation);
+        this.fitBoundsForNearbyPage(this.userLocation);
       }
       // go to users location
     },
@@ -436,28 +437,39 @@ export default {
       }
     },
 
+    fitBoundsForNearbyPage(coords) {
+      // padding for desktop panel
+      var latlng = L.latLng(coords);
+      if (this.$q.screen.gt.xs) {
+        toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
+          paddingTopLeft: [0, 0 - window.innerHeight / 2 - 128],
+          animate: !this.disableAnimations,
+          duration: 0.3,
+          easeLinearity: 1,
+          maxZoom: 10,
+        });
+      } else {
+        // padding for mobile bottom panel
+        toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
+          paddingTopLeft: [0, -150],
+          animate: !this.disableAnimations,
+          duration: 0.3,
+          easeLinearity: 1,
+          maxZoom: 10,
+        });
+      }
+    },
     fitBoundsForExplorePage(coords) {
       // padding for desktop panel
       var latlng = L.latLng(coords);
       if (this.$q.screen.gt.xs) {
-        if (this.sidebarExpanded) {
-          // padding for sidebar
-          toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
-            paddingTopLeft: [1000, 0],
-            animate: !this.disableAnimations,
-            duration: 0.3,
-            easeLinearity: 1,
-            maxZoom: 10,
-          });
-        } else {
-          toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
-            paddingTopLeft: [580, 0],
-            animate: !this.disableAnimations,
-            duration: 0.3,
-            easeLinearity: 1,
-            maxZoom: 10,
-          });
-        }
+        toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
+          paddingTopLeft: [0, -150],
+          animate: !this.disableAnimations,
+          duration: 0.3,
+          easeLinearity: 1,
+          maxZoom: 10,
+        });
       } else {
         // padding for mobile bottom panel
         toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
@@ -513,22 +525,12 @@ export default {
       }
     },
     setBounds(bounds) {
-      if (this.$q.screen.gt.xs) {
-        var pxSw = this.map.getPixelBounds().getBottomLeft();
-
-        // Get the width of the overlapping sidebar if on desktop
-        // so that the bounds exclude the sidebar
-        var $cover = document.getElementById('sidebar');
-        var deltaX = $cover.getBoundingClientRect().width;
-        var pxSw = this.map.getPixelBounds().getBottomLeft();
-        pxSw = pxSw.add(L.point(deltaX, 0)); // add the width of the sidebar
-        var sw = this.map.unproject(pxSw);
-        bounds = L.latLngBounds(sw, this.map.getBounds().getNorthEast()); // bounds without the sidebar
-      } else {
+      if (this.$q.screen.lt.md) {
         // padding for mobile bottom panel
+        // on desktop we don't care about the portion the panel covers
         var pxSw = this.map.getPixelBounds().getBottomLeft();
 
-        const bottomPanelHeight = '276';
+        const bottomPanelHeight = '200';
         pxSw = pxSw.subtract(L.point(0, bottomPanelHeight)); // add the height of the bottom panel
         var sw = toRaw(this.map).unproject(pxSw);
         bounds = L.latLngBounds(sw, toRaw(this.map).getBounds().getNorthEast()); // bounds without the bottom panel

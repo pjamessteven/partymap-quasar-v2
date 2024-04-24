@@ -29,8 +29,8 @@
           <div v-if="!!controlDateRangeSelectedOption?.value">
             {{ controlDateRangeSelectedOption.label }}
           </div>
-          <div v-else-if="$q.screen.lt.xl">Dates</div>
-          <div v-else>Dates</div>
+          <div v-else-if="$q.screen.lt.sm">Any Dates</div>
+          <div v-else>Any Dates</div>
         </div>
       </div>
       <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">

@@ -69,7 +69,7 @@
                 }
           "
           class="scroll-area flex grow"
-          :disableScroll="!showPanel || preventMapZoom"
+          :disableScroll="!showPanelBackground || preventMapZoom"
         >
           <div class="flex column no-wrap scroll-content q-px-sm">
             <!-- tags -->
@@ -189,7 +189,7 @@
               >
                 <EventDateList
                   v-if="compactView"
-                  :groupByMonth="groupEventsByMonth"
+                  :groupByMonth="groupEventsByMonth && $q.screen.lt.sm"
                   :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
                   :eventDates="eventDates"
                   :hasNext="eventDatesHasNext"
@@ -199,7 +199,7 @@
 
                 <EventDatePosterList
                   v-if="!compactView"
-                  :groupByMonth="groupEventsByMonth"
+                  :groupByMonth="groupEventsByMonth && $q.screen.lt.sm"
                   :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
                   :eventDates="eventDates"
                   :hasNext="eventDatesHasNext"

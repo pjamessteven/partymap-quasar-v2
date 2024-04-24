@@ -224,9 +224,9 @@ body {
     top: 0px;
     z-index: 100;
     padding: 16px 16px;
-    font-weight: 800 !important;
+    font-weight: 600 !important;
     .text-h6 {
-      font-weight: 800 !important;
+      font-weight: 600 !important;
     }
   }
   .dialog-card-content {
@@ -244,8 +244,8 @@ body {
   /* ... */
   .dialog-card {
     .dialog-card-header {
-      background: $b-2;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      background: $b-1;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
   }
 
@@ -284,9 +284,9 @@ body {
     border: 1px solid rgba(0, 0, 0, 0.05);
   }
   .q-separator {
-    height: 0px;
-    background: none;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    // height: 0px;
+    // background: none;
+    // border-top: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   .vc-container {
@@ -531,8 +531,8 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.05);
   }
   .q-separator--dark {
-    background: none;
-    border-top: 1px solid rgb(26, 26, 26) !important;
+    // background: none;
+    // border-top: 1px solid rgb(26, 26, 26) !important;
   }
 
   .vc-container {
@@ -648,7 +648,7 @@ body {
   .dialog-card {
     background: $bi-2;
     .dialog-card-header {
-      background: $bi-3;
+      background: $bi-2;
     }
   }
 

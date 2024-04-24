@@ -8,90 +8,16 @@
         class="controls-wrapper-inner"
         :class="showPanel ? 'show-panel' : ''"
       >
-        <div
-          class="location-button-wrapper q-mr-sm"
-          :class="showPanel ? 'show-panel' : ''"
-          v-if="$q.screen.gt.xs && false"
-        >
-          <q-btn
-            flat
-            round
-            class="q-pa-sm q-ml-md location t1"
-            @click.stop="() => clickLocation()"
-          >
-            <template v-slot:default>
-              <div v-if="!userLocationLoading" class="flex">
-                <q-icon
-                  name="mdi-crosshairs-gps"
-                  class=""
-                  v-if="(fineLocation && sidebarPanel === 'nearby') || true"
-                  size="1.3rem"
-                />
-                <q-icon name="mdi-crosshairs" class="" v-else size="1.3rem" />
-              </div>
-              <div v-else style="position: relative" class="flex">
-                <q-icon style="z-index: 1" name="mdi-crosshairs" />
-                <q-icon
-                  style="z-index: 2; left: 0px"
-                  class="animated infinite flash slowest absolute"
-                  name="mdi-crosshairs-gps"
-                />
-              </div>
-              <!--
-              <q-tooltip
-                style="font-size: 1em !important"
-                :content-class="
-                  $q.dark.isActive
-                    ? 'bg-black text-white'
-                    : 'bg-white text-black'
-                "
-                :offset="[10, 10]"
-              >
-                Near you
-              </q-tooltip>-->
-            </template>
-          </q-btn>
-        </div>
-        <ControlsComponent />
-
-        <!--
-          <q-icon
-            flat
-            class="q-pa-sm"
-            @click.stop="() => getFineLocation()"
-            size="1rem"
-          >
-            <template v-slot:default>
-              <div v-if="!userLocationLoading" class="flex">
-                <q-icon
-                  name="mdi-crosshairs-gps"
-                  class=""
-                  v-if="fineLocation"
-                />
-                <q-icon name="mdi-crosshairs" class="" v-else />
-              </div>
-              <div v-else style="position: relative" class="flex">
-                <q-icon style="z-index: 1" name="mdi-crosshairs" />
-                <q-icon
-                  style="z-index: 2; left: 0px"
-                  class="animated infinite flash slowest absolute"
-                  name="mdi-crosshairs-gps"
-                />
-              </div>
-              <q-tooltip
-                class=""
-                :content-class="
-                  $q.dark.isActive
-                    ? 'bg-black text-white'
-                    : 'bg-white text-black'
-                "
-                :offset="[10, 10]"
-              >
-                {{ $t('landing_page.improve_location') }}
-              </q-tooltip>
-            </template>
-          </q-icon>
-          -->
+        <CustomQScroll
+          ref="scroll"
+          horizontal
+          class="control-scroll-area"
+          :thumb-style="
+            $q.screen.gt.xs
+              ? { bottom: '0px', height: '4px' }
+              : { bottom: '-8px', height: '0px' }
+          "
+        ></CustomQScroll>
       </div>
     </div>
   </div>
@@ -101,10 +27,8 @@
 import { mapState, mapActions, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useSearchStore } from 'src/stores/search';
-import ControlsComponent from 'src/components/Controls/ControlsComponent.vue';
 
 export default {
-  components: { ControlsComponent },
   data() {
     return { showSearch: false };
   },

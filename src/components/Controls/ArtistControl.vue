@@ -29,7 +29,8 @@
 
         <div class="button-label flex row items-center row no-wrap">
           <div v-if="!controlArtist || controlArtist.length === 0">
-            {{ $t('top_controls.select_artist') }}
+            <div v-if="$q.screen.lt.sm">Artists</div>
+            <div v-else>All Artists</div>
           </div>
           <div v-else>
             <span v-for="(artist, index) in controlArtist" :key="index"

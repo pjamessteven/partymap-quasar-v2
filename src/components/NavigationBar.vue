@@ -82,6 +82,7 @@
       />
 
       <q-route-tab
+        v-if="$q.screen.lt.md"
         name="profile"
         key="4"
         :icon="

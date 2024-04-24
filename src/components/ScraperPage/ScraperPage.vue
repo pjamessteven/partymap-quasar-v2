@@ -17,9 +17,9 @@
           >
           <a
             class="link-hover text-h6 q-ml-md"
-            :class="mode === 'facebook' ? '' : 'o-050'"
-            @click="mode = 'facebook'"
-            >Facebook Tool</a
+            :class="mode === 'gpt' ? '' : 'o-050'"
+            @click="mode = 'gpt'"
+            >GPT Tool</a
           >
         </div>
         <SelectTagsComponent
@@ -160,18 +160,14 @@
         </div>
       </q-card>
 
-      <q-card
-        class="flex row q-gutter-sm q-pa-sm"
-        v-else-if="mode == 'facebook'"
-      >
+      <q-card class="flex row q-gutter-sm q-pa-sm" v-else-if="mode == 'gpt'">
         <div class="flex column grow">
-          <q-input dense v-model="facebook.URL" label="Facebook URL" />
-          <q-btn
-            class="nav-button primary"
-            no-caps
-            @click="scrapeFacebookEvent()"
-            >Go</q-btn
-          >
+          <q-input type="textarea" v-model="gpt" label="GPT JSON Array" />
+          <div class="flex grow justify-end q-mt-md">
+            <q-btn class="nav-button primary" no-caps @click="parseGptEvents()"
+              >Go</q-btn
+            >
+          </div>
         </div>
       </q-card>
 
@@ -231,8 +227,7 @@ import {
 import SelectTagsComponent from 'components/EventPage/Tags/SelectTagsComponent.vue';
 import moment from 'moment';
 import countryCodes from 'src/assets/country-code';
-import { scrapeFbEvent, scrapeFbEventFromFbid } from 'facebook-event-scraper';
-
+import gptSamplePrompt from './gptJsonSample.ts';
 export default {
   components: {
     InnerLoading,
@@ -272,6 +267,7 @@ export default {
       response: null,
       mappedResponse: [],
       selectedResult: null,
+      gpt: gptSamplePrompt,
     };
   },
   watch: {
@@ -280,35 +276,6 @@ export default {
     },
   },
   methods: {
-    async scrapeFacebookEvent() {
-      try {
-        const event = await scrapeFbEvent(this.facebook.URL);
-        let locationString = '';
-        if (event.location.name) {
-          locationString += event.location.name;
-        }
-        if (event.location.address) {
-          locationString += ' ' + event.location.address;
-        }
-        this.mappedResponse = [
-          {
-            dates: {
-              start: moment(event.startTimestamp).format(),
-              end: event.endTimestamp
-                ? moment(event.moment(event.endTimestamp)).format()
-                : undefined,
-            },
-            name: event.name,
-            description: event.description,
-            url: event.url,
-            images: [{ width: 0, height: 0, url: event.photo.imageUri }],
-          },
-        ];
-        console.log(eventData);
-      } catch (err) {
-        console.error(err);
-      }
-    },
     async addEvents() {
       const progressDialog = this.$q.dialog({
         title: this.$t('add.uploading_event'),
@@ -499,6 +466,56 @@ export default {
       console.log(this.mappedResponse);
       this.loading = false;
     },
+    parseGptEvents() {
+      try {
+        this.mappedResponse = JSON.parse(this.gpt).map((event) => {
+          console.log('event', event);
+          let start = event.dates.start.localDate;
+          if (event.dates?.start?.localTime) {
+            start += ' ' + event.dates?.start?.localTime;
+          } else {
+            // just set time to midday if time doesn't exist
+            start += ' 12:00:00';
+          }
+          let end = start;
+          if (event.dates?.end?.localDate) {
+            end = event.dates.end.localDate;
+            if (event.dates?.end?.localTime) {
+              end += ' ' + event.dates?.end?.localTime;
+            } else {
+              // just set time to midday if time doesn't exist
+              end += ' 12:00:00';
+            }
+          }
+          return {
+            dates: { start, end },
+            locationString: event.location,
+            name: event.name,
+            description: event.description,
+            description_attribute: event.description_attribute,
+            full_description: event.full_description,
+            full_description_attribute: event.full_description_attribute,
+            url: event.url,
+            youtube_url: event.youtube_url,
+            images: event.images?.map((x) => ({
+              height: 0,
+              width: 0,
+              url: x,
+            })),
+            artists: event.artists.map((x) => ({
+              name: x.name,
+              mbid: x.mbid,
+            })),
+            rrule: event.rrule,
+            tags: event.tags,
+            next_event_date_size: event.size,
+          };
+        });
+      } catch (e) {
+        this.$q.notify('Error parsing JSON');
+        console.log(e);
+      }
+    },
   },
   computed: {
     validEvents() {
@@ -622,6 +639,7 @@ export default {
     this.timeAgo = common.timeAgo;
     this.dateUTCToLocal = common.dateUTCToLocal;
     this.countryCodes = countryCodes;
+    this.gptSamplePrompt = gptSamplePrompt;
   },
 };
 </script>

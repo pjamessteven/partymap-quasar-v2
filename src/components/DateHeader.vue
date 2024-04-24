@@ -1,7 +1,7 @@
 <template>
   <div class="date-header-wrapper">
     <div
-      class="date-header flex row no-wrap justify-between grow ellipsis inter"
+      class="date-header flex row no-wrap grow ellipsis inter"
       :class="{
         ' q-px-md q-pb-md  semibold t1 inter  ': $q.screen.gt.sm,
         'q-pt-md': $q.screen.gt.xs && $route.name !== 'Explore',
@@ -9,7 +9,9 @@
       }"
     >
       <span v-if="!!altLabel">{{ altLabel }}</span>
-      <span v-else>Events in {{ dateString }}</span>
+      <span v-else-if="dateString">Events in {{ dateString }}</span>
+
+      <slot />
       <!--
       <q-separator class="grow q-ml-md" v-if="$q.screen.gt.lg" />
       -->

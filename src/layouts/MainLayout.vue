@@ -18,7 +18,11 @@
         class="sidebar-component-wrapper"
         :style="$q.screen.lt.sm && computedSidebarOpacity"
       >
-        <SearchComponent class="search-component" v-show="$q.screen.lt.sm" />
+        <SearchComponent
+          class="search-component"
+          v-show="$q.screen.lt.sm"
+          :overlayingMap="!showPanel"
+        />
         <Transition
           appear
           :enter-active-class="
@@ -96,7 +100,7 @@
       </router-view>
       <NavigationBar
         class="nav-bar"
-        v-if="$q.screen.lt.sm"
+        v-if="$q.screen.lt.md"
         :style="
           $route.name === 'EventPage' ||
           $route.name === 'Explore' ||
@@ -111,10 +115,10 @@
 </template>
 
 <script lang="ts">
-import MainMap from 'src/components/MainMap/MainMap_pixi.vue';
+import MainMap from 'src/components/MainMap/MainMap.vue';
 import SideBar from 'components/SideBar/SideBar.vue';
 import MenuBar from 'components/MenuBar/MenuBar.vue';
-import SearchComponent from 'src/components/Search/SearchComponent.vue';
+import SearchComponent from 'src/components/Search/DesktopSearchComponent.vue';
 import MenuBarLogo from 'src/components/MenuBar/MenuBarLogo.vue';
 import NavigationBar from 'src/components/NavigationBar.vue';
 import { mapWritableState } from 'pinia';
@@ -244,8 +248,9 @@ export default {
       background: linear-gradient(
         rgba(0, 0, 0, 0.68),
         rgba(0, 0, 0, 0.6) 48px,
-        transparent 128px,
-        transparent
+        transparent 112px,
+        transparent calc(100vh - 348px),
+        rgba(0, 0, 0, 0.68)
       );
     }
     .overlay {
@@ -271,7 +276,8 @@ export default {
         rgba(0, 0, 0, 0.68),
         rgba(0, 0, 0, 0.6) 48px,
         transparent 112px,
-        transparent
+        transparent calc(100vh - 348px),
+        rgba(0, 0, 0, 0.68)
       );
     }
     .overlay {
@@ -522,9 +528,11 @@ export default {
         position: unset;
         height: unset;
         transition: opacity 0.3s ease;
-        will-change: opacity;
+        // will-change: opacity; breaks blur on controls
         //transform: translate3d(0, 0, 0);
         .search-component {
+          position: absolute;
+
           z-index: 105;
           width: 100vw;
           max-width: 100vw;

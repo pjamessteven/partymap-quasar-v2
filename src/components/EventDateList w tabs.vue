@@ -3,8 +3,26 @@
     <DateHeader
       v-if="!hideHeader && !groupByMonth && eventDatesTotal > 0"
       class="total-result-header"
-      :altLabel="computedTotalResultMessage"
-    />
+      :altLabel="`All ${eventDatesTotal} events`"
+    >
+      <div
+        class="flex row q-ml-md no-wrap"
+        v-if="$q.screen.gt.sm"
+        style="overflow-x: auto"
+      >
+        <div
+          v-for="yearMonth of Object.keys(yearMonths).sort().splice(0, 12)"
+          :key="yearMonth"
+          class="o-080 q-px-xs"
+          :class="{
+            'o-030': !yearMonths[yearMonth],
+            'inter bold': yearMonths[yearMonth],
+          }"
+        >
+          {{ yearMonthToString(yearMonth) }} &nbsp;
+        </div>
+      </div></DateHeader
+    >
 
     <div v-if="groupByMonth">
       <div
@@ -151,6 +169,16 @@ const props = withDefaults(defineProps<Props>(), {
   twoColumnsMd: () => false,
 });
 
+const yearMonthToString = (yearMonth: string) => {
+  const year = Number(yearMonth.substring(0, 2));
+  const month = Number(yearMonth.substring(2, 4));
+  return moment()
+    .set('day', 1)
+    .set('month', month)
+    .set('year', year)
+    .format('MMMM');
+};
+
 const gridColumns = computed(() => {
   //if ( props.twoColumnsMd) {
   if ($q.screen.gt.xs) {
@@ -195,6 +223,22 @@ const computedTotalResultMessage = computed(() => {
       return props.eventDatesTotal + ' upcoming in this area';
     } else return null;
   }
+});
+
+const yearMonths = computed(() => {
+  const yearMonths: any = {};
+  // get next 12 yearMonths
+  let date = moment().set('day', 1);
+  for (let i = 0; i < 11; i++) {
+    yearMonths[date.format('YYMM')] = false;
+    date.add(1, 'month');
+  }
+  console.log('yearm', yearMonths);
+  for (const yearMonth of Object.keys(props.eventDatesGroupedByMonth)) {
+    yearMonths[yearMonth] = true;
+  }
+  // not ordered properly because object
+  return yearMonths;
 });
 </script>
 <style lang="scss" scoped>

@@ -24,7 +24,7 @@
               width: $q.screen.gt.sm ? '12px' : '4px',
               borderRadius: '0px',
             }"
-            :class="$q.screen.lt.sm && !showPanel && 'disable-scroll'"
+            :class="!showPanelBackground && 'disable-scroll'"
             class="scroll-area flex grow"
           >
             <div class="scroll-stuff flex column">
@@ -158,8 +158,8 @@
                   }"
                 >
                   <span
-                    >Welcome to the global directory of festivals and
-                    parties!</span
+                    >Welcome to PartyMap, the global directory of festivals,
+                    parties and underground culture!</span
                   >
                   <q-icon
                     class="q-ml-md"
@@ -217,7 +217,7 @@
                 </div>
               </div>
               <div
-                v-if="$q.screen.lt.sm"
+                v-if="$q.screen.lt.sm && false"
                 class="nav-button-container flex row no-wrap q-px-md t1 q-mt-md"
                 :class="{
                   'q-mb-sm': $q.screen.lt.sm,
@@ -822,6 +822,18 @@ export default {
     onScroll(info) {
       this.scrollPosition = info.verticalPosition;
 
+      if (info.verticalPosition <= 0) {
+        if (!this.$q.platform.has.touch) {
+          setTimeout(() => {
+            // behavior fix for desktop scroll
+            this.enablePanelSwipeDown = true;
+          }, 250);
+        } else {
+          this.enablePanelSwipeDown = true;
+        }
+      } else {
+        this.enablePanelSwipeDown = false;
+      }
       // infinite scrolling
 
       if (info.verticalPercentage === 1) {
@@ -932,6 +944,7 @@ export default {
     ...mapState(useAuthStore, ['currentUser']),
     ...mapWritableState(useMainStore, [
       'showPanel',
+      'showPanelBackground',
       'enablePanelSwipeDown',
       'sidebarPanel',
       'menubarOpacity',
