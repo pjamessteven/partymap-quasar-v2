@@ -3,7 +3,7 @@
     class="desktop-search-component flex row items-center no-wrap"
     :class="{
       'overlaying-map': overlayingMap,
-      'center-absolute': $route.name !== 'Explore',
+      'center-absolute': $route.name !== 'Explore' && $q.screen.gt.xs,
     }"
   >
     <CustomQScroll
@@ -102,7 +102,7 @@
         </div>
         <div
           class="flex row items-center no-wrap q-mr-md"
-          v-if="$route.name === 'Explore'"
+          v-if="$route.name === 'Explore' || $q.screen.lt.sm"
         >
           <!--<div class="text-white q-ml-md">Filter:</div>-->
           <div class="controls-wrapper flex no-wrap q-ml-sm">
@@ -158,6 +158,7 @@
 import { mapState, mapActions, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useSearchStore } from 'src/stores/search';
+import { useQueryStore } from 'src/stores/query';
 import ArtistControl from 'src/components/Controls/ArtistControl.vue';
 import DateControl from 'src/components/Controls/DateControl.vue';
 import DurationControl from 'src/components/Controls/DurationControl.vue';
@@ -198,10 +199,55 @@ export default {
         this.hideResultsAndPreviousPanel();
       }
     },
+    controlArtist: {
+      handler(newVal) {
+        if (newVal && newVal.length > 0) {
+          this.goToExplore();
+        }
+      },
+      deep: true,
+    },
+    controlTag: {
+      handler(newVal) {
+        if (newVal && newVal.length > 0) {
+          this.goToExplore();
+        }
+      },
+      deep: true,
+    },
+    controlDateRange: {
+      handler(newVal) {
+        if (newVal && newVal.end) {
+          this.goToExplore();
+        }
+      },
+      deep: true,
+    },
+    controlSize: {
+      handler(newVal) {
+        if (newVal && newVal.length > 0) {
+          this.goToExplore();
+        }
+      },
+      deep: true,
+    },
+    controlDuration: {
+      handler(newVal) {
+        if (newVal && newVal.length > 0) {
+          this.goToExplore();
+        }
+      },
+      deep: true,
+    },
   },
   methods: {
     ...mapActions(useMainStore, ['loadIpInfo', 'getFineLocation']),
-
+    goToExplore() {
+      this.sidebarPanel = 'explore';
+      if (this.$route.name !== 'Explore') {
+        this.$router.push({ name: 'Explore', query: { view: 'explore' } });
+      }
+    },
     clickLocation() {
       this.getFineLocation();
       this.sidebarPanel = 'nearby';
@@ -245,6 +291,18 @@ export default {
       'userLocationLoading',
       'userLocationCity',
       'userLocation',
+    ]),
+    ...mapState(useQueryStore, [
+      'controlDateRange',
+      'controlFavorites',
+      'controlDuration',
+      'controlSize',
+      'controlArtist',
+      'controlTag',
+      'controlCountry',
+      'controlRegion',
+      'controlLocality',
+      'anyFiltersEnabled',
     ]),
   },
 };
@@ -481,11 +539,14 @@ export default {
       }
       &.overlaying-map {
         .controls-wrapper {
-          backdrop-filter: none;
+          backdrop-filter: blur(20px);
 
           .controls-wrapper-inner {
-            background: $b-1;
-            color: $t-1;
+            // background: $b-1;
+            background: rgba(150, 150, 150, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+
+            // color: $t-1;
             border: 1px solid rgba(0, 0, 0, 0.05);
           }
         }
@@ -511,10 +572,12 @@ export default {
       }
       &.overlaying-map {
         .controls-wrapper {
-          backdrop-filter: none;
+          backdrop-filter: blur(10px);
 
           .controls-wrapper-inner {
-            background: $bi-3;
+            background: rgba(64, 64, 64, 0.48);
+
+            // background: $bi-3;
           }
         }
       }

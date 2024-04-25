@@ -227,10 +227,9 @@
         <div
           class="flex row justify-center items-center loading-wrapper"
           v-if="
-            false &&
-            (loadingEverything ||
-              !computedSidebarPanelReady ||
-              userLocationLoading)
+            loadingEverything ||
+            !computedSidebarPanelReady ||
+            userLocationLoading
           "
         >
           <!--
@@ -998,6 +997,15 @@ export default {
     this.sidebarPanelReady = false;
   },
   async mounted() {
+    if (this.$q.screen.lt.sm || true) {
+      this.$refs.scroll.setScrollPercentage('vertical', 0);
+      setTimeout(() => {
+        this.sidebarPanelReady = true;
+      }, 350);
+    } else {
+      this.sidebarPanelReady = true;
+    }
+
     if (this.$route.name === 'Explore') {
       // otherwise will change on route change
       // await this.loadIpInfo();
@@ -1083,7 +1091,7 @@ export default {
       }
     }
 
-    .header {
+    .location-header {
       background: white;
     }
 

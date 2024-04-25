@@ -31,6 +31,7 @@ import BrowseTaggedEvents from './BrowseTaggedEvents.vue';
 import InnerLoading from 'src/components/InnerLoading.vue';
 
 export default {
+  name: 'BrowsePage',
   components: { SolidPage, BrowseTaggedEvents, InnerLoading },
   props: {
     username: {

@@ -837,7 +837,7 @@ import { useAuthStore } from 'src/stores/auth';
 import { useMapStore } from 'src/stores/map';
 import { useEventStore } from 'src/stores/event';
 
-import { computed, ref, onActivated, onDeactivated } from 'vue';
+import { computed, ref, onActivated, onDeactivated, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router';
 import { storeToRefs } from 'pinia';
@@ -868,7 +868,13 @@ import UploadNewLogoDialog from 'components/EventPage/Gallery/UploadNewLogoDialo
 import InnerLoading from 'components/InnerLoading.vue';
 import { useI18n } from 'vue-i18n';
 import { useDrag } from '@vueuse/gesture';
-import { useMotionProperties, useSpring } from '@vueuse/motion';
+import {
+  MotionVariants,
+  useMotionControls,
+  useMotionProperties,
+  useMotionTransitions,
+  useSpring,
+} from '@vueuse/motion';
 /*
   meta() {
     return {
@@ -941,6 +947,9 @@ const scrollArea = ref<HTMLElement>();
 const eventPage = ref();
 
 const spring = ref();
+const motionProperties = ref();
+const motionControls = ref();
+const motionTransitions = ref();
 
 const hiddenYPosition = window.innerHeight - window.innerHeight * 0.2;
 
@@ -949,6 +958,23 @@ const previousRouteIsExplore = computed(
     mainStore.routerHistory[mainStore.routerHistory.length - 1]?.name ===
     'Explore'
 );
+
+const setupSpring = () => {
+  // start hidden
+  const { motionProperties: mp } = useMotionProperties(eventPage, {
+    y: hiddenYPosition,
+  });
+  motionProperties.value = mp;
+  motionControls.value = useMotionControls(motionProperties.value);
+  motionTransitions.value = useMotionTransitions();
+  // spring up
+  motionTransitions.value.push('y', 0, motionProperties.value, {
+    type: 'spring',
+    stiffness: 600,
+    damping: 50,
+    mass: 1.8,
+  });
+};
 
 const dragHandler = ({
   movement: [x, y],
@@ -968,7 +994,13 @@ const dragHandler = ({
       if (y > 150) {
         goBack();
       } else {
-        spring.value.set({ x: 0, y: 0, cursor: 'grab' });
+        // spring.value.set({ x: 0, y: 0, cursor: 'grab' });
+        motionTransitions.value.push('y', 0, motionProperties.value, {
+          type: 'spring',
+          stiffness: 600,
+          damping: 50,
+          mass: 1.8,
+        });
       }
       return;
     }
@@ -981,11 +1013,10 @@ const dragHandler = ({
       ) {
         // mainStore.sidebarOpacity = 1;
       }
-      // mainStore.sidebarOpacity = 0 + ((y - 150) / 100) * 1;
-      spring.value.set({
-        cursor: 'grabbing',
-        x,
-        y,
+      // update motion position but don't animate
+      motionTransitions.value.push('y', y, motionProperties.value, {
+        type: 'keyframes',
+        duration: 0,
       });
     }
   }
@@ -1036,16 +1067,24 @@ const deleteEvent = () => {
 onBeforeRouteLeave((to, from, next) => {
   // transition out before going back on mobile
   if ($q.screen.lt.sm) {
-    spring.value.set({
-      cursor: 'grabbing',
-      x: 0,
-      y: hiddenYPosition,
+    motionTransitions.value.push('y', hiddenYPosition, motionProperties.value, {
+      type: 'spring',
+      stiffness: 600,
+      damping: 50,
+      mass: 1.8,
     });
 
-    if (previousRouteIsExplore.value) {
-      setTimeout(() => (mainStore.sidebarOpacity = 1), 100);
+    if ($q.platform.is.android) {
+      if (previousRouteIsExplore.value) {
+        setTimeout(() => (mainStore.sidebarOpacity = 1), 150);
+      }
+      setTimeout(() => next(), 300);
+    } else {
+      setTimeout(() => {
+        mainStore.sidebarOpacity = 1;
+      }, 50);
+      next();
     }
-    setTimeout(() => next(), 400);
   } else {
     next();
   }
@@ -1236,25 +1275,32 @@ const load = async () => {
   }, 300);
 };
 
-onActivated(() => {
+onBeforeRouteLeave(() => {
+  if ($q.platform.is.android) {
+    event.value = null;
+  }
+});
+
+onMounted(() => {
   // called on initial mount
   // and every time it is re-inserted from the cache
   mainStore.sidebarOpacity = 0;
-
+  setupSpring();
   if (scrollArea.value) {
     (scrollArea.value as any).setScrollPercentage('vertical', 0);
   }
 
-  if (!event.value || (event.value && event.value?.id + '' !== props.id + '')) {
-    event.value = null;
+  const eventAlreadyLoaded =
+    event.value && event.value?.id + '' === props.id + '';
 
-    if ($q.platform.is.android) {
-      setTimeout(() => {
-        load();
-      }, 150);
-    } else {
+  if ($q.platform.is.android) {
+    event.value = null;
+    setTimeout(() => {
       load();
-    }
+    }, 300);
+  } else if (!eventAlreadyLoaded) {
+    event.value = null;
+    load();
   } else {
     mainStore.menubarOpacity = previousMenubarOpacity.value;
   }
@@ -1262,19 +1308,9 @@ onActivated(() => {
   disableScroll.value = true; // helps animation be smoother on android
 
   // we need to reset spring state every time we open the event page on mobile
-  const { motionProperties } = useMotionProperties(eventPage, {
-    x: 0,
-    y: $q.screen.gt.xs ? 0 : hiddenYPosition,
-  });
-  // ...and then animate in
-
-  //spring.value = useSpring(motionProperties, { stiffness: 400, damping: 30 });
-  spring.value = useSpring(motionProperties, {
-    stiffness: 400,
-    damping: 40,
-  });
 
   // if android then do this for performance
+  /*
   if ($q.platform.is.mobile) {
     setTimeout(
       () =>
@@ -1290,6 +1326,7 @@ onActivated(() => {
       y: 0,
     });
   }
+  */
 
   // ensure sidebar is transparent on mobile
 
@@ -1302,6 +1339,7 @@ onActivated(() => {
   // to avoid performance issues
 });
 
+/*
 onDeactivated(() => {
   //  set({ x: 0, y: window.innerHeight, cursor: 'grab' });
 
@@ -1313,6 +1351,7 @@ onDeactivated(() => {
   mainStore.overlayOpacity = 0;
   mapStore.focusMarker = null;
 });
+*/
 
 const computedUrl = computed(() => {
   if (eventStore.event) {

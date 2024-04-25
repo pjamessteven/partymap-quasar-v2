@@ -21,7 +21,7 @@
         <SearchComponent
           class="search-component"
           v-show="$q.screen.lt.sm"
-          :overlayingMap="!showPanel"
+          :overlayingMap="!showPanelBackground"
         />
         <Transition
           appear
@@ -71,9 +71,7 @@
             eventPageTransition ? undefined : 'animated fadeOut'
           "
         >
-          <keep-alive>
-            <component :is="Component" />
-          </keep-alive>
+          <component :is="Component" />
         </Transition>
       </router-view>
       <router-view
@@ -93,7 +91,7 @@
           "
           mode="in-out"
         >
-          <keep-alive>
+          <keep-alive include="BrowsePage">
             <component :is="Component" />
           </keep-alive>
         </Transition>
@@ -153,7 +151,7 @@ export default {
       // blockUpdates is re-enabled in Map.vue at map.
     }
     if (to.name === 'Explore') {
-      // this.sidebarOpacity = 1;
+      this.sidebarOpacity = 1;
       setTimeout(() => {
         this.overlayOpacityTransition = true;
 
@@ -172,7 +170,7 @@ export default {
       }
     }
     if (from.name === 'EventPage') {
-      //this.sidebarOpacity = 1;
+      this.sidebarOpacity = 1;
 
       if (to.name === 'Explore') {
         // dont transition to eventpage from explore/artist pages on desktop

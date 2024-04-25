@@ -107,7 +107,7 @@ export default {
       } else if ((firstParagraph + secondParagraph).length > 300) {
         return firstParagraph + '\n\n' + secondParagraph;
       } else {
-        const amalagamtion = firstParagraph;
+        let amalagamtion = firstParagraph;
 
         if (secondParagraph) {
           amalagamtion += '\n\n' + secondParagraph;

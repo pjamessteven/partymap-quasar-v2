@@ -86,12 +86,10 @@
           class="sidebar-content-inner"
           @wheel="handleInnerWheel"
         >
-          <keep-alive>
-            <NearbyView
-              style="height: 100%; width: 100%"
-              v-if="mainStore.sidebarPanel === 'nearby'"
-            />
-          </keep-alive>
+          <NearbyView
+            style="height: 100%; width: 100%"
+            v-if="mainStore.sidebarPanel === 'nearby'"
+          />
           <keep-alive>
             <ExploreView
               style="height: 100%; width: 100%"
@@ -459,11 +457,10 @@ watch(
       if ($q.screen.lt.sm) {
         showPanel();
 
-        mainStore.enablePanelSwipeDown = true;
+        mainStore.enablePanelSwipeDown = false;
       } else {
         hidePanel();
         mainStore.showPanel = false;
-        mainStore.enablePanelSwipeDown = true;
       }
     }
   }
