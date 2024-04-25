@@ -127,7 +127,7 @@ export default {
           // go to users location
           this.fitBoundsForNearbyPage(this.userLocation);
       }
-      if (newv === 'explore' && oldv === 'nearby') {
+      if (this.$q.screen.gt.xs && newv === 'explore' && oldv === 'nearby') {
         this.fitBoundsForExplorePage(this.userLocation);
       }
     },

@@ -187,7 +187,7 @@ const hiddenYPosition = () => {
   return window.innerHeight - 234 - mainStore.safeAreaInsets.top;
 };
 const showingYPosition = () => {
-  return $q.screen.lt.md ? 120 : 76;
+  return $q.screen.lt.md ? 112 : 76;
 };
 
 const showPanel = () => {
