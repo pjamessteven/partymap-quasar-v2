@@ -93,68 +93,48 @@
                 </q-tooltip>
               </template>
             </q-btn>
-            <span v-if="userLocation" class="ellipsis q-mr-sm inter bolder"
-              ><span v-if="$q.screen.gt.sm && false">Near&nbsp;</span>
-              <span v-if="userLocationCountry && !userLocationLoading">
-                {{ userLocationCity }}</span
-              ><span v-else class="t3">...</span
-              ><span
-                v-if="
-                  (userLocationCountry && $q.screen.gt.sm & false) ||
-                  !userLocationCity
-                "
-                ><span v-if="userLocationCity">,&nbsp;</span
-                >{{ userLocationCountry }}</span
-              >
-            </span>
-            <span
-              class="ellipsis text-h4 inter bolder t4"
-              v-else-if="userLocationLoading"
-              ><span v-if="$q.screen.gt.sm">Finding location</span>...
-            </span>
-            <span class="ellipsis text-h4 inter bolder t1" v-else
-              >Unknown Location...
-            </span>
+            <NearbyCountrySelect />
           </div>
         </div>
         <div
           class="flex message"
           :class="{
-            'q-mx-lg  q-mb-md ': $q.screen.gt.lg,
-            'q-mx-lg  q-mb-sm ': $q.screen.gt.sm && $q.screen.lt.xl,
-            'q-mx-md q-mt-xs ': $q.screen.lt.md,
+            'q-mx-lg  q-my-xs ': $q.screen.gt.sm,
+            'q-mx-lg  q-mb-sm ': $q.screen.gt.lg,
+
+            'q-mx-md q-mt-sm q-pb-s ': $q.screen.lt.md,
           }"
           @click="showMessage = !showMessage"
         >
           <div
-            class="flex grow no-wrap justify-between inter q-pb-md"
+            class="flex grow no-wrap justify-between inter"
             :class="{
               ' q-pt-sm t3 items-center ': $q.screen.lt.md,
-              ' q-mt-sm  inter text-large  t3 ': $q.screen.gt.sm,
+              ' q-mt-md  inter text-large  t3 ': $q.screen.gt.sm,
 
               ' items-end': $q.screen.gt.sm,
             }"
           >
             <span
-              >Welcome to PartyMap, the global directory of festivals, parties
-              and underground culture!</span
+              >Welcome to PartyMap, the global directory of festivals, doofs and
+              underground culture!</span
             >
             <q-icon
               class="q-ml-md"
               size="1.2rem"
-              :name="!showMessage ? 'mdi-chevron-down' : 'mdi-chevron-up'"
+              :name="!showMessage ? 'mdi-menu-down' : 'mdi-menu-up'"
             />
           </div>
           <div
             v-if="showMessage"
-            class="flex column items-start justify-start t1 q-mt-sm q-mb-md"
+            class="flex column items-start justify-start grow t1 q-mt-md inter semibold q-mb-md"
           >
             PartyMap is a community-driven, crowd-sourced platform for finding
             parties and festivals around the world!
             <p />
             Anyone can submit an event that they know about, as long as the
-            information is already public. Also anyone can suggest changes to an
-            event if the information is out of date. No account needed!
+            information is already public. <br />Anyone can also suggest changes
+            to an event if the information is out of date. No account needed!
 
             <p />
 
@@ -163,17 +143,24 @@
             <p />
             - Pete
             <div
-              class="flex q-gutter-md q-my-lg"
+              class="flex q-gutter-md q-mt-sm"
               v-if="!$q.platform.is.nativeMobile"
             >
-              <div
+              <a
+                href="https://apps.apple.com/in/app/partymap/id6473246623"
+                target="_blank"
+                class="app-link"
+                style="text-decoration: none !important"
                 @click.stop
-                class="appstore-wrapper flex items-center q-py-sm q-px-md"
               >
-                <q-icon name="mdi-apple" size="1.5rem" class="q-mr-sm" />
-                <!--PartyMap on the App Store-->
-                <span style="text-decoration: italic">Coming soon...</span>
-              </div>
+                <div class="appstore-wrapper flex items-center q-py-sm q-px-md">
+                  <q-icon name="mdi-apple" size="1.5rem" class="q-mr-sm" />
+                  <!--PartyMap on the App Store-->
+                  <span style="text-decoration: italic"
+                    >PartyMap on the App Store</span
+                  >
+                </div>
+              </a>
               <div
                 @click.stop
                 class="appstore-wrapper flex items-center q-py-sm q-px-md"
@@ -182,6 +169,7 @@
                 <span style="text-decoration: italic">Coming soon...</span>
               </div>
             </div>
+            <div class="separator q-mt-md" />
           </div>
         </div>
         <div
@@ -220,7 +208,7 @@
           </q-btn>
         </div>
 
-        <div class="q-px-md q-mt-sm q-mb-xs" v-if="$q.screen.lt.sm">
+        <div class="q-px-md q-mt-sm q-mb-xs" v-if="$q.screen.lt.sm && false">
           <div class="separator" />
         </div>
 
@@ -619,7 +607,7 @@ import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useQueryStore } from 'src/stores/query';
 import { useMainStore } from 'src/stores/main';
 import { useNearbyStore } from 'src/stores/nearby';
-
+import NearbyCountrySelect from './NearbyCountrySelect.vue';
 import AddEventDialog from 'components/dialogs/AddEventDialog.vue';
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
@@ -660,6 +648,7 @@ export default {
     // EventDateViewOptions,
     InnerLoading,
     EventDatePoster,
+    NearbyCountrySelect,
   },
   data() {
     return {
@@ -1045,11 +1034,11 @@ export default {
       background: black;
     }
     .message {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       .appstore-wrapper {
         //background: $bi-3;
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 9px;
+        color: $ti-1;
         &:hover {
           background: $bi-2;
         }
@@ -1078,13 +1067,12 @@ export default {
 .body--light {
   .nearby-page {
     .message {
-      // background: rgba(200, 100, 0, 0.2);
-      //background: $b-2;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       .appstore-wrapper {
         //background: $b-2;
         border: 1px solid rgba(0, 0, 0, 0.1);
         border-radius: 9px;
+        color: $t-1 !important;
+        text-decoration: none !important;
         &:hover {
           background: $b-2;
         }
@@ -1308,7 +1296,7 @@ export default {
         border-left: none !important;
         border-right: none !important;
         border: none;
-        margin-bottom: -16px !important;
+        // margin-bottom: -16px !important;
       }
     }
 

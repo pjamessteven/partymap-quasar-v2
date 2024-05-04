@@ -198,33 +198,55 @@
                           :class="$q.screen.gt.sm ? 'q-mt-md' : 'q-mt-lg'"
                         />
                       </div>
-
-                      <a
-                        :href="computedExternalUrl"
-                        target="_blank"
-                        v-if="
-                          !!event &&
-                          computedExternalUrl &&
-                          !editing &&
-                          $q.screen.gt.xs &&
-                          false
-                        "
-                      >
-                        <q-btn
-                          no-caps
-                          class="q-mt-lg"
-                          :color="'grey'"
-                          :text-color="$q.dark.isActive ? 'grey-4' : 'grey-3'"
-                          style="width: 160px"
-                          label="Visit website"
-                          icon="las la-external-link-alt"
-                          :class="$q.screen.gt.sm ? '' : 'flex grow'"
-                        />
-                      </a>
-
+                      <div :class="$q.screen.gt.sm ? 'q-mt-lg' : 'q-mt-sm'">
+                        <div class="flex row">
+                          <div class="flex col">
+                            <a
+                              class="flex grow"
+                              :href="computedExternalUrl"
+                              target="_blank"
+                              v-if="!!event && computedExternalUrl && !editing"
+                            >
+                              <q-btn
+                                no-caps
+                                color="grey-3"
+                                text-color="black"
+                                :label="
+                                  $q.screen.lt.sm ? 'Website' : 'Visit website'
+                                "
+                                icon="las la-external-link-alt"
+                                :class="$q.screen.gt.sm ? 'grow' : ' grow'"
+                              />
+                            </a>
+                          </div>
+                          <div class="flex col">
+                            <a
+                              :href="computedTicketUrl"
+                              target="_blank"
+                              class="flex"
+                              v-if="!!event && computedTicketUrl && !editing"
+                            >
+                              <q-btn
+                                no-caps
+                                :disable="editing"
+                                color="grey-3"
+                                text-color="black"
+                                style="text-wrap: nowrap"
+                                :label="
+                                  $q.screen.lt.sm ? 'Tickets' : 'Get tickets'
+                                "
+                                size="md"
+                                class="border-radius flex grow"
+                                icon="las la-ticket-alt"
+                                :class="$q.screen.gt.sm ? '' : 'flex grow'"
+                              />
+                            </a>
+                          </div>
+                        </div>
+                      </div>
                       <div
                         class="flex row justify-between items-end no-wrap tags-wrapper o-080"
-                        :class="$q.screen.gt.sm ? 'q-pt-lg' : 'q-mt-lg'"
+                        :class="$q.screen.gt.sm ? 'q-pt-sm' : 'q-mt-md'"
                         v-if="event?.event_tags"
                       >
                         <TagsComponent :small="false" :editing="editing" />
@@ -343,24 +365,6 @@
                                     style="height: 36px"
                                   />
                                 </div>
-                                <a
-                                  :href="computedTicketUrl"
-                                  target="_blank"
-                                  v-if="
-                                    computedTicketUrl && event?.host && !editing
-                                  "
-                                >
-                                  <q-btn
-                                    :disable="editing"
-                                    color="grey-3"
-                                    text-color="black"
-                                    :label="t('event.get_tickets')"
-                                    size="md"
-                                    class="border-radius"
-                                    icon="las la-ticket-alt"
-                                    :class="$q.screen.gt.sm ? '' : 'flex grow'"
-                                  />
-                                </a>
 
                                 <InterestedComponent />
 
@@ -1484,6 +1488,8 @@ a {
     // seems to speed up animations a bit on iphone
     -webkit-backface-visibility: hidden;
     -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+
     will-change: tranform;
     .scroll-area {
       .edit-event-dates {

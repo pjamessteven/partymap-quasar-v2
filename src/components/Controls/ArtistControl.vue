@@ -23,9 +23,12 @@
             }
           "
         >
-          <q-icon style="font-size: 18px" name="mdi-close" />
+          <q-icon style="font-size: 16px" name="mdi-close" />
         </div>
-        <i class="las la-music q-mr-sm q-ml-none q-pr-none" />
+        <i
+          class="las la-music q-mr-sm q-ml-none q-pr-none"
+          v-if="!controlArtist || controlArtist?.length == 0"
+        />
 
         <div class="button-label flex row items-center row no-wrap">
           <div v-if="!controlArtist || controlArtist.length === 0">

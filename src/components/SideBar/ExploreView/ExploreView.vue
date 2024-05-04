@@ -227,7 +227,9 @@
         :style="
           $q.screen.lt.sm
             ? 'height: 144px; position: absolute; width: 100%; z-index: 500'
-            : 'height: 100%; position: absolute; width: 100%; z-index: 500'
+            : $q.screen.lt.xl
+            ? 'height: 348px; position: absolute; width: 100%; z-index: 500'
+            : 'height: 512px; position: absolute; width: 100%; z-index: 500'
         "
       >
         <div class="flex column items-center no-wrap">

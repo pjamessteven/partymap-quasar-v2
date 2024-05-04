@@ -39,7 +39,7 @@
     <DesktopSearchComponent
       class="desktop-search-component"
       v-if="$q.screen.gt.xs && showSearchForRoute"
-      :overlayingMap="overlayingMap"
+      :overlayingMap="overlayingContent"
     />
     <transition
       appear
@@ -247,7 +247,7 @@ export default {
     },
 
     iconColor() {
-      if (!this.overlayingMap && !this.$q.dark.isActive) {
+      if (!this.overlayingContent && !this.$q.dark.isActive) {
         return 'black';
       } else if (
         this.$q.dark.isActive ||
@@ -261,15 +261,15 @@ export default {
         return 'black';
       }
     },
-    overlayingMap() {
+    overlayingContent() {
       return (
         ((this.$route.name === 'EventPage' ||
           this.$route.name === 'ArtistPage') &&
-          this.$q.screen.gt.xs &&
-          this.menubarOpacity === 0) ||
+          ((this.$q.screen.gt.xs && this.menubarOpacity === 0) ||
+            this.$q.screen.lt.sm)) ||
         (this.$route.name === 'Explore' && !this.showPanel) ||
         (this.$route.name === 'Explore' && !this.showPanelBackground) ||
-        (this.swipingDownMenuPageMobile && !this.showPanel)
+        (this.swipingDownMenuPageMobile && !this.showPanelBackground)
       );
     },
   },

@@ -168,13 +168,14 @@ const preventSwipe = (event) => {
 };
 
 const hiddenYPosition = () => {
-  if ($q.screen.gt.sm && mainStore.sidebarPanel === 'nearby') {
-    return 256;
+  if (mainStore.sidebarPanel === 'nearby') {
+    if ($q.screen.gt.xs) {
+      return 256;
+    } else {
+      return 200;
+    }
   }
 
-  if ($q.screen.gt.xl) {
-    return window.innerHeight - 448 - mainStore.safeAreaInsets.top;
-  }
   if ($q.screen.gt.lg) {
     return window.innerHeight - 408 - mainStore.safeAreaInsets.top;
   }
@@ -370,7 +371,7 @@ onMounted(() => {
       ? hiddenYPosition()
       : showingYPosition()
   );
-  $q.screen.gt.sm && hidePanel();
+  hidePanel();
   window.addEventListener('resize', () => {
     if (!mainStore.showPanel) {
       hidePanel();
@@ -454,7 +455,7 @@ watch(
       }
     }
     if (to === 'nearby') {
-      if ($q.screen.lt.sm) {
+      if ($q.screen.lt.sm && false) {
         showPanel();
 
         mainStore.enablePanelSwipeDown = false;

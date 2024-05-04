@@ -40,7 +40,7 @@
         class="artist-header flex row justify-center no-wrap"
         v-if="$q.screen.gt.sm"
       >
-        <div class="artist-background" :style="computedBackround">
+        <div class="artist-background">
           <transition
             appear
             enter-active-class="animated fadeIn slow"
@@ -288,7 +288,7 @@ export default {
       //this.overlayOpacity = ((info.target.scrollTop * 0.5) / 100) * 1;
     },
   },
-  activated() {
+  mounted() {
     if (!this.artist || this.artist.id + '' !== this.id + '') {
       this.artist = null;
       this.menubarOpacity = 0;
@@ -310,12 +310,9 @@ export default {
       });
     } else {
       this.menubarOpacity = this.previousMenubarOpacity;
-      console.log('seto', this.previousMenubarOpacity);
     }
   },
-  deactivated() {
-    console.log('setpm', this.previousMenubarOpacity);
-
+  beforeRouteLeave() {
     this.previousMenubarOpacity = this.menubarOpacity;
   },
   computed: {

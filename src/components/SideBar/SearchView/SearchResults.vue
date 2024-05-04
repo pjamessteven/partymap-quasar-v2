@@ -163,7 +163,6 @@ export default {
         // no city, country level zoom
         // give it some time because we want to use
         // the bandwidth to load the nearby view first
-        console.log('loc', this.userLocationCity);
 
         setTimeout(() => {
           if (this.$q.screen.gt.lg) {

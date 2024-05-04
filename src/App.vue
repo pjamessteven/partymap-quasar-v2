@@ -160,7 +160,7 @@ export default {
     setTimeout(() => (this.assetsLoaded = true), 1000);
 
     this.$q.dark.set('auto');
-
+    this.$q.addressbarColor.set('#181818');
     this.checkAuthCookie();
   },
 };
@@ -424,12 +424,7 @@ body {
     &::before {
       box-shadow: none !important;
     }
-    .q-btn__content {
-      .close-icon-wrapper {
-        background: $b-4;
-        color: black;
-      }
-    }
+
     .q-btn__wrapper {
       &:before {
         box-shadow: none;
@@ -577,13 +572,6 @@ body {
     transition: none;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
-
-    .q-btn__content {
-      .close-icon-wrapper {
-        background: $bi-4;
-        color: white;
-      }
-    }
 
     .q-btn__wrapper {
       &:before {

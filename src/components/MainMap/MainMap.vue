@@ -120,14 +120,13 @@ export default {
       if (newv === 'nearby' && oldv === 'explore') {
         if (
           this.userLocation?.lat &&
-          !this.userLocationFromSearch &&
-          this.$q.screen.gt.xs &&
+          // !this.userLocationFromSearch &&
           newv === 'nearby'
         )
           // go to users location
           this.fitBoundsForNearbyPage(this.userLocation);
       }
-      if (this.$q.screen.gt.xs && newv === 'explore' && oldv === 'nearby') {
+      if (newv === 'explore' && oldv === 'nearby') {
         this.fitBoundsForExplorePage(this.userLocation);
       }
     },
@@ -188,7 +187,9 @@ export default {
       },
     },
     userLocation: {
-      handler: function (newval) {
+      deep: true,
+      handler(newval) {
+        console.log('USERLOCATION', newval);
         this.fitBoundsForNearbyPage(newval);
         // add location marker for fine location
         if (!this.userLocationFromSearch && this.fineLocation) {
@@ -451,7 +452,8 @@ export default {
       } else {
         // padding for mobile bottom panel
         toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
-          paddingTopLeft: [0, -150],
+          //paddingTopLeft: [0, -150],
+          paddingTopLeft: [0, 0 - window.innerHeight / 2 - 128],
           animate: !this.disableAnimations,
           duration: 0.3,
           easeLinearity: 1,
@@ -847,6 +849,9 @@ export default {
       this.clearMarkersAndLoadPoints();
     }
     this.initMap();
+    if (this.userLocation) {
+      this.fitBoundsForNearbyPage(this.userLocation);
+    }
     this.windowHeight = window.innerHeight;
     this.windowWidth = window.innerWidth;
     window.addEventListener('resize', () => {

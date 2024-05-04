@@ -318,6 +318,18 @@ export default {
         background: $b-3;
         color: $t-1;
         border: 1px solid rgba(0, 0, 0, 0.05);
+        :deep(.button-control) {
+          &.active {
+            background: white;
+            color: $t-1;
+          }
+          .q-btn__content {
+            .close-icon-wrapper {
+              background: $bi-4;
+              color: white;
+            }
+          }
+        }
         .searchbar-wrapper {
           .searchbar-input {
             :deep(.q-field__inner) {
@@ -380,6 +392,18 @@ export default {
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         border-left: 1px solid rgba(255, 255, 255, 0.1);
         border-right: 1px solid rgba(255, 255, 255, 0.1);
+        :deep(.button-control) {
+          .q-btn__content {
+            .close-icon-wrapper {
+              background: $bi-4;
+              color: white;
+            }
+          }
+          &.active {
+            background: white;
+            color: $t-1;
+          }
+        }
       }
     }
     &.overlaying-map {
@@ -461,8 +485,21 @@ export default {
           :deep(.q-btn::before) {
             box-shadow: none !important;
           }
-          :deep(.q-btn) {
+          :deep(.button-control) {
             .button-label {
+              white-space: nowrap;
+            }
+            .q-btn__content {
+              .close-icon-wrapper {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 48px;
+                padding: 2px;
+                margin-right: 8px;
+                margin-left: -6px;
+              }
+
               white-space: nowrap;
             }
           }

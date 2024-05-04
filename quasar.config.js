@@ -29,7 +29,13 @@ module.exports = configure(function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['i18n', 'axios', 'appleLoginDesktop', 'safeAreaAndroid'],
+    boot: [
+      'i18n',
+      'axios',
+      'appleLoginDesktop',
+      'safeAreaAndroid',
+      'addressbar-color',
+    ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ['app.scss'],
@@ -110,7 +116,7 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Notify', 'Dialog'],
+      plugins: ['Notify', 'Dialog', 'AddressbarColor'],
     },
 
     // animations: 'all', // --- includes all animations

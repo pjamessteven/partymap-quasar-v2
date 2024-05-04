@@ -4,7 +4,7 @@
       <div
         @click="openEditorDialog()"
         class="editing-outline"
-        style="white-space: pre-line; word-break: break-word"
+        style="word-break: break-word"
         :class="editing ? 'q-pa-md' : ''"
       >
         <span class="o-080">{{ event.description }}</span>
@@ -15,12 +15,14 @@
             event.description_attribute.length > 0
           "
         >
+          <!--
           -&nbsp;<a
             class="link-hover"
             target="_blank"
             :href="computedAttributeUrl"
             >{{ computedAttributeDomain }}</a
           >
+          -->
         </div>
       </div>
     </div>

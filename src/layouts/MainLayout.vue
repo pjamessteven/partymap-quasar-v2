@@ -2,7 +2,10 @@
   <div class="main-layout">
     <div class="map-container">
       <MainMap />
-      <div class="map-overlay" />
+      <div
+        class="map-overlay"
+        :class="sidebarPanel === 'nearby' && 'nearby-map-overlay-mobile'"
+      />
     </div>
     <div
       class="overlay"
@@ -496,6 +499,16 @@ export default {
             rgba(0, 0, 0, 0.68) calc(100% - 200px),
             rgba(0, 0, 0, 0.68) 100%
           );
+          &.nearby-map-overlay-mobile {
+            background: linear-gradient(
+              rgba(0, 0, 0, 0.68),
+              rgba(0, 0, 0, 0.6) 62px,
+              transparent 128px,
+              transparent 156px,
+              rgba(0, 0, 0, 0.68) 220px,
+              rgba(0, 0, 0, 0.68) 100%
+            );
+          }
         }
       }
     }

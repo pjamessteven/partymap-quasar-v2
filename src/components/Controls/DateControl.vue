@@ -20,7 +20,7 @@
           v-if="!!controlDateRangeSelectedOption?.value"
           @click.stop="clearDateRange"
         >
-          <q-icon style="font-size: 18px" name="mdi-close" />
+          <q-icon style="font-size: 16px" name="mdi-close" />
         </div>
         <div v-if="!controlDateRangeSelectedOption?.value" class="q-mr-sm">
           <i class="las la-calendar" />

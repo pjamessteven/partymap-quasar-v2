@@ -108,11 +108,11 @@ export default {
   position: relative;
   overflow: hidden;
   transition: opacity 0.3s;
-  transform: translate3d(0, 0, 0);
+  //transform: translate3d(0, 0, 0);
   cursor: pointer;
   @supports (font: -apple-system-body) and (-webkit-appearance: none) {
-    -webkit-backface-visibility: hidden;
-    -webkit-transform: translate3d(0, 0, 0);
+    //  -webkit-backface-visibility: hidden;
+    // -webkit-transform: translate3d(0, 0, 0);
     // translate3d is a hack for safari to force gpu rendering of blur()
   }
 

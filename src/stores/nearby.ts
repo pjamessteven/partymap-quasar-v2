@@ -174,6 +174,7 @@ export const useNearbyStore = defineStore('nearby', {
       }
     },
     setMapBoundsNearby() {
+      /*
       const mappedPoints = this.nearbyEventDates.map((item: any) =>
         item?.[0]?.location?.lat
           ? {
@@ -191,6 +192,7 @@ export const useNearbyStore = defineStore('nearby', {
         const bounds = L.latLngBounds(mappedPoints);
         toRaw(mapStore.map).fitBounds(bounds);
       }
+      */
     },
     async loadNearbyEventDates() {
       const main = useMainStore();
