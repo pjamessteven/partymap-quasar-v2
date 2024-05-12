@@ -1,6 +1,7 @@
 <template>
   <div style="height: 100%">
     <q-btn
+      flat
       no-caps
       @click="
         () => {

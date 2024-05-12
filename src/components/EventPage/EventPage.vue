@@ -198,7 +198,7 @@
                           :class="$q.screen.gt.sm ? 'q-mt-md' : 'q-mt-lg'"
                         />
                       </div>
-                      <div :class="$q.screen.gt.sm ? 'q-mt-lg' : 'q-mt-sm'">
+                      <div :class="$q.screen.gt.sm ? 'q-mt-lg' : 'q-mt-md'">
                         <div class="flex row">
                           <div class="flex col">
                             <a
@@ -212,7 +212,9 @@
                                 color="grey-3"
                                 text-color="black"
                                 :label="
-                                  $q.screen.lt.sm ? 'Website' : 'Visit website'
+                                  $q.screen.lt.sm
+                                    ? 'Visit Website'
+                                    : 'Visit website'
                                 "
                                 icon="las la-external-link-alt"
                                 :class="$q.screen.gt.sm ? 'grow' : ' grow'"
@@ -223,7 +225,7 @@
                             <a
                               :href="computedTicketUrl"
                               target="_blank"
-                              class="flex"
+                              class="flex grow q-ml-sm"
                               v-if="!!event && computedTicketUrl && !editing"
                             >
                               <q-btn
@@ -246,7 +248,7 @@
                       </div>
                       <div
                         class="flex row justify-between items-end no-wrap tags-wrapper o-080"
-                        :class="$q.screen.gt.sm ? 'q-pt-sm' : 'q-mt-md'"
+                        :class="$q.screen.gt.sm ? 'q-pt-sm' : 'q-mt-sm'"
                         v-if="event?.event_tags"
                       >
                         <TagsComponent :small="false" :editing="editing" />

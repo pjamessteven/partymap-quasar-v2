@@ -3,7 +3,7 @@
     <q-tabs
       :class="{
         'light-button': color === 'white',
-        'inter bolder desktop-tabs': $q.screen.gt.sm,
+        'inter bolder desktop-tabs': $q.screen.gt.xs,
       }"
       class="tabs"
       @click.stop
@@ -11,7 +11,7 @@
       @update:model-value="updateNav"
       no-caps
       :indicator-color="
-        $q.screen.lt.md && false
+        $q.screen.lt.sm && false
           ? $route.name === 'Explore' ||
             $route.name === 'UserPage' ||
             $route.name === 'BrowsePage'
@@ -20,7 +20,7 @@
           : 'transparent'
       "
       :active-class="
-        $q.screen.lt.md
+        $q.screen.lt.sm
           ? $route.name === 'Explore' ||
             $route.name === 'UserPage' ||
             $route.name === 'BrowsePage'
@@ -38,7 +38,7 @@
         label="Home"
         :ripple="false"
         :icon="
-          $q.screen.lt.md
+          $q.screen.lt.sm
             ? sidebarPanel === 'nearby'
               ? 'mdi-home'
               : 'mdi-home-outline'
@@ -53,7 +53,7 @@
         key="2"
         name="explore"
         :icon="
-          $q.screen.lt.md
+          $q.screen.lt.sm
             ? sidebarPanel === 'explore'
               ? 'mdi-map-search'
               : 'mdi-map-search-outline'
@@ -71,7 +71,7 @@
         name="browse"
         label="Browse"
         :icon="
-          $q.screen.lt.md
+          $q.screen.lt.sm
             ? $route.name === 'BrowsePage'
               ? 'mdi-feature-search'
               : 'mdi-feature-search-outline'
@@ -82,11 +82,11 @@
       />
 
       <q-route-tab
-        v-if="$q.screen.lt.md"
+        v-if="$q.screen.lt.sm"
         name="profile"
         key="4"
         :icon="
-          $q.screen.lt.md
+          $q.screen.lt.sm
             ? $route.name === 'UserPage'
               ? 'mdi-account-circle'
               : 'mdi-account-circle-outline'
@@ -163,6 +163,8 @@ export default {
           }
         } else if (newval === 'explore') {
           this.$router.push({ name: 'Explore', query: { view: 'explore' } });
+        } else if (newval === 'search') {
+          this.$router.push({ name: 'Explore', query: { view: 'search' } });
         }
       },
     },
@@ -378,7 +380,7 @@ export default {
 .animated.slowest {
   animation-duration: calc(var(--animate-duration) * 10);
 }
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 600px) {
   .body--dark {
     .navigation-bar {
       //background: black;

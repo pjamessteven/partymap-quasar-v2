@@ -19,33 +19,8 @@
         </q-btn>
       </div>
     </transition>
-    <q-btn
-      v-if="$q.screen.lt.sm"
-      icon="mdi-magnify"
-      @click="() => (sidebarPanel = 'search')"
-      :class="{
-        'light-button': color === 'white',
-      }"
-      flat
-    >
-    </q-btn>
+       -->
 
-    <div class="flex items-center" v-else>
-      <q-btn
-        no-caps
-        size="medium"
-        label="Seach"
-        icon="mdi-magnify"
-        @click="() => (sidebarPanel = 'search')"
-        :class="{
-          'light-button': color === 'white',
-        }"
-        class="inter bold desktop-search-button q-pl-md q-pr-lg"
-        flat
-      >
-      </q-btn>
-    </div>
-        -->
     <div
       v-if="$q.screen.gt.xs && false"
       class="flex items-center q-mr-sm q-pr-xs"
@@ -88,8 +63,9 @@
       </div>
     </q-btn>
   -->
+
     <router-link
-      v-if="($q.screen.gt.xs || onlyLogin) && !currentUser"
+      v-if="$q.screen.gt.xs && !currentUser"
       class="flex link-hover"
       :to="
         currentUser
@@ -126,7 +102,7 @@
     </router-link>
 
     <q-btn
-      v-else-if="($q.screen.gt.xs || onlyLogin) && currentUser"
+      v-else-if="$q.screen.gt.xs && currentUser"
       flat
       no-caps
       class="profile-button t2 q-mr-md"
@@ -161,6 +137,21 @@
       >
         <TopControlsMenu :onlyUserItems="true" />
       </q-menu>
+    </q-btn>
+    <q-btn
+      v-if="$q.screen.lt.sm"
+      icon="mdi-magnify"
+      @click="
+        () => {
+          $router.push({ name: 'Explore', query: { view: 'search' } });
+          sidebarPanel = 'search';
+        }
+      "
+      :class="{
+        'light-button': color === 'white',
+      }"
+      flat
+    >
     </q-btn>
     <q-btn
       class="menubar-button"

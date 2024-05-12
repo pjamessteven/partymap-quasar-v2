@@ -16,96 +16,66 @@
           : { bottom: '0px', marginLeft: '16px', height: '0px' }
       "
     >
-      <div class="scroll-inner flex row no-wrap items-center">
+      <div
+        class="scroll-inner flex row no-wrap items-center q-mr-md"
+        v-if="$route.name === 'Explore' || $q.screen.lt.sm"
+      >
         <div
-          v-if="$q.screen.gt.md"
-          class="controls-wrapper flex no-wrap"
-          @click="() => (showSearch = !showSearch)"
+          class="flex items-center no-wrap"
+          v-show="
+            $q.screen.gt.md || ($q.screen.lt.lg && sidebarPanel === 'search')
+          "
         >
-          <div class="controls-wrapper-inner">
-            <div class="searchbar-wrapper">
-              <q-input
-                @keydown.esc="
-                  () => {
-                    $refs.search.blur();
-
-                    clearSearch();
-                  }
-                "
-                ref="search"
-                borderless
-                style="width: 260px"
-                dense
-                autofocus
-                @focus="onSearchbarFocus()"
-                @clear="clearSearch()"
-                class="searchbar-input inter bold"
-                v-model="query"
-                @keyup.enter="() => $refs.search.blur()"
-                placeholder="Search places, artists and events"
-              >
-                <template v-slot:prepend>
-                  <div class="q-mr-xs q-ml-">
-                    <i class="mdi mdi-magnify" />
-                  </div>
-                </template>
-                <template v-slot:append>
-                  <div
-                    class="search-button"
-                    v-if="query?.length"
-                    @click="clearSearch()"
-                  >
-                    <q-icon
-                      name="mdi-close"
-                      style="cursor: pointer"
-                      size="large"
-                    ></q-icon>
-                  </div>
-                </template>
-              </q-input>
+          <q-icon
+            @click="() => $router.go(-1)"
+            class="q-pr-md q-pl-sm"
+            size="sm"
+            name="mdi-chevron-left"
+            v-if="$q.screen.lt.lg && sidebarPanel === 'search'"
+          />
+          <div
+            class="controls-wrapper flex no-wrap q-mr-sm"
+            :class="{
+              'mobile-search-wrapper':
+                $q.screen.lt.lg && sidebarPanel === 'search',
+            }"
+          >
+            <div class="controls-wrapper-inner">
+              <SearchComponent />
             </div>
-            <!--
-            <q-btn
-              v-else
-              no-caps
-              @click="
-                () => {
-                  searchbarShowing = true;
-                }
-              "
-              style="padding-left: 8px; width: 100%"
-              class="button-control flex grow items-start"
-              :class="{
-                active: sidebarPanel === 'search',
-              }"
-            >
-              <div class="flex items-center row no-wrap">
-                <div class="flex row items-center row no-wrap">
-                  <div class="q-mr-sm q-ml-sm">
-                    <i class="mdi mdi-magnify" />
-                  </div>
-                  <div
-                    class="q-mr-sm"
-                    v-if="$q.screen.gt.sm"
-                    style="white-space: nowrap"
-                  >
-                    Search for places, artists or events
-                  </div>
-                  <div class="q-mr-sm" style="white-space: nowrap" v-else>
-                    Search everything
-                  </div>
-                </div>
-              </div>
-            </q-btn>
-            -->
           </div>
         </div>
         <div
-          class="flex row items-center no-wrap q-mr-md"
-          v-if="$route.name === 'Explore' || $q.screen.lt.sm"
+          class="flex row items-center no-wrap"
+          v-show="$q.screen.gt.md || sidebarPanel !== 'search'"
         >
+          <div
+            class="controls-wrapper flex no-wrap q-mr-sm"
+            v-if="$q.screen.gt.xs && $q.screen.lt.lg"
+          >
+            <div class="controls-wrapper-inner">
+              <q-btn
+                no-caps
+                @click="() => (sidebarPanel = 'search')"
+                style="padding-left: 8px"
+                class="button-control flex grow items-start"
+                :class="{
+                  active: sidebarPanel === 'search',
+                }"
+              >
+                <div class="flex items-center row no-wrap">
+                  <div class="flex row items-center row no-wrap">
+                    <div class="q-mr-sm q-ml-sm">
+                      <i class="mdi mdi-magnify" />
+                    </div>
+                    <div class="q-mr-x" style="white-space: nowrap">Search</div>
+                  </div>
+                </div>
+              </q-btn>
+            </div>
+          </div>
           <!--<div class="text-white q-ml-md">Filter:</div>-->
-          <div class="controls-wrapper flex no-wrap q-ml-sm">
+          <div class="controls-wrapper flex no-wrap">
             <div class="controls-wrapper-inner">
               <DateControl />
             </div>
@@ -120,15 +90,38 @@
               <ArtistControl />
             </div>
           </div>
+
           <div
             class="controls-wrapper flex no-wrap q-ml-sm"
             v-if="$q.screen.gt.xs"
           >
-            <div
-              class="controls-wrapper-inner q-pa-sm"
-              style="width: 42px; text-align: center"
-            >
-              ...
+            <div class="controls-wrapper-inner">
+              <div style="height: 100%">
+                <q-btn
+                  class="button-control"
+                  :class="{
+                    active:
+                      (controlSize && controlSize.length > 0) ||
+                      (controlDuration && controlDuration.length > 0),
+                  }"
+                  >...
+                  <q-menu
+                    transition-show="jump-down"
+                    transition-hide="jump-up"
+                    anchor="bottom right"
+                    self="top right"
+                    class="more-menu"
+                    max-height="100vh"
+                  >
+                    <q-item>
+                      <SizeControl />
+                    </q-item>
+                    <q-item>
+                      <DurationControl />
+                    </q-item>
+                  </q-menu>
+                </q-btn>
+              </div>
             </div>
           </div>
 
@@ -165,7 +158,7 @@ import DurationControl from 'src/components/Controls/DurationControl.vue';
 import SizeControl from 'src/components/Controls/SizeControl.vue';
 import TagControl from 'src/components/Controls/TagControl.vue';
 import CustomQScroll from 'components/CustomQScroll.vue';
-
+import SearchComponent from './SearchComponent.vue';
 export default {
   components: {
     CustomQScroll,
@@ -174,31 +167,13 @@ export default {
     DurationControl,
     SizeControl,
     TagControl,
+    SearchComponent,
   },
   props: ['overlayingMap'],
   data() {
-    return {
-      showSearch: false,
-      previousSidebarPanel: '',
-      previousShowPanel: '',
-    };
+    return {};
   },
   watch: {
-    sidebarPanel(newv, oldv) {
-      // so we can return to previous sidebar panel after triggering search
-      this.previousSidebarPanel = oldv;
-    },
-    query(newv) {
-      if (newv?.length > 0) {
-        this.showPanel = true;
-        this.sidebarPanel = 'search';
-        if (this.$route.name !== 'Explore') {
-          this.$router.push({ name: 'Explore' });
-        }
-      } else {
-        this.hideResultsAndPreviousPanel();
-      }
-    },
     controlArtist: {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
@@ -252,32 +227,6 @@ export default {
       this.getFineLocation();
       this.sidebarPanel = 'nearby';
     },
-    hideResultsAndPreviousPanel() {
-      if (this.sidebarPanel === 'search') {
-        // hide results and restore previous sidebar state
-        this.sidebarPanel = this.previousSidebarPanel;
-        if (this.sidebarPanel === 'explore') {
-          this.showPanel = false;
-        }
-      }
-    },
-    clearSearch() {
-      this.query = null;
-      this.searchbarShowing = false;
-      this.hideResultsAndPreviousPanel();
-    },
-    onSearchbarFocus() {
-      if (this.query?.length > 0) {
-        this.sidebarPanel = 'search';
-        this.showPanel = true;
-      }
-    },
-    onSearchbarBlur() {
-      if (!this.query || this.query.length === 0) {
-        this.searchbarShowing = false;
-        this.hideResultsAndPreviousPanel();
-      }
-    },
   },
   computed: {
     ...mapWritableState(useSearchStore, ['query', 'searchbarShowing']),
@@ -315,9 +264,9 @@ export default {
       // box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
 
       .controls-wrapper-inner {
-        background: $b-3;
+        background: $b-2;
         color: $t-1;
-        border: 1px solid rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.1);
         :deep(.button-control) {
           &.active {
             background: white;
@@ -330,9 +279,9 @@ export default {
             }
           }
         }
-        .searchbar-wrapper {
+        :deep(.searchbar-wrapper) {
           .searchbar-input {
-            :deep(.q-field__inner) {
+            .q-field__inner {
               .q-placeholder::placeholder {
                 opacity: 1;
               }
@@ -347,16 +296,16 @@ export default {
     &.overlaying-map {
       .controls-wrapper {
         backdrop-filter: blur(40px);
-        box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+        //   box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
 
         .controls-wrapper-inner {
           background: rgba(255, 255, 255, 0.3);
           color: $ti-1;
           border: 1px solid rgba(255, 255, 255, 0.1);
 
-          .searchbar-wrapper {
+          :deep(.searchbar-wrapper) {
             .searchbar-input {
-              :deep(.q-field__inner) {
+              .q-field__inner {
                 .q-placeholder::placeholder {
                   opacity: 1;
                 }
@@ -388,10 +337,8 @@ export default {
         background: $bi-3;
 
         //background: rgba(0, 0, 0, 0.5);
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        border-left: 1px solid rgba(255, 255, 255, 0.1);
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
+
+        border: 1px solid rgba(255, 255, 255, 0.1);
         :deep(.button-control) {
           .q-btn__content {
             .close-icon-wrapper {
@@ -409,7 +356,7 @@ export default {
     &.overlaying-map {
       .controls-wrapper {
         backdrop-filter: blur(40px);
-        box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+        // box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
 
         .controls-wrapper-inner {
           background: rgba(100, 100, 100, 0.4);
@@ -438,11 +385,13 @@ export default {
     width: 100%;
     justify-content: center;
   }
+
   .control-scroll-area {
     height: 40px;
     width: 100%;
     .scroll-inner {
       justify-content: center;
+      pointer-events: all;
 
       .controls-wrapper {
         //z-index: 105;
@@ -462,14 +411,14 @@ export default {
 
           position: relative;
 
-          .searchbar-wrapper {
+          :deep(.searchbar-wrapper) {
             padding-left: 18px;
             padding-right: 18px;
             margin-top: 2px;
 
             .searchbar-input {
               margin-top: -4px;
-              :deep(.q-field__inner) {
+              .q-field__inner {
                 .q-field__control::before {
                   border-color: transparent;
                   border: none;
@@ -477,6 +426,10 @@ export default {
                 }
                 .q-field__marginal {
                   font-size: unset;
+                  font-size: larger;
+                }
+                input {
+                  font-weight: 500;
                 }
               }
             }
@@ -488,6 +441,7 @@ export default {
           :deep(.button-control) {
             .button-label {
               white-space: nowrap;
+              font-weight: 500;
             }
             .q-btn__content {
               .close-icon-wrapper {
@@ -513,10 +467,6 @@ export default {
           }
         }
       }
-
-      .search-dialog {
-        z-index: 1000;
-      }
     }
   }
 }
@@ -525,10 +475,6 @@ export default {
   animation-duration: calc(var(--animate-duration) * 10);
 }
 
-@media only screen and (min-width: 1921px) {
-  .search-component {
-  }
-}
 @media only screen and (max-width: 1576px) {
   .desktop-search-component {
     margin-right: 0px;
@@ -562,7 +508,7 @@ export default {
     }
   }
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 1024px) {
   .body--light {
     .desktop-search-component {
       .controls-wrapper {
@@ -623,7 +569,29 @@ export default {
   .desktop-search-component {
     .control-scroll-area {
       .scroll-inner {
-        padding-left: 8px;
+        padding-left: 16px;
+      }
+    }
+  }
+}
+@media only screen and (max-width: 1024px) and (min-width: 600px) {
+  .desktop-search-component {
+    .control-scroll-area {
+      .scroll-inner {
+        padding-left: 24px;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .desktop-search-component {
+    .control-scroll-area {
+      .scroll-inner {
+        .mobile-search-wrapper {
+          width: 100%;
+        }
       }
     }
   }

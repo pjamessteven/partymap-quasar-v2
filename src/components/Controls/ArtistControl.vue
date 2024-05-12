@@ -1,6 +1,7 @@
 <template>
   <div style="height: 100%">
     <q-btn
+      flat
       @click="
         () => {
           showing = !showing;
@@ -32,7 +33,7 @@
 
         <div class="button-label flex row items-center row no-wrap">
           <div v-if="!controlArtist || controlArtist.length === 0">
-            <div v-if="$q.screen.lt.sm">Artists</div>
+            <div v-if="$q.screen.lt.lg">Artists</div>
             <div v-else>All Artists</div>
           </div>
           <div v-else>

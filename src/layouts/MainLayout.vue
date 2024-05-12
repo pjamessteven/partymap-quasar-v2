@@ -19,11 +19,11 @@
       <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
       <div
         class="sidebar-component-wrapper"
-        :style="$q.screen.lt.sm && computedSidebarOpacity"
+        :style="$q.screen.lt.md && computedSidebarOpacity"
       >
         <SearchComponent
           class="search-component"
-          v-show="$q.screen.lt.sm"
+          v-if="$q.screen.lt.md"
           :overlayingMap="!showPanelBackground"
         />
         <Transition
@@ -101,7 +101,7 @@
       </router-view>
       <NavigationBar
         class="nav-bar"
-        v-if="$q.screen.lt.md"
+        v-if="$q.screen.lt.sm"
         :style="
           $route.name === 'EventPage' ||
           $route.name === 'Explore' ||
@@ -464,7 +464,7 @@ export default {
     //opacity: 0;
   }
 }
-@media only screen and (max-width: 599px) {
+@media only screen and (max-width: 1024px) {
   .body--dark {
     .main-layout {
       .overlay {

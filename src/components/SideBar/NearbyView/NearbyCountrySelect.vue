@@ -1,44 +1,71 @@
 <template>
-  <q-select
-    ref="locationSelect"
-    class="text-h4 inter bold country-select"
-    :input-style="$q.screen.gt.xs ? 'width: 300px;' : 'width: 250px'"
-    input-class="country-select-input"
-    behavior="menu"
-    :class="
-      (!query || query?.length === 0) && !userLocationCity ? 'placeholder' : ''
-    "
-    :model-value="userLocationCity"
-    :use-input="userLocationCity == null"
-    @input-value="
-      ($event) => {
-        query = $event;
-      }
-    "
-    :hide-dropdown-icon="!userLocationCity"
-    :options="locationSearchResults"
-    @filter="locationSearchFilter"
-    @update:model-value="setLocation($event)"
-    hide-bottom-space
-    :loading="userLocationLoading || loading"
-    map-options
-    v-on:click="
-      () => {
-        $refs.locationSelect.updateInputValue('', true);
+  <div
+    class="flex"
+    @click.capture="
+      (event) => {
+        if (userLocationCity) {
+          userLocationCity = null;
 
-        userLocationCity = null;
-      }
-    "
-    v-on:focusout="
-      () => {
-        $refs.locationSelect.updateInputValue('', true);
+          $refs.locationSelect.updateInputValue('', true);
 
-        !userLocationCity || userLocationCity.length == 0
-          ? (userLocationCity = previouslySelectedCity)
-          : undefined;
+          $nextTick(() => $refs.locationSelect.focus());
+
+          event.stopPropagation();
+          return false;
+        }
       }
     "
-  />
+  >
+    <q-select
+      ref="locationSelect"
+      class="text-h4 inter bold country-select"
+      :input-style="$q.screen.gt.xs ? 'width: 300px;' : 'width: 250px'"
+      input-class="country-select-input"
+      behavior="menu"
+      :class="
+        (!query || query?.length === 0) && !userLocationCity
+          ? userLocationLoading
+            ? 'loading-placeholder'
+            : 'placeholder'
+          : ''
+      "
+      :model-value="userLocationCity"
+      :use-input="userLocationCity == null"
+      @input-value="
+        ($event) => {
+          query = $event;
+        }
+      "
+      :hide-dropdown-icon="!userLocationCity"
+      :options="locationSearchResults"
+      @filter="locationSearchFilter"
+      @update:model-value="setLocation($event)"
+      :loading="userLocationLoading || loading"
+      map-options
+      @popup-show="
+        () => {
+          if (userLocationCity) {
+            userLocationCity = null;
+
+            $refs.locationSelect.updateInputValue('', true);
+
+            $nextTick(() => $refs.locationSelect.focus());
+            return false;
+          }
+        }
+      "
+      v-on:focusout="
+        () => {
+          $refs.locationSelect.updateInputValue('', true);
+
+          !userLocationCity || userLocationCity.length == 0
+            ? (userLocationCity = previouslySelectedCity)
+            : undefined;
+        }
+      "
+    >
+    </q-select>
+  </div>
 </template>
 
 <script>
@@ -50,8 +77,6 @@ export default {
   props: {},
   data() {
     return {
-      model: 'Wellington',
-      options: ['Wellington', 'Auckland', 'Christchurch'],
       locationSearchResults: [],
       query: '',
       loading: false,
@@ -167,6 +192,20 @@ export default {
       height: 100%;
       width: 100%;
       content: 'Search places';
+      // color: grey;
+      font-weight: 800;
+    }
+  }
+  &.loading-placeholder {
+    &::before {
+      opacity: 0.68;
+      z-index: 2;
+      position: absolute;
+      left: 0px;
+      top: 8px;
+      height: 100%;
+      width: 100%;
+      content: '...';
       // color: grey;
       font-weight: 800;
     }

@@ -179,7 +179,7 @@ const hiddenYPosition = () => {
   if ($q.screen.gt.lg) {
     return window.innerHeight - 408 - mainStore.safeAreaInsets.top;
   }
-  if ($q.screen.gt.sm) {
+  if ($q.screen.gt.xs) {
     return window.innerHeight - 260 - mainStore.safeAreaInsets.top;
   }
 
@@ -279,13 +279,13 @@ const dragHandler = ({
   // if ($q.screen.lt.sm && mainStore.sidebarPanel === 'explore') {
   if (!dragging) {
     if (mainStore.showPanel && mainStore.enablePanelSwipeDown) {
-      if (y > 100) {
+      if (y > 30) {
         hidePanel();
       } else {
         showPanel();
       }
     } else if (!mainStore.showPanel) {
-      if (y < -100) {
+      if (y < -30) {
         showPanel();
       } else {
         hidePanel();
@@ -325,7 +325,7 @@ const dragHandler = ({
     y + showingYPosition() > showingYPosition() &&
     mainStore.showPanel
   ) {
-    // dragging down
+    // dragging down from showing position
 
     // show background when dragging back up after drag down started
     if (y + showingYPosition() - 10 <= showingYPosition()) {
@@ -338,6 +338,27 @@ const dragHandler = ({
       y + showingYPosition()
     }px, 0px)`;
     currentYPos.value = y + showingYPosition();
+
+    // update motion position but don't animate
+    motionTransitions.value.push(
+      'y',
+      currentYPos.value,
+      motionProperties.value,
+      {
+        type: 'keyframes',
+        duration: 0,
+      }
+    );
+  } else if (
+    y + hiddenYPosition() > hiddenYPosition() &&
+    !mainStore.showPanel
+  ) {
+    // dragging down from hidden position
+
+    sidebar.value.style.transform = `translate3d(${x}px, ${
+      y + hiddenYPosition()
+    }px, 0px)`;
+    currentYPos.value = y + hiddenYPosition();
 
     // update motion position but don't animate
     motionTransitions.value.push(
@@ -738,7 +759,7 @@ watch(
 @media only screen and (min-width: 1024px) {
   .sidebar-wrapper {
     .sidebar {
-      padding-bottom: 88px;
+      padding-bottom: 76px;
       min-width: 920px;
       max-width: 1280px;
     }

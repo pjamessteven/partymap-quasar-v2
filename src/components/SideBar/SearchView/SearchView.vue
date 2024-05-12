@@ -25,6 +25,7 @@
 
 
     -->
+
       <SearchResults
         v-if="!loading"
         class="q-pb-md"

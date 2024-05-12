@@ -16,26 +16,28 @@
             }
           : { bottom: '0px', height: '0px' }
       "
-    >
-      <div
-        class="flex row no-wrap q-gutter-md q-pr-xl"
-        :class="$q.screen.lt.sm ? 'q-pl-md' : 'q-pl-md'"
-      >
-        <ArtistHead
-          v-for="(artist, index) in artists"
-          :key="index"
-          :artist="artist"
-        ></ArtistHead>
+      ><div>
         <div
-          v-if="hasNext"
-          class="pagination-icon flex justify-center items-center t3 link-hover"
-          style="width: 128px"
+          class="flex row no-wrap q-gutter-md q-pr-xl"
+          :class="$q.screen.lt.sm ? 'q-pl-md' : 'q-pl-md'"
         >
-          <q-spinner-ios
-            :thickness="2"
-            :color="$q.dark.isActive ? 'white' : 'black'"
-            size="2em"
-          />
+          <ArtistHead
+            v-for="artist in $props.artists"
+            :key="artist.id"
+            :artist="artist"
+          ></ArtistHead>
+
+          <div
+            v-if="hasNext"
+            class="flex justify-center items-center t3 link-hover q-ml-md"
+            style="width: 128px"
+          >
+            <q-spinner-ios
+              :thickness="2"
+              :color="$q.dark.isActive ? 'white' : 'black'"
+              size="2em"
+            />
+          </div>
         </div>
       </div>
     </CustomQScroll>
@@ -57,6 +59,8 @@ const props = withDefaults(defineProps<Props>(), {
   artists: () => [],
 });
 
+console.log(props.artists);
+
 function onScrollMainContent(info: {
   horizontalSize: number;
   horizontalContainerSize: number;
@@ -67,8 +71,8 @@ function onScrollMainContent(info: {
   const triggerPositoion =
     info.horizontalSize - info.horizontalContainerSize - 128; // width of loading spinner
 */
+
   if (info.horizontalPercentage == 1) {
-    console.log('load more');
     // reached end
     props.loadMore();
   }
@@ -111,7 +115,6 @@ function onScrollMainContent(info: {
   .pagination-icon {
     z-index: 100;
     height: 154px;
-    width: auto;
     display: flex;
     align-items: center;
     :deep(.q-icon) {

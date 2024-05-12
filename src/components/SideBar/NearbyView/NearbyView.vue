@@ -99,18 +99,18 @@
         <div
           class="flex message"
           :class="{
-            'q-mx-lg  q-my-xs ': $q.screen.gt.sm,
-            'q-mx-lg  q-mb-sm ': $q.screen.gt.lg,
+            'q-mx-lg  q-mt-sm q-mb-sm ': $q.screen.gt.sm,
+            'q-mx-lg  q-mb-md ': $q.screen.gt.lg,
 
-            'q-mx-md q-mt-sm q-pb-s ': $q.screen.lt.md,
+            'q-mx-md q-mt-sm q-pb-xs ': $q.screen.lt.md,
           }"
           @click="showMessage = !showMessage"
         >
           <div
             class="flex grow no-wrap justify-between inter"
             :class="{
-              ' q-pt-sm t3 items-center ': $q.screen.lt.md,
-              ' q-mt-md  inter text-large  t3 ': $q.screen.gt.sm,
+              ' q-pt-sm t2 items-center ': $q.screen.lt.md,
+              ' q-mt-md  inter text-large  t2 ': $q.screen.gt.sm,
 
               ' items-end': $q.screen.gt.sm,
             }"
@@ -433,7 +433,7 @@
                   :class="$q.screen.gt.sm ? 'q-pl-sm' : ''"
                   :artists="nearbyArtists"
                   :hasNext="nearbyArtistsHasNext"
-                  :loadMore="loadNearbyArtists"
+                  :loadMore="debouncedLoadNearbyArtists"
                   :style="$q.screen.gt.sm ? 'margin-bottom: -24px' : ''"
                 />
               </div>
@@ -455,7 +455,7 @@
                   :class="$q.screen.gt.sm ? 'q-pl-sm' : ''"
                   :artists="artistOptions"
                   :hasNext="artistOptionsHasNext"
-                  :loadMore="loadArtistOptions"
+                  :loadMore="debouncedLoadArtistOptions"
                   :style="$q.screen.gt.sm ? 'margin-bottom: -24px' : ''"
                 />
               </div>
@@ -967,6 +967,14 @@ export default {
       leading: true,
       trailing: false,
     });
+    this.debouncedLoadArtistOptions = _.debounce(this.loadArtistOptions, 300, {
+      leading: true,
+      trailing: false,
+    });
+    this.debouncedLoadNearbyArtists = _.debounce(this.loadNearbyArtists, 300, {
+      leading: true,
+      trailing: false,
+    });
   },
   unmounted() {
     this.menuBarOpacity = 1;
@@ -1110,8 +1118,9 @@ export default {
     overflow: hidden;
     :deep(.q-scrollarea__container) {
       .q-scrollarea__content {
-        width: 100% !important;
-        max-width: 100% !important;
+        // width: 100% !important;
+        // max-width: 100% !important;
+        // this fucks with the vertical artist scroll child width
       }
     }
     :deep(.scroll) {

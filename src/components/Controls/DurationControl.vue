@@ -2,6 +2,7 @@
   <div style="height: 100%">
     <q-btn
       no-caps
+      flat
       @click="
         () => {
           showing = !showing;

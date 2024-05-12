@@ -1,25 +1,40 @@
 <template>
-  <div class="search-component flex row items-center">
-    <div
-      class="controls-wrapper flex no-wrap"
-      @click="() => (showSearch = !showSearch)"
+  <div class="searchbar-wrapper">
+    <q-input
+      @keydown.esc="
+        () => {
+          $refs.search.blur();
+
+          clearSearch();
+        }
+      "
+      ref="search"
+      borderless
+      style="width: 260px"
+      dense
+      autofocus
+      @focus="onSearchbarFocus()"
+      @clear="clearSearch()"
+      class="searchbar-input inter bold"
+      v-model="query"
+      @keyup.enter="() => $refs.search.blur()"
+      placeholder="Search places, artists and events"
     >
-      <div
-        class="controls-wrapper-inner"
-        :class="showPanel ? 'show-panel' : ''"
-      >
-        <CustomQScroll
-          ref="scroll"
-          horizontal
-          class="control-scroll-area"
-          :thumb-style="
-            $q.screen.gt.xs
-              ? { bottom: '0px', height: '4px' }
-              : { bottom: '-8px', height: '0px' }
-          "
-        ></CustomQScroll>
-      </div>
-    </div>
+      <template v-slot:prepend>
+        <div class="q-mr-xs q-ml-">
+          <i class="mdi mdi-magnify" />
+        </div>
+      </template>
+      <template v-slot:append>
+        <div class="search-button" v-if="query?.length" @click="clearSearch()">
+          <q-icon
+            name="mdi-close"
+            style="cursor: pointer"
+            size="large"
+          ></q-icon>
+        </div>
+      </template>
+    </q-input>
   </div>
 </template>
 
@@ -30,18 +45,66 @@ import { useSearchStore } from 'src/stores/search';
 
 export default {
   data() {
-    return { showSearch: false };
+    return {
+      showSearch: false,
+      previousSidebarPanel: '',
+      previousShowPanel: '',
+    };
+  },
+  watch: {
+    sidebarPanel(newv, oldv) {
+      // so we can return to previous sidebar panel after triggering search
+      this.previousSidebarPanel = oldv;
+
+      if (oldv === 'search') this.query = null;
+      if (newv === 'search') {
+        setTimeout(() => {
+          this.$refs.search.focus();
+        }, 500);
+      }
+    },
+    query(newv) {
+      if (newv?.length > 0) {
+        this.showPanel = true;
+        this.sidebarPanel = 'search';
+        if (this.$route.name !== 'Explore') {
+          this.$router.push({ name: 'Explore' });
+        }
+      } else {
+        this.hideResultsAndPreviousPanel();
+      }
+    },
   },
   methods: {
-    ...mapActions(useMainStore, ['loadIpInfo', 'getFineLocation']),
-
-    clickLocation() {
-      this.getFineLocation();
-      this.sidebarPanel = 'nearby';
+    hideResultsAndPreviousPanel() {
+      if (this.sidebarPanel === 'search') {
+        // hide results and restore previous sidebar state
+        this.sidebarPanel = this.previousSidebarPanel;
+        if (this.sidebarPanel === 'explore') {
+          this.showPanel = false;
+        }
+      }
+    },
+    clearSearch() {
+      this.query = null;
+      this.searchbarShowing = false;
+      this.hideResultsAndPreviousPanel();
+    },
+    onSearchbarFocus() {
+      if (this.query?.length > 0) {
+        this.sidebarPanel = 'search';
+        this.showPanel = true;
+      }
+    },
+    onSearchbarBlur() {
+      if (!this.query || this.query.length === 0) {
+        this.searchbarShowing = false;
+        this.hideResultsAndPreviousPanel();
+      }
     },
   },
   computed: {
-    ...mapWritableState(useSearchStore, ['query']),
+    ...mapWritableState(useSearchStore, ['query', 'searchbarShowing']),
     ...mapWritableState(useMainStore, [
       'sidebarPanel',
       'showPanel',

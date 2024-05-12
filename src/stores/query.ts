@@ -126,7 +126,7 @@ export const useQueryStore = defineStore('query', {
 
     artistOptions: [],
     artistOptionsHasNext: false,
-    artistOptionsPerPage: 20,
+    artistOptionsPerPage: 10,
     artistOptionsPage: 1,
     artistOptionsLoading: false,
 
@@ -426,7 +426,7 @@ export const useQueryStore = defineStore('query', {
         if (this.artistOptionsPage === 1) {
           this.artistOptions = response.data.items;
         } else {
-          this.artistOptions = this.artistOptions.concat(response.data.items);
+          this.artistOptions = [...this.artistOptions, ...response.data.items];
         }
         this.artistOptionsHasNext = response.data.has_next;
         this.artistOptionsLoading = false;

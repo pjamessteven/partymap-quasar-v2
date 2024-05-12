@@ -24,7 +24,7 @@
 
       <div
         class="tab-wrapper flex items-center"
-        v-if="!previousRouteName && $q.screen.gt.sm"
+        v-if="!previousRouteName && $q.screen.gt.xs"
       >
         <div
           class="q-py-md q-mr-sm"
@@ -38,7 +38,7 @@
     </div>
     <DesktopSearchComponent
       class="desktop-search-component"
-      v-if="$q.screen.gt.xs && showSearchForRoute"
+      v-if="$q.screen.gt.sm && showSearchForRoute"
       :overlayingMap="overlayingContent"
     />
     <transition
@@ -73,11 +73,7 @@
       enter-active-class="animated fadeIn"
       leave-active-class="animated fadeOut"
     >
-      <MenuBarButtons
-        :color="iconColor"
-        class="right-buttons"
-        :onlyLogin="$q.screen.gt.xs"
-      />
+      <MenuBarButtons :color="iconColor" class="right-buttons" />
     </transition>
   </div>
 </template>
@@ -267,7 +263,6 @@ export default {
           this.$route.name === 'ArtistPage') &&
           ((this.$q.screen.gt.xs && this.menubarOpacity === 0) ||
             this.$q.screen.lt.sm)) ||
-        (this.$route.name === 'Explore' && !this.showPanel) ||
         (this.$route.name === 'Explore' && !this.showPanelBackground) ||
         (this.swipingDownMenuPageMobile && !this.showPanelBackground)
       );

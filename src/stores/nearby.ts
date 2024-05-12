@@ -158,7 +158,7 @@ export const useNearbyStore = defineStore('nearby', {
           date_min: moment().toISOString(),
           date_max: null,
           page: this.nearbyArtistsPage,
-          per_page: 15,
+          per_page: 10,
           location: JSON.stringify(main.userLocation),
           radius: this.queryRadius,
           sort: 'event_count',

@@ -32,7 +32,7 @@
 
         <div class="button-label flex row items-center row no-wrap">
           <div v-if="!controlTag || controlTag.length === 0">
-            <span v-if="$q.screen.gt.xs">All Tags</span><span v-else>Tags</span>
+            <span v-if="$q.screen.gt.md">All Tags</span><span v-else>Tags</span>
           </div>
           <div v-else>
             <span v-for="(tag, index) in controlTag" :key="index"

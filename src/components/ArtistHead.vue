@@ -1,43 +1,45 @@
 <template>
-  <router-link
-    class="artist-head-link"
-    style="text-decoration: none; color: inherit"
-    :to="{
-      name: 'ArtistPage',
-      params: { id: artist.id },
-      query: {
-        name: artist.name.replace(/ /g, '_'),
-        thumb_xs_url: artist?.media_items?.[0]?.thumb_xs_url,
-      },
-    }"
-  >
-    <div
-      class="artist-head-wrapper flex column justify-start items-center"
-      :class="$q.platform.is.ios ? 'no-hover' : ''"
+  <div>
+    <router-link
+      class="artist-head-link"
+      style="text-decoration: none; color: inherit"
+      :to="{
+        name: 'ArtistPage',
+        params: { id: artist.id },
+        query: {
+          name: artist.name.replace(/ /g, '_'),
+          thumb_xs_url: artist?.media_items?.[0]?.thumb_xs_url,
+        },
+      }"
     >
-      <div class="card-bottom-background" :style="getBgImgStyle()" />
-      <div class="artist-head flex column no-wrap">
-        <div class="artist-head-background shadow-2xl">
-          <img
-            :src="artist.media_items[0].thumb_xs_url"
-            v-if="artist.media_items && artist.media_items[0]"
-          />
-          <q-icon
-            v-else
-            size="2em"
-            class="t3"
-            name="mdi-account-music-outline"
-          />
-        </div>
-        <div
-          class="artist-name q-mt-sm inter bold ellipsis"
-          :class="{ 'text-large': false }"
-        >
-          {{ artist.name }}
+      <div
+        class="artist-head-wrapper flex column justify-start items-center"
+        :class="$q.platform.is.ios ? 'no-hover' : ''"
+      >
+        <div class="card-bottom-background" :style="getBgImgStyle()" />
+        <div class="artist-head flex column no-wrap">
+          <div class="artist-head-background shadow-2xl">
+            <img
+              :src="artist.media_items[0].thumb_xs_url"
+              v-if="artist.media_items && artist.media_items[0]"
+            />
+            <q-icon
+              v-else
+              size="2em"
+              class="t3"
+              name="mdi-account-music-outline"
+            />
+          </div>
+          <div
+            class="artist-name q-mt-sm inter bold ellipsis"
+            :class="{ 'text-large': false }"
+          >
+            {{ artist.name }}
+          </div>
         </div>
       </div>
-    </div>
-  </router-link>
+    </router-link>
+  </div>
 </template>
 
 <script>
@@ -137,7 +139,7 @@ export default {
     border-radius: 9px;
     overflow: hidden;
     z-index: -1;
-    filter: blur(50px) brightness(0.8);
+    filter: blur(30px) brightness(0.8);
     transform: rotate(180deg) scaleX(-1) scale(2);
     position: absolute;
     height: 100%;
