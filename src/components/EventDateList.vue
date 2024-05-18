@@ -203,6 +203,9 @@ const computedTotalResultMessage = computed(() => {
   grid-gap: 1rem;
   .ed-card {
     //max-height: 280px;
+    &:first-child {
+      margin-top: 0px;
+    }
     .card {
       height: 100%;
       .card-content {

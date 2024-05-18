@@ -26,6 +26,15 @@
   border: none !important;
 }
 
+@font-face {
+  font-family: chicagoflf;
+  src: url(./chicagoflf/ChicagoFLF.woff);
+}
+
+.chicago {
+  font-family: 'chicagoflf';
+}
+
 .inter {
   font-family: 'Inter';
   &.semibold {

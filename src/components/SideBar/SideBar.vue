@@ -501,7 +501,10 @@ watch(
     .sidebar {
       border: 1px solid black;
       background: black;
-
+      border-top: 1px solid $bi-4;
+      &.sidebar-mobile-expanded {
+        border-top-color: black;
+      }
       &.shadow {
         border: 1px solid $bi-3;
       }
@@ -789,6 +792,14 @@ watch(
     }
   }
 }
+@media only screen and (min-width: 1921px) {
+  .sidebar-wrapper {
+    .sidebar {
+      width: 66vw;
+      max-width: 1200px;
+    }
+  }
+}
 
 @media only screen and (max-width: 599px) {
   .body--dark {
@@ -798,12 +809,9 @@ watch(
       .sidebar {
         //border: none;
         box-shadow: none;
-        border-top: 1px solid $bi-4;
         //border-top: none;
         background: black;
-        &.sidebar-mobile-expanded {
-          border-top-color: black;
-        }
+
         .sidebar-content {
           background: black;
 

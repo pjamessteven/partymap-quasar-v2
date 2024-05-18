@@ -35,13 +35,13 @@
         key="1"
         name="nearby"
         content-class="tab"
-        label="Home"
+        label="Nearby"
         :ripple="false"
         :icon="
           $q.screen.lt.sm
             ? sidebarPanel === 'nearby'
-              ? 'mdi-home'
-              : 'mdi-home-outline'
+              ? 'mdi-near-me'
+              : 'mdi-near-me'
             : undefined
         "
       />
@@ -55,8 +55,8 @@
         :icon="
           $q.screen.lt.sm
             ? sidebarPanel === 'explore'
-              ? 'mdi-map-search'
-              : 'mdi-map-search-outline'
+              ? 'mdi-earth'
+              : 'mdi-earth'
             : undefined
         "
         label="Explore"
@@ -73,8 +73,8 @@
         :icon="
           $q.screen.lt.sm
             ? $route.name === 'BrowsePage'
-              ? 'mdi-feature-search'
-              : 'mdi-feature-search-outline'
+              ? 'mdi-text'
+              : 'mdi-text'
             : undefined
         "
         content-class="tab"
@@ -89,10 +89,10 @@
           $q.screen.lt.sm
             ? $route.name === 'UserPage'
               ? 'mdi-account-circle'
-              : 'mdi-account-circle-outline'
+              : 'mdi-account-circle'
             : undefined
         "
-        label="Profile"
+        label="You"
         content-class="tab"
         :ripple="false"
         :to="
@@ -105,7 +105,14 @@
         "
         exact
       />
-
+      <q-route-tab
+        v-show="false"
+        name="search"
+        key="5"
+        :ripple="false"
+        exact
+        :to="{ query: { view: 'search' }, name: 'Explore' }"
+      />
       <!--
       <q-tab
         key="4"

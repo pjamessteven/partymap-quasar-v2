@@ -10,7 +10,7 @@
       "
       ref="search"
       borderless
-      style="width: 260px"
+      style="width: 260px; height: 40px"
       dense
       autofocus
       @focus="onSearchbarFocus()"
@@ -22,7 +22,7 @@
     >
       <template v-slot:prepend>
         <div class="q-mr-xs q-ml-">
-          <i class="mdi mdi-magnify" />
+          <q-icon size="1.2em" name="mdi-magnify" />
         </div>
       </template>
       <template v-slot:append>

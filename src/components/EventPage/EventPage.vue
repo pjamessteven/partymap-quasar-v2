@@ -150,7 +150,6 @@
                         size="2em"
                       />
                       --></div>
-
                       <div
                         class="flex row justify-between items-center"
                         :class="{
@@ -178,7 +177,12 @@
                       </div>
 
                       <FeaturedMediaComponent
-                        style="route.query?.thumbXsUrl && !event ? 'filter: blur(5px)' : ''"
+                        @loaded="mediaLoaded"
+                        :style="
+                          $route.query?.thumbXsUrl && !event
+                            ? 'filter: blur(5px)'
+                            : ''
+                        "
                         v-if="
                           (!!event || route.query?.thumbXsUrl) &&
                           $q.screen.lt.md
@@ -186,74 +190,76 @@
                         :editing="editing"
                         class="q-mt-lg"
                         :item="event?.media_items?.[0]"
-                        :thumbXsUrl="route.query?.thumbXsUrl"
+                        :thumbXsUrl="route.query?.thumbXsUrl as any as string"
                       />
-
-                      <div
-                        class="flex grow justify-start items-start"
-                        v-if="!!event"
-                      >
-                        <SummaryComponent
-                          :editing="editing"
-                          :class="$q.screen.gt.sm ? 'q-mt-md' : 'q-mt-lg'"
-                        />
-                      </div>
-                      <div :class="$q.screen.gt.sm ? 'q-mt-lg' : 'q-mt-md'">
-                        <div class="flex row">
-                          <div class="flex col">
-                            <a
-                              class="flex grow"
-                              :href="computedExternalUrl"
-                              target="_blank"
-                              v-if="!!event && computedExternalUrl && !editing"
-                            >
-                              <q-btn
-                                no-caps
-                                color="grey-3"
-                                text-color="black"
-                                :label="
-                                  $q.screen.lt.sm
-                                    ? 'Visit Website'
-                                    : 'Visit website'
+                      <div class="flex column" v-if="imageLoaded && event">
+                        <div
+                          class="flex grow justify-start items-start"
+                          v-if="!!event"
+                        >
+                          <SummaryComponent
+                            :editing="editing"
+                            :class="$q.screen.gt.sm ? 'q-mt-md' : 'q-mt-lg'"
+                          />
+                        </div>
+                        <div :class="$q.screen.gt.sm ? 'q-mt-lg' : 'q-mt-md'">
+                          <div class="flex row">
+                            <div class="flex col">
+                              <a
+                                class="flex grow"
+                                :href="computedExternalUrl"
+                                target="_blank"
+                                v-if="
+                                  !!event && computedExternalUrl && !editing
                                 "
-                                icon="las la-external-link-alt"
-                                :class="$q.screen.gt.sm ? 'grow' : ' grow'"
-                              />
-                            </a>
-                          </div>
-                          <div class="flex col">
-                            <a
-                              :href="computedTicketUrl"
-                              target="_blank"
-                              class="flex grow q-ml-sm"
-                              v-if="!!event && computedTicketUrl && !editing"
-                            >
-                              <q-btn
-                                no-caps
-                                :disable="editing"
-                                color="grey-3"
-                                text-color="black"
-                                style="text-wrap: nowrap"
-                                :label="
-                                  $q.screen.lt.sm ? 'Tickets' : 'Get tickets'
-                                "
-                                size="md"
-                                class="border-radius flex grow"
-                                icon="las la-ticket-alt"
-                                :class="$q.screen.gt.sm ? '' : 'flex grow'"
-                              />
-                            </a>
+                              >
+                                <q-btn
+                                  no-caps
+                                  color="grey-3"
+                                  text-color="black"
+                                  :label="
+                                    $q.screen.lt.sm
+                                      ? 'Visit Website'
+                                      : 'Visit website'
+                                  "
+                                  icon="las la-external-link-alt"
+                                  :class="$q.screen.gt.sm ? 'grow' : ' grow'"
+                                />
+                              </a>
+                            </div>
+                            <div class="flex col">
+                              <a
+                                :href="computedTicketUrl"
+                                target="_blank"
+                                class="flex grow q-ml-sm"
+                                v-if="!!event && computedTicketUrl && !editing"
+                              >
+                                <q-btn
+                                  no-caps
+                                  :disable="editing"
+                                  color="grey-3"
+                                  text-color="black"
+                                  style="text-wrap: nowrap"
+                                  :label="
+                                    $q.screen.lt.sm ? 'Tickets' : 'Get tickets'
+                                  "
+                                  size="md"
+                                  class="border-radius flex grow"
+                                  icon="las la-ticket-alt"
+                                  :class="$q.screen.gt.sm ? '' : 'flex grow'"
+                                />
+                              </a>
+                            </div>
                           </div>
                         </div>
+                        <div
+                          class="flex row justify-between items-end no-wrap tags-wrapper o-080"
+                          :class="$q.screen.gt.sm ? 'q-pt-sm' : 'q-mt-sm'"
+                          v-if="event?.event_tags"
+                        >
+                          <TagsComponent :small="false" :editing="editing" />
+                        </div>
                       </div>
-                      <div
-                        class="flex row justify-between items-end no-wrap tags-wrapper o-080"
-                        :class="$q.screen.gt.sm ? 'q-pt-sm' : 'q-mt-sm'"
-                        v-if="event?.event_tags"
-                      >
-                        <TagsComponent :small="false" :editing="editing" />
-                      </div>
-
                       <!--
                       <q-rating
                         v-if="!!event"
@@ -274,6 +280,7 @@
                         v-if="!!event"
                         :editing="editing"
                         :item="event?.media_items?.[0]"
+                        @loaded="mediaLoaded"
                       />
                     </div>
                   </div>
@@ -281,7 +288,10 @@
 
                 <div
                   class="main-content"
-                  :class="$q.screen.gt.sm ? ' q-px-xl q-pb-xl q-pt-lg' : ''"
+                  :class="{
+                    ' q-px-xl q-pb-xl q-pt-lg': $q.screen.gt.sm,
+                    loading: !event,
+                  }"
                 >
                   <div
                     v-if="
@@ -927,6 +937,7 @@ const showingReportDialog = ref(false);
 const showingClaimDialog = ref(false);
 
 const loading = ref(false);
+const imageLoaded = ref(false);
 const showingHistory = ref(false);
 const showingSuggestionsDialog = ref(false);
 const showingAddEventPhotosDialog = ref(false);
@@ -951,6 +962,10 @@ let {
 const scrollArea = ref<HTMLElement>();
 
 const eventPage = ref();
+
+const mediaLoaded = () => {
+  imageLoaded.value = true;
+};
 
 const spring = ref();
 const motionProperties = ref();
@@ -1282,7 +1297,7 @@ const load = async () => {
 };
 
 onBeforeRouteLeave(() => {
-  if ($q.platform.is.android) {
+  if ($q.platform.is.mobile) {
     event.value = null;
   }
 });
@@ -1299,7 +1314,7 @@ onMounted(() => {
   const eventAlreadyLoaded =
     event.value && event.value?.id + '' === props.id + '';
 
-  if ($q.platform.is.android) {
+  if ($q.platform.is.mobile) {
     event.value = null;
     setTimeout(() => {
       load();
@@ -1543,7 +1558,6 @@ a {
             border-bottom: 1px solid $b-4 !important;
             background: white;
             min-height: 50vh;
-
             .event-buttons {
               //background: #fafafa; // z-index: 100;
 
@@ -1569,8 +1583,6 @@ a {
           }
 
           .content {
-            // background: white;
-
             :deep(.event-page-header) {
               background: white;
             }
@@ -1953,7 +1965,6 @@ a {
               border: none;
             }
             .header {
-              //min-height: 66vh !important;
               // background: green !important;
             }
           }

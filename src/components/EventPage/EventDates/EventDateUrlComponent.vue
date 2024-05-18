@@ -33,8 +33,7 @@
             style="text-decoration: none; line-break: anywhere"
             target="_blank"
           >
-            {{ selectedEventDate.url.substring(0, 40)
-            }}<span v-if="selectedEventDate.url.length > 40">...</span>
+            {{ urlSubstring }}
           </a>
         </div>
         <!--
@@ -125,6 +124,16 @@ export default {
         } else return this.selectedEventDate.url;
       } else {
         return null;
+      }
+    },
+    urlSubstring() {
+      if (this.selectedEventDate.url) {
+        let substring = this.selectedEventDate.url.substring(0, 36);
+        if (this.selectedEventDate.url.length > 36) substring += '...';
+
+        return substring;
+      } else {
+        return '';
       }
     },
   },

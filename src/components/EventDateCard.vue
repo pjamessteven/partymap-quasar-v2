@@ -309,9 +309,7 @@ export default {
       opacity: 0.8;
       transition: opacity 0.2s ease;
     }
-    &:first-child {
-      margin-top: 0px;
-    }
+
     .event-info {
       color: $ti-2;
     }
@@ -347,9 +345,6 @@ export default {
       border-top: 1px solid (rgba(255, 255, 255, 0.2));
 
       color: white !important;
-    }
-    &:first-child {
-      margin-top: 0px;
     }
 
     .event-info {

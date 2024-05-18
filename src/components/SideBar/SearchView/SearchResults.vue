@@ -147,7 +147,7 @@ export default {
           },
         });
       }
-      this.closeSearchBar();
+      //this.closeSearchBar();
     },
 
     clickLocationResult(location) {
@@ -158,8 +158,9 @@ export default {
       };
       let labelParts = location.label.split(', ');
       this.userLocationCountry = labelParts.pop();
-      this.userLocationCity = labelParts?.[0];
-      if (!this.userLocationCity) {
+      this.userLocationCity = labelParts?.[0] || this.userLocationCountry;
+      /*
+      if (this.userLocationCountry === this.userLocationCity) {
         // no city, country level zoom
         // give it some time because we want to use
         // the bandwidth to load the nearby view first
@@ -171,7 +172,7 @@ export default {
             toRaw(this.map).setZoom(4);
           }
         }, 1000);
-      }
+      }*/
       this.fineLocation = false;
       this.sidebarPanel = 'nearby';
       this.loadEverything();

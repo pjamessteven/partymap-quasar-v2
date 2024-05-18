@@ -26,13 +26,24 @@
         >
           <q-icon style="font-size: 18px" name="mdi-close" />
         </div>
-        <i class="las la-user-friends q-mr-sm q-ml-none q-pr-none" />
-
+        <q-icon
+          class="q-mr-sm"
+          size="1.4em"
+          name="las la-user-friends"
+          v-else
+        />
         <div class="button-label flex row items-center row no-wrap">
           <div>
             {{ $t('top_controls.select_size') }}
           </div>
         </div>
+        <q-icon
+          class="q-ml-xs"
+          size="1.4em"
+          name="mdi-menu-down"
+          style="margin-right: -8px"
+          v-if="$q.screen.gt.xs"
+        />
       </div>
       <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
         <div

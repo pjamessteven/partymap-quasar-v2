@@ -25,8 +25,11 @@
         >
           <q-icon style="font-size: 16px" name="mdi-close" />
         </div>
-        <i
-          class="las la-tags q-mr-sm q-ml-none q-pr-none"
+
+        <q-icon
+          class="q-mr-sm"
+          size="1.4em"
+          name="las la-hashtag"
           v-if="!controlTag || controlTag?.length == 0"
         />
 
@@ -44,6 +47,13 @@
               </span></span
             >
           </div>
+          <q-icon
+            class="q-ml-xs"
+            size="1.4em"
+            name="mdi-menu-down"
+            style="margin-right: -8px"
+            v-if="$q.screen.gt.xs"
+          />
         </div>
 
         <!--
@@ -274,6 +284,7 @@ export default {
         this.controlTag.splice(index, 1);
       } else {
         this.controlTag.push(tag);
+        this.onHide();
       }
     },
     onScrollMainContent(event) {
@@ -325,7 +336,7 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 400px;
-  max-width: 300px;
+  max-width: 500px;
 }
 @media only screen and (max-width: 599px) {
   .control-menu {

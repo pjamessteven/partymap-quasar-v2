@@ -102,15 +102,16 @@ function onScrollMainContent(info: {
   width: 100%;
   overflow: hidden;
   .artist-scroll-area {
-    height: 176px;
+    height: 196px;
     width: 100%;
+    /*
     mask-image: linear-gradient(
       to left,
       transparent 0px,
       white 32px,
       white calc(100% - 16px),
       transparent 100%
-    );
+    );*/
   }
   .pagination-icon {
     z-index: 100;

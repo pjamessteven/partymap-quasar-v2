@@ -175,6 +175,9 @@ export default {
 .country-select {
   :deep(.q-field__native) {
     font-weight: 800 !important;
+    span {
+      line-height: 1.2em;
+    }
   }
   :deep(.country-select-input) {
     font-weight: 800 !important;

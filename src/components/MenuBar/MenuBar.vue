@@ -18,7 +18,7 @@
         :style="
           !previousRouteName || swipingDownMenuPageMobile
             ? 'opacity: 1'
-            : 'opacity: 0'
+            : 'opacity: 0; pointer-events: none;'
         "
       />
 
@@ -37,6 +37,7 @@
       </div>
     </div>
     <DesktopSearchComponent
+      :class="{ 'q-mt-md': $q.screen.gt.lg }"
       class="desktop-search-component"
       v-if="$q.screen.gt.sm && showSearchForRoute"
       :overlayingMap="overlayingContent"

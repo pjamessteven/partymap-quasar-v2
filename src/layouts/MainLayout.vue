@@ -26,6 +26,11 @@
           v-if="$q.screen.lt.md"
           :overlayingMap="!showPanelBackground"
         />
+        <PopupSearchComponent
+          v-if="false"
+          class="search-component"
+          :overlayingMap="!showPanelBackground"
+        />
         <Transition
           appear
           :enter-active-class="
@@ -126,6 +131,7 @@ import { mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import { useMainStore } from 'src/stores/main';
 import { useEventStore } from 'src/stores/event';
+import PopupSearchComponent from 'src/components/Search/PopupSearchComponent.vue';
 
 export default {
   components: {
@@ -135,6 +141,7 @@ export default {
     MenuBarLogo,
     NavigationBar,
     SearchComponent,
+    PopupSearchComponent,
   },
   data() {
     return {
@@ -432,7 +439,7 @@ export default {
 
   .event-page-enter-active {
     transform: translate3d(0, 0, 0) !important;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease-in-out;
     z-index: 5000;
     //opacity: 1;
   }
@@ -459,7 +466,7 @@ export default {
       calc(100vh - Max(calc((100vh - 66vh) - 64px), 0px)),
       0
     ) !important;
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease-in-out;
 
     //opacity: 0;
   }
@@ -470,18 +477,6 @@ export default {
       .overlay {
         background: black;
       }
-      .map-container {
-        .map-overlay {
-          background: linear-gradient(
-            rgba(0, 0, 0, 0.68),
-            rgba(0, 0, 0, 0.6) 62px,
-            transparent 128px,
-            transparent calc(100% - 274px),
-            rgba(0, 0, 0, 0.68) calc(100% - 200px),
-            rgba(0, 0, 0, 0.68) 100%
-          );
-        }
-      }
     }
   }
   .body--light {
@@ -489,32 +484,55 @@ export default {
       .overlay {
         background: white;
       }
+    }
+  }
+
+  .native-mobile {
+    .main-layout {
       .map-container {
         .map-overlay {
           background: linear-gradient(
-            rgba(0, 0, 0, 0.68),
-            rgba(0, 0, 0, 0.6) 62px,
-            transparent 128px,
+            rgba(0, 0, 0, 1),
+            rgba(0, 0, 0, 0.48) 148px,
+            transparent 200px,
             transparent calc(100% - 274px),
             rgba(0, 0, 0, 0.68) calc(100% - 200px),
             rgba(0, 0, 0, 0.68) 100%
           );
           &.nearby-map-overlay-mobile {
             background: linear-gradient(
-              rgba(0, 0, 0, 0.68),
-              rgba(0, 0, 0, 0.6) 62px,
-              transparent 128px,
-              transparent 156px,
-              rgba(0, 0, 0, 0.68) 220px,
-              rgba(0, 0, 0, 0.68) 100%
+              rgba(0, 0, 0, 1),
+              rgba(0, 0, 0, 0.48) 120px,
+              rgba(0, 0, 0, 0.48) 200px,
+              rgba(0, 0, 0, 0) 100%
             );
           }
         }
       }
     }
   }
-
   .main-layout {
+    .map-container {
+      .map-overlay {
+        background: linear-gradient(
+          rgba(0, 0, 0, 0.8),
+          rgba(0, 0, 0, 0) 168px,
+          transparent 200px,
+          transparent calc(100% - 274px),
+          rgba(0, 0, 0, 0.68) calc(100% - 200px),
+          rgba(0, 0, 0, 0.68) 100%
+        );
+
+        &.nearby-map-overlay-mobile {
+          background: linear-gradient(
+            rgba(0, 0, 0, 0.8),
+            rgba(0, 0, 0, 0.4) 120px,
+            rgba(0, 0, 0, 0.4) 200px,
+            rgba(0, 0, 0, 0) 100%
+          );
+        }
+      }
+    }
     .main-layout-router {
       padding-top: calc(62px + var(--safe-area-inset-top));
       // ios specific top padding
@@ -531,9 +549,6 @@ export default {
       }
     }
 
-    .overlay {
-      // transition: opacity 0.3s;
-    }
     .main-inner-layout {
       .sidebar-component-wrapper {
         position: unset;

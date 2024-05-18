@@ -104,9 +104,9 @@ export default {
 .artist-head-wrapper {
   transition: all 0.3s ease;
   border-radius: 9px;
-  width: 128px;
-  height: 156px;
-  max-width: 128px;
+  width: 144px;
+  height: 176px;
+  max-width: 144px;
   position: relative;
   overflow: hidden;
   transition: opacity 0.3s;
@@ -204,6 +204,9 @@ export default {
 
 @media only screen and (max-width: 599px) {
   .artist-head-wrapper {
+    width: 128px;
+    height: 156px;
+    max-width: 128px;
     .artist-head {
     }
   }

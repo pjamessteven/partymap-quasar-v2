@@ -21,7 +21,7 @@
           class="flex column mobile-location-header"
           style="width: 100%"
           :class="{
-            'q-px-lg q-mb-sm q-mt-md': $q.screen.gt.lg,
+            'q-px-lg q-mt-md': $q.screen.gt.lg,
             'q-px-lg q-mt-sm': $q.screen.gt.sm && $q.screen.lt.xl,
             'q-px-md  q-mt-md ': $q.screen.lt.md,
           }"
@@ -100,7 +100,7 @@
           class="flex message"
           :class="{
             'q-mx-lg  q-mt-sm q-mb-sm ': $q.screen.gt.sm,
-            'q-mx-lg  q-mb-md ': $q.screen.gt.lg,
+            'q-mx-lg  q-mb-sm ': $q.screen.gt.lg,
 
             'q-mx-md q-mt-sm q-pb-xs ': $q.screen.lt.md,
           }"
@@ -215,9 +215,8 @@
         <div
           class="flex row justify-center items-center loading-wrapper"
           v-if="
-            loadingEverything ||
-            !computedSidebarPanelReady ||
-            userLocationLoading
+            !userLocationLoading &&
+            (loadingEverything || !computedSidebarPanelReady)
           "
         >
           <!--
@@ -270,7 +269,8 @@
                       $q.screen.gt.sm
                         ? {
                             bottom: '0px',
-                            height: '8px',
+                            height: '4px',
+                            borderRadius: '0px',
                             marginLeft: '24px',
                           }
                         : { bottom: '0px', height: '0px' }
@@ -280,7 +280,7 @@
                       class="flex row no-wrap q-gutter-md"
                       :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-px-md'"
                     >
-                      <EventDatePoster
+                      <EventDateCard
                         v-for="(ed, index) in userEventDates"
                         :key="index"
                         :hideInfo="true"
@@ -615,6 +615,7 @@ import EventDatePosterList from 'src/components/EventDatePosterList.vue';
 import InnerLoading from 'src/components/InnerLoading.vue';
 import { useAuthStore } from 'src/stores/auth';
 import EventDatePoster from 'src/components/EventDatePoster.vue';
+import EventDateCard from 'src/components/EventDateCard.vue';
 
 import _ from 'lodash';
 
@@ -647,7 +648,7 @@ export default {
     EventDatePosterList,
     // EventDateViewOptions,
     InnerLoading,
-    EventDatePoster,
+    EventDateCard,
     NearbyCountrySelect,
   },
   data() {
@@ -1143,7 +1144,7 @@ export default {
         top: -1px;
         z-index: 1000;
         width: 100%;
-
+        font-weight: 500;
         // text-transform: lowercase;
       }
     }
@@ -1157,7 +1158,7 @@ export default {
     .loading-wrapper {
       pointer-events: none !important;
       position: absolute;
-      height: 100vh;
+      height: calc(100vh - 128px); // account for desktop hiddenYposition
       width: 100%;
       justify-content: center;
       display: flex;
@@ -1211,8 +1212,9 @@ export default {
   }
 
   .user-event-scroll-area {
-    height: 288px;
+    height: 248px;
     margin-bottom: -8px;
+    /*
     mask-image: linear-gradient(
       to left,
       transparent 0px,
@@ -1220,10 +1222,10 @@ export default {
       white calc(100% - 16px),
       transparent 100%
     );
+    */
     width: 100%;
-    :deep(.ed-poster) {
-      width: 150px;
-      min-width: 150px;
+    :deep(.ed-card) {
+      width: 450px;
     }
   }
   .tag-scroll-area {
@@ -1297,6 +1299,8 @@ export default {
   .nearby-page {
     .scroll-stuff {
       .loading-wrapper {
+        height: calc(100vh - 172px); // account for desktop hiddenYposition
+
         pointer-events: none;
         //margin-top: calc(var(--safe-area-inset-top));
       }
@@ -1321,9 +1325,9 @@ export default {
     }
     .user-event-scroll-area {
       mask-image: unset;
-      height: 288px;
-      :deep(.ed-poster) {
-        max-width: 128px;
+      height: 180px;
+      :deep(.ed-card) {
+        max-width: 374px;
       }
     }
 

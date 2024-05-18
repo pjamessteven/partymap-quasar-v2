@@ -136,7 +136,7 @@ export const useMainStore = defineStore('main', {
                 const unknownCityCoords =
                   position.coords.latitude + ', ' + position.coords.longitude;
                 //  this.userLocationCity = unknownCityCoords;
-                this.userLocationCity = 'Finding your location...';
+                this.userLocationCity = '...';
               }
 
               this.userLocation = {

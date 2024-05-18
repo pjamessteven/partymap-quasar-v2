@@ -122,12 +122,35 @@ export default {
           this.userLocation?.lat &&
           // !this.userLocationFromSearch &&
           newv === 'nearby'
-        )
+        ) {
           // go to users location
           this.fitBoundsForNearbyPage(this.userLocation);
+        }
+        if (this.$q.screen.lt.sm) {
+          // hide map markers on nearby page
+          if (
+            this.mapMarkers &&
+            toRaw(this.map).hasLayer(toRaw(this.mapMarkers))
+          ) {
+            toRaw(this.mapMarkers).remove();
+          }
+        }
       }
       if (newv === 'explore' && oldv === 'nearby') {
         this.fitBoundsForExplorePage(this.userLocation);
+      }
+      if (newv === 'explore') {
+        if (
+          this.$q.screen.lt.sm &&
+          !toRaw(this.map).hasLayer(toRaw(this.mapMarkers))
+        ) {
+          // possible performance issue
+          if (toRaw(this.mapMarkers)) {
+            toRaw(this.mapMarkers).addTo(toRaw(this.map));
+          } else {
+            this.clearMarkersAndLoadPoints();
+          }
+        }
       }
     },
     darkMode() {
@@ -781,11 +804,15 @@ export default {
           marker.data = this.points[i];
           tooltipMarkers.push(marker);
         }
+        // on mobile markers are hidden on nearby view - handled by watcher
         toRaw(this.mapMarkers).addLayers(tooltipMarkers);
+
         //toRaw(this.mapMarkersPermanentTooltip).addLayers(tooltipMarkers);
 
         this.markersLoaded = true;
-        toRaw(this.map).addLayer(toRaw(this.mapMarkers));
+        if (this.$q.screen.gt.xs || this.sidebarPanel == 'explore') {
+          toRaw(this.map).addLayer(toRaw(this.mapMarkers));
+        }
         //toRaw(this.map).addLayer(toRaw(this.mapMarkersPermanentTooltip));
         //this.mapMarkers.addTo(toRaw(this.map));
       }
@@ -965,7 +992,7 @@ export default {
     }
   }
   .map {
-    background: white;
+    background: black;
     .leaflet-map-pane {
       .leaflet-marker-pane {
         .marker-icon {

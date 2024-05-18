@@ -22,9 +22,13 @@
         >
           <q-icon style="font-size: 16px" name="mdi-close" />
         </div>
-        <div v-if="!controlDateRangeSelectedOption?.value" class="q-mr-sm">
-          <i class="las la-calendar" />
-        </div>
+        <q-icon
+          class="q-mr-sm"
+          size="1.5em"
+          name="las la-calendar"
+          v-if="!controlDateRangeSelectedOption?.value"
+        />
+
         <div class="button-label flex row items-center row no-wrap">
           <div v-if="!!controlDateRangeSelectedOption?.value">
             {{ controlDateRangeSelectedOption.label }}
@@ -32,6 +36,13 @@
           <div v-else-if="$q.screen.lt.sm || $q.screen.gt.md">Any Dates</div>
           <div v-else>Dates</div>
         </div>
+        <q-icon
+          v-if="$q.screen.gt.xs"
+          class="q-ml-xs"
+          size="1.4em"
+          name="mdi-menu-down"
+          style="margin-right: -8px"
+        />
       </div>
       <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
         <div class="calendar-header flex row no-wrap items-start" style="">

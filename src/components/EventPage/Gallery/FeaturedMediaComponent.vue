@@ -50,24 +50,33 @@
           />
         </video>
 -->
-        <img
-          v-show="!loaded && thumbXsUrl && false"
-          style="
-            height: auto;
+        <transition appear enter-active-class="animated fadeIn slower">
+          <img
+            v-show="!loaded && thumbXsUrl"
+            style="
+              height: auto;
 
-            filter: blur(20px);
-            transform: scale(1.2);
-          "
-          :src="thumbXsUrl"
-        />
-
-        <img
-          style="height: auto"
-          v-show="loaded"
-          :src="logo?.thumb_url"
-          @load="loaded = true"
-        />
+              filter: blur(20px);
+              transform: scale(1.2);
+            "
+            :src="thumbXsUrl"
+          />
+        </transition>
+        <transition appear enter-active-class="animated fadeIn slower">
+          <img
+            v-show="loaded"
+            style="height: auto"
+            :src="logo?.thumb_url"
+            @load="
+              () => {
+                loaded = true;
+                $emit('loaded');
+              }
+            "
+          />
+        </transition>
       </div>
+
       <!--
       <div
         class="flex row no-wrap justify-start grow q-pt-sm"
@@ -131,9 +140,7 @@ export default {
     };
   },
   methods: {},
-  mounted() {
-    this.loaded = false;
-  },
+  watch: {},
   computed: {
     ...mapState(useEventStore, ['event', 'currentUserCanEdit']),
     ...mapState(useAuthStore, ['currentUser']),
