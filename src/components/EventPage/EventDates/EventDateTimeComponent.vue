@@ -65,8 +65,8 @@
                 selectedEventDate.tz
               )
             }}</span>
-            <span v-else>
-              {{
+            <span v-else
+              >{{
                 localDateTimeShort(
                   selectedEventDate.end_naive,
                   selectedEventDate.tz
@@ -82,15 +82,19 @@
         >
           <div class="t2">
             <span>
-              {{
-                monthYear(selectedEventDate.start_naive, selectedEventDate.tz)
+              Usually happens in&nbsp;{{
+                month(selectedEventDate.start_naive, selectedEventDate.tz)
               }}
             </span>
-            &nbsp;
+            <br />
             <span
               class="t4 link-hover underline"
               @click.stop="showEditDialog = true"
-              >(Confirm exact date)
+              >Confirm exact date</span
+            >&nbsp;or&nbsp;<span
+              class="t4 link-hover underline"
+              @click.stop="showEditDialog = true"
+              >Mark as cancelled
             </span>
           </div>
         </div>
@@ -344,7 +348,7 @@ export default {
     this.localDateLong = common.localDateLong;
     this.localTimeCompact = common.localTimeCompact;
     this.timeZoneAbbreviention = common.timeZoneAbbreviention;
-    this.monthYear = common.monthYear;
+    this.month = common.month;
     this.recurringPattern = common.recurringPattern;
   },
 };

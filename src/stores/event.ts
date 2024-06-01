@@ -50,6 +50,9 @@ export const useEventStore = defineStore('event', {
     backgroundMediaIndex: 0,
   }),
   getters: {
+    eventHasHost: (state) => {
+      return !!state.event?.host?.username;
+    },
     currentUserCanEdit: (state) => {
       const authStore = useAuthStore();
       return (

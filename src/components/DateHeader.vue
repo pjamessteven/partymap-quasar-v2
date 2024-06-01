@@ -5,7 +5,7 @@
       :class="{
         ' q-px-md q-pb-md  semibold t1 inter  ': $q.screen.gt.sm,
         'q-pt-md': $q.screen.gt.xs && $route.name !== 'Explore',
-        'q-px-sm q-ml-xs q-py-md t2 semibold': $q.screen.lt.md,
+        'q-px-sm q-ml-xs q-py-md t1 semibold': $q.screen.lt.md,
       }"
     >
       <span v-if="!!altLabel">{{ altLabel }}</span>
@@ -53,7 +53,8 @@ export default {
     width: 100%;
     display: flex;
     align-items: center;
-    //font-size: 1rem;
+    font-size: 1rem;
+    font-weight: 700;
     //bottom: 4px;
     //padding: 32px 0;
   }
@@ -80,9 +81,13 @@ export default {
       background: black !important;
     }
   }
-  .date-header {
-    //width: calc(100% - 64px) !important;
-    //padding-right: 64px !important;
+  .date-header-wrapper {
+    .date-header {
+      //width: calc(100% - 64px) !important;
+      //padding-right: 64px !important;
+      font-size: unset;
+      font-weight: 700;
+    }
   }
 }
 </style>

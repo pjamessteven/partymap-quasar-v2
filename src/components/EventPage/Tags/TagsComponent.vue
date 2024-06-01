@@ -15,6 +15,14 @@
           v-for="(et, index) in event?.event_tags"
           :key="index"
           :value="et.tag"
+          style="pointer-events: none"
+        />
+        <Tag
+          v-if="!eventHasHost && !editing"
+          :small="small"
+          :key="-1"
+          value="Add tag +"
+          @click="() => (showAddTagDialog = true)"
         />
       </div>
       <div
@@ -72,7 +80,7 @@ export default {
   },
   watch: {},
   computed: {
-    ...mapState(useEventStore, ['event']),
+    ...mapState(useEventStore, ['event', 'eventHasHost']),
   },
 };
 </script>

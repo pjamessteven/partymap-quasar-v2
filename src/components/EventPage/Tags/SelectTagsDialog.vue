@@ -6,7 +6,7 @@
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>
 
-    <q-card-section class="flex column no-wrap q-mt-sm">
+    <q-card-section class="flex column no-wrap q-pt-none">
       <div class="t3 q-mb-md">{{ $t('suggestions.event_tags_msg') }}</div>
       <SelectTagsComponent
         :showTopTags="true"

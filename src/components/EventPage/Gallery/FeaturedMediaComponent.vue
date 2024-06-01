@@ -157,7 +157,7 @@ export default {
       const otherImages = this.event?.media_items?.filter(
         (x) => !x?.attributes?.isLineupImage
       );
-      if (otherImages?.length > 0 && nextEventDateLineupImages.length > 0) {
+      if (otherImages?.length > 0 && nextEventDateLineupImages?.length > 0) {
         return [
           ...otherImages?.slice(0, 1), // logo
           ...nextEventDateLineupImages, // next lineup images

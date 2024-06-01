@@ -22,7 +22,6 @@
         v-if="$route.name === 'Explore' || $q.screen.lt.sm"
       >
         <div
-          :class="{ 'q-mr-sm': $q.screen.lt.xl }"
           class="flex items-center no-wrap"
           v-show="
             $q.screen.gt.md || ($q.screen.lt.lg && sidebarPanel === 'search')
@@ -36,7 +35,7 @@
             v-if="$q.screen.lt.lg && sidebarPanel === 'search'"
           />
           <div
-            class="controls-wrapper flex no-wrap"
+            class="controls-wrapper flex no-wrap q-mr-sm"
             :class="{
               'mobile-search-wrapper':
                 $q.screen.lt.lg && sidebarPanel === 'search',
@@ -52,9 +51,8 @@
           v-show="$q.screen.gt.md || sidebarPanel !== 'search'"
         >
           <div
-            class="controls-wrapper flex no-wrap"
+            class="controls-wrapper flex no-wrap q-mr-sm"
             v-if="$q.screen.gt.xs && $q.screen.lt.lg"
-            :class="{ 'q-mr-sm': $q.screen.lt.lg }"
           >
             <div class="controls-wrapper-inner">
               <q-btn
@@ -69,7 +67,11 @@
                 <div class="flex items-center row no-wrap">
                   <div class="flex row items-center row no-wrap">
                     <div class="q-mr-sm q-ml-sm">
-                      <i class="mdi mdi-magnify" />
+                      <q-icon
+                        size="1.5em"
+                        name="mdi-magnify"
+                        v-if="!controlDateRangeSelectedOption?.value"
+                      />
                     </div>
                     <div class="q-mr-sm" style="white-space: nowrap">
                       Search
@@ -81,8 +83,8 @@
           </div>
           <div
             class="separator vertical"
-            v-if="$q.screen.gt.lg"
-            :class="{ 'q-mx-lg': $q.screen.gt.md, 'q-mx-md': $q.screen.lt.lg }"
+            v-if="$q.screen.gt.lg && false"
+            :class="{ 'q-mx-md': $q.screen.gt.md }"
           />
           <!--<div class="text-white q-ml-md">Filter:</div>-->
           <div class="controls-wrapper flex no-wrap">
@@ -415,7 +417,7 @@ export default {
     }
     &.overlaying-map {
       .separator {
-        color: $bi-4;
+        color: $ti-4;
       }
       .controls-wrapper {
         backdrop-filter: blur(40px);

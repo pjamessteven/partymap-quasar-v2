@@ -45,7 +45,8 @@
               ></span
             ></span
           ><span v-else class="t4 inter text-large q-mt-sm">
-            Nothing here yet.
+            Gizzus a general description of this event. There's nothing here
+            yet.
           </span>
         </div>
       </div>

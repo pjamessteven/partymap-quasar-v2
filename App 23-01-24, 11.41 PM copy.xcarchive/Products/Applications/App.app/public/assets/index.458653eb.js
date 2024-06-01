@@ -11786,7 +11786,7 @@ var QP = {
       change_schedule: 'Change Schedule',
       schedule_msg:
         'PartyMap can automatically add future dates if this event happens on a regular basis',
-      remove_schedule: 'Remove schedule',
+      remove_schedule: 'Mark as cancelled',
       remove_schedule_msg:
         'Stop automatically generating dates if this event no longer happens on a regular basis',
       date: 'Date and time',
@@ -11920,7 +11920,7 @@ var QP = {
       ends: 'Ends',
       directions: 'Directions',
       add_info:
-        "Add a detailed description about what's happening on this date",
+        'Add a description specific to this date (for',
       add_ticket_url: 'Add a link to your ticketing page',
       add_url: 'Add a link to the website or Facebook page',
       add_lineup: 'Add the lineup',

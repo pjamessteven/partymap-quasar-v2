@@ -13,6 +13,7 @@ interface MainStoreState {
   showSidebar: boolean;
   showSearchBox: boolean;
   sidebarPanel: string;
+  sidebarMinimized: boolean;
   showPanel: boolean;
   showPanelBackground: boolean;
   sidebarOpacity: number;
@@ -37,6 +38,7 @@ export const useMainStore = defineStore('main', {
     safeAreaInsets: { top: 0, bottom: 0, left: 0, right: 0 },
     disableAnimations: false,
     darkMode: false,
+    sidebarMinimized: false,
     showSidebar: true,
     showSearchBox: false, // for menubar search
     sidebarPanel: 'nearby',

@@ -239,7 +239,7 @@
                   class="q-py-md location-header"
                   :class="
                     $q.screen.gt.sm
-                      ? 'q-px-lg q-mt-sm t1 inter semibold'
+                      ? 'q-px-lg  t1 inter semibold'
                       : 'q-pl-md t1 inter semibold'
                   "
                 >
@@ -261,11 +261,11 @@
                         : { bottom: '0px', height: '0px' }
                     "
                   >
-                    <div class="flex column" v-if="$q.screen.gt.xs">
+                    <div class="flex column">
                       <div class="flex row no-wrap q-gutter-sm">
                         <div
                           v-for="(tag, index) in nearbyTags.filter(
-                            (x, i) => i % 3 === 0
+                            (x, i) => i % 2
                           )"
                           :key="index"
                           @click="clickTag(tag)"
@@ -279,51 +279,7 @@
                       <div class="flex row no-wrap q-gutter-sm q-pt-sm">
                         <div
                           v-for="(tag, index) in nearbyTags.filter(
-                            (x, i) => i % 3 === 1
-                          )"
-                          :key="index"
-                          @click="clickTag(tag)"
-                          class="tag t2 text- inter semibold"
-                          style="text-transform: capitalize"
-                          :class="$q.platform.is.ios ? 'no-hover' : ''"
-                        >
-                          {{ tag.tag }}
-                        </div>
-                      </div>
-                      <div class="flex row no-wrap q-gutter-sm q-pt-sm">
-                        <div
-                          v-for="(tag, index) in nearbyTags.filter(
-                            (x, index) => index % 3 === 2
-                          )"
-                          :key="index"
-                          @click="clickTag(tag)"
-                          class="tag t2 text- inter semibold"
-                          style="text-transform: capitalize"
-                          :class="$q.platform.is.ios ? 'no-hover' : ''"
-                        >
-                          {{ tag.tag }}
-                        </div>
-                      </div>
-                    </div>
-                    <div class="flex column" v-else>
-                      <div class="flex row no-wrap q-gutter-sm">
-                        <div
-                          v-for="(tag, index) in nearbyTags.filter(
-                            (x, i) => i % 2 === 0
-                          )"
-                          :key="index"
-                          @click="clickTag(tag)"
-                          class="tag t2 text- inter semibold"
-                          style="text-transform: capitalize"
-                          :class="$q.platform.is.ios ? 'no-hover' : ''"
-                        >
-                          {{ tag.tag }}
-                        </div>
-                      </div>
-                      <div class="flex row no-wrap q-gutter-sm q-pt-sm">
-                        <div
-                          v-for="(tag, index) in nearbyTags.filter(
-                            (x, i) => i % 2 === 1
+                            (x, i) => i % 2 !== 1
                           )"
                           :key="index"
                           @click="clickTag(tag)"
@@ -344,7 +300,7 @@
                   class="q-py-md location-header"
                   :class="
                     $q.screen.gt.sm
-                      ? 'q-px-lg q-mt-sm  t1 inter semibold'
+                      ? 'q-px-lg  t1 inter semibold'
                       : 'q-pl-md t1'
                   "
                 >
@@ -362,51 +318,7 @@
                         : { bottom: '0px', height: '0px' }
                     "
                   >
-                    <div class="flex column" v-if="$q.screen.gt.xs">
-                      <div class="flex row no-wrap q-gutter-sm">
-                        <div
-                          v-for="(tag, index) in tagOptions.filter(
-                            (x, i) => i % 3 === 0
-                          )"
-                          :key="index"
-                          @click="clickTag(tag)"
-                          class="tag t2 text- inter semibold"
-                          style="text-transform: capitalize"
-                          :class="$q.platform.is.ios ? 'no-hover' : ''"
-                        >
-                          {{ tag.tag }}
-                        </div>
-                      </div>
-                      <div class="flex row no-wrap q-gutter-sm q-pt-sm">
-                        <div
-                          v-for="(tag, index) in tagOptions.filter(
-                            (x, i) => i % 3 === 1
-                          )"
-                          :key="index"
-                          @click="clickTag(tag)"
-                          class="tag t2 text- inter semibold"
-                          style="text-transform: capitalize"
-                          :class="$q.platform.is.ios ? 'no-hover' : ''"
-                        >
-                          {{ tag.tag }}
-                        </div>
-                      </div>
-                      <div class="flex row no-wrap q-gutter-sm q-pt-sm">
-                        <div
-                          v-for="(tag, index) in tagOptions.filter(
-                            (x, index) => index % 3 === 2
-                          )"
-                          :key="index"
-                          @click="clickTag(tag)"
-                          class="tag t2 text- inter semibold"
-                          style="text-transform: capitalize"
-                          :class="$q.platform.is.ios ? 'no-hover' : ''"
-                        >
-                          {{ tag.tag }}
-                        </div>
-                      </div>
-                    </div>
-                    <div class="flex column" v-else>
+                    <div class="flex column">
                       <div class="flex row no-wrap q-gutter-sm">
                         <div
                           v-for="(tag, index) in tagOptions.filter(
@@ -445,7 +357,7 @@
                   class="location-header q-py-md inter"
                   :class="
                     $q.screen.gt.sm
-                      ? 'q-px-lg t1 q-mt-sm inter semibold'
+                      ? 'q-px-lg t1 inter semibold'
                       : 'q-pl-md t1 semibold'
                   "
                 >
@@ -456,7 +368,7 @@
                   :artists="nearbyArtists"
                   :hasNext="nearbyArtistsHasNext"
                   :loadMore="debouncedLoadNearbyArtists"
-                  :style="$q.screen.gt.sm ? 'margin-bottom: -12px' : ''"
+                  :style="$q.screen.gt.sm ? 'margin-bottom: -24px' : ''"
                 />
               </div>
 
@@ -467,7 +379,7 @@
                   class="location-header q-py-md inter semibold"
                   :class="
                     $q.screen.gt.sm
-                      ? 'q-pl-lg  q-mt-sm t1 inter semibold'
+                      ? 'q-pl-lg  t1 inter semibold'
                       : 'q-pl-md t1'
                   "
                 >
@@ -478,7 +390,7 @@
                   :artists="artistOptions"
                   :hasNext="artistOptionsHasNext"
                   :loadMore="debouncedLoadArtistOptions"
-                  :style="$q.screen.gt.sm ? 'margin-bottom: -12px' : ''"
+                  :style="$q.screen.gt.sm ? 'margin-bottom: -24px' : ''"
                 />
               </div>
               <!-- NEARBY EVENTS -->
@@ -491,8 +403,8 @@
                   class="q-py-md location-header flex justify-between"
                   :class="
                     $q.screen.gt.sm
-                      ? 'q-px-lg q-mt-sm t1 inter semibold'
-                      : 'q-px-md q-mt-sm t1 inter semibold'
+                      ? 'q-px-lg t1 inter semibold'
+                      : 'q-px-md t1 inter semibold'
                   "
                 >
                   <div class="text-">Your upcoming events:</div>
@@ -540,7 +452,9 @@
                 </div>
                 <div
                   :class="
-                    $q.screen.lt.md ? 'q-px-md ' : 'q-px-lg q-mt-sm q-mb-sm'
+                    $q.screen.lt.md
+                      ? 'q-px-md q-mt-s'
+                      : 'q-px-lg q-mt-sm q-mb-sm'
                   "
                 >
                   <q-separator />
@@ -552,8 +466,8 @@
                 class="t1 inter semibold location-header q-py-sm flex row items-center justify-between"
                 :class="
                   $q.screen.gt.sm
-                    ? 'q-pl-lg q-mt-sm t1 inter semibold'
-                    : 'q-pl-md q-mt-sm'
+                    ? 'q-pl-lg q-mt-md t1 inter semibold'
+                    : 'q-pl-md'
                 "
               >
                 <div class="flex items-center">
@@ -578,12 +492,6 @@
                         v-if="$q.screen.gt.sm "
                       />
                       -->
-              </div>
-              <div
-                :class="$q.screen.gt.sm ? 'q-pl-lg t3 ' : 'q-pl-md t3'"
-                v-if="nearbyEventDates.length === 0"
-              >
-                No nearby events! Try selecting a wider radius.
               </div>
               <transition appear enter-active-class="animated fadeIn slower">
                 <EventDateList
@@ -625,9 +533,7 @@
               <div
                 class="t1 inter semibold location-header flex row items-center justify-between"
                 :class="
-                  $q.screen.gt.sm
-                    ? 'q-pl-sm q-mt-sm t1 inter semibold'
-                    : 'q-pl-sm t1'
+                  $q.screen.gt.sm ? 'q-pl-sm  t1 inter semibold' : 'q-pl-sm t1'
                 "
                 v-if="eventDates && eventDates.length > 0"
                 style="height: 56px"
@@ -1238,8 +1144,7 @@ export default {
         top: -1px;
         z-index: 1000;
         width: 100%;
-        font-weight: 700;
-        font-size: 1rem;
+        font-weight: 500;
         // text-transform: lowercase;
       }
     }
@@ -1324,7 +1229,7 @@ export default {
     }
   }
   .tag-scroll-area {
-    height: 128px;
+    height: 90px;
     mask-image: linear-gradient(to left, transparent 0px, white 64px);
     width: 100%;
     .tag {
@@ -1392,25 +1297,19 @@ export default {
   }
 
   .nearby-page {
-    .scroll-area {
-      .scroll-stuff {
-        .location-header {
-          font-size: unset;
-          font-weight: 700;
-        }
-        .loading-wrapper {
-          height: calc(100vh - 172px); // account for desktop hiddenYposition
+    .scroll-stuff {
+      .loading-wrapper {
+        height: calc(100vh - 172px); // account for desktop hiddenYposition
 
-          pointer-events: none;
-          //margin-top: calc(var(--safe-area-inset-top));
-        }
-        .message {
-          border-radius: 0px;
-          border-left: none !important;
-          border-right: none !important;
-          border: none;
-          // margin-bottom: -16px !important;
-        }
+        pointer-events: none;
+        //margin-top: calc(var(--safe-area-inset-top));
+      }
+      .message {
+        border-radius: 0px;
+        border-left: none !important;
+        border-right: none !important;
+        border: none;
+        // margin-bottom: -16px !important;
       }
     }
 

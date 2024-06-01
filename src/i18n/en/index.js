@@ -495,7 +495,7 @@ export default {
     times: 'times',
   },
   suggestions: {
-    improve_this_page: 'Update this page',
+    improve_this_page: 'Edit this page',
     improve_this_page_msg:
       'If the information on this page is incorrect you can help other people by updating it! All updates are moderated.',
     general: 'General',
@@ -605,7 +605,7 @@ export default {
     upcoming_dates: 'Event dates:',
     past_dates: 'No upcoming dates.',
     change_schedule: 'Change schedule',
-    remove_schedule: 'Remove schedule',
+    remove_schedule: 'Mark as cancelled',
     remove_schedule_confirm:
       'Are you sure? All future scheduled dates will be deleted.',
     schedule_msg:
@@ -649,8 +649,8 @@ export default {
     starts: 'Starts',
     ends: 'Ends',
     directions: 'Directions',
-    add_info: "Add a detailed description about what's happening on this date",
-    add_ticket_url: 'Add a link to your ticketing page',
+    add_info: 'Add a description for this specific date (for recurring events)',
+    add_ticket_url: 'Add a link to the ticketing page',
     add_url: 'Add a link to the website or Facebook page',
     add_lineup: 'Add the lineup',
     show_all: 'Show all',
@@ -658,9 +658,9 @@ export default {
     add_size: 'Add the size of this event',
     size_people: 'people attending',
     cancelled: 'CANCELLED',
-    mark_date_as_cancelled: 'Mark event date as cancelled',
+    mark_date_as_cancelled: 'Mark as cancelled',
     mark_date_as_happening: 'Mark event date as happening',
-    add_missing_information: 'Add missing information',
+    add_missing_information: 'Edit this page',
     hide_missing_information: 'Hide missing information',
   },
   edit_event: {

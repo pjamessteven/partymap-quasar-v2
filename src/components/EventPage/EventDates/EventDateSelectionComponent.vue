@@ -30,6 +30,7 @@
               <q-btn
                 class="soft-button-shadow"
                 color="red"
+                no-caps
                 @click="removeRrule"
                 :label="$t('event_dates.remove_schedule')"
               />
@@ -37,6 +38,7 @@
                 class="soft-button-shadow q-ml-sm"
                 @click="changeRrule"
                 color="primary"
+                no-caps
                 :label="$t('event_dates.change_schedule')"
               />
             </div>
@@ -65,7 +67,7 @@
         v-if="this.event?.event_dates?.length > 0"
         horizontal
         ref="scrollArea"
-        style="height: 136px"
+        style="height: 120px"
         :bar-style="{
           height: '2px',
         }"

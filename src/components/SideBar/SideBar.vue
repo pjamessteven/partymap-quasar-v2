@@ -13,74 +13,13 @@
           false && $q.screen.lt.sm && $route.name === 'EventPage',
       }"
     >
+      <q-btn rounded no-caps class="hide-results-button" v-if="false"
+        >Hide Results</q-btn
+      >
+
       <div class="sidebar-content flex column no-wrap">
-        <div
-          class="add-event-wrapper items-center flex justify-center q-px-md"
-          v-if="$route.name === 'Explore' && $q.screen.gt.xs"
-          style="height: 72px"
-        >
-          <!--
-          <q-btn
-            v-if="false"
-            class="inter o-070"
-            no-caps
-            flat
-            @click="showAddEventDialog"
-            >Submit
-            <q-icon name="mdi-plus" class="q-ml-sm" size="1rem" />
-          </q-btn>
-          -->
-          <q-btn
-            v-if="false"
-            flat
-            no-caps
-            class="inter nav-button q-ml-sm"
-            @click.stop="() => mainStore.getFineLocation()"
-          >
-            <template v-slot:default>
-              <div
-                v-if="!mainStore.userLocationLoading"
-                class="flex items-center"
-              >
-                <q-icon
-                  name="mdi-crosshairs-gps"
-                  class=""
-                  size="1rem"
-                  v-if="
-                    mainStore.fineLocation && !mainStore.userLocationFromSearch
-                  "
-                />
-                <q-icon name="mdi-crosshairs" size="1rem" class="" v-else />
-              </div>
-              <div v-else style="position: relative" class="flex items-center">
-                <q-icon style="z-index: 1" name="mdi-crosshairs" size="1rem" />
-                <q-icon
-                  style="z-index: 2; left: 0px"
-                  size="1rem"
-                  class="animated infinite flash slowest absolute"
-                  name="mdi-crosshairs-gps"
-                />
-              </div>
-              <q-tooltip
-                style="font-size: 1em !important"
-                :content-class="
-                  $q.dark.isActive
-                    ? 'bg-black text-white'
-                    : 'bg-white text-black'
-                "
-                :offset="[10, 10]"
-              >
-                <span v-if="!mainStore.fineLocation">
-                  Using rough location from your IP address. Click to improve
-                  your location.
-                </span>
-                <span v-else>
-                  {{ $t('landing_page.improve_location') }}
-                </span>
-              </q-tooltip>
-            </template>
-          </q-btn>
-        </div>
+        <div class="desktop-resizer"></div>
+
         <div
           style="height: 100%; width: 100%"
           class="sidebar-content-inner"
@@ -168,6 +107,12 @@ const preventSwipe = (event) => {
 };
 
 const hiddenYPosition = () => {
+  if (
+    mainStore.sidebarMinimized &&
+    mainStore.sidebarPanel === 'explore' &&
+    $q.screen.gt.xs
+  )
+    return window.innerHeight - 62;
   if (mainStore.sidebarPanel === 'nearby') {
     if ($q.screen.gt.xs) {
       return 256;
@@ -177,7 +122,7 @@ const hiddenYPosition = () => {
   }
 
   if ($q.screen.gt.lg) {
-    return window.innerHeight - 408 - mainStore.safeAreaInsets.top;
+    return window.innerHeight - 362 - mainStore.safeAreaInsets.top;
   }
   if ($q.screen.gt.xs) {
     return window.innerHeight - 260 - mainStore.safeAreaInsets.top;
@@ -285,9 +230,19 @@ const dragHandler = ({
         showPanel();
       }
     } else if (!mainStore.showPanel) {
-      if (y < -30) {
+      if (mainStore.sidebarMinimized && y < -30 && y > -256) {
+        // unminimize
+        mainStore.sidebarMinimized = false;
+        hidePanel();
+      } else if (mainStore.sidebarMinimized && y < -256) {
+        // show panel but keep minimized state
+        showPanel();
+      } else if (y < -30) {
+        // show panel from normal state
         showPanel();
       } else {
+        // minimize
+        mainStore.sidebarMinimized = true;
         hidePanel();
       }
     }
@@ -338,7 +293,6 @@ const dragHandler = ({
       y + showingYPosition()
     }px, 0px)`;
     currentYPos.value = y + showingYPosition();
-
     // update motion position but don't animate
     motionTransitions.value.push(
       'y',
@@ -372,6 +326,7 @@ const dragHandler = ({
     );
   }
 };
+
 useDrag(dragHandler, {
   domTarget: sidebar,
   axis: 'y',
@@ -609,9 +564,9 @@ watch(
     //  rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
     //box-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
     max-height: 100%;
-    overflow: hidden;
     height: 100%;
     // max-width: 599px;
+    overflow: hidden;
     pointer-events: all;
     transition: width 0.4s ease;
     //transform: translate3d(0, calc(100% - 226px), 0);
@@ -629,11 +584,25 @@ watch(
       cursor: ew-resize;
       opacity: 0.48;
     }
+    .hide-results-button {
+      position: absolute;
+      top: -64px;
+      right: calc(50% - 48px);
+    }
     .sidebar-content {
       padding-top: 4px;
       overflow: hidden;
       position: relative;
       align-items: center;
+
+      .desktop-resizer {
+        position: absolute;
+        width: 90%;
+        height: 64px;
+        cursor: grab;
+        z-index: 1000;
+        pointer-events: all;
+      }
 
       .add-event-wrapper {
         position: absolute;
@@ -795,8 +764,8 @@ watch(
 @media only screen and (min-width: 1921px) {
   .sidebar-wrapper {
     .sidebar {
-      width: 66vw;
-      max-width: 1200px;
+      //  width: 66vw;
+      //  max-width: 1200px;
     }
   }
 }

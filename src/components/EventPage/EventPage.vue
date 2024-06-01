@@ -192,7 +192,10 @@
                         :item="event?.media_items?.[0]"
                         :thumbXsUrl="route.query?.thumbXsUrl as any as string"
                       />
-                      <div class="flex column" v-if="imageLoaded && event">
+                      <div
+                        class="flex column grow no-wrap"
+                        v-if="imageLoaded && event"
+                      >
                         <div
                           class="flex grow justify-start items-start"
                           v-if="!!event"
@@ -202,11 +205,11 @@
                             :class="$q.screen.gt.sm ? 'q-mt-md' : 'q-mt-lg'"
                           />
                         </div>
-                        <div :class="$q.screen.gt.sm ? 'q-mt-lg' : 'q-mt-md'">
+                        <div :class="$q.screen.gt.sm ? 'q-mt-md' : 'q-mt-md'">
                           <div class="flex row">
                             <div class="flex col">
                               <a
-                                class="flex grow"
+                                class="flex grow ellipsis"
                                 :href="computedExternalUrl"
                                 target="_blank"
                                 v-if="
@@ -217,44 +220,81 @@
                                   no-caps
                                   color="grey-3"
                                   text-color="black"
-                                  :label="
-                                    $q.screen.lt.sm
-                                      ? 'Visit Website'
-                                      : 'Visit website'
-                                  "
-                                  icon="las la-external-link-alt"
+                                  class="ellipsis"
                                   :class="$q.screen.gt.sm ? 'grow' : ' grow'"
-                                />
+                                >
+                                  <div
+                                    class="flex row grow no-wrap justify-start ellipsis items-center"
+                                  >
+                                    <q-icon
+                                      name="las la-external-link-alt"
+                                      class=""
+                                    />
+                                    <div
+                                      class="flex column ellipsis items-start q-ml-sm q-pl-xs"
+                                    >
+                                      <div class="">
+                                        {{ computedExternalUrlTitle }}
+                                      </div>
+                                      <div
+                                        class="o-050 ellipsis text- q-mb-xs"
+                                        style="
+                                          font-size: small;
+                                          line-height: normal;
+                                          width: 100%;
+                                        "
+                                      >
+                                        {{ computedExternalUrlSubtitle }}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </q-btn>
                               </a>
                             </div>
-                            <div class="flex col">
+                            <div
+                              class="flex col q-ml-sm"
+                              v-if="!!event && computedTicketUrl && !editing"
+                            >
                               <a
+                                class="flex grow ellipsis"
                                 :href="computedTicketUrl"
                                 target="_blank"
-                                class="flex grow q-ml-sm"
-                                v-if="!!event && computedTicketUrl && !editing"
                               >
                                 <q-btn
                                   no-caps
-                                  :disable="editing"
                                   color="grey-3"
                                   text-color="black"
-                                  style="text-wrap: nowrap"
-                                  :label="
-                                    $q.screen.lt.sm ? 'Tickets' : 'Get tickets'
-                                  "
-                                  size="md"
-                                  class="border-radius flex grow"
-                                  icon="las la-ticket-alt"
-                                  :class="$q.screen.gt.sm ? '' : 'flex grow'"
-                                />
+                                  class="ellipsis"
+                                  :class="$q.screen.gt.sm ? 'grow' : ' grow'"
+                                >
+                                  <div
+                                    class="flex row grow no-wrap justify-start ellipsis items-center"
+                                  >
+                                    <q-icon name="las la-ticket-alt" class="" />
+                                    <div
+                                      class="flex column ellipsis items-start q-ml-sm q-pl-xs"
+                                    >
+                                      <div class="">Get tickets!</div>
+                                      <div
+                                        class="o-050 ellipsis text- q-mb-xs"
+                                        style="
+                                          font-size: small;
+                                          line-height: normal;
+                                          width: 100%;
+                                        "
+                                      >
+                                        {{ computedTicketUrlSubtitle }}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </q-btn>
                               </a>
                             </div>
                           </div>
                         </div>
                         <div
                           class="flex row justify-between items-end no-wrap tags-wrapper o-080"
-                          :class="$q.screen.gt.sm ? 'q-pt-sm' : 'q-mt-sm'"
+                          :class="$q.screen.gt.sm ? 'q-pt-lg' : 'q-mt-md'"
                           v-if="event?.event_tags"
                         >
                           <TagsComponent :small="false" :editing="editing" />
@@ -407,7 +447,7 @@
                                   ></q-icon>
                                   {{
                                     $q.screen.gt.xs
-                                      ? 'Download'
+                                      ? 'Save to device'
                                       : 'Save to device'
                                   }}
                                 </q-btn>
@@ -417,7 +457,7 @@
                                   flat
                                   no-caps
                                   icon="mdi-image-plus-outline"
-                                  :label="'Photos'"
+                                  :label="'Add photos'"
                                 >
                                   <q-menu
                                     transition-show="jump-down"
@@ -485,7 +525,7 @@
                                   v-if="currentUserCanEdit"
                                   flat
                                   class="button-light"
-                                  :label="'Edit'"
+                                  :label="'Edit Page'"
                                   no-caps
                                   :icon="
                                     $q.screen.gt.xs
@@ -693,7 +733,7 @@
                           "
                         />
 
-                        <ReviewsComponent class="q-mt-sm q-mb-xl" />
+                        <ReviewsComponent class="q-mb-xl" />
                       </div>
                     </div>
                   </div>
@@ -1209,7 +1249,6 @@ const share = () => {
 
 const load = async () => {
   loading.value = true;
-
   try {
     const response = await eventStore.loadEvent(Number(props.id));
 
@@ -1300,6 +1339,7 @@ onBeforeRouteLeave(() => {
   if ($q.platform.is.mobile) {
     event.value = null;
   }
+  mapStore.focusMarker = null;
 });
 
 onMounted(() => {
@@ -1319,7 +1359,7 @@ onMounted(() => {
     setTimeout(() => {
       load();
     }, 300);
-  } else if (!eventAlreadyLoaded) {
+  } else if (!eventAlreadyLoaded || true) {
     event.value = null;
     load();
   } else {
@@ -1374,6 +1414,26 @@ onDeactivated(() => {
 });
 */
 
+const getDomainFromUrl = (url: string) => {
+  // Add the prefix if it's missing
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    url = 'http://' + url;
+  }
+
+  // Create a URL object
+  const urlObj = new URL(url);
+
+  // Get the hostname (domain name)
+  let domain = urlObj.hostname;
+
+  // Remove the 'www' prefix if it exists
+  if (domain.startsWith('www.')) {
+    domain = domain.substring(4);
+  }
+
+  return domain;
+};
+
 const computedUrl = computed(() => {
   if (eventStore.event) {
     return (
@@ -1411,6 +1471,25 @@ const computedExternalUrl = computed(() => {
   }
 });
 
+const computedExternalUrlTitle = computed(() => {
+  if (
+    computedExternalUrl.value &&
+    computedExternalUrl.value?.indexOf('facebook') > -1
+  ) {
+    return 'Facebook Page';
+  } else {
+    return 'Visit Website';
+  }
+});
+
+const computedExternalUrlSubtitle = computed(() => {
+  if (computedExternalUrl.value) {
+    return getDomainFromUrl(computedExternalUrl.value);
+  } else {
+    return null;
+  }
+});
+
 const computedTicketUrl = computed(() => {
   const ticketUrl = selectedEventDate.value?.ticket_url;
   if (ticketUrl) {
@@ -1418,6 +1497,14 @@ const computedTicketUrl = computed(() => {
     if (ticketUrl.indexOf('http://') < 0 && ticketUrl.indexOf('https://') < 0) {
       return '//' + ticketUrl;
     } else return ticketUrl;
+  } else {
+    return null;
+  }
+});
+const computedTicketUrlSubtitle = computed(() => {
+  const ticketUrl = selectedEventDate.value?.ticket_url;
+  if (ticketUrl) {
+    return getDomainFromUrl(ticketUrl);
   } else {
     return null;
   }
@@ -1765,7 +1852,14 @@ a {
                 }
                 .tags-wrapper {
                 }
-
+                :deep(.q-btn) {
+                  border: 1px solid rgba(255, 255, 255, 0.3);
+                  background: rgba(255, 255, 255, 0.1) !important;
+                  color: white !important;
+                  span {
+                    text-align: start !important;
+                  }
+                }
                 .event-buttons {
                   // height: 36px;
                   width: 100%;

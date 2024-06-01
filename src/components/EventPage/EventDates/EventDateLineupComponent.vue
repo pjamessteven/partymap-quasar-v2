@@ -2,13 +2,13 @@
   <div v-if="!!event" class="flex column grow no-wrap">
     <div
       class="inter bolder text-large t2 q-pr-md event-page-header"
-      v-if="selectedEventDate?.artists?.length > 0 || lineupImages.length > 0"
+      v-if="selectedEventDate?.artists?.length > 0 || lineupImages?.length > 0"
     >
       {{ $t('event_dates.lineup') }}
     </div>
     <div
       class="flex row no-wrap q-gutter-sm q-mb-lg"
-      v-if="lineupImages.length > 0"
+      v-if="lineupImages?.length > 0"
     >
       <GalleryDialog
         :open="lineupGalleryIndex != null"

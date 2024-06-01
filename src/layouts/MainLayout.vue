@@ -210,7 +210,7 @@ export default {
       return `opacity: ${this.sidebarOpacity}`;
     },
     computedSidebarOverlayStyle() {
-      if (!this.showPanelBackground) {
+      if (!this.showPanelBackground || this.$route.name !== 'Explore') {
         return 'opacity: 0';
       } else {
         return 'opacity: 1';

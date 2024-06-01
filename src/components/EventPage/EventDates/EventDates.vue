@@ -22,7 +22,7 @@
       class="inter bolder t2 text-large q-pr-md event-page-header"
       v-if="computedImages?.length > 0"
     >
-      <span v-if="selectedDateImages.length > 0">Photos from this date:</span>
+      <span v-if="selectedDateImages?.length > 0">Photos from this date:</span>
       <span v-else>All photos:</span>
     </div>
 
@@ -68,6 +68,7 @@
 
     <div
       class="flex row wrap items-center event-page-header"
+      :class="{ 'q-mt-md': $q.screen.gt.sm }"
       v-if="event.event_dates.length > 1"
     >
       <div class="text-large inter bolder t2 q-pr-md">
@@ -107,7 +108,7 @@
         ><span v-else>Event details:</span>
       </div>
 
-      <q-list class="q-mb-lg" style="position: relative">
+      <q-list class="q-mb-md" style="position: relative">
         <div
           v-for="(component, index) in visibleComponents"
           :key="component.type"
@@ -147,11 +148,7 @@
           @click="editing = true"
           style="cursor: pointer"
         >
-          <q-icon
-            size="2em"
-            :name="showMoreFields ? 'las la-minus' : 'las la-plus'"
-            class="t4"
-          />
+          <q-icon size="2em" name="las la-edit" class="t4" />
           <div
             class="flex column q-ml-md t2"
             :class="{ 'text-large': $q.screen.gt.sm }"
@@ -249,7 +246,7 @@ export default {
       );
     },
     computedImages() {
-      if (this.selectedDateImages.length > 0) {
+      if (this.selectedDateImages?.length > 0) {
         return this.selectedDateImages;
       } else {
         return this.allEventImages;

@@ -119,9 +119,13 @@ export const useNearbyStore = defineStore('nearby', {
           !main.userLocation
         ) {
           const queryStore = useQueryStore();
-          if (this.nearbyArtists.length < 6)
+          if (
+            this.nearbyArtists.length < 6 &&
+            queryStore.artistOptions.length === 0
+          )
             await queryStore.loadArtistOptions();
-          if (this.nearbyTags.length < 10) await queryStore.loadTagOptions();
+          if (this.nearbyTags.length < 10 && queryStore.tagOptions.length === 0)
+            await queryStore.loadTagOptions();
         }
         this.loadingEverything = false;
       } catch (e) {

@@ -14,8 +14,8 @@
       <q-icon
         @click="showPanel ? $emit('hidePanel') : $emit('showPanel')"
         flat
-        size="1.5rem"
-        class="q-pa-md q-mr-xs t2"
+        :size="$q.screen.gt.sm ? '2rem' : '1.5rem'"
+        class="q-pa-md q-mr-sm t1"
         :class="{ 'rotate-180': showPanelBackground }"
         name="mdi-chevron-up"
         style="pointer-events: all"
@@ -23,6 +23,26 @@
     </div>
     <div class="touch-overlay" v-touch-swipe.vertical="handleSwipe" />
     <div class="event-list-inner">
+      <div
+        class="inter text-large q-mb-md"
+        style="position: absolute; left: 24px; top: 16px; font-weight: 700"
+        v-if="
+          (isLoadingInitial || (mapMoving && !blockUpdates)) && sidebarMinimized
+        "
+      >
+        Finding what's good...
+      </div>
+      <div
+        class="inter q-mb-md"
+        style="position: absolute; left: 24px; top: 16px; font-weight: 700"
+        v-else-if="
+          !isLoadingInitial &&
+          (eventDatesTotal === 0 || !eventDates || eventDates.length === 0) &&
+          sidebarMinimized
+        "
+      >
+        Nothing coming up in this area
+      </div>
       <div
         class="flex row no-wrap items-center justify-between q-px-md q-pt-md q-pb-sm view-options-absolute"
         v-if="$q.screen.gt.xs"
@@ -223,19 +243,24 @@
       </div>
       -->
       <div
-        class="event-date-center t2 flex column grow no-wrap justify-center items-center"
+        class="event-date-center t1 flex column grow no-wrap justify-center items-center"
         :style="
           $q.screen.lt.sm
             ? 'height: 144px; position: absolute; width: 100%; z-index: 500'
             : $q.screen.lt.xl
             ? 'height: 348px; position: absolute; width: 100%; z-index: 500'
-            : 'height: 512px; position: absolute; width: 100%; z-index: 500'
+            : 'height: 450px; position: absolute; width: 100%; z-index: 500'
         "
       >
         <div class="flex column items-center no-wrap">
           <div
-            class="inter semibold q-mb-md"
-            v-if="isLoadingInitial || (mapMoving && !blockUpdates)"
+            class="inter q-mb-md"
+            :class="{ 'text-large': $q.screen.gt.sm }"
+            style="font-weight: 700"
+            v-if="
+              (isLoadingInitial || (mapMoving && !blockUpdates)) &&
+              !sidebarMinimized
+            "
           >
             Finding what's good...
           </div>
@@ -243,8 +268,13 @@
             class="inter semibold q-mb-md"
             v-else-if="
               !isLoadingInitial &&
-              (eventDatesTotal === 0 || !eventDates || eventDates.length === 0)
+              (eventDatesTotal === 0 ||
+                !eventDates ||
+                eventDates.length === 0) &&
+              !sidebarMinimized
             "
+            :class="{ 'text-large': $q.screen.gt.sm }"
+            style="font-weight: 700"
           >
             Nothing coming up in this area
           </div>
@@ -520,6 +550,7 @@ export default {
       'userLocation',
       'compactView',
       'groupEventsByMonth',
+      'sidebarMinimized',
     ]),
     ...mapWritableState(useMainStore, [
       'showPanel',

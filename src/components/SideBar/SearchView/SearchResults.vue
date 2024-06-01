@@ -138,7 +138,6 @@ export default {
         this.controlTag = [obj];
         this.sidebarPanel = 'explore';
       } else if (result.type === 'event') {
-        console.log(result);
         this.$router.push({
           name: 'EventPage',
           params: { id: result.id },

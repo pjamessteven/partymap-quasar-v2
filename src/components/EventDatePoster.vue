@@ -2,7 +2,7 @@
   <transition appear enter-active-class="animated fadeIn">
     <div class="ed-poster" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
       <router-link
-        style="text-decoration: none; color: inherit"
+        style="text-decoration: none; color: inherit; height: 100%"
         :to="{
           name: 'EventPage',
           params: {
@@ -375,7 +375,7 @@ export default {
   cursor: pointer;
   overflow: hidden;
   position: relative;
-
+  height: 256px;
   @supports (font: -apple-system-body) and (-webkit-appearance: none) {
     -webkit-backface-visibility: hidden;
     -webkit-transform: translate3d(0, 0, 0);
@@ -419,6 +419,7 @@ export default {
     z-index: 1;
     position: relative;
     width: 100%;
+    height: 100%;
     pointer-events: all;
     @supports (font: -apple-system-body) and (-webkit-appearance: none) {
       -webkit-backface-visibility: hidden;
@@ -445,8 +446,9 @@ export default {
       font-size: small;
     }
     .image-container {
-      aspect-ratio: 595 / 842;
+      aspect-ratio: 595 / 842; //unsupported on older ios
       width: 100%;
+      height: 100%;
       position: relative;
       overflow: hidden;
       box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,

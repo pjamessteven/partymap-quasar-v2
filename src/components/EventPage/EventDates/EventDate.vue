@@ -7,7 +7,7 @@
       @click="deleteEd"
       size="sm"
       color="red"
-      class="delete-button"
+      class="delete-button items-center justify-center flex"
       round
       v-if="editing"
       style="border-radius: 100px"
@@ -287,8 +287,8 @@ export default {
   }
   .delete-button {
     position: absolute;
-    right: -10px;
-    top: -10px;
+    right: 8px;
+    top: 8px;
     z-index: 2;
     border-radius: 100px !important;
   }

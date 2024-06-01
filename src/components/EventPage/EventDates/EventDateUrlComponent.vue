@@ -1,9 +1,13 @@
 <template>
   <div
     v-if="selectedEventDate != null"
-    class="flex row items-start no-wrap ed-inline-card editing-outline"
+    class="flex row justify-center no-wrap ed-inline-card editing-outline"
     style="max-width: 100%"
-    :class="[editing || showMoreFields ? 'editing q-px-md' : '']"
+    :class="{
+      'editing q-px-md': editing || showMoreFields,
+      'items-start': $q.screen.lt.sm,
+      'items-center': $q.screen.gt.xs,
+    }"
     @click="editing || showMoreFields ? (showEditingDialog = true) : null"
   >
     <q-icon
@@ -25,8 +29,11 @@
         style="white-space: pre-line; width: 100%"
         v-if="computedExternalUrl"
       >
-        <div class="flex column" :class="$q.screen.gt.sm ? 'text-large' : ''">
-          <div class="t2">Link</div>
+        <div
+          class="flex column justify-center"
+          :class="$q.screen.gt.sm ? 'text-large' : ''"
+          :style="editing ? 'pointer-events: none' : ''"
+        >
           <a
             class="t3 link-hover q-mr-sm"
             :href="computedExternalUrl"
@@ -48,7 +55,6 @@
           style="text-decoration: none; color: unset"
           :href="computedExternalUrl"
           target="_blank"
-          class="q-mt-sm"
           v-if="computedExternalUrl && !editing"
         >
           <q-btn
@@ -64,7 +70,7 @@
             "
             :color="$q.dark.isActive ? 'white' : 'black'"
             icon="las la-external-link-alt"
-            :class="$q.screen.gt.sm ? '' : 'flex grow'"
+            :class="$q.screen.gt.sm ? '' : 'flex grow q-mt-sm'"
           />
         </a>
       </div>
