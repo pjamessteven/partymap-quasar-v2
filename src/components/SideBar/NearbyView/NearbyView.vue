@@ -127,7 +127,7 @@
           </div>
           <div
             v-if="showMessage"
-            class="flex column items-start justify-start grow t1 q-mt-md inter semibold q-mb-md"
+            class="flex column items-start justify-start grow t1 q-mt-md inter semibold q-mb-sm"
           >
             PartyMap is a community-driven, crowd-sourced platform for finding
             parties and festivals around the world!
@@ -239,7 +239,7 @@
                   class="q-py-md location-header"
                   :class="
                     $q.screen.gt.sm
-                      ? 'q-px-lg q-mt-sm t1 inter semibold'
+                      ? 'q-px-lg q-mt- t1 inter semibold'
                       : 'q-pl-md t1 inter semibold'
                   "
                 >
@@ -673,7 +673,7 @@
               </transition>
 
               <div
-                class="flex row justify-center q-mt-md"
+                class="flex row justify-center q-my-md"
                 style="opacity: 0; margin-top: -16px"
               >
                 <a
@@ -1238,8 +1238,8 @@ export default {
         top: -1px;
         z-index: 1000;
         width: 100%;
-        font-weight: 700;
-        font-size: 1rem;
+        font-weight: 600;
+        // font-size: 1rem;
         // text-transform: lowercase;
       }
     }
@@ -1396,7 +1396,7 @@ export default {
       .scroll-stuff {
         .location-header {
           font-size: unset;
-          font-weight: 700;
+          font-weight: 600;
         }
         .loading-wrapper {
           height: calc(100vh - 172px); // account for desktop hiddenYposition

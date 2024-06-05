@@ -178,11 +178,6 @@
 
                       <FeaturedMediaComponent
                         @loaded="mediaLoaded"
-                        :style="
-                          $route.query?.thumbXsUrl && !event
-                            ? 'filter: blur(5px)'
-                            : ''
-                        "
                         v-if="
                           (!!event || route.query?.thumbXsUrl) &&
                           $q.screen.lt.md
@@ -1128,6 +1123,8 @@ const deleteEvent = () => {
 onBeforeRouteLeave((to, from, next) => {
   // transition out before going back on mobile
   if ($q.screen.lt.sm) {
+    (scrollArea.value as any).setScrollPercentage('vertical', 0);
+
     motionTransitions.value.push('y', hiddenYPosition, motionProperties.value, {
       type: 'spring',
       stiffness: 600,

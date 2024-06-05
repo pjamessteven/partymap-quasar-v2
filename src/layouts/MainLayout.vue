@@ -4,7 +4,10 @@
       <MainMap />
       <div
         class="map-overlay"
-        :class="sidebarPanel === 'nearby' && 'nearby-map-overlay-mobile'"
+        :class="{
+          'nearby-map-overlay-mobile': sidebarPanel === 'nearby',
+          'map-overlay-mobile-minimized': sidebarMinimized,
+        }"
       />
     </div>
     <div
@@ -204,6 +207,7 @@ export default {
       'sidebarPanel',
       'sidebarOpacity',
       'disableAnimations',
+      'sidebarMinimized',
     ]),
     ...mapWritableState(useEventStore, ['event']),
     computedSidebarOpacity() {
@@ -522,6 +526,7 @@ export default {
           rgba(0, 0, 0, 0.68) calc(100% - 200px),
           rgba(0, 0, 0, 0.68) 100%
         );
+        //transition: background 0.2s ease;
 
         &.nearby-map-overlay-mobile {
           background: linear-gradient(
@@ -529,6 +534,16 @@ export default {
             rgba(0, 0, 0, 0.4) 120px,
             rgba(0, 0, 0, 0.4) 200px,
             rgba(0, 0, 0, 0) 100%
+          );
+        }
+        &.map-overlay-mobile-minimized {
+          background: linear-gradient(
+            rgba(0, 0, 0, 0.8),
+            rgba(0, 0, 0, 0) 168px,
+            transparent 200px,
+            transparent calc(100% - 176px),
+            rgba(0, 0, 0, 0.68) calc(100% - 96px),
+            rgba(0, 0, 0, 0.68) 100%
           );
         }
       }

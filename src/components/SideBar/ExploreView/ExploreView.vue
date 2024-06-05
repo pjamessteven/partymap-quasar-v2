@@ -14,7 +14,7 @@
       <q-icon
         @click="showPanel ? $emit('hidePanel') : $emit('showPanel')"
         flat
-        :size="$q.screen.gt.sm ? '2rem' : '1.5rem'"
+        :size="$q.screen.gt.sm ? '1.7rem' : '1.5rem'"
         class="q-pa-md q-mr-sm t1"
         :class="{ 'rotate-180': showPanelBackground }"
         name="mdi-chevron-up"
@@ -24,8 +24,8 @@
     <div class="touch-overlay" v-touch-swipe.vertical="handleSwipe" />
     <div class="event-list-inner">
       <div
-        class="inter text-large q-mb-md"
-        style="position: absolute; left: 24px; top: 16px; font-weight: 700"
+        class="inter q-mb-md"
+        style="position: absolute; left: 24px; top: 16px; font-weight: 600"
         v-if="
           (isLoadingInitial || (mapMoving && !blockUpdates)) && sidebarMinimized
         "
@@ -255,8 +255,7 @@
         <div class="flex column items-center no-wrap">
           <div
             class="inter q-mb-md"
-            :class="{ 'text-large': $q.screen.gt.sm }"
-            style="font-weight: 700"
+            style="font-weight: 600"
             v-if="
               (isLoadingInitial || (mapMoving && !blockUpdates)) &&
               !sidebarMinimized
@@ -273,8 +272,7 @@
                 eventDates.length === 0) &&
               !sidebarMinimized
             "
-            :class="{ 'text-large': $q.screen.gt.sm }"
-            style="font-weight: 700"
+            style="font-weight: 600"
           >
             Nothing coming up in this area
           </div>

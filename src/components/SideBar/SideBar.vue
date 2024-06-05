@@ -113,6 +113,13 @@ const hiddenYPosition = () => {
     $q.screen.gt.xs
   )
     return window.innerHeight - 62;
+  else if (
+    mainStore.sidebarMinimized &&
+    mainStore.sidebarPanel === 'explore' &&
+    $q.screen.lt.sm
+  )
+    return window.innerHeight - 126;
+
   if (mainStore.sidebarPanel === 'nearby') {
     if ($q.screen.gt.xs) {
       return 256;
@@ -233,7 +240,7 @@ const dragHandler = ({
       if (mainStore.sidebarMinimized && y < -30 && y > -256) {
         // unminimize
         mainStore.sidebarMinimized = false;
-        hidePanel();
+        // hidePanel();
       } else if (mainStore.sidebarMinimized && y < -256) {
         // show panel but keep minimized state
         showPanel();
@@ -243,7 +250,7 @@ const dragHandler = ({
       } else {
         // minimize
         mainStore.sidebarMinimized = true;
-        hidePanel();
+        //hidePanel();
       }
     }
 
@@ -404,6 +411,13 @@ watch(
     } else {
       hidePanel();
     }
+  }
+);
+
+watch(
+  () => mainStore.sidebarMinimized,
+  (to: string, from: string) => {
+    hidePanel();
   }
 );
 

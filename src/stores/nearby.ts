@@ -258,6 +258,7 @@ export const useNearbyStore = defineStore('nearby', {
           } else {
             this.eventDates = this.eventDates.concat(response.data.items);
           }
+          this.eventDatesPages = response.data.pages;
           this.eventDatesHasNext = response.data.has_next;
           this.eventDatesPage += 1;
           return;

@@ -53,8 +53,8 @@ export default {
     width: 100%;
     display: flex;
     align-items: center;
-    font-size: 1rem;
-    font-weight: 700;
+    // font-size: 1rem;
+    font-weight: 600;
     //bottom: 4px;
     //padding: 32px 0;
   }
@@ -86,7 +86,7 @@ export default {
       //width: calc(100% - 64px) !important;
       //padding-right: 64px !important;
       font-size: unset;
-      font-weight: 700;
+      font-weight: 600;
     }
   }
 }

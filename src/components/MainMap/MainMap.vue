@@ -604,7 +604,21 @@ export default {
       if (!this.userLocationFromSearch && this.fineLocation) {
         this.addUserLocationMarker(this.userLocation);
       }
+      toRaw(this.map).clicked = 0;
+
       toRaw(this.map).on('click', () => {
+        if (this.sidebarPanel === 'explore') {
+          toRaw(this.map).clicked = toRaw(this.map).clicked + 1;
+
+          setTimeout(() => {
+            if (toRaw(this.map).clicked == 1) {
+              toRaw(this.map).clicked = 0;
+              // single click action
+              this.sidebarMinimized = !this.sidebarMinimized;
+            }
+          }, 300);
+        }
+
         if (this.$route.name === 'EventPage') {
           //this.peekMap = false;
           if (!this.peekMap) {
@@ -615,17 +629,24 @@ export default {
         }
       });
 
-      toRaw(this.map).on('mousedown', () => {
-        if (this.$route.name === 'Explore') {
-          // switch to explore view
-          if (
-            this.sidebarPanel !== 'explore' &&
-            this.sidebarPanel !== 'favorites'
-          ) {
-            this.sidebarPanel = 'explore';
+      toRaw(this.map).on('dblclick', (event) => {
+        toRaw(this.map).clicked = 0;
+        // toRaw(this.map).zoomIn();
+      });
+
+      toRaw(this.map).on('mouseup', () => {
+        setTimeout(() => {
+          if (this.$route.name === 'Explore') {
+            // switch to explore view
+            if (
+              this.sidebarPanel !== 'explore' &&
+              this.sidebarPanel !== 'favorites'
+            ) {
+              this.sidebarPanel = 'explore';
+            }
+            this.showPanel = false;
           }
-          this.showPanel = false;
-        }
+        }, 50);
       });
 
       toRaw(this.map).on('movestart', () => {
@@ -751,6 +772,25 @@ export default {
         this.mapMarkers = L.markerClusterGroup({
           chunkedLoading: true,
           showCoverageOnHover: false,
+          // disableClusteringAtZoom: 0,
+          spiderfyOnMaxZoom: false,
+          /*
+          iconCreateFunction: (cluster) => {
+            let className;
+            if (cluster.getChildCount() > 10) {
+              className = 'cluster-icon-10';
+            } else if (cluster.getChildCount() > 2) {
+              className = 'cluster-icon-3';
+            } else {
+              className = 'cluster-icon-2';
+            }
+            return L.divIcon({
+              className, // style defined in App.vue
+              iconAnchor: [12, 30],
+              iconSize: [25, 30],
+              tooltipAnchor: [3, -32],
+            });
+            */
         });
 
         /*this.mapMarkersPermanentTooltip = L.markerClusterGroup({
@@ -851,6 +891,7 @@ export default {
       'showPanel',
       'sidebarExpanded',
       'disableAnimations',
+      'sidebarMinimized',
     ]),
     ...mapState(useMainStore, ['routerHistory']),
     ...mapState(useQueryStore, [
@@ -920,17 +961,6 @@ export default {
       }
     }
     .leaflet-marker-pane {
-      .marker-icon {
-        background: url('assets/marker-dark-filled.png') !important;
-        z-index: 800 !important;
-        height: 30px !important;
-        width: 30px !important;
-        //background: url('~assets/marker-dark.svg') !important;
-        background-size: contain !important;
-        background-repeat: no-repeat !important;
-        background-position: center !important;
-        filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.4));
-      }
       .focus-marker-icon {
         &:before {
           content: '';
@@ -995,17 +1025,6 @@ export default {
     background: black;
     .leaflet-map-pane {
       .leaflet-marker-pane {
-        .marker-icon {
-          background: url('assets/marker-light-filled.png') !important;
-          z-index: 800 !important;
-          height: 30px !important;
-          width: 30px !important;
-          //background: url('~assets/marker-dark.svg') !important;
-          background-size: contain !important;
-          background-repeat: no-repeat !important;
-          background-position: center !important;
-          filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.2));
-        }
         .focus-marker-icon {
           &:before {
             content: '';
@@ -1062,17 +1081,6 @@ export default {
       //background: black;
       .leaflet-map-pane {
         .leaflet-marker-pane {
-          .marker-icon {
-            background: url('assets/marker-dark-filled.png') !important;
-            z-index: 800 !important;
-            height: 30px !important;
-            width: 30px !important;
-            //background: url('~assets/marker-dark.svg') !important;
-            background-size: contain !important;
-            background-repeat: no-repeat !important;
-            background-position: center !important;
-            filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.2));
-          }
         }
       }
     }
@@ -1087,6 +1095,67 @@ export default {
 .map {
   .leaflet-map-pane {
     .leaflet-marker-pane {
+      .marker-icon {
+        background: url('assets/marker-dark-filled.png') !important;
+        z-index: 800 !important;
+        height: 30px !important;
+        width: 30px !important;
+        //background: url('~assets/marker-dark.svg') !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.4));
+      }
+      .cluster-icon-3 {
+        cursor: zoom-in;
+
+        background: url('assets/multi.png') !important;
+        z-index: 800 !important;
+        height: 40px !important;
+        width: 40px !important;
+        //background: url('~assets/marker-dark.svg') !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.4));
+      }
+      .cluster-icon-2 {
+        cursor: zoom-in;
+        background: url('assets/multi-2.png') !important;
+        z-index: 800 !important;
+        height: 30px !important;
+        width: 30px !important;
+        //background: url('~assets/marker-dark.svg') !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.4));
+      }
+      .cluster-icon-5 {
+        cursor: zoom-in;
+        background: url('assets/multi-5.png') !important;
+        z-index: 800 !important;
+        height: 30px !important;
+        width: 30px !important;
+        //background: url('~assets/marker-dark.svg') !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.4));
+      }
+      .cluster-icon-10 {
+        cursor: zoom-in;
+        background: url('assets/multi-12.png') !important;
+        z-index: 800 !important;
+        height: 50px !important;
+        width: 50px !important;
+        //background: url('~assets/marker-dark.svg') !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.4));
+      }
+
       .location-marker-icon {
         &::before {
           position: absolute;
