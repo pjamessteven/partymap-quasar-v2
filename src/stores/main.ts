@@ -113,6 +113,8 @@ export const useMainStore = defineStore('main', {
           this.userLocationCity = address.suburb;
         } else if (address.suburb) {
           this.userLocationCity = address.neighbourhood;
+        } else if (address.county) {
+          this.userLocationCity = address.county;
         } else if (address.state_district) {
           this.userLocationCity = address.state_district;
         }
@@ -163,7 +165,8 @@ export const useMainStore = defineStore('main', {
               if (!this.userLocation) {
                 const unknownCityCoords =
                   position.coords.latitude + ', ' + position.coords.longitude;
-                this.userLocationCity = unknownCityCoords;
+                // this.userLocationCity = unknownCityCoords;
+                this.userLocationCity = '...';
               }
 
               this.userLocation = {

@@ -1121,6 +1121,11 @@ const deleteEvent = () => {
 };
 
 onBeforeRouteLeave((to, from, next) => {
+  if ($q.platform.is.mobile) {
+    event.value = null;
+  }
+  mapStore.focusMarker = null;
+
   // transition out before going back on mobile
   if ($q.screen.lt.sm) {
     (scrollArea.value as any).setScrollPercentage('vertical', 0);
@@ -1134,14 +1139,16 @@ onBeforeRouteLeave((to, from, next) => {
 
     if ($q.platform.is.android) {
       if (previousRouteIsExplore.value) {
-        setTimeout(() => (mainStore.sidebarOpacity = 1), 150);
+        setTimeout(() => {
+          mainStore.sidebarOpacity = 1;
+        }, 0);
       }
-      setTimeout(() => next(), 300);
+      setTimeout(() => next(), 0);
     } else {
       setTimeout(() => {
         mainStore.sidebarOpacity = 1;
       }, 50);
-      next();
+      setTimeout(() => next(), 150);
     }
   } else {
     next();
@@ -1177,7 +1184,7 @@ const onScrollMainContent = (info: any) => {
     } else {
       mainStore.menubarOpacity = 0;
     }
-    mainStore.overlayOpacity = ((verticalPostion * 1.5) / 100) * 1;
+    mainStore.overlayOpacity = Math.min(((verticalPostion * 1.5) / 100) * 1, 1);
   } else {
     if (
       verticalPostion >
@@ -1331,14 +1338,14 @@ const load = async () => {
     (window as any).prerenderReady = true;
   }, 300);
 };
-
+/*
 onBeforeRouteLeave(() => {
   if ($q.platform.is.mobile) {
     event.value = null;
   }
   mapStore.focusMarker = null;
 });
-
+*/
 onMounted(() => {
   // called on initial mount
   // and every time it is re-inserted from the cache

@@ -408,7 +408,7 @@ export default {
     .menubar-background {
       @supports ((top: var(--safe-area-inset-top))) {
         padding-top: var(--safe-area-inset-top);
-        height: calc(env(safe-area-inset-top) + 62px);
+        height: calc(var(--safe-area-inset-top) + 62px);
         position: fixed;
         top: 0px;
       }
@@ -434,7 +434,7 @@ export default {
         // android
         @supports ((top: var(--safe-area-inset-top))) {
           padding-top: var(--safe-area-inset-top);
-          height: calc(env(safe-area-inset-top) + 100px);
+          height: calc(var(--safe-area-inset-top) + 62px);
           position: fixed;
           top: 0px;
         }

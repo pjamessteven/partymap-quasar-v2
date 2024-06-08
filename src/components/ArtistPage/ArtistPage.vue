@@ -124,6 +124,24 @@
                   class="q-mb-md ed-card"
                 />
               </div>
+              <div>
+                <q-btn
+                  flat
+                  no-caps
+                  class="nav-button soft-button-shadow q-mr-sm q-px-md q-mt-lg q-py-sm"
+                  :class="$q.screen.gt.sm ? 'q-mt-lg' : ''"
+                  @click="viewOnMap"
+                  v-if="artist?.future_event_dates?.length > 0"
+                >
+                  View all upcoming on the map
+                  <q-icon
+                    name="mdi-chevron-right"
+                    size="1rem"
+                    class="q-ml-md"
+                    :class="{ 'q-ml-md': $q.screen.gt.xs }"
+                  />
+                </q-btn>
+              </div>
 
               <div
                 class="flex column"

@@ -52,7 +52,7 @@
 -->
         <transition appear enter-active-class="animated fadeIn slower">
           <img
-            v-show="!loaded && thumbXsUrl"
+            v-if="!loaded && thumbXsUrl && false"
             style="
               height: auto;
 

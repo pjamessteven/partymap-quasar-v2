@@ -136,7 +136,7 @@ export default {
           }
         }
       }
-      if (newv === 'explore' && oldv === 'nearby') {
+      if (newv === 'explore' && oldv === 'nearby' && this.userLocation) {
         this.fitBoundsForExplorePage(this.userLocation);
       }
       if (newv === 'explore') {
@@ -466,7 +466,10 @@ export default {
       var latlng = L.latLng(coords);
       if (this.$q.screen.gt.xs) {
         toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
-          paddingTopLeft: [0, 0 - window.innerHeight / 2 - 128],
+          paddingTopLeft: [
+            0,
+            0 - window.innerHeight / 2 - 128 + this.safeAreaInsets.top,
+          ],
           animate: !this.disableAnimations,
           duration: 0.3,
           easeLinearity: 1,
@@ -476,7 +479,10 @@ export default {
         // padding for mobile bottom panel
         toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
           //paddingTopLeft: [0, -150],
-          paddingTopLeft: [0, 0 - window.innerHeight / 2 - 128],
+          paddingTopLeft: [
+            0,
+            0 - window.innerHeight / 2 - 86 + this.safeAreaInsets.top,
+          ],
           animate: !this.disableAnimations,
           duration: 0.3,
           easeLinearity: 1,
@@ -651,6 +657,9 @@ export default {
 
       toRaw(this.map).on('movestart', () => {
         this.mapMoving = true;
+        if (this.$route.name === 'EventPage' && !this.peekMap) {
+          // this.peekMap = true;
+        }
       });
 
       toRaw(this.map).on('moveend', (event) => {
@@ -884,6 +893,7 @@ export default {
       'mapZoomLevel',
     ]),
     ...mapWritableState(useMainStore, [
+      'safeAreaInsets',
       'userLocationFromSearch',
       'userLocation',
       'fineLocation',

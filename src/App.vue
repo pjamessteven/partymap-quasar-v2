@@ -81,7 +81,7 @@ export default {
             cancel: { label: 'Ignore', flat: true },
             ok: { label: 'Update on Play Store', flat: true },
             title: 'System WebView out of date!',
-            message: `Your Android System WebView is at version v${androidWebviewVersion}. PartyMap works best with at least version 20.`,
+            message: `Your Android System WebView is at version v${androidWebviewVersion}. PartyMap works best with at least v120.`,
             color: 'primary',
           })
           .onOk(() => {

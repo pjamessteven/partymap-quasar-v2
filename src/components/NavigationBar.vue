@@ -40,8 +40,8 @@
         :icon="
           $q.screen.lt.sm
             ? sidebarPanel === 'nearby'
-              ? 'mdi-near-me'
-              : 'mdi-near-me'
+              ? 'mdi-home'
+              : 'mdi-home-outline'
             : undefined
         "
       />
@@ -73,8 +73,8 @@
         :icon="
           $q.screen.lt.sm
             ? $route.name === 'BrowsePage'
-              ? 'mdi-text'
-              : 'mdi-text'
+              ? 'mdi-pound'
+              : 'mdi-pound'
             : undefined
         "
         content-class="tab"
@@ -88,8 +88,8 @@
         :icon="
           $q.screen.lt.sm
             ? $route.name === 'UserPage'
-              ? 'mdi-account-circle'
-              : 'mdi-account-circle'
+              ? 'mdi-emoticon-cool'
+              : 'mdi-emoticon-cool-outline'
             : undefined
         "
         label="You"

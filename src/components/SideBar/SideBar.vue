@@ -112,19 +112,19 @@ const hiddenYPosition = () => {
     mainStore.sidebarPanel === 'explore' &&
     $q.screen.gt.xs
   )
-    return window.innerHeight - 62;
+    return window.innerHeight - 62 - mainStore.safeAreaInsets.top;
   else if (
     mainStore.sidebarMinimized &&
     mainStore.sidebarPanel === 'explore' &&
     $q.screen.lt.sm
   )
-    return window.innerHeight - 126;
+    return window.innerHeight - 126 - mainStore.safeAreaInsets.top;
 
   if (mainStore.sidebarPanel === 'nearby') {
     if ($q.screen.gt.xs) {
-      return 256;
+      return 256 + mainStore.safeAreaInsets.top;
     } else {
-      return 200;
+      return 200 + mainStore.safeAreaInsets.top;
     }
   }
 
@@ -237,7 +237,11 @@ const dragHandler = ({
         showPanel();
       }
     } else if (!mainStore.showPanel) {
-      if (mainStore.sidebarMinimized && y < -30 && y > -256) {
+      if (mainStore.sidebarPanel === 'nearby' && y > 30) {
+        mainStore.sidebarPanel = 'explore';
+        hidePanel();
+        return;
+      } else if (mainStore.sidebarMinimized && y < -30 && y > -256) {
         // unminimize
         mainStore.sidebarMinimized = false;
         // hidePanel();

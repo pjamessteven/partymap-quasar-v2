@@ -32,7 +32,7 @@
             </div>
           -->
           <div
-            class="flex row wrap q-gutter-xs"
+            class="flex row wrap q-gutter-xs q-mt-xs"
             style="max-width: 100%"
             v-if="artist && artist.tags"
           >
@@ -87,27 +87,9 @@
             {{ $t('artists.links') }}:
           </div>
 
-          <div class="flex column" style="max-width: 100%">
+          <div class="flex column q-gutter-sm q-pt-xs" style="max-width: 100%">
             <ArtistUrl v-for="(url, index) in urls" :url="url" :key="index" />
           </div>
-        </div>
-        <div>
-          <q-btn
-            flat
-            no-caps
-            class="nav-button soft-button-shadow q-mr-sm q-px-md q-mt-lg q-py-sm"
-            :class="$q.screen.gt.sm ? 'q-mt-lg' : ''"
-            @click="viewOnMap"
-            v-if="artist?.future_event_dates?.length > 0"
-          >
-            View on the map
-            <q-icon
-              name="mdi-chevron-right"
-              size="1rem"
-              class="q-ml-md"
-              :class="{ 'q-ml-md': $q.screen.gt.xs }"
-            />
-          </q-btn>
         </div>
       </div>
     </transition>

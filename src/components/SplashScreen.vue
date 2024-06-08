@@ -76,8 +76,8 @@
     .splash-inner {
       .logo {
         // android
-        @supports ((top: env(safe-area-inset-top))) {
-          top: calc(env(safe-area-inset-top) + 5px);
+        @supports ((top: var(--safe-area-inset-top))) {
+          top: calc(var(--safe-area-inset-top));
         }
 
         &.ipad {

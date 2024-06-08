@@ -29,7 +29,7 @@
         <q-icon
           class="q-mr-sm"
           size="1.4em"
-          name="las la-hashtag"
+          name="mdi-pound"
           v-if="!controlTag || controlTag?.length == 0"
         />
 

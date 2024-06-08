@@ -19,6 +19,8 @@ import FavoritesView from '../SideBar/FavoritesView/FavoritesView.vue';
 
 import { getUserRequest, getUserFullProfileRequest } from 'src/api';
 export default {
+  name: 'UserPage',
+
   components: { SolidPage, FavoritesView },
   props: {
     username: {

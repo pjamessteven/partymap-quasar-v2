@@ -102,7 +102,7 @@
           "
           mode="in-out"
         >
-          <keep-alive include="BrowsePage">
+          <keep-alive :include="['BrowsePage', 'UserPage']">
             <component :is="Component" />
           </keep-alive>
         </Transition>
@@ -214,7 +214,7 @@ export default {
       return `opacity: ${this.sidebarOpacity}`;
     },
     computedSidebarOverlayStyle() {
-      if (!this.showPanelBackground || this.$route.name !== 'Explore') {
+      if (!this.showPanelBackground) {
         return 'opacity: 0';
       } else {
         return 'opacity: 1';
