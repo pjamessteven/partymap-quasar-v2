@@ -385,7 +385,7 @@ export default {
       if (this.ed.url !== this.url) {
         update.url = this.url;
       }
-      if (!_.isEqual(this.ed.tickets, this.tickets)) {
+      if (this.ticketsHasChanged) {
         update.tickets = this.tickets;
       }
       if (this.dateTimeHasChanged) {
@@ -529,6 +529,12 @@ export default {
     },
     locationHasChanged() {
       return this.locationUnchanged !== this.location;
+    },
+    ticketsHasChanged() {
+      return (
+        (!this.ed.tickets && this.tickets.length > 0) ||
+        (this.ed.tickets && !_.isEqual(this.tickets, this.ed.tickets))
+      );
     },
   },
   mounted() {

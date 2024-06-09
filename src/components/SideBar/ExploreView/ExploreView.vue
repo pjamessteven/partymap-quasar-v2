@@ -37,7 +37,7 @@
         style="position: absolute; left: 24px; top: 16px; font-weight: 700"
         v-else-if="
           !isLoadingInitial &&
-          (eventDatesTotal === 0 || !eventDates || eventDates.length === 0) &&
+          (eventDatesTotal === 0 || !eventDates || eventDates?.length === 0) &&
           sidebarMinimized
         "
       >
@@ -269,7 +269,7 @@
               !isLoadingInitial &&
               (eventDatesTotal === 0 ||
                 !eventDates ||
-                eventDates.length === 0) &&
+                eventDates?.length === 0) &&
               !sidebarMinimized
             "
             style="font-weight: 600"
@@ -294,7 +294,7 @@
                   Object.keys(eventDatesGroupedByMonth)?.length == 0) ||
                   (!groupEventsByMonth &&
                     eventDates &&
-                    eventDates.length === 0)) &&
+                    eventDates?.length === 0)) &&
                 !(isLoadingInitial || (mapMoving && !blockUpdates))
               "
             >

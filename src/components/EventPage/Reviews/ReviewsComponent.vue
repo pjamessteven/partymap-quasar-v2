@@ -3,7 +3,7 @@
     <div class="inter bolder text-large t2 q-pr-md q-mb event-page-header">
       Reviews and experiences:
     </div>
-    <div class="new-review q-m-sm q-pl-md q-pb-md">
+    <div class="new-review q-mt-md q-pl-md q-pb-md">
       <div class="flex column grow">
         <div class="flex row items-end">
           <q-input
@@ -104,6 +104,9 @@
     <div
       class="no-reviews t4 inter q-mt-lg"
       v-if="event?.event_contributions?.length === 0"
+      :style="
+        $q.screen.lt.sm || true ? 'text-align: center; padding: 0 32px;' : ''
+      "
     >
       No one has shared their experience yet... be the first!
     </div>
@@ -196,7 +199,7 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .new-review {
-    background: $bi-2;
+    background: $bi-1;
     border: 1px solid (rgba(255, 255, 255, 0.1));
     .panel {
       background: $bi-1;
@@ -208,7 +211,7 @@ export default {
   .new-review {
     background: $b-1;
     border: 1px solid (rgba(0, 0, 0, 0.1));
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
 
     .panel {
       background: $b-1;

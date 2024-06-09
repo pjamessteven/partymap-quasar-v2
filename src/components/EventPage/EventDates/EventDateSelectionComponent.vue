@@ -116,6 +116,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import AddEventDateDialog from './AddEventDateDialog.vue';
 import common from 'assets/common';
 import EventDate from './EventDate.vue';
@@ -159,7 +160,7 @@ export default {
       // this.selectedEventDate = this.this.event?.event_dates?[0]
     },
     selectedEventDateIndex: function () {
-      this.scrollSelectedEdIntoView();
+      this.debouncedScrollSelectedEdIntoView();
     },
   },
   methods: {
@@ -216,7 +217,7 @@ export default {
           query: { name: this.event.name.replace(/ /g, '_') },
         };
         const { href } = this.$router.resolve(route);
-        window.history.pushState({}, null, href);
+        window.history.replaceState({}, null, href);
 
         this.loadEventDate(ed.id);
       }
@@ -241,28 +242,30 @@ export default {
     },
     scrollSelectedEdIntoView() {
       if (this.$refs.scrollArea)
-        if (this.selectedEventDateIndex > 0) {
-          if (this.$q.screen.gt.xs) {
-            // scroll to middle
-            this.$refs.scrollArea.setScrollPosition(
-              'horizontal',
-              this.selectedEventDateIndex * (180 + 18) - (180 + 18),
-              100
-            );
-          } else {
-            // scroll so item is on the left
-            this.$refs.scrollArea.setScrollPosition(
-              'horizontal',
-              this.selectedEventDateIndex * (180 + 18),
-              100
-            );
-          }
-        } else {
+        console.log(this.selectedEventDateIndex, 'indexx');
+
+      if (this.selectedEventDateIndex > 0) {
+        if (this.$q.screen.gt.xs) {
+          // scroll to middle
           this.$refs.scrollArea.setScrollPosition(
             'horizontal',
-            this.selectedEventDateIndex * (180 + 18)
+            this.selectedEventDateIndex * (180 + 18) - (180 + 18),
+            300
+          );
+        } else {
+          // scroll so item is on the left
+          this.$refs.scrollArea.setScrollPosition(
+            'horizontal',
+            this.selectedEventDateIndex * (180 + 18),
+            300 // don't animate
           );
         }
+      } else {
+        this.$refs.scrollArea.setScrollPosition(
+          'horizontal',
+          this.selectedEventDateIndex * (180 + 18)
+        );
+      }
     },
   },
   computed: {
@@ -285,6 +288,14 @@ export default {
     this.localTime = common.localTime;
     this.localTimeCompact = common.localTimeCompact;
     this.recurringPattern = common.recurringPattern;
+    this.debouncedScrollSelectedEdIntoView = _.debounce(
+      this.scrollSelectedEdIntoView,
+      300,
+      {
+        leading: false,
+        trailing: true,
+      }
+    );
     // used to show the add date dialog after removing rrule.
     // regular events wont work because chain of q-dialogs in editrrulecomponent
     /*
@@ -297,7 +308,7 @@ export default {
     */
   },
   mounted() {
-    this.scrollSelectedEdIntoView(this.selectedEventDateIndex);
+    this.debouncedScrollSelectedEdIntoView();
   },
 };
 </script>

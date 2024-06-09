@@ -213,8 +213,6 @@
                               >
                                 <q-btn
                                   no-caps
-                                  color="grey-3"
-                                  text-color="black"
                                   class="ellipsis"
                                   :class="$q.screen.gt.sm ? 'grow' : ' grow'"
                                 >
@@ -248,42 +246,35 @@
                             </div>
                             <div
                               class="flex col q-ml-sm"
-                              v-if="!!event && computedTicketUrl && !editing"
+                              v-if="!!event && computedTicketName && !editing"
                             >
-                              <a
-                                class="flex grow ellipsis"
-                                :href="computedTicketUrl"
-                                target="_blank"
+                              <q-btn
+                                @click="showingTicketDialog = true"
+                                no-caps
+                                class="ellipsis tickets"
+                                :class="$q.screen.gt.sm ? 'grow' : ' grow'"
                               >
-                                <q-btn
-                                  no-caps
-                                  color="grey-3"
-                                  text-color="black"
-                                  class="ellipsis"
-                                  :class="$q.screen.gt.sm ? 'grow' : ' grow'"
+                                <div
+                                  class="flex row grow no-wrap justify-start ellipsis items-center"
                                 >
+                                  <q-icon name="las la-ticket-alt" class="" />
                                   <div
-                                    class="flex row grow no-wrap justify-start ellipsis items-center"
+                                    class="flex column ellipsis items-start q-ml-sm q-pl-xs"
                                   >
-                                    <q-icon name="las la-ticket-alt" class="" />
+                                    <div class="">Get tickets!</div>
                                     <div
-                                      class="flex column ellipsis items-start q-ml-sm q-pl-xs"
+                                      class="o-050 ellipsis text- q-mb-xs"
+                                      style="
+                                        font-size: small;
+                                        line-height: normal;
+                                        width: 100%;
+                                      "
                                     >
-                                      <div class="">Get tickets!</div>
-                                      <div
-                                        class="o-050 ellipsis text- q-mb-xs"
-                                        style="
-                                          font-size: small;
-                                          line-height: normal;
-                                          width: 100%;
-                                        "
-                                      >
-                                        {{ computedTicketUrlSubtitle }}
-                                      </div>
+                                      {{ computedTicketName }}
                                     </div>
                                   </div>
-                                </q-btn>
-                              </a>
+                                </div>
+                              </q-btn>
                             </div>
                           </div>
                         </div>
@@ -846,6 +837,7 @@
       <input :value="computedUrl" ref="copyUrlInput" style="display: none" />
       <q-dialog v-model="showingReportDialog">
         <ReportDialog
+          v-if="showingReportDialog"
           :mode="'reportEvent'"
           @closeDialog="showingReportDialog = false"
         />
@@ -854,27 +846,40 @@
         <ReportDialog
           @closeDialog="showingClaimDialog = false"
           :mode="'claimEvent'"
+          v-if="showingClaimDialog"
         />
       </q-dialog>
 
       <q-dialog v-model="showingSuggestionsDialog">
-        <SuggestionsDialog @closeDialog="showingSuggestionsDialog = false" />
+        <SuggestionsDialog
+          v-if="showingSuggestionsDialog"
+          @closeDialog="showingSuggestionsDialog = false"
+        />
       </q-dialog>
 
       <q-dialog v-model="showingAddEventPhotosDialog">
         <AddEventPhotosDialog
+          v-if="showingAddEventPhotosDialog"
           @closeDialog="showingAddEventPhotosDialog = false"
         />
       </q-dialog>
       <q-dialog v-model="showingAddLineupPosterDialog">
         <AddLineupPosterDialog
+          v-if="showingAddLineupPosterDialog"
           @closeDialog="showingAddLineupPosterDialog = false"
         />
       </q-dialog>
       <q-dialog v-model="showingUploadNewLogoDialog">
         <UploadNewLogoDialog
+          v-if="showingUploadNewLogoDialog"
           @closeDialog="() => (showingUploadNewLogoDialog = false)"
         />
+      </q-dialog>
+      <q-dialog
+        v-model="showingTicketDialog"
+        @closeDialog="() => (showingTicketDialog = false)"
+      >
+        <EventDateTicketUrlDialog v-if="showingTicketDialog" />
       </q-dialog>
     </div>
   </div>
@@ -904,6 +909,7 @@ import EventDateSidebarDesktop from 'components/EventPage/EventDates/EventDateSi
 import FeaturedMediaBackground from 'components/EventPage/Gallery/FeaturedMediaBackground.vue';
 import FeaturedMediaComponent from 'components/EventPage/Gallery/FeaturedMediaComponent.vue';
 import EventDateLineupComponent from 'components/EventPage/EventDates/EventDateLineupComponent.vue';
+import EventDateTicketUrlDialog from 'components/EventPage/EventDates/EventDateTicketUrlDialog.vue';
 // import HistoryComponent from 'components/EventPage/Activity/HistoryComponent.vue';
 import NextEventDateSummary from 'components/EventPage/EventDates/NextEventDateSummary.vue';
 import ReportDialog from './ReportDialog.vue';
@@ -978,12 +984,14 @@ const showingSuggestionsDialog = ref(false);
 const showingAddEventPhotosDialog = ref(false);
 const showingAddLineupPosterDialog = ref(false);
 const showingUploadNewLogoDialog = ref(false);
+const showingTicketDialog = ref(false);
 const eventStore = useEventStore();
 const authStore = useAuthStore();
 const mainStore = useMainStore();
 const mapStore = useMapStore();
 
 const timeAgo = common.timeAgo;
+const getDomainFromUrl = common.getDomainFromUrl;
 
 const { currentUser, currentUserIsStaff } = storeToRefs(authStore);
 let {
@@ -1418,26 +1426,6 @@ onDeactivated(() => {
 });
 */
 
-const getDomainFromUrl = (url: string) => {
-  // Add the prefix if it's missing
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    url = 'http://' + url;
-  }
-
-  // Create a URL object
-  const urlObj = new URL(url);
-
-  // Get the hostname (domain name)
-  let domain = urlObj.hostname;
-
-  // Remove the 'www' prefix if it exists
-  if (domain.startsWith('www.')) {
-    domain = domain.substring(4);
-  }
-
-  return domain;
-};
-
 const computedUrl = computed(() => {
   if (eventStore.event) {
     return (
@@ -1494,19 +1482,8 @@ const computedExternalUrlSubtitle = computed(() => {
   }
 });
 
-const computedTicketUrl = computed(() => {
-  const ticketUrl = selectedEventDate.value?.ticket_url;
-  if (ticketUrl) {
-    // ensure that there is a protocol prefix
-    if (ticketUrl.indexOf('http://') < 0 && ticketUrl.indexOf('https://') < 0) {
-      return '//' + ticketUrl;
-    } else return ticketUrl;
-  } else {
-    return null;
-  }
-});
-const computedTicketUrlSubtitle = computed(() => {
-  const ticketUrl = selectedEventDate.value?.ticket_url;
+const computedTicketName = computed(() => {
+  const ticketUrl = selectedEventDate.value?.tickets?.[0]?.url;
   if (ticketUrl) {
     return getDomainFromUrl(ticketUrl);
   } else {

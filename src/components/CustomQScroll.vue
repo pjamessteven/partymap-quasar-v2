@@ -26,11 +26,11 @@ export default {
     onScroll(event) {
       console.log(event);
     },
-    setScrollPosition(direction, x, y) {
-      this.$refs.scroll.setScrollPosition(direction, x, y);
+    setScrollPosition(direction, offset, duration) {
+      this.$refs.scroll.setScrollPosition(direction, offset, duration);
     },
-    setScrollPercentage(direction, percentage) {
-      this.$refs.scroll.setScrollPercentage(direction, percentage);
+    setScrollPercentage(direction, offset, duration) {
+      this.$refs.scroll.setScrollPercentage(direction, offset, duration);
     },
   },
   computed: {},

@@ -90,9 +90,9 @@ export const useNearbyStore = defineStore('nearby', {
       // needed for the following requests
       const main = useMainStore();
 
-      if (main.userLocation) await this.loadNearbyEventDates();
-
       try {
+        if (main.userLocation) await this.loadNearbyEventDates();
+
         // do the following concurrently
         if (main.userLocation) {
           await Promise.all([
@@ -256,7 +256,7 @@ export const useNearbyStore = defineStore('nearby', {
           if (this.eventDatesPage === 1) {
             this.eventDates = response.data.items;
           } else {
-            this.eventDates = this.eventDates.concat(response.data.items);
+            this.eventDates = this.eventDates?.concat(response.data.items);
           }
           this.eventDatesPages = response.data.pages;
           this.eventDatesHasNext = response.data.has_next;

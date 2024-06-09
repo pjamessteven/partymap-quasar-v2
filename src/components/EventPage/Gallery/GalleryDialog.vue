@@ -17,19 +17,21 @@
         </div>
 
         <div class="info-panel shadow-5 q-pr-sm q-pl-md q-py-xs flex column r">
-          <div class="flex row items-center">
-            Uploaded by&nbsp;
-            <router-link
-              v-if="items[currentIndex]?.creator?.username"
-              class="link-hover t3 inter semibold"
-              :to="{
-                name: 'UserPage',
-                params: { username: items[currentIndex]?.creator?.username },
-              }"
-              >@{{ items[currentIndex]?.creator?.username }}</router-link
-            ><span v-else>anon</span>&nbsp;{{
-              timeAgo(items[currentIndex]?.created_at)
-            }}
+          <div class="flex row items-center no-wrap">
+            <div class="flex row">
+              <router-link
+                style="color: black"
+                v-if="items[currentIndex]?.creator?.username"
+                class="link-hover t3 inter semibold"
+                :to="{
+                  name: 'UserPage',
+                  params: { username: items[currentIndex]?.creator?.username },
+                }"
+                >@{{ items[currentIndex]?.creator?.username }}</router-link
+              ><span v-else>anon</span>&nbsp;{{
+                timeAgo(items[currentIndex]?.created_at)
+              }}
+            </div>
             <q-btn
               flat
               :text-color="'grey-6'"

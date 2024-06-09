@@ -130,7 +130,7 @@ export default {
           // hide map markers on nearby page
           if (
             this.mapMarkers &&
-            toRaw(this.map).hasLayer(toRaw(this.mapMarkers))
+            toRaw(this.map)?.hasLayer(toRaw(this.mapMarkers))
           ) {
             toRaw(this.mapMarkers).remove();
           }
@@ -141,8 +141,9 @@ export default {
       }
       if (newv === 'explore') {
         if (
+          toRaw(this.mapMarkers) &&
           this.$q.screen.lt.sm &&
-          !toRaw(this.map).hasLayer(toRaw(this.mapMarkers))
+          !toRaw(this.map)?.hasLayer(toRaw(this.mapMarkers))
         ) {
           // possible performance issue
           if (toRaw(this.mapMarkers)) {
@@ -239,13 +240,13 @@ export default {
             // enter event page
             if (
               this.mapMarkers &&
-              toRaw(this.map).hasLayer(toRaw(this.mapMarkers))
+              toRaw(this.map)?.hasLayer(toRaw(this.mapMarkers))
             ) {
               toRaw(this.mapMarkers).remove();
             }
             if (
               this.eventDateHoverLayer &&
-              toRaw(this.map).hasLayer(toRaw(this.eventDateHoverLayer))
+              toRaw(this.map)?.hasLayer(toRaw(this.eventDateHoverLayer))
             ) {
               toRaw(this.eventDateHoverLayer).clearLayers();
               toRaw(this.eventDateHoverLayer).remove();
@@ -287,14 +288,14 @@ export default {
 
             if (
               this.focusMarkerLayer &&
-              toRaw(this.map).hasLayer(toRaw(this.focusMarkerLayer))
+              toRaw(this.map)?.hasLayer(toRaw(this.focusMarkerLayer))
             ) {
               this.focusMarkerLayer.clearLayers();
               this.focusMarkerLayer.remove();
             }
             if (
               this.eventDateHoverLayer &&
-              toRaw(this.map).hasLayer(toRaw(this.eventDateHoverLayer))
+              toRaw(this.map)?.hasLayer(toRaw(this.eventDateHoverLayer))
             ) {
               this.eventDateHoverLayer.clearLayers();
               this.eventDateHoverLayer.remove();
@@ -371,7 +372,7 @@ export default {
     addUserLocationMarker(latlng) {
       if (
         this.userLocationMarkerLayer &&
-        toRaw(this.map).hasLayer(toRaw(this.userLocationMarkerLayer))
+        toRaw(this.map)?.hasLayer(toRaw(this.userLocationMarkerLayer))
       ) {
         this.userLocationMarkerLayer.clearLayers();
         this.userLocationMarkerLayer.remove();
@@ -430,7 +431,9 @@ export default {
         toRaw(this.map)?.removeLayer(toRaw(this.mapMarkersPermanentTooltip));
         this.mapMarkersPermanentTooltip.clearLayers();
       }
-      this.loadPoints();
+      try {
+        this.loadPoints();
+      } catch (e) {}
     },
     fitBoundsForFocusMarker() {
       // var paddingBottom = this.windowHeight - (this.windowHeight / 2 - 120)

@@ -17,16 +17,20 @@
         <div>
           <q-badge
             v-if="ed?.cancelled"
-            class="q-my-xs"
+            class="q-my-xs q-mr-sm"
             color="red"
             :label="$t('event_date_inline.cancelled')"
           />
-          <span v-else-if="ed?.date_confirmed == true">
-            {{ localDay(ed?.start_naive, ed.tz) }}
-            {{ localDate(ed?.start_naive, ed.tz) }}
+          <span v-if="hasOccured">Past event in&nbsp;</span>
+          <span v-if="ed?.date_confirmed == true">
+            {{ localDay(ed?.start_naive, ed?.tz) }}
+            {{ localDate(ed?.start_naive, ed?.tz) }}
           </span>
           <span v-else-if="!ed?.date_confirmed">
-            {{ monthYear(ed?.start_naive, ed?.tz) }}&nbsp;(Date TBC)</span
+            {{ monthYear(ed?.start_naive, ed?.tz) }}&nbsp;<span
+              v-if="!hasOccured && !ed?.cancelled"
+              >(Date TBC)</span
+            ></span
           >
           <!--
           <span class="t3">
@@ -65,7 +69,11 @@ export default {
   },
   components: {},
   props: { ed: Object, alignRight: Boolean },
-
+  computed: {
+    hasOccured() {
+      return this.isInPast(this.ed?.start_naive, this.ed?.tz);
+    },
+  },
   created() {
     // import common methods
     this.relativeHumanTime = common.relativeHumanTime;
@@ -77,6 +85,7 @@ export default {
     this.localTimeCompact = common.localTimeCompact;
     this.timeZoneAbbreviention = common.timeZoneAbbreviention;
     this.monthYear = common.monthYear;
+    this.isInPast = common.isInPast;
   },
 };
 </script>

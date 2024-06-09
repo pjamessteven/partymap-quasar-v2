@@ -52,9 +52,11 @@
           />
         </Transition>
         <div
+          v-show="
+            $q.screen.lt.sm || ($q.screen.gt.xs && $route.name == 'Explore')
+          "
           class="sidebar-overlay"
           :style="computedSidebarOverlayStyle"
-          @click="clickOverlay()"
         />
       </div>
 
@@ -215,7 +217,7 @@ export default {
     },
     computedSidebarOverlayStyle() {
       if (!this.showPanelBackground) {
-        return 'opacity: 0';
+        return 'opacity: 0; pointer-events: none;';
       } else {
         return 'opacity: 1';
       }
@@ -377,7 +379,7 @@ export default {
       position: absolute;
       height: 100%;
       width: 100%;
-      pointer-events: none;
+      pointer-events: all;
       margin-top: calc(0px - var(--safe-area-inset-top)) !important;
     }
 
@@ -511,6 +513,16 @@ export default {
               rgba(0, 0, 0, 0) 100%
             );
           }
+          &.map-overlay-mobile-minimized {
+            background: linear-gradient(
+              rgba(0, 0, 0, 1),
+              rgba(0, 0, 0, 0.48) 148px,
+              transparent 200px,
+              transparent calc(100% - 200px),
+              rgba(0, 0, 0, 0.68) calc(100% - 128px),
+              rgba(0, 0, 0, 0.68) 100%
+            );
+          }
         }
       }
     }
@@ -541,9 +553,9 @@ export default {
             rgba(0, 0, 0, 0.8),
             rgba(0, 0, 0, 0) 168px,
             transparent 200px,
-            transparent calc(100% - 176px),
-            rgba(0, 0, 0, 0.68) calc(100% - 96px),
-            rgba(0, 0, 0, 0.68) 100%
+            transparent calc(100% - 200px),
+            rgba(0, 0, 0, 0.48) calc(100% - 128px),
+            rgba(0, 0, 0, 0.48) 100%
           );
         }
       }

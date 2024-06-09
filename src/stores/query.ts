@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import moment from 'moment';
-import { Screen } from 'quasar';
+import { Screen, Notify } from 'quasar';
 
 import {
   getPointsRequest,
@@ -359,7 +359,7 @@ export const useQueryStore = defineStore('query', {
             this.topTagsInArea = response.data.top_tags;
             this.topArtistsInArea = response.data.top_artists;
           } else {
-            this.eventDates = this.eventDates.concat(response.data.items);
+            this.eventDates = this.eventDates?.concat(response.data.items);
             groupEventDatesByMonth(
               this.eventDatesGroupedByMonth,
               response.data.items
@@ -376,6 +376,7 @@ export const useQueryStore = defineStore('query', {
       } catch (error) {
         this.eventDatesLoading = false;
         this.eventDatesHasNext = false;
+        Notify.create('Network error');
         throw error;
       }
     },

@@ -1,6 +1,6 @@
 <template>
   <div v-if="!!event">
-    <div class="flex column">
+    <div class="flex column q-mb-md">
       <div class="inter bolder text-large t2 q-pr-md q-mb-sm event-page-header">
         Description:
       </div>
@@ -50,7 +50,6 @@
           </span>
         </div>
       </div>
-      <q-separator class="q-mt-lg" />
     </div>
     <q-dialog
       v-model="showEditingDialog"

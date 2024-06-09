@@ -7,7 +7,7 @@
       {{ $t('event_dates.lineup') }}
     </div>
     <div
-      class="flex row no-wrap q-gutter-sm q-mb-lg"
+      class="flex row no-wrap q-gutter-sm q-mb-lg q-mt-sm"
       v-if="lineupImages?.length > 0"
     >
       <GalleryDialog

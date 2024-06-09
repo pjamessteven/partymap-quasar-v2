@@ -247,6 +247,11 @@ export default {
     var m = moment.tz(t, tz);
     return m.format('ddd') + ' ' + m.format('lll');
   },
+  isInPast: function (t, tz) {
+    moment.locale(locale);
+    var m = moment.tz(t, tz);
+    return m.isBefore(moment());
+  },
   month: function (t, tz) {
     moment.locale(locale);
     var m = moment.tz(t, tz);
@@ -642,5 +647,24 @@ export default {
     } else {
       return '';
     }
+  },
+  getDomainFromUrl: (url) => {
+    // Add the prefix if it's missing
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      url = 'http://' + url;
+    }
+
+    // Create a URL object
+    const urlObj = new URL(url);
+
+    // Get the hostname (domain name)
+    let domain = urlObj.hostname;
+
+    // Remove the 'www' prefix if it exists
+    if (domain.startsWith('www.')) {
+      domain = domain.substring(4);
+    }
+
+    return domain;
   },
 };

@@ -79,6 +79,10 @@ export const useMainStore = defineStore('main', {
       } catch (error) {
         //fail silently
         console.log(error);
+        this.userLocationLoading = false;
+        this.userLocationCity = 'Arghhhh!';
+
+        return;
         //throw error;
       }
     },
@@ -123,8 +127,7 @@ export const useMainStore = defineStore('main', {
         this.userLocationFromSearch = false;
       } catch (e) {
         // just show the co-ords if reverse geocoding fails
-        this.userLocationCity =
-          this.userLocation?.lat + ', ' + this.userLocation?.lng;
+        this.userLocationCity = 'Unknown location';
         this.userLocationLoading = false;
       }
     },

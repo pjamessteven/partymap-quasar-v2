@@ -27,7 +27,7 @@
     </div>
 
     <CustomQScroll
-      class="q-mb-sm"
+      class="q-mb-sm q-mt-sm"
       v-if="computedImages?.length > 0"
       horizontal
       ref="scrollArea"
@@ -63,8 +63,6 @@
         </div>
       </div>
     </CustomQScroll>
-
-    <q-separator v-if="computedImages?.length > 0" class="q-mb-md" />
 
     <div
       class="flex row wrap items-center event-page-header"

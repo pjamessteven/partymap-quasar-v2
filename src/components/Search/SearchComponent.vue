@@ -21,7 +21,7 @@
       placeholder="Search places, artists and events"
     >
       <template v-slot:prepend>
-        <div class="q-mr-xs q-ml-">
+        <div class="q-mr-xs q-ml-" v-if="$q.screen.gt.xs">
           <q-icon size="1.2em" name="mdi-magnify" />
         </div>
       </template>

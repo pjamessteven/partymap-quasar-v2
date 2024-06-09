@@ -138,7 +138,7 @@ export interface EventDate {
   description: string;
   description_attribute: string;
   url: string;
-  ticket_url?: string;
+  tickets?: any; //yolo
   cancelled: boolean;
   distance: number;
   duration: number;

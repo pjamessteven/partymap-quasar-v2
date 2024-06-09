@@ -629,7 +629,7 @@
                   ? 'q-pl-sm q-mt-sm t1 inter semibold'
                   : 'q-pl-sm t1'
               "
-              v-if="eventDates && eventDates.length > 0"
+              v-if="eventDates && eventDates?.length > 0"
               style="height: 56px"
             >
               <!--<div class="separator" /> -->
@@ -905,9 +905,9 @@ export default {
             } catch {
               //  await this.loadIpInfo();
             }
-            if (this.eventDates.length === 0) this.loadEverything();
+            if (this.eventDates?.length === 0) this.loadEverything();
           } else {
-            if (this.eventDates.length === 0) this.loadEverything();
+            if (this.eventDates?.length === 0) this.loadEverything();
           }
         }
       },
@@ -1103,9 +1103,9 @@ export default {
         } catch {
           await this.loadIpInfo();
         }
-        if (this.eventDates.length === 0) this.loadEverything();
+        if (this.eventDates?.length === 0) this.loadEverything();
       } else {
-        if (this.eventDates.length === 0) this.loadEverything();
+        if (this.eventDates?.length === 0) this.loadEverything();
       }
     }
 

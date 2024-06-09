@@ -650,7 +650,7 @@ export default {
     ends: 'Ends',
     directions: 'Directions',
     add_info: 'Add a description for this specific date (for recurring events)',
-    add_ticket_url: 'Add a link to the ticketing page',
+    add_ticket_url: 'Add links to buy tickets',
     add_url: 'Add a link to the website or Facebook page',
     add_lineup: 'Add the lineup',
     show_all: 'Show all',

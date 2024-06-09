@@ -22,7 +22,7 @@
         v-if="$route.name === 'Explore' || $q.screen.lt.sm"
       >
         <div
-          class="flex items-center no-wrap"
+          class="flex items-center no-wrap scroll-inner-inner"
           v-show="
             $q.screen.gt.md || ($q.screen.lt.lg && sidebarPanel === 'search')
           "
@@ -656,8 +656,19 @@ export default {
       pointer-events: all;
 
       .scroll-inner {
-        .mobile-search-wrapper {
+        .scroll-inner-inner {
           width: 100%;
+          .mobile-search-wrapper {
+            width: 100%;
+            .controls-wrapper-inner {
+              width: 100%;
+              :deep(.searchbar-wrapper) {
+                .searchbar-input {
+                  width: 100% !important;
+                }
+              }
+            }
+          }
         }
       }
     }

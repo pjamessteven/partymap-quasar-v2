@@ -28,8 +28,9 @@
         <div class="flex column" :class="$q.screen.gt.sm ? 'text-large' : ''">
           <div class="t2">Tickets</div>
           <span class="t3">
-            <span v-if="computedTicketSellerName"
-              >Get tickets from&nbsp;{{ computedTicketSellerName }}</span
+            <span v-if="computedTicketSellerName">{{
+              computedTicketSellerName
+            }}</span
             ><span v-else>Get tickets to this event</span></span
           >
         </div>
@@ -110,45 +111,7 @@ Direct link when only one ticket available
       transition-show="jump-up"
       transition-hide="jump-down"
     >
-      <q-card class="flex column q-pa-md">
-        <div
-          class="flex column"
-          v-for="(ticket, index) of selectedEventDate.tickets"
-          :key="index"
-        >
-          <div class="flex row items-center justify-between">
-            <div class="flex column">
-              <div class="inter bold">{{ ticket.description }}</div>
-              <div class="t2" v-if="ticket.price_min">
-                {{ ticket.price_min
-                }}<span class="t2" v-if="ticket.price_max"
-                  >&nbsp;-&nbsp;{{ ticket.price_max }}</span
-                >&nbsp;{{ ticket.price_currency_code }}
-              </div>
-            </div>
-            <a
-              style="text-decoration: none; color: unset"
-              :href="ticket.url"
-              target="_blank"
-              class="q-ml-xl"
-            >
-              <q-btn
-                no-caps
-                class="nav-button primary"
-                flat
-                style="width: 190px"
-                label="Buy tickets"
-                icon="las la-external-link-alt"
-                :class="$q.screen.gt.sm ? '' : 'flex grow'"
-              />
-            </a>
-          </div>
-          <q-separator
-            v-if="index !== selectedEventDate.tickets.length - 1"
-            class="q-my-sm"
-          />
-        </div>
-      </q-card>
+      <EventDateTicketUrlDialog />
     </q-dialog>
   </div>
 </template>
@@ -156,13 +119,16 @@ Direct link when only one ticket available
 <script>
 import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
+import common from 'assets/common';
 
 import EditEventDateDialog from './EditEventDateDialog.vue';
+import EventDateTicketUrlDialog from './EventDateTicketUrlDialog.vue';
 
 export default {
   name: 'EventDateTicketUrlComponent',
   components: {
     EditEventDateDialog,
+    EventDateTicketUrlDialog,
   },
   watch: {},
   data() {
@@ -172,45 +138,14 @@ export default {
     editing: Boolean,
   },
   methods: {},
+  created() {
+    this.getDomainFromUrl = common.getDomainFromUrl;
+  },
   computed: {
     ...mapState(useEventStore, ['event', 'selectedEventDate']),
-    /*
-    computedExternalUrl() {
-      if (this.selectedEventDate && this.selectedEventDate.ticket_url) {
-        // ensure that there is a protocol prefix
-        if (
-          this.selectedEventDate.ticket_url.indexOf('http://') < 0 &&
-          this.selectedEventDate.ticket_url.indexOf('https://') < 0
-        ) {
-          return '//' + this.selectedEventDate.ticket_url;
-        } else return this.selectedEventDate.ticket_url;
-      } else {
-        return null;
-      }
-    },
-    */
+
     computedTicketSellerName() {
-      if (
-        this.selectedEventDate &&
-        this.selectedEventDate.tickets?.length > 0
-      ) {
-        // ensure that there is a protocol prefix
-        if (
-          this.selectedEventDate.tickets[0].url
-            .toLowerCase()
-            .indexOf('ticketmaster')
-        ) {
-          return 'Ticketmaster';
-        } else if (
-          this.selectedEventDate.tickets[0].url.toLowerCase().indexOf('moshtix')
-        ) {
-          return 'Moshtix';
-        } else {
-          return null;
-        }
-      } else {
-        return null;
-      }
+      return this.getDomainFromUrl(this.selectedEventDate?.tickets?.[0]?.url);
     },
   },
 };

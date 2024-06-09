@@ -112,6 +112,7 @@ export default {
     },
   },
   mounted() {
+    StatusBar.setOverlaysWebView({ overlay: true });
     if (this.$q.platform.is.ipad) {
       StatusBar.hide();
     } else if (this.$q.platform.is.capacitor) {
@@ -360,8 +361,9 @@ export default {
       opacity: 1;
       transition: opacity 0.3s ease;
       pointer-events: all;
-      min-height: 64px;
+      min-height: 72px;
       border-radius: 0px !important;
+      padding-right: 24px;
     }
   }
 
@@ -418,6 +420,7 @@ export default {
       left: 0px;
 
       .back-button {
+        min-height: 62px;
       }
     }
     &.search-expanded {

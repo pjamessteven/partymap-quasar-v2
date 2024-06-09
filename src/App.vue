@@ -94,7 +94,6 @@ export default {
           });
       }
     }
-    console.log('ua', navigator.userAgent);
     // check and get location permission
     try {
       this.getFineLocation();
@@ -898,17 +897,21 @@ body {
 
 .q-dialog {
   @supports ((top: var(--safe-area-inset-top))) {
-    padding-top: calc(var(--safe-area-inset-top));
+    top: calc(var(--safe-area-inset-top));
   }
   @supports ((bottom: var(--safe-area-inset-bottom))) {
-    padding-bottom: calc(var(--safe-area-inset-bottom));
+    height: calc(
+      100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top)
+    );
   }
   .q-dialog__inner {
     @supports ((top: var(--safe-area-inset-top))) {
-      padding-top: calc(var(--safe-area-inset-top));
+      top: calc(var(--safe-area-inset-top));
     }
     @supports ((bottom: var(--safe-area-inset-bottom))) {
-      padding-bottom: calc(var(--safe-area-inset-bottom));
+      height: calc(
+        100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top)
+      ) !important;
     }
   }
 }

@@ -26,10 +26,17 @@
           class="flex column t2"
           :class="$q.screen.gt.sm ? 'text-large items-start' : 'items-center'"
         >
-          <div class="t2" v-if="ed.date_confirmed">
+          <q-badge
+            v-if="ed?.cancelled && false"
+            class="q-my-xs"
+            color="red"
+            :label="$t('event_date_inline.cancelled')"
+          />
+          <div class="t2" v-else-if="ed.date_confirmed">
             <span>{{ localDay(ed.start_naive, null) }}</span>
           </div>
-          <span v-else class="t2">Date TBC</span>
+          <span v-else-if="!hasOccured" class="t2">Date TBC</span>
+          <span v-else-if="hasOccured" class="t2">Past event in</span>
           <div class="t2" style="text-align: center">
             <span v-if="ed.date_confirmed">{{
               localDate(ed.start_naive, null)
@@ -41,6 +48,20 @@
       <div class="background" />
       <div class="line" :style="getOpacity" v-if="!editing" />
       <div class="flex timeline-icon-wrapper q-mt-md" v-if="!editing">
+        <q-icon
+          class="timeline-icon"
+          v-if="event?.next_date?.id === ed.id"
+          name="mdi-circle"
+          color="primary"
+          style="
+            z-index: -1;
+            margin-top: -7px;
+            margin-left: -7px;
+            filter: opacity(0.48);
+          "
+          size="2em"
+          :style="getOpacity"
+        />
         <transition
           appear
           enter-active-class="animated fadeIn slow"
@@ -49,6 +70,7 @@
           <q-icon
             class="timeline-icon t2"
             v-if="expanded"
+            color="primary"
             name="mdi-circle"
             size="1em"
             :style="getOpacity"
@@ -147,6 +169,9 @@ export default {
       return `opacity: ${this.opacity};
       transition: all 300ms;`;
     },
+    hasOccured() {
+      return this.isInPast(this.ed?.start_naive, this.ed.tz);
+    },
   },
   created() {
     // import common methods
@@ -157,6 +182,7 @@ export default {
     this.localDay = common.localDay;
     this.localTimeCompact = common.localTimeCompact;
     this.timeZoneAbbreviention = common.timeZoneAbbreviention;
+    this.isInPast = common.isInPast;
   },
 };
 </script>
@@ -191,11 +217,6 @@ export default {
     }
   }
 
-  .active-card {
-    .timeline-icon {
-      background: $bi-3;
-    }
-  }
   .inactive-card {
     &:hover {
       box-shadow: none;
@@ -243,9 +264,6 @@ export default {
   .active-card {
     .timeline-line {
       opacity: 0;
-    }
-    .timeline-icon {
-      background: $b-2;
     }
   }
   .inactive-card {

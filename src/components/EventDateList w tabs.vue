@@ -107,7 +107,7 @@
           v-if="
             (groupByMonth &&
               Object.keys(eventDatesGroupedByMonth)?.length > 0) ||
-            (!groupByMonth && eventDates && eventDates.length > 0)
+            (!groupByMonth && eventDates && eventDates?.length > 0)
           "
           class="t4 inter semibold q-mt-md"
         >
@@ -117,7 +117,7 @@
           v-else-if="
             ((groupByMonth &&
               Object.keys(eventDatesGroupedByMonth)?.length == 0) ||
-              (!groupByMonth && eventDates && eventDates.length === 0)) &&
+              (!groupByMonth && eventDates && eventDates?.length === 0)) &&
             !loading
           "
           :class="$q.screen.lt.sm ? 'q-mt-lg t4 semibold' : 'q-mt-lg'"

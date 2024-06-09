@@ -11,6 +11,7 @@
           mainStore.sidebarPanel === 'nearby' && $q.screen.gt.xs,
         'sidebar-mobile-hidden':
           false && $q.screen.lt.sm && $route.name === 'EventPage',
+        iphone: $q.platform.is.iphone || $q.platform.is.ipod,
       }"
     >
       <q-btn rounded no-caps class="hide-results-button" v-if="false"
@@ -107,18 +108,24 @@ const preventSwipe = (event) => {
 };
 
 const hiddenYPosition = () => {
+  const iosOffset =
+    $q.platform.is.ios &&
+    $q.platform.is.capacitor &&
+    mainStore.safeAreaInsets.bottom
+      ? mainStore.safeAreaInsets.bottom - 24
+      : 0;
   if (
     mainStore.sidebarMinimized &&
     mainStore.sidebarPanel === 'explore' &&
     $q.screen.gt.xs
   )
-    return window.innerHeight - 62 - mainStore.safeAreaInsets.top;
+    return window.innerHeight - 62 - mainStore.safeAreaInsets.top - iosOffset;
   else if (
     mainStore.sidebarMinimized &&
     mainStore.sidebarPanel === 'explore' &&
     $q.screen.lt.sm
   )
-    return window.innerHeight - 126 - mainStore.safeAreaInsets.top;
+    return window.innerHeight - 126 - mainStore.safeAreaInsets.top - iosOffset;
 
   if (mainStore.sidebarPanel === 'nearby') {
     if ($q.screen.gt.xs) {
@@ -868,24 +875,6 @@ watch(
         */
         padding-bottom: calc(180px + var(--safe-area-inset-top));
       }
-      @supports (
-          (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
-            (-webkit-appearance: none)
-        )
-        and (max-width: 599px) {
-        /*
-        transform: translate3d(
-          0,
-          calc(
-            100% - 228px - env(safe-area-inset-top) -
-              env(safe-area-inset-bottom) + 16px
-          ),
-          0
-        );
-        */
-        // below value -8px is correct for iphone 7, + 16px is correct for iphone x in app mode, 0px correct for iphone x in browser
-        // padding-bottom: calc(188px + env(safe-area-inset-top));
-      }
 
       .sidebar-content {
       }
@@ -926,6 +915,26 @@ watch(
 
         .lights-image {
           width: 100%;
+        }
+      }
+    }
+  }
+  .native-mobile {
+    .sidebar-wrapper {
+      .sidebar {
+        &.iphone {
+          @supports (
+            (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+              (-webkit-appearance: none)
+          ) {
+            @media screen and (max-width: 375px) {
+              //  iphone 7
+              padding-bottom: calc(180px - 8px + var(--safe-area-inset-top));
+            }
+            @media screen and (min-width: 376px) {
+              padding-bottom: calc(180px + var(--safe-area-inset-top));
+            }
+          }
         }
       }
     }

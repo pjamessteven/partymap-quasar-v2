@@ -24,6 +24,8 @@
           v-if="selectedEventDate?.date_confirmed"
         >
           <div class="t2" v-if="selectedEventDate.start_naive">
+            <span class="inter" v-if="hasOccured">Happened on:&nbsp;</span>
+
             <span v-if="$q.screen.gt.xs">
               {{
                 localDateTimeLong(
@@ -78,7 +80,7 @@
         <div
           class="flex column q-ml-md"
           :class="$q.screen.gt.sm ? 'text-large' : ''"
-          v-else
+          v-else-if="!hasOccured"
         >
           <div class="t2">
             <span>
@@ -93,8 +95,21 @@
               >Confirm exact date</span
             >&nbsp;or&nbsp;<span
               class="t4 link-hover underline"
-              @click.stop="showEditDialog = true"
+              @click.stop="showMarkCancelledDialog = true"
               >Mark as cancelled
+            </span>
+          </div>
+        </div>
+        <div
+          class="flex column q-ml-md"
+          :class="$q.screen.gt.sm ? 'text-large' : ''"
+          v-else
+        >
+          <div class="t2">
+            <span>
+              Happened in&nbsp;{{
+                monthYear(selectedEventDate.start_naive, selectedEventDate.tz)
+              }}
             </span>
           </div>
         </div>
@@ -136,6 +151,13 @@
     >
       <EditEventDateDialog :ed="selectedEventDate" mode="date" />
     </q-dialog>
+    <q-dialog
+      v-model="showMarkCancelledDialog"
+      transition-show="jump-up"
+      transition-hide="jump-down"
+    >
+      <EventDateMarkCancelledDialog v-if="showMarkCancelledDialog" />
+    </q-dialog>
   </div>
 </template>
 
@@ -145,7 +167,7 @@ import common from 'assets/common';
 import moment from 'moment-timezone';
 
 import EditEventDateDialog from './EditEventDateDialog.vue';
-
+import EventDateMarkCancelledDialog from './EventDateMarkCancelledDialog.vue';
 import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 
@@ -154,6 +176,7 @@ export default {
   components: {
     EditEventDateDialog,
     Calendar,
+    EventDateMarkCancelledDialog,
   },
   watch: {
     calendarSelectedEventDateRange: {
@@ -178,7 +201,12 @@ export default {
     },
   },
   data() {
-    return { expanded: false, showEditDialog: false, local: moment() };
+    return {
+      expanded: false,
+      showEditDialog: false,
+      local: moment(),
+      showMarkCancelledDialog: false,
+    };
   },
   props: {
     editing: Boolean,
@@ -225,7 +253,12 @@ export default {
       'selectedEventDate',
       'selectedEventDateIndex',
     ]),
-
+    hasOccured() {
+      return this.isInPast(
+        this.selectedEventDate?.start_naive,
+        this.selectedEventDate.tz
+      );
+    },
     calendarSelectedEventDateRange() {
       // THIS ASSUMES THAT THE INPUT IS A NAIVE DATETIME STRING
       // LIKE 2021-12-23 11:00:00 OR 2021-12-26T14:00:00Z
@@ -346,10 +379,13 @@ export default {
     this.localDateTimeLong = common.localDateTimeLong;
     this.localDateTimeShort = common.localDateTimeShort;
     this.localDateLong = common.localDateLong;
+    this.localDate = common.localDate;
+    this.monthYear = common.monthYear;
     this.localTimeCompact = common.localTimeCompact;
     this.timeZoneAbbreviention = common.timeZoneAbbreviention;
     this.month = common.month;
     this.recurringPattern = common.recurringPattern;
+    this.isInPast = common.isInPast;
   },
 };
 </script>

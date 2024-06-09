@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import moment from 'moment';
-import { Screen } from 'quasar';
+import { Screen, Notify } from 'quasar';
 
 import { getEventDatesRequest } from 'src/api';
 import { EventDate } from 'src/types/autogen_types';
@@ -74,7 +74,7 @@ export const useBrowseStore = defineStore('browse', {
             response.data.items
           );
         } else {
-          item.eventDates = item.eventDates.concat(response.data.items);
+          item.eventDates = item.eventDates?.concat(response.data.items);
           groupEventDatesByMonth(
             item.eventDatesGroupedByMonth,
             response.data.items
@@ -87,6 +87,8 @@ export const useBrowseStore = defineStore('browse', {
       } catch (error) {
         item.eventDatesLoading = false;
         item.eventDatesHasNext = false;
+        Notify.create('Network error');
+
         throw error;
       }
       this.taggedEvents[tag] = item;

@@ -141,16 +141,6 @@
           outlined
           dense
           color="bg-grey-7"
-          v-model="event.ticket_url"
-          label="Ticket URL"
-          style="padding-bottom: 0px"
-        />
-
-        <q-input
-          class="q-mb-md"
-          outlined
-          dense
-          color="bg-grey-7"
           v-model="event.youtube_url"
           label="Youtube URL"
           style="padding-bottom: 0px"
