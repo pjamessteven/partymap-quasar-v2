@@ -73,7 +73,10 @@
                         v-if="!controlDateRangeSelectedOption?.value"
                       />
                     </div>
-                    <div class="q-mr-sm" style="white-space: nowrap">
+                    <div
+                      class="q-mr-sm hide-ipad-portrait"
+                      style="white-space: nowrap"
+                    >
                       Search
                     </div>
                   </div>
@@ -97,7 +100,10 @@
               <TagControl />
             </div>
           </div>
-          <div class="controls-wrapper flex no-wrap q-ml-sm">
+          <div
+            class="controls-wrapper flex no-wrap q-ml-sm"
+            v-if="!ipadPortrait"
+          >
             <div class="controls-wrapper-inner">
               <ArtistControl />
             </div>
@@ -125,6 +131,9 @@
                     class="more-menu"
                     max-height="100vh"
                   >
+                    <q-item v-if="ipadPortrait">
+                      <ArtistControl />
+                    </q-item>
                     <q-item>
                       <SizeControl />
                     </q-item>
@@ -242,6 +251,10 @@ export default {
     },
   },
   computed: {
+    ipadPortrait() {
+      // special layout case
+      return this.$q.screen.gt.sm && this.windowWidth < 1124;
+    },
     ...mapState(useMapStore, ['mapStyle']),
     ...mapWritableState(useSearchStore, ['query', 'searchbarShowing']),
     ...mapWritableState(useMainStore, [
@@ -250,6 +263,7 @@ export default {
       'menubarOpacity',
     ]),
     ...mapState(useMainStore, [
+      'windowWidth',
       'fineLocation',
       'userLocationLoading',
       'userLocationCity',
@@ -645,6 +659,15 @@ export default {
       .scroll-inner {
         padding-left: 24px;
         justify-content: center;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1116px) and (min-width: 1024px) {
+  .desktop-search-component {
+    .control-scroll-area {
+      .scroll-inner {
       }
     }
   }

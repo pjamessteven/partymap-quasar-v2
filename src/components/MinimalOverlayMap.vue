@@ -58,7 +58,6 @@ export default {
       monochromeMapOpactiy: 0.68,
       windowHeight: 0,
       clientHeight: 0,
-      windowWidth: 0,
     };
   },
   created() {
@@ -171,6 +170,7 @@ export default {
       'mapStyle',
     ]),
     ...mapState(useMainStore, [
+      'windowWidth',
       'userLocation',
       'sidebarPanel',
       'showPanel',

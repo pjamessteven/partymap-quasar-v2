@@ -94,7 +94,6 @@ export default {
       monochromeMapOpactiy: 0.68,
       windowHeight: 0,
       clientHeight: 0,
-      windowWidth: 0,
     };
   },
   created() {
@@ -896,6 +895,7 @@ export default {
       'mapZoomLevel',
     ]),
     ...mapWritableState(useMainStore, [
+      'windowWidth',
       'safeAreaInsets',
       'userLocationFromSearch',
       'userLocation',
