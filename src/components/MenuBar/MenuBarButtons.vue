@@ -65,7 +65,7 @@
   -->
 
     <router-link
-      v-if="$q.screen.gt.xs && !currentUser"
+      v-if="$q.screen.gt.xs"
       class="flex link-hover"
       :to="
         currentUser
@@ -102,7 +102,7 @@
     </router-link>
 
     <q-btn
-      v-else-if="$q.screen.gt.xs && currentUser"
+      v-else-if="false && currentUser"
       flat
       no-caps
       class="profile-button t2 q-mr-md"

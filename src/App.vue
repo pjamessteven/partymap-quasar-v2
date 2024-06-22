@@ -94,12 +94,6 @@ export default {
           });
       }
     }
-    // check and get location permission
-    try {
-      this.getFineLocation();
-    } catch {
-      this.loadIpInfo();
-    }
 
     if (this.$q.platform.is.capacitor) {
       // handle deep links in native app
@@ -895,6 +889,11 @@ body {
   padding: 0px;
 }
 
+.q-notifications__list--top {
+  @supports ((top: var(--safe-area-inset-top))) {
+    top: calc(var(--safe-area-inset-top));
+  }
+}
 .q-dialog {
   @supports ((top: var(--safe-area-inset-top))) {
     top: calc(var(--safe-area-inset-top));
@@ -909,9 +908,11 @@ body {
       top: calc(var(--safe-area-inset-top));
     }
     @supports ((bottom: var(--safe-area-inset-bottom))) {
+      /*
       height: calc(
         100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top)
       ) !important;
+       */
     }
   }
 }

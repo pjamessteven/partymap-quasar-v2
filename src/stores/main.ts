@@ -6,6 +6,7 @@ import { Geolocation } from '@capacitor/geolocation';
 import { Notify } from 'quasar';
 import { Screen, Platform } from 'quasar';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
+
 interface MainStoreState {
   windowWidth: number;
   safeAreaInsets: { [key: string]: number };
@@ -33,7 +34,12 @@ interface MainStoreState {
   groupEventsByMonth: boolean;
   compactView: boolean;
   routerHistory: RouteLocationNormalizedLoaded[];
+  tips: {
+    [key: string]: boolean;
+  };
 }
+const localTips = localStorage.getItem('tips');
+
 export const useMainStore = defineStore('main', {
   state: (): MainStoreState => ({
     windowWidth: 0,
@@ -62,9 +68,16 @@ export const useMainStore = defineStore('main', {
     groupEventsByMonth: Screen.lt.sm,
     compactView: true,
     routerHistory: [],
+    tips: (localTips && JSON.parse(localTips)) || {
+      hidePanelTip: true,
+      oldAndroid: true,
+    },
   }),
   getters: {},
   actions: {
+    persistTipsToLocalStorage() {
+      localStorage.setItem('tips', JSON.stringify(this.tips));
+    },
     async loadIpInfo() {
       try {
         const response = await getIpInfoRequest();
@@ -129,7 +142,7 @@ export const useMainStore = defineStore('main', {
         this.userLocationFromSearch = false;
       } catch (e) {
         // just show the co-ords if reverse geocoding fails
-        this.userLocationCity = 'Unknown location';
+        this.userLocationCity = '...';
         this.userLocationLoading = false;
       }
     },
@@ -143,9 +156,11 @@ export const useMainStore = defineStore('main', {
               // show coords while loading place name
               if (!this.userLocation) {
                 const unknownCityCoords =
-                  position.coords.latitude + ', ' + position.coords.longitude;
+                  position.coords.latitude.toFixed(3) +
+                  ', ' +
+                  position.coords.longitude.toFixed(3);
                 //  this.userLocationCity = unknownCityCoords;
-                this.userLocationCity = '...';
+                this.userLocationCity = unknownCityCoords;
               }
 
               this.userLocation = {
@@ -157,7 +172,12 @@ export const useMainStore = defineStore('main', {
               resolve(null);
             },
             () => {
-              Notify.create('Cannot get your location');
+              Notify.create({
+                message: 'Using rough location from your IP address...',
+              });
+              Notify.create({
+                message: "Can't get precise location",
+              });
               reject(null);
             },
             { timeout: 10000 }
@@ -169,9 +189,12 @@ export const useMainStore = defineStore('main', {
               // show coords while loading place name
               if (!this.userLocation) {
                 const unknownCityCoords =
-                  position.coords.latitude + ', ' + position.coords.longitude;
+                  position.coords.latitude.toFixed(3) +
+                  ', ' +
+                  position.coords.longitude.toFixed(3);
+
                 // this.userLocationCity = unknownCityCoords;
-                this.userLocationCity = '...';
+                this.userLocationCity = unknownCityCoords;
               }
 
               this.userLocation = {
@@ -184,7 +207,12 @@ export const useMainStore = defineStore('main', {
               resolve(null);
             })
             .catch((error) => {
-              Notify.create('Cannot get your location');
+              Notify.create({
+                message: 'Using rough location from your IP address...',
+              });
+              Notify.create({
+                message: 'Cannot get your location',
+              });
               reject(null);
             });
         } else {

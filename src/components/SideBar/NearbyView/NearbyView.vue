@@ -230,6 +230,7 @@
         <transition appear enter-active-class="animated fadeIn slow">
           <div
             class="content"
+            style="cursor: default"
             v-if="computedSidebarPanelReady && !loadingEverything"
           >
             <!-- tags -->
@@ -587,7 +588,7 @@
                 !userLocationLoading
               "
             >
-              No nearby events! Try selecting a wider radius.
+              :/
             </div>
             <EventDateList
               class="q-mx-sm"

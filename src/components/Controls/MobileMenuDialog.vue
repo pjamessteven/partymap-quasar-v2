@@ -77,6 +77,7 @@ export default {
   max-height: 600px;
   position: absolute;
   bottom: 0px;
+  border-radius: 0px !important;
   .card {
     border: none;
     flex-grow: 1;
@@ -84,7 +85,8 @@ export default {
     backdrop-filter: none;
     box-shadow: none;
     height: 100%;
-
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
     .component-wrapper {
       overflow: hidden;
       border-top-right-radius: 18px !important;

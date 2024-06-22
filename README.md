@@ -46,7 +46,9 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 
 npm install -g @quasar/icongenie
 
-icongenie generate --icon /Users/peter/development/partymap-git/partymap-quasarv2/src/assets/marker-dark.png --background /Users/peter/development/partymap-git/partymap-quasarv2/src/assets/partymap-logo-light.png --png-color 000000 --splashscreen-color 000000 --svg-color 000000 --theme-color 000000
+icongenie generate --icon /Users/peter/development/partymap-git/partymap-quasarv2/src/assets/marker-dark.png --skip-trim --padding 30,30 --background /Users/peter/development/partymap-git/partymap-quasarv2/src/assets/partymap-logo-light.png --png-color 242424 --splashscreen-color 242424 --svg-color 242424 --theme-color 242424 --mode capacitor
+
+icongenie generate --icon /Users/peter/development/partymap-git/partymap-quasarv2/src/assets/marker-dark.png --png-color 242424 --splashscreen-color 242424 --svg-color 242424 --theme-color 242424 --mode capacitor
 
 ## Capactior Android font size fix
 

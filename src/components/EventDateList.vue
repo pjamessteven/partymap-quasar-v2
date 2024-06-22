@@ -199,6 +199,7 @@ const computedTotalResultMessage = computed(() => {
 </script>
 <style lang="scss" scoped>
 .ed-card-grid {
+  cursor: default;
   display: grid;
   grid-gap: 1rem;
   .ed-card {

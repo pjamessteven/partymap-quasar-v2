@@ -20,7 +20,10 @@
         }"
       >
         <div class="ed-card-bg" :style="getBottomBgImgStyle()" />
-        <div class="ed-card-content flex row no-wrap q-pa-md">
+        <div
+          class="ed-card-content flex row no-wrap q-py-md q-pl-md"
+          style="width: 100%"
+        >
           <!-- mouseover.stop is to fix a stupid ios bug relating to q-scroll-area having a mouseover event and causing the user to have to double click on items-->
           <div
             class="image-container flex justify-center items-center shadow-2xl"
@@ -40,7 +43,10 @@
               />
             </transition>
           </div>
-          <div class="flex column grow q-pl-md" style="width: 100%">
+          <div
+            class="flex column grow q-pl-md"
+            style="width: 100%; overflow: hidden"
+          >
             <div
               class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
             >
@@ -73,8 +79,8 @@
             </div>
 
             <div
-              class="flex column justify-center card-bottom-text o-070 q-mb-sm"
-              style="font-weight: 400"
+              class="flex column justify-center card-bottom-text o-070 q-mb-sm q-pr-md"
+              style="font-weight: 400; width: 100%"
               :class="{
                 'q-mt-': $q.screen.gt.sm,
               }"
@@ -95,7 +101,7 @@
             </span>
           </div>
 -->
-              <div class="flex column">
+              <div class="flex column ellipsis" style="width: 100%">
                 <span>
                   <q-icon name="las la-clock" class="q-mr-sm" />
                   <q-badge
@@ -114,29 +120,35 @@
                       )
                     }}
                   </span>
+                  <span
+                    v-if="
+                      event.event.rrule &&
+                      event.event.rrule.separation_count > 0
+                    "
+                    class="o-070 no-wrap ellipsis q-ml-xs"
+                  >
+                    <q-icon size="1em" class="q-mr-sm" name="las la-redo-alt" />
+                    <span v-if="$q.screen.gt.sm">{{
+                      simplifiedRecurringPattern(event.event.rrule)
+                    }}</span>
+                  </span>
                 </span>
-                <div class="flex row items-center no-wrap ellipsis">
+                <div
+                  class="flex row items-center no-wrap ellipsis"
+                  style="width: 100%"
+                >
                   <q-icon name="las la-calendar" class="q-mr-sm" />
                   <div class="flex row no-wrap ellipsis">
                     <span v-if="event.date_confirmed">
                       {{ localDateWithWeekday(event.start_naive, event.tz) }}
                     </span>
                     <span v-else>
-                      {{ monthYear(event.start_naive, event.tz) }} (Date TBC)
-                    </span>
-                    <span
-                      v-if="
-                        event.event.rrule &&
-                        event.event.rrule.separation_count > 0
-                      "
-                      class="flex row items-center q-ml-xs o-070 no-wrap ellipsis"
-                    >
-                      <q-icon class="q-ml-xs q-mr-sm" name="las la-redo-alt" />
-                      {{ simplifiedRecurringPattern(event.event.rrule) }}
+                      {{ monthYear(event.start_naive, event.tz)
+                      }}<span class="o-060">&nbsp;(TBC)</span>
                     </span>
                   </div>
                 </div>
-                <div>
+                <div style="width: 100%" class="ellipsis">
                   <span
                     v-if="event.location && event.location.locality"
                     class="ellipsis"
@@ -171,8 +183,8 @@
               {{ event.event.description }}
             </div>
             <!-- scroll area here (qscroll or regular) area causes performance issues on android-->
-            <q-scroll-area
-              v-if="!$q.platform.is.android"
+            <CustomQScroll
+              v-if="!$q.platform.is.androi || true"
               horizontal
               style="min-height: 39px; margin-bottom: -8px"
               class="q-mt-xs"
@@ -183,7 +195,7 @@
               }"
             >
               <div
-                class="tag-container flex row no-wrap ellipsis"
+                class="tag-container flex row no-wrap ellipsis q-pr-md"
                 v-if="
                   event.event.event_tags && event.event.event_tags.length > 0
                 "
@@ -196,7 +208,7 @@
                   :value="et.tag"
                 ></Tag>
               </div>
-            </q-scroll-area>
+            </CustomQScroll>
             <div v-else class="flex">
               <div
                 class="tag-container flex row no-wrap"
@@ -225,9 +237,12 @@ import common, { localDayOfMonth } from 'assets/common';
 import Tag from 'src/components/TagComponent.vue';
 import { mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
+import CustomQScroll from 'components/CustomQScroll.vue';
+
 export default {
   components: {
     Tag,
+    CustomQScroll,
   },
   props: {
     event: Object,
@@ -297,6 +312,7 @@ export default {
     outline: 1px solid black;
     border-top: 1px solid rgba(48, 48, 48);
     background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9));
+    background: linear-gradient($bi-2, $bi-3);
 
     .ed-card-bg {
       background: $bi-3;
@@ -317,7 +333,7 @@ export default {
 
   .tag-container {
     .tag {
-      color: $ti-2 !important;
+      color: $ti-1 !important;
       border: 1px solid rgba(255, 255, 255, 0.2) !important;
     }
   }
@@ -330,6 +346,7 @@ export default {
     box-shadow: rgba(0, 0, 0, 0.12) 0px 3px 8px;
     font-smooth: always;
     background: black;
+    background: linear-gradient($bi-2, $bi-3);
 
     .card-background {
       //background: #181818;
@@ -374,13 +391,13 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
     z-index: 10;
     opacity: 0;
     transition: opacity 0.3s;
     pointer-events: none;
     border-radius: 9px;
-    z-index: 2;
+    z-index: 5;
   }
 
   &:hover {
@@ -489,7 +506,7 @@ export default {
 @media only screen and (min-width: 1024px) {
   .ed-card {
     &:before {
-      display: none;
+      //display: none;
       //opacity: 1;
     }
     &:hover {

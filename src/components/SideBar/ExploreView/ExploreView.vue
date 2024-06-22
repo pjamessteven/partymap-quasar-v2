@@ -406,7 +406,7 @@ export default {
       'loadMoreArtists',
       'clearAllFilters',
     ]),
-    ...mapActions(useMainStore, ['loadIpInfo']),
+    ...mapActions(useMainStore, ['loadIpInfo', 'persistTipsToLocalStorage']),
     clickTag(tag) {
       let index = this.controlTag?.findIndex((x) => x.tag === tag.tag);
       if (index > -1) {
@@ -484,6 +484,41 @@ export default {
     },
     sidebarPanel(newv) {
       this.$refs.scroll.setScrollPercentage('vertical', 0);
+      if (newv === 'explore') {
+        if (this.tips.hidePanelTip)
+          setTimeout(() => {
+            this.$q.notify({
+              message: 'Tap the map or drag to hide/show the bottom panel!',
+              actions: [
+                {
+                  label: 'Got it',
+                  handler: () => {
+                    this.tips.hidePanelTip = false;
+                    this.persistTipsToLocalStorage();
+                  },
+                },
+              ],
+            });
+          }, 1000);
+
+        if (this.tips.oldAndroid && this.$q.platform.is.android) {
+          setTimeout(() => {
+            this.$q.notify({
+              message:
+                'Got an older phone? Improve app performance by switching to the transport map.',
+              actions: [
+                {
+                  label: 'Got it',
+                  handler: () => {
+                    this.tips.oldAndroid = false;
+                    this.persistTipsToLocalStorage();
+                  },
+                },
+              ],
+            });
+          }, 15000);
+        }
+      }
     },
     mapMoving(newv) {
       if (newv) this.eventDatesHasNext = false;
@@ -549,6 +584,7 @@ export default {
       'compactView',
       'groupEventsByMonth',
       'sidebarMinimized',
+      'tips',
     ]),
     ...mapWritableState(useMainStore, [
       'showPanel',

@@ -76,7 +76,7 @@ export default {
 }
 
 .user-event-scroll-area {
-  height: 288px;
+  height: 264px;
   margin-bottom: -8px;
   mask-image: linear-gradient(
     to left,

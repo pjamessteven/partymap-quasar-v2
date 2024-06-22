@@ -19,8 +19,6 @@
       >
 
       <div class="sidebar-content flex column no-wrap">
-        <div class="desktop-resizer"></div>
-
         <div
           style="height: 100%; width: 100%"
           class="sidebar-content-inner"
@@ -580,6 +578,7 @@ watch(
   justify-content: center;
   display: flex;
   .sidebar {
+    cursor: grab;
     position: relative;
     flex-shrink: 0;
     z-index: 500;
@@ -619,15 +618,6 @@ watch(
       overflow: hidden;
       position: relative;
       align-items: center;
-
-      .desktop-resizer {
-        position: absolute;
-        width: 90%;
-        height: 64px;
-        cursor: grab;
-        z-index: 1000;
-        pointer-events: all;
-      }
 
       .add-event-wrapper {
         position: absolute;
