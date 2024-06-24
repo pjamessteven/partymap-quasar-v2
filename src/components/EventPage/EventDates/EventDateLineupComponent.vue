@@ -3,11 +3,13 @@
     <div
       class="inter bolder text-large t2 q-pr-md event-page-header"
       v-if="selectedEventDate?.artists?.length > 0 || lineupImages?.length > 0"
+      :class="{ 'q-px-md': $q.screen.lt.sm }"
     >
       {{ $t('event_dates.lineup') }}
     </div>
     <div
-      class="flex row no-wrap q-gutter-sm q-mb-lg q-mt-sm"
+      class="flex row no-wrap q-gutter-sm q-mt-sm"
+      :class="{ 'q-mb-': $q.screen.gt.xs }"
       v-if="lineupImages?.length > 0"
     >
       <GalleryDialog

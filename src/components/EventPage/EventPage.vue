@@ -344,7 +344,7 @@
                       <div
                         class="flex column"
                         :class="{
-                          'q-px-md ': $q.screen.lt.sm,
+                          ' ': $q.screen.lt.sm,
                           'q-mt-md': $q.screen.gt.xs && $q.screen.lt.md,
                           'q-px-xl': $q.screen.gt.xs && $q.screen.lt.md,
                         }"
@@ -354,7 +354,9 @@
                             (computedTicketUrl || computedExternalUrl) && event
                           "
                           class="event-buttons flex row items-center wrap o-100"
-                          :class="$q.screen.gt.sm ? ' q-py-md' : 'q-py-md'"
+                          :class="
+                            $q.screen.gt.sm ? ' q-py-md' : 'q-py-md q-pl-md'
+                          "
                         >
                           <CustomQScroll
                             horizontal
@@ -704,6 +706,7 @@
                             (event.full_description &&
                               event?.full_description?.length > 0)
                           "
+                          :class="{ 'q-px-md': $q.screen.lt.sm }"
                         />
 
                         <EventDateLineupComponent />
@@ -719,7 +722,10 @@
                           "
                         />
 
-                        <ReviewsComponent class="q-mb-xl" />
+                        <ReviewsComponent
+                          class="q-mb-xl"
+                          :class="{ 'q-px-md': $q.screen.lt.sm }"
+                        />
                       </div>
                     </div>
                   </div>

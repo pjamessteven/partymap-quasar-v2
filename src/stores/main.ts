@@ -156,9 +156,9 @@ export const useMainStore = defineStore('main', {
               // show coords while loading place name
               if (!this.userLocation) {
                 const unknownCityCoords =
-                  position.coords.latitude.toFixed(3) +
+                  position.coords.latitude.toFixed(1) +
                   ', ' +
-                  position.coords.longitude.toFixed(3);
+                  position.coords.longitude.toFixed(1);
                 //  this.userLocationCity = unknownCityCoords;
                 this.userLocationCity = unknownCityCoords;
               }
@@ -189,9 +189,9 @@ export const useMainStore = defineStore('main', {
               // show coords while loading place name
               if (!this.userLocation) {
                 const unknownCityCoords =
-                  position.coords.latitude.toFixed(3) +
+                  position.coords.latitude.toFixed(1) +
                   ', ' +
-                  position.coords.longitude.toFixed(3);
+                  position.coords.longitude.toFixed(1);
 
                 // this.userLocationCity = unknownCityCoords;
                 this.userLocationCity = unknownCityCoords;

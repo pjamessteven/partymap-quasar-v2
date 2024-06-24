@@ -66,7 +66,7 @@
 
     <div
       class="flex row wrap items-center event-page-header"
-      :class="{ 'q-mt-md': $q.screen.gt.sm }"
+      :class="{ 'q-mt-md': $q.screen.gt.sm, 'q-px-md': $q.screen.lt.sm }"
       v-if="event.event_dates.length > 1"
     >
       <div class="text-large inter bolder t2 q-pr-md">
@@ -100,6 +100,7 @@
       class="flex column"
       v-else-if="!!selectedEventDate"
       :key="selectedEventDateIndex + 101"
+      :class="{ 'q-px-md': $q.screen.lt.sm }"
     >
       <div class="inter bolder t2 text-large q-pr-md event-page-header">
         <span v-if="event.event_dates.length > 1">Details:</span

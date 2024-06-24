@@ -872,6 +872,9 @@ body {
 .q-input {
   border-radius: 9px !important;
 }
+.q-scrollarea__thumb {
+  z-index: 5000;
+}
 .q-field__control {
   //border-radius: 9px !important;
   overflow: hidden;

@@ -161,13 +161,25 @@
                   >
                 </div>
               </a>
-              <div
+
+              <a
+                href="https://play.google.com/store/apps/details?id=org.partymap.com"
+                target="_blank"
+                class="app-link"
+                style="text-decoration: none !important"
                 @click.stop
-                class="appstore-wrapper flex items-center q-py-sm q-px-md"
               >
-                <q-icon name="mdi-google-play" size="1.5rem" class="q-mr-sm" />
-                <span style="text-decoration: italic">Coming soon...</span>
-              </div>
+                <div class="appstore-wrapper flex items-center q-py-sm q-px-md">
+                  <q-icon
+                    name="mdi-google-play"
+                    size="1.5rem"
+                    class="q-mr-sm"
+                  />
+                  <span style="text-decoration: italic"
+                    >PartyMap on Google Play</span
+                  >
+                </div>
+              </a>
             </div>
             <div class="separator q-mt-md" />
           </div>
