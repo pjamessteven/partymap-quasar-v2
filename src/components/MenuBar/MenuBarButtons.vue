@@ -77,6 +77,7 @@
       "
     >
       <q-btn
+        v-if="!currentUser"
         flat
         no-caps
         class="profile-button t2 q-mr-md"
@@ -99,45 +100,35 @@
           />
         </div>
       </q-btn>
-    </router-link>
-
-    <q-btn
-      v-else-if="false && currentUser"
-      flat
-      no-caps
-      class="profile-button t2 q-mr-md"
-      :class="{
-        'light-button': color === 'white',
-      }"
-    >
-      <div
-        class="profile-button-inner flex row items-center no-wrap"
-        style="white-space: nowrap"
+      <q-btn
+        v-else-if="currentUser"
+        flat
+        no-caps
+        class="profile-button t2 q-mr-md"
+        :class="{
+          'light-button': color === 'white',
+        }"
       >
-        <!--
+        <div
+          class="profile-button-inner flex row items-center no-wrap"
+          style="white-space: nowrap"
+        >
+          <!--
           <q-icon name="mdi-calendar-star" class="q-mr-md q-ml-md t2" />
           -->
-        <div class="q-px-md q-pl-md">@{{ currentUser.username }}</div>
-        <q-avatar
-          :color="color"
-          class="o-070"
-          :text-color="color === 'white' ? 'black' : 'white'"
-          icon="mdi-account-circle"
-          font-size="14px"
-          size="36px"
-        />
-      </div>
-      <q-menu
-        transition-show="jump-down"
-        transition-hide="jump-up"
-        anchor="bottom right"
-        self="top right"
-        class="main-menu"
-        max-height="100vh"
-      >
-        <TopControlsMenu :onlyUserItems="true" />
-      </q-menu>
-    </q-btn>
+          <div class="q-px-md q-pl-md">@{{ currentUser.username }}</div>
+          <q-avatar
+            :color="color"
+            class="o-070"
+            :text-color="color === 'white' ? 'black' : 'white'"
+            icon="mdi-account-circle"
+            font-size="14px"
+            size="36px"
+          />
+        </div>
+      </q-btn>
+    </router-link>
+
     <q-btn
       v-if="$q.screen.lt.sm"
       icon="mdi-magnify"

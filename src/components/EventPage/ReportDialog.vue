@@ -106,7 +106,7 @@ export default {
   components: { VueHcaptcha },
   props: {
     mode: String,
-    contributionId: String,
+    reviewId: String,
     mediaItemId: String,
   },
   methods: {
@@ -170,15 +170,17 @@ export default {
           ...payload,
           event_id: this.event.id,
         };
-      } else if (this.mode === 'reportContribution') {
+      } else if (this.mode === 'reportReview') {
         payload = {
           ...payload,
-          event_contribution_id: this.contributionId,
+          event_review_id: this.reviewId,
+          event_id: this.event?.id,
         };
       } else if (this.mode === 'reportMediaItem') {
         payload = {
           ...payload,
           media_item_id: this.mediaItemId,
+          event_id: this.event?.id,
         };
       }
       return payload;

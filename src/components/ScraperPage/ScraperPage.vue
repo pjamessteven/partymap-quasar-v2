@@ -162,10 +162,30 @@
 
       <q-card class="flex row q-gutter-sm q-pa-sm" v-else-if="mode == 'gpt'">
         <div class="flex column grow">
-          <q-input type="textarea" v-model="gpt" label="GPT JSON Array" />
-          <div class="flex grow justify-end q-mt-md">
+          <div class="flex row justify-between items-center grow q-mb-xl">
+            <GptQuery
+              @result="
+                ($event) => (gptEventsToGet = [...gptEventsToGet, ...$event])
+              "
+            />
+          </div>
+          <q-divider />
+          <div :key="key" v-for="(item, key) in gptEventsToGet">
+            <GptQueryItem
+              v-model="gptEventsToGet[key]"
+              @result="($event) => mappedResponse.push($event)"
+            />
+          </div>
+          <div class="flex grow justify-start q-mt-md q-gutter-sm">
+            <q-btn class="nav-button" no-caps @click="resetGptEvents()"
+              >Reset</q-btn
+            >
+            <q-btn class="nav-button" no-caps @click="addGptEvent()"
+              >Add Manual</q-btn
+            >
+
             <q-btn class="nav-button primary" no-caps @click="parseGptEvents()"
-              >Go</q-btn
+              >Load all</q-btn
             >
           </div>
         </div>
@@ -196,12 +216,18 @@
         <InnerLoading v-if="loading" />
         <ScraperResult
           class="q-mt-md"
-          v-for="result in mappedResponse"
+          v-for="(result, index) in mappedResponse"
           :result="result"
           :universalTags="universalTags"
-          :key="result.id"
-          @errorStateChanged="errorStatusChanged(result.id, $event)"
-          @eventData="eventDataChanged(result.id, $event)"
+          :key="index"
+          @errorStateChanged="errorStatusChanged(index, $event)"
+          @eventData="eventDataChanged(index, $event)"
+          @delete="
+            () => {
+              delete events[index];
+              mappedResponse.splice(index, 1);
+            }
+          "
         />
       </div>
       <q-dialog :model-value="!!mappedSelectedResult">
@@ -228,12 +254,16 @@ import SelectTagsComponent from 'components/EventPage/Tags/SelectTagsComponent.v
 import moment from 'moment';
 import countryCodes from 'src/assets/country-code';
 import gptSamplePrompt from './gptJsonSample.ts';
+import GptQuery from './GptQuery.vue';
+import GptQueryItem from './GptQueryItem.vue';
 export default {
   components: {
     InnerLoading,
     ScraperResult,
     AddEventPage,
     SelectTagsComponent,
+    GptQueryItem,
+    GptQuery,
   },
   props: {
     username: {
@@ -243,7 +273,7 @@ export default {
   data() {
     return {
       totalPages: 0,
-      mode: 'ticketmaster',
+      mode: 'gpt',
       events: {},
       universalTags: [],
       ticketMasterSearch: {
@@ -263,6 +293,13 @@ export default {
       facebook: {
         URL: '',
       },
+      gptEventsToGet: [
+        {
+          name: '',
+          country: '',
+          year: moment().year(),
+        },
+      ],
       page: 0,
       response: null,
       mappedResponse: [],
@@ -298,11 +335,11 @@ export default {
 
       progressDialog.hide();
     },
-    errorStatusChanged(id, errorStatus) {
-      this.events[id] = { ...this.events[id], errorStatus, id };
+    errorStatusChanged(index, errorStatus) {
+      this.events[index] = { ...this.events[index], errorStatus, index };
     },
-    eventDataChanged(id, eventData) {
-      this.events[id] = { ...this.events[id], eventData, id };
+    eventDataChanged(index, eventData) {
+      this.events[index] = { ...this.events[index], eventData, index };
     },
     search() {
       if (this.mode === 'ticketmaster') {
@@ -310,6 +347,22 @@ export default {
       } else if (this.mode === 'musicbrainz') {
         this.searchMusicbrainz();
       }
+    },
+    resetGptEvents() {
+      this.gptEventsToGet = [
+        {
+          name: '',
+          country: '',
+          year: moment().year(),
+        },
+      ];
+    },
+    addGptEvent() {
+      this.gptEventsToGet.push({
+        name: '',
+        country: '',
+        year: moment().year(),
+      });
     },
     async searchMusicbrainz() {
       this.loading = true;

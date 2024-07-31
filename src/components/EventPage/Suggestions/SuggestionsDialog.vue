@@ -168,7 +168,12 @@
       transition-show="jump-up"
       transition-hide="jump-down"
     >
-      <SelectArtistsDialog @closeDialog="closeDialog()" />
+      <SelectArtistsDialog
+        @closeDialog="closeDialog()"
+        :eventName="event.name"
+        :eventCountry="computedEventDateCountry"
+        :eventYear="computedEventDateYear"
+      />
     </q-dialog>
   </q-card>
 </template>
@@ -282,6 +287,12 @@ export default {
   },
   computed: {
     ...mapState(useEventStore, ['event', 'selectedEventDate']),
+    computedEventDateYear() {
+      return moment(this.selectedEventDate.start_naive).year();
+    },
+    computedEventDateCountry() {
+      return selectedEventDate?.location?.description?.split(',').pop();
+    },
     rruleStatus() {
       if (this.event?.rrule?.separation_count > 0) {
         return true;

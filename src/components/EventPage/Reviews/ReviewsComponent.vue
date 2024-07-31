@@ -103,7 +103,7 @@
     </div>
     <div
       class="no-reviews t4 inter q-mt-lg"
-      v-if="event?.event_contributions?.length === 0"
+      v-if="event?.event_reviews?.length === 0"
       :style="
         $q.screen.lt.sm || true ? 'text-align: center; padding: 0 32px;' : ''
       "
@@ -112,7 +112,7 @@
     </div>
     <div v-else class="q-mt-md">
       <ReviewComponent
-        v-for="(review, index) in event.event_contributions"
+        v-for="(review, index) in event.event_reviews"
         :key="index"
         :review="review"
       />

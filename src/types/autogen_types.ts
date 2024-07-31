@@ -287,6 +287,7 @@ export interface Activity {
   verb: string;
   object_type: string;
   object_version: any;
+  object_id: any;
   target_version: any;
   previous_version: any;
   previous_target_version: any;
@@ -347,7 +348,7 @@ export interface Report {
   message: string;
   email: string;
   event: Event;
-  event_contribution: EventContribution;
+  event_reviewtContribution;
   media_item: MediaItem;
 }
 

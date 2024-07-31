@@ -10,7 +10,7 @@ import {
   editEventDateRequest,
   updateMediaItemRequest,
   deleteMediaItemRequest,
-  submitContributionRequest,
+  submitReviewRequest,
   toggleEventDateInterestedRequest,
   toggleEventDateGoingRequest,
 } from 'src/api';
@@ -282,10 +282,7 @@ export const useEventStore = defineStore('event', {
     },
     async addReview(payload: EventContribution) {
       try {
-        const response = await submitContributionRequest(
-          this.event?.id,
-          payload
-        );
+        const response = await submitReviewRequest(this.event?.id, payload);
         this.reloadEvent();
         return response;
       } catch (e) {

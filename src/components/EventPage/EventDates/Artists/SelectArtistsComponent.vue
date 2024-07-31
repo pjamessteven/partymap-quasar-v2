@@ -1,6 +1,14 @@
 <template>
   <div class="select-artists-component flex column">
     <SelectArtistsInput @selectedArtist="onSelectArtist($event)" />
+    <GptArtistQuery
+      class="q-mt-md"
+      v-if="currentUser?.role >= 20"
+      :name="eventName"
+      :year="eventYear"
+      :country="eventCountry"
+      @save="($event) => onSaveGptArtists($event)"
+    />
     <div
       class="flex row no-wrap items-center q-mt-sm list-select"
       style="max-width: 100%"
@@ -39,7 +47,7 @@
       <div
         class="flex column"
         v-for="(artist, index) in artistsOfList"
-        :key="artist.id + artist.mbid"
+        :key="artist.id + artist.mbid + artist.name"
       >
         <q-separator v-if="index !== 0" />
         <ArtistListItem
@@ -86,25 +94,31 @@
 <script>
 import SelectEventInput from 'src/components/SelectEventInput.vue';
 
-import _, { update } from 'lodash';
+import _ from 'lodash';
 import ArtistListItem from './ArtistListItem.vue';
 import SubmitSuggestionPrompt from 'components/EventPage/Suggestions/SubmitSuggestionPrompt.vue';
 import SelectArtistsInput from './SelectArtistsInput.vue';
+import GptArtistQuery from './GptArtistQuery.vue';
 import { mapState, mapActions } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
+import moment from 'moment-timezone';
 
 export default {
   components: {
     ArtistListItem,
     SelectArtistsInput,
     SelectEventInput,
+    GptArtistQuery,
   },
   props: {
     mode: String,
     artists: Array,
     defaultDate: String,
     prepopulateArtistsToAdd: Array,
+    eventName: String,
+    eventCountry: String,
+    eventYear: Number,
   },
   data() {
     return {
@@ -258,11 +272,18 @@ export default {
         }
       });
     },
+    onSaveGptArtists(values) {
+      console.log('values', values);
+      for (const value of values) {
+        const _value = { ...value, toAdd: true, stage: this.selectedList };
+        this.artistsList.push(_value);
+        this.artistsToAdd.push(_value);
+      }
+    },
     onSelectArtist(value) {
-      value.toAdd = true;
-      value.stage = this.selectedList;
-      this.artistsList.push(value);
-      this.artistsToAdd.push(value);
+      const _value = { ...value, toAdd: true, stage: this.selectedList };
+      this.artistsList.push(_value);
+      this.artistsToAdd.push(_value);
     },
     loadArtistList() {
       this.originalArtistsList = _.cloneDeep(this.selectedEventDate.artists);
@@ -361,6 +382,11 @@ export default {
       } else {
         return this.artistsList.filter((x) => x.stage === this.selectedList);
       }
+    },
+    computedEventYear() {
+      if (this.eventYear) return this.eventYear;
+      else if (this.defaultDate) return moment(this.defaultDate).year();
+      else return null;
     },
   },
   mounted() {

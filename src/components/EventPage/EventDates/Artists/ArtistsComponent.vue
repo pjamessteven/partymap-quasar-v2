@@ -101,6 +101,9 @@
       <SelectArtistsDialog
         @hideDialog="hideDialog()"
         :defaultDate="selectedEventDate.start_naive"
+        :eventName="event.name"
+        :eventCountry="computedEventDateCountry"
+        :eventYear="computedEventDateYear"
       />
     </q-dialog>
   </div>
@@ -201,6 +204,12 @@ export default {
   },
   computed: {
     ...mapState(useEventStore, ['event', 'selectedEventDate']),
+    computedEventDateYear() {
+      return moment(this.selectedEventDate.start_naive).year();
+    },
+    computedEventDateCountry() {
+      return this.selectedEventDate?.location?.description?.split(',').pop();
+    },
     trimmedArtistsOfStage() {
       // show all or nah?
       if (this.artistsOfStage.length > 10 && !this.showAllArtists) {

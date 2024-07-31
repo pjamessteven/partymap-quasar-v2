@@ -106,6 +106,9 @@
           class="q-px-lg"
           :mode="'newEvent'"
           @updated="eventDate.artists = $event"
+          :eventName="event.name"
+          :eventCountry="computedEventDateCountry"
+          :eventYear="computedEventDateYear"
         />
       </q-card-section>
 
@@ -162,27 +165,29 @@
         />
       </q-card-section>
 
-      <!-- Ticket URL (removed for this release)
+      <!-- Ticket URL (admin only) -->
 
-    <q-card-section class="flex row justify-between no-wrap">
-      <div class="   flex row wrap items-center">
-        <q-icon left size="1em" name="las la-ticket-alt" />
-        <div class=" card-title q-pr-md">
-          Ticketing URL
+      <q-card-section
+        class="flex row justify-between no-wrap"
+        v-if="currentUser.role >= 20"
+      >
+        <div class="flex row wrap items-center">
+          <q-icon left size="1em" name="las la-ticket-alt" />
+          <div class="card-title q-pr-md">Ticketing URL</div>
         </div>
-      </div>
-    </q-card-section>
-    <q-card-section class="q-pt-none q-ml-lg">
-      <q-input
-        outlined
-        square
-        autogrow
-        color="bg-grey-7"
-        v-model="eventDate.ticket_url"
-        :label="$t('add.ticketing_url')"
-      />
-    </q-card-section>
-     -->
+      </q-card-section>
+
+      <q-card-section class="q-pt-none q-ml-lg" v-if="currentUser.role >= 20">
+        <q-input
+          outlined
+          square
+          autogrow
+          color="bg-grey-7"
+          v-model="eventDate.ticket_url"
+          :label="$t('add.ticketing_url')"
+        />
+      </q-card-section>
+
       <q-card-section class="flex row justify-end">
         <q-btn
           @click="addEd()"
@@ -309,6 +314,15 @@ export default {
     getOpacity() {
       return `opacity: ${this.opacity};
       transition: all 300ms;`;
+    },
+    computedEventDateYear() {
+      // use end to consider new years festivals
+      if (this.eventDate?.date_time?.end) {
+        return moment(this.eventDate.date_time.end).year();
+      } else return null;
+    },
+    computedEventDateCountry() {
+      return this.eventDate?.location?.description?.split(',').pop();
     },
   },
   created() {

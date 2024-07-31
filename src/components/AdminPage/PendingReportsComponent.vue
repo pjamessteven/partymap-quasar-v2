@@ -23,7 +23,7 @@
         <div class="flex column" v-for="(item, index) in reports" :key="index">
           <q-separator spaced v-if="index !== 0" />
 
-          <q-item>
+          <q-item div class="flex column">
             <q-item-section>
               <div class="flex row grow justify-between no-wrap items-center">
                 <div class="flex row no-wrap items-center">
@@ -33,6 +33,7 @@
                   <div class="flex column no-wrap q-ml-md">
                     <q-item-label class="flex row items-center">
                       <router-link
+                        v-if="item.event"
                         class="link-hover"
                         :to="{
                           name: 'EventPage',
@@ -93,6 +94,18 @@
                   >
                   </q-btn>
                 </div>
+              </div>
+            </q-item-section>
+            <q-item-section v-if="item.media_item" class="q-mt-lg">
+              <div>
+                <img :src="item.media_item.thumb_url" />
+              </div>
+              id: {{ item.media_item.id }}
+            </q-item-section>
+            <q-item-section v-if="item.event_review" class="q-mt-lg">
+              <div class="flex column">
+                <div>Review:</div>
+                {{ item.event_review.text }}
               </div>
             </q-item-section>
           </q-item>

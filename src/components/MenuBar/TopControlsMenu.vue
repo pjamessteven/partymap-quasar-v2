@@ -55,7 +55,7 @@
       </q-item-section>
     </q-item>
     <q-item
-      v-if="currentUser && currentUser.role >= 20"
+      v-if="currentUser && currentUser.role >= 30"
       v-ripple
       v-on:click="$router.push({ name: 'AdminPage' })"
       clickable
@@ -229,7 +229,7 @@
     </q-item>
 
     <q-item
-      v-if="currentUser && currentUser.role >= 20"
+      v-if="currentUser && currentUser.role >= 30"
       v-ripple
       v-on:click="$router.push({ name: 'AdminPage' })"
       clickable
@@ -243,7 +243,7 @@
     </q-item>
 
     <q-item
-      v-if="currentUser && currentUser.role >= 20"
+      v-if="currentUser && currentUser.role >= 30"
       v-ripple
       v-on:click="$router.push({ name: 'WorkQueuePage' })"
       clickable

@@ -33,6 +33,9 @@
       <SelectArtistsDialog
         @hideDialog="hideDialog()"
         :defaultDate="selectedEventDate.start_naive"
+        :eventName="event.name"
+        :eventCountry="computedEventDateCountry"
+        :eventYear="computedEventDateYear"
       />
     </q-dialog>
   </div>
@@ -43,6 +46,7 @@ import _ from 'lodash';
 import SelectArtistsDialog from './Artists/SelectArtistsDialog.vue';
 import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
+import moment from 'moment-timezone';
 export default {
   name: 'EventDateAddArtistsComponent',
   components: {
@@ -94,6 +98,12 @@ export default {
   },
   computed: {
     ...mapState(useEventStore, ['event', 'selectedEventDate']),
+    computedEventDateYear() {
+      return moment(this.selectedEventDate.start_naive).year();
+    },
+    computedEventDateCountry() {
+      return this.selectedEventDate?.location?.description?.split(',').pop();
+    },
   },
   beforeMount() {
     this.loadArtistList();

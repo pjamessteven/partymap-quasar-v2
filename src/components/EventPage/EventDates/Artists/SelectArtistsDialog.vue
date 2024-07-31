@@ -15,6 +15,9 @@
         class="select-artists"
         @hideDialog="$emit('hideDialog')"
         :defaultDate="defaultDate"
+        :eventYear="eventYear"
+        :eventName="eventName"
+        :eventCountry="eventCountry"
       />
     </div>
   </q-card>
@@ -27,7 +30,12 @@ export default {
   components: {
     SelectArtistsComponent,
   },
-  props: { defaultDate: String },
+  props: {
+    defaultDate: String,
+    eventYear: Number,
+    eventName: String,
+    eventCountry: String,
+  },
   data() {
     return {};
   },

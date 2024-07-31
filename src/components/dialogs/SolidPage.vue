@@ -12,7 +12,7 @@
           right: $q.screen.gt.xs ? '0px' : '-16px',
           width: $q.screen.gt.xs ? '12px' : '4px',
         }"
-        class="scroll-area flex grow"
+        class="solid-page-scroll-area flex grow"
         stye="width: 100%;"
       >
         <div class="flex justify-center" style="width: 100%">
@@ -122,6 +122,10 @@ export default {
   padding-top: 62px;
   display: flex;
   justify-content: center;
+
+  .solid-page-scroll-area > .q-scrollarea__container > .q-scrollarea__content {
+    width: 100%;
+  }
 
   //overflow: hidden;
   .solid-page-content {

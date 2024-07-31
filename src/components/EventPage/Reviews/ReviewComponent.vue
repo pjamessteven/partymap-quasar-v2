@@ -100,7 +100,8 @@
     />
     <q-dialog v-model="showingReportDialog">
       <ReportDialog
-        :mode="'reportContribution'"
+        :reviewId="review.id"
+        :mode="'reportReview'"
         @closeDialog="showingReportDialog = false"
       />
     </q-dialog>

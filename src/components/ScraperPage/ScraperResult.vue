@@ -7,56 +7,68 @@
     <div class="flex column" @click="expanded = !expanded" style="width: 100%">
       <div
         class="scraper-header flex row justify-between grow"
-        style="width: 100%"
+        style="width: 100%; position: relative"
       >
-        <div class="errors flex column">
-          <div
-            style="color: darkred"
-            class="inter bold q-mb-md flex items-center"
-          >
-            <q-icon name="mdi-alert-circle-outline" class="q-mr-md" />
+        <q-btn
+          icon="mdi-close"
+          class="q-pa-xs"
+          text-color="red"
+          style="position: absolute; top: -32px; left: -32px"
+          @click.stop="$emit('delete')"
+        />
 
-            <span :key="index" v-for="(error, index) of Object.values(errors)"
-              >{{ error
-              }}<span v-if="index !== Object.keys(errors).length - 1"
-                >,&nbsp;
-              </span></span
+        <div class="flex row items-center">
+          <div class="errors flex column">
+            <div
+              style="color: darkred"
+              class="inter bold q-mb-md flex items-center"
             >
+              <q-icon name="mdi-alert-circle-outline" class="q-mr-md" />
 
-            <span
-              :key="index + 'w'"
-              v-for="(error, index) of Object.values(warnings)"
-              >WARN: {{ error
-              }}<span v-if="index !== Object.keys(errors).length - 1"
-                >,&nbsp;
-              </span></span
-            >
-          </div>
-          <div
-            class="flex column items-baseline no-wrap q-mb-lg"
-            v-if="existingEvents && existingEvents.length > 0"
-            :style="eventExistsWarning ? 'color: darkred' : undefined"
-          >
-            <div class="flex row justify-between items-center">
-              <div class="flex row items-center q-mr-md inter bold">
-                <q-icon name="mdi-alert-circle-outline" class="q-mr-md" />
-                {{ $t('add.an_event_already_exists') }}
-              </div>
-              <q-btn
-                label="Don't care"
-                @click.stop="eventExistsWarning = false"
-              />
-            </div>
-            <div v-for="(event, index) of existingEvents" :key="index">
-              <router-link
-                :to="{
-                  name: 'EventPage',
-                  params: { id: event.id },
-                }"
-                >{{ event.name }}</router-link
+              <span :key="index" v-for="(error, index) of Object.values(errors)"
+                >{{ error
+                }}<span v-if="index !== Object.keys(errors).length - 1"
+                  >,&nbsp;
+                </span></span
               >
-              -
-              <a @click.stop="copyInfoFromExistingEvent(event)">[Copy info]</a>
+
+              <span
+                :key="index + 'w'"
+                v-for="(error, index) of Object.values(warnings)"
+                >WARN: {{ error
+                }}<span v-if="index !== Object.keys(errors).length - 1"
+                  >,&nbsp;
+                </span></span
+              >
+            </div>
+            <div
+              class="flex column items-baseline no-wrap q-mb-lg"
+              v-if="existingEvents && existingEvents.length > 0"
+              :style="eventExistsWarning ? 'color: darkred' : undefined"
+            >
+              <div class="flex row justify-between items-center">
+                <div class="flex row items-center q-mr-md inter bold">
+                  <q-icon name="mdi-alert-circle-outline" class="q-mr-md" />
+                  {{ $t('add.an_event_already_exists') }}
+                </div>
+                <q-btn
+                  label="Don't care"
+                  @click.stop="eventExistsWarning = false"
+                />
+              </div>
+              <div v-for="(event, index) of existingEvents" :key="index">
+                <router-link
+                  :to="{
+                    name: 'EventPage',
+                    params: { id: event.id },
+                  }"
+                  >{{ event.name }}</router-link
+                >
+                -
+                <a @click.stop="copyInfoFromExistingEvent(event)"
+                  >[Copy info]</a
+                >
+              </div>
             </div>
           </div>
         </div>
@@ -230,7 +242,7 @@
               </q-item-section>
               <q-item-section v-else>
                 <div class="flex row items-stretch no-wrap">
-                  <q-btn @click="deleteArtist(index)"
+                  <q-btn @click="() => deleteArtist(index)"
                     ><q-icon name="mdi-delete"></q-icon
                   ></q-btn>
                   <q-btn @click="editArtist = index"
@@ -242,6 +254,29 @@
           </div>
         </div>
 
+        <div class="flex column q-gutter-sm">
+          <span class="t2">Upload the logo/main image (required).</span>
+          <q-card class="b2 shadow-1 flex column q-pa-md grow">
+            <div class="text-large inter bold">Event logo</div>
+            <span class="t2">Upload the logo/main image (required).</span>
+            <MultipleMediaSelector
+              :singleSelectMode="true"
+              :showUploadButton="false"
+              :disableCaption="true"
+              @filesSelected="event.logo = $event?.[0]"
+            />
+          </q-card>
+          <q-card class="b2 shadow-1 flex column q-pa-md grow">
+            <div class="text-large inter bold">Lineup poster</div>
+            <span class="t2">Upload a lineup poster (optional)</span>
+            <MultipleMediaSelector
+              :singleSelectMode="false"
+              :showUploadButton="false"
+              :disableCaption="true"
+              @filesSelected="event.next_event_date_lineup_images = $event"
+            />
+          </q-card>
+        </div>
         <div class="flex row q-gutter-sm">
           {{ selectedImageIndex }}
           <div
@@ -272,6 +307,8 @@ import SelectTagsComponent from 'components/EventPage/Tags/SelectTagsComponent.v
 import DateTimePicker from 'components/DateTimePicker.vue';
 import SelectArtistsInput from 'components/EventPage/EventDates/Artists/SelectArtistsInput.vue';
 import RrulePicker from 'components/RrulePicker.vue';
+import MultipleMediaSelector from 'components/MultipleMediaSelector.vue';
+
 export default {
   components: {
     GoogleLocationComponent,
@@ -279,10 +316,11 @@ export default {
     DateTimePicker,
     SelectArtistsInput,
     RrulePicker,
+    MultipleMediaSelector,
   },
   props: {
     result: {
-      default: null,
+      type: Object,
     },
     universalTags: {
       default: null,
@@ -321,11 +359,13 @@ export default {
         date_time: null,
         location: null,
         url: this.result.url || '',
-        ticket_url: this.result.ticket_url || '',
-        youtube_url: this.result.youtube_url || '',
+        //ticket_url: this.result.ticket_url || '',
+        youtube_url: this.result.youtube_url || undefined,
         tags: this.result.tags || [],
         next_event_date_artists: this.result.artists || [],
         next_event_date_size: null,
+        next_event_date_lineup_images: null,
+        logo: null,
         rrule: this.result.rrule || {
           recurringType: 1,
           separationCount: 0,

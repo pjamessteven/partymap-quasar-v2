@@ -41,6 +41,15 @@
                 no-caps
                 :label="$t('event_dates.change_schedule')"
               />
+              <q-btn
+                label="Add date"
+                size="md"
+                no-caps
+                style="white-space: nowrap"
+                class="q-ml-sm nav-button primary"
+                icon-right="las la-plus"
+                v-on:click="showAddEventDateDialog = true"
+              />
             </div>
           </div>
           <div class="flex row justify-start grow" v-else>
@@ -50,7 +59,7 @@
               no-caps
               style="white-space: nowrap"
               class="q-mr-sm soft-button-shadow"
-              icon="las la-plus"
+              icon-right="las la-plus"
               v-on:click="showAddEventDateDialog = true"
             />
             <q-btn

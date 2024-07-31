@@ -15,7 +15,7 @@
           v-model="message"
         />
         <vue-hcaptcha
-          v-if="!currentUser"
+          v-if="!currentUser && !devServer"
           class="q-mt-md"
           sitekey="147c4ce5-0c6b-4de0-99cf-ca14503265e2"
           @verify="verify"
@@ -24,7 +24,7 @@
       <q-card-actions align="right" class="bg-white text-teal">
         <q-btn flat color="primary" label="Cancel" @click="hide()" />
         <q-btn
-          :disable="!hcaptchaToken && !currentUser"
+          :disable="!hcaptchaToken && !currentUser && !devServer"
           color="primary"
           :label="$t('add.continue')"
           v-on:click="onOKClick()"
@@ -45,6 +45,7 @@ export default {
     return {
       message: null,
       hcaptchaToken: null,
+      devServer: process.env.NODE_ENV === 'development',
     };
   },
   methods: {

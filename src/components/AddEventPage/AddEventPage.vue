@@ -88,6 +88,7 @@
                     <div>
                       <p class="q-ml-sm">
                         {{ $t('add.an_event_already_exists') }}(<router-link
+                          target="_blank"
                           :to="{
                             name: 'EventPage',
                             params: { id: existingEvents[0].id },
@@ -117,6 +118,7 @@
                       >Upload the logo/main image (required).</span
                     >
                     <MultipleMediaSelector
+                      label="Select/Drop Logo"
                       :singleSelectMode="true"
                       :showUploadButton="false"
                       :disableCaption="true"
@@ -136,6 +138,7 @@
                     <div class="text-large inter bold">Lineup poster</div>
                     <span class="t2">Upload a lineup poster (optional)</span>
                     <MultipleMediaSelector
+                      label="Select/Drop Lineup Poster"
                       :singleSelectMode="false"
                       :showUploadButton="false"
                       :disableCaption="true"
@@ -157,6 +160,7 @@
                     >
 
                     <MultipleMediaSelector
+                      label="Select/Drop Photos"
                       :singleSelectMode="false"
                       :showUploadButton="false"
                       :disableCaption="true"
@@ -471,6 +475,12 @@
                     event.
                   </span>
                   <SelectArtistsComponent
+                    :eventName="event.name"
+                    :eventCountry="
+                      event.location?.address_components?.find(
+                        (x) => x.types.indexOf('country') > -1
+                      )?.long_name
+                    "
                     :mode="'newEvent'"
                     @updated="event.next_event_date_artists = $event"
                     :defaultDate="event.date_time.start"

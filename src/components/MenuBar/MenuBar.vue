@@ -112,14 +112,16 @@ export default {
     },
   },
   mounted() {
-    StatusBar.setOverlaysWebView({ overlay: true });
-    if (this.$q.platform.is.ipad) {
-      StatusBar.hide();
-    } else if (this.$q.platform.is.capacitor) {
-      if (this.iconColor === 'black') {
-        StatusBar.setStyle({ style: Style.Light });
-      } else {
-        StatusBar.setStyle({ style: Style.Dark });
+    if (this.$q.platform.is.capacitor) {
+      StatusBar.setOverlaysWebView({ overlay: true });
+      if (this.$q.platform.is.ipad) {
+        StatusBar.hide();
+      } else if (this.$q.platform.is.capacitor) {
+        if (this.iconColor === 'black') {
+          StatusBar.setStyle({ style: Style.Light });
+        } else {
+          StatusBar.setStyle({ style: Style.Dark });
+        }
       }
     }
   },
