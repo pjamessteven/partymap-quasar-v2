@@ -567,7 +567,7 @@ export default {
     photos_and_videos: 'Photos and videos',
     edit_gallery: 'Edit media gallery',
     edit_gallery_message:
-      'Upload content and arrange the media gallery. Video is supported. ',
+      'Upload content and arrange the media gallery. The first item will show as the main cover image. ',
     reorder: 'Re-order',
     uploading_media: 'Uploading media',
     do_do_do: 'Do do doo do..',

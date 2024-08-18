@@ -28,6 +28,7 @@
         >
           <!-- SHOW REPORT if not creator -->
           <q-item
+            v-if="review.creator_id !== currentUser.id"
             v-close-popup
             v-ripple
             v-on:click="showingReportDialog = true"
@@ -37,7 +38,22 @@
               <q-icon name="mdi-alert-circle-outline" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>Report this post</q-item-label>
+              <q-item-label>Report review</q-item-label>
+            </q-item-section>
+          </q-item>
+          <!-- SHOW delete if admin or creator -->
+          <q-item
+            v-if="review.creator_id == currentUser.id || currentUser.role > 20"
+            v-close-popup
+            v-ripple
+            v-on:click="handleDeleteReview"
+            clickable
+          >
+            <q-item-section avatar>
+              <q-icon name="mdi-delete" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Delete review</q-item-label>
             </q-item-section>
           </q-item>
         </q-menu>
@@ -110,12 +126,14 @@
 
 <script>
 import { useAuthStore } from 'src/stores/auth';
-import { mapState } from 'pinia';
+import { mapState, mapWritableState, mapActions } from 'pinia';
 import CustomQScroll from 'components/CustomQScroll.vue';
 
 import common from 'src/assets/common';
 import GalleryDialog from 'components/EventPage/Gallery/GalleryDialog.vue';
 import ReportDialog from 'components/EventPage/ReportDialog.vue';
+import { deleteReviewRequest } from 'src/api';
+import { useEventStore } from 'src/stores/event';
 
 export default {
   components: {
@@ -136,11 +154,39 @@ export default {
   watch: {},
   computed: {
     ...mapState(useAuthStore, ['currentUser']),
+    ...mapWritableState(useEventStore, ['event']),
     currentUserIsCreator() {
       return this.currentUser.username === this.review.creator.username;
     },
   },
-  methods: {},
+  methods: {
+    ...mapActions(useEventStore, ['reloadEvent']),
+    handleDeleteReview() {
+      this.$q
+        .dialog({
+          title: 'Delete review',
+          message: 'Are you sure? ',
+          color: 'primary',
+          cancel: true,
+        })
+        .onOk(async () => {
+          const progressDialog = this.$q.dialog({
+            title: 'Deleting...',
+            color: 'primary',
+            progress: true, // we enable default settings
+            cancel: false,
+            persistent: true, // we want the user to not be able to close it
+            ok: false,
+          });
+          try {
+            await deleteReviewRequest(this.review.id);
+            this.reloadEvent();
+          } catch {}
+
+          progressDialog.hide();
+        });
+    },
+  },
   created() {
     this.timeAgo = common.timeAgo;
   },

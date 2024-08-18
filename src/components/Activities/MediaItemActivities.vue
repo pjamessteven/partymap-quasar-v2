@@ -3,7 +3,6 @@
     <div class="flex column q-pa-md">
       <TransactionInfo v-if="showTransactionInfo" :activity="activities[0]" />
       <div class="flex column no-wrap" v-if="activitiesByVerb.create">
-        <b>Added media </b>
         <div class="flex row q-gutter-sm q-mt-md">
           <div
             v-for="(activity, index) in activitiesByVerb.create"
@@ -18,15 +17,12 @@
           </div>
         </div>
       </div>
-      <div
-        class="flex column no-wrap items-center"
-        v-if="activitiesByVerb?.delete"
-      >
-        <b>Removed media</b>
+      <div class="flex column no-wrap" v-if="activitiesByVerb?.update">
+        <b>Modified these items:</b>
         <div class="flex row q-gutter-sm q-mt-md">
           <div
-            v-for="(activity, index) in activitiesByVerb.delete"
-            class="media_thumb flex"
+            v-for="(activity, index) in activitiesByVerb.update"
+            class="media_thumb flex column"
             :key="index"
           >
             <img
@@ -34,6 +30,7 @@
               :src="activity.object_version.thumb_url"
               style="max-height: 200px"
             />
+            {{ activity.changeset }}
           </div>
         </div>
       </div>

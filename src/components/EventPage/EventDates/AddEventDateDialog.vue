@@ -135,7 +135,10 @@
           :label="$t('add.size')"
           type="number"
           :rules="[
-            (val) => Number.isInteger(parseInt(val)) || 'Please input a number',
+            (val) =>
+              !val ||
+              Number.isInteger(parseInt(val)) ||
+              'Please input a number',
           ]"
           class="q-ml-lg"
         />
@@ -187,7 +190,6 @@
           :label="$t('add.ticketing_url')"
         />
       </q-card-section>
-
       <q-card-section class="flex row justify-end">
         <q-btn
           @click="addEd()"
@@ -211,11 +213,11 @@ import DateTimePicker from 'components/DateTimePicker.vue';
 import GoogleLocationComponent from 'components/GoogleLocationComponent.vue';
 import SelectArtistsComponent from 'components/EventPage/EventDates/Artists/SelectArtistsComponent.vue';
 import SubmitSuggestionPrompt from 'components/EventPage/Suggestions/SubmitSuggestionPrompt.vue';
-
+import moment from 'moment-timezone';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
 import { mapActions, mapState } from 'pinia';
-
+import _ from 'lodash';
 export default {
   data() {
     return {
@@ -255,7 +257,13 @@ export default {
           ok: false,
         });
         try {
-          await this.addEventDate({ ...this.eventDate });
+          await this.addEventDate(
+            // omit empty fields
+            _.omitBy(
+              this.eventDate,
+              (v) => _.isUndefined(v) || _.isNull(v) || v === ''
+            )
+          );
           progressDialog.hide();
           this.$emit('closeDialog');
         } catch (e) {
@@ -283,7 +291,10 @@ export default {
               await this.suggestEventEdit({
                 // include message and hcaptcha token
                 ...messageAndToken,
-                ...this.eventDate,
+                ..._.omitBy(
+                  this.eventDate,
+                  (v) => _.isUndefined(v) || _.isNull(v) || v === ''
+                ),
               });
               progressDialog.hide();
 

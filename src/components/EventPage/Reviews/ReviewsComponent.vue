@@ -185,7 +185,7 @@ export default {
       }
       await this.addReview({
         ...this.review,
-        event_date_id: this.selectedDate?.id,
+        event_date_id: this.selectedDate?.id || undefined,
       });
       this.loading = false;
     },

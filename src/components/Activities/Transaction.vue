@@ -1,5 +1,5 @@
 <template>
-  <q-card>
+  <q-card v-if="filteredActivities.length > 0">
     <div class="flex column q-pa-md">
       <div
         class="flew row items-center justify-between"
@@ -20,7 +20,7 @@
 
           <div>
             <b>
-              {{ targetVerb }}
+              {{ actionText }}
               <router-link
                 v-if="transaction.target_type === 'Event'"
                 style="text-decoration: none; color: inherit"
@@ -35,7 +35,7 @@
                     name: transaction.target_version.name.replace(/ /g, '_'),
                   },
                 }"
-                >{{ target }}</router-link
+                >{{ targetName }}</router-link
               >
               {{ common.timeAgo(transaction.issued_at) }}</b
             >
@@ -63,6 +63,7 @@
           v-if="mediaItemActivities?.length > 0"
           :activities="mediaItemActivities"
         />
+
         <div v-for="(activity, index) in filteredActivities" :key="index">
           <LocationActivity
             v-if="activity.object_type === 'EventLocation'"
@@ -91,9 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import Activity from './Activity.vue';
 import { computed, ref } from 'vue';
-import moment from 'moment-timezone';
 import common from 'src/assets/common';
 import TagActivities from './TagActivities.vue';
 import ArtistActivities from './ArtistActivities.vue';
@@ -114,30 +113,52 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const expanded = ref(false);
+
 const targetVerb = computed(() => {
-  const targetVerb = props.transaction.activities?.[0]?.verb; // assuming the target activity is always last to be added in a transaction
-  if (targetVerb === 'create') {
-    return 'Created';
-  } else if (targetVerb === 'update') {
+  const verb = props.transaction.activities?.[0]?.verb; // assuming the target activity is always last to be added in a transaction
+  const objectType = props.transaction.activities?.[0]?.object_type;
+  const targetType = props.transaction.target_type;
+
+  if (
+    targetType === 'Event' &&
+    (objectType === 'EventDate' ||
+      objectType === 'EventArtist' ||
+      objectType === 'EventTag')
+  ) {
+    // even though the verb might be create for the activity, we're really updating the page
     return 'Updated';
-  } else if (targetVerb === 'delete') {
+  }
+  if (verb === 'create') {
+    return 'Created';
+  } else if (verb === 'update') {
+    return 'Updated';
+  } else if (verb === 'delete') {
     return 'Deleted';
   } else return 'Modified';
 });
 
-const target = computed(() => {
-  const targetTyoe = props.transaction.target_type;
+const actionText = computed(() => {
+  const targetType = props.transaction.target_type;
   const objectType = props.transaction.activities?.[0]?.object_type;
   if (objectType === 'EventReview') {
-    const eventName = props.transaction.target_version.name;
-    return 'a review for ' + eventName;
+    return 'Reviewed ';
   }
-  if (targetTyoe === 'Event') {
+  if (targetType === 'Event') {
+    return targetVerb.value + ' the event page for ';
+  } else if (targetType === 'Artist') {
+    return targetVerb.value + ' the artist page for ';
+  } else return 'Unknown';
+});
+
+const targetName = computed(() => {
+  const targetType = props.transaction.target_type;
+
+  if (targetType === 'Event') {
     const eventName = props.transaction.target_version.name;
-    return 'the event page for ' + eventName;
-  } else if (targetTyoe === 'Artist') {
-    // TODO
-    return 'Artist';
+    return eventName;
+  } else if (targetType === 'Artist') {
+    const artistName = props.transaction.target_version.name;
+    return artistName;
   } else return 'Unknown';
 });
 

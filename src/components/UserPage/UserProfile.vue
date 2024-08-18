@@ -67,7 +67,7 @@
             <q-input
               v-else
               v-model="user.description"
-              label="A little bit about yourself"
+              label="A little bit about you or your organisation"
               maxlength="1000"
               counter
             />

@@ -464,32 +464,36 @@ export default {
     },
 
     fitBoundsForNearbyPage(coords) {
-      // padding for desktop panel
-      var latlng = L.latLng(coords);
-      if (this.$q.screen.gt.xs) {
-        toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
-          paddingTopLeft: [
-            0,
-            0 - window.innerHeight / 2 - 128 + this.safeAreaInsets.top,
-          ],
-          animate: !this.disableAnimations,
-          duration: 0.3,
-          easeLinearity: 1,
-          maxZoom: 10,
-        });
+      if (coords) {
+        // padding for desktop panel
+        var latlng = L.latLng(coords);
+        if (this.$q.screen.gt.xs) {
+          toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
+            paddingTopLeft: [
+              0,
+              0 - window.innerHeight / 2 - 128 + this.safeAreaInsets.top,
+            ],
+            animate: !this.disableAnimations,
+            duration: 0.3,
+            easeLinearity: 1,
+            maxZoom: 10,
+          });
+        } else {
+          // padding for mobile bottom panel
+          toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
+            //paddingTopLeft: [0, -150],
+            paddingTopLeft: [
+              0,
+              0 - window.innerHeight / 2 - 86 + this.safeAreaInsets.top,
+            ],
+            animate: !this.disableAnimations,
+            duration: 0.3,
+            easeLinearity: 1,
+            maxZoom: 10,
+          });
+        }
       } else {
-        // padding for mobile bottom panel
-        toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
-          //paddingTopLeft: [0, -150],
-          paddingTopLeft: [
-            0,
-            0 - window.innerHeight / 2 - 86 + this.safeAreaInsets.top,
-          ],
-          animate: !this.disableAnimations,
-          duration: 0.3,
-          easeLinearity: 1,
-          maxZoom: 10,
-        });
+        this.locateMe();
       }
     },
     fitBoundsForExplorePage(coords) {

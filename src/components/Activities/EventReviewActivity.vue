@@ -10,6 +10,15 @@
       <div>
         {{ activity.object_version.text }}
       </div>
+      <q-rating
+        v-if="activity.object_version.rating !== 0"
+        :model-value="activity.object_version.rating"
+        size="1rem"
+        :max="5"
+        readonly
+        color="primary"
+        class="q-my-sm"
+      />
     </div>
   </q-card>
 </template>
