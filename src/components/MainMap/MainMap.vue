@@ -209,6 +209,16 @@ export default {
         this.debouncedClearMarkersAndLoadPoints();
       },
     },
+    controlEmptyLineup: {
+      handler() {
+        this.debouncedClearMarkersAndLoadPoints();
+      },
+    },
+    controlDateUnconfirmed: {
+      handler() {
+        this.debouncedClearMarkersAndLoadPoints();
+      },
+    },
     userLocation: {
       deep: true,
       handler(newval) {
@@ -920,6 +930,8 @@ export default {
       'controlCountry',
       'controlRegion',
       'controlLocality',
+      'controlEmptyLineup',
+      'controlDateUnconfirmed',
       'loadingPoints',
       'nearbyEventDates',
       'points',

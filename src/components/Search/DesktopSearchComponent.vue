@@ -140,6 +140,18 @@
                     <q-item>
                       <DurationControl />
                     </q-item>
+                    <q-item>
+                      <q-checkbox
+                        v-model="controlDateUnconfirmed"
+                        label="Date unconfirmed"
+                      />
+                    </q-item>
+                    <q-item>
+                      <q-checkbox
+                        v-model="controlEmptyLineup"
+                        label="Empty lineup"
+                      />
+                    </q-item>
                   </q-menu>
                 </q-btn>
               </div>
@@ -279,7 +291,12 @@ export default {
       'controlCountry',
       'controlRegion',
       'controlLocality',
+
       'anyFiltersEnabled',
+    ]),
+    ...mapWritableState(useQueryStore, [
+      'controlEmptyLineup',
+      'controlDateUnconfirmed',
     ]),
   },
 };

@@ -93,10 +93,10 @@
                   />
                   <div class="header-content grow row">
                     <div
-                      class="flex column justify-start items-stretch col-6 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6"
+                      class="flex column justify-start items-stretch col-6 col-xs-12 col-sm-7 col-md-6 col-lg-6 col-xl-6"
                       :class="{
-                        'q-px-xl q-pt-xl q-pb-lg': $q.screen.gt.xs,
-                        'q-pa-lg': $q.screen.lt.md && $q.screen.gt.xs,
+                        'q-px-xl q-pt-xl q-pb-lg': $q.screen.gt.sm,
+                        'q-pa-lg q-pt-xl': $q.screen.lt.md && $q.screen.gt.xs,
                         'q-px-md q-pb-md': $q.screen.lt.sm,
                       }"
                     >
@@ -180,7 +180,7 @@
                         @loaded="mediaLoaded"
                         v-if="
                           (!!event || route.query?.thumbXsUrl) &&
-                          $q.screen.lt.md
+                          $q.screen.lt.sm
                         "
                         :editing="editing"
                         class="q-mt-lg"
@@ -192,7 +192,7 @@
                         v-if="imageLoaded && event"
                       >
                         <div
-                          class="flex grow justify-start items-start"
+                          class="flex justify-start items-start"
                           v-if="!!event"
                         >
                           <SummaryComponent
@@ -200,7 +200,10 @@
                             :class="$q.screen.gt.sm ? 'q-mt-md' : 'q-mt-lg'"
                           />
                         </div>
-                        <div :class="$q.screen.gt.sm ? 'q-mt-md' : 'q-mt-md'">
+                        <div
+                          class="grow"
+                          :class="$q.screen.gt.sm ? 'q-mt-lg' : 'q-mt-md'"
+                        >
                           <div class="flex row">
                             <div class="flex col">
                               <a
@@ -299,8 +302,12 @@
                       -->
                     </div>
                     <div
-                      class="flex column no-wrap justify-center q-py-xl q-pr-xl col-6 col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"
-                      v-if="$q.screen.gt.sm"
+                      class="flex column no-wrap justify-center col-6 col-xs-12 col-sm-5 col-md-6 col-lg-6 col-xl-6"
+                      v-if="$q.screen.gt.xs"
+                      :class="{
+                        'q-py-xl q-pr-xl': $q.screen.gt.sm,
+                        'q-py-lg q-pr-lg': $q.screen.lt.md,
+                      }"
                     >
                       <FeaturedMediaComponent
                         v-if="!!event"
@@ -342,46 +349,38 @@
                       :class="{ 'q-pl-lg': $q.screen.gt.sm }"
                     >
                       <div
-                        class="flex column"
-                        :class="{
-                          ' ': $q.screen.lt.sm,
-                          'q-mt-md': $q.screen.gt.xs && $q.screen.lt.md,
-                          'q-px-xl': $q.screen.gt.xs && $q.screen.lt.md,
-                        }"
+                        v-if="
+                          (computedTicketUrl || computedExternalUrl) && event
+                        "
+                        class="event-buttons flex row items-center wrap o-100"
+                        :class="
+                          $q.screen.gt.sm ? ' q-py-md' : 'q-py-md q-pl-md'
+                        "
                       >
-                        <div
-                          v-if="
-                            (computedTicketUrl || computedExternalUrl) && event
+                        <CustomQScroll
+                          horizontal
+                          class="event-buttons-scroll"
+                          style="
+                            width: 100%;
+                            height: 44px;
+                            margin-bottom: -16px;
                           "
-                          class="event-buttons flex row items-center wrap o-100"
-                          :class="
-                            $q.screen.gt.sm ? ' q-py-md' : 'q-py-md q-pl-md'
+                          :thumb-style="
+                            $q.screen.gt.xs
+                              ? {
+                                  bottom: '0px',
+                                  height: '4px',
+                                }
+                              : { bottom: '0px', height: '0px' }
                           "
                         >
-                          <CustomQScroll
-                            horizontal
-                            class="event-buttons-scroll"
-                            style="
-                              width: 100%;
-                              height: 44px;
-                              margin-bottom: -16px;
-                            "
-                            :thumb-style="
-                              $q.screen.gt.xs
-                                ? {
-                                    bottom: '0px',
-                                    height: '4px',
-                                  }
-                                : { bottom: '0px', height: '0px' }
-                            "
+                          <div
+                            class="flex justify-between items-center no-wrap"
                           >
                             <div
-                              class="flex justify-between items-center no-wrap"
+                              class="flex row q-gutter-sm items-center no-wrap"
                             >
-                              <div
-                                class="flex row q-gutter-sm items-center no-wrap"
-                              >
-                                <!--
+                              <!--
                                 <a
                                   style="text-decoration: none; color: unset"
                                   :href="computedExternalUrl"
@@ -399,288 +398,284 @@
                                   />
                                 </a>
                                 -->
-                                <div v-if="$q.screen.gt.xs && false">
-                                  <div
-                                    class="separator vertical q-mx-sm"
-                                    style="height: 36px"
-                                  />
-                                </div>
-
-                                <InterestedComponent />
-
-                                <!-- show share button -->
-                                <q-btn
-                                  class="button-light"
-                                  :label="
-                                    $q.screen.gt.xs ? 'Share' : t('event.share')
-                                  "
-                                  no-caps
-                                  flat
-                                  icon="mdi-share"
-                                  @click="share"
-                                  v-if="!editing"
-                                />
-
-                                <q-btn
-                                  class="button-light"
-                                  flat
-                                  no-caps
-                                  @click="getIcalFile"
-                                  ><q-icon
-                                    name="mdi-calendar-export-outline"
-                                    size="22px"
-                                    :class="
-                                      $q.screen.gt.xs ? 'q-mr-sm' : 'q-mr-sm'
-                                    "
-                                  ></q-icon>
-                                  {{
-                                    $q.screen.gt.xs
-                                      ? 'Save to device'
-                                      : 'Save to device'
-                                  }}
-                                </q-btn>
-
-                                <q-btn
-                                  class="button-light"
-                                  flat
-                                  no-caps
-                                  icon="mdi-image-plus-outline"
-                                  :label="'Add photos'"
-                                >
-                                  <q-menu
-                                    transition-show="jump-down"
-                                    transition-hide="jump-up"
-                                    anchor="bottom right"
-                                    self="top right"
-                                  >
-                                    <q-item
-                                      v-close-popup
-                                      v-ripple
-                                      @click="
-                                        showingAddEventPhotosDialog = true
-                                      "
-                                      clickable
-                                    >
-                                      <q-item-section avatar>
-                                        <q-icon
-                                          name="mdi-camera-plus-outline"
-                                        />
-                                      </q-item-section>
-                                      <q-item-section>
-                                        <q-item-label>{{
-                                          t('event.add_photos')
-                                        }}</q-item-label>
-                                      </q-item-section>
-                                    </q-item>
-                                    <q-separator />
-                                    <q-item
-                                      v-close-popup
-                                      v-ripple
-                                      @click="
-                                        showingAddLineupPosterDialog = true
-                                      "
-                                      clickable
-                                    >
-                                      <q-item-section avatar>
-                                        <q-icon name="mdi-image-plus-outline" />
-                                      </q-item-section>
-                                      <q-item-section>
-                                        <q-item-label>{{
-                                          t('event.add_lineup_poster')
-                                        }}</q-item-label>
-                                      </q-item-section>
-                                    </q-item>
-                                    <q-item
-                                      v-close-popup
-                                      v-ripple
-                                      @click="showingUploadNewLogoDialog = true"
-                                      clickable
-                                    >
-                                      <q-item-section avatar>
-                                        <q-icon name="mdi-image-sync-outline" />
-                                      </q-item-section>
-                                      <q-item-section>
-                                        <q-item-label>{{
-                                          t('event.update_event_logo')
-                                        }}</q-item-label>
-                                      </q-item-section>
-                                    </q-item>
-                                  </q-menu>
-                                </q-btn>
-
-                                <!-- show EDIT BUTTON if user is host or user is staff and public event -->
-                                <q-btn
-                                  v-if="currentUserCanEdit"
-                                  flat
-                                  class="button-light"
-                                  :label="'Edit Page'"
-                                  no-caps
-                                  :icon="
-                                    $q.screen.gt.xs
-                                      ? 'mdi-square-edit-outline'
-                                      : undefined
-                                  "
-                                  style="padding-left: 4px"
-                                  :size="$q.screen.gt.xs ? '1em' : 'md'"
-                                  @click="editing = !editing"
+                              <div v-if="$q.screen.gt.xs && false">
+                                <div
+                                  class="separator vertical q-mx-sm"
+                                  style="height: 36px"
                                 />
                               </div>
+
+                              <InterestedComponent />
+
+                              <!-- show share button -->
                               <q-btn
-                                flat
-                                :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
-                                :text-color="
-                                  $q.dark.isActive ? 'grey-4' : 'grey-6'
+                                class="button-light"
+                                :label="
+                                  $q.screen.gt.xs ? 'Share' : t('event.share')
                                 "
-                                icon="mdi-dots-vertical"
-                                class="q-px-sm q-ml-md"
-                                :size="$q.screen.gt.xs ? '1em' : 'md'"
-                              >
-                                <q-tooltip
-                                  :content-class="
-                                    $q.dark.isActive
-                                      ? 'bg-black text-white'
-                                      : 'bg-white text-black'
+                                no-caps
+                                flat
+                                icon="mdi-share"
+                                @click="share"
+                                v-if="!editing"
+                              />
+
+                              <q-btn
+                                class="button-light"
+                                flat
+                                no-caps
+                                @click="getIcalFile"
+                                ><q-icon
+                                  name="mdi-calendar-export-outline"
+                                  size="22px"
+                                  :class="
+                                    $q.screen.gt.xs ? 'q-mr-sm' : 'q-mr-sm'
                                   "
-                                  :offset="[10, 10]"
-                                  content-style="font-size: 16px"
-                                >
-                                  {{ t('sidebar.more') }}
-                                </q-tooltip>
+                                ></q-icon>
+                                {{
+                                  $q.screen.gt.xs
+                                    ? 'Save to device'
+                                    : 'Save to device'
+                                }}
+                              </q-btn>
+
+                              <q-btn
+                                class="button-light"
+                                flat
+                                no-caps
+                                icon="mdi-image-plus-outline"
+                                :label="'Add photos'"
+                              >
                                 <q-menu
                                   transition-show="jump-down"
                                   transition-hide="jump-up"
                                   anchor="bottom right"
                                   self="top right"
                                 >
-                                  <!-- SHOW REPORT if not host -->
                                   <q-item
                                     v-close-popup
                                     v-ripple
-                                    v-if="!currentUserIsHost"
-                                    v-on:click="showingReportDialog = true"
+                                    @click="showingAddEventPhotosDialog = true"
                                     clickable
                                   >
                                     <q-item-section avatar>
-                                      <q-icon name="mdi-alert-circle-outline" />
+                                      <q-icon name="mdi-camera-plus-outline" />
                                     </q-item-section>
                                     <q-item-section>
                                       <q-item-label>{{
-                                        t('report.report_event')
+                                        t('event.add_photos')
                                       }}</q-item-label>
                                     </q-item-section>
                                   </q-item>
-                                  <!-- SHOW CLAIM if there is no event host -->
+                                  <q-separator />
                                   <q-item
                                     v-close-popup
                                     v-ripple
-                                    v-if="!currentUserIsHost && !event.host"
-                                    @click="
-                                      currentUser
-                                        ? (showingClaimDialog = true)
-                                        : $router.push({
-                                            path: '/login',
-                                            query: { from: $route.path },
-                                          })
-                                    "
+                                    @click="showingAddLineupPosterDialog = true"
                                     clickable
                                   >
                                     <q-item-section avatar>
-                                      <q-icon
-                                        name="mdi-check-decagram-outline"
-                                      />
+                                      <q-icon name="mdi-image-plus-outline" />
                                     </q-item-section>
                                     <q-item-section>
                                       <q-item-label>{{
-                                        t('report.are_you_host')
+                                        t('event.add_lineup_poster')
                                       }}</q-item-label>
                                     </q-item-section>
                                   </q-item>
-
-                                  <!-- SHOW SUGGESTIONS if there is no event host -->
                                   <q-item
                                     v-close-popup
                                     v-ripple
-                                    v-if="
-                                      !currentUserCanEdit && event.host == null
-                                    "
-                                    @click="editing = true"
+                                    @click="showingUploadNewLogoDialog = true"
                                     clickable
                                   >
                                     <q-item-section avatar>
-                                      <q-icon name="las la-hand-peace" />
+                                      <q-icon name="mdi-image-sync-outline" />
                                     </q-item-section>
                                     <q-item-section>
                                       <q-item-label>{{
-                                        t('suggestions.improve_this_page')
+                                        t('event.update_event_logo')
                                       }}</q-item-label>
-                                    </q-item-section>
-                                  </q-item>
-                                  <!-- SHOW EDIT if currentUserIsStaff -->
-                                  <q-item
-                                    v-if="currentUserCanEdit"
-                                    v-ripple
-                                    v-close-popup
-                                    v-on:click="editing = !editing"
-                                    clickable
-                                  >
-                                    <q-item-section avatar>
-                                      <q-icon name="las la-edit" />
-                                    </q-item-section>
-                                    <q-item-section>
-                                      <q-item-label
-                                        >{{
-                                          t('event.edit_event')
-                                        }}
-                                        &nbsp;(admin)</q-item-label
-                                      >
-                                    </q-item-section>
-                                  </q-item>
-                                  <q-item
-                                    v-if="
-                                      currentUserIsHost || currentUserIsStaff
-                                    "
-                                    v-ripple
-                                    v-close-popup
-                                    v-on:click="deleteEvent()"
-                                    clickable
-                                  >
-                                    <q-item-section avatar>
-                                      <q-icon name="las la-trash" />
-                                    </q-item-section>
-                                    <q-item-section>
-                                      <q-item-label
-                                        >{{ t('event.delete_event') }}
-                                        <span
-                                          v-if="
-                                            currentUserIsStaff &&
-                                            !currentUserIsHost
-                                          "
-                                          >(admin)</span
-                                        ></q-item-label
-                                      >
-                                    </q-item-section>
-                                  </q-item>
-                                  <q-item
-                                    v-if="currentUserIsStaff"
-                                    v-ripple
-                                    v-close-popup
-                                    v-on:click="showingHistory = true"
-                                    clickable
-                                  >
-                                    <q-item-section avatar>
-                                      <q-icon name="las la-history" />
-                                    </q-item-section>
-                                    <q-item-section>
-                                      <q-item-label>
-                                        Suggestions and Activity
-                                      </q-item-label>
                                     </q-item-section>
                                   </q-item>
                                 </q-menu>
                               </q-btn>
+
+                              <!-- show EDIT BUTTON if user is host or user is staff and public event -->
+                              <q-btn
+                                v-if="currentUserCanEdit"
+                                flat
+                                class="button-light"
+                                :label="'Edit Page'"
+                                no-caps
+                                :icon="
+                                  $q.screen.gt.xs
+                                    ? 'mdi-square-edit-outline'
+                                    : undefined
+                                "
+                                style="padding-left: 4px"
+                                :size="$q.screen.gt.xs ? '1em' : 'md'"
+                                @click="editing = !editing"
+                              />
                             </div>
-                          </CustomQScroll>
-                        </div>
+                            <q-btn
+                              flat
+                              :color="$q.dark.isActive ? 'grey-10' : 'grey-1'"
+                              :text-color="
+                                $q.dark.isActive ? 'grey-4' : 'grey-6'
+                              "
+                              icon="mdi-dots-vertical"
+                              class="q-px-sm q-ml-md"
+                              :size="$q.screen.gt.xs ? '1em' : 'md'"
+                            >
+                              <q-tooltip
+                                :content-class="
+                                  $q.dark.isActive
+                                    ? 'bg-black text-white'
+                                    : 'bg-white text-black'
+                                "
+                                :offset="[10, 10]"
+                                content-style="font-size: 16px"
+                              >
+                                {{ t('sidebar.more') }}
+                              </q-tooltip>
+                              <q-menu
+                                transition-show="jump-down"
+                                transition-hide="jump-up"
+                                anchor="bottom right"
+                                self="top right"
+                              >
+                                <!-- SHOW REPORT if not host -->
+                                <q-item
+                                  v-close-popup
+                                  v-ripple
+                                  v-if="!currentUserIsHost"
+                                  v-on:click="showingReportDialog = true"
+                                  clickable
+                                >
+                                  <q-item-section avatar>
+                                    <q-icon name="mdi-alert-circle-outline" />
+                                  </q-item-section>
+                                  <q-item-section>
+                                    <q-item-label>{{
+                                      t('report.report_event')
+                                    }}</q-item-label>
+                                  </q-item-section>
+                                </q-item>
+                                <!-- SHOW CLAIM if there is no event host -->
+                                <q-item
+                                  v-close-popup
+                                  v-ripple
+                                  v-if="!currentUserIsHost && !event.host"
+                                  @click="
+                                    currentUser
+                                      ? (showingClaimDialog = true)
+                                      : $router.push({
+                                          path: '/login',
+                                          query: { from: $route.path },
+                                        })
+                                  "
+                                  clickable
+                                >
+                                  <q-item-section avatar>
+                                    <q-icon name="mdi-check-decagram-outline" />
+                                  </q-item-section>
+                                  <q-item-section>
+                                    <q-item-label>{{
+                                      t('report.are_you_host')
+                                    }}</q-item-label>
+                                  </q-item-section>
+                                </q-item>
+
+                                <!-- SHOW SUGGESTIONS if there is no event host -->
+                                <q-item
+                                  v-close-popup
+                                  v-ripple
+                                  v-if="
+                                    !currentUserCanEdit && event.host == null
+                                  "
+                                  @click="editing = true"
+                                  clickable
+                                >
+                                  <q-item-section avatar>
+                                    <q-icon name="las la-hand-peace" />
+                                  </q-item-section>
+                                  <q-item-section>
+                                    <q-item-label>{{
+                                      t('suggestions.improve_this_page')
+                                    }}</q-item-label>
+                                  </q-item-section>
+                                </q-item>
+                                <!-- SHOW EDIT if currentUserIsStaff -->
+                                <q-item
+                                  v-if="currentUserCanEdit"
+                                  v-ripple
+                                  v-close-popup
+                                  v-on:click="editing = !editing"
+                                  clickable
+                                >
+                                  <q-item-section avatar>
+                                    <q-icon name="las la-edit" />
+                                  </q-item-section>
+                                  <q-item-section>
+                                    <q-item-label
+                                      >{{
+                                        t('event.edit_event')
+                                      }}
+                                      &nbsp;(admin)</q-item-label
+                                    >
+                                  </q-item-section>
+                                </q-item>
+                                <q-item
+                                  v-if="currentUserIsHost || currentUserIsStaff"
+                                  v-ripple
+                                  v-close-popup
+                                  v-on:click="deleteEvent()"
+                                  clickable
+                                >
+                                  <q-item-section avatar>
+                                    <q-icon name="las la-trash" />
+                                  </q-item-section>
+                                  <q-item-section>
+                                    <q-item-label
+                                      >{{ t('event.delete_event') }}
+                                      <span
+                                        v-if="
+                                          currentUserIsStaff &&
+                                          !currentUserIsHost
+                                        "
+                                        >(admin)</span
+                                      ></q-item-label
+                                    >
+                                  </q-item-section>
+                                </q-item>
+                                <q-item
+                                  v-if="currentUserIsStaff"
+                                  v-ripple
+                                  v-close-popup
+                                  v-on:click="showingHistory = true"
+                                  clickable
+                                >
+                                  <q-item-section avatar>
+                                    <q-icon name="las la-history" />
+                                  </q-item-section>
+                                  <q-item-section>
+                                    <q-item-label>
+                                      Suggestions and Activity
+                                    </q-item-label>
+                                  </q-item-section>
+                                </q-item>
+                              </q-menu>
+                            </q-btn>
+                          </div>
+                        </CustomQScroll>
+                      </div>
+                      <div
+                        class="flex column"
+                        :class="{
+                          'q-mt-md q-mx-lg': $q.screen.gt.xs && $q.screen.lt.md,
+                        }"
+                      >
                         <div
                           v-if="$q.screen.lt.sm"
                           class="separator"

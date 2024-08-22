@@ -136,10 +136,20 @@ export default {
 
         if (error.response.data.error.code === 'USERNAME_TAKEN') {
           this.username_taken = true;
+          this.$q.dialog({
+            title: this.$t('error_codes.USERNAME_TAKEN'),
+            cancel: false,
+            color: 'primary',
+          });
         } else if (
           error.response.data.error.code === 'EMAIL_ALREADY_REGISTERED'
         ) {
           this.email_taken = true;
+          this.$q.dialog({
+            title: this.$t('error_codes.EMAIL_ALREADY_REGISTERED'),
+            cancel: false,
+            color: 'primary',
+          });
         }
       }
     },

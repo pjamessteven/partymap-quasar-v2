@@ -576,6 +576,16 @@ export default {
       },
       deep: true,
     },
+    controlEmptyLineup: {
+      handler() {
+        this.delayedGetInitial();
+      },
+    },
+    controlDateUnconfirmed: {
+      handler() {
+        this.delayedGetInitial();
+      },
+    },
   },
   computed: {
     ...mapState(useMainStore, [
@@ -608,10 +618,11 @@ export default {
       'anyFiltersEnabled',
       'topTagsInArea',
       'topArtistsInArea',
+      'controlDateUnconfirmed',
+      'controlEmptyLineup',
     ]),
     ...mapWritableState(useQueryStore, [
       'controlTag',
-
       'eventDates',
       'eventDatesTotal',
       'eventDatesPage',

@@ -53,19 +53,13 @@
         <transition appear enter-active-class="animated fadeIn slower">
           <img
             v-if="!loaded && thumbXsUrl && false"
-            style="
-              height: auto;
-
-              filter: blur(20px);
-              transform: scale(1.2);
-            "
+            style="filter: blur(20px); transform: scale(1.2)"
             :src="thumbXsUrl"
           />
         </transition>
         <transition appear enter-active-class="animated fadeIn slower">
           <img
             v-show="loaded"
-            style="height: auto"
             :src="logo?.thumb_url"
             @load="
               () => {
@@ -192,7 +186,7 @@ export default {
   width: 100%;
   height: 100%;
   max-width: 100%;
-  max-height: 400px;
+  //max-height: 400px;
 
   .editing-overlay {
     pointer-events: all;
@@ -244,8 +238,10 @@ export default {
       img,
       video {
         cursor: pointer;
-        // border-radius: 18px !important;
+        border-radius: 18px !important;
+        height: auto;
         max-width: 100%;
+        width: 100%;
         object-fit: contain;
         display: block;
         transition: opacity 0.3s;
@@ -264,11 +260,11 @@ export default {
   }
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 600px) {
   .featured-media-component {
     height: unset;
     max-width: calc(100vw - 48px);
-    width: auto;
+    width: 100%;
     min-height: unset;
     min-width: 600px;
     .item-wrapper {
@@ -286,29 +282,10 @@ export default {
 
         img,
         video {
-          width: unset;
-          filter: none;
-        }
-      }
-    }
-  }
-}
-
-@media only screen and (max-width: 599px) {
-  .featured-media-component {
-    max-width: unset;
-    min-height: unset;
-    min-width: 100%;
-    .item-wrapper {
-      justify-content: flex-start;
-      .item-wrapper-inner {
-        //width: unset;
-        max-height: unset;
-        -webkit-backface-visibility: hidden;
-        -webkit-transform: translate3d(0, 0, 0);
-        img,
-        video {
           border-radius: 18px;
+
+          width: 100%;
+          filter: none;
         }
       }
     }

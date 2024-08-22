@@ -21,7 +21,7 @@
           v-if="!eventHasHost && !editing"
           :small="small"
           :key="-1"
-          value="Add tag +"
+          value="add tag +"
           @click="() => (showAddTagDialog = true)"
         />
       </div>

@@ -36,7 +36,8 @@ interface QueryState {
   controlCountry: Country | null;
   controlRegion: Region | null;
   controlLocality: Locality | null;
-
+  controlEmptyLineup: boolean;
+  controlDateUnconfirmed: boolean;
   // the following state is for dynamic options shown in control dropdowns
 
   topArtistsInArea: Artist[];
@@ -121,6 +122,8 @@ export const useQueryStore = defineStore('query', {
     controlCountry: null,
     controlLocality: null,
     controlRegion: null,
+    controlEmptyLineup: false,
+    controlDateUnconfirmed: false,
 
     topArtistsInArea: [],
 
@@ -226,7 +229,9 @@ export const useQueryStore = defineStore('query', {
           this.controlDuration.length > 0 ? this.controlDuration : undefined,
           this.controlSize.length > 0 ? this.controlSize : undefined,
 
-          this.controlFavorites ? true : undefined
+          this.controlFavorites ? true : undefined,
+          this.controlDateUnconfirmed,
+          this.controlEmptyLineup
         );
         this.points = pointsResponse.data;
         this.loadingPoints = false;
@@ -343,6 +348,8 @@ export const useQueryStore = defineStore('query', {
           page: this.eventDatesPage,
           per_page: Screen.lt.sm ? 10 : 20,
           distinct: true,
+          empty_lineup: this.controlEmptyLineup || undefined,
+          date_unconfirmed: this.controlDateUnconfirmed || undefined,
         });
         if (this.eventDatesRequestId === requestId) {
           // only save data in store if this is the latest request
