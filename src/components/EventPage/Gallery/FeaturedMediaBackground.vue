@@ -1,7 +1,6 @@
 <template>
   <div class="featured-media">
     <div class="featured-media-overlay" />
-
     <div class="media-wrapper" v-if="headerBackground">
       <transition appear enter-active-class="animated fadeIn slower">
         <video
@@ -28,7 +27,11 @@
       <transition appear enter-active-class="animated fadeIn slower">
         <img
           :key="headerBackground.thumb_xs_url"
-          v-if="headerBackground.thumb_xs_url && !headerBackground.v_low_url"
+          v-if="
+            headerBackground &&
+            headerBackground.thumb_xs_url &&
+            !headerBackground.v_low_url
+          "
           :src="headerBackground.thumb_xs_url"
           class="item"
         />

@@ -37,7 +37,7 @@
         <Transition
           appear
           :enter-active-class="
-            $q.screen.gt.xs ? 'animated  slideInUp' : 'animated fadeIn'
+            $q.screen.gt.xs ? 'animated  fadeIn' : 'animated fadeIn'
           "
           :leave-active-class="
             $q.screen.gt.xs ? 'animated slideOutDown' : undefined
@@ -462,17 +462,7 @@ export default {
       calc(100vh - Max(calc((100vh - 66vh) - 64px), 0px)),
       0
     ) !important;
-    /*
-
-   transform: translate3d(0, 100vh, 0) !important;
-  transition: transform 0.3s ease;
-  */
-    transform: translate3d(
-      0,
-      calc(100vh - Max(calc((100vh - 66vh) - 64px), 0px)),
-      0
-    ) !important;
-    transition: transform 0.2s ease-in-out;
+    transition: transform 0.2s ease-in-out !important;
 
     //opacity: 0;
   }

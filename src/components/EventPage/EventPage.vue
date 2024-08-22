@@ -84,13 +84,16 @@
             <div class="content flex column">
               <div class="flex column grow">
                 <div class="header flex column">
-                  <InnerLoading v-if="loading" :solid="false" />
-
                   <FeaturedMediaBackground
-                    :thumbXsUrl="route.query?.thumbXsUrl"
+                    :thumbXsUrl="route.query?.thumbXsUrl as any as string"
                     class="featured-media"
                     :editing="editing"
                   />
+                  <InnerLoading
+                    :solid="false"
+                    v-if="loading && !route.query?.thumbXsUrl"
+                  />
+
                   <div class="header-content grow row">
                     <div
                       class="flex column justify-start items-stretch col-6 col-xs-12 col-sm-7 col-md-6 col-lg-6 col-xl-6"
@@ -105,7 +108,7 @@
                         style="position: relative"
                       >
                         <div
-                          class="o-090 text-h4 flex items-baseline flex inter bolder no-wrap"
+                          class="o-090 text-h4 flex grow items-baseline flex inter bolder no-wrap"
                           :class="{
                             'q-pt-lg q-pr-xl q-mr-xl': $q.screen.lt.sm,
                           }"
@@ -151,6 +154,13 @@
                       />
                       --></div>
                       <div
+                        class="flex grow"
+                        style="position: relative"
+                        v-if="loading && !!route.query?.thumbXsUrl"
+                      >
+                        <InnerLoading :solid="false" />
+                      </div>
+                      <div
                         class="flex row justify-between items-center"
                         :class="{
                           'q-mt-md': $q.screen.gt.xs,
@@ -185,14 +195,11 @@
                         :editing="editing"
                         class="q-mt-lg"
                         :item="event?.media_items?.[0]"
-                        :thumbXsUrl="route.query?.thumbXsUrl as any as string"
+                        :thumbXsUrl="route.query?.thumbXsUrl"
                       />
-                      <div
-                        class="flex column grow no-wrap"
-                        v-if="imageLoaded && event"
-                      >
+                      <div class="flex column grow no-wrap" v-if="!!event">
                         <div
-                          class="flex justify-start items-start"
+                          class="flex grow justify-start items-start"
                           v-if="!!event"
                         >
                           <SummaryComponent
@@ -201,7 +208,7 @@
                           />
                         </div>
                         <div
-                          class="grow"
+                          class=""
                           :class="$q.screen.gt.sm ? 'q-mt-lg' : 'q-mt-md'"
                         >
                           <div class="flex row">
@@ -283,7 +290,9 @@
                         </div>
                         <div
                           class="flex row justify-between items-end no-wrap tags-wrapper o-080"
-                          :class="$q.screen.gt.sm ? 'q-pt-lg' : 'q-mt-md'"
+                          :class="
+                            $q.screen.gt.sm ? 'q-pt-lg q-mt-sm' : 'q-mt-md'
+                          "
                           v-if="event?.event_tags"
                         >
                           <TagsComponent :small="false" :editing="editing" />
@@ -310,10 +319,10 @@
                       }"
                     >
                       <FeaturedMediaComponent
-                        v-if="!!event"
                         :editing="editing"
                         :item="event?.media_items?.[0]"
                         @loaded="mediaLoaded"
+                        :thumbXsUrl="route.query?.thumbXsUrl"
                       />
                     </div>
                   </div>
@@ -707,6 +716,7 @@
                         <EventDateLineupComponent />
 
                         <YoutubeVideoComponent
+                          :key="event?.youtube_url"
                           class="q-mb-md"
                           :editing="editing"
                           v-if="
@@ -1130,9 +1140,8 @@ const deleteEvent = () => {
 };
 
 onBeforeRouteLeave((to, from, next) => {
-  if ($q.platform.is.mobile) {
-    event.value = null;
-  }
+  event.value = null;
+
   mapStore.focusMarker = null;
 
   // transition out before going back on mobile
@@ -1157,7 +1166,7 @@ onBeforeRouteLeave((to, from, next) => {
       setTimeout(() => {
         mainStore.sidebarOpacity = 1;
       }, 50);
-      setTimeout(() => next(), 150);
+      setTimeout(() => next(), 350);
     }
   } else {
     next();
@@ -1620,7 +1629,7 @@ a {
     .scroll-area {
       .main-row {
         .content-card {
-          //background: white;
+          background: white;
           .main-content {
             border-left: 1px solid $b-4 !important;
             border-right: 1px solid $b-4 !important;

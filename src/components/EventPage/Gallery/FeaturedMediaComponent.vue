@@ -51,16 +51,26 @@
         </video>
 -->
         <transition appear enter-active-class="animated fadeIn slower">
-          <img
-            v-if="!loaded && thumbXsUrl && false"
-            style="filter: blur(20px); transform: scale(1.2)"
-            :src="thumbXsUrl"
-          />
+          <div
+            style="
+              border-radius: 18px;
+              overflow: hidden;
+              width: 100%;
+              height: auto;
+            "
+            v-if="(!loaded && thumbXsUrl) || true"
+          >
+            <img
+              style="filter: blur(5px); transform: scale(1)"
+              :src="thumbXsUrl || logo?.thumb_xxs_url"
+            />
+          </div>
         </transition>
         <transition appear enter-active-class="animated fadeIn slower">
           <img
+            style="position: absolute"
             v-show="loaded"
-            :src="logo?.thumb_url"
+            :src="logo?.image_med_url"
             @load="
               () => {
                 loaded = true;
