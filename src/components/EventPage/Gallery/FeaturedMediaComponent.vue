@@ -62,7 +62,12 @@
           >
             <img
               style="filter: blur(5px); transform: scale(1)"
-              :src="thumbXsUrl || logo?.thumb_xxs_url"
+              :src="
+                thumbXsUrl ||
+                logo?.thumb_xxs_url ||
+                logo?.thumb_xs_url ||
+                logo?.thumb_url
+              "
             />
           </div>
         </transition>
@@ -70,7 +75,7 @@
           <img
             style="position: absolute"
             v-show="loaded"
-            :src="logo?.image_med_url"
+            :src="logo?.image_med_url || logo?.image_url"
             @load="
               () => {
                 loaded = true;
@@ -273,19 +278,9 @@ export default {
 @media only screen and (max-width: 600px) {
   .featured-media-component {
     height: unset;
-    max-width: calc(100vw - 48px);
     width: 100%;
     min-height: unset;
-    min-width: 600px;
     .item-wrapper {
-      position: relative;
-      max-height: 100%;
-      max-width: 100%;
-      overflow: visible;
-      display: flex;
-      justify-content: flex-start;
-      align-content: center;
-      align-items: start;
       .item-wrapper-inner {
         justify-content: flex-start;
         border-radius: 18px;

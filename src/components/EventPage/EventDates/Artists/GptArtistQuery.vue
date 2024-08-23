@@ -48,7 +48,7 @@
             </div>
           </q-item-section>
           <q-item-section v-else>
-            <div class="flex row items-stretch no-wrap">
+            <div class="flex row items-center no-wrap">
               <q-btn @click="editArtist = index" class="q-mr-sm"
                 ><q-icon name="mdi-pencil" class="q-mr-sm"></q-icon
                 >Refine</q-btn
@@ -56,6 +56,10 @@
               <q-btn @click="() => deleteArtist(index)"
                 ><q-icon name="mdi-delete"></q-icon
               ></q-btn>
+              <q-spinner
+                class="q-ml-md"
+                v-if="gettingMbidForIndex === index"
+              ></q-spinner>
             </div>
           </q-item-section>
         </q-item>
@@ -72,37 +76,39 @@
 <script setup lang="ts">
 import { ref, defineProps, withDefaults } from 'vue';
 
-import { getGptArtists } from 'src/api';
-import AbortController from 'axios';
+import {
+  getArtistsRequest,
+  getGptArtists,
+  getMusicBrainzArtist,
+} from 'src/api';
 import { Notify } from 'quasar';
 import SelectArtistsInput from 'components/EventPage/EventDates/Artists/SelectArtistsInput.vue';
 
 interface Props {
   name: string;
-  country?: string;
-  year?: number;
+  country: string;
+  year: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   name: '',
-  country: '',
-  year: null,
 });
 
 const emit = defineEmits(['save']);
 
 const loading = ref(false);
-const error = ref(null);
-const abortController = ref(null);
-const results = ref([]);
-const editArtist = ref(null);
+const error = ref<string | null>(null);
+const abortController = ref<AbortController>(new AbortController());
+const results = ref<any>([]);
+const editArtist = ref<number | null>(null);
+const gettingMbidForIndex = ref<number | null>(null);
 
-const replaceArtist = (index, artist) => {
+const replaceArtist = (index: number, artist: any) => {
   results.value[index] = artist;
   editArtist.value = null;
 };
 
-const deleteArtist = (index) => {
+const deleteArtist = (index: number) => {
   results.value.splice(index, 1);
   editArtist.value = null;
 };
@@ -128,12 +134,13 @@ const load = async () => {
         console.log('parsed JSON', parsedJson);
         if (parsedJson.length > 0 && parsedJson[0].name) {
           results.value = parsedJson;
+          triggerMbidAutoLookups();
           // emit('result', parsedJson);
         } else {
           error.value =
             'Result is malformed. Try again or let Pete know if this continues to be a problem.';
         }
-      } catch (e) {
+      } catch (e: any) {
         error.value =
           'error parsing JSON \n' +
           JSON.stringify(response.data?.data?.outputs);
@@ -142,7 +149,7 @@ const load = async () => {
     } else {
       error.value = response.data?.data?.outputs?.__reason || 'Error';
     }
-  } catch (e) {
+  } catch (e: any) {
     error.value = e?.response?.data?.message || e.message;
 
     Notify.create({
@@ -152,6 +159,42 @@ const load = async () => {
   }
 
   loading.value = false;
+};
+
+const triggerMbidAutoLookups = async () => {
+  for (const [index, artist] of results.value.entries()) {
+    gettingMbidForIndex.value = index;
+    try {
+      const [pmResponse, mbResponse] = await Promise.all([
+        getArtistsRequest({
+          query: artist.name,
+          page: 1,
+          sort: 'event_count',
+          desc: true,
+          per_page: 5,
+        }),
+        getMusicBrainzArtist(artist.name),
+      ]);
+      let mappedResponse = mbResponse.data.artists
+        .map(({ id, ...rest }: any) => ({ ...rest, mbid: id }))
+        .filter(
+          (x: any) =>
+            pmResponse.data.items.findIndex((y: any) => y.mbid === x.mbid) ===
+            -1
+        );
+      const searchResults = [...pmResponse.data.items, ...mappedResponse];
+      const matches = searchResults.filter(
+        (x) => x.name.toLowerCase() === artist.name.toLowerCase()
+      );
+      console.log('matches', matches);
+      if (matches.length === 1) {
+        results.value[index].mbid = matches[0]?.mbid;
+        console.log('results.value', results.value[index]);
+      }
+    } catch (e) {}
+    gettingMbidForIndex.value = null;
+    setTimeout(() => null, 1000);
+  }
 };
 
 const cancel = () => {

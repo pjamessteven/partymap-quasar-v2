@@ -489,16 +489,9 @@ export default {
           setTimeout(() => {
             this.$q.notify({
               message: 'Tap the map or drag to hide/show the bottom panel!',
-              actions: [
-                {
-                  label: 'Got it',
-                  handler: () => {
-                    this.tips.hidePanelTip = false;
-                    this.persistTipsToLocalStorage();
-                  },
-                },
-              ],
             });
+            this.tips.hidePanelTip = false;
+            this.persistTipsToLocalStorage();
           }, 1000);
 
         if (this.tips.oldAndroid && this.$q.platform.is.android) {
@@ -506,16 +499,9 @@ export default {
             this.$q.notify({
               message:
                 'Got an older phone? Improve app performance by switching to the transport map.',
-              actions: [
-                {
-                  label: 'Got it',
-                  handler: () => {
-                    this.tips.oldAndroid = false;
-                    this.persistTipsToLocalStorage();
-                  },
-                },
-              ],
             });
+            this.tips.oldAndroid = false;
+            this.persistTipsToLocalStorage();
           }, 15000);
         }
       }
