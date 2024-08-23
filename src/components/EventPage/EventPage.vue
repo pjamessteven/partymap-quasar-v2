@@ -82,7 +82,7 @@
             />
 
             <div class="content flex column">
-              <div class="flex column grow">
+              <div class="flex column grow no-wrap">
                 <div class="header flex column">
                   <FeaturedMediaBackground
                     :thumbXsUrl="route.query?.thumbXsUrl as any as string"
@@ -1827,12 +1827,13 @@ a {
               max-height: min-content;
               background: #fafafa;
               border-bottom: 1px solid #1a1a1a;
-              min-height: Min(66vh, 440px);
               .q-inner-loading {
                 background: none;
               }
 
               .header-content {
+                min-height: Min(66vh, 440px);
+
                 position: relative;
                 width: 100%;
                 height: 100%;
@@ -1879,7 +1880,7 @@ a {
             }
 
             .main-content {
-              min-height: 800p;
+              min-height: 800px;
             }
             :deep(.event-page-header) {
               position: sticky;
