@@ -12,6 +12,8 @@
         parties!
       </span>
       <p />
+      <b>About</b>
+      <p />
       PartyMap is a crowd-sourced, community-driven platform for discovering
       festivals and experiences around the world. I built this because I wished
       something like this existed. If you have any thoughts, ideas or
@@ -24,11 +26,41 @@
         >info@partymap.com</a
       >
       <p />
+      <b>How does it work?</b>
+      <p />
+      Anyone can add anything, as long as the information is already public on
+      the internet. Anyone can also make changes to event pages that have no
+      owner. If you add your own event and you are the host, you will have full
+      control of the event page and other users will not be able to modify it.
+      All submissions and changes are moderated, and as the site grows I will be
+      seeking regional moderators.
+      <p />
+      <b>Open Source</b>
+      <p />
       PartyMap would not have been possible without the amazing open source
       communtiy. Many thanks to the contributors of Vue, Python, Flask,
       SQLAlchemy, PostgreSQL, PostGIS, Quasar and Leaflet. Thanks to Spotify,
       Last.FM and Musicbrainz for artist info. And many thanks to you for
       submitting your events and reviews!
+      <p />
+      Partymap itself is open source. Keen to contribute? Hell yeah!!! Let's
+      build the best event platform on the internet!
+      <p></p>
+      If you want to get involved you can find us on
+      <a href="https://discord.gg/BD7BwrZA">Discord</a>
+      <p />
+      Source code:
+      <p />
+      <a href="https://github.com/pjamessteven/partymap-backend"
+        >PartyMap Backend on Github</a
+      ><br />
+      <a href=" https://github.com/pjamessteven/partymap-quasar-v2"
+        >PartyMap Frontend on Github</a
+      >
+      <p />
+
+      <p />
+      <b>Donate</b>
       <p />
       {{ $t('about.message_3') }}
       <a
@@ -37,6 +69,7 @@
         href="https://www.paypal.com/donate/?hosted_button_id=9MVTW44EMSCRA"
         >PayPal</a
       >
+      (and soon BTC)<!--
       {{ $t('about.or') }}
       <span
         @click="showBtcAddress = !showBtcAddress"
@@ -51,6 +84,9 @@
         href="bitcoin:bc1qnn5rhppt78ay2aavex2d8v0u9u7j7025mec9hd?message=Donations&time=1639975733"
         >BTC: bc1qnn5rhppt78ay2aavex2d8v0u9u7j7025mec9hd</a
       >
+      -->
+      <p />
+      <b>I hate PartyMap!</b>
       <p />
       {{ $t('about.message_2') }}
       <p />
