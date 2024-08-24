@@ -14,8 +14,6 @@ Please find source for PartyMap API at https://github.com/pjamessteven/partymap-
 
 This work is licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
-[![Apache License 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-
 The Apache License 2.0 allows users to use, modify, and distribute this work, even for commercial purposes as long as permission is granted. This license also provides an express grant of patent rights from contributors to users. For more details, see the LICENSE file in the repository.
 
 ---
