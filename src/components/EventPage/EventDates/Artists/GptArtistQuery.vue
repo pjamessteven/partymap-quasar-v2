@@ -193,7 +193,7 @@ const triggerMbidAutoLookups = async () => {
       }
     } catch (e) {}
     gettingMbidForIndex.value = null;
-    setTimeout(() => null, 1000);
+    await new Promise((resolve) => setTimeout(resolve, 500));
   }
 };
 

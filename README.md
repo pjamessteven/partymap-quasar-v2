@@ -1,11 +1,15 @@
-# PartyMap (partymap)
+# PartyMap Frontend (partymap-quasar-v2)
 
-The global directory of festivals and events
+The global directory of festivals and events. This is a hybrid web app built with the wonderful Quasar Framework and Vue 3. It can be built for the Web, iOS and Android.
 
-## Install the dependencies
+## Setup
+
+### Install the dependencies
+
+Make sure you have node 18 installed.
 
 ```bash
-yarn
+yarn install
 # or
 npm install
 ```
@@ -16,20 +20,13 @@ npm install
 quasar dev
 ```
 
-### Lint the files
+### Run the app in dev mode with hot-reloading
+
+Android Studio is required for the Android app.
+XCode and Mac OS is required for the iOS app.
 
 ```bash
-yarn lint
-# or
-npm run lint
-```
-
-### Format the files
-
-```bash
-yarn format
-# or
-npm run format
+quasar dev -m capacitor -T [android|ios] --ide
 ```
 
 ### Build the app for production
@@ -38,9 +35,14 @@ npm run format
 quasar build
 ```
 
-### Customize the configuration
+### Build the mobile apps for production
 
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
+Android Studio is required for the Android app.
+XCode and Mac OS is required for the iOS app.
+
+```bash
+quasar build -m capacitor -T [android|ios] --ide
+```
 
 ## Icon genie
 
