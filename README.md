@@ -4,6 +4,8 @@ The global directory of festivals and events (https://www.partymap.com).
 
 This is a hybrid web app built with the wonderful Quasar Framework and Vue 3. It can be built for the Web, iOS and Android.
 
+Please find source for PartyMap API at https://github.com/pjamessteven/partymap-backend/
+
 ---
 
 ## License
@@ -19,7 +21,25 @@ This work is licensed under a
 [cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
 [cc-by-nc-sa-shield]: https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg
 
-This project is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0). This license lets others remix, tweak, and build upon this work non-commercially, as long as they credit the original author and license their new creations under the identical terms. For more details, see the LICENSE file.
+The Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0) allows others to remix, tweak, and build upon this work non-commercially, as long as they credit the original author(s) (Peter James Steven and PartyMap Contributors) and license their new creations under the identical terms. For more details, see the LICENSE file.
+
+---
+
+## Contributing
+
+Keen to contribute? Hell yeah!!! Let's build the best event platform on the internet!
+
+You can find us on Discord: https://discord.gg/BD7BwrZA
+
+To start contributing to the code base, [find](https://github.com/pjamessteven/partymap-quasar-v2/issues?q=is:issue+is:closed) an existing issue, or [open](https://github.com/pjamessteven/partymap-quasar-v2/issues/new/choose) a new one. We categorize issues into 2 types:
+
+- Feature requests:
+
+  - If you're opening a new feature request, we'd like you to explain what the proposed feature achieves, and include as much context as possible
+  - If you want to pick one up from the existing issues, simply drop a comment below it saying so.
+
+- Anything else (e.g. bug report, performance optimization, typo correction):
+  - Start coding right away.
 
 ---
 
