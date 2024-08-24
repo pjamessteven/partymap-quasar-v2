@@ -1,6 +1,8 @@
 .DS_Store
 .thumbs.db
 node_modules
+my-release-key.keystore
+.env
 
 # Quasar core related directories
 .quasar
