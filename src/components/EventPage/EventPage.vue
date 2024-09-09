@@ -156,7 +156,11 @@
                       <div
                         class="flex grow"
                         style="position: relative"
-                        v-if="loading && !!route.query?.thumbXsUrl"
+                        v-if="
+                          loading &&
+                          !!route.query?.thumbXsUrl &&
+                          $q.screen.gt.xs
+                        "
                       >
                         <InnerLoading :solid="false" />
                       </div>

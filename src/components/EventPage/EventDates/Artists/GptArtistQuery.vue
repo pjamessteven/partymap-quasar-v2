@@ -29,8 +29,12 @@
       </div>
     </div>
     <q-card class="q-pa-sm q-mt-md flex column" v-if="results?.length > 0">
-      <div :key="artist.name" v-for="(artist, index) of results">
-        <q-item>
+      <div
+        class="flex column"
+        :key="artist.name"
+        v-for="(artist, index) of results"
+      >
+        <q-item v-if="(!artist.mbid && !artist.id) || showHidden">
           <q-item-section>
             <q-item-label>{{ artist.name }}</q-item-label>
             <q-item-label caption>{{ artist.mbid }}</q-item-label>
@@ -63,6 +67,43 @@
             </div>
           </q-item-section>
         </q-item>
+        <q-item class="b3 q-ml-lg" v-if="artist.results?.length">
+          <q-item-section>
+            <q-item-label> <b>Multiple options found</b> </q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item
+          class="b3 q-ml-lg"
+          clickable
+          v-if="artist.results?.length"
+          :onClick="() => (results[index].results = null)"
+        >
+          <q-item-section>
+            <q-item-label> (Create new record) </q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item
+          clickable
+          :onClick="() => (results[index] = result)"
+          class="b3 q-ml-lg"
+          v-for="(result, resultIndex) of artist.results?.slice(0, 5)"
+          :key="resultIndex"
+        >
+          <q-item-section>
+            <q-item-label>{{ result.name }}</q-item-label>
+            <q-item-label caption>{{
+              result.disambiguation || result.description
+            }}</q-item-label>
+            <q-item-label caption>mbid: {{ result.mbid }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </div>
+      <div class="q-pa-md" v-if="artistsWithId?.length">
+        <b>{{ artistsWithId.length }}</b
+        >&nbsp; matched artists hidden
+        <span class="t2 link-hover" @click="() => (showHidden = !showHidden)">{{
+          !showHidden ? '[show]' : '[hide]'
+        }}</span>
       </div>
       <div class="q-pa-md">
         <b>Make sure to refine all artists before saving!</b>
@@ -74,7 +115,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, defineProps, withDefaults } from 'vue';
+import { ref, defineProps, withDefaults, computed } from 'vue';
 
 import {
   getArtistsRequest,
@@ -102,6 +143,11 @@ const abortController = ref<AbortController>(new AbortController());
 const results = ref<any>([]);
 const editArtist = ref<number | null>(null);
 const gettingMbidForIndex = ref<number | null>(null);
+const showHidden = ref(false);
+
+const artistsWithId = computed(() =>
+  results.value.filter((x: any) => !!x.mbid || !!x.id)
+);
 
 const replaceArtist = (index: number, artist: any) => {
   results.value[index] = artist;
@@ -114,7 +160,10 @@ const deleteArtist = (index: number) => {
 };
 
 const save = () => {
-  emit('save', results.value);
+  emit(
+    'save',
+    results.value.map((x: any) => ({ name: x.name, mbid: x.mbid }))
+  );
   results.value = [];
 };
 
@@ -127,25 +176,11 @@ const load = async () => {
       { name: props.name, country: props.country, year: props.year + '' },
       abortController.value.signal
     );
-    const eventJson = response.data?.data?.outputs?.json;
-    if (eventJson) {
-      try {
-        const parsedJson = JSON.parse(eventJson);
-        console.log('parsed JSON', parsedJson);
-        if (parsedJson.length > 0 && parsedJson[0].name) {
-          results.value = parsedJson;
-          triggerMbidAutoLookups();
-          // emit('result', parsedJson);
-        } else {
-          error.value =
-            'Result is malformed. Try again or let Pete know if this continues to be a problem.';
-        }
-      } catch (e: any) {
-        error.value =
-          'error parsing JSON \n' +
-          JSON.stringify(response.data?.data?.outputs);
-        console.log('error parsing JSON', eventJson);
-      }
+    const artists = response.data?.data?.outputs?.artists;
+    if (artists && artists?.length > 0) {
+      results.value = artists.map((x) => ({ name: x }));
+      triggerMbidAutoLookups();
+      // emit('result', parsedJson);
     } else {
       error.value = response.data?.data?.outputs?.__reason || 'Error';
     }
@@ -189,7 +224,9 @@ const triggerMbidAutoLookups = async () => {
       console.log('matches', matches);
       if (matches.length === 1) {
         results.value[index].mbid = matches[0]?.mbid;
-        console.log('results.value', results.value[index]);
+        results.value[index].name = matches[0].name;
+      } else {
+        results.value[index].results = searchResults;
       }
     } catch (e) {}
     gettingMbidForIndex.value = null;
