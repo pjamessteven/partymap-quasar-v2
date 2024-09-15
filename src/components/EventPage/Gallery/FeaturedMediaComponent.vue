@@ -283,6 +283,7 @@ export default {
     .item-wrapper {
       .item-wrapper-inner {
         justify-content: flex-start;
+        align-content: flex-start;
         border-radius: 18px;
 
         img,

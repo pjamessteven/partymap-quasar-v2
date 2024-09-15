@@ -484,6 +484,7 @@ export default {
     },
     sidebarPanel(newv) {
       this.$refs.scroll.setScrollPercentage('vertical', 0);
+      /*
       if (newv === 'explore') {
         if (this.tips.hidePanelTip)
           setTimeout(() => {
@@ -504,7 +505,7 @@ export default {
             this.persistTipsToLocalStorage();
           }, 15000);
         }
-      }
+      }*/
     },
     mapMoving(newv) {
       if (newv) this.eventDatesHasNext = false;

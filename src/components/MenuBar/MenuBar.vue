@@ -263,7 +263,7 @@ export default {
     },
     overlayingContent() {
       return (
-        ((this.$route.name === 'EventPage' ||
+        (((this.$route.name === 'EventPage' && this.sidebarOpacity === 0) ||
           this.$route.name === 'ArtistPage') &&
           ((this.$q.screen.gt.xs && this.menubarOpacity === 0) ||
             this.$q.screen.lt.sm)) ||
