@@ -13,7 +13,7 @@
         width: $q.screen.gt.sm ? '12px' : '4px',
         borderRadius: '0px',
       }"
-      :class="!showPanelBackground && 'disable-scroll'"
+      :class="!showPanelBackground && $q.screen.lt.md && 'disable-scroll'"
       class="scroll-area flex grow"
     >
       <div class="scroll-stuff flex column">

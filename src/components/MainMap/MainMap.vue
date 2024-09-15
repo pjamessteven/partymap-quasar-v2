@@ -477,17 +477,9 @@ export default {
       if (coords) {
         // padding for desktop panel
         var latlng = L.latLng(coords);
-        if (this.$q.screen.gt.xs) {
-          toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
-            paddingTopLeft: [
-              0,
-              0 - window.innerHeight / 2 - 128 + this.safeAreaInsets.top,
-            ],
-            animate: !this.disableAnimations,
-            duration: 0.3,
-            easeLinearity: 1,
-            maxZoom: 10,
-          });
+        if (this.$q.screen.gt.sm) {
+          // no distinction between nearby and explore on desktop
+          this.fitBoundsForExplorePage(coords);
         } else {
           // padding for mobile bottom panel
           toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
@@ -509,9 +501,9 @@ export default {
     fitBoundsForExplorePage(coords) {
       // padding for desktop panel
       var latlng = L.latLng(coords);
-      if (this.$q.screen.gt.xs) {
+      if (this.$q.screen.gt.sm) {
         toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
-          paddingTopLeft: [0, -150],
+          paddingTopLeft: [352, 0],
           animate: !this.disableAnimations,
           duration: 0.3,
           easeLinearity: 1,

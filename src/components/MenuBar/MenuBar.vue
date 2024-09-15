@@ -13,17 +13,14 @@
     />
     <div class="flex items-center no-wrap q-mr-md">
       <MenuBarLogo
-        class="logo"
-        :color="iconColor"
-        :style="
-          !previousRouteName || swipingDownMenuPageMobile
-            ? 'opacity: 1'
-            : 'opacity: 0; pointer-events: none;'
-        "
+        class="menubar-item logo"
+        :class="{ 'menubar-item-inverted': iconLeftColor === 'black' }"
+        v-show="!previousRouteName || swipingDownMenuPageMobile"
       />
 
       <div
-        class="tab-wrapper flex items-center"
+        class="tab-wrapper menubar-item flex items-center"
+        :class="{ 'menubar-item-inverted': iconLeftColor === 'black' }"
         v-if="!previousRouteName && $q.screen.gt.xs"
       >
         <div
@@ -33,7 +30,7 @@
         >
           <div class="separator vertical" />
         </div>
-        <NavigationBar :color="iconColor" />
+        <NavigationBar color="white" />
       </div>
     </div>
     <DesktopSearchComponent
@@ -48,14 +45,14 @@
       leave-active-class="animated fadeOut"
     >
       <div
-        class="back-button-wrapper flex items-center no-wrap"
+        class="back-button-wrapper menubar-item flex items-center no-wrap"
+        :class="{ 'menubar-inverted': iconColor === 'black' }"
         v-if="
           previousRouteName &&
           this.$route.name !== 'Explore' &&
           !swipingDownMenuPageMobile
         "
       >
-        <div class="separator vertical" v-if="$q.screen.gt.xs" />
         <q-btn
           class="back-button"
           style="cursor: pointer"
@@ -63,7 +60,7 @@
           flat
           icon="mdi-chevron-left"
           :label="previousRouteName"
-          :color="iconColor"
+          color="white"
           no-caps
           @click="back()"
         />
@@ -74,7 +71,11 @@
       enter-active-class="animated fadeIn"
       leave-active-class="animated fadeOut"
     >
-      <MenuBarButtons :color="iconColor" class="right-buttons" />
+      <MenuBarButtons
+        color="white"
+        class="menubar-item right-buttons"
+        :class="{ 'menubar-item-inverted': iconColor === 'black' }"
+      />
     </transition>
   </div>
 </template>
@@ -246,6 +247,18 @@ export default {
       } */ else return 'opacity: 0';
     },
 
+    iconLeftColor() {
+      if (this.$q.screen.gt.sm) {
+        if (
+          !this.$q.dark.isActive &&
+          ((this.$route.name === 'Explore' && this.sidebarPanel === 'nearby') ||
+            this.sidebarPanel === 'explore')
+        ) {
+          return 'black';
+        }
+      }
+      return this.iconColor;
+    },
     iconColor() {
       if (!this.overlayingContent && !this.$q.dark.isActive) {
         return 'black';
@@ -309,9 +322,13 @@ export default {
   height: 72px;
   position: relative;
   transition: height 0.3s ease;
-  //padding-left: 8px;
-  .logo {
-    margin-left: 8px;
+
+  .menubar-item {
+    filter: invert(0);
+    transition: all 0.6s ease;
+    &.menubar-item-inverted {
+      filter: invert(1);
+    }
   }
   // android
   @supports ((top: var(--safe-area-inset-top))) {
@@ -337,9 +354,8 @@ export default {
     transition: all 0.3s ease;
   }
   .logo {
+    margin-left: 8px;
     z-index: 1;
-    opacity: 1;
-    transition: opacity 0.3s ease;
     pointer-events: all;
     min-height: 62px;
   }

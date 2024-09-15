@@ -10,7 +10,7 @@
       <q-separator />
     </div>
 
-    <div class="mobile-panel-button">
+    <div class="mobile-panel-button" v-if="$q.screen.lt.md">
       <q-icon
         @click="showPanel ? $emit('hidePanel') : $emit('showPanel')"
         flat
@@ -43,26 +43,6 @@
       >
         Nothing coming up in this area
       </div>
-      <div
-        class="flex row no-wrap items-center justify-between q-px-md q-pt-md q-pb-sm view-options-absolute"
-        v-if="$q.screen.gt.xs"
-      >
-        <div class="flex row items-center no-wrap">
-          <!--
-          <EventDateViewOptions class="q-m-md" />
--->
-          <q-icon
-            @click="() => (showPanel = !showPanel)"
-            v-if="$q.screen.gt.sm && false"
-            flat
-            size="2.5rem"
-            class="q-mx-md t1"
-            name="mdi-chevron-up"
-            :class="{ 'rotate-180': showPanelBackground }"
-            style="cursor: pointer"
-          />
-        </div>
-      </div>
 
       <div
         class="flex column grow no-wrap"
@@ -89,7 +69,9 @@
                 }
           "
           class="scroll-area flex grow"
-          :disableScroll="!showPanelBackground || preventMapZoom"
+          :disableScroll="
+            $q.screen.lt.md && (!showPanelBackground || preventMapZoom)
+          "
         >
           <div class="flex column no-wrap scroll-content q-px-sm">
             <!-- tags -->
@@ -209,7 +191,7 @@
               >
                 <EventDateList
                   v-if="compactView"
-                  :groupByMonth="groupEventsByMonth && $q.screen.lt.sm"
+                  :groupByMonth="groupEventsByMonth"
                   :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
                   :eventDates="eventDates"
                   :hasNext="eventDatesHasNext"

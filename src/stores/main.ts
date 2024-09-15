@@ -65,7 +65,7 @@ export const useMainStore = defineStore('main', {
     userLocationCountry: null,
     userLocationFromSearch: false,
     fineLocation: false,
-    groupEventsByMonth: Screen.lt.sm,
+    groupEventsByMonth: true,
     compactView: true,
     routerHistory: [],
     tips: (localTips && JSON.parse(localTips)) || {

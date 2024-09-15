@@ -43,13 +43,22 @@
             $q.screen.gt.xs ? 'animated slideOutDown' : undefined
           "
         >
-          <SideBar
+          <MobileSideBar
             class="sidebar-component"
-            v-show="
-              $q.screen.lt.sm || ($q.screen.gt.xs && $route.name == 'Explore')
-            "
+            v-if="$q.screen.lt.md"
             :class="{ hide: $q.screen.lt.sm && $route.name === 'EventPage' }"
           />
+        </Transition>
+        <Transition
+          appear
+          :enter-active-class="
+            $q.screen.gt.xs ? 'animated  fadeIn' : 'animated fadeIn'
+          "
+          :leave-active-class="
+            $q.screen.gt.xs ? 'animated slideOutDown' : undefined
+          "
+        >
+          <SideBar class="sidebar-component" v-if="$q.screen.gt.sm" />
         </Transition>
         <div
           v-show="
@@ -132,6 +141,7 @@ import MenuBar from 'components/MenuBar/MenuBar.vue';
 import SearchComponent from 'src/components/Search/DesktopSearchComponent.vue';
 import MenuBarLogo from 'src/components/MenuBar/MenuBarLogo.vue';
 import NavigationBar from 'src/components/NavigationBar.vue';
+import MobileSideBar from 'src/components/SideBar/MobileSideBar.vue';
 import { mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import { useMainStore } from 'src/stores/main';
@@ -142,6 +152,7 @@ export default {
   components: {
     MainMap,
     SideBar,
+    MobileSideBar,
     MenuBar,
     MenuBarLogo,
     NavigationBar,

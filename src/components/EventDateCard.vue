@@ -53,7 +53,7 @@
               <div
                 class="flex row items-baseline no-wrap inter bold q-mr-sm ellipsis"
                 :class="{
-                  'text-large q-mb-sm': $q.screen.gt.sm,
+                  'text-large q-mb-sm': $q.screen.gt.xs,
                   'q-mb-xs': $q.screen.lt.md,
                 }"
               >
@@ -81,9 +81,6 @@
             <div
               class="flex column justify-center card-bottom-text o-070 q-mb-sm q-pr-md"
               style="font-weight: 400; width: 100%"
-              :class="{
-                'q-mt-': $q.screen.gt.sm,
-              }"
             >
               <!--
 
@@ -128,7 +125,7 @@
                     class="o-070 no-wrap ellipsis q-ml-xs"
                   >
                     <q-icon size="1em" class="q-mr-sm" name="las la-redo-alt" />
-                    <span v-if="$q.screen.gt.sm">{{
+                    <span v-if="$q.screen.gt.xs">{{
                       simplifiedRecurringPattern(event.event.rrule)
                     }}</span>
                   </span>
@@ -176,7 +173,7 @@
               </div>
             </div>
             <div
-              v-if="$q.screen.gt.sm"
+              v-if="$q.screen.gt.xs"
               class="description grow flex ellipsis q-mb-sm items-center"
               style="max-width: 100%"
             >
@@ -503,7 +500,7 @@ export default {
 }
 
 // desktop
-@media only screen and (min-width: 1024px) {
+@media only screen and (min-width: 600px) {
   .ed-card {
     &:before {
       //display: none;
