@@ -96,11 +96,12 @@
 
                   <div class="header-content grow row">
                     <div
-                      class="flex column justify-start items-stretch col-6 col-xs-12 col-sm-7 col-md-6 col-lg-6 col-xl-6"
+                      class="flex column justify-start col-6 col-xs-12 col-sm-7 col-md-6 col-lg-6 col-xl-6"
                       :class="{
-                        'q-px-xl q-pt-xl q-pb-lg': $q.screen.gt.sm,
+                        'q-px-xl q-pt-xl q-pb-lg items-stretch ':
+                          $q.screen.gt.sm,
                         'q-pa-lg q-pt-xl': $q.screen.lt.md && $q.screen.gt.xs,
-                        'q-px-md q-pb-md': $q.screen.lt.sm,
+                        'q-px-md q-pb-md items-start': $q.screen.lt.sm,
                       }"
                     >
                       <div
@@ -166,28 +167,26 @@
                       </div>
                       <div
                         class="flex row justify-between items-center"
+                        style="height: 42px"
                         :class="{
                           'q-mt-md': $q.screen.gt.xs,
                           'q-mt-sm': $q.screen.lt.sm,
                         }"
                       >
-                        <NextEventDateSummary
-                          :class="{
-                            'o-050': editing,
-                          }"
-                          class=""
-                          v-if="!!event && selectedEventDate"
-                          :key="selectedEventDate.id"
-                          :ed="selectedEventDate"
-                        />
-                        <NextEventDateSummary
-                          :class="{
-                            'o-050': editing,
-                          }"
-                          class=""
-                          v-else
-                          key="placeholder"
-                        />
+                        <transition
+                          appear
+                          enter-active-class="animated fadeIn slow"
+                        >
+                          <NextEventDateSummary
+                            :class="{
+                              'o-050': editing,
+                            }"
+                            class=""
+                            v-if="!!event && selectedEventDate"
+                            :key="selectedEventDate.id"
+                            :ed="selectedEventDate"
+                          />
+                        </transition>
                       </div>
 
                       <FeaturedMediaComponent
@@ -1162,10 +1161,11 @@ onBeforeRouteLeave((to, from, next) => {
     if ($q.platform.is.android) {
       if (previousRouteIsExplore.value) {
         setTimeout(() => {
+          mainStore.showPanelBackground = true;
           mainStore.sidebarOpacity = 1;
         }, 0);
       }
-      setTimeout(() => next(), 0);
+      setTimeout(() => next(), 300);
     } else {
       setTimeout(() => {
         mainStore.sidebarOpacity = 1;
