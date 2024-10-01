@@ -27,7 +27,9 @@
         class="inter q-mb-md"
         style="position: absolute; left: 24px; top: 16px; font-weight: 600"
         v-if="
-          (isLoadingInitial || (mapMoving && !blockUpdates)) && sidebarMinimized
+          (isLoadingInitial || (mapMoving && !blockUpdates)) &&
+          sidebarMinimized &&
+          $q.screen.lt.sm
         "
       >
         Finding what's good...
@@ -38,7 +40,8 @@
         v-else-if="
           !isLoadingInitial &&
           (eventDatesTotal === 0 || !eventDates || eventDates?.length === 0) &&
-          sidebarMinimized
+          sidebarMinimized &&
+          $q.screen.lt.sm
         "
       >
         Nothing coming up in this area
@@ -46,7 +49,7 @@
 
       <div
         class="flex column grow no-wrap"
-        :class="$q.screen.gt.sm ? 'q-pt-md' : ''"
+        :class="$q.screen.gt.sm ? 'q-pt-sm' : ''"
       >
         <CustomQScroll
           vertical
@@ -73,32 +76,55 @@
             $q.screen.lt.md && (!showPanelBackground || preventMapZoom)
           "
         >
-          <div class="flex column no-wrap scroll-content q-px-sm">
+          <div class="flex column no-wrap scroll-content">
+            <div class="flex row items-center q-ml-lg">
+              <router-link
+                :to="{ name: 'Explore' }"
+                style="text-decoration: none; color: inherit"
+              >
+                <q-btn
+                  flat
+                  class=""
+                  :class="{
+                    'q-ml-md q-pa-sm': $q.screen.lt.md,
+                    'q-pa-md': $q.screen.gt.sm,
+                  }"
+                  :style="
+                    $q.screen.gt.sm
+                      ? 'margin-left: -16px; border-radius: 100px!important;'
+                      : 'margin-left: 0px; border-radius: 100px!important;'
+                  "
+                >
+                  <template v-slot:default>
+                    <q-icon size="sm" name="mdi-crosshairs" />
+                  </template>
+                </q-btn>
+              </router-link>
+              <NearbyCountrySelect />
+            </div>
             <!-- tags -->
             <div
-              class="flex column q-mb-lg q-mt-xs"
+              class="flex column q-mb-lg q-mt-lg q-pt-sm"
               v-if="
                 topTagsInArea?.length >= 1 &&
                 !eventDatesLoading &&
                 !mapMoving &&
-                $q.screen.gt.xs &&
-                false
+                $q.screen.gt.xs
               "
             >
               <div
                 class="q-pb-md location-header"
                 :class="
                   $q.screen.gt.sm
-                    ? 'q-px-md  t1 inter semibold'
+                    ? 'q-px-lg  t1 inter semibold'
                     : ' t1 inter semibold'
                 "
               >
-                <div class="text-">Narrow down your search...</div>
+                <div class="inter bold">Hot tags in this area</div>
               </div>
 
               <div
                 :style="$q.screen.gt.sm ? 'margin-bottom: -8px' : ''"
-                :class="$q.screen.gt.sm ? 'q-pl-md ' : 'q-pl-md'"
                 v-if="topTagsInArea && topTagsInArea.length > 0"
               >
                 <CustomQScroll
@@ -114,8 +140,25 @@
                       : { bottom: '0px', height: '0px' }
                   "
                 >
-                  <div class="flex column">
+                  <div
+                    class="flex column"
+                    :class="$q.screen.gt.sm ? 'q-pl-lg ' : 'q-pl-lg'"
+                  >
                     <div class="flex row no-wrap q-gutter-sm q-pr-xl">
+                      <div
+                        v-for="(tag, index) in controlTag"
+                        :key="-index"
+                        @click="clickTag(tag)"
+                        class="tag tag-selected flex items-center no-wrap text- inter semibold"
+                        style="text-transform: capitalize"
+                        :class="$q.platform.is.ios ? 'no-hover' : ''"
+                      >
+                        <q-icon
+                          style="margin-left: -4px; font-size: 18px"
+                          name="mdi-close-circle q-mr-xs"
+                        />
+                        {{ tag.tag }}
+                      </div>
                       <div
                         v-for="(tag, index) in computedTags1"
                         :key="index"
@@ -149,25 +192,24 @@
             <div
               class="flex column"
               v-if="
-                topArtistsInArea?.length > 5 &&
-                !eventDatesLoading &&
-                !mapMoving &&
-                false
+                topArtistsInArea?.length > 5 && !eventDatesLoading && !mapMoving
               "
             >
               <div
-                class="location-header q-pb-md inter"
+                class="location-header q-pb-md inter bold"
                 :class="
                   $q.screen.gt.sm
-                    ? 'q-px-md t1 inter semibold'
+                    ? 'q-px-lg t1 inter semibold'
                     : 'q-pl-md t1 semibold'
                 "
               >
-                Top artists in this area:
+                High profile artists
               </div>
               <ArtistsComponent
-                :class="$q.screen.gt.sm ? 'q-pl- q-mb-' : ''"
+                :class="$q.screen.gt.sm ? 'q-pl- q-mb-md' : ''"
                 :artists="topArtistsInArea"
+                :size="$q.screen.gt.lg ? 'lg' : 'md'"
+                style="margin-top: -12px"
               />
             </div>
             <!-- theres no point in this 
@@ -186,7 +228,7 @@
             -->
             <transition appear enter-active-class="animated fadeIn slow">
               <div
-                class="flex column"
+                class="flex column q-px-sm"
                 :style="mapMoving && !blockUpdates ? 'opacity: 0' : ''"
               >
                 <EventDateList
@@ -229,9 +271,7 @@
         :style="
           $q.screen.lt.sm
             ? 'height: 144px; position: absolute; width: 100%; z-index: 500'
-            : $q.screen.lt.xl
-            ? 'height: 348px; position: absolute; width: 100%; z-index: 500'
-            : 'height: 450px; position: absolute; width: 100%; z-index: 500'
+            : 'height: 100%; position: absolute; width: 100%; z-index: 500'
         "
       >
         <div class="flex column items-center no-wrap">
@@ -240,7 +280,7 @@
             style="font-weight: 600"
             v-if="
               (isLoadingInitial || (mapMoving && !blockUpdates)) &&
-              !sidebarMinimized
+              (!sidebarMinimized || $q.screen.gt.sm)
             "
           >
             Finding what's good...
@@ -252,7 +292,7 @@
               (eventDatesTotal === 0 ||
                 !eventDates ||
                 eventDates?.length === 0) &&
-              !sidebarMinimized
+              (!sidebarMinimized || $q.screen.gt.sm)
             "
             style="font-weight: 600"
           >
@@ -337,6 +377,7 @@ import { useMainStore } from 'src/stores/main';
 import { useAuthStore } from 'src/stores/auth';
 import { mapActions, mapWritableState, mapState } from 'pinia';
 import CustomQScroll from 'components/CustomQScroll.vue';
+import NearbyCountrySelect from '../NearbyView/NearbyCountrySelect.vue';
 
 export default {
   components: {
@@ -346,6 +387,7 @@ export default {
     EventDateList,
     EventDatePosterList,
     CustomQScroll,
+    NearbyCountrySelect,
   },
 
   async mounted() {
@@ -392,7 +434,8 @@ export default {
     clickTag(tag) {
       let index = this.controlTag?.findIndex((x) => x.tag === tag.tag);
       if (index > -1) {
-        // tag already selected, do nothing
+        // tag already selected, remove tag
+        this.controlTag.splice(index, 1);
       } else {
         this.controlTag.push(tag);
       }

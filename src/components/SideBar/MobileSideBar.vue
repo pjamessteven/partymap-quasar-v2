@@ -414,7 +414,6 @@ watch(
 .body--dark {
   .sidebar-wrapper {
     .sidebar {
-      border: 1px solid black;
       background: black;
       border-top: 1px solid $bi-4;
       &.sidebar-mobile-expanded {
@@ -439,16 +438,7 @@ watch(
 .body--light {
   .sidebar-wrapper {
     .sidebar {
-      //box-shadow: rgb(38, 57, 77) 0px 8px 30px -10px;
-      //box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px,
-      // rgba(0, 0, 0, 0.15) 0px 7px 20px 3px,
-      // rgba(0, 0, 0, 0.1) 0px -3px 0px inset;
-
-      //box-shadow: rgba(50, 50, 105, 0.15) 0px 0px 5px 0px,
-      //  rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
-
       background: white;
-      border: 1px solid white;
 
       &.shadow {
         border: 1px solid rgba(0, 0, 0, 0.1);

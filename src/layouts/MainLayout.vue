@@ -51,14 +51,14 @@
         </Transition>
         <Transition
           appear
-          :enter-active-class="
-            $q.screen.gt.xs ? 'animated  fadeIn' : 'animated fadeIn'
-          "
-          :leave-active-class="
-            $q.screen.gt.xs ? 'animated slideOutDown' : undefined
-          "
+          :enter-active-class="'animated slideInLeft'"
+          :leave-active-class="'animated slideOutLeft'"
+          v-if="$q.screen.gt.sm"
         >
-          <SideBar class="sidebar-component" v-if="$q.screen.gt.sm" />
+          <SideBar
+            class="sidebar-component"
+            v-show="$route.name === 'Explore'"
+          />
         </Transition>
         <div
           v-show="
@@ -271,8 +271,8 @@ export default {
     }
     .map-overlay {
       background: linear-gradient(
-        rgba(0, 0, 0, 0.68),
-        rgba(0, 0, 0, 0.6) 48px,
+        rgba(0, 0, 0, 0.8),
+        rgba(0, 0, 0, 0.6) 72px,
         transparent 112px,
         transparent calc(100vh - 348px),
         rgba(0, 0, 0, 0.68)
@@ -298,8 +298,8 @@ export default {
   .main-layout {
     .map-overlay {
       background: linear-gradient(
-        rgba(0, 0, 0, 0.68),
-        rgba(0, 0, 0, 0.6) 48px,
+        rgba(0, 0, 0, 0.8),
+        rgba(0, 0, 0, 0.6) 72px,
         transparent 112px,
         transparent calc(100vh - 348px),
         rgba(0, 0, 0, 0.68)

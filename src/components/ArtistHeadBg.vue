@@ -13,28 +13,25 @@
       }"
     >
       <div
-        :class="`artist-head-wrapper flex column justify-start items-center size-${size}`"
+        class="artist-head-wrapper flex column justify-start items-center"
+        :class="$q.platform.is.ios ? 'no-hover' : ''"
       >
+        <div class="card-bottom-background" :style="getBgImgStyle()" />
         <div class="artist-head flex column no-wrap">
-          <div
-            class="artist-head-img"
-            :class="{
-              'no-hover': $q.platform.is.ios,
-            }"
-          >
+          <div class="artist-head-background shadow-2xl">
             <img
-              :src="artist?.media_items[0].thumb_xs_url"
-              v-if="artist?.media_items[0]"
+              :src="artist.media_items[0].thumb_xs_url"
+              v-if="artist.media_items && artist.media_items[0]"
             />
             <q-icon
               v-else
-              size="3em"
+              size="2em"
               class="t3"
               name="mdi-account-music-outline"
             />
           </div>
           <div
-            class="artist-name q-mt-sm inter semibold ellipsis"
+            class="artist-name q-mt-sm inter bold ellipsis"
             :class="{ 'text-large': false }"
           >
             {{ artist.name }}
@@ -48,7 +45,7 @@
 <script>
 export default {
   components: {},
-  props: { artist: Object, size: String },
+  props: { artist: Object },
   data() {
     return {};
   },
@@ -84,15 +81,10 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .artist-head-wrapper {
-    .artist-head {
-      .artist-head-img {
-        border-top: 1px solid rgba(48, 48, 48);
-        border-bottom: 1px solid rgba(48, 48, 48, 0.4);
-        background: $bi-2;
-        box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.4),
-          0 12px 10px 2px rgba(0, 0, 0, 0.3), 0 5px 16px 4px rgba(0, 0, 0, 0.5);
-      }
-    }
+    overflow: hidden;
+    border: 1px solid black;
+    border-top: 1px solid rgba(48, 48, 48);
+
     .card-bottom-background {
       background: $bi-3;
     }
@@ -103,13 +95,6 @@ export default {
     .card-bottom-background {
       background: $b-4;
     }
-    .artist-head {
-      .artist-head-img {
-        background: $b-2;
-        box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.1),
-          0 12px 17px 2px rgba(0, 0, 0, 0.1), 0 5px 10px 4px rgba(0, 0, 0, 0.08);
-      }
-    }
   }
 }
 .artist-head-link {
@@ -117,41 +102,39 @@ export default {
 }
 
 .artist-head-wrapper {
-  margin-right: -48px;
   transition: all 0.3s ease;
   border-radius: 9px;
-  width: 164px;
-  height: 196px;
-  max-width: 164px;
+  width: 144px;
+  height: 176px;
+  max-width: 144px;
   position: relative;
   overflow: hidden;
   transition: opacity 0.3s;
   transform: translate3d(0, 0, 0); // needed for ios
   cursor: pointer;
-
-  &.size-sm {
-    width: 96px;
-    height: 116px;
-    max-width: 96px;
-    font-size: 10px;
-    margin-right: -42px;
+  @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+    //  -webkit-backface-visibility: hidden;
+    // -webkit-transform: translate3d(0, 0, 0);
+    // translate3d is a hack for safari to force gpu rendering of blur()
   }
 
-  &.size-md {
-    width: 144px;
-    height: 172px;
-    max-width: 144px;
-    .artist-name {
-      //font-weight: 400 !important;
+  &:not(.no-hover) {
+    &:before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    &:hover {
+      &:before {
+        opacity: 1;
+      }
     }
   }
-
-  &.size-lg {
-    width: 156px;
-    height: 186px;
-    max-width: 156px;
-  }
-
   .card-bottom-background {
     border-radius: 9px;
     overflow: hidden;
@@ -161,66 +144,71 @@ export default {
     position: absolute;
     height: 100%;
     width: 100%;
+    //opacity: 0.4;
     transition: opacity 0.2s ease;
+
+    @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+      -webkit-backface-visibility: hidden;
+      transform: rotate(180deg) scaleX(-1) scale(2) translate3d(0, 0, 0);
+      // translate3d is a hack for safari to force gpu rendering of blur()
+    }
   }
 
   .artist-head {
     padding: 16px;
     position: relative;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 100%;
     transition: all 0.3s ease;
-    .artist-head-img {
+    .artist-head-background {
       border-radius: 100%;
       overflow: hidden;
       height: 96px;
       width: 96px;
+      //height: 100%;
       width: 100%;
       display: flex;
       flex-grow: 1;
       justify-content: center;
       align-items: center;
       transition: all 0.3s ease;
-      position: relative;
+      opacity: 0.9;
       img {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
         width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      &:not(.no-hover) {
-        &:before {
-          content: '';
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          background: rgba(255, 255, 255, 0.15);
-          z-index: 10;
-          opacity: 0;
-          transition: opacity 0.3s;
-        }
-        &:hover {
-          &:before {
-            opacity: 1;
-          }
-        }
       }
     }
   }
 
   .artist-name {
+    color: white;
     z-index: 10;
     text-align: center;
     width: 100%;
   }
 }
 
+@media only screen and (min-width: 1921px) {
+  .artist-head-wrapper {
+    transition: all 0.3s ease;
+    border-radius: 9px;
+    width: 144px;
+    height: 168px;
+    max-width: 144px;
+    position: relative;
+    overflow: hidden;
+  }
+}
+
 @media only screen and (max-width: 599px) {
+  .artist-head-wrapper {
+    width: 128px;
+    height: 156px;
+    max-width: 128px;
+    .artist-head {
+    }
+  }
 }
 </style>

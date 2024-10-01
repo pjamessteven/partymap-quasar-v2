@@ -22,31 +22,6 @@
         v-if="$route.name === 'Explore' || $q.screen.lt.sm"
       >
         <div
-          class="flex items-center no-wrap scroll-inner-inner"
-          v-show="
-            $q.screen.gt.md || ($q.screen.lt.lg && sidebarPanel === 'search')
-          "
-        >
-          <q-icon
-            @click="() => $router.go(-1)"
-            class="q-pr-md q-pl-sm"
-            size="sm"
-            name="mdi-chevron-left"
-            v-if="$q.screen.lt.lg && sidebarPanel === 'search'"
-          />
-          <div
-            class="controls-wrapper search-wrapper flex no-wrap q-mr-sm"
-            :class="{
-              'mobile-search-wrapper':
-                $q.screen.lt.lg && sidebarPanel === 'search',
-            }"
-          >
-            <div class="controls-wrapper-inner">
-              <SearchComponent />
-            </div>
-          </div>
-        </div>
-        <div
           class="flex row items-center no-wrap"
           v-show="$q.screen.gt.md || sidebarPanel !== 'search'"
         >
@@ -164,7 +139,6 @@ import DurationControl from 'src/components/Controls/DurationControl.vue';
 import SizeControl from 'src/components/Controls/SizeControl.vue';
 import TagControl from 'src/components/Controls/TagControl.vue';
 import CustomQScroll from 'components/CustomQScroll.vue';
-import SearchComponent from './SearchComponent.vue';
 export default {
   components: {
     CustomQScroll,
@@ -173,7 +147,6 @@ export default {
     DurationControl,
     SizeControl,
     TagControl,
-    SearchComponent,
   },
   props: ['overlayingMap'],
   data() {
@@ -446,9 +419,7 @@ export default {
 
 .desktop-search-component {
   z-index: 104;
-  position: absolute;
   top: 8px;
-  padding-left: 354px;
   width: 100%;
   display: flex;
   pointer-events: none;
@@ -456,11 +427,6 @@ export default {
   justify-content: center;
   //overflow-x: auto;
   //overflow-y: visible;
-  &.center-absolute {
-    position: absolute;
-    width: 100%;
-    justify-content: center;
-  }
 
   .control-scroll-area {
     height: 44px;

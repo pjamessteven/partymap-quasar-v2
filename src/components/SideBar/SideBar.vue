@@ -113,7 +113,7 @@ const lastx = ref();
       //  rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
 
       background: white;
-      border: 1px solid white;
+      //: 1px solid white;
 
       &.shadow {
         border: 1px solid rgba(0, 0, 0, 0.1);

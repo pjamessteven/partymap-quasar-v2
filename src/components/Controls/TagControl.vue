@@ -52,7 +52,7 @@
             size="1.4em"
             name="mdi-menu-down"
             style="margin-right: -8px"
-            v-if="$q.screen.gt.xs"
+            v-if="$q.screen.gt.xs && false"
           />
         </div>
 

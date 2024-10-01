@@ -21,8 +21,7 @@
           class="flex column mobile-location-header"
           style="width: 100%"
           :class="{
-            'q-px-lg q-mt-md': $q.screen.gt.lg,
-            'q-px-lg q-mt-sm': $q.screen.gt.sm && $q.screen.lt.xl,
+            'q-px-lg ': $q.screen.gt.sm,
             'q-px-md  q-mt-md ': $q.screen.lt.md,
           }"
         >
@@ -99,26 +98,24 @@
         <div
           class="flex message"
           :class="{
-            'q-mx-lg  q-mt-sm q-mb-sm ': $q.screen.gt.sm,
-            'q-mx-lg  q-mb-sm ': $q.screen.gt.lg,
-
-            'q-mx-md q-mt-sm q-pb-xs ': $q.screen.lt.md,
+            'q-mx-lg q-mb-sm q-mt-lg q-pa-md': $q.screen.gt.sm,
+            'q-mx-md q-mt-md  q-pb-xs ': $q.screen.lt.md,
           }"
           @click="showMessage = !showMessage"
         >
           <div
             class="flex grow no-wrap justify-between inter"
             :class="{
-              ' q-pt-sm t2 items-center ': $q.screen.lt.md,
-              ' q-mt-md  inter text-large  t2 ': $q.screen.gt.sm,
+              't2 items-center ': $q.screen.lt.md,
+              '   inter  text-large t2 ': $q.screen.gt.sm,
 
               ' items-end': $q.screen.gt.sm,
             }"
           >
-            <span
-              >Welcome to PartyMap, the global directory of festivals, doofs and
-              underground culture!</span
-            >
+            <div class="flex grow">
+              Welcome to PartyMap, the global directory of<br />
+              doofs, festivals and underground culture!
+            </div>
             <q-icon
               class="q-ml-md"
               size="1.2rem"
@@ -181,7 +178,6 @@
                 </div>
               </a>
             </div>
-            <div class="separator q-mt-md" />
           </div>
         </div>
         <div
@@ -255,7 +251,7 @@
                     : 'q-pl-md t1 inter semibold'
                 "
               >
-                <div class="text-">Top tags in your area:</div>
+                <div class="text-">Hot tags in this area</div>
               </div>
               <div
                 class=""
@@ -273,7 +269,7 @@
                       : { bottom: '0px', height: '0px' }
                   "
                 >
-                  <div class="flex column" v-if="$q.screen.gt.xs">
+                  <div class="flex column" v-if="$q.screen.gt.xs && false">
                     <div class="flex row no-wrap q-gutter-sm">
                       <div
                         v-for="(tag, index) in nearbyTags.filter(
@@ -360,7 +356,7 @@
                     : 'q-pl-md t1'
                 "
               >
-                <div class="inter semibold">Top tags around the world:</div>
+                <div class="inter semibold">Hot tags around the world:</div>
               </div>
               <div :class="$q.screen.gt.sm ? 'q-pl-lg q-mb-sm' : 'q-pl-md'">
                 <CustomQScroll
@@ -374,7 +370,7 @@
                       : { bottom: '0px', height: '0px' }
                   "
                 >
-                  <div class="flex column" v-if="$q.screen.gt.xs">
+                  <div class="flex column" v-if="$q.screen.gt.xs && false">
                     <div class="flex row no-wrap q-gutter-sm">
                       <div
                         v-for="(tag, index) in tagOptions.filter(
@@ -461,14 +457,18 @@
                     : 'q-pl-md t1 semibold'
                 "
               >
-                Artists playing nearby:
+                High profile artists
               </div>
               <ArtistsComponent
-                :class="$q.screen.gt.sm ? 'q-pl-sm' : ''"
+                :size="$q.screen.gt.lg ? 'lg' : 'md'"
                 :artists="nearbyArtists"
                 :hasNext="nearbyArtistsHasNext"
                 :loadMore="debouncedLoadNearbyArtists"
-                :style="$q.screen.gt.sm ? 'margin-bottom: -12px' : ''"
+                :style="
+                  $q.screen.gt.sm
+                    ? 'margin-bottom: -12px; margin-top: -12px'
+                    : ''
+                "
               />
             </div>
 
@@ -490,7 +490,12 @@
                 :artists="artistOptions"
                 :hasNext="artistOptionsHasNext"
                 :loadMore="debouncedLoadArtistOptions"
-                :style="$q.screen.gt.sm ? 'margin-bottom: -12px' : ''"
+                :size="$q.screen.gt.xs ? 'lg' : 'md'"
+                :style="
+                  $q.screen.gt.sm
+                    ? 'margin-bottom: -12px; margin-top: -12px'
+                    : ''
+                "
               />
             </div>
             <!-- NEARBY EVENTS -->
@@ -541,7 +546,7 @@
                     class="flex row no-wrap q-gutter-md"
                     :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-px-md'"
                   >
-                    <EventDateCard
+                    <EventDatePoster
                       v-for="(ed, index) in userEventDates"
                       :key="index"
                       :hideInfo="true"
@@ -748,9 +753,10 @@ export default {
     ArtistsComponent,
     EventDateList,
     EventDatePosterList,
+    EventDatePoster,
     // EventDateViewOptions,
     InnerLoading,
-    EventDateCard,
+    // EventDateCard,
     NearbyCountrySelect,
   },
   data() {
@@ -1145,6 +1151,8 @@ export default {
       background: black;
     }
     .message {
+      background: $bi-2;
+      border: 1px solid rgba(255, 255, 255, 0.05);
       .appstore-wrapper {
         //background: $bi-3;
         border: 1px solid rgba(255, 255, 255, 0.2);
@@ -1178,6 +1186,10 @@ export default {
 .body--light {
   .nearby-page {
     .message {
+      box-shadow: rgba(100, 100, 111, 0.05) 0px 7px 29px 0px;
+      //background: $b-1;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+
       .appstore-wrapper {
         //background: $b-2;
         border: 1px solid rgba(0, 0, 0, 0.1);
@@ -1266,6 +1278,8 @@ export default {
       display: flex;
     }
     .message {
+      border-radius: 18px;
+      z-index: 5000;
       //border-radius: 9px;
       cursor: pointer;
     }
@@ -1314,24 +1328,14 @@ export default {
   }
 
   .user-event-scroll-area {
-    height: 248px;
-    margin-bottom: -8px;
-    /*
-    mask-image: linear-gradient(
-      to left,
-      transparent 0px,
-      white 32px,
-      white calc(100% - 16px),
-      transparent 100%
-    );
-    */
-    width: 100%;
-    :deep(.ed-card) {
-      width: 450px;
+    mask-image: unset;
+    height: 280px;
+    :deep(.ed-poster) {
+      max-width: 150px;
     }
   }
   .tag-scroll-area {
-    height: 128px;
+    height: 88px;
     mask-image: linear-gradient(to left, transparent 0px, white 64px);
     width: 100%;
     .tag {
@@ -1416,6 +1420,8 @@ export default {
           border-left: none !important;
           border-right: none !important;
           border: none;
+          box-shadow: none;
+          background: none;
           // margin-bottom: -16px !important;
         }
       }
@@ -1430,13 +1436,6 @@ export default {
     }
     .tag-scroll-area {
       height: 84px;
-    }
-    .user-event-scroll-area {
-      mask-image: unset;
-      height: 180px;
-      :deep(.ed-card) {
-        max-width: 374px;
-      }
     }
 
     .header {

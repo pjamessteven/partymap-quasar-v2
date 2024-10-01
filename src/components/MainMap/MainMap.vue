@@ -135,7 +135,12 @@ export default {
           }
         }
       }
-      if (newv === 'explore' && oldv === 'nearby' && this.userLocation) {
+      if (
+        newv === 'explore' &&
+        oldv === 'nearby' &&
+        this.userLocation &&
+        this.$q.screen.lt.sm
+      ) {
         this.fitBoundsForExplorePage(this.userLocation);
       }
       if (newv === 'explore') {
@@ -816,7 +821,7 @@ export default {
         var tooltipMarkers = [];
         for (let i = 0; i < this.points.length; i++) {
           var toolTipHtml = '';
-          var toolTipString = '';
+          var labelString = '';
           // show list of events for location in toolTip
           // if there are more than one
           var eventIds = [];
@@ -824,7 +829,13 @@ export default {
             if (eventIds.indexOf(this.points[i].events[j].event_id) === -1) {
               eventIds.push(this.points[i].events[j].event_id);
               toolTipHtml = toolTipHtml + this.points[i].events[j].name;
-              toolTipString = toolTipString + this.points[i].events[j].name;
+              labelString = labelString + this.points[i].events[j].name;
+              const numberOfEventsAtLocation = this.points[i].events.length;
+              if (numberOfEventsAtLocation > 1) {
+                toolTipHtml = `${this.points[i].name} (${numberOfEventsAtLocation} upcoming)`;
+                labelString = labelString + this.points[i].events[j].name;
+              }
+              /*
               if (
                 this.points[i].events[j + 1] ||
                 this.points[i].events[j - 1]
@@ -833,7 +844,7 @@ export default {
                   // not last element
                   // toolTipHtml = toolTipHtml + '<ul>'
                   toolTipHtml = toolTipHtml + '<br/>';
-                  toolTipString = toolTipString + ', ';
+                  labelString = labelString + ', ';
                 }
                 /* if (this.points[i].events[j + 1] || this.points[i].events[j - 1]) {
                 // toolTipHtml = toolTipHtml + '</li>'
@@ -843,14 +854,13 @@ export default {
                   }
                 }
                 */
-              }
             }
           }
 
           let marker = L.marker([this.points[i].lat, this.points[i].lng], {
             icon: toRaw(this.defaultIcon),
-            title: toolTipString,
-            alt: toolTipString,
+            title: labelString,
+            alt: labelString,
           }).bindTooltip(toolTipHtml, {
             direction: 'top',
             permanent: true,

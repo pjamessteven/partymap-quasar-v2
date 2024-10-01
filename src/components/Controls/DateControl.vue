@@ -37,7 +37,7 @@
           <div v-else>Dates</div>
         </div>
         <q-icon
-          v-if="$q.screen.gt.xs"
+          v-if="$q.screen.gt.xs && false"
           class="q-ml-xs"
           size="1.4em"
           name="mdi-menu-down"
