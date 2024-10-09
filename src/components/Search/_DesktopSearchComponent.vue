@@ -21,7 +21,7 @@
           <div class="q-mr-xs q-mr-sm">
             <q-icon size="1.2em" name="mdi-magnify" />
           </div>
-          Search events, places and artists
+          Search and filter events, places and artists
         </div>
         <div class="o-060 q-py-sm">Any Dates • All Tags • All Artists</div>
       </div>

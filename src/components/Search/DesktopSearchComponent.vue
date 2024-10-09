@@ -48,7 +48,7 @@
         </div>
         <div
           class="flex row items-center no-wrap"
-          v-show="$q.screen.gt.md || sidebarPanel !== 'search'"
+          v-show="false && ($q.screen.gt.md || sidebarPanel !== 'search')"
         >
           <div
             class="separator vertical"
@@ -56,31 +56,36 @@
             :class="{ 'q-mx-md': $q.screen.gt.md }"
           />
           <!--<div class="text-white q-ml-md">Filter:</div>-->
-          <div
-            class="controls-wrapper flex no-wrap"
-            v-if="controlDateRange.end || true"
-          >
-            <div class="controls-wrapper-inner">
-              <DateControl />
-            </div>
-          </div>
-          <div
-            class="controls-wrapper flex no-wrap q-ml-sm"
-            v-if="controlTag.length > 0 || true"
-          >
-            <div class="controls-wrapper-inner">
-              <TagControl />
-            </div>
-          </div>
-          <div
-            class="controls-wrapper flex no-wrap q-ml-sm"
-            v-if="controlArtist.length > 0 || true"
-          >
-            <div class="controls-wrapper-inner">
-              <ArtistControl />
-            </div>
-          </div>
 
+          <ControlButton
+            :isActive="!!controlDateRangeSelectedOption?.value"
+            :label="controlDateRangeSelectedOption?.value || 'Any Dates'"
+            iconName="las la-calendar"
+          >
+            <DateControl />
+          </ControlButton>
+
+          <ControlButton
+            class="q-ml-sm"
+            :isActive="controlTag?.length > 0"
+            :label="computedTagLabel"
+            iconName="mdi-pound"
+            iconSize="1.4em"
+          >
+            <TagControl />
+          </ControlButton>
+
+          <ControlButton
+            class="q-ml-sm"
+            :isActive="controlArtist.length > 0"
+            :label="computedArtistLabel"
+            iconName="las-la-music"
+            iconSize="1.4em"
+          >
+            <ArtistControl />
+          </ControlButton>
+
+          <!--
           <div
             class="controls-wrapper flex no-wrap q-ml-sm"
             v-if="$q.screen.gt.xs && false"
@@ -129,23 +134,27 @@
               </div>
             </div>
           </div>
+-->
 
-          <div
-            class="controls-wrapper flex no-wrap q-ml-sm"
-            v-if="$q.screen.lt.sm"
+          <ControlButton
+            class="q-ml-sm"
+            :isActive="controlSize.length > 0"
+            :label="computedArtistLabel"
+            iconName="las la-user-friends"
+            iconSize="1.4em"
           >
-            <div class="controls-wrapper-inner">
-              <SizeControl />
-            </div>
-          </div>
-          <div
-            class="controls-wrapper flex no-wrap q-ml-sm"
-            v-if="$q.screen.lt.sm"
+            <SizeControl />
+          </ControlButton>
+
+          <ControlButton
+            class="q-ml-sm"
+            :isActive="controlArtist.length > 0"
+            :label="controlDuration"
+            iconName="las la-clock"
+            iconSize="1.4em"
           >
-            <div class="controls-wrapper-inner">
-              <DurationControl />
-            </div>
-          </div>
+            <DurationControl />
+          </ControlButton>
         </div>
       </div>
     </CustomQScroll>
@@ -165,6 +174,7 @@ import SizeControl from 'src/components/Controls/SizeControl.vue';
 import TagControl from 'src/components/Controls/TagControl.vue';
 import CustomQScroll from 'components/CustomQScroll.vue';
 import SearchComponent from './SearchComponent.vue';
+import ControlButton from 'src/components/Controls/ControlButton.vue';
 export default {
   components: {
     CustomQScroll,
@@ -174,6 +184,7 @@ export default {
     SizeControl,
     TagControl,
     SearchComponent,
+    ControlButton,
   },
   props: ['overlayingMap'],
   data() {
@@ -235,6 +246,34 @@ export default {
     },
   },
   computed: {
+    computedTagLabel() {
+      let label = '';
+      if (this.controlTag?.length > 0) {
+        for (let [index, tag] of this.controlTag.entries()) {
+          label += tag.tag;
+          if (index < this.controlTag.length - 1) {
+            label += ' + ';
+          }
+        }
+      } else {
+        label = 'Tags';
+      }
+      return label;
+    },
+    computedArtistLabel() {
+      let label = '';
+      if (this.controlArtist?.length > 0) {
+        for (let [index, artist] of this.controlArtist.entries()) {
+          label += artist.name;
+          if (index < this.controlArtist.length - 1) {
+            label += ' + ';
+          }
+        }
+      } else {
+        label = 'Artists';
+      }
+      return label;
+    },
     ipadPortrait() {
       // special layout case
       return this.$q.screen.gt.sm && this.windowWidth < 1124;
@@ -448,7 +487,7 @@ export default {
   z-index: 104;
   position: absolute;
   top: 8px;
-  padding-left: 354px;
+  padding-left: 532px;
   width: 100%;
   display: flex;
   pointer-events: none;
@@ -466,6 +505,8 @@ export default {
     height: 44px;
     width: 100%;
     .scroll-inner {
+      //justify-content: start;
+      //padding-left: 256px;
       justify-content: center;
       pointer-events: all;
       .separator {
@@ -570,7 +611,8 @@ export default {
     margin-right: 0px;
     .control-scroll-area {
       .scroll-inner {
-        justify-content: flex-start;
+        justify-content: center;
+        padding-right: 64px;
       }
     }
   }

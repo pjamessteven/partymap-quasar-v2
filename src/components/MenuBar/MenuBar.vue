@@ -15,13 +15,15 @@
       <MenuBarLogo
         class="menubar-item logo"
         :class="{ 'menubar-item-inverted': iconLeftColor === 'black' }"
-        v-show="!previousRouteName || swipingDownMenuPageMobile"
+        v-show="
+          !previousRouteName || swipingDownMenuPageMobile || $q.screen.gt.sm
+        "
       />
 
       <div
         class="tab-wrapper menubar-item flex items-center"
         :class="{ 'menubar-item-inverted': iconLeftColor === 'black' }"
-        v-if="!previousRouteName && $q.screen.gt.xs"
+        v-if="$q.screen.gt.xs"
       >
         <div
           class="q-py-md q-mr-sm"
@@ -50,7 +52,8 @@
         v-if="
           previousRouteName &&
           this.$route.name !== 'Explore' &&
-          !swipingDownMenuPageMobile
+          !swipingDownMenuPageMobile &&
+          $q.screen.lt.md
         "
       >
         <q-btn

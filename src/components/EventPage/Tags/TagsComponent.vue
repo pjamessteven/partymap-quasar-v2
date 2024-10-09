@@ -12,7 +12,7 @@
       <div class="flex row wrap" :class="small ? 'q-gutter-xs' : 'q-gutter-sm'">
         <Tag
           :small="small"
-          v-for="(et, index) in event?.event_tags"
+          v-for="(et, index) in computedTags"
           :key="index"
           :value="et.tag"
           style="pointer-events: none"
@@ -25,10 +25,7 @@
           @click="() => (showAddTagDialog = true)"
         />
       </div>
-      <div
-        style="color: white"
-        v-if="editing && (!event.event_tags || event.event_tags.length == 0)"
-      >
+      <div style="color: white" v-if="editing && !computedTags.length == 0">
         {{ $t('event.add_tags') }}
       </div>
 
@@ -81,6 +78,13 @@ export default {
   watch: {},
   computed: {
     ...mapState(useEventStore, ['event', 'eventHasHost']),
+    computedTags() {
+      return (
+        this.event?.event_tags ||
+        (this.$route.query?.tags && JSON.parse(this.$route.query?.tags)) ||
+        []
+      );
+    },
   },
 };
 </script>

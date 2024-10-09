@@ -2,7 +2,8 @@
   <div
     ref="eventPage"
     class="event-page"
-    :style="mapStore.peekMap ? 'pointer-events: none !important' : ''"
+    :style="$q.screen.gt.lg ? 'padding-left: 512px;' : ''"
+    :key="id"
   >
     <transition appear enter-active-class="animated fadeIn slow">
       <div
@@ -52,12 +53,6 @@
       >
         <div class="row flex grow main-row no-wrap justify-center">
           <div
-            v-if="scrollPercentage <= 0 && !mapStore.peekMap"
-            class="clickable-background"
-            style="pointer-events: all"
-            @click="clickBackground()"
-          />
-          <div
             ref="contentCard"
             class="content-card flex column no-wrap"
             :class="{
@@ -91,7 +86,7 @@
                   />
                   <InnerLoading
                     :solid="false"
-                    v-if="loading && !route.query?.thumbXsUrl"
+                    v-if="loading && !route.query?.thumbXsUrl && false"
                   />
 
                   <div class="header-content grow row">
@@ -160,14 +155,15 @@
                         v-if="
                           loading &&
                           !!route.query?.thumbXsUrl &&
-                          $q.screen.gt.xs
+                          $q.screen.gt.xs &&
+                          false
                         "
                       >
                         <InnerLoading :solid="false" />
                       </div>
                       <div
                         class="flex row justify-between items-center"
-                        style="height: 42px"
+                        style="width: 100%"
                         :class="{
                           'q-mt-md': $q.screen.gt.xs,
                           'q-mt-sm': $q.screen.lt.sm,
@@ -175,20 +171,17 @@
                       >
                         <transition
                           appear
-                          enter-active-class="animated fadeIn slow"
+                          enter-active-class="animated fadeIn "
                         >
                           <NextEventDateSummary
                             :class="{
                               'o-050': editing,
                             }"
                             class=""
-                            v-if="!!event && selectedEventDate"
-                            :key="selectedEventDate.id"
                             :ed="selectedEventDate"
                           />
                         </transition>
                       </div>
-
                       <FeaturedMediaComponent
                         @loaded="mediaLoaded"
                         v-if="
@@ -200,29 +193,30 @@
                         :item="event?.media_items?.[0]"
                         :thumbXsUrl="route.query?.thumbXsUrl"
                       />
-                      <div class="flex column grow no-wrap" v-if="!!event">
+
+                      <div class="flex column grow no-wrap">
                         <div
                           class="flex grow justify-start items-start"
-                          v-if="!!event"
+                          v-if="!!event || !!route.query?.description"
                         >
                           <SummaryComponent
                             :editing="editing"
-                            :class="$q.screen.gt.sm ? 'q-mt-md' : 'q-mt-lg'"
+                            :class="
+                              $q.screen.gt.sm ? 'q-mt-md q-mb-md' : 'q-mt-lg'
+                            "
                           />
                         </div>
+                        <q-separator />
                         <div
                           class=""
                           :class="$q.screen.gt.sm ? 'q-mt-lg' : 'q-mt-md'"
                         >
                           <div class="flex row">
-                            <div class="flex col">
+                            <div class="flex col" v-if="!editing">
                               <a
                                 class="flex grow ellipsis"
                                 :href="computedExternalUrl"
                                 target="_blank"
-                                v-if="
-                                  !!event && computedExternalUrl && !editing
-                                "
                               >
                                 <q-btn
                                   no-caps
@@ -250,7 +244,9 @@
                                           width: 100%;
                                         "
                                       >
-                                        {{ computedExternalUrlSubtitle }}
+                                        {{
+                                          computedExternalUrlSubtitle || '...'
+                                        }}
                                       </div>
                                     </div>
                                   </div>
@@ -296,7 +292,6 @@
                           :class="
                             $q.screen.gt.sm ? 'q-pt-lg q-mt-sm' : 'q-mt-md'
                           "
-                          v-if="event?.event_tags"
                         >
                           <TagsComponent :small="false" :editing="editing" />
                         </div>
@@ -915,26 +910,6 @@ import CustomQScroll from 'components/CustomQScroll.vue';
 
 import _ from 'lodash';
 import common from 'assets/common';
-import DescriptionComponent from 'components/EventPage/DescriptionComponent.vue';
-import YoutubeVideoComponent from 'components/EventPage/YoutubeVideoComponent.vue';
-import SummaryComponent from 'components/EventPage/SummaryComponent.vue';
-import EventDates from 'components/EventPage/EventDates/EventDates.vue';
-import EventDateSidebarDesktop from 'components/EventPage/EventDates/EventDateSidebarDesktop.vue';
-import FeaturedMediaBackground from 'components/EventPage/Gallery/FeaturedMediaBackground.vue';
-import FeaturedMediaComponent from 'components/EventPage/Gallery/FeaturedMediaComponent.vue';
-import EventDateLineupComponent from 'components/EventPage/EventDates/EventDateLineupComponent.vue';
-import EventDateTicketUrlDialog from 'components/EventPage/EventDates/EventDateTicketUrlDialog.vue';
-// import HistoryComponent from 'components/EventPage/Activity/HistoryComponent.vue';
-import NextEventDateSummary from 'components/EventPage/EventDates/NextEventDateSummary.vue';
-import ReportDialog from './ReportDialog.vue';
-import TagsComponent from 'components/EventPage/Tags/TagsComponent.vue';
-import ReviewsComponent from './Reviews/ReviewsComponent.vue';
-import MobileSwipeHandle from '../MobileSwipeHandle.vue';
-import InterestedComponent from './InterestedComponent.vue';
-import SuggestionsDialog from './Suggestions/SuggestionsDialog.vue';
-import AddEventPhotosDialog from 'components/EventPage/Gallery/AddEventPhotosDialog.vue';
-import AddLineupPosterDialog from 'components/EventPage/Gallery/AddLineupPosterDialog.vue';
-import UploadNewLogoDialog from 'components/EventPage/Gallery/UploadNewLogoDialog.vue';
 
 import InnerLoading from 'components/InnerLoading.vue';
 import { useI18n } from 'vue-i18n';
@@ -1144,7 +1119,7 @@ const deleteEvent = () => {
 
 onBeforeRouteLeave((to, from, next) => {
   event.value = null;
-
+  selectedEventDate.value = null;
   mapStore.focusMarker = null;
 
   // transition out before going back on mobile
@@ -1777,7 +1752,7 @@ a {
       }
       .main-row {
         position: relative;
-
+        pointer-events: none;
         .content-card {
           min-height: 2000px;
           margin-top: Max(calc((100vh - 66vh) - 64px), 0px);

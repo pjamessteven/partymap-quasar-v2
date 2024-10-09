@@ -53,7 +53,7 @@
         <transition appear enter-active-class="animated fadeIn slower">
           <div
             style="
-              border-radius: 18px;
+              border-radius: 0px;
               overflow: hidden;
               width: 100%;
               height: auto;
@@ -253,7 +253,7 @@ export default {
       img,
       video {
         cursor: pointer;
-        border-radius: 18px !important;
+        border-radius: 0px !important;
         height: auto;
         max-width: 100%;
         width: 100%;

@@ -3,13 +3,12 @@
     <div
       class="date-header flex row no-wrap grow ellipsis inter"
       :class="{
-        ' q-px-md q-pb-md  semibold t1 inter  ': $q.screen.gt.sm,
-        'q-pt-md': $q.screen.gt.xs && $route.name !== 'Explore',
+        ' q-px-md q-pb-md   t1  text-large  ': $q.screen.gt.sm,
         'q-px-sm q-ml-xs q-py-md t1 semibold': $q.screen.lt.md,
       }"
     >
       <span v-if="!!altLabel">{{ altLabel }}</span>
-      <span v-else-if="dateString">Events in {{ dateString }}</span>
+      <span v-else-if="dateString">{{ dateString }}</span>
 
       <slot />
       <!--
@@ -54,7 +53,7 @@ export default {
     display: flex;
     align-items: center;
     // font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
     //bottom: 4px;
     //padding: 32px 0;
   }

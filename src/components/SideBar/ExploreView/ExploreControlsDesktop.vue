@@ -223,7 +223,6 @@ export default {
       'windowWidth',
       'fineLocation',
       'userLocationLoading',
-      'userLocationCity',
       'userLocation',
     ]),
     ...mapState(useQueryStore, [

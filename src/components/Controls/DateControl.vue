@@ -1,209 +1,158 @@
 <template>
-  <div style="height: 100%">
-    <q-btn
-      no-caps
-      @click="
-        () => {
-          showing = !showing;
-        }
-      "
-      class="button-control flex items-center"
-      :class="{
-        active:
-          controlDateRangeSelectedOption &&
-          controlDateRangeSelectedOption?.value != null,
-      }"
-    >
-      <div class="flex items-center row no-wrap">
-        <div
-          class="close-icon-wrapper"
-          v-if="!!controlDateRangeSelectedOption?.value"
-          @click.stop="clearDateRange"
-        >
-          <q-icon style="font-size: 16px" name="mdi-close" />
-        </div>
-        <q-icon
-          class="q-mr-sm"
-          size="1.5em"
-          name="las la-calendar"
-          v-if="!controlDateRangeSelectedOption?.value"
-        />
+  <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
+    <div class="calendar-header flex row no-wrap items-start" style="">
+      <q-list
+        dense
+        style="min-width: 100px"
+        v-if="$q.screen.gt.xs"
+        class="desktop-shortcuts"
+      >
+        <q-item-label header class="q-pb-md">{{
+          $t('top_controls.shortcuts')
+        }}</q-item-label>
+        <q-separator class="q-mb-sm" />
 
-        <div class="button-label flex row items-center row no-wrap">
-          <div v-if="!!controlDateRangeSelectedOption?.value">
-            {{ controlDateRangeSelectedOption.label }}
-          </div>
-          <div v-else-if="$q.screen.lt.sm || $q.screen.gt.md">Any Dates</div>
-          <div v-else>Dates</div>
-        </div>
-        <q-icon
-          v-if="$q.screen.gt.xs && false"
-          class="q-ml-xs"
-          size="1.4em"
-          name="mdi-menu-down"
-          style="margin-right: -8px"
+        <q-item
+          clickable
+          v-close-popup
+          v-for="option in menuOptions"
+          :key="option.value"
+          @click="controlDateRange = option"
+        >
+          <q-item-section>{{ option.label }}</q-item-section>
+        </q-item>
+        <q-item
+          style="white-space: nowrap"
+          v-for="option in monthOptionsOrderedFromNow.slice(0, 2)"
+          :key="option.value"
+          clickable
+          v-close-popup
+          @click="controlDateRange = option"
+        >
+          <q-item-section>{{ option.label }}</q-item-section>
+        </q-item>
+        <q-item clickable v-if="$q.screen.gt.xs">
+          <q-item-section>{{ $t('top_controls.more_months') }}</q-item-section>
+
+          <q-item-section side>
+            <q-icon name="keyboard_arrow_right" />
+          </q-item-section>
+
+          <q-menu
+            :anchor="$q.screen.gt.xs ? 'top right' : 'top middle'"
+            :self="$q.screen.gt.xs ? 'top left' : 'top left'"
+          >
+            <q-list class="q-pr-md" dense>
+              <q-item
+                style="white-space: nowrap"
+                v-for="option in monthOptionsOrderedFromNow.slice(2)"
+                :key="option.value"
+                clickable
+                v-close-popup
+                @click="controlDateRange = option"
+              >
+                <q-item-section>{{ option.label }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-item>
+      </q-list>
+      <q-list
+        padding
+        style="min-width: 100px"
+        class="grow"
+        v-if="$q.screen.lt.sm"
+      >
+        <q-item-label header class="q-pb-sm">{{
+          $t('top_controls.shortcuts')
+        }}</q-item-label>
+        <q-item
+          dense
+          clickable
+          v-close-popup
+          v-for="option in menuOptions"
+          :key="option.value"
+          @click="controlDateRange = option"
+        >
+          <q-item-section>{{ option.label }}</q-item-section>
+        </q-item>
+      </q-list>
+      <q-list
+        dense
+        padding
+        style="min-width: 100px"
+        class="grow"
+        v-if="$q.screen.lt.sm"
+      >
+        <q-item-label header class="q-pb-sm">&nbsp;</q-item-label>
+
+        <q-item
+          style="white-space: nowrap"
+          v-for="option in monthOptionsOrderedFromNow.slice(0, 3)"
+          :key="option.value"
+          clickable
+          v-close-popup
+          @click="controlDateRange = option"
+        >
+          <q-item-section>{{ option.label }}</q-item-section>
+        </q-item>
+        <q-item clickable>
+          <q-item-section>{{ $t('top_controls.more_months') }}</q-item-section>
+
+          <q-item-section side>
+            <q-icon name="keyboard_arrow_right" />
+          </q-item-section>
+
+          <q-menu
+            transition-show="jump-down"
+            transition-hide="jump-up"
+            :anchor="$q.screen.gt.xs ? 'top right' : 'top middle'"
+            :self="$q.screen.gt.xs ? 'top left' : 'top left'"
+          >
+            <q-list class="q-pr-md" dense>
+              <q-item
+                style="white-space: nowrap"
+                v-for="option in monthOptionsOrderedFromNow.slice(3)"
+                :key="option.value"
+                clickable
+                v-close-popup
+                @click="controlDateRange = option"
+              >
+                <q-item-section>{{ option.label }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-item>
+      </q-list>
+      <div
+        class="flex column date-picker-container"
+        :class="$q.screen.lt.sm ? ' q-pb-xl' : ''"
+      >
+        <q-item-label
+          header
+          class="q-pb-md t1 inter bold"
+          style="text-align: center"
+          >{{ title }}</q-item-label
+        >
+        <q-separator />
+        <DatePicker
+          borderless
+          expanded
+          title-position="center"
+          @update:model-value="onSelectedCustomDateRange"
+          class="date-picker flex"
+          is-inline="true"
+          v-model="controlDateRange"
+          :model-config="modelConfig"
+          is-range
+          color="gray"
+          :columns="$q.screen.gt.xs ? 2 : 1"
+          :is-dark="$q.dark.isActive"
+          @dayclick="dayclick"
         />
       </div>
-      <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
-        <div class="calendar-header flex row no-wrap items-start" style="">
-          <q-list
-            dense
-            style="min-width: 100px"
-            v-if="$q.screen.gt.xs"
-            class="desktop-shortcuts"
-          >
-            <q-item-label header class="q-pb-md">{{
-              $t('top_controls.shortcuts')
-            }}</q-item-label>
-            <q-separator class="q-mb-sm" />
-
-            <q-item
-              clickable
-              v-close-popup
-              v-for="option in menuOptions"
-              :key="option.value"
-              @click="controlDateRange = option"
-            >
-              <q-item-section>{{ option.label }}</q-item-section>
-            </q-item>
-            <q-item
-              style="white-space: nowrap"
-              v-for="option in monthOptionsOrderedFromNow.slice(0, 2)"
-              :key="option.value"
-              clickable
-              v-close-popup
-              @click="controlDateRange = option"
-            >
-              <q-item-section>{{ option.label }}</q-item-section>
-            </q-item>
-            <q-item clickable v-if="$q.screen.gt.xs">
-              <q-item-section>{{
-                $t('top_controls.more_months')
-              }}</q-item-section>
-
-              <q-item-section side>
-                <q-icon name="keyboard_arrow_right" />
-              </q-item-section>
-
-              <q-menu
-                :anchor="$q.screen.gt.xs ? 'top right' : 'top middle'"
-                :self="$q.screen.gt.xs ? 'top left' : 'top left'"
-              >
-                <q-list class="q-pr-md" dense>
-                  <q-item
-                    style="white-space: nowrap"
-                    v-for="option in monthOptionsOrderedFromNow.slice(2)"
-                    :key="option.value"
-                    clickable
-                    v-close-popup
-                    @click="controlDateRange = option"
-                  >
-                    <q-item-section>{{ option.label }}</q-item-section>
-                  </q-item>
-                </q-list>
-              </q-menu>
-            </q-item>
-          </q-list>
-          <q-list
-            padding
-            style="min-width: 100px"
-            class="grow"
-            v-if="$q.screen.lt.sm"
-          >
-            <q-item-label header class="q-pb-sm">{{
-              $t('top_controls.shortcuts')
-            }}</q-item-label>
-            <q-item
-              dense
-              clickable
-              v-close-popup
-              v-for="option in menuOptions"
-              :key="option.value"
-              @click="controlDateRange = option"
-            >
-              <q-item-section>{{ option.label }}</q-item-section>
-            </q-item>
-          </q-list>
-          <q-list
-            dense
-            padding
-            style="min-width: 100px"
-            class="grow"
-            v-if="$q.screen.lt.sm"
-          >
-            <q-item-label header class="q-pb-sm">&nbsp;</q-item-label>
-
-            <q-item
-              style="white-space: nowrap"
-              v-for="option in monthOptionsOrderedFromNow.slice(0, 3)"
-              :key="option.value"
-              clickable
-              v-close-popup
-              @click="controlDateRange = option"
-            >
-              <q-item-section>{{ option.label }}</q-item-section>
-            </q-item>
-            <q-item clickable>
-              <q-item-section>{{
-                $t('top_controls.more_months')
-              }}</q-item-section>
-
-              <q-item-section side>
-                <q-icon name="keyboard_arrow_right" />
-              </q-item-section>
-
-              <q-menu
-                transition-show="jump-down"
-                transition-hide="jump-up"
-                :anchor="$q.screen.gt.xs ? 'top right' : 'top middle'"
-                :self="$q.screen.gt.xs ? 'top left' : 'top left'"
-              >
-                <q-list class="q-pr-md" dense>
-                  <q-item
-                    style="white-space: nowrap"
-                    v-for="option in monthOptionsOrderedFromNow.slice(3)"
-                    :key="option.value"
-                    clickable
-                    v-close-popup
-                    @click="controlDateRange = option"
-                  >
-                    <q-item-section>{{ option.label }}</q-item-section>
-                  </q-item>
-                </q-list>
-              </q-menu>
-            </q-item>
-          </q-list>
-          <div
-            class="flex column date-picker-container"
-            :class="$q.screen.lt.sm ? ' q-pb-xl' : ''"
-          >
-            <q-item-label
-              header
-              class="q-pb-md t1 inter bold"
-              style="text-align: center"
-              >{{ title }}</q-item-label
-            >
-            <q-separator />
-            <DatePicker
-              borderless
-              expanded
-              title-position="center"
-              @update:model-value="onSelectedCustomDateRange"
-              class="date-picker flex"
-              is-inline="true"
-              v-model="controlDateRange"
-              :model-config="modelConfig"
-              is-range
-              color="gray"
-              :columns="$q.screen.gt.xs ? 2 : 1"
-              :is-dark="$q.dark.isActive"
-              @dayclick="dayclick"
-            />
-          </div>
-        </div>
-      </MenuWrapper>
-    </q-btn>
-  </div>
+    </div>
+  </MenuWrapper>
 </template>
 
 <script>
@@ -221,7 +170,7 @@ export default {
     MenuWrapper,
   },
   props: {
-    showSelectedValue: {
+    showing: {
       default: false,
       type: Boolean,
     },
@@ -229,7 +178,6 @@ export default {
   data() {
     return {
       title: 'Select a date range',
-      showing: false,
       customDateRange: null,
       modelConfig: {
         type: 'string',
@@ -566,10 +514,7 @@ export default {
       this.controlDateRangeSelectedOption = null;
     },
     onHide() {
-      this.showing = false;
-    },
-    onShow() {
-      this.showing = true;
+      this.$emit('hide');
     },
     onSelectedCustomDateRange(value) {
       // set button label
@@ -588,7 +533,7 @@ export default {
         label: label,
         value: 'custom',
       };
-      this.showing = false;
+      this.$emit('hide');
     },
     getThisWeekendDateRange() {
       const weekendStart = 5; // friday

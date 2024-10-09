@@ -150,7 +150,7 @@ export default {
     },
 
     clickLocationResult(location) {
-      this.userLocationFromSearch = true;
+      this.currentLocationFromSearch = true;
       this.userLocation = {
         lat: parseFloat(location.location.lat),
         lng: parseFloat(location.location.lng),
@@ -197,7 +197,7 @@ export default {
     },
     ...mapWritableState(useMapStore, ['map']),
     ...mapWritableState(useMainStore, [
-      'userLocationFromSearch',
+      'currentLocationFromSearch',
       'userLocation',
       'userLocationCity',
       'userLocationCountry',

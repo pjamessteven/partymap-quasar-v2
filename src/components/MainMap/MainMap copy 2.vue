@@ -35,14 +35,8 @@ import { useMainStore } from 'stores/main.ts';
 import { useQueryStore } from 'src/stores/query';
 
 import _ from 'lodash';
-//import L from 'leaflet';
-//import { PIXI } from 'pixi.js';
-import * as L from 'leaflet';
-import * as PIXI from 'pixi.js';
+import L from 'leaflet';
 
-import * as d3 from 'd3';
-import 'leaflet-pixi-overlay';
-//import 'leaflet-pixi-overlay';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster';
@@ -65,8 +59,6 @@ export default {
       withPopup: L.latLng(47.41322, -1.219482),
       withTooltip: L.latLng(47.41422, -1.250482),
       currentZoom: 11.5,
-      pixiContainer: null,
-      pixiOverlay: null,
       mapOptions: {
         zoom: 1,
         zoomControl: true,
@@ -102,7 +94,6 @@ export default {
       monochromeMapOpactiy: 0.68,
       windowHeight: 0,
       clientHeight: 0,
-      windowWidth: 0,
     };
   },
   created() {
@@ -121,25 +112,50 @@ export default {
   },
 
   watch: {
-    peekMap() {
+    peekMap(newv, oldv) {
       if (this.$route.name === 'EventPage') this.fitBoundsForFocusMarker();
     },
     sidebarPanel(newv, oldv) {
-      if (
-        (newv === 'explore' && oldv === 'nearby') ||
-        (newv === 'nearby' && oldv === 'explore')
-      ) {
-        if (this.nearbyEventsDates?.length > 0) {
-          //this.setMapBoundsNearby();
-        }
+      if (newv === 'nearby' && oldv === 'explore') {
         if (
           this.userLocation?.lat &&
-          !this.userLocationFromSearch &&
-          this.$q.screen.gt.xs &&
+          // !this.currentLocationFromSearch &&
           newv === 'nearby'
-        )
+        ) {
           // go to users location
-          this.fitBoundsForExplorePage(this.userLocation);
+          this.fitBoundsForNearbyPage(this.userLocation);
+        }
+        if (this.$q.screen.lt.sm) {
+          // hide map markers on nearby page
+          if (
+            this.mapMarkers &&
+            toRaw(this.map)?.hasLayer(toRaw(this.mapMarkers))
+          ) {
+            toRaw(this.mapMarkers).remove();
+          }
+        }
+      }
+      if (
+        newv === 'explore' &&
+        oldv === 'nearby' &&
+        this.userLocation &&
+        this.$q.screen.lt.sm
+      ) {
+        this.fitBoundsForExplorePage(this.userLocation);
+      }
+      if (newv === 'explore') {
+        if (
+          toRaw(this.mapMarkers) &&
+          this.$q.screen.lt.sm &&
+          !toRaw(this.map)?.hasLayer(toRaw(this.mapMarkers))
+        ) {
+          // possible performance issue
+          if (toRaw(this.mapMarkers)) {
+            toRaw(this.mapMarkers).addTo(toRaw(this.map));
+          } else {
+            this.clearMarkersAndLoadPoints();
+          }
+        }
       }
     },
     darkMode() {
@@ -198,11 +214,23 @@ export default {
         this.debouncedClearMarkersAndLoadPoints();
       },
     },
+    controlEmptyLineup: {
+      handler() {
+        this.debouncedClearMarkersAndLoadPoints();
+      },
+    },
+    controlDateUnconfirmed: {
+      handler() {
+        this.debouncedClearMarkersAndLoadPoints();
+      },
+    },
     userLocation: {
-      handler: function (newval) {
-        this.fitBoundsForExplorePage(newval);
+      deep: true,
+      handler(newval) {
+        console.log('USERLOCATION', newval);
+        this.fitBoundsForNearbyPage(newval);
         // add location marker for fine location
-        if (!this.userLocationFromSearch && this.fineLocation) {
+        if (!this.currentLocationFromSearch && this.fineLocation) {
           this.addUserLocationMarker(newval);
         }
         // wait for animation
@@ -226,13 +254,13 @@ export default {
             // enter event page
             if (
               this.mapMarkers &&
-              toRaw(this.map).hasLayer(toRaw(this.mapMarkers))
+              toRaw(this.map)?.hasLayer(toRaw(this.mapMarkers))
             ) {
               toRaw(this.mapMarkers).remove();
             }
             if (
               this.eventDateHoverLayer &&
-              toRaw(this.map).hasLayer(toRaw(this.eventDateHoverLayer))
+              toRaw(this.map)?.hasLayer(toRaw(this.eventDateHoverLayer))
             ) {
               toRaw(this.eventDateHoverLayer).clearLayers();
               toRaw(this.eventDateHoverLayer).remove();
@@ -244,10 +272,13 @@ export default {
               zoom: this.map.getZoom(),
             };
           } else if (to.name === 'Explore') {
-            //
+            if (!to.query.view) {
+              // gone to nearby page
+              this.fitBoundsForNearbyPage(this.userLocation);
+            }
 
             // restore previous map view
-            if (this.exploreMapView) {
+            else if (this.exploreMapView) {
               toRaw(this.map).setView(
                 this.exploreMapView.latlng,
                 this.exploreMapView.zoom,
@@ -271,18 +302,19 @@ export default {
 
             if (
               this.focusMarkerLayer &&
-              toRaw(this.map).hasLayer(toRaw(this.focusMarkerLayer))
+              toRaw(this.map)?.hasLayer(toRaw(this.focusMarkerLayer))
             ) {
               this.focusMarkerLayer.clearLayers();
               this.focusMarkerLayer.remove();
             }
             if (
               this.eventDateHoverLayer &&
-              toRaw(this.map).hasLayer(toRaw(this.eventDateHoverLayer))
+              toRaw(this.map)?.hasLayer(toRaw(this.eventDateHoverLayer))
             ) {
               this.eventDateHoverLayer.clearLayers();
               this.eventDateHoverLayer.remove();
             }
+
             // possible performance issue
             if (toRaw(this.mapMarkers)) {
               toRaw(this.mapMarkers).addTo(toRaw(this.map));
@@ -343,7 +375,6 @@ export default {
     points: function () {
       if (this.$route.name === 'Explore') {
         this.initMarkers();
-        //this.initPixiOverlay();
       }
     },
   },
@@ -355,7 +386,7 @@ export default {
     addUserLocationMarker(latlng) {
       if (
         this.userLocationMarkerLayer &&
-        toRaw(this.map).hasLayer(toRaw(this.userLocationMarkerLayer))
+        toRaw(this.map)?.hasLayer(toRaw(this.userLocationMarkerLayer))
       ) {
         this.userLocationMarkerLayer.clearLayers();
         this.userLocationMarkerLayer.remove();
@@ -377,9 +408,9 @@ export default {
         } catch {
           await this.loadIpInfo();
         }
-        this.fitBoundsForExplorePage(this.userLocation);
+        this.fitBoundsForNearbyPage(this.userLocation);
       } catch (e) {
-        this.fitBoundsForExplorePage(this.userLocation);
+        this.fitBoundsForNearbyPage(this.userLocation);
       }
       // go to users location
     },
@@ -414,7 +445,9 @@ export default {
         toRaw(this.map)?.removeLayer(toRaw(this.mapMarkersPermanentTooltip));
         this.mapMarkersPermanentTooltip.clearLayers();
       }
-      this.loadPoints();
+      try {
+        this.loadPoints();
+      } catch (e) {}
     },
     fitBoundsForFocusMarker() {
       // var paddingBottom = this.windowHeight - (this.windowHeight / 2 - 120)
@@ -445,28 +478,42 @@ export default {
       }
     },
 
-    fitBoundsForExplorePage(coords) {
-      // padding for desktop panel
-      var latlng = L.latLng(coords);
-      if (this.$q.screen.gt.xs) {
-        if (this.sidebarExpanded) {
-          // padding for sidebar
-          toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
-            paddingTopLeft: [1000, 0],
-            animate: !this.disableAnimations,
-            duration: 0.3,
-            easeLinearity: 1,
-            maxZoom: 10,
-          });
+    fitBoundsForNearbyPage(coords) {
+      if (coords) {
+        // padding for desktop panel
+        var latlng = L.latLng(coords);
+        if (this.$q.screen.gt.sm) {
+          // no distinction between nearby and explore on desktop
+          this.fitBoundsForExplorePage(coords);
         } else {
+          // padding for mobile bottom panel
           toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
-            paddingTopLeft: [580, 0],
+            //paddingTopLeft: [0, -150],
+            paddingTopLeft: [
+              0,
+              0 - window.innerHeight / 2 - 86 + this.safeAreaInsets.top,
+            ],
             animate: !this.disableAnimations,
             duration: 0.3,
             easeLinearity: 1,
             maxZoom: 10,
           });
         }
+      } else {
+        this.locateMe();
+      }
+    },
+    fitBoundsForExplorePage(coords) {
+      // padding for desktop panel
+      var latlng = L.latLng(coords);
+      if (this.$q.screen.gt.sm) {
+        toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
+          paddingTopLeft: [352, 0],
+          animate: !this.disableAnimations,
+          duration: 0.3,
+          easeLinearity: 1,
+          maxZoom: 10,
+        });
       } else {
         // padding for mobile bottom panel
         toRaw(this.map).fitBounds(L.latLngBounds(latlng, latlng), {
@@ -522,22 +569,12 @@ export default {
       }
     },
     setBounds(bounds) {
-      if (this.$q.screen.gt.xs) {
-        var pxSw = this.map.getPixelBounds().getBottomLeft();
-
-        // Get the width of the overlapping sidebar if on desktop
-        // so that the bounds exclude the sidebar
-        var $cover = document.getElementById('sidebar');
-        var deltaX = $cover.getBoundingClientRect().width;
-        var pxSw = this.map.getPixelBounds().getBottomLeft();
-        pxSw = pxSw.add(L.point(deltaX, 0)); // add the width of the sidebar
-        var sw = this.map.unproject(pxSw);
-        bounds = L.latLngBounds(sw, this.map.getBounds().getNorthEast()); // bounds without the sidebar
-      } else {
+      if (this.$q.screen.lt.md) {
         // padding for mobile bottom panel
+        // on desktop we don't care about the portion the panel covers
         var pxSw = this.map.getPixelBounds().getBottomLeft();
 
-        const bottomPanelHeight = '276';
+        const bottomPanelHeight = '200';
         pxSw = pxSw.subtract(L.point(0, bottomPanelHeight)); // add the height of the bottom panel
         var sw = toRaw(this.map).unproject(pxSw);
         bounds = L.latLngBounds(sw, toRaw(this.map).getBounds().getNorthEast()); // bounds without the bottom panel
@@ -546,7 +583,7 @@ export default {
       this.mapBounds = bounds;
       this.mapCenter = bounds;
     },
-    setMarkerFocusForEventPage(latlng) {
+    setMarkerFocusForEventPage(latlng, zoom) {
       toRaw(this.mapMarkers)?.remove();
       //this.mapMarkersPermanentTooltip.remove();
 
@@ -578,15 +615,29 @@ export default {
             zoom: toRaw(this.map).getZoom(),
           };
 
-          //  this.setMarkerFocusForEventPage(newval);
+          this.setMarkerFocusForEventPage(newval);
         }
       }
       this.initTileLayers();
       // add location marker for fine location
-      if (!this.userLocationFromSearch && this.fineLocation) {
+      if (!this.currentLocationFromSearch && this.fineLocation) {
         this.addUserLocationMarker(this.userLocation);
       }
+      toRaw(this.map).clicked = 0;
+
       toRaw(this.map).on('click', () => {
+        if (this.sidebarPanel === 'explore') {
+          toRaw(this.map).clicked = toRaw(this.map).clicked + 1;
+
+          setTimeout(() => {
+            if (toRaw(this.map).clicked == 1) {
+              toRaw(this.map).clicked = 0;
+              // single click action
+              this.sidebarMinimized = !this.sidebarMinimized;
+            }
+          }, 300);
+        }
+
         if (this.$route.name === 'EventPage') {
           //this.peekMap = false;
           if (!this.peekMap) {
@@ -597,21 +648,31 @@ export default {
         }
       });
 
-      toRaw(this.map).on('mousedown', () => {
-        if (this.$route.name === 'Explore') {
-          // switch to explore view
-          if (
-            this.sidebarPanel !== 'explore' &&
-            this.sidebarPanel !== 'favorites'
-          ) {
-            this.sidebarPanel = 'explore';
+      toRaw(this.map).on('dblclick', (event) => {
+        toRaw(this.map).clicked = 0;
+        // toRaw(this.map).zoomIn();
+      });
+
+      toRaw(this.map).on('mouseup', () => {
+        setTimeout(() => {
+          if (this.$route.name === 'Explore') {
+            // switch to explore view
+            if (
+              this.sidebarPanel !== 'explore' &&
+              this.sidebarPanel !== 'favorites'
+            ) {
+              this.sidebarPanel = 'explore';
+            }
+            this.showPanel = false;
           }
-          this.showPanel = false;
-        }
+        }, 50);
       });
 
       toRaw(this.map).on('movestart', () => {
         this.mapMoving = true;
+        if (this.$route.name === 'EventPage' && !this.peekMap) {
+          // this.peekMap = true;
+        }
       });
 
       toRaw(this.map).on('moveend', (event) => {
@@ -724,349 +785,35 @@ export default {
       }
       //this.map.fitWorld();
     },
-    solveCollision: (t, e) => {
-      e = e || {};
-      var r = d3
-          .quadtree()
-          .x(function (t) {
-            return t.xp;
-          })
-          .y(function (t) {
-            return t.yp;
-          }),
-        m = (void 0 !== e.extent && r.extent(e.extent), 0),
-        n =
-          (t.forEach(function (t) {
-            (t.xp = t.x0),
-              (t.yp = t.y0),
-              void 0 !== e.r0 && (t.r0 = e.r0),
-              (t.r = t.r0),
-              (t.xMin = t.x0 - t.r0),
-              (t.xMax = t.x0 + t.r0),
-              (t.yMin = t.y0 - t.r0),
-              (t.yMax = t.y0 + t.r0);
-            var d,
-              y = [];
-            r.visit(
-              ((d = t),
-              function (t, n, e, r, i) {
-                if (!t.length)
-                  for (
-                    ;
-                    d.xMax > t.data.xMin &&
-                      d.xMin < t.data.xMax &&
-                      d.yMax > t.data.yMin &&
-                      d.yMin < t.data.yMax &&
-                      ((o = t.data),
-                      (p = f = p = f = h = c = l = s = u = a = void 0),
-                      (f = d.xp - o.xp),
-                      (p = d.yp - o.yp),
-                      (f = f * f + p * p),
-                      (p = d.r + o.r),
-                      f < p * p) &&
-                      ((p = { r: o.r, xp: o.xp, yp: o.yp, from: o }),
-                      y.push(p),
-                      (o = Math.sqrt(f)),
-                      (p = d.r < p.r ? ((a = p), d) : ((a = d), p)),
-                      (c = ((s = a.r) + (l = p.r) + o) / 4),
-                      (f =
-                        0 < f
-                          ? ((h = (p.xp - a.xp) / o), (p.yp - a.yp) / o)
-                          : ((f = 2 * Math.PI * Math.random()),
-                            (h = Math.cos(f)),
-                            Math.sin(f))),
-                      (c =
-                        c <= l
-                          ? ((u = c / s), c / l)
-                          : ((u = (s - l + o) / (2 * s)), 1)),
-                      (a.r *= u),
-                      (p.r *= c),
-                      (a.xp += (u - 1) * s * h),
-                      (a.yp += (u - 1) * s * f),
-                      (p.xp += (1 - c) * l * h),
-                      (p.yp += (1 - c) * l * f),
-                      (a.xMin = a.xp - a.r),
-                      (a.xMax = a.xp + a.r),
-                      (a.yMin = a.yp - a.r),
-                      (a.yMax = a.yp + a.r),
-                      (p.xMin = p.xp - p.r),
-                      (p.xMax = p.xp + p.r),
-                      (p.yMin = p.yp - p.r),
-                      (p.yMax = p.yp + p.r)),
-                      (t = t.next);
-
-                  );
-                var o, a, u, s, l, c, h, f, p;
-                return (
-                  n > d.xMax + m ||
-                  r + m < d.xMin ||
-                  e > d.yMax + m ||
-                  i + m < d.yMin
-                );
-              })
-            ),
-              (m = Math.max(m, t.r)),
-              r.removeAll(
-                y.map(function (t) {
-                  return t.from;
-                })
-              );
-            var n = y.map(function (t) {
-              var n = t.from;
-              return (
-                (n.xp = t.xp),
-                (n.yp = t.yp),
-                (n.r = t.r),
-                (n.xMin = t.xMin),
-                (n.xMax = t.xMax),
-                (n.yMin = t.yMin),
-                (n.yMax = t.yMax),
-                n
-              );
-            });
-            n.push(t), r.addAll(n);
-          }),
-          void 0 !== e.zoom &&
-            t.forEach(function (t) {
-              (t.cache = t.cache || {}),
-                (t.cache[e.zoom] = { x: t.xp, y: t.yp, r: t.r });
-            }),
-          0);
-      return (
-        t.forEach(function (t) {
-          n = Math.max(n, t.r);
-        }),
-        (r.rMax = n),
-        r
-      );
-    },
-    async initPixiOverlay() {
-      this.$nextTick(async () => {
-        let firstDraw = true;
-        let prevZoom;
-        const Assets = PIXI.Assets;
-        const textures = [
-          await Assets.load('/src/assets/marker-dark-filled.png'),
-        ];
-        const markerSprites = [];
-        let colorScale = d3
-          .scaleLinear()
-          .domain([0, 50, 100])
-          .range(['#c6233c', '#ffd300', '#008000']);
-        let frame = null;
-        let focus = null;
-        this.pixiContainer = new PIXI.Container();
-        const doubleBuffering =
-          /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-        this.pixiOverlay = L.pixiOverlay(
-          (utils) => {
-            const zoom = utils.getMap().getZoom();
-            if (frame) {
-              cancelAnimationFrame(frame);
-              frame = null;
-            }
-            const container = utils.getContainer();
-            const renderer = utils.getRenderer();
-            const project = utils.latLngToLayerPoint;
-            const scale = utils.getScale();
-            const invScale = 1 / scale;
-            if (firstDraw) {
-              prevZoom = zoom;
-              this.points.forEach((point) => {
-                // calculate label text
-                var toolTipHtml = '';
-                var toolTipString = '';
-                // show list of events for location in toolTip
-                // if there are more than one
-                var eventIds = [];
-                for (let j = 0; j < point.events.length; j++) {
-                  if (eventIds.indexOf(point.events[j].event_id) === -1) {
-                    eventIds.push(point.events[j].event_id);
-                    toolTipHtml = toolTipHtml + point.events[j].name;
-                    toolTipString = toolTipString + point.events[j].name;
-                    if (point.events[j + 1] || point.events[j - 1]) {
-                      if (j !== point.events.length - 1) {
-                        // not last element
-                        // toolTipHtml = toolTipHtml + '<ul>'
-                        toolTipHtml = toolTipHtml + '<br/>';
-                        toolTipString = toolTipString + ', ';
-                      }
-                      /* if (this.points[i].events[j + 1] || this.points[i].events[j - 1]) {
-                    // toolTipHtml = toolTipHtml + '</li>'
-                    if (j === this.points[i].events.length - 1) {
-                      //  toolTipHtml = toolTipHtml + '<ul/>'
-                      // last item
-                      }
-                    }
-                    */
-                    }
-                  }
-                }
-
-                const coords = project([point.lat, point.lng]);
-                const index = Math.floor(Math.random() * textures.length);
-                const markerSprite = new PIXI.Sprite(textures[index]);
-                markerSprite.textureIndex = index;
-                markerSprite.x0 = coords.x;
-                markerSprite.y0 = coords.y;
-                markerSprite.anchor.set(0.5, 1);
-
-                const tint = d3
-                  .color(
-                    colorScale(markerSprite.avancement || Math.random() * 100)
-                  )
-                  .rgb();
-
-                // markerSprite.tint = 256 * (tint.r * 256 + tint.g) + tint.b;
-                container.addChild(markerSprite);
-                markerSprites.push(markerSprite);
-                markerSprite.legend = toolTipString;
-                //markerSprite.scale.x = scale - 0.2;
-              });
-              const quadTrees = {};
-              for (
-                let z = toRaw(this.map).getMinZoom();
-                z <= toRaw(this.map).getMaxZoom();
-                z++
-              ) {
-                const rInit = (z <= 7 ? 16 : 24) / utils.getScale(z);
-                quadTrees[z] = this.solveCollision(markerSprites, {
-                  r0: rInit,
-                  zoom: z,
-                });
-              }
-              const findMarker = (ll) => {
-                const layerPoint = project(ll);
-                const quadTree = quadTrees[utils.getMap().getZoom()];
-                let marker;
-                const rMax = quadTree.rMax;
-                let found = false;
-                quadTree.visit((quad, x1, y1, x2, y2) => {
-                  if (!quad.length) {
-                    var dx = quad.data.x - layerPoint.x;
-                    var dy = quad.data.y - layerPoint.y;
-                    var r = quad.data.scale.x * 16;
-                    if (dx * dx + dy * dy <= r * r) {
-                      marker = quad.data;
-                      found = true;
-                    }
-                  }
-                  return (
-                    found ||
-                    x1 > layerPoint.x + rMax ||
-                    x2 + rMax < layerPoint.x ||
-                    y1 > layerPoint.y + rMax ||
-                    y2 + rMax < layerPoint.y
-                  );
-                });
-                return marker;
-              };
-              toRaw(this.map).on('click', (e) => {
-                let redraw = false;
-                if (focus) {
-                  focus.texture = textures[focus.textureIndex];
-                  focus = null;
-                  L.DomUtil.addClass(legend, 'hide');
-                  legendContent.innerHTML = '';
-                  redraw = true;
-                }
-                const marker = findMarker(e.latlng);
-                if (marker) {
-                  marker.texture = focusTextures[marker.textureIndex];
-                  focus = marker;
-                  legendContent.innerHTML = marker.legend;
-                  L.DomUtil.removeClass(legend, 'hide');
-                  redraw = true;
-                }
-                if (redraw) utils.getRenderer().render(container);
-              });
-              /*
-            const self = toRaw(this.map);
-            toRaw(this.map).on(
-              'mousemove',
-              L.Util.throttle((e) => {
-                const marker = findMarker(e.latlng);
-                if (marker) {
-                  L.DomUtil.addClass(self._container, 'leaflet-interactive');
-                } else {
-                  L.DomUtil.removeClass(self._container, 'leaflet-interactive');
-                }
-              }, 32)
-            );              */
-            }
-            if (firstDraw || prevZoom !== zoom) {
-              markerSprites.forEach((markerSprite) => {
-                const position = markerSprite.cache[zoom];
-                if (firstDraw) {
-                  markerSprite.x = position.x;
-                  markerSprite.y = position.y;
-                  markerSprite.currentScale = markerSprite.scale.x;
-                  markerSprite.targetScale =
-                    zoom > 5 ? 0.12 / scale : 0.07 / scale;
-                } else {
-                  markerSprite.currentX = markerSprite.x;
-                  markerSprite.currentY = markerSprite.y;
-                  markerSprite.targetX = position.x;
-                  markerSprite.targetY = position.y;
-                  markerSprite.currentScale = markerSprite.scale.x;
-                  markerSprite.targetScale =
-                    zoom > 5 ? 0.12 / scale : 0.07 / scale;
-                }
-              });
-            }
-
-            let start = null;
-            const delta = 300;
-            const animate = (timestamp) => {
-              let progress;
-              if (start === null) start = timestamp;
-              progress = timestamp - start;
-              let lambda = progress / delta;
-              if (lambda > 1) lambda = 1;
-              lambda = lambda * (0.4 + lambda * (2.2 + lambda * -1.6));
-              markerSprites.forEach((markerSprite) => {
-                markerSprite.x =
-                  markerSprite.currentX +
-                  lambda * (markerSprite.targetX - markerSprite.currentX);
-                markerSprite.y =
-                  markerSprite.currentY +
-                  lambda * (markerSprite.targetY - markerSprite.currentY);
-                markerSprite.scale.set(
-                  markerSprite.currentScale +
-                    lambda *
-                      (markerSprite.targetScale - markerSprite.currentScale)
-                );
-              });
-              renderer.render(container);
-              if (progress < delta) {
-                frame = requestAnimationFrame(animate);
-              }
-            };
-            if (!firstDraw && prevZoom !== zoom) {
-              frame = requestAnimationFrame(animate);
-            }
-            firstDraw = false;
-            prevZoom = zoom;
-            renderer.render(container);
-          },
-          toRaw(this.pixiContainer),
-          {
-            doubleBuffering: doubleBuffering,
-            destroyInteractionManager: true,
-          }
-        );
-
-        toRaw(this.pixiOverlay).addTo(toRaw(this.map));
-      });
-    },
     initMarkers() {
       this.markersLoaded = false;
 
       if (this.points.length > 0) {
         // this.map.locate({setView: true, maxZoom: 17});
         // Leaflet.markercluster
-        this.mapMarkers = L.layerGroup();
+        this.mapMarkers = L.markerClusterGroup({
+          chunkedLoading: true,
+          showCoverageOnHover: false,
+          // disableClusteringAtZoom: 0,
+          spiderfyOnMaxZoom: false,
+          /*
+          iconCreateFunction: (cluster) => {
+            let className;
+            if (cluster.getChildCount() > 10) {
+              className = 'cluster-icon-10';
+            } else if (cluster.getChildCount() > 2) {
+              className = 'cluster-icon-3';
+            } else {
+              className = 'cluster-icon-2';
+            }
+            return L.divIcon({
+              className, // style defined in App.vue
+              iconAnchor: [12, 30],
+              iconSize: [25, 30],
+              tooltipAnchor: [3, -32],
+            });
+            */
+        });
 
         /*this.mapMarkersPermanentTooltip = L.markerClusterGroup({
           chunkedLoading: true,
@@ -1074,7 +821,7 @@ export default {
         var tooltipMarkers = [];
         for (let i = 0; i < this.points.length; i++) {
           var toolTipHtml = '';
-          var toolTipString = '';
+          var labelString = '';
           // show list of events for location in toolTip
           // if there are more than one
           var eventIds = [];
@@ -1082,7 +829,13 @@ export default {
             if (eventIds.indexOf(this.points[i].events[j].event_id) === -1) {
               eventIds.push(this.points[i].events[j].event_id);
               toolTipHtml = toolTipHtml + this.points[i].events[j].name;
-              toolTipString = toolTipString + this.points[i].events[j].name;
+              labelString = labelString + this.points[i].events[j].name;
+              const numberOfEventsAtLocation = this.points[i].events.length;
+              if (numberOfEventsAtLocation > 1) {
+                toolTipHtml = `${this.points[i].name} (${numberOfEventsAtLocation} upcoming)`;
+                labelString = labelString + this.points[i].events[j].name;
+              }
+              /*
               if (
                 this.points[i].events[j + 1] ||
                 this.points[i].events[j - 1]
@@ -1091,7 +844,7 @@ export default {
                   // not last element
                   // toolTipHtml = toolTipHtml + '<ul>'
                   toolTipHtml = toolTipHtml + '<br/>';
-                  toolTipString = toolTipString + ', ';
+                  labelString = labelString + ', ';
                 }
                 /* if (this.points[i].events[j + 1] || this.points[i].events[j - 1]) {
                 // toolTipHtml = toolTipHtml + '</li>'
@@ -1101,30 +854,32 @@ export default {
                   }
                 }
                 */
-              }
             }
           }
 
           let marker = L.marker([this.points[i].lat, this.points[i].lng], {
             icon: toRaw(this.defaultIcon),
-            title: toolTipString,
-            alt: toolTipString,
+            title: labelString,
+            alt: labelString,
           }).bindTooltip(toolTipHtml, {
             direction: 'top',
-            permanent: false,
+            permanent: true,
             interactive: true,
           });
 
           marker.on('click', this.clickMarker);
           marker.data = this.points[i];
           tooltipMarkers.push(marker);
-          toRaw(this.mapMarkers).addLayer(marker);
         }
-        //toRaw(this.mapMarkers).addLayers(tooltipMarkers);
+        // on mobile markers are hidden on nearby view - handled by watcher
+        toRaw(this.mapMarkers).addLayers(tooltipMarkers);
+
         //toRaw(this.mapMarkersPermanentTooltip).addLayers(tooltipMarkers);
 
         this.markersLoaded = true;
-        toRaw(this.map).addLayer(toRaw(this.mapMarkers));
+        if (this.$q.screen.gt.xs || this.sidebarPanel == 'explore') {
+          toRaw(this.map).addLayer(toRaw(this.mapMarkers));
+        }
         //toRaw(this.map).addLayer(toRaw(this.mapMarkersPermanentTooltip));
         //this.mapMarkers.addTo(toRaw(this.map));
       }
@@ -1156,13 +911,16 @@ export default {
       'mapZoomLevel',
     ]),
     ...mapWritableState(useMainStore, [
-      'userLocationFromSearch',
+      'windowWidth',
+      'safeAreaInsets',
+      'currentLocationFromSearch',
       'userLocation',
       'fineLocation',
       'sidebarPanel',
       'showPanel',
       'sidebarExpanded',
       'disableAnimations',
+      'sidebarMinimized',
     ]),
     ...mapState(useMainStore, ['routerHistory']),
     ...mapState(useQueryStore, [
@@ -1174,6 +932,8 @@ export default {
       'controlCountry',
       'controlRegion',
       'controlLocality',
+      'controlEmptyLineup',
+      'controlDateUnconfirmed',
       'loadingPoints',
       'nearbyEventDates',
       'points',
@@ -1188,6 +948,9 @@ export default {
       this.clearMarkersAndLoadPoints();
     }
     this.initMap();
+    if (this.userLocation) {
+      this.fitBoundsForNearbyPage(this.userLocation);
+    }
     this.windowHeight = window.innerHeight;
     this.windowWidth = window.innerWidth;
     window.addEventListener('resize', () => {
@@ -1229,17 +992,6 @@ export default {
       }
     }
     .leaflet-marker-pane {
-      .marker-icon {
-        background: url('assets/marker-dark-filled.png') !important;
-        z-index: 800 !important;
-        height: 30px !important;
-        width: 30px !important;
-        //background: url('~assets/marker-dark.svg') !important;
-        background-size: contain !important;
-        background-repeat: no-repeat !important;
-        background-position: center !important;
-        filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.4));
-      }
       .focus-marker-icon {
         &:before {
           content: '';
@@ -1301,20 +1053,9 @@ export default {
     }
   }
   .map {
-    background: white;
+    background: black;
     .leaflet-map-pane {
       .leaflet-marker-pane {
-        .marker-icon {
-          background: url('assets/marker-light-filled.png') !important;
-          z-index: 800 !important;
-          height: 30px !important;
-          width: 30px !important;
-          //background: url('~assets/marker-dark.svg') !important;
-          background-size: contain !important;
-          background-repeat: no-repeat !important;
-          background-position: center !important;
-          filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.2));
-        }
         .focus-marker-icon {
           &:before {
             content: '';
@@ -1371,17 +1112,6 @@ export default {
       //background: black;
       .leaflet-map-pane {
         .leaflet-marker-pane {
-          .marker-icon {
-            background: url('assets/marker-dark-filled.png') !important;
-            z-index: 800 !important;
-            height: 30px !important;
-            width: 30px !important;
-            //background: url('~assets/marker-dark.svg') !important;
-            background-size: contain !important;
-            background-repeat: no-repeat !important;
-            background-position: center !important;
-            filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.2));
-          }
         }
       }
     }
@@ -1396,6 +1126,67 @@ export default {
 .map {
   .leaflet-map-pane {
     .leaflet-marker-pane {
+      .marker-icon {
+        background: url('assets/marker-dark-filled.png') !important;
+        z-index: 800 !important;
+        height: 30px !important;
+        width: 30px !important;
+        //background: url('~assets/marker-dark.svg') !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.4));
+      }
+      .cluster-icon-3 {
+        cursor: zoom-in;
+
+        background: url('assets/multi.png') !important;
+        z-index: 800 !important;
+        height: 40px !important;
+        width: 40px !important;
+        //background: url('~assets/marker-dark.svg') !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.4));
+      }
+      .cluster-icon-2 {
+        cursor: zoom-in;
+        background: url('assets/multi-2.png') !important;
+        z-index: 800 !important;
+        height: 30px !important;
+        width: 30px !important;
+        //background: url('~assets/marker-dark.svg') !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.4));
+      }
+      .cluster-icon-5 {
+        cursor: zoom-in;
+        background: url('assets/multi-5.png') !important;
+        z-index: 800 !important;
+        height: 30px !important;
+        width: 30px !important;
+        //background: url('~assets/marker-dark.svg') !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.4));
+      }
+      .cluster-icon-10 {
+        cursor: zoom-in;
+        background: url('assets/multi-12.png') !important;
+        z-index: 800 !important;
+        height: 50px !important;
+        width: 50px !important;
+        //background: url('~assets/marker-dark.svg') !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        filter: drop-shadow(0px 10px 5px rgba(0, 0, 0, 0.4));
+      }
+
       .location-marker-icon {
         &::before {
           position: absolute;

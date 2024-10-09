@@ -33,7 +33,7 @@
             <span class="">Near</span>
           </div>
           <div
-            class="flex items-center no-wrap"
+            class="flex items-start no-wrap"
             :class="{
               'justify-start text-h4': $q.screen.gt.sm,
               'justify-between row reverse  text-h4': $q.screen.lt.md,
@@ -60,7 +60,7 @@
                     name="mdi-crosshairs-gps"
                     class=""
                     size="sm"
-                    v-if="fineLocation && !userLocationFromSearch"
+                    v-if="fineLocation && !currentLocationFromSearch"
                   />
                   <q-icon size="sm" name="mdi-crosshairs" class="" v-else />
                 </div>
@@ -93,6 +93,13 @@
               </template>
             </q-btn>
             <NearbyCountrySelect />
+            <div
+              class="flex row items-start no-wrap q-ml-sm"
+              style="min-width: 220px"
+            >
+              <q-icon name="las la-calendar" class="q-mr q-pa-md" size="sm" />
+              <DesktopDateSelect />
+            </div>
           </div>
         </div>
         <div
@@ -245,11 +252,7 @@
             <div class="flex column" v-if="nearbyTags?.length >= 10">
               <div
                 class="q-py-md location-header"
-                :class="
-                  $q.screen.gt.sm
-                    ? 'q-px-lg q-mt- t1 inter semibold'
-                    : 'q-pl-md t1 inter semibold'
-                "
+                :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
               >
                 <div class="text-">Hot tags in this area</div>
               </div>
@@ -350,15 +353,11 @@
             <div class="flex column" v-else-if="tagOptions?.length > 0">
               <div
                 class="q-py-md location-header"
-                :class="
-                  $q.screen.gt.sm
-                    ? 'q-px-lg q-mt-sm  t1 inter semibold'
-                    : 'q-pl-md t1'
-                "
+                :class="$q.screen.gt.sm ? 'q-px-lg q-mt-sm' : 'q-pl-md'"
               >
-                <div class="inter semibold">Hot tags around the world:</div>
+                Hot tags around the world:
               </div>
-              <div :class="$q.screen.gt.sm ? 'q-pl-lg q-mb-sm' : 'q-pl-md'">
+              <div :class="$q.screen.gt.sm ? 'q-pl-lg ' : 'q-pl-md'">
                 <CustomQScroll
                   horizontal
                   :style="$q.screen.gt.sm ? 'margin-bottom: -8px' : ''"
@@ -451,11 +450,7 @@
             <div class="flex column" v-if="nearbyArtists?.length > 5">
               <div
                 class="location-header q-py-md inter"
-                :class="
-                  $q.screen.gt.sm
-                    ? 'q-px-lg t1 q-mt-sm inter semibold'
-                    : 'q-pl-md t1 semibold'
-                "
+                :class="$q.screen.gt.sm ? 'q-px-lg ' : 'q-pl-md t1'"
               >
                 High profile artists
               </div>
@@ -466,7 +461,7 @@
                 :loadMore="debouncedLoadNearbyArtists"
                 :style="
                   $q.screen.gt.sm
-                    ? 'margin-bottom: -12px; margin-top: -12px'
+                    ? 'margin-bottom: -16px; margin-top: -12px'
                     : ''
                 "
               />
@@ -479,7 +474,7 @@
                 class="location-header q-py-md inter semibold"
                 :class="
                   $q.screen.gt.sm
-                    ? 'q-pl-lg  q-mt-sm t1 inter semibold'
+                    ? 'q-pl-lg  q-mt-sm t1 inter bolder text-h6'
                     : 'q-pl-md t1'
                 "
               >
@@ -493,7 +488,7 @@
                 :size="$q.screen.gt.xs ? 'lg' : 'md'"
                 :style="
                   $q.screen.gt.sm
-                    ? 'margin-bottom: -12px; margin-top: -12px'
+                    ? 'margin-bottom: -16px; margin-top: -12px'
                     : ''
                 "
               />
@@ -505,12 +500,8 @@
               v-if="currentUser && userEventDates?.length > 0"
             >
               <div
-                class="q-py-md location-header flex justify-between"
-                :class="
-                  $q.screen.gt.sm
-                    ? 'q-px-lg q-mt-sm t1 inter semibold'
-                    : 'q-px-md q-mt-sm t1 inter semibold'
-                "
+                class="q-py-md q-mt-sm location-header flex justify-between"
+                :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-px-md'"
               >
                 <div class="text-">Your upcoming events:</div>
                 <router-link
@@ -566,12 +557,8 @@
 
             <div
               v-if="userLocation"
-              class="t1 inter semibold location-header q-py-sm flex row items-center justify-between"
-              :class="
-                $q.screen.gt.sm
-                  ? 'q-pl-lg q-mt-sm t1 inter semibold'
-                  : 'q-pl-md q-mt-sm'
-              "
+              class="location-header q-py-sm q-mt-sm flex row items-center justify-between"
+              :class="$q.screen.lt.sm ? 'q-pl-md' : 'q-pl-lg'"
             >
               <div class="flex items-center">
                 <div class="">
@@ -641,12 +628,8 @@
             <!-- ALL EVENTS -->
 
             <div
-              class="t1 inter semibold location-header flex row items-center justify-between"
-              :class="
-                $q.screen.gt.sm
-                  ? 'q-pl-sm q-mt-sm t1 inter semibold'
-                  : 'q-pl-sm t1'
-              "
+              class="location-header q-pl-sm flex row items-center justify-between"
+              :class="$q.screen.gt.sm ? 'q-mt-sm' : ''"
               v-if="eventDates && eventDates?.length > 0"
               style="height: 56px"
             >
@@ -723,7 +706,7 @@ import InnerLoading from 'src/components/InnerLoading.vue';
 import { useAuthStore } from 'src/stores/auth';
 import EventDatePoster from 'src/components/EventDatePoster.vue';
 import EventDateCard from 'src/components/EventDateCard.vue';
-
+import DesktopDateSelect from './DesktopDateSelect.vue';
 import _ from 'lodash';
 
 export default {
@@ -758,6 +741,7 @@ export default {
     InnerLoading,
     // EventDateCard,
     NearbyCountrySelect,
+    DesktopDateSelect,
   },
   data() {
     return {
@@ -989,7 +973,7 @@ export default {
     ...mapState(useMainStore, [
       'userLocationLoading',
       'userLocation',
-      'userLocationFromSearch',
+      'currentLocationFromSearch',
       'userLocationCity',
       'userLocationCountry',
       'fineLocation',
@@ -1089,7 +1073,7 @@ export default {
     this.menuBarOpacity = 1;
   },
 
-  activated() {
+  async activated() {
     if (this.$q.screen.lt.sm || true) {
       this.$refs.scroll.setScrollPercentage('vertical', 0);
       setTimeout(() => {
@@ -1098,6 +1082,12 @@ export default {
     } else {
       this.sidebarPanelReady = true;
     }
+    try {
+      await this.getFineLocation();
+    } catch {
+      await this.loadIpInfo();
+    }
+    this.loadEverything();
   },
   deactivated() {
     this.sidebarPanelReady = false;
@@ -1151,8 +1141,8 @@ export default {
       background: black;
     }
     .message {
-      background: $bi-2;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      // background: $bi-2;
+      border: 1px solid rgba(255, 255, 255, 0.15);
       .appstore-wrapper {
         //background: $bi-3;
         border: 1px solid rgba(255, 255, 255, 0.2);
@@ -1186,7 +1176,7 @@ export default {
 .body--light {
   .nearby-page {
     .message {
-      box-shadow: rgba(100, 100, 111, 0.05) 0px 7px 29px 0px;
+      //box-shadow: rgba(100, 100, 111, 0.05) 0px 7px 29px 0px;
       //background: $b-1;
       border: 1px solid rgba(0, 0, 0, 0.1);
 
@@ -1257,8 +1247,8 @@ export default {
         top: -1px;
         z-index: 1000;
         width: 100%;
-        font-weight: 600;
-        // font-size: 1rem;
+        font-weight: 700;
+        font-size: 1rem;
         // text-transform: lowercase;
       }
     }
@@ -1406,8 +1396,8 @@ export default {
     .scroll-area {
       .scroll-stuff {
         .location-header {
-          font-size: unset;
           font-weight: 600;
+          font-size: unset;
         }
         .loading-wrapper {
           height: calc(100vh - 172px); // account for desktop hiddenYposition

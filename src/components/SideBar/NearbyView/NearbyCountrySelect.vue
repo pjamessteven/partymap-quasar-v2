@@ -3,68 +3,73 @@
     class="flex"
     @click.capture="
       (event) => {
-        if (userLocationCity) {
-          userLocationCity = null;
+        inputValue = null;
 
-          $refs.locationSelect.updateInputValue('', true);
+        $refs.locationSelect.updateInputValue('', true);
 
-          $nextTick(() => $refs.locationSelect.focus());
+        $nextTick(() => $refs.locationSelect.focus());
 
-          event.stopPropagation();
-          return false;
-        }
+        event.stopPropagation();
+        return false;
       }
     "
   >
-    <q-select
-      ref="locationSelect"
-      class="text-h4 inter bold country-select"
-      :input-style="$q.screen.gt.xs ? 'width: 300px;' : 'width: 250px'"
-      input-class="country-select-input"
-      behavior="menu"
-      :class="
-        (!query || query?.length === 0) && !userLocationCity
-          ? userLocationLoading
-            ? 'loading-placeholder'
-            : 'placeholder'
-          : ''
-      "
-      :model-value="userLocationCity"
-      :use-input="userLocationCity == null"
-      @input-value="
-        ($event) => {
-          query = $event;
-        }
-      "
-      :hide-dropdown-icon="!userLocationCity"
-      :options="locationSearchResults"
-      @filter="locationSearchFilter"
-      @update:model-value="setLocation($event)"
-      :loading="userLocationLoading || loading"
-      map-options
-      @popup-show="
-        () => {
-          if (userLocationCity) {
-            userLocationCity = null;
+    <transition
+      leave-active-class="animated fadeOut"
+      enter-active-class="animated fadeIn"
+      mode="out-in"
+    >
+      <q-select
+        style="min-width: 170px"
+        :key="currentLocationCity"
+        ref="locationSelect"
+        class="text-h5 inter bold country-select"
+        :input-style="$q.screen.gt.xs ? 'width: 169px;' : 'width: 250px'"
+        input-class="country-select-input"
+        behavior="menu"
+        :class="
+          (!query || query?.length === 0) && !currentLocationCity
+            ? userLocationLoading
+              ? 'loading-placeholder'
+              : 'placeholder'
+            : ''
+        "
+        :model-value="inputValue"
+        :use-input="inputValue == null"
+        @input-value="
+          ($event) => {
+            query = $event;
+          }
+        "
+        :input-debounce="0"
+        :hide-dropdown-icon="!inputValue"
+        :options="locationSearchResults"
+        @filter="locationSearchFilter"
+        @update:model-value="setLocation($event)"
+        :loading="userLocationLoading || loading"
+        map-options
+        @popup-show="
+          () => {
+            inputValue = null;
 
             $refs.locationSelect.updateInputValue('', true);
 
             $nextTick(() => $refs.locationSelect.focus());
             return false;
           }
-        }
-      "
-      v-on:focusout="
-        () => {
-          $refs.locationSelect.updateInputValue('', true);
+        "
+        v-on:focusout="
+          () => {
+            $refs.locationSelect.updateInputValue('', true);
 
-          !userLocationCity || userLocationCity.length == 0
-            ? (userLocationCity = previouslySelectedCity)
-            : undefined;
-        }
-      "
-    >
-    </q-select>
+            !inputValue || inputValue.length == 0
+              ? (inputValue = userLocationCity)
+              : undefined;
+          }
+        "
+      >
+      </q-select>
+    </transition>
   </div>
 </template>
 
@@ -80,6 +85,7 @@ export default {
       locationSearchResults: [],
       query: '',
       loading: false,
+      inputValue: null,
       selectedLocation: {},
       previouslySelectedPlace: this.userLocationCity,
     };
@@ -130,31 +136,41 @@ export default {
     },
     setLocation(location) {
       this.$refs.locationSelect.blur();
-      this.userLocation = {
+      this.currentLocation = {
         lat: parseFloat(location.location.lat),
         lng: parseFloat(location.location.lng),
       };
       let labelParts = location.label.split(', ');
-      this.userLocationCountry = labelParts.pop();
-      this.userLocationCity = labelParts?.[0] || this.userLocationCountry;
-      this.userLocationFromSearch = true;
+      this.currentLocationCountry = labelParts.pop();
+      this.currentLocationCity = labelParts?.[0] || this.currentLocationCountry;
+      this.currentLocationFromSearch = true;
     },
   },
   watch: {
     userLocationCity(newv, oldv) {
       if (oldv || (newv && !oldv)) {
         this.previouslySelectedCity = oldv;
+        this.inputValue = newv;
+      }
+    },
+    currentLocationCity(newv, oldv) {
+      if (oldv || (newv && !oldv)) {
+        this.previouslySelectedCity = oldv;
+        this.inputValue = newv;
       }
     },
   },
   computed: {
     ...mapWritableState(useMainStore, [
       'userLocationLoading',
+      'currentLocation',
       'userLocation',
-      'userLocationFromSearch',
+      'currentLocationFromSearch',
       'userLocationCity',
       'userLocationCountry',
       'fineLocation',
+      'currentLocationCity',
+      'currentLocationCountry',
     ]),
   },
   created() {
@@ -162,6 +178,7 @@ export default {
       leading: false,
       trailing: true,
     });
+    this.inputValue = this.userLocationCity;
   },
 };
 </script>
@@ -191,7 +208,7 @@ export default {
       z-index: 2;
       position: absolute;
       left: 0px;
-      top: 8px;
+      top: 12px;
       height: 100%;
       width: 100%;
       content: 'Search places';

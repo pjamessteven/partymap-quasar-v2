@@ -1,27 +1,22 @@
 <template>
-  <transition
-    enter-active-class="animated fadeIn"
-    leave-active-class="animated fadeOut"
+  <div
+    class="inner-loading flex justify-center items-center"
+    :class="{
+      solid: solid ? 'solid' : undefined,
+      fixed: fixed ? 'fixed' : undefined,
+    }"
   >
-    <div
-      class="inner-loading flex justify-center items-center"
-      :class="{
-        solid: solid ? 'solid' : undefined,
-        fixed: fixed ? 'fixed' : undefined,
-      }"
-    >
-      <!--
+    <!--
       <q-spinner-ios color="$a.dark.isActive ? 'white' : 'black'" size="2em" />
       -->
-      <q-linear-progress
-        indeterminate
-        size="2px"
-        :color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
-        rounded
-        :style="$q.screen.gt.xs ? 'max-width: 200px' : 'max-width: 120px'"
-      />
-    </div>
-  </transition>
+    <q-linear-progress
+      indeterminate
+      size="2px"
+      :color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
+      rounded
+      :style="$q.screen.gt.xs ? 'max-width: 200px' : 'max-width: 120px'"
+    />
+  </div>
 </template>
 
 <script>

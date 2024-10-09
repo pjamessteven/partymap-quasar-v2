@@ -1,5 +1,5 @@
 <template>
-  <div class="ed-summary flex column ellipsis" :class="{ transparent: !ed }">
+  <div class="ed-summary flex column" :class="{ transparent: !ed }">
     <div
       class="flex row items-center ellipsis"
       :class="{ reverse: alignRight }"
@@ -12,9 +12,9 @@
       />
       <div
         class="flex column"
-        :class="$q.screen.gt.xs ? 'text-large' : 'inter bold'"
+        :class="$q.screen.gt.xs ? 'inter bold' : 'inter bold'"
       >
-        <div>
+        <div v-if="!!ed">
           <q-badge
             v-if="ed?.cancelled"
             class="q-my-xs q-mr-sm"
@@ -23,8 +23,7 @@
           />
           <span v-if="hasOccured">Past event in&nbsp;</span>
           <span v-if="ed?.date_confirmed == true">
-            {{ localDay(ed?.start_naive, ed?.tz) }}
-            {{ localDate(ed?.start_naive, ed?.tz) }}
+            {{ localDateWithWeekday(ed?.start_naive, ed?.tz) }}
           </span>
           <span v-else-if="!ed?.date_confirmed">
             {{ monthYear(ed?.start_naive, ed?.tz) }}&nbsp;<span
@@ -37,32 +36,39 @@
             [{{ timeZoneAbbreviention(ed.event_start, ed.tz) }}]
           </span>-->
         </div>
+        <div v-else-if="$route?.query.dateString">
+          {{ $route.query.dateString }}
+        </div>
+        <div v-else>...</div>
       </div>
     </div>
+
     <div
-      class="flex row items-center no-wrap ellipsis"
+      class="flex row items-baseline no-wrap"
       style="width: 100%"
       :class="{ reverse: alignRight }"
     >
       <q-icon
+        class="q-mt-xs"
         name="las la-map-marker"
         size="1.25em"
         :left="!alignRight"
         :right="alignRight"
       />
-      <span
-        v-if="ed?.location.name"
-        class="ellipsis"
-        :class="$q.screen.gt.xs ? 'text-large' : 'inter bold'"
-        >{{ ed?.location.name }}</span
-      >
-      <span v-else>...</span>
+      <div :class="$q.screen.gt.xs ? 'inter bold' : 'inter bold'">
+        {{
+          $route?.query?.locationDescription ||
+          ed?.location.description ||
+          '...'
+        }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import common from 'assets/common';
+
 export default {
   data() {
     return {};
@@ -86,6 +92,7 @@ export default {
     this.timeZoneAbbreviention = common.timeZoneAbbreviention;
     this.monthYear = common.monthYear;
     this.isInPast = common.isInPast;
+    this.localDateWithWeekday = common.localDateWithWeekday;
   },
 };
 </script>
@@ -93,13 +100,13 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .ed-summary {
-    color: $ti-3;
+    color: $ti-2;
   }
 }
 
 .body--light {
   .ed-summary {
-    color: $ti-3;
+    color: $ti-2;
   }
 }
 

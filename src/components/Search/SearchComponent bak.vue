@@ -140,12 +140,6 @@ export default {
       'showPanel',
       'menubarOpacity',
     ]),
-    ...mapState(useMainStore, [
-      'fineLocation',
-      'userLocationLoading',
-      'userLocationCity',
-      'userLocation',
-    ]),
   },
 };
 </script>

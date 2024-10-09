@@ -2,13 +2,6 @@
   <div class="main-layout">
     <div class="map-container">
       <MainMap />
-      <div
-        class="map-overlay"
-        :class="{
-          'nearby-map-overlay-mobile': sidebarPanel === 'nearby',
-          'map-overlay-mobile-minimized': sidebarMinimized,
-        }"
-      />
     </div>
     <div
       class="overlay"
@@ -57,7 +50,7 @@
         >
           <SideBar
             class="sidebar-component"
-            v-show="$route.name === 'Explore'"
+            v-show="$route.name === 'Explore' || $q.screen.gt.lg"
           />
         </Transition>
         <div
@@ -172,7 +165,7 @@ export default {
     },
   },
   beforeRouteUpdate(to, from, next) {
-    if (from.name === 'Explore') {
+    if (from.name === 'Explore' && to.name !== 'Explore') {
       this.blockUpdates = true;
       // blockUpdates is re-enabled in Map.vue at map.
     }
@@ -269,15 +262,7 @@ export default {
         background: black;
       }
     }
-    .map-overlay {
-      background: linear-gradient(
-        rgba(0, 0, 0, 0.8),
-        rgba(0, 0, 0, 0.6) 72px,
-        transparent 112px,
-        transparent calc(100vh - 348px),
-        rgba(0, 0, 0, 0.68)
-      );
-    }
+
     .overlay {
       //background: linear-gradient($bi-2, $bi-2 62px, black 62px, black);
       background: black;
@@ -296,15 +281,6 @@ export default {
 }
 .body--light {
   .main-layout {
-    .map-overlay {
-      background: linear-gradient(
-        rgba(0, 0, 0, 0.8),
-        rgba(0, 0, 0, 0.6) 72px,
-        transparent 112px,
-        transparent calc(100vh - 348px),
-        rgba(0, 0, 0, 0.68)
-      );
-    }
     .overlay {
       //background: linear-gradient(#fafafa, #fafafa 64px, white 64px, white);
       background: white;
@@ -335,14 +311,6 @@ export default {
 
   .map-container {
     z-index: 0;
-    .map-overlay {
-      z-index: 0;
-      position: absolute;
-      height: 100%;
-      width: 100%;
-
-      pointer-events: none;
-    }
   }
   .overlay {
     z-index: 103;
@@ -437,6 +405,7 @@ export default {
     }
     .event-router {
       z-index: 4000 !important;
+      pointer-events: none;
     }
 
     .mobile-map-view-router {
@@ -494,72 +463,8 @@ export default {
     }
   }
 
-  .native-mobile {
-    .main-layout {
-      .map-container {
-        .map-overlay {
-          background: linear-gradient(
-            rgba(0, 0, 0, 1),
-            rgba(0, 0, 0, 0.48) 148px,
-            transparent 200px,
-            transparent calc(100% - 274px),
-            rgba(0, 0, 0, 0.68) calc(100% - 200px),
-            rgba(0, 0, 0, 0.68) 100%
-          );
-          &.nearby-map-overlay-mobile {
-            background: linear-gradient(
-              rgba(0, 0, 0, 1),
-              rgba(0, 0, 0, 0.48) 120px,
-              rgba(0, 0, 0, 0.48) 200px,
-              rgba(0, 0, 0, 0) 100%
-            );
-          }
-          &.map-overlay-mobile-minimized {
-            background: linear-gradient(
-              rgba(0, 0, 0, 1),
-              rgba(0, 0, 0, 0.48) 148px,
-              transparent 200px,
-              transparent calc(100% - 200px),
-              rgba(0, 0, 0, 0.68) calc(100% - 128px),
-              rgba(0, 0, 0, 0.68) 100%
-            );
-          }
-        }
-      }
-    }
-  }
   .main-layout {
     .map-container {
-      .map-overlay {
-        background: linear-gradient(
-          rgba(0, 0, 0, 0.8),
-          rgba(0, 0, 0, 0) 168px,
-          transparent 200px,
-          transparent calc(100% - 274px),
-          rgba(0, 0, 0, 0.68) calc(100% - 200px),
-          rgba(0, 0, 0, 0.68) 100%
-        );
-        //transition: background 0.2s ease;
-
-        &.nearby-map-overlay-mobile {
-          background: linear-gradient(
-            rgba(0, 0, 0, 0.8),
-            rgba(0, 0, 0, 0.4) 120px,
-            rgba(0, 0, 0, 0.4) 200px,
-            rgba(0, 0, 0, 0) 100%
-          );
-        }
-        &.map-overlay-mobile-minimized {
-          background: linear-gradient(
-            rgba(0, 0, 0, 0.8),
-            rgba(0, 0, 0, 0) 168px,
-            transparent 200px,
-            transparent calc(100% - 200px),
-            rgba(0, 0, 0, 0.48) calc(100% - 128px),
-            rgba(0, 0, 0, 0.48) 100%
-          );
-        }
-      }
     }
     .main-layout-router {
       padding-top: calc(62px + var(--safe-area-inset-top));

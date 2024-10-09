@@ -157,7 +157,7 @@ export default {
       handler: function (newval) {
         if (newval) {
           if (this.showMap && newval.location?.lat) {
-            this.addMarker();
+            //  this.addMarker();
           }
         }
       },
@@ -173,6 +173,7 @@ export default {
       }
     },
     initMap() {
+      /*
       this.map = null;
       this.map = L.map(this.$refs.map, this.mapOptions).setView(
         [
@@ -190,6 +191,7 @@ export default {
       });
       this.initTileLayers();
       this.addMarker();
+      */
     },
     addMarker() {
       if (this.markers && this.map.hasLayer(this.markers)) {

@@ -1,173 +1,105 @@
 <template>
-  <div style="height: 100%">
-    <q-btn
-      flat
-      @click="
-        () => {
-          showing = !showing;
-        }
-      "
-      no-caps
-      class="button-control flex items-center"
-      :class="{
-        active: controlArtist && controlArtist.length > 0,
-      }"
-    >
-      <div class="flex items-center row no-wrap">
-        <div
-          class="close-icon-wrapper"
-          v-if="controlArtist && controlArtist.length > 0"
-          @click.stop="
-            (event) => {
-              controlArtist = [];
-              event.preventDefault();
-            }
-          "
-        >
-          <q-icon style="font-size: 16px" name="mdi-close" />
-        </div>
-        <q-icon
-          class="q-mr-sm"
-          size="1.4em"
-          name="las la-music"
-          v-if="!controlArtist || controlArtist?.length == 0"
-        />
-
-        <div class="button-label flex row items-center row no-wrap">
-          <div v-if="!controlArtist || controlArtist.length === 0">
-            <div v-if="$q.screen.lt.lg">Artists</div>
-            <div v-else>All Artists</div>
-          </div>
-          <div v-else>
-            <span v-for="(artist, index) in controlArtist" :key="index"
-              >{{ artist.name
-              }}<span
-                v-if="
-                  index != controlArtist.length - 1 && controlArtist.length > 1
-                "
-              >
-                &
-              </span></span
-            >
-          </div>
-        </div>
-        <q-icon
-          class="q-ml-xs"
-          size="1.4em"
-          name="mdi-menu-down"
-          style="margin-right: -8px"
-          v-if="$q.screen.gt.xs && false"
-        />
-      </div>
-      <MenuWrapper
-        :showing="showing"
-        @hide="onHide()"
-        @show="onShow()"
-        class="menu-wrapper"
-        @scroll="onScrollMainContent($event)"
+  <MenuWrapper
+    :showing="showing"
+    @hide="onHide()"
+    @show="onShow()"
+    class="menu-wrapper"
+    @scroll="onScrollMainContent($event)"
+  >
+    <div class="sticky-input">
+      <q-input
+        debounce="500"
+        clearable
+        class="q-ml-md q-mr-md"
+        v-model="query"
+        ref="input"
+        borderless
+        bg-color="transparent"
+        :label="$t('top_controls.search_artists')"
+        @keyup.enter="$refs.input.blur()"
       >
-        <div class="sticky-input">
-          <q-input
-            debounce="500"
-            clearable
-            class="q-ml-md q-mr-md"
-            v-model="query"
-            ref="input"
-            borderless
-            bg-color="transparent"
-            :label="$t('top_controls.search_artists')"
-            @keyup.enter="$refs.input.blur()"
+        <template v-slot:append>
+          <q-icon
+            name="mdi-magnify"
+            class="q-my-md"
+            v-if="!query || query?.length == 0"
+          />
+        </template>
+      </q-input>
+      <div class="separator" style="width: 100%" />
+    </div>
+    <div class="control-menu" @scroll="onScrollMainContent($event)">
+      <div
+        :class="$q.screen.lt.sm ? 'q-pb-lg' : undefined"
+        class="flex column grow"
+        v-if="artistOptions && artistOptions.length > 0"
+      >
+        <q-list>
+          <q-item-label
+            header
+            class="t3 q-pb-sm"
+            v-if="(!query || query.length == 0) && topArtistsInArea?.length > 0"
+            >Top artists in this area:</q-item-label
           >
-            <template v-slot:append>
-              <q-icon
-                name="mdi-magnify"
-                class="q-my-md"
-                v-if="!query || query?.length == 0"
-              />
-            </template>
-          </q-input>
-          <div class="separator" style="width: 100%" />
-        </div>
-        <div class="control-menu" @scroll="onScrollMainContent($event)">
+
           <div
-            :class="$q.screen.lt.sm ? 'q-pb-lg' : undefined"
-            class="flex column grow"
-            v-if="artistOptions && artistOptions.length > 0"
+            class="flex column"
+            v-for="(artist, index) in topArtistsInArea"
+            :key="index + 'a'"
           >
-            <q-list>
-              <q-item-label
-                header
-                class="t3 q-pb-sm"
-                v-if="
-                  (!query || query.length == 0) && topArtistsInArea?.length > 0
-                "
-                >Top artists in this area:</q-item-label
-              >
-
-              <div
-                class="flex column"
-                v-for="(artist, index) in topArtistsInArea"
-                :key="index + 'a'"
-              >
-                <div class="q-px-md">
-                  <q-separator v-if="index > 0" />
-                </div>
-                <ArtistControlListItem
-                  @click="clickArtist(artist)"
-                  :artist="artist"
-                  :isActive="
-                    controlArtist.findIndex((x) => x.id == artist.id) > -1
-                  "
-                />
-              </div>
-              <q-item-label
-                header
-                class="t3 q-pb-sm"
-                v-if="!query || query.length == 0"
-                >Top artists worldwide:</q-item-label
-              >
-
-              <div
-                class="flex column"
-                v-for="(artist, index) in artistOptions"
-                :key="index"
-              >
-                <div class="q-px-md">
-                  <q-separator v-if="index > 0" />
-                </div>
-                <ArtistControlListItem
-                  @click="clickArtist(artist)"
-                  :artist="artist"
-                  :isActive="
-                    controlArtist.findIndex((x) => x.id == artist.id) > -1
-                  "
-                />
-              </div>
-            </q-list>
-
-            <div
-              class="row justify-center q-my-lg"
-              v-if="artistOptionsHasNext && artistOptions?.length > 0"
-            >
-              <q-spinner-ios
-                :color="$q.dark.isActive ? 'white' : 'black'"
-                size="2em"
-              />
+            <div class="q-px-md">
+              <q-separator v-if="index > 0" />
             </div>
-          </div>
-          <div
-            class="flex row grow justify-center items-center"
-            v-if="artistOptionsLoading && artistOptionsPage == 1"
-          >
-            <q-spinner-ios
-              :color="$q.dark.isActive ? 'white' : 'black'"
-              size="2em"
+            <ArtistControlListItem
+              @click="clickArtist(artist)"
+              :artist="artist"
+              :isActive="controlArtist.findIndex((x) => x.id == artist.id) > -1"
             />
           </div>
+          <q-item-label
+            header
+            class="t3 q-pb-sm"
+            v-if="!query || query.length == 0"
+            >Top artists worldwide:</q-item-label
+          >
+
+          <div
+            class="flex column"
+            v-for="(artist, index) in artistOptions"
+            :key="index"
+          >
+            <div class="q-px-md">
+              <q-separator v-if="index > 0" />
+            </div>
+            <ArtistControlListItem
+              @click="clickArtist(artist)"
+              :artist="artist"
+              :isActive="controlArtist.findIndex((x) => x.id == artist.id) > -1"
+            />
+          </div>
+        </q-list>
+
+        <div
+          class="row justify-center q-my-lg"
+          v-if="artistOptionsHasNext && artistOptions?.length > 0"
+        >
+          <q-spinner-ios
+            :color="$q.dark.isActive ? 'white' : 'black'"
+            size="2em"
+          />
         </div>
-      </MenuWrapper>
-    </q-btn>
-  </div>
+      </div>
+      <div
+        class="flex row grow justify-center items-center"
+        v-if="artistOptionsLoading && artistOptionsPage == 1"
+      >
+        <q-spinner-ios
+          :color="$q.dark.isActive ? 'white' : 'black'"
+          size="2em"
+        />
+      </div>
+    </div>
+  </MenuWrapper>
 </template>
 
 <script>
@@ -183,10 +115,15 @@ export default {
     MenuWrapper,
     ArtistControlListItem,
   },
+  props: {
+    showing: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       query: null,
-      showing: false,
     };
   },
   methods: {
@@ -211,7 +148,7 @@ export default {
       }
     },
     onHide() {
-      this.showing = false;
+      this.$emit('hide');
       // unload additional pages to reduce render load next time the dialog is opened
       this.artistOptions = this.artistOptions.slice(
         0,

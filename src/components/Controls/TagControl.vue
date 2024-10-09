@@ -1,172 +1,97 @@
 <template>
-  <div style="height: 100%">
-    <q-btn
-      no-caps
-      class="button-control flex items-center"
-      :class="{
-        active: controlTag?.length > 0,
-      }"
-      @click="
-        () => {
-          showing = !showing;
-        }
-      "
-    >
-      <div class="flex items-center row no-wrap">
-        <div
-          class="close-icon-wrapper"
-          v-if="controlTag?.length > 0"
-          @click.stop="
-            () => {
-              controlTag = [];
-              event.preventDefault();
-            }
-          "
-        >
-          <q-icon style="font-size: 16px" name="mdi-close" />
-        </div>
-
-        <q-icon
-          class="q-mr-sm"
-          size="1.4em"
-          name="mdi-pound"
-          v-if="!controlTag || controlTag?.length == 0"
-        />
-
-        <div class="button-label flex row items-center row no-wrap">
-          <div v-if="!controlTag || controlTag.length === 0">
-            <span v-if="$q.screen.gt.md">All Tags</span><span v-else>Tags</span>
-          </div>
-          <div v-else>
-            <span v-for="(tag, index) in controlTag" :key="index"
-              >{{ tag.tag
-              }}<span
-                v-if="index != controlTag.length - 1 && controlTag.length > 1"
-              >
-                +
-              </span></span
-            >
-          </div>
-          <q-icon
-            class="q-ml-xs"
-            size="1.4em"
-            name="mdi-menu-down"
-            style="margin-right: -8px"
-            v-if="$q.screen.gt.xs && false"
-          />
-        </div>
-
-        <!--
-        <i
-          class="q-select__dropdown-icon material-icons q-icon notranslate q-mr-none q-pr-none"
-          :class="{ 'rotate-180': menuShowing }"
-        >
-          arrow_drop_down
-        </i>
-        -->
-      </div>
-
-      <MenuWrapper
-        :showing="showing"
-        @hide="onHide()"
-        @show="onShow()"
-        class="menu-wrapper"
-        @scroll="onScrollMainContent($event)"
+  <MenuWrapper
+    :showing="showing"
+    @hide="onHide()"
+    @show="onShow()"
+    class="menu-wrapper"
+    @scroll="onScrollMainContent($event)"
+  >
+    <div class="sticky-input">
+      <q-input
+        debounce="500"
+        clearable
+        class="q-ml-md q-mr-md"
+        v-model="query"
+        borderless
+        ref="input"
+        bg-color="transparent"
+        :label="$t('top_controls.search_tags')"
+        @keyup.enter="$refs.input.blur()"
       >
-        <div class="sticky-input">
-          <q-input
-            debounce="500"
-            clearable
-            class="q-ml-md q-mr-md"
-            v-model="query"
-            borderless
-            ref="input"
-            bg-color="transparent"
-            :label="$t('top_controls.search_tags')"
-            @keyup.enter="$refs.input.blur()"
+        <template v-slot:append>
+          <q-icon
+            name="mdi-magnify"
+            class="q-my-md"
+            v-if="!query || query?.length == 0"
+          />
+        </template>
+      </q-input>
+      <div class="separator" style="width: 100%" />
+    </div>
+    <div @scroll="onScrollMainContent($event)" class="control-menu">
+      <div
+        :class="$q.screen.lt.sm ? 'q-pb-lg' : undefined"
+        class="flex column grow"
+        v-if="tagOptions && tagOptions.length > 0"
+      >
+        <q-list>
+          <q-item-label
+            header
+            class="t3 q-pb-sm inter"
+            v-if="controlTag?.length > 0"
+            >Selected tags:</q-item-label
           >
-            <template v-slot:append>
-              <q-icon
-                name="mdi-magnify"
-                class="q-my-md"
-                v-if="!query || query?.length == 0"
-              />
-            </template>
-          </q-input>
-          <div class="separator" style="width: 100%" />
-        </div>
-        <div @scroll="onScrollMainContent($event)" class="control-menu">
           <div
-            :class="$q.screen.lt.sm ? 'q-pb-lg' : undefined"
-            class="flex column grow"
-            v-if="tagOptions && tagOptions.length > 0"
+            class="flex row q-gutter-sm q-px-md q-pt-sm q-mb-xs"
+            v-if="controlTag?.length > 0"
           >
-            <q-list>
-              <q-item-label
-                header
-                class="t3 q-pb-sm inter"
-                v-if="controlTag?.length > 0"
-                >Selected tags:</q-item-label
-              >
-              <div
-                class="flex row q-gutter-sm q-px-md q-pt-sm q-mb-xs"
-                v-if="controlTag?.length > 0"
-              >
-                <Tag
-                  :value="tag.tag"
-                  :key="index"
-                  @click="clickTag(tag)"
-                  :selected="true"
-                  :showIcons="true"
-                  v-for="(tag, index) in controlTag"
-                />
-              </div>
+            <Tag
+              :value="tag.tag"
+              :key="index"
+              @click="clickTag(tag)"
+              :selected="true"
+              :showIcons="true"
+              v-for="(tag, index) in controlTag"
+            />
+          </div>
 
-              <q-item-label
-                header
-                class="t3 q-pb-sm inter"
-                v-if="
-                  (!query || query.length == 0) && topTagsInArea?.length > 0
-                "
-                >Top tags in this area:</q-item-label
-              >
-              <div
-                class="flex row q-gutter-sm q-px-md q-pt-sm q-mb-xs"
-                v-if="
-                  (!query || query.length == 0) && topTagsInArea?.length > 0
-                "
-              >
-                <Tag
-                  :value="tag.tag"
-                  :key="index"
-                  @click="clickTag(tag)"
-                  :disabled="
-                    controlTag?.findIndex((x) => x.tag === tag.tag) > -1
-                  "
-                  v-for="(tag, index) in topTagsInArea"
-                />
-              </div>
-              <q-item-label
-                header
-                class="t3 q-pb-sm inter"
-                v-if="!query || query.length == 0"
-                >Top tags worldwide:</q-item-label
-              >
-              <q-item-label header class="t3 q-pb-sm inter" v-else
-                >Search results:</q-item-label
-              >
-              <div class="flex row q-gutter-sm q-px-md q-pt-sm q-pb-lg">
-                <Tag
-                  :value="tag.tag"
-                  :key="index"
-                  @click="clickTag(tag)"
-                  :disabled="
-                    controlTag?.findIndex((x) => x.tag === tag.tag) > -1
-                  "
-                  v-for="(tag, index) in tagOptions"
-                />
-              </div>
-              <!--
+          <q-item-label
+            header
+            class="t3 q-pb-sm inter"
+            v-if="(!query || query.length == 0) && topTagsInArea?.length > 0"
+            >Top tags in this area:</q-item-label
+          >
+          <div
+            class="flex row q-gutter-sm q-px-md q-pt-sm q-mb-xs"
+            v-if="(!query || query.length == 0) && topTagsInArea?.length > 0"
+          >
+            <Tag
+              :value="tag.tag"
+              :key="index"
+              @click="clickTag(tag)"
+              :disabled="controlTag?.findIndex((x) => x.tag === tag.tag) > -1"
+              v-for="(tag, index) in topTagsInArea"
+            />
+          </div>
+          <q-item-label
+            header
+            class="t3 q-pb-sm inter"
+            v-if="!query || query.length == 0"
+            >Top tags worldwide:</q-item-label
+          >
+          <q-item-label header class="t3 q-pb-sm inter" v-else
+            >Search results:</q-item-label
+          >
+          <div class="flex row q-gutter-sm q-px-md q-pt-sm q-pb-lg">
+            <Tag
+              :value="tag.tag"
+              :key="index"
+              @click="clickTag(tag)"
+              :disabled="controlTag?.findIndex((x) => x.tag === tag.tag) > -1"
+              v-for="(tag, index) in tagOptions"
+            />
+          </div>
+          <!--
                                 <div
                 class="flex column"
                 v-for="(tag, index) in tagOptions"
@@ -193,30 +118,28 @@
                 </q-item>
                 </div>
               -->
-            </q-list>
-            <div
-              class="row justify-center q-my-lg"
-              v-if="tagOptionsHasNext && tagOptions?.length > 0"
-            >
-              <q-spinner-ios
-                :color="$q.dark.isActive ? 'white' : 'black'"
-                size="2em"
-              />
-            </div>
-          </div>
-          <div
-            class="flex row grow justify-center items-center"
-            v-if="tagOptionsLoading && tagOptionsPage == 1"
-          >
-            <q-spinner-ios
-              :color="$q.dark.isActive ? 'white' : 'black'"
-              size="2em"
-            />
-          </div>
+        </q-list>
+        <div
+          class="row justify-center q-my-lg"
+          v-if="tagOptionsHasNext && tagOptions?.length > 0"
+        >
+          <q-spinner-ios
+            :color="$q.dark.isActive ? 'white' : 'black'"
+            size="2em"
+          />
         </div>
-      </MenuWrapper>
-    </q-btn>
-  </div>
+      </div>
+      <div
+        class="flex row grow justify-center items-center"
+        v-if="tagOptionsLoading && tagOptionsPage == 1"
+      >
+        <q-spinner-ios
+          :color="$q.dark.isActive ? 'white' : 'black'"
+          size="2em"
+        />
+      </div>
+    </div>
+  </MenuWrapper>
 </template>
 
 <script>
@@ -228,13 +151,18 @@ import Tag from 'components/EventPage/Tags/TagComponent.vue';
 import _ from 'lodash';
 
 export default {
+  props: {
+    showing: {
+      type: Boolean,
+      default: false,
+    },
+  },
   components: {
     MenuWrapper,
     Tag,
   },
   data() {
     return {
-      showing: false,
       query: null,
     };
   },
@@ -247,7 +175,6 @@ export default {
   methods: {
     ...mapActions(useQueryStore, ['loadTagOptions']),
     onShow() {
-      console.log('onshow');
       // used to stop the ed list refrshing on mobile viewport size change
       // this.blockUpdates = true;
       if (!this.tagOptions || this.tagOptions.length === 0) {
@@ -255,8 +182,7 @@ export default {
       }
     },
     onHide() {
-      this.showing = false;
-
+      this.$emit('hide');
       // unload additional pages to reduce render load next time the dialog is opened
       this.tagOptions = this.tagOptions.slice(0, this.tagOptionsPerPage);
       this.tagOptionsPage = 2; // we reset back to page 1

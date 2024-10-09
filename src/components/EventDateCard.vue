@@ -16,6 +16,10 @@
               lat: event.location.lat,
               lng: event.location.lng,
             }),
+            dateString: computedDateString,
+            locationDescription: event.location.description,
+            description: event.event.description,
+            tags: JSON.stringify(event.event.event_tags),
           },
         }"
       >
@@ -288,6 +292,13 @@ export default {
     },
     imgThumbXsUrl() {
       return this.event?.event?.cover_items?.[0]?.thumb_xxs_url;
+    },
+    computedDateString() {
+      if (this.event?.date_confirmed) {
+        return this.localDateWithWeekday(this.event.start_naive, this.event.tz);
+      } else if (this.event) {
+        return this.monthYear(this.event.start_naive, this.event.tz);
+      } else return '';
     },
   },
   created() {

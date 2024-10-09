@@ -228,7 +228,7 @@ export const useNearbyStore = defineStore('nearby', {
         this.nearbyArtistsSuccess = true;
 
         // don't do this when searching for locations
-        if (!main.userLocationFromSearch) {
+        if (!main.currentLocationFromSearch) {
           this.setMapBoundsNearby();
         }
 

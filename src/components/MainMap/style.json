@@ -1,0 +1,41 @@
+{
+  "version": 8,
+  "id": "streets",
+  "name": "Streets",
+  "sources": {
+    "openmaptiles": {
+      "url": "https://api.maptiler.com/tiles/v3/tiles.json?key=cQX2iET1gmOW38bedbUh",
+      "type": "vector"
+    },
+    "maptiler_attribution": {
+      "attribution": "<a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a> <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap contributors</a>",
+      "type": "vector"
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "layout": { "visibility": "visible" },
+      "paint": {
+        "background-color": {
+          "stops": [
+            [6, "rgba(252, 247, 229, 1)"],
+            [10, "rgba(252, 247, 229, 1)"],
+            [14, "rgba(246, 241, 229, 1)"],
+            [15, "rgba(246, 241, 229, 1)"]
+          ]
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "maptiler:copyright": "This style was generated on MapTiler Cloud. Usage outside of MapTiler Cloud requires valid MapTiler Data Package: https://www.maptiler.com/data/package/ -- please contact us."
+  },
+  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=cQX2iET1gmOW38bedbUh",
+  "sprite": "https://api.maptiler.com/maps/streets/sprite",
+  "bearing": 0,
+  "pitch": 0,
+  "center": [0, 0],
+  "zoom": 1
+}

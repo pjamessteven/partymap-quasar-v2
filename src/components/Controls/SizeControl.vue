@@ -1,85 +1,37 @@
 <template>
-  <div style="height: 100%">
-    <q-btn
-      flat
-      no-caps
-      @click="
-        () => {
-          showing = !showing;
-        }
-      "
-      class="button-control flex items-center"
-      :class="{
-        active: controlSize && controlSize.length > 0,
-      }"
+  <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
+    <div
+      class="q-gutter-sm flex column q-pr-md q-pa-xs"
+      :class="$q.screen.lt.sm ? 'q-py-sm q-pb-xl' : ''"
     >
-      <div class="flex items-center row no-wrap">
-        <div
-          class="close-icon-wrapper"
-          v-if="controlSize && controlSize.length > 0"
-          @click.stop="
-            () => {
-              controlSize = [];
-              menuShowing = false;
-            }
-          "
-        >
-          <q-icon style="font-size: 18px" name="mdi-close" />
-        </div>
-        <q-icon
-          class="q-mr-sm"
-          size="1.4em"
-          name="las la-user-friends"
-          v-else
-        />
-        <div class="button-label flex row items-center row no-wrap">
-          <div>
-            {{ $t('top_controls.select_size') }}
-          </div>
-        </div>
-        <q-icon
-          class="q-ml-xs"
-          size="1.4em"
-          name="mdi-menu-down"
-          style="margin-right: -8px"
-          v-if="$q.screen.gt.xs"
-        />
-      </div>
-      <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
-        <div
-          class="q-gutter-sm flex column q-pr-md q-pa-xs"
-          :class="$q.screen.lt.sm ? 'q-py-sm q-pb-xl' : ''"
-        >
-          <q-checkbox
-            v-model="controlSize"
-            val="0,1000"
-            :label="$t('top_controls.less_than_one_thousand')"
-          />
-          <q-checkbox
-            v-model="controlSize"
-            val="1000,5000"
-            :label="'1000 - 5000 ' + $t('top_controls.people')"
-          />
-          <q-checkbox
-            v-model="controlSize"
-            val="5000,20000"
-            :label="'5000 - 20,000 ' + $t('top_controls.people')"
-          />
-          <q-checkbox
-            v-model="controlSize"
-            val="20000,50000"
-            :label="'20,000 - 50,000 ' + $t('top_controls.people')"
-          />
+      <q-checkbox
+        v-model="controlSize"
+        val="0,1000"
+        :label="$t('top_controls.less_than_one_thousand')"
+      />
+      <q-checkbox
+        v-model="controlSize"
+        val="1000,5000"
+        :label="'1000 - 5000 ' + $t('top_controls.people')"
+      />
+      <q-checkbox
+        v-model="controlSize"
+        val="5000,20000"
+        :label="'5000 - 20,000 ' + $t('top_controls.people')"
+      />
+      <q-checkbox
+        v-model="controlSize"
+        val="20000,50000"
+        :label="'20,000 - 50,000 ' + $t('top_controls.people')"
+      />
 
-          <q-checkbox
-            v-model="controlSize"
-            val="50000,200000"
-            :label="$t('top_controls.more_than_fifty_thousand')"
-          />
-        </div>
-      </MenuWrapper>
-    </q-btn>
-  </div>
+      <q-checkbox
+        v-model="controlSize"
+        val="50000,200000"
+        :label="$t('top_controls.more_than_fifty_thousand')"
+      />
+    </div>
+  </MenuWrapper>
 </template>
 
 <script>
@@ -91,19 +43,19 @@ export default {
   components: {
     MenuWrapper,
   },
-  props: {},
+  props: {
+    showing: {
+      default: false,
+      type: Boolean,
+    },
+  },
   data() {
-    return {
-      showing: false,
-    };
+    return {};
   },
   watch: {},
   methods: {
     onHide() {
-      this.showing = false;
-    },
-    onShow() {
-      this.showing = true;
+      this.$emit('hide');
     },
   },
   computed: {

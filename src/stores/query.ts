@@ -41,6 +41,7 @@ interface QueryState {
   // the following state is for dynamic options shown in control dropdowns
 
   topArtistsInArea: Artist[];
+  topRegionsInArea: Region[];
 
   artistOptions: Artist[];
   artistOptionsHasNext: boolean;
@@ -124,6 +125,8 @@ export const useQueryStore = defineStore('query', {
     controlRegion: null,
     controlEmptyLineup: false,
     controlDateUnconfirmed: false,
+
+    topRegionsInArea: [],
 
     topArtistsInArea: [],
 
@@ -321,7 +324,10 @@ export const useQueryStore = defineStore('query', {
           radius: undefined,
           bounds:
             map.mapBounds && !this.controlFavorites
-              ? JSON.stringify(map.mapBounds)
+              ? JSON.stringify({
+                  _northEast: map.mapBounds._ne,
+                  _southWest: map.mapBounds._sw,
+                })
               : undefined,
           location: main.userLocation
             ? JSON.stringify(main.userLocation)
@@ -365,6 +371,7 @@ export const useQueryStore = defineStore('query', {
             // these things are only returned on first page
             this.topTagsInArea = response.data.top_tags;
             this.topArtistsInArea = response.data.top_artists;
+            this.topRegionsInArea = response.data.top_regions;
           } else {
             this.eventDates = this.eventDates?.concat(response.data.items);
             groupEventDatesByMonth(
@@ -398,7 +405,10 @@ export const useQueryStore = defineStore('query', {
           per_page: 10,
           bounds:
             map.mapBounds && !this.controlFavorites
-              ? JSON.stringify(map.mapBounds)
+              ? JSON.stringify({
+                  _northEast: map.mapBounds._ne,
+                  _southWest: map.mapBounds._sw,
+                })
               : undefined,
           radius: undefined,
           sort: 'event_count',

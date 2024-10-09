@@ -6,7 +6,7 @@ import { Notify } from 'quasar';
 import { i18n } from 'src/boot/i18n';
 
 export const API_URL =
-  process.env.NODE_ENV === 'development' && false
+  process.env.NODE_ENV === 'developments'
     ? 'http://localhost:5000/api'
     : 'https://api.partymap.com/api';
 

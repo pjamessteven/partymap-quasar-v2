@@ -142,14 +142,15 @@ export default {
     height: 172px;
     max-width: 144px;
     .artist-name {
-      //font-weight: 400 !important;
+      font-weight: 400 !important;
+      font-size: small;
     }
   }
 
   &.size-lg {
-    width: 156px;
-    height: 186px;
-    max-width: 156px;
+    width: 164px;
+    height: 196px;
+    max-width: 164px;
   }
 
   .card-bottom-background {
@@ -170,7 +171,7 @@ export default {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100%;
+    height: 99%; // dont ask
     transition: all 0.3s ease;
     .artist-head-img {
       border-radius: 100%;

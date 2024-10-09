@@ -9,14 +9,14 @@
         'sidebar-mobile-expanded':
           mainStore.showPanelBackground && $q.screen.lt.sm,
         iphone: $q.platform.is.iphone || $q.platform.is.ipod,
+        dim:
+          mainStore.menubarOpacity === 1 &&
+          $route.name === 'EventPage' &&
+          $q.screen.gt.lg,
       }"
     >
       <div class="sidebar-content flex column no-wrap">
-        <div
-          style="height: 100%; width: 100%"
-          class="sidebar-content-inner"
-          @wheel="handleInnerWheel"
-        >
+        <div style="height: 100%; width: 100%" class="sidebar-content-inner">
           <NearbyView
             style="height: 100%; width: 100%"
             v-if="mainStore.sidebarPanel === 'nearby'"
@@ -24,8 +24,6 @@
           <keep-alive>
             <ExploreView
               style="height: 100%; width: 100%"
-              @hidePanel="hidePanel"
-              @showPanel="showPanel"
               v-if="mainStore.sidebarPanel === 'explore'"
             />
           </keep-alive>
@@ -140,13 +138,13 @@ const lastx = ref();
   justify-content: start;
   display: flex;
   .sidebar {
-    cursor: grab;
+    //cursor: grab;
     position: relative;
     flex-shrink: 0;
     z-index: 500;
     left: 0px;
     padding-top: 64px;
-    width: 532px;
+    width: 568px;
     max-height: 100%;
     height: 100%;
     overflow: hidden;
@@ -155,6 +153,13 @@ const lastx = ref();
     user-select: none;
     display: flex;
     justify-content: center;
+    transition: opacity 0.3s ease;
+    &.dim {
+      opacity: 0.68;
+    }
+    &:hover {
+      opacity: 1;
+    }
     .resizer {
       position: absolute;
       top: 50%;

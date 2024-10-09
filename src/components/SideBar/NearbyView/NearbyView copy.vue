@@ -61,7 +61,7 @@
                     name="mdi-crosshairs-gps"
                     class=""
                     size="sm"
-                    v-if="fineLocation && !userLocationFromSearch"
+                    v-if="fineLocation && !currentLocationFromSearch"
                   />
                   <q-icon size="sm" name="mdi-crosshairs" class="" v-else />
                 </div>
@@ -881,7 +881,7 @@ export default {
     ...mapState(useMainStore, [
       'userLocationLoading',
       'userLocation',
-      'userLocationFromSearch',
+      'currentLocationFromSearch',
       'userLocationCity',
       'userLocationCountry',
       'fineLocation',

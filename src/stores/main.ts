@@ -6,6 +6,7 @@ import { Geolocation } from '@capacitor/geolocation';
 import { Notify } from 'quasar';
 import { Screen, Platform } from 'quasar';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
+import { LngLat, LngLatLike } from 'maplibre-gl';
 
 interface MainStoreState {
   windowWidth: number;
@@ -26,11 +27,14 @@ interface MainStoreState {
   overlayOpacity: number;
   ipInfo: IpInfo | null;
   userLocationLoading: boolean;
-  userLocation: { lat: number; lng: number } | null;
-  userLocationFromSearch: boolean;
+  fineLocation: boolean;
+  userLocation: LngLatLike | null;
   userLocationCity: string | null;
   userLocationCountry: string | null;
-  fineLocation: boolean;
+  currentLocation: LngLatLike | null;
+  currentLocationCity: string | null;
+  currentLocationCountry: string | null;
+  currentLocationFromSearch: boolean;
   groupEventsByMonth: boolean;
   compactView: boolean;
   routerHistory: RouteLocationNormalizedLoaded[];
@@ -63,7 +67,10 @@ export const useMainStore = defineStore('main', {
     userLocation: null,
     userLocationCity: null,
     userLocationCountry: null,
-    userLocationFromSearch: false,
+    currentLocationFromSearch: false,
+    currentLocation: null,
+    currentLocationCity: '',
+    currentLocationCountry: null,
     fineLocation: false,
     groupEventsByMonth: true,
     compactView: true,
@@ -88,24 +95,27 @@ export const useMainStore = defineStore('main', {
         };
         this.userLocationCity = response.data.city;
         this.userLocationCountry = response.data.country;
-        this.userLocationFromSearch = false;
+        this.currentLocationFromSearch = false;
         this.userLocationLoading = false;
         return;
       } catch (error) {
         //fail silently
         console.log(error);
         this.userLocationLoading = false;
-        this.userLocationCity = 'Arghhhh!';
+        this.userLocationCity = 'No IP location!';
 
         return;
         //throw error;
       }
     },
-    async reverseGecodeUserLocation() {
+    async reverseGecodeLocation(coords: LngLatLike, zoom = 22) {
+      //
+      let city;
+      let country;
+      let state;
       try {
-        console.log('reverse', this.userLocation);
         const response: any = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?lat=${this.userLocation.lat}&lon=${this.userLocation.lng}&format=json&addressdetails=1`,
+          `https://nominatim.openstreetmap.org/reverse?lat=${coords.lat}&lon=${coords.lng}&format=json&addressdetails=1`,
           {
             method: 'GET',
             headers: {
@@ -115,111 +125,110 @@ export const useMainStore = defineStore('main', {
         );
         const data = await response.json();
         const address = data.address;
-        console.log(data);
+
         if (address?.city?.length > 0) {
-          this.userLocationCity = address.city;
+          city = address.city;
         } else if (address?.town?.length > 0) {
-          this.userLocationCity = address.town;
+          city = address.town;
         } else if (address?.village?.length > 0) {
-          this.userLocationCity = address.village;
+          city = address.village;
         } else if (address.municipality) {
-          this.userLocationCity = address.municipality;
+          city = address.municipality;
         } else if (address.administrativeLevels?.level1short) {
-          this.userLocationCity = address.administrativeLevels?.level1short;
+          city = address.administrativeLevels?.level1short;
         } else if (address.administrativeLevels?.level2short) {
-          this.userLocationCity = address.administrativeLevels?.level2short;
+          city = address.administrativeLevels?.level2short;
         } else if (address.suburb) {
-          this.userLocationCity = address.suburb;
+          city = address.suburb;
         } else if (address.suburb) {
-          this.userLocationCity = address.neighbourhood;
+          city = address.neighbourhood;
         } else if (address.county) {
-          this.userLocationCity = address.county;
+          city = address.county;
         } else if (address.state_district) {
-          this.userLocationCity = address.state_district;
+          city = address.state_district;
         }
-        this.userLocationCountry = address.country;
-        this.userLocationLoading = false;
-        this.userLocationFromSearch = false;
+        country = address.country;
+        state = address.state || address.state_district;
       } catch (e) {
+        throw e;
         // just show the co-ords if reverse geocoding fails
-        this.userLocationCity = '...';
-        this.userLocationLoading = false;
       }
+      return { city, country, state };
     },
     async getFineLocation() {
-      return new Promise((resolve, reject) => {
-        if (navigator.geolocation && !Platform.is.capacitor) {
-          this.userLocationLoading = true;
-          navigator.geolocation.getCurrentPosition(
-            async (position) => {
-              this.fineLocation = true;
-              // show coords while loading place name
-              if (!this.userLocation) {
-                const unknownCityCoords =
-                  position.coords.latitude.toFixed(1) +
-                  ', ' +
-                  position.coords.longitude.toFixed(1);
-                //  this.userLocationCity = unknownCityCoords;
-                this.userLocationCity = unknownCityCoords;
-              }
+      let fineLocation;
+      try {
+        fineLocation = await new Promise<LngLatLike>((resolve, reject) => {
+          if (navigator.geolocation && !Platform.is.capacitor) {
+            this.userLocationLoading = true;
+            navigator.geolocation.getCurrentPosition(
+              async (position) => {
+                // show coords while loading place name
+                if (!this.userLocation) {
+                  const unknownCityCoords =
+                    position.coords.latitude.toFixed(1) +
+                    ', ' +
+                    position.coords.longitude.toFixed(1);
+                  //  this.userLocationCity = unknownCityCoords;
+                  this.userLocationCity = unknownCityCoords;
+                }
 
-              this.userLocation = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-              };
-              await this.reverseGecodeUserLocation();
+                resolve({
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude,
+                });
+              },
+              () => {
+                reject(null);
+              },
+              { timeout: 10000 }
+            );
+          } else if (Platform.is.capacitor) {
+            Geolocation.getCurrentPosition()
+              .then(async (position) => {
+                // show coords while loading place name
+                if (!this.userLocation) {
+                  const unknownCityCoords =
+                    position.coords.latitude.toFixed(1) +
+                    ', ' +
+                    position.coords.longitude.toFixed(1);
 
-              resolve(null);
-            },
-            () => {
-              Notify.create({
-                message: 'Using rough location from your IP address...',
+                  // this.userLocationCity = unknownCityCoords;
+                  this.userLocationCity = unknownCityCoords;
+                }
+
+                resolve({
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude,
+                });
+              })
+              .catch((error) => {
+                reject(null);
               });
-              Notify.create({
-                message: "Can't get precise location",
-              });
-              reject(null);
-            },
-            { timeout: 10000 }
-          );
-        } else if (Platform.is.capacitor) {
-          Geolocation.getCurrentPosition()
-            .then(async (position) => {
-              this.fineLocation = true;
-              // show coords while loading place name
-              if (!this.userLocation) {
-                const unknownCityCoords =
-                  position.coords.latitude.toFixed(1) +
-                  ', ' +
-                  position.coords.longitude.toFixed(1);
+          } else {
+            reject(null);
+          }
+        });
+      } catch (e) {}
 
-                // this.userLocationCity = unknownCityCoords;
-                this.userLocationCity = unknownCityCoords;
-              }
+      if (fineLocation) {
+        this.fineLocation = true;
+        this.userLocation = fineLocation;
+        const revereseGeo = await this.reverseGecodeLocation(fineLocation);
+        this.userLocationCountry = revereseGeo.country;
+        this.userLocationCity = revereseGeo.city;
+        this.userLocationLoading = false;
+        this.currentLocationFromSearch = false;
+      } else {
+        this.fineLocation = true;
+        Notify.create({
+          message:
+            "Can't get your fine location! \n\n Using rough  IP location instead.",
+        });
 
-              this.userLocation = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-              };
-
-              await this.reverseGecodeUserLocation();
-
-              resolve(null);
-            })
-            .catch((error) => {
-              Notify.create({
-                message: 'Using rough location from your IP address...',
-              });
-              Notify.create({
-                message: 'Cannot get your location',
-              });
-              reject(null);
-            });
-        } else {
-          this.userLocationLoading = false;
-          resolve(null);
-        }
-      });
+        this.userLocationLoading = false;
+        throw new Error('Cant get fine location');
+      }
     },
   },
 });

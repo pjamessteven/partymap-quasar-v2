@@ -77,61 +77,128 @@
           "
         >
           <div class="flex column no-wrap scroll-content">
-            <div class="flex row items-center q-ml-lg">
-              <router-link
-                :to="{ name: 'Explore' }"
-                style="text-decoration: none; color: inherit"
-              >
-                <q-btn
-                  flat
-                  class=""
-                  :class="{
-                    'q-ml-md q-pa-sm': $q.screen.lt.md,
-                    'q-pa-md': $q.screen.gt.sm,
-                  }"
-                  :style="
-                    $q.screen.gt.sm
-                      ? 'margin-left: -16px; border-radius: 100px!important;'
-                      : 'margin-left: 0px; border-radius: 100px!important;'
-                  "
+            <div class="flex row items-start q-px-lg q-mb-sm no-wrap">
+              <div class="flex row no-wrap items-start">
+                <router-link
+                  :to="{ name: 'Explore' }"
+                  style="text-decoration: none; color: inherit"
                 >
-                  <template v-slot:default>
-                    <q-icon size="sm" name="mdi-crosshairs" />
-                  </template>
-                </q-btn>
-              </router-link>
-              <NearbyCountrySelect />
-            </div>
-            <!-- tags -->
-            <div
-              class="flex column q-mb-lg q-mt-lg q-pt-sm"
-              v-if="
-                topTagsInArea?.length >= 1 &&
-                !eventDatesLoading &&
-                !mapMoving &&
-                $q.screen.gt.xs
-              "
-            >
-              <div
-                class="q-pb-md location-header"
-                :class="
-                  $q.screen.gt.sm
-                    ? 'q-px-lg  t1 inter semibold'
-                    : ' t1 inter semibold'
-                "
-              >
-                <div class="inter bold">Hot tags in this area</div>
+                  <q-btn
+                    flat
+                    class=""
+                    :class="{
+                      'q-ml-md q-pa-sm': $q.screen.lt.md,
+                      'q-pa-md': $q.screen.gt.sm,
+                    }"
+                    :style="
+                      $q.screen.gt.sm
+                        ? 'margin-left: -16px; border-radius: 100px!important;'
+                        : 'margin-left: 0px; border-radius: 100px!important;'
+                    "
+                  >
+                    <template v-slot:default>
+                      <q-icon size="sm" name="mdi-crosshairs" />
+                    </template>
+                  </q-btn>
+                </router-link>
+
+                <NearbyCountrySelect />
               </div>
 
               <div
-                :style="$q.screen.gt.sm ? 'margin-bottom: -8px' : ''"
-                v-if="topTagsInArea && topTagsInArea.length > 0"
+                class="flex row items-start no-wrap q-ml-sm"
+                style="min-width: 220px"
               >
+                <q-icon name="las la-calendar" class="q-mr q-pa-md" size="sm" />
+                <DesktopDateSelect />
+              </div>
+            </div>
+
+            <!-- cities-->
+            <div
+              class="flex column q-mb-lg q-mt-md q-pt-sm"
+              v-if="topRegionsInArea?.length > 0 && mapZoomLevel < 7"
+            >
+              <div
+                v-if="false"
+                class="q-pb-md q-mt-sm t1 header"
+                :class="$q.screen.gt.sm ? 'q-px-lg  ' : ' '"
+              >
+                <div class="inter bolder text-large">Happening Places</div>
+              </div>
+
+              <div :style="$q.screen.gt.sm ? 'margin-bottom: -24px' : ''">
                 <CustomQScroll
                   horizontal
                   class="tag-scroll-area"
                   :style="
-                    topTagsInArea.length > 14 ? 'height: 90px' : 'height: 45px'
+                    topRegionsInArea.length > 14
+                      ? 'height: 72px'
+                      : 'height: 36px'
+                  "
+                  style="width: 100%"
+                  :thumb-style="
+                    $q.screen.gt.sm
+                      ? { bottom: '0px', height: '0px' }
+                      : { bottom: '0px', height: '0px' }
+                  "
+                >
+                  <div
+                    class="flex column inter bolder text-h6 t3"
+                    style="word-break: keep-all; white-space: nowrap"
+                    :class="$q.screen.gt.sm ? 'q-pl-lg ' : 'q-pl-lg'"
+                  >
+                    <div class="flex row no-wrap q-gutter-md q-pr-xl">
+                      <div
+                        v-for="(region, index) in computedRegions1"
+                        :key="index"
+                        @click="clickTag(tag)"
+                        style="text-transform: capitalize"
+                        :class="$q.platform.is.ios ? 'no-hover' : ''"
+                      >
+                        {{ region.long_name }}
+                      </div>
+                    </div>
+
+                    <div
+                      class="flex row no-wrap q-gutter-md q-pt-sm"
+                      v-if="computedRegions2.length > 0"
+                    >
+                      <div
+                        v-for="(region, index) in computedRegions2"
+                        :key="index"
+                        @click="clickTag(tag)"
+                        style="text-transform: capitalize"
+                        :class="$q.platform.is.ios ? 'no-hover' : ''"
+                      >
+                        {{ region.long_name }}
+                      </div>
+                    </div>
+                  </div>
+                </CustomQScroll>
+              </div>
+            </div>
+            <!-- tags -->
+            <div
+              class="flex column q-mb-lg q-mt-md q-pt-sm"
+              v-if="topTagsInArea?.length > 0"
+            >
+              <div
+                class="q-pb-md header"
+                :class="$q.screen.gt.sm ? 'q-px-lg  t1' : ' t1 inter semibold'"
+              >
+                <div class="">Hot Tags</div>
+              </div>
+
+              <div :style="$q.screen.gt.sm ? 'margin-bottom: -8px' : ''">
+                <CustomQScroll
+                  horizontal
+                  class="tag-scroll-area"
+                  :style="
+                    topTagsInArea.length > 14 &&
+                    !(topTagsInArea.length > 13 && controlTag.length > 0)
+                      ? 'height: 90px'
+                      : 'height: 45px'
                   "
                   style="width: 100%"
                   :thumb-style="
@@ -191,25 +258,20 @@
             </div>
             <div
               class="flex column"
-              v-if="
-                topArtistsInArea?.length > 5 && !eventDatesLoading && !mapMoving
-              "
+              v-if="topArtistsInArea?.length > 5"
+              style="margin-bottom: -8px"
             >
               <div
-                class="location-header q-pb-md inter bold"
-                :class="
-                  $q.screen.gt.sm
-                    ? 'q-px-lg t1 inter semibold'
-                    : 'q-pl-md t1 semibold'
-                "
+                class="header t1 q-pb-sm"
+                :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
               >
-                High profile artists
+                High Profile Artists
               </div>
               <ArtistsComponent
                 :class="$q.screen.gt.sm ? 'q-pl- q-mb-md' : ''"
                 :artists="topArtistsInArea"
                 :size="$q.screen.gt.lg ? 'lg' : 'md'"
-                style="margin-top: -12px"
+                style="margin-top: -8px"
               />
             </div>
             <!-- theres no point in this 
@@ -271,7 +333,7 @@
         :style="
           $q.screen.lt.sm
             ? 'height: 144px; position: absolute; width: 100%; z-index: 500'
-            : 'height: 100%; position: absolute; width: 100%; z-index: 500'
+            : 'height: 100%; padding-top: 96px; position: absolute; width: 100%; z-index: 500'
         "
       >
         <div class="flex column items-center no-wrap">
@@ -378,6 +440,7 @@ import { useAuthStore } from 'src/stores/auth';
 import { mapActions, mapWritableState, mapState } from 'pinia';
 import CustomQScroll from 'components/CustomQScroll.vue';
 import NearbyCountrySelect from '../NearbyView/NearbyCountrySelect.vue';
+import DesktopDateSelect from '../NearbyView/DesktopDateSelect.vue';
 
 export default {
   components: {
@@ -388,6 +451,7 @@ export default {
     EventDatePosterList,
     CustomQScroll,
     NearbyCountrySelect,
+    DesktopDateSelect,
   },
 
   async mounted() {
@@ -630,6 +694,7 @@ export default {
       'anyFiltersEnabled',
       'topTagsInArea',
       'topArtistsInArea',
+      'topRegionsInArea',
       'controlDateUnconfirmed',
       'controlEmptyLineup',
     ]),
@@ -660,6 +725,20 @@ export default {
     computedTags2() {
       if (this.topTagsWithoutSelected.length > 14) {
         return this.topTagsWithoutSelected.filter((x, i) => i % 2 !== 1);
+      } else {
+        return [];
+      }
+    },
+    computedRegions1() {
+      if (this.topRegionsInArea.length > 14) {
+        return this.topRegionsInArea.filter((x, i) => i % 2);
+      } else {
+        return this.topRegionsInArea;
+      }
+    },
+    computedRegions2() {
+      if (this.topRegionsInArea.length > 14) {
+        return this.topRegionsInArea.filter((x, i) => i % 2 !== 1);
       } else {
         return [];
       }
@@ -755,16 +834,10 @@ export default {
 }
 
 .header {
-  //position: absolute;
-  //transition: all 0.3s ease;
-  // width: 100%;
+  z-index: 1000;
   width: 100%;
-  //height: 56px;
-  position: sticky;
-  top: 0px;
-  //max-height: 48px;
-  z-index: 10;
-  // font-size: 1rem;
+  font-weight: 700;
+  font-size: 1rem;
 }
 
 .event-list-vertical {
