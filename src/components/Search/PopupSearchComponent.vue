@@ -149,8 +149,8 @@ export default {
     ...mapState(useMainStore, [
       'fineLocation',
       'userLocationLoading',
-      'userLocationCity',
-      'userLocation',
+      'currentLocationCity',
+      'currentLocation',
     ]),
     ...mapState(useQueryStore, [
       'controlDateRange',

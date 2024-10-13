@@ -1,5 +1,6 @@
 <template>
   <div
+    class="main-map"
     :class="{
       'nearby-map-overlay-mobile': mainStore.sidebarPanel === 'nearby',
       'map-overlay-mobile-minimized': mainStore.sidebarMinimized,
@@ -14,6 +15,7 @@
         @map:moveend="moveend"
         @map:click="mapClick"
         @map:move="moving"
+        @loaded="mapLoaded"
       >
         <mgl-raster-source
           :tile-size="pixelRatio >= 1.5 ? 128 : 168"
@@ -24,6 +26,7 @@
         </mgl-raster-source>
         <mgl-navigation-control :position="'bottom-right'" />
         <mgl-geo-json-source
+          v-show="showPoints"
           source-id="points"
           :data="mappedPoints"
           :cluster="true"
@@ -49,10 +52,19 @@
             :filter="['!', ['has', 'point_count']]"
             :paint="unclusteredPointPaint"
             @click="onClickPoint"
+            @mouseenter="onMouseOverPoint"
+            @mouseleave="mouseOverPoint = null"
           />
         </mgl-geo-json-source>
       </mgl-map>
     </UseDevicePixelRatio>
+    <transition
+      appear
+      enter-active-class="animated fadeIn"
+      leave-active-class="animated fadeOut"
+    >
+      <div class="markers-loading-overlay" v-if="loadingPoints"></div>
+    </transition>
   </div>
 </template>
 
@@ -75,16 +87,50 @@ import style from './style.json';
 import { onMounted, watch, nextTick, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { debounce } from 'lodash';
-import { LngLatLike, MapLayerMouseEvent } from 'maplibre-gl';
+import {
+  LngLat,
+  LngLatBounds,
+  LngLatLike,
+  Map,
+  MapLayerMouseEvent,
+  Padding,
+  PaddingOptions,
+} from 'maplibre-gl';
+import { storeToRefs } from 'pinia';
+import { Dialog, Screen } from 'quasar';
 //import markerDarkFilled from 'assets/marker-dark-filled.png';
+import EventSelectionComponent from './EventSelectionComponent.vue';
 
 const mapStore = useMapStore();
+
+const { blockUpdates, peekMap, focusMarker } = storeToRefs(mapStore);
+
 const $route = useRoute();
 const $router = useRouter();
+
+const showPoints = ref(true);
 
 const mainStore = useMainStore();
 
 const queryStore = useQueryStore();
+
+const blockPeekMap = ref(false);
+
+const mouseOverPointEvents = ref(null);
+
+const {
+  points,
+  loadingPoints,
+  topTagsInArea,
+  topArtistsInArea,
+  controlDateRange,
+  controlDuration,
+  controlSize,
+  controlArtist,
+  controlTag,
+  controlEmptyLineup,
+  controlDateUnconfirmed,
+} = storeToRefs(queryStore);
 
 const map = useMap();
 
@@ -92,7 +138,7 @@ const delayedRouteName = ref();
 
 const mappedPoints = computed(() => ({
   type: 'FeatureCollection',
-  features: queryStore.points.map((x) => ({
+  features: points.value.map((x) => ({
     type: 'Feature',
     properties: x,
     geometry: {
@@ -115,12 +161,13 @@ onMounted(async () => {
       pixelRatio: 5,
       content: [16, 16, 50, 50], // place text over left half of image, avoiding the 16px border
     });
+    mapStore.map = map.map;
   }
 });
 
 watch(
   () => $route.name,
-  (to, from) => {
+  (to: string, from: string) => {
     setTimeout(() => {
       delayedRouteName.value = to;
     }, 500);
@@ -132,63 +179,112 @@ watch(
       if (from !== 'EventPage') {
         // if we're coming from eventpage, blockupdates is disabled
         // on map:moveend
-        mapStore.blockUpdates = false;
+        blockUpdates.value = false;
       }
 
-      if (!queryStore.points || queryStore.points.length === 0) {
+      if (!points.value || points.value.length === 0) {
         queryStore.loadPoints();
       }
     }
   }
 );
 
+watch(
+  () => mainStore.sidebarPanel,
+  (newv: string, oldv: string) => {
+    if (mainStore.userLocation && newv === 'nearby') {
+      blockUpdates.value = true;
+      flyTo({
+        center: mainStore.userLocation,
+        padding: getNearbyPagePadding(),
+      });
+      if (Screen.lt.sm) {
+        showPoints.value = false;
+      }
+    }
+    if (newv === 'explore') {
+      showPoints.value = true;
+      blockUpdates.value = false;
+      if (oldv === 'nearby' && mainStore.userLocation && Screen.lt.sm) {
+        flyTo({ center: mainStore.userLocation });
+      }
+    }
+  }
+);
+
+watch(
+  [
+    controlDateRange,
+    controlDuration,
+    controlSize,
+    controlArtist,
+    controlTag,
+    controlEmptyLineup,
+    controlDateUnconfirmed,
+  ],
+  () => {
+    debouncedClearMarkersAndLoadPoints();
+  },
+  { deep: true }
+);
+
 const movestart = () => {
-  if (!mapStore.blockUpdates) {
+  if (!blockUpdates.value) {
     mapStore.mapMoving = true;
     mainStore.sidebarPanel = 'explore';
-    queryStore.topTagsInArea = [];
-    queryStore.topArtistsInArea = [];
+    topTagsInArea.value = [];
+    topArtistsInArea.value = [];
   }
-
-  setTimeout(() => {
-    if (delayedRouteName.value == 'EventPage' && $route.name === 'EventPage') {
-      mapStore.peekMap = true;
-    }
-  }, 300);
+  if (!peekMap.value && !blockPeekMap.value) {
+    setTimeout(() => {
+      if (
+        delayedRouteName.value == 'EventPage' &&
+        $route.name === 'EventPage'
+      ) {
+        peekMap.value = true;
+      }
+    }, 300);
+  }
 };
 
 const moving = (event) => {
-  if (!mapStore.blockUpdates) {
+  if (!blockUpdates.value) {
     mainStore.userLocationLoading = false;
-    const center = event.map.getCenter();
-    // mainStore.userLocationCity =
-    //   center.lat.toFixed(1) + ', ' + center.lng.toFixed(1);
   }
 };
+
+const debouncedClearMarkersAndLoadPoints = debounce(
+  async () => {
+    points.value = [];
+    queryStore.loadPoints();
+  },
+  300,
+  { leading: false, trailing: true }
+);
 
 const debouncedReverseGeocode = debounce(
   async (coords, zoom) => {
     if (mapStore.mapZoomLevel <= 4) {
-      mainStore.userLocationCity = 'In this area';
+      mainStore.currentLocationCity = 'In this area';
     } else {
       const reverseGeo = await mainStore.reverseGecodeLocation(coords, zoom);
       if (mapStore.mapZoomLevel > 9) {
         const cityOrState = reverseGeo.city || reverseGeo.state;
         if (cityOrState) {
-          mainStore.userLocationCity = cityOrState; //+ ', ' + reverseGeo.country;
-        } else mainStore.userLocationCity = reverseGeo.country;
+          mainStore.currentLocationCity = cityOrState; //+ ', ' + reverseGeo.country;
+        } else mainStore.currentLocationCity = reverseGeo.country;
       } else if (mapStore.mapZoomLevel > 7) {
         if (reverseGeo.state) {
-          mainStore.userLocationCity = reverseGeo.state; // + ', ' + reverseGeo.country;
+          mainStore.currentLocationCity = reverseGeo.state; // + ', ' + reverseGeo.country;
         } else {
-          mainStore.userLocationCity = reverseGeo.country;
+          mainStore.currentLocationCity = reverseGeo.country;
         }
       } else {
-        mainStore.userLocationCity = reverseGeo.country;
+        mainStore.currentLocationCity = reverseGeo.country;
       }
 
       if (reverseGeo.country)
-        mainStore.userLocationCountry = reverseGeo.country;
+        mainStore.currentLocationCountry = reverseGeo.country;
       mainStore.currentLocationFromSearch = false;
       mainStore.userLocationLoading = false;
     }
@@ -199,25 +295,25 @@ const debouncedReverseGeocode = debounce(
 
 const moveend = () => {
   mapStore.mapMoving = false;
-  if (!mapStore.blockUpdates) {
+  blockPeekMap.value = false;
+  if (!blockUpdates.value) {
     if (map.map) {
       const center = map.map.getCenter();
       const zoomLevel = map.map.getZoom();
-      mapStore.mapBounds = map.map.getBounds();
+      mapStore.mapBounds = getPaddedBounds(map.map, getDefaultPadding());
+      //mapStore.mapBounds = map.map.getBounds();
       mapStore.mapCenter = center;
       mapStore.mapZoomLevel = zoomLevel;
-      mainStore.userLocation = center;
-      //mainStore.userLocationCity = '...';
-      //mainStore.userLocationLoading = true;
-      // mainStore.userLocationCity =
-      //  center.lat.toFixed(1) + ', ' + center.lng.toFixed(1);
-      //mainStore.userLocationCountry = null;
-      debouncedReverseGeocode(center, zoomLevel);
+      mainStore.currentLocation = center;
+      // dont rev. geocode immediatly after selecting search result
+      if (!mainStore.currentLocationFromSearch)
+        debouncedReverseGeocode(center, zoomLevel);
     }
+    mainStore.currentLocationFromSearch = false;
   } else {
     nextTick(() => {
       if ($route.name === 'Explore') {
-        mapStore.blockUpdates = false;
+        blockUpdates.value = false;
       }
     });
   }
@@ -226,7 +322,9 @@ const moveend = () => {
 const mapClick = () => {
   if ($route.name === 'EventPage') {
     if (mapStore.peekMap) {
-      mapStore.peekMap = false;
+      peekMap.value = false;
+      if (focusMarker.value) blockPeekMap.value = true;
+      flyTo({ center: focusMarker.value, padding: getEventPagePadding() });
     } else {
       if (mainStore.routerHistory.length > 0) {
         $router.go(-1);
@@ -237,55 +335,169 @@ const mapClick = () => {
   }
 };
 
-const flyTo = (coords: LngLatLike, zoom = 9) => {
-  map.map?.flyTo({ center: coords, zoom });
+const getEventPagePadding = (): PaddingOptions => {
+  if (peekMap.value) {
+    return {
+      top: 0,
+      bottom: window.innerHeight / 2,
+      left: 0,
+      right: 0,
+    };
+  }
+  if (Screen.lt.sm) {
+    return {
+      top: 0,
+      bottom: window.innerHeight * 0.66 - 64,
+      left: 0,
+      right: 0,
+    };
+  } else {
+    return {
+      top: 0,
+      bottom: window.innerHeight * 0.66 - 64,
+      left: 0,
+      right: 0,
+    };
+  }
+};
+
+const getNearbyPagePadding = (): PaddingOptions => {
+  // default padding for explore page
+  if (Screen.lt.sm) {
+    return {
+      top: 0,
+      bottom: window.innerHeight / 2 - 86 + mainStore.safeAreaInsets.top,
+      left: 0,
+      right: 0,
+    };
+  } else {
+    return getDefaultPadding();
+  }
+};
+
+const getDefaultPadding = (): PaddingOptions => {
+  // default padding for explore page
+  if (Screen.lt.sm) {
+    return { top: 0, bottom: 150, left: 0, right: 0 };
+  } else if (Screen.gt.sm) {
+    return { top: 0, bottom: 0, left: 568, right: 0 };
+  } else {
+    // lt.md
+    return { top: 0, bottom: 0, left: 376, right: 0 };
+  }
+};
+
+const getPaddedBounds = (map: Map, padding: PaddingOptions) => {
+  const pixelBounds = map.getContainer().getBoundingClientRect();
+  const widthPx = pixelBounds.width;
+  const heightPx = pixelBounds.height;
+
+  const swPadded = map.unproject([padding.left, heightPx - padding.bottom]);
+  const nePadded = map.unproject([widthPx - padding.right, padding.top]);
+
+  return new LngLatBounds(swPadded, nePadded);
+};
+
+const flyTo = ({
+  center,
+  zoom = 9,
+  padding,
+}: {
+  center: LngLatLike;
+  zoom?: number;
+  padding?: PaddingOptions;
+}) => {
+  console.log('fly to');
+  map.map?.flyTo({ center, zoom, padding: padding || getDefaultPadding() });
+};
+
+const onMouseOverPoint = (e: MapLayerMouseEvent) => {
+  const properties = e?.features?.[0]?.properties;
+  if (properties?.events) {
+    mouseOverPointEvents.value = JSON.parse(properties.events);
+  }
 };
 
 const onClickPoint = (e: MapLayerMouseEvent) => {
-  console.log('pooint', e);
-  /*
-  $router.push({
-    name: 'EventPage',
-    params: {
-      id: e.events[0].event_id,
-      eventDateId: e.events[0].event_date_id,
-    },
-    query: {
-      name: e.events[0].name.replace(/ /g, '_'),
-    },
-  });
-  */
+  const properties = e?.features?.[0]?.properties;
+  if (properties?.events) {
+    const events = JSON.parse(properties.events);
+    if (events.length > 1) {
+      Dialog.create({
+        component: EventSelectionComponent,
+        // props forwarded to component
+        componentProps: {
+          data: properties,
+        },
+      });
+    } else {
+      // show event page
+      focusMarker.value = {
+        lat: properties.lat,
+        lng: properties.lng,
+      };
+      $router.push({
+        name: 'EventPage',
+        params: {
+          id: events[0].event_id,
+          eventDateId: events[0].event_date_id,
+        },
+        query: {
+          name: events[0].name.replace(/ /g, '_'),
+        },
+      });
+    }
+  }
 };
 
 watch(
   () => map.isLoaded,
-  (isLoaded) => {
-    console.log('mmm', isLoaded);
-
-    map.map.scrollZoom.setWheelZoomRate(1 / 500);
-    map.map.scrollZoom.setZoomRate(1 / 500);
+  (isLoaded: boolean) => {
+    if (map.map && isLoaded) {
+      map.map.scrollZoom.setWheelZoomRate(1 / 500);
+      map.map.scrollZoom.setZoomRate(1 / 500);
+    }
   }
 );
 
 watch(
-  () => mapStore.focusMarker,
-  (newval) => {
-    if (newval !== null) {
-      mapStore.blockUpdates = true;
-      // save current map view so we can return to it
-      if (newval.lat && newval.lng) {
-        mapStore.exploreMapView = {
-          latlng: map.map.getCenter(),
-          zoom: map.map.getZoom(),
-        };
-        mapStore.blockUpdates = true;
-        flyTo(newval);
-      }
-    } else {
-      flyTo(mapStore.exploreMapView.latlng, mapStore.exploreMapView.zoom);
+  () => mainStore.currentLocation,
+  (newv: LngLatLike | null) => {
+    if (newv && mainStore.currentLocationFromSearch) {
+      flyTo({ center: newv });
     }
   }
 );
+
+watch(focusMarker, (newval: LngLat | null) => {
+  if (newval) {
+    blockUpdates.value = true;
+    blockPeekMap.value = true;
+    // save current map view so we can return to it
+    if (newval.lat && newval.lng && map.map) {
+      mapStore.exploreMapView = {
+        latlng: map.map.getCenter(),
+        zoom: map.map.getZoom(),
+      };
+      blockUpdates.value = true;
+      flyTo({ center: newval, padding: getEventPagePadding() });
+    }
+  } else {
+    if (mapStore.exploreMapView)
+      if (mainStore.sidebarPanel === 'nearby') {
+        flyTo({
+          center: mapStore.exploreMapView.latlng,
+          zoom: mapStore.exploreMapView.zoom,
+          padding: getNearbyPagePadding(),
+        });
+      } else {
+        flyTo({
+          center: mapStore.exploreMapView.latlng,
+          zoom: mapStore.exploreMapView.zoom,
+        });
+      }
+  }
+});
 
 const clusterPaint = {
   /*
@@ -321,9 +533,13 @@ const unclusteredPointPaint = {
   'circle-stroke-width': 3,
   'circle-stroke-color': '#fff',
 };
+
+function useRef(arg0: boolean) {
+  throw new Error('Function not implemented.');
+}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import 'maplibre-gl/dist/maplibre-gl.css';
 .body--dark {
   .maplibregl-map {
@@ -354,39 +570,56 @@ const unclusteredPointPaint = {
   inherits: false;
 }
 
-.maplibregl-map {
-  height: 100%;
-  width: 100%;
+.main-map {
   z-index: 0;
   position: absolute;
-  &:before {
-    position: absolute;
-    content: '';
-    width: 100%;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  :deep(.maplibregl-map) {
     height: 100%;
-    z-index: 1;
-    pointer-events: none;
-    background: linear-gradient(
-      rgba(0, 0, 0, 1),
-      rgba(0, 0, 0, 0.2) 148px,
-      var(--bottomGradient1) 200px,
-      var(--bottomGradient2) calc(100% - 128px),
-      var(--bottomGradient2) calc(100% - 200px),
-      var(--bottomGradient3) 100%
-    );
+    width: 100%;
+    z-index: 0;
+    position: absolute;
+    &:before {
+      position: absolute;
+      content: '';
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(
+        rgba(0, 0, 0, 1),
+        rgba(0, 0, 0, 0.2) 148px,
+        var(--bottomGradient1) 200px,
+        var(--bottomGradient2) calc(100% - 128px),
+        var(--bottomGradient2) calc(100% - 200px),
+        var(--bottomGradient3) 100%
+      );
+    }
   }
-}
-.nearby-map-overlay-mobile {
-  --bottomGradient1: rgba(0, 0, 0, 0.48);
-}
-.map-overlay-mobile-minimized {
+  .nearby-map-overlay-mobile {
+    --bottomGradient1: rgba(0, 0, 0, 0.48);
+  }
+  .map-overlay-mobile-minimized {
+  }
+
+  .markers-loading-overlay {
+    background-color: rgba(0, 0, 0, 0.8);
+    position: absolute;
+    z-index: 1000;
+    height: 100%;
+    width: 100%;
+  }
 }
 
 @media only screen and (max-width: 599px) {
-  .maplibregl-ctrl-bottom-right {
-    bottom: calc(268px + env(safe-area-inset-bottom));
-    .maplibregl-ctrl-attrib {
-      display: none;
+  .main-map {
+    .maplibregl-ctrl-bottom-right {
+      bottom: calc(268px + env(safe-area-inset-bottom));
+      .maplibregl-ctrl-attrib {
+        display: none;
+      }
     }
   }
 }

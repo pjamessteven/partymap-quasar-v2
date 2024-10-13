@@ -10,7 +10,7 @@
       "
       ref="search"
       borderless
-      style="width: 268px; height: 40px"
+      style="width: 328px; height: 40px"
       dense
       autofocus
       @focus="onSearchbarFocus()"
@@ -18,7 +18,7 @@
       class="searchbar-input inter bold"
       v-model="query"
       @keyup.enter="() => $refs.search.blur()"
-      placeholder="Search events, places and artists"
+      placeholder="Search events, places, artists & tags"
     >
       <template v-slot:prepend>
         <div class="q-mr-xs q-ml-" v-if="$q.screen.gt.xs">

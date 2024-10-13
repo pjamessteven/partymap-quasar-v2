@@ -91,10 +91,10 @@ export const useNearbyStore = defineStore('nearby', {
       const main = useMainStore();
 
       try {
-        if (main.userLocation) await this.loadNearbyEventDates();
+        if (main.currentLocation) await this.loadNearbyEventDates();
 
         // do the following concurrently
-        if (main.userLocation) {
+        if (main.currentLocation) {
           await Promise.all([
             this.loadNearbyArtists(),
             this.loadNearbyTags(),
@@ -116,7 +116,7 @@ export const useNearbyStore = defineStore('nearby', {
         if (
           this.nearbyArtists.length < 6 ||
           this.nearbyTags.length < 10 ||
-          !main.userLocation
+          !main.currentLocation
         ) {
           const queryStore = useQueryStore();
           if (
@@ -142,7 +142,7 @@ export const useNearbyStore = defineStore('nearby', {
           per_page: 20,
           desc: true,
           sort: 'count',
-          location: JSON.stringify(main.userLocation),
+          location: JSON.stringify(main.currentLocation),
           radius: this.queryRadius ? this.queryRadius : undefined,
         });
         this.nearbyTags = this.nearbyTags.concat(response.data.items);
@@ -163,7 +163,7 @@ export const useNearbyStore = defineStore('nearby', {
           date_max: null,
           page: this.nearbyArtistsPage,
           per_page: 10,
-          location: JSON.stringify(main.userLocation),
+          location: JSON.stringify(main.currentLocation),
           radius: this.queryRadius,
           sort: 'event_count',
           desc: true,
@@ -202,7 +202,7 @@ export const useNearbyStore = defineStore('nearby', {
       const main = useMainStore();
       try {
         const response = await getEventDatesRequest({
-          location: JSON.stringify(main.userLocation),
+          location: JSON.stringify(main.currentLocation),
           date_min: moment().toISOString(),
           date_max: null,
           radius: this.queryRadius,

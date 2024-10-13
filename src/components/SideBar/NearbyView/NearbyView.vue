@@ -33,68 +33,74 @@
             <span class="">Near</span>
           </div>
           <div
-            class="flex items-start no-wrap"
+            class="flex items-end no-wrap"
             :class="{
               'justify-start text-h4': $q.screen.gt.sm,
               'justify-between row reverse  text-h4': $q.screen.lt.md,
             }"
             style="width: 100%"
           >
-            <q-btn
-              flat
-              class=""
-              :class="{
-                'q-ml-md q-pa-sm': $q.screen.lt.md,
-                'q-pa-md': $q.screen.gt.sm,
-              }"
-              @click.stop="() => getFineLocation()"
-              :style="
-                $q.screen.gt.sm
-                  ? 'margin-left: -16px; border-radius: 100px!important;'
-                  : 'margin-left: 0px; border-radius: 100px!important;'
-              "
-            >
-              <template v-slot:default>
-                <div v-if="!userLocationLoading" class="flex">
-                  <q-icon
-                    name="mdi-crosshairs-gps"
-                    class=""
-                    size="sm"
-                    v-if="fineLocation && !currentLocationFromSearch"
-                  />
-                  <q-icon size="sm" name="mdi-crosshairs" class="" v-else />
-                </div>
-                <div v-else style="position: relative" class="flex">
-                  <q-icon size="sm" style="z-index: 1" name="mdi-crosshairs" />
-                  <q-icon
-                    size="sm"
-                    style="z-index: 2; left: 0px"
-                    class="animated infinite flash slowest absolute"
-                    name="mdi-crosshairs-gps"
-                  />
-                </div>
-                <q-tooltip
-                  style="font-size: 1em !important"
-                  :content-class="
-                    $q.dark.isActive
-                      ? 'bg-black text-white'
-                      : 'bg-white text-black'
-                  "
-                  :offset="[10, 10]"
-                >
-                  <span v-if="!fineLocation">
-                    Using rough location from your IP address. Click to improve
-                    your location.
-                  </span>
-                  <span v-else>
-                    {{ $t('landing_page.improve_location') }}
-                  </span>
-                </q-tooltip>
-              </template>
-            </q-btn>
-            <NearbyCountrySelect />
+            <div class="flex row no-wrap items-center">
+              <q-btn
+                flat
+                class=""
+                :class="{
+                  'q-ml-md q-pa-sm': $q.screen.lt.md,
+                  'q-pa-md': $q.screen.gt.sm,
+                }"
+                @click.stop="() => getFineLocation()"
+                :style="
+                  $q.screen.gt.sm
+                    ? 'margin-left: -16px; border-radius: 100px!important;'
+                    : 'margin-left: 0px; border-radius: 100px!important;'
+                "
+              >
+                <template v-slot:default>
+                  <div v-if="!userLocationLoading" class="flex">
+                    <q-icon
+                      name="mdi-crosshairs-gps"
+                      class=""
+                      size="sm"
+                      v-if="fineLocation && !currentLocationFromSearch"
+                    />
+                    <q-icon size="sm" name="mdi-crosshairs" class="" v-else />
+                  </div>
+                  <div v-else style="position: relative" class="flex">
+                    <q-icon
+                      size="sm"
+                      style="z-index: 1"
+                      name="mdi-crosshairs"
+                    />
+                    <q-icon
+                      size="sm"
+                      style="z-index: 2; left: 0px"
+                      class="animated infinite flash slowest absolute"
+                      name="mdi-crosshairs-gps"
+                    />
+                  </div>
+                  <q-tooltip
+                    style="font-size: 1em !important"
+                    :content-class="
+                      $q.dark.isActive
+                        ? 'bg-black text-white'
+                        : 'bg-white text-black'
+                    "
+                    :offset="[10, 10]"
+                  >
+                    <span v-if="!fineLocation">
+                      Using rough location from your IP address. Click to
+                      improve your location.
+                    </span>
+                    <span v-else>
+                      {{ $t('landing_page.improve_location') }}
+                    </span>
+                  </q-tooltip>
+                </template>
+              </q-btn>
+              <NearbyCountrySelect />
+            </div>
             <div
-              class="flex row items-start no-wrap q-ml-sm"
+              class="flex row items-center no-wrap q-ml-sm"
               style="min-width: 220px"
             >
               <q-icon name="las la-calendar" class="q-mr q-pa-md" size="sm" />
@@ -107,6 +113,7 @@
           :class="{
             'q-mx-lg q-mb-sm q-mt-lg q-pa-md': $q.screen.gt.sm,
             'q-mx-md q-mt-md  q-pb-xs ': $q.screen.lt.md,
+            b3: showMessage,
           }"
           @click="showMessage = !showMessage"
         >
@@ -258,7 +265,7 @@
               </div>
               <div
                 class=""
-                :class="$q.screen.gt.sm ? 'q-pl-lg q-mb-sm' : 'q-pl-md'"
+                :class="$q.screen.gt.sm ? 'q-mb-sm' : ''"
                 v-if="nearbyTags && nearbyTags.length > 0"
               >
                 <CustomQScroll
@@ -267,56 +274,21 @@
                   style="width: 100%"
                   :style="$q.screen.gt.sm ? 'margin-bottom: -8px' : ''"
                   :thumb-style="
-                    $q.screen.gt.sm
-                      ? { bottom: '0px', height: '0px' }
+                    $q.screen.gt.xs
+                      ? {
+                          borderRadius: '0px',
+                          bottom: '8px',
+                          height: '4px',
+                          paddingLeft: '16px',
+                          marginLeft: '24px',
+                        }
                       : { bottom: '0px', height: '0px' }
                   "
                 >
-                  <div class="flex column" v-if="$q.screen.gt.xs && false">
-                    <div class="flex row no-wrap q-gutter-sm">
-                      <div
-                        v-for="(tag, index) in nearbyTags.filter(
-                          (x, i) => i % 3 === 0
-                        )"
-                        :key="index"
-                        @click="clickTag(tag)"
-                        class="tag t2 text- inter semibold"
-                        style="text-transform: capitalize"
-                        :class="$q.platform.is.ios ? 'no-hover' : ''"
-                      >
-                        {{ tag.tag }}
-                      </div>
-                    </div>
-                    <div class="flex row no-wrap q-gutter-sm q-pt-sm">
-                      <div
-                        v-for="(tag, index) in nearbyTags.filter(
-                          (x, i) => i % 3 === 1
-                        )"
-                        :key="index"
-                        @click="clickTag(tag)"
-                        class="tag t2 text- inter semibold"
-                        style="text-transform: capitalize"
-                        :class="$q.platform.is.ios ? 'no-hover' : ''"
-                      >
-                        {{ tag.tag }}
-                      </div>
-                    </div>
-                    <div class="flex row no-wrap q-gutter-sm q-pt-sm">
-                      <div
-                        v-for="(tag, index) in nearbyTags.filter(
-                          (x, index) => index % 3 === 2
-                        )"
-                        :key="index"
-                        @click="clickTag(tag)"
-                        class="tag t2 text- inter semibold"
-                        style="text-transform: capitalize"
-                        :class="$q.platform.is.ios ? 'no-hover' : ''"
-                      >
-                        {{ tag.tag }}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="flex column" v-else>
+                  <div
+                    class="flex column"
+                    :class="$q.screen.gt.sm ? 'q-px-lg ' : 'q-pl-md'"
+                  >
                     <div class="flex row no-wrap q-gutter-sm">
                       <div
                         v-for="(tag, index) in nearbyTags.filter(
@@ -357,63 +329,28 @@
               >
                 Hot tags around the world:
               </div>
-              <div :class="$q.screen.gt.sm ? 'q-pl-lg ' : 'q-pl-md'">
+              <div>
                 <CustomQScroll
                   horizontal
                   :style="$q.screen.gt.sm ? 'margin-bottom: -8px' : ''"
                   class="tag-scroll-area"
                   style="width: 100%"
                   :thumb-style="
-                    $q.screen.gt.sm
-                      ? { bottom: '0px', height: '0px' }
+                    $q.screen.gt.xs
+                      ? {
+                          borderRadius: '0px',
+                          bottom: '8px',
+                          height: '4px',
+                          paddingLeft: '16px',
+                          marginLeft: '24px',
+                        }
                       : { bottom: '0px', height: '0px' }
                   "
                 >
-                  <div class="flex column" v-if="$q.screen.gt.xs && false">
-                    <div class="flex row no-wrap q-gutter-sm">
-                      <div
-                        v-for="(tag, index) in tagOptions.filter(
-                          (x, i) => i % 3 === 0
-                        )"
-                        :key="index"
-                        @click="clickTag(tag)"
-                        class="tag t2 text- inter semibold"
-                        style="text-transform: capitalize"
-                        :class="$q.platform.is.ios ? 'no-hover' : ''"
-                      >
-                        {{ tag.tag }}
-                      </div>
-                    </div>
-                    <div class="flex row no-wrap q-gutter-sm q-pt-sm">
-                      <div
-                        v-for="(tag, index) in tagOptions.filter(
-                          (x, i) => i % 3 === 1
-                        )"
-                        :key="index"
-                        @click="clickTag(tag)"
-                        class="tag t2 text- inter semibold"
-                        style="text-transform: capitalize"
-                        :class="$q.platform.is.ios ? 'no-hover' : ''"
-                      >
-                        {{ tag.tag }}
-                      </div>
-                    </div>
-                    <div class="flex row no-wrap q-gutter-sm q-pt-sm">
-                      <div
-                        v-for="(tag, index) in tagOptions.filter(
-                          (x, index) => index % 3 === 2
-                        )"
-                        :key="index"
-                        @click="clickTag(tag)"
-                        class="tag t2 text- inter semibold"
-                        style="text-transform: capitalize"
-                        :class="$q.platform.is.ios ? 'no-hover' : ''"
-                      >
-                        {{ tag.tag }}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="flex column" v-else>
+                  <div
+                    class="flex column"
+                    :class="$q.screen.gt.sm ? 'q-px-lg ' : 'q-pl-md'"
+                  >
                     <div class="flex row no-wrap q-gutter-sm">
                       <div
                         v-for="(tag, index) in tagOptions.filter(
@@ -461,7 +398,7 @@
                 :loadMore="debouncedLoadNearbyArtists"
                 :style="
                   $q.screen.gt.sm
-                    ? 'margin-bottom: -16px; margin-top: -12px'
+                    ? 'margin-bottom: -16px; margin-top: -12px; z-index: 2000'
                     : ''
                 "
               />
@@ -488,7 +425,7 @@
                 :size="$q.screen.gt.xs ? 'lg' : 'md'"
                 :style="
                   $q.screen.gt.sm
-                    ? 'margin-bottom: -16px; margin-top: -12px'
+                    ? 'margin-bottom: -16px; margin-top: -12px; z-index: 2000'
                     : ''
                 "
               />
@@ -556,7 +493,7 @@
             </div>
 
             <div
-              v-if="userLocation"
+              v-if="currentLocation"
               class="location-header q-py-sm q-mt-sm flex row items-center justify-between"
               :class="$q.screen.lt.sm ? 'q-pl-md' : 'q-pl-lg'"
             >
@@ -798,7 +735,11 @@ export default {
   },
 
   methods: {
-    ...mapActions(useMainStore, ['loadIpInfo', 'getFineLocation']),
+    ...mapActions(useMainStore, [
+      'loadIpInfo',
+      'getFineLocation',
+      'restoreUserLocation',
+    ]),
     ...mapActions(useQueryStore, ['loadArtistOptions', 'loadTagOptions']),
     ...mapActions(useNearbyStore, [
       'loadEverything',
@@ -857,7 +798,7 @@ export default {
       // infinite scrolling
 
       if (info.verticalPercentage === 1) {
-        if (this.nearbyEventDatesHasNext && this.userLocation) {
+        if (this.nearbyEventDatesHasNext && this.currentLocation) {
           this.debouncedLoadNearbyEventDates();
         } else if (this.eventDatesHasNext) {
           this.debouncedLoadEventDates();
@@ -899,36 +840,7 @@ export default {
     },
   },
   watch: {
-    $route: {
-      handler: async function (newval) {
-        if (newval.name === 'Explore' && this.sidebarPanel === 'nearby') {
-          if (!this.userLocation) {
-            try {
-              //  await this.getFineLocation();
-            } catch {
-              //  await this.loadIpInfo();
-            }
-            if (this.eventDates?.length === 0) this.loadEverything();
-          } else {
-            if (this.eventDates?.length === 0) this.loadEverything();
-          }
-        }
-      },
-    },
-    sidebarPanel: {
-      handler: function (newval) {
-        if (this.$route.name === 'Explore' && newval === 'nearby') {
-          if (!this.userLocation) {
-            try {
-              //    this.getFineLocation();
-            } catch {
-              //     this.loadIpInfo();
-            }
-          }
-        }
-      },
-    },
-    userLocation: {
+    currentLocation: {
       handler: function (newval, oldval) {
         if (this.$route.name === 'Explore') {
           if (newval && !oldval) {
@@ -973,9 +885,10 @@ export default {
     ...mapState(useMainStore, [
       'userLocationLoading',
       'userLocation',
+      'currentLocation',
       'currentLocationFromSearch',
-      'userLocationCity',
-      'userLocationCountry',
+      'currentLocationCity',
+      'currentLocationCountry',
       'fineLocation',
       'compactView',
     ]),
@@ -1073,7 +986,8 @@ export default {
     this.menuBarOpacity = 1;
   },
 
-  async activated() {
+  /*
+  async activated() {)
     if (this.$q.screen.lt.sm || true) {
       this.$refs.scroll.setScrollPercentage('vertical', 0);
       setTimeout(() => {
@@ -1082,13 +996,18 @@ export default {
     } else {
       this.sidebarPanelReady = true;
     }
-    try {
-      await this.getFineLocation();
-    } catch {
-      await this.loadIpInfo();
+    if (this.userLocation) {
+      restoreUserLocation();
+    } else {
+      try {
+        await this.getFineLocation();
+      } catch {
+        await this.loadIpInfo();
+      }
     }
     this.loadEverything();
   },
+  */
   deactivated() {
     this.sidebarPanelReady = false;
   },
@@ -1105,16 +1024,18 @@ export default {
     if (this.$route.name === 'Explore') {
       // otherwise will change on route change
       // await this.loadIpInfo();
-
-      if (!this.userLocation) {
+      if (this.userLocation) {
+        this.restoreUserLocation();
+      } else {
         try {
           await this.getFineLocation();
         } catch {
           await this.loadIpInfo();
         }
         if (this.eventDates?.length === 0) this.loadEverything();
-      } else {
-        if (this.eventDates?.length === 0) this.loadEverything();
+        else {
+          if (this.eventDates?.length === 0) this.loadEverything();
+        }
       }
     }
 

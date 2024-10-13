@@ -186,24 +186,24 @@ export default {
     ...mapState(useMainStore, [
       'fineLocation',
       'userLocationLoading',
-      'userLocationCity',
-      'userLocation',
-      'userLocationCountry',
+      'currentLocationCity',
+      'currentLocation',
+      'currentLocationCountry',
     ]),
     ...mapWritableState(useQueryStore, ['controlFavorites']),
     computedPanelName() {
       switch (this.sidebarPanel) {
         case 'nearby':
-          if (this.userLocationCity) {
+          if (this.currentLocationCity) {
             if (this.$q.screen.gt.sm) {
               return (
                 'Near ' +
-                this.userLocationCity +
+                this.currentLocationCity +
                 ', ' +
-                this.userLocationCountry
+                this.currentLocationCountry
               );
             } else {
-              return 'Near ' + this.userLocationCity;
+              return 'Near ' + this.currentLocationCity;
             }
           } else {
             return 'Finding your location...';

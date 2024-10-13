@@ -63,7 +63,7 @@
             $refs.locationSelect.updateInputValue('', true);
 
             !inputValue || inputValue.length == 0
-              ? (inputValue = userLocationCity)
+              ? (inputValue = currentLocationCity)
               : undefined;
           }
         "
@@ -87,7 +87,7 @@ export default {
       loading: false,
       inputValue: null,
       selectedLocation: {},
-      previouslySelectedPlace: this.userLocationCity,
+      previouslySelectedPlace: this.currentLocationCity,
     };
   },
   methods: {
@@ -147,7 +147,7 @@ export default {
     },
   },
   watch: {
-    userLocationCity(newv, oldv) {
+    currentLocationCity(newv, oldv) {
       if (oldv || (newv && !oldv)) {
         this.previouslySelectedCity = oldv;
         this.inputValue = newv;
@@ -164,10 +164,10 @@ export default {
     ...mapWritableState(useMainStore, [
       'userLocationLoading',
       'currentLocation',
-      'userLocation',
+      'currentLocation',
       'currentLocationFromSearch',
-      'userLocationCity',
-      'userLocationCountry',
+      'currentLocationCity',
+      'currentLocationCountry',
       'fineLocation',
       'currentLocationCity',
       'currentLocationCountry',
@@ -178,7 +178,7 @@ export default {
       leading: false,
       trailing: true,
     });
-    this.inputValue = this.userLocationCity;
+    this.inputValue = this.currentLocationCity;
   },
 };
 </script>

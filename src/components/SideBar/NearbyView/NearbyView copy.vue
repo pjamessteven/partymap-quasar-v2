@@ -462,7 +462,7 @@
               </div>
 
               <div
-                v-if="userLocation"
+                v-if="currentLocation"
                 class="t1 inter semibold location-header q-py-sm flex row items-center justify-between"
                 :class="
                   $q.screen.gt.sm
@@ -765,7 +765,7 @@ export default {
       // infinite scrolling
 
       if (info.verticalPercentage === 1) {
-        if (this.nearbyEventDatesHasNext && this.userLocation) {
+        if (this.nearbyEventDatesHasNext && this.currentLocation) {
           this.debouncedLoadNearbyEventDates();
         } else if (this.eventDatesHasNext) {
           this.debouncedLoadEventDates();
@@ -810,7 +810,7 @@ export default {
     $route: {
       handler: async function (newval) {
         if (newval.name === 'Explore' && this.sidebarPanel === 'nearby') {
-          if (!this.userLocation) {
+          if (!this.currentLocation) {
             try {
               //  await this.getFineLocation();
             } catch {
@@ -826,7 +826,7 @@ export default {
     sidebarPanel: {
       handler: function (newval) {
         if (this.$route.name === 'Explore' && newval === 'nearby') {
-          if (!this.userLocation) {
+          if (!this.currentLocation) {
             try {
               //    this.getFineLocation();
             } catch {
@@ -836,7 +836,7 @@ export default {
         }
       },
     },
-    userLocation: {
+    currentLocation: {
       handler: function (newval, oldval) {
         if (this.$route.name === 'Explore') {
           if (newval && !oldval) {
@@ -880,10 +880,10 @@ export default {
     ]),
     ...mapState(useMainStore, [
       'userLocationLoading',
-      'userLocation',
+      'currentLocation',
       'currentLocationFromSearch',
-      'userLocationCity',
-      'userLocationCountry',
+      'currentLocationCity',
+      'currentLocationCountry',
       'fineLocation',
       'compactView',
     ]),
@@ -1008,7 +1008,7 @@ export default {
       // otherwise will change on route change
       // await this.loadIpInfo();
 
-      if (!this.userLocation) {
+      if (!this.currentLocation) {
         try {
           await this.getFineLocation();
         } catch {

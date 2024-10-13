@@ -106,8 +106,9 @@ export default {
     .artist-head {
       .artist-head-img {
         background: $b-2;
-        box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.1),
-          0 12px 17px 2px rgba(0, 0, 0, 0.1), 0 5px 10px 4px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.05),
+          0 12px 17px 2px rgba(0, 0, 0, 0.05),
+          0 5px 10px 4px rgba(0, 0, 0, 0.08);
       }
     }
   }
@@ -129,6 +130,12 @@ export default {
   transform: translate3d(0, 0, 0); // needed for ios
   cursor: pointer;
 
+  .artist-name {
+    z-index: 10;
+    text-align: center;
+    width: 100%;
+  }
+
   &.size-sm {
     width: 96px;
     height: 116px;
@@ -144,6 +151,8 @@ export default {
     .artist-name {
       font-weight: 400 !important;
       font-size: small;
+      max-width: 90px;
+      margin-left: 10px;
     }
   }
 
@@ -213,12 +222,6 @@ export default {
         }
       }
     }
-  }
-
-  .artist-name {
-    z-index: 10;
-    text-align: center;
-    width: 100%;
   }
 }
 

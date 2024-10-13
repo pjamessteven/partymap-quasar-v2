@@ -3,14 +3,20 @@ import { LatLngBounds, LatLng } from 'leaflet';
 import { Coordinates, HoverMarker, MapView } from 'src/types/map';
 import { Dark } from 'quasar';
 import L from 'leaflet';
-import { LngLatBounds, LngLatBoundsLike, LngLatLike } from 'maplibre-gl';
+import {
+  LngLat,
+  LngLatBounds,
+  LngLatBoundsLike,
+  LngLatLike,
+  Map,
+} from 'maplibre-gl';
 
 interface MapStoreState {
-  map: null | L.Map;
+  map: null | Map;
   mapStyle: 'satellite' | 'transport' | 'toner';
   mapBounds: LngLatBounds | null;
   mapCenter: LngLatLike | null;
-  focusMarker: Coordinates | null;
+  focusMarker: LngLatLike | null;
   eventDateHoverMarker: HoverMarker | null;
   exploreMapView: MapView | null;
   mapMoving: boolean;

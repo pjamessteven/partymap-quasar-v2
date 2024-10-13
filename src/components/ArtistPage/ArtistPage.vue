@@ -265,7 +265,7 @@ export default {
   methods: {
     viewOnMap() {
       setTimeout(() => {
-        toRaw(this.map).setZoom(1);
+        toRaw(this.map).flyTo({ zoom: 1 });
       }, 300);
       this.controlArtist = [this.artist];
 

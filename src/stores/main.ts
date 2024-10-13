@@ -82,6 +82,11 @@ export const useMainStore = defineStore('main', {
   }),
   getters: {},
   actions: {
+    restoreUserLocation() {
+      this.currentLocation = this.userLocation;
+      this.currentLocationCity = this.userLocationCity;
+      this.currentLocationCountry = this.userLocationCountry;
+    },
     persistTipsToLocalStorage() {
       localStorage.setItem('tips', JSON.stringify(this.tips));
     },
@@ -95,6 +100,11 @@ export const useMainStore = defineStore('main', {
         };
         this.userLocationCity = response.data.city;
         this.userLocationCountry = response.data.country;
+
+        this.currentLocation = this.userLocation;
+        this.currentLocationCity = this.userLocationCity;
+        this.currentLocationCountry = this.userLocationCountry;
+
         this.currentLocationFromSearch = false;
         this.userLocationLoading = false;
         return;
@@ -102,6 +112,7 @@ export const useMainStore = defineStore('main', {
         //fail silently
         console.log(error);
         this.userLocationLoading = false;
+        this.currentLocationCity = 'No IP location!';
         this.userLocationCity = 'No IP location!';
 
         return;
@@ -169,8 +180,9 @@ export const useMainStore = defineStore('main', {
                     position.coords.latitude.toFixed(1) +
                     ', ' +
                     position.coords.longitude.toFixed(1);
-                  //  this.userLocationCity = unknownCityCoords;
+                  //  this.currentLocationCity = unknownCityCoords;
                   this.userLocationCity = unknownCityCoords;
+                  this.currentLocationCity = this.userLocationCity;
                 }
 
                 resolve({
@@ -193,8 +205,9 @@ export const useMainStore = defineStore('main', {
                     ', ' +
                     position.coords.longitude.toFixed(1);
 
-                  // this.userLocationCity = unknownCityCoords;
+                  // this.currentLocationCity = unknownCityCoords;
                   this.userLocationCity = unknownCityCoords;
+                  this.currentLocationCity = this.userLocationCity;
                 }
 
                 resolve({
@@ -213,14 +226,20 @@ export const useMainStore = defineStore('main', {
 
       if (fineLocation) {
         this.fineLocation = true;
-        this.userLocation = fineLocation;
         const revereseGeo = await this.reverseGecodeLocation(fineLocation);
+
         this.userLocationCountry = revereseGeo.country;
         this.userLocationCity = revereseGeo.city;
+        this.userLocation = fineLocation;
+
+        this.currentLocation = fineLocation;
+        this.currentLocationCountry = this.userLocationCountry;
+        this.currentLocationCity = this.userLocationCity;
+
         this.userLocationLoading = false;
         this.currentLocationFromSearch = false;
       } else {
-        this.fineLocation = true;
+        this.fineLocation = false;
         Notify.create({
           message:
             "Can't get your fine location! \n\n Using rough  IP location instead.",

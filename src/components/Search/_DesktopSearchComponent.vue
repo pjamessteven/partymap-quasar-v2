@@ -118,8 +118,8 @@ export default {
       'windowWidth',
       'fineLocation',
       'userLocationLoading',
-      'userLocationCity',
-      'userLocation',
+      'currentLocationCity',
+      'currentLocation',
     ]),
     ...mapState(useQueryStore, [
       'controlDateRange',

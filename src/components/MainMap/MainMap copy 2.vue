@@ -118,12 +118,12 @@ export default {
     sidebarPanel(newv, oldv) {
       if (newv === 'nearby' && oldv === 'explore') {
         if (
-          this.userLocation?.lat &&
+          this.currentLocation?.lat &&
           // !this.currentLocationFromSearch &&
           newv === 'nearby'
         ) {
           // go to users location
-          this.fitBoundsForNearbyPage(this.userLocation);
+          this.fitBoundsForNearbyPage(this.currentLocation);
         }
         if (this.$q.screen.lt.sm) {
           // hide map markers on nearby page
@@ -138,10 +138,10 @@ export default {
       if (
         newv === 'explore' &&
         oldv === 'nearby' &&
-        this.userLocation &&
+        this.currentLocation &&
         this.$q.screen.lt.sm
       ) {
-        this.fitBoundsForExplorePage(this.userLocation);
+        this.fitBoundsForExplorePage(this.currentLocation);
       }
       if (newv === 'explore') {
         if (
@@ -224,7 +224,7 @@ export default {
         this.debouncedClearMarkersAndLoadPoints();
       },
     },
-    userLocation: {
+    currentLocation: {
       deep: true,
       handler(newval) {
         console.log('USERLOCATION', newval);
@@ -274,7 +274,7 @@ export default {
           } else if (to.name === 'Explore') {
             if (!to.query.view) {
               // gone to nearby page
-              this.fitBoundsForNearbyPage(this.userLocation);
+              this.fitBoundsForNearbyPage(this.currentLocation);
             }
 
             // restore previous map view
@@ -408,9 +408,9 @@ export default {
         } catch {
           await this.loadIpInfo();
         }
-        this.fitBoundsForNearbyPage(this.userLocation);
+        this.fitBoundsForNearbyPage(this.currentLocation);
       } catch (e) {
-        this.fitBoundsForNearbyPage(this.userLocation);
+        this.fitBoundsForNearbyPage(this.currentLocation);
       }
       // go to users location
     },
@@ -621,7 +621,7 @@ export default {
       this.initTileLayers();
       // add location marker for fine location
       if (!this.currentLocationFromSearch && this.fineLocation) {
-        this.addUserLocationMarker(this.userLocation);
+        this.addUserLocationMarker(this.currentLocation);
       }
       toRaw(this.map).clicked = 0;
 
@@ -914,7 +914,7 @@ export default {
       'windowWidth',
       'safeAreaInsets',
       'currentLocationFromSearch',
-      'userLocation',
+      'currentLocation',
       'fineLocation',
       'sidebarPanel',
       'showPanel',
@@ -948,8 +948,8 @@ export default {
       this.clearMarkersAndLoadPoints();
     }
     this.initMap();
-    if (this.userLocation) {
-      this.fitBoundsForNearbyPage(this.userLocation);
+    if (this.currentLocation) {
+      this.fitBoundsForNearbyPage(this.currentLocation);
     }
     this.windowHeight = window.innerHeight;
     this.windowWidth = window.innerWidth;

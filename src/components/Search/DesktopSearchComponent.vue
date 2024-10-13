@@ -289,8 +289,8 @@ export default {
       'windowWidth',
       'fineLocation',
       'userLocationLoading',
-      'userLocationCity',
-      'userLocation',
+      'currentLocationCity',
+      'currentLocation',
     ]),
     ...mapState(useQueryStore, [
       'controlDateRange',
@@ -552,6 +552,7 @@ export default {
                 }
                 input {
                   font-weight: 500;
+                  font-size: 1rem;
                 }
               }
             }

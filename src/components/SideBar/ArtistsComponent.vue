@@ -13,6 +13,7 @@
               bottom: '8px',
               height: '4px',
               paddingLeft: '16px',
+              marginLeft: '24px',
             }
           : { bottom: '0px', height: '0px' }
       "

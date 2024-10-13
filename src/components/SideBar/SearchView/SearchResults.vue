@@ -146,35 +146,20 @@ export default {
           },
         });
       }
-      //this.closeSearchBar();
     },
 
     clickLocationResult(location) {
       this.currentLocationFromSearch = true;
-      this.userLocation = {
+      this.currentLocation = {
         lat: parseFloat(location.location.lat),
         lng: parseFloat(location.location.lng),
       };
       let labelParts = location.label.split(', ');
-      this.userLocationCountry = labelParts.pop();
-      this.userLocationCity = labelParts?.[0] || this.userLocationCountry;
-      /*
-      if (this.userLocationCountry === this.userLocationCity) {
-        // no city, country level zoom
-        // give it some time because we want to use
-        // the bandwidth to load the nearby view first
+      this.currentLocationCountry = labelParts.pop();
+      this.currentLocationCity = labelParts?.[0] || this.currentLocationCountry;
 
-        setTimeout(() => {
-          if (this.$q.screen.gt.lg) {
-            toRaw(this.map).setZoom(6);
-          } else {
-            toRaw(this.map).setZoom(4);
-          }
-        }, 1000);
-      }*/
       this.fineLocation = false;
-      this.sidebarPanel = 'nearby';
-      this.loadEverything();
+
       if (this.$q.screen.gt.xs) {
         this.showPanel = false;
       }
@@ -198,9 +183,9 @@ export default {
     ...mapWritableState(useMapStore, ['map']),
     ...mapWritableState(useMainStore, [
       'currentLocationFromSearch',
-      'userLocation',
-      'userLocationCity',
-      'userLocationCountry',
+      'currentLocation',
+      'currentLocationCity',
+      'currentLocationCountry',
       'sidebarPanel',
       'fineLocation',
       'showPanel',

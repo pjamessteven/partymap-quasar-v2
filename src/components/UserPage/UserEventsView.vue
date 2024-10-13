@@ -362,7 +362,7 @@ export default {
     },
     ...mapState(useMainStore, [
       'sidebarPanel',
-      'userLocation',
+      'currentLocation',
       'compactView',
       'groupEventsByMonth',
     ]),

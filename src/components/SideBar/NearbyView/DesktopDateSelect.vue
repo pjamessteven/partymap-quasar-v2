@@ -12,9 +12,11 @@
       class="text-h5 inter bold date-select"
       input-class="date-select-input"
       behavior="menu"
+      :clearable="!!controlDateRangeSelectedOption?.label"
       :options="[]"
       :model-value="controlDateRangeSelectedOption?.label || 'Any Dates'"
-      :hide-dropdown-icon="!!controlDateRange?.label"
+      :hide-dropdown-icon="!!controlDateRangeSelectedOption?.label"
+      @clear="clearDateRange"
     >
     </q-select>
     <DateControl :showing="showing" @hide="showing = false" />
@@ -27,6 +29,8 @@ import { mapWritableState } from 'pinia';
 import _ from 'lodash';
 import { useQueryStore } from 'src/stores/query';
 import DateControl from 'src/components/Controls/DateControl.vue';
+import moment from 'moment';
+
 export default {
   components: { DateControl },
   props: {},
@@ -36,7 +40,13 @@ export default {
       showing: false,
     };
   },
-  methods: {},
+  methods: {
+    clearDateRange() {
+      this.controlDateRange = { start: moment().toISOString() };
+      this.controlDateRangeSelectedOption = null;
+      this.showing = false;
+    },
+  },
   watch: {},
   computed: {
     ...mapWritableState(useQueryStore, [

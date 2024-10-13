@@ -57,8 +57,8 @@ export const useBrowseStore = defineStore('browse', {
         item.eventDatesLoading = true;
 
         const response = await getEventDatesRequest({
-          location: main.userLocation
-            ? JSON.stringify(main.userLocation)
+          location: main.currentLocation
+            ? JSON.stringify(main.currentLocation)
             : null,
           tags: [tag],
           date_min: startDate,

@@ -77,8 +77,8 @@
           "
         >
           <div class="flex column no-wrap scroll-content">
-            <div class="flex row items-start q-px-lg q-mb-sm no-wrap">
-              <div class="flex row no-wrap items-start">
+            <div class="flex row items-end q-px-lg q-mb-sm no-wrap">
+              <div class="flex row no-wrap items-center">
                 <router-link
                   :to="{ name: 'Explore' }"
                   style="text-decoration: none; color: inherit"
@@ -106,7 +106,7 @@
               </div>
 
               <div
-                class="flex row items-start no-wrap q-ml-sm"
+                class="flex row items-center no-wrap q-ml-sm"
                 style="min-width: 220px"
               >
                 <q-icon name="las la-calendar" class="q-mr q-pa-md" size="sm" />
@@ -178,156 +178,173 @@
                 </CustomQScroll>
               </div>
             </div>
-            <!-- tags -->
+            <!-- selected artist (desktop only) -->
             <div
-              class="flex column q-mb-lg q-mt-md q-pt-sm"
-              v-if="topTagsInArea?.length > 0"
+              class="flex column q-mt-md q-pt-sm"
+              v-if="controlArtist?.length > 0 && $q.screen.gt.xs"
             >
               <div
                 class="q-pb-md header"
                 :class="$q.screen.gt.sm ? 'q-px-lg  t1' : ' t1 inter semibold'"
               >
-                <div class="">Hot Tags</div>
+                <div v-if="controlArtist.length === 1">Selected Artist</div>
+                <div v-else>Selected Artists</div>
               </div>
+              <div class="tag-scroll-area q-px-lg t1 flex justify-start">
+                <div
+                  v-for="(artist, index) in controlArtist"
+                  :key="-index"
+                  @click="clearArtists"
+                  class="tag tag-selected flex items-center no-wrap text- inter semibold"
+                  style="text-transform: capitalize"
+                  :class="$q.platform.is.ios ? 'no-hover' : ''"
+                >
+                  <q-icon
+                    style="margin-left: -4px; font-size: 18px"
+                    name="mdi-close-circle q-mr-xs"
+                  />
+                  {{ artist.name }}
+                </div>
+              </div>
+            </div>
 
-              <div :style="$q.screen.gt.sm ? 'margin-bottom: -8px' : ''">
-                <CustomQScroll
-                  horizontal
-                  class="tag-scroll-area"
-                  :style="
-                    topTagsInArea.length > 14 &&
-                    !(topTagsInArea.length > 13 && controlTag.length > 0)
-                      ? 'height: 90px'
-                      : 'height: 45px'
-                  "
-                  style="width: 100%"
-                  :thumb-style="
-                    $q.screen.gt.sm
-                      ? { bottom: '0px', height: '0px' }
-                      : { bottom: '0px', height: '0px' }
-                  "
+            <transition appear enter-active-class="animated fadeIn slow">
+              <div class="flex column" v-if="!isLoadingInitial">
+                <!-- tags -->
+                <div
+                  class="flex column q-mb-lg q-mt-md q-pt-sm"
+                  v-if="topTagsInArea?.length > 0 || controlTag.length > 0"
                 >
                   <div
-                    class="flex column"
-                    :class="$q.screen.gt.sm ? 'q-pl-lg ' : 'q-pl-lg'"
+                    class="q-pb-md header"
+                    :class="
+                      $q.screen.gt.sm ? 'q-px-lg  t1' : ' t1 inter semibold'
+                    "
                   >
-                    <div class="flex row no-wrap q-gutter-sm q-pr-xl">
-                      <div
-                        v-for="(tag, index) in controlTag"
-                        :key="-index"
-                        @click="clickTag(tag)"
-                        class="tag tag-selected flex items-center no-wrap text- inter semibold"
-                        style="text-transform: capitalize"
-                        :class="$q.platform.is.ios ? 'no-hover' : ''"
-                      >
-                        <q-icon
-                          style="margin-left: -4px; font-size: 18px"
-                          name="mdi-close-circle q-mr-xs"
-                        />
-                        {{ tag.tag }}
-                      </div>
-                      <div
-                        v-for="(tag, index) in computedTags1"
-                        :key="index"
-                        @click="clickTag(tag)"
-                        class="tag t2 text- inter semibold"
-                        style="text-transform: capitalize"
-                        :class="$q.platform.is.ios ? 'no-hover' : ''"
-                      >
-                        {{ tag.tag }}
-                      </div>
-                    </div>
-                    <div
-                      class="flex row no-wrap q-gutter-sm q-pt-sm"
-                      v-if="computedTags2.length > 0"
+                    <div class="" v-if="topTagsInArea?.length">Hot Tags</div>
+                    <div v-else-if="controlTag.length === 1">Selected Tag</div>
+                    <div v-else>Selected Tags</div>
+                  </div>
+
+                  <div :style="$q.screen.gt.sm ? 'margin-bottom: -8px' : ''">
+                    <CustomQScroll
+                      horizontal
+                      class="tag-scroll-area"
+                      :style="
+                        computedTotalTags > 14 ? 'height: 90px' : 'height: 45px'
+                      "
+                      style="width: 100%"
+                      :thumb-style="
+                        $q.screen.gt.xs
+                          ? {
+                              borderRadius: '0px',
+                              bottom: '0px',
+                              height: '4px',
+                              marginLeft: '24px',
+                              paddingLeft: '16px',
+                            }
+                          : { bottom: '0px', height: '0px' }
+                      "
                     >
                       <div
-                        v-for="(tag, index) in computedTags2"
-                        :key="index"
-                        @click="clickTag(tag)"
-                        class="tag t2 text- inter semibold"
-                        style="text-transform: capitalize"
-                        :class="$q.platform.is.ios ? 'no-hover' : ''"
+                        class="flex column"
+                        :class="$q.screen.gt.sm ? 'q-pl-lg ' : 'q-pl-lg'"
                       >
-                        {{ tag.tag }}
+                        <div class="flex row no-wrap q-gutter-sm q-pr-xl">
+                          <div
+                            v-for="(tag, index) in controlTag"
+                            :key="-index"
+                            @click="clickTag(tag)"
+                            class="tag tag-selected flex items-center no-wrap text- inter semibold"
+                            style="text-transform: capitalize"
+                            :class="$q.platform.is.ios ? 'no-hover' : ''"
+                          >
+                            <q-icon
+                              style="margin-left: -4px; font-size: 18px"
+                              name="mdi-close-circle q-mr-xs"
+                            />
+                            {{ tag.tag }}
+                          </div>
+                          <div
+                            v-for="(tag, index) in computedTags1"
+                            :key="index"
+                            @click="clickTag(tag)"
+                            class="tag t2 text- inter semibold"
+                            style="text-transform: capitalize"
+                            :class="$q.platform.is.ios ? 'no-hover' : ''"
+                          >
+                            {{ tag.tag }}
+                          </div>
+                        </div>
+                        <div
+                          class="flex row no-wrap q-gutter-sm q-pt-sm"
+                          v-if="computedTags2.length > 0"
+                        >
+                          <div
+                            v-for="(tag, index) in computedTags2"
+                            :key="index"
+                            @click="clickTag(tag)"
+                            class="tag t2 text- inter semibold"
+                            style="text-transform: capitalize"
+                            :class="$q.platform.is.ios ? 'no-hover' : ''"
+                          >
+                            {{ tag.tag }}
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    </CustomQScroll>
                   </div>
-                </CustomQScroll>
-              </div>
-            </div>
-            <div
-              class="flex column"
-              v-if="topArtistsInArea?.length > 5"
-              style="margin-bottom: -8px"
-            >
-              <div
-                class="header t1 q-pb-sm"
-                :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
-              >
-                High Profile Artists
-              </div>
-              <ArtistsComponent
-                :class="$q.screen.gt.sm ? 'q-pl- q-mb-md' : ''"
-                :artists="topArtistsInArea"
-                :size="$q.screen.gt.lg ? 'lg' : 'md'"
-                style="margin-top: -8px"
-              />
-            </div>
-            <!-- theres no point in this 
-            <ArtistsComponent
-              v-if="
-                $q.screen.gt.xs &&
-                artists.length > 0 &&
-                ((groupByMonth &&
-                  Object.keys(eventDatesGroupedByMonth)?.length > 0) ||
-                  (!groupByMonth && eventDates?.length > 0))
-              "
-              :artists="artists"
-              :hasNext="artistsHasNext"
-              :loadMore="loadArtists"
-            />
-            -->
-            <transition appear enter-active-class="animated fadeIn slow">
-              <div
-                class="flex column q-px-sm"
-                :style="mapMoving && !blockUpdates ? 'opacity: 0' : ''"
-              >
-                <EventDateList
-                  v-if="compactView"
-                  :groupByMonth="groupEventsByMonth"
-                  :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
-                  :eventDates="eventDates"
-                  :hasNext="eventDatesHasNext"
-                  :loading="eventDatesLoading"
-                  :eventDatesTotal="eventDatesTotal"
-                />
+                </div>
+                <div
+                  class="flex column"
+                  v-if="
+                    topArtistsInArea?.length > 5 &&
+                    $q.screen.gt.xs &&
+                    controlArtist.length === 0
+                  "
+                  style="margin-bottom: -8px"
+                >
+                  <div
+                    class="header t1 q-pb-sm"
+                    :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
+                  >
+                    High Profile Artists
+                  </div>
+                  <ArtistsComponent
+                    :class="$q.screen.gt.sm ? 'q-pl- q-mb-md' : ''"
+                    :artists="topArtistsInArea"
+                    :size="$q.screen.gt.lg ? 'lg' : 'md'"
+                    style="margin-top: -8px"
+                  />
+                </div>
 
-                <EventDatePosterList
-                  v-if="!compactView"
-                  :groupByMonth="groupEventsByMonth && $q.screen.lt.sm"
-                  :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
-                  :eventDates="eventDates"
-                  :hasNext="eventDatesHasNext"
-                  :loading="eventDatesLoading"
-                  :eventDatesTotal="eventDatesTotal"
-                />
+                <div class="flex column q-px-sm">
+                  <EventDateList
+                    v-if="compactView"
+                    :groupByMonth="groupEventsByMonth"
+                    :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
+                    :eventDates="eventDates"
+                    :hasNext="eventDatesHasNext"
+                    :loading="eventDatesLoading"
+                    :eventDatesTotal="eventDatesTotal"
+                  />
+
+                  <EventDatePosterList
+                    v-if="!compactView"
+                    :groupByMonth="groupEventsByMonth && $q.screen.lt.sm"
+                    :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
+                    :eventDates="eventDates"
+                    :hasNext="eventDatesHasNext"
+                    :loading="eventDatesLoading"
+                    :eventDatesTotal="eventDatesTotal"
+                  />
+                </div>
               </div>
             </transition>
           </div>
         </CustomQScroll>
       </div>
-      <!--
-      <div
-        v-if="
-          $q.screen.gt.xs && (isLoadingInitial || (mapMoving && !blockUpdates))
-        "
-        style="height: 100%; position: absolute; width: 100%; z-index: 500"
-        class="t4 inter semibold q-mt-md event-date-center flex grow justify-center"
-      >
-        Loading...
-      </div>
-      -->
+
       <div
         class="event-date-center t1 flex column grow no-wrap justify-center items-center"
         :style="
@@ -340,10 +357,7 @@
           <div
             class="inter q-mb-md"
             style="font-weight: 600"
-            v-if="
-              (isLoadingInitial || (mapMoving && !blockUpdates)) &&
-              (!sidebarMinimized || $q.screen.gt.sm)
-            "
+            v-if="isLoadingInitial && (!sidebarMinimized || $q.screen.gt.sm)"
           >
             Finding what's good...
           </div>
@@ -351,9 +365,7 @@
             class="inter semibold q-mb-md"
             v-else-if="
               !isLoadingInitial &&
-              (eventDatesTotal === 0 ||
-                !eventDates ||
-                eventDates?.length === 0) &&
+              noResults &&
               (!sidebarMinimized || $q.screen.gt.sm)
             "
             style="font-weight: 600"
@@ -362,7 +374,7 @@
           </div>
           <div style="height: 20px; width: 200px" class="flex justify-center">
             <q-linear-progress
-              v-if="isLoadingInitial || (mapMoving && !blockUpdates)"
+              v-if="isLoadingInitial"
               class="linear-progress q-mt-md"
               indeterminate
               size="2px"
@@ -373,14 +385,7 @@
             <div
               class="flex column no-wrap"
               style="pointer-events: all"
-              v-else-if="
-                ((groupEventsByMonth &&
-                  Object.keys(eventDatesGroupedByMonth)?.length == 0) ||
-                  (!groupEventsByMonth &&
-                    eventDates &&
-                    eventDates?.length === 0)) &&
-                !(isLoadingInitial || (mapMoving && !blockUpdates))
-              "
+              v-else-if="noResults && !isLoadingInitial"
             >
               <div class="flex row no-wrap">
                 <q-btn
@@ -461,7 +466,7 @@ export default {
     }, 500);
     if (this.eventDates?.length === 0) {
       this.blockUpdates = false;
-      if (!this.userLocation) {
+      if (!this.currentLocation) {
         this.blockUpdates = true;
 
         /// await this.loadIpInfo();
@@ -471,7 +476,7 @@ export default {
         this.getInitialList();
       }
     }
-    if (!this.userLocation) {
+    if (!this.currentLocation) {
       // this.loadIpInfo(); happens in route watcher
     }
   },
@@ -483,8 +488,6 @@ export default {
       headerYPosition: 0,
       year: 0,
       componentGroup: {},
-      isLoadingDatesInitial: false,
-      isLoadingArtistsInitial: false,
     };
   },
   methods: {
@@ -495,7 +498,20 @@ export default {
       'clearAllFilters',
     ]),
     ...mapActions(useMainStore, ['loadIpInfo', 'persistTipsToLocalStorage']),
+    clearArtists() {
+      // force loading state after clicking to prevent glitchy feeling ui
+      this.eventDates = [];
+      this.eventDatesGroupedByMonth = {};
+      this.eventDatesLoading = true;
+
+      this.controlArtist = [];
+    },
     clickTag(tag) {
+      // force loading state after clicking to prevent glitchy feeling ui
+      this.eventDates = [];
+      this.eventDatesGroupedByMonth = {};
+      this.eventDatesLoading = true;
+
       let index = this.controlTag?.findIndex((x) => x.tag === tag.tag);
       if (index > -1) {
         // tag already selected, remove tag
@@ -505,12 +521,11 @@ export default {
       }
     },
     zoomOut() {
-      toRaw(this.map).setZoom(1);
+      toRaw(this.map).flyTo({ zoom: 1 });
       this.showPanel = false;
     },
     async getInitialList() {
       // event date stuff
-      // this.isLoadingDatesInitial = true;
       if (this.$refs) this.$refs.scroll.setScrollPercentage('vertical', 0);
       this.eventDatesHasNext = true;
       this.eventDatesPage = 1;
@@ -604,7 +619,7 @@ export default {
         if (to.name === 'Explore') {
           if (this.eventDates?.length === 0) {
             this.blockUpdates = false;
-            if (!this.userLocation) {
+            if (!this.currentLocation) {
               await this.loadIpInfo();
               this.getInitialList();
             } else {
@@ -621,7 +636,6 @@ export default {
         this.getInitialList();
       }
     },
-
     controlDateRange: {
       handler() {
         this.delayedGetInitial();
@@ -666,7 +680,7 @@ export default {
   computed: {
     ...mapState(useMainStore, [
       'sidebarPanel',
-      'userLocation',
+      'currentLocation',
       'compactView',
       'groupEventsByMonth',
       'sidebarMinimized',
@@ -689,7 +703,6 @@ export default {
       'controlDateRange',
       'controlSize',
       'controlDuration',
-      'controlArtist',
       'artistsHasNext',
       'anyFiltersEnabled',
       'topTagsInArea',
@@ -700,6 +713,7 @@ export default {
     ]),
     ...mapWritableState(useQueryStore, [
       'controlTag',
+      'controlArtist',
       'eventDates',
       'eventDatesTotal',
       'eventDatesPage',
@@ -714,6 +728,9 @@ export default {
       return this.topTagsInArea.filter(
         (x) => this.controlTag.findIndex((y) => y.tag === x.tag) === -1
       );
+    },
+    computedTotalTags() {
+      return this.controlTag?.length + this.topTagsWithoutSelected.length;
     },
     computedTags1() {
       if (this.topTagsWithoutSelected.length > 14) {
@@ -752,11 +769,23 @@ export default {
         this.controlTag.length === 0
       );
     },
-    isLoadingInitial() {
-      // return this.isLoadingDatesInitial || this.isLoadingArtistsInitial;
-      return this.eventDatesLoading && this.eventDatesTotal <= 1;
+    noResults() {
+      return (
+        (this.groupEventsByMonth &&
+          Object.keys(this.eventDatesGroupedByMonth).length === 0) ||
+        (!this.groupEventsByMonth && this.eventDates?.length === 0)
+      );
     },
-
+    // depends on results being mapped to stop loading indicator
+    isLoadingInitial() {
+      return (
+        (this.eventDatesLoading && this.noResults) ||
+        (this.mapMoving && !this.blockUpdates)
+      );
+    },
+    isLoading() {
+      return this.isLoadingInitial || this.eventDatesLoading;
+    },
     route() {
       return this.$route;
     },
@@ -941,7 +970,7 @@ export default {
       }
     }
     :deep(.q-scrollarea__thumb) {
-      z-index: 1000;
+      z-index: 5000;
     }
   }
 

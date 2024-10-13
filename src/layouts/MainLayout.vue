@@ -1,8 +1,7 @@
 <template>
   <div class="main-layout">
-    <div class="map-container">
-      <MainMap />
-    </div>
+    <MainMap />
+
     <div
       class="overlay"
       :class="overlayOpacityTransition ? 'overlay-transition' : ''"
@@ -309,9 +308,6 @@ export default {
   position: relative;
   overflow: hidden;
 
-  .map-container {
-    z-index: 0;
-  }
   .overlay {
     z-index: 103;
     position: absolute;
@@ -464,8 +460,6 @@ export default {
   }
 
   .main-layout {
-    .map-container {
-    }
     .main-layout-router {
       padding-top: calc(62px + var(--safe-area-inset-top));
       // ios specific top padding

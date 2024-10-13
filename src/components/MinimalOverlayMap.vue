@@ -74,7 +74,7 @@ export default {
     windowHeight() {
       this.invalidateMapSize();
     },
-    userLocation: {
+    currentLocation: {
       deep: true,
       handler: function (newval) {
         this.fitBoundsForExplorePage(newval);
@@ -121,8 +121,8 @@ export default {
     },
     initMap() {
       this.map = L.map(this.$refs.map, this.mapOptions);
-      if (this.userLocation?.lat && this.userLocation?.lng)
-        this.fitBoundsForExplorePage(this.userLocation);
+      if (this.currentLocation?.lat && this.currentLocation?.lng)
+        this.fitBoundsForExplorePage(this.currentLocation);
 
       this.initTileLayers();
     },
@@ -171,7 +171,7 @@ export default {
     ]),
     ...mapState(useMainStore, [
       'windowWidth',
-      'userLocation',
+      'currentLocation',
       'sidebarPanel',
       'showPanel',
       'darkMode',

@@ -150,16 +150,7 @@ export default {
       default: null,
     },
   },
-  methods: {
-    viewOnMap() {
-      setTimeout(() => {
-        toRaw(this.map).setZoom(1);
-      }, 300);
-      this.controlArtist = [this.artist];
 
-      //this.$router.push({ name: 'Explore', query: { view: 'explore' } });
-    },
-  },
   computed: {
     ...mapWritableState(useQueryStore, ['controlArtist']),
     ...mapState(useAuthStore, ['currentUser']),
