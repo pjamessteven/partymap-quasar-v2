@@ -25,17 +25,19 @@
           <div
             class="image-container flex justify-center items-center shadow-2xl"
           >
-            <img
-              style="filter: blur(2px); transform: scale(1.2)"
-              :src="imgThumbXsUrl"
-              class="not-loaded"
-              v-show="!loadedImage"
-            />
-            <transition enter-active-class="animated fadeIn">
+            <transition appear enter-active-class="animated fadeIn slower">
+              <img
+                style="filter: blur(2px); transform: scale(1.2); z-index: 2"
+                :src="imgThumbXsUrl"
+                class="not-loaded"
+              />
+            </transition>
+            <transition appear enter-active-class="animated fadeIn slower">
               <img
                 :src="imgThumbUrl"
                 @load="() => (loadedImage = true)"
                 v-show="loadedImage"
+                style="z-index: 3"
               />
             </transition>
           </div>
@@ -462,13 +464,13 @@ export default {
         transform: scale(1.2);
       }
       img {
+        position: absolute;
+        pointer-events: none;
         height: 100%;
         width: 100%;
         max-height: 100%;
         max-width: 100%;
         object-fit: cover;
-        z-index: 2;
-        pointer-events: none;
       }
     }
   }

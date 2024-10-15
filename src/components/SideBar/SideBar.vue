@@ -11,7 +11,7 @@
         iphone: $q.platform.is.iphone || $q.platform.is.ipod,
         dim:
           mainStore.menubarOpacity === 1 &&
-          $route.name === 'EventPage' &&
+          route.name === 'EventPage' &&
           $q.screen.gt.lg,
       }"
     >
@@ -19,7 +19,10 @@
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
           <NearbyView
             style="height: 100%; width: 100%"
-            v-if="mainStore.sidebarPanel === 'nearby'"
+            v-if="
+              mainStore.sidebarPanel == 'nearby' ||
+              mainStore.sidebarPanel === ''
+            "
           />
           <keep-alive>
             <ExploreView
@@ -40,37 +43,21 @@
 </template>
 
 <script setup lang="ts">
-import SearchComponent from 'src/components/Search/SearchComponent.vue';
-import TopControlsMenu from 'components/MenuBar/TopControlsMenu.vue';
-import { Lethargy } from 'lethargy-ts';
 import ExploreView from './ExploreView/ExploreView.vue';
 import SearchView from './SearchView/SearchView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
 import { useMainStore } from 'src/stores/main';
-import { useRouter, useRoute } from 'vue-router';
 
-import { useDrag, useWheel } from '@vueuse/gesture';
-import {
-  MotionVariants,
-  useMotionControls,
-  useMotionProperties,
-  useMotionTransitions,
-  useSpring,
-} from '@vueuse/motion';
-import { ref, watch, toRaw, onMounted, computed } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { ref } from 'vue';
 import { useQuasar } from 'quasar';
-import { useMapStore } from 'src/stores/map';
+import { useRoute } from 'vue-router';
+
 const $q = useQuasar();
-const { t } = useI18n();
+
 const route = useRoute();
 
 const sidebar = ref();
-const resizer = ref();
 const mainStore = useMainStore();
-const mapStore = useMapStore();
-
-const lastx = ref();
 </script>
 
 <style lang="scss" scoped>
@@ -104,11 +91,10 @@ const lastx = ref();
     .sidebar {
       //box-shadow: rgb(38, 57, 77) 0px 8px 30px -10px;
       //box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px,
-      // rgba(0, 0, 0, 0.15) 0px 7px 20px 3px,
-      // rgba(0, 0, 0, 0.1) 0px -3px 0px inset;
+      //  rgba(0, 0, 0, 0.15) 0px 7px 20px 3px,
+      //  rgba(0, 0, 0, 0.1) 0px -3px 0px inset;
 
-      //box-shadow: rgba(50, 50, 105, 0.15) 0px 0px 5px 0px,
-      //  rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+      box-shadow: rgba(0, 0, 0, 0.68) 8px 0px 48px 4px;
 
       background: white;
       //: 1px solid white;
@@ -138,7 +124,6 @@ const lastx = ref();
   justify-content: start;
   display: flex;
   .sidebar {
-    //cursor: grab;
     position: relative;
     flex-shrink: 0;
     z-index: 500;
@@ -186,129 +171,36 @@ const lastx = ref();
   }
 }
 
-@media only screen and (min-width: 1080px) {
-  .sidebar-wrapper {
-    .sidebar {
-    }
-  }
-}
-
-@media only screen and (min-width: 1280px) {
-  .sidebar-wrapper {
-    .sidebar {
-    }
-  }
-}
-@media only screen and (min-width: 1921px) {
-  .sidebar-wrapper {
-    .sidebar {
-    }
-  }
-}
-
-@media only screen and (max-width: 599px) {
+@media only screen and (max-width: 1023px) {
   .body--dark {
     .sidebar-wrapper {
       .sidebar {
-        box-shadow: none;
-        background: black;
-
-        .sidebar-content {
-          background: black;
-
-          .sidebar-content-inner {
-            .sidebar-content-inner-shadow {
-              background: black;
-            }
-          }
-        }
-        :deep(.panels) {
-          width: 100%;
-        }
       }
     }
   }
   .body--light {
     .sidebar-wrapper {
       .sidebar {
-        box-shadow: none;
-        border-color: transparent;
-        .sidebar-content {
-          background: white;
-          .sidebar-content-inner {
-            .sidebar-content-inner-shadow {
-              display: none;
-            }
-          }
-        }
-        :deep(.panels) {
-          //box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
-          border-top: none !important;
-        }
       }
     }
   }
 
   .sidebar-wrapper {
-    padding: 0;
-    overflow: hidden;
-    box-shadow: none;
-    border-radius: 18px;
-
     .sidebar {
-      box-shadow: none;
-      //  transition: transform 0.4s ease, opacity 0s ease;
-
-      width: 100%;
-      background: transparent;
-      //margin-top: 48px;
-      //     transform: translate3d(0, calc(100% - 228px), 0);
-      //will-change: auto;
-      padding-bottom: 188px;
-      border-left: none;
-      border-right: none;
-      overflow: none;
-      max-width: 100vw;
-      width: 100vw;
-      border-radius: 18px;
-      will-change: opacity, transform; //important for smoothness on android
+      width: 408px;
       @supports ((top: var(--safe-area-inset-top))) {
-        /*
-        transform: translate3d(
-          0,
-          calc(100% - 228px - var(--safe-area-inset-top)),
-          0
-        );
-        */
-        padding-bottom: calc(180px + var(--safe-area-inset-top));
+        //padding-bottom: calc(180px + var(--safe-area-inset-top));
       }
 
       &.sidebar-mobile-expanded {
-        //  transform: translate3d(0, 120px, 0);
-        //padding-bottom: 128px;
         border-radius: 0px;
       }
 
       .sidebar-content {
-        backdrop-filter: unset !important;
-        padding-top: unset;
-        background: none !important;
-
         .sidebar-content-inner {
-          overflow: hidden;
-          border-top: none !important;
         }
       }
       :deep(.main-content) {
-        padding-top: 0px;
-      }
-
-      .lights-wrapper {
-        top: 70px;
-
-        .lights-image {
-          width: 100%;
-        }
       }
     }
   }
@@ -316,18 +208,6 @@ const lastx = ref();
     .sidebar-wrapper {
       .sidebar {
         &.iphone {
-          @supports (
-            (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
-              (-webkit-appearance: none)
-          ) {
-            @media screen and (max-width: 375px) {
-              //  iphone 7
-              padding-bottom: calc(180px - 8px + var(--safe-area-inset-top));
-            }
-            @media screen and (min-width: 376px) {
-              padding-bottom: calc(180px + var(--safe-area-inset-top));
-            }
-          }
         }
       }
     }

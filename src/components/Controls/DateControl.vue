@@ -1,5 +1,5 @@
 <template>
-  <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
+  <MenuWrapper :showing="showing" @hide="onHide()">
     <div class="calendar-header flex row no-wrap items-start" style="">
       <q-list
         dense

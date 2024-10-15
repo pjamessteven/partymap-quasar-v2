@@ -45,7 +45,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useMainStore, ['getFineLocation', 'loadIpInfo']),
     ...mapActions(useAuthStore, ['checkAuthCookie', 'login']),
   },
   computed: {
@@ -764,6 +763,9 @@ body {
 
 .disabled {
   pointer-events: none;
+}
+.pointer-events-none {
+  pointer-events: none !important;
 }
 .q-btn {
   font-size: 14px;

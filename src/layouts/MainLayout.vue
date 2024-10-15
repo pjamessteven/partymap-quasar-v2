@@ -10,22 +10,20 @@
     />
     <div class="main-inner-layout">
       <MenuBar class="menubar" />
-
-      <!--<ControlsComponent v-if="$q.screen.lt.sm" class="controls-mobile" />-->
+      <Transition
+        appear
+        :enter-active-class="'animated fadeIn'"
+        :leave-active-class="'animated fadeOut'"
+      >
+        <ControlsComponent
+          :overlayingMap="!showPanelBackground"
+          v-show="$q.screen.lt.sm || ($q.screen.gt.sm && showSearchForRoute)"
+        />
+      </Transition>
       <div
         class="sidebar-component-wrapper"
         :style="$q.screen.lt.md && computedSidebarOpacity"
       >
-        <SearchComponent
-          class="search-component"
-          v-if="$q.screen.lt.md"
-          :overlayingMap="!showPanelBackground"
-        />
-        <PopupSearchComponent
-          v-if="false"
-          class="search-component"
-          :overlayingMap="!showPanelBackground"
-        />
         <Transition
           appear
           :enter-active-class="
@@ -37,7 +35,7 @@
         >
           <MobileSideBar
             class="sidebar-component"
-            v-if="$q.screen.lt.md"
+            v-if="$q.screen.lt.sm"
             :class="{ hide: $q.screen.lt.sm && $route.name === 'EventPage' }"
           />
         </Transition>
@@ -45,7 +43,7 @@
           appear
           :enter-active-class="'animated slideInLeft'"
           :leave-active-class="'animated slideOutLeft'"
-          v-if="$q.screen.gt.sm"
+          v-if="$q.screen.gt.xs"
         >
           <SideBar
             class="sidebar-component"
@@ -130,7 +128,8 @@
 import MainMap from 'src/components/MainMap/MainMap.vue';
 import SideBar from 'components/SideBar/SideBar.vue';
 import MenuBar from 'components/MenuBar/MenuBar.vue';
-import SearchComponent from 'src/components/Search/DesktopSearchComponent.vue';
+import DesktopSearchComponent from 'src/components/Search/DesktopSearchComponent.vue';
+import ControlsComponent from 'src/components/Controls/ControlsComponent.vue';
 import MenuBarLogo from 'src/components/MenuBar/MenuBarLogo.vue';
 import NavigationBar from 'src/components/NavigationBar.vue';
 import MobileSideBar from 'src/components/SideBar/MobileSideBar.vue';
@@ -138,7 +137,6 @@ import { mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import { useMainStore } from 'src/stores/main';
 import { useEventStore } from 'src/stores/event';
-import PopupSearchComponent from 'src/components/Search/PopupSearchComponent.vue';
 
 export default {
   components: {
@@ -148,8 +146,8 @@ export default {
     MenuBar,
     MenuBarLogo,
     NavigationBar,
-    SearchComponent,
-    PopupSearchComponent,
+    DesktopSearchComponent,
+    ControlsComponent,
   },
   data() {
     return {
@@ -215,6 +213,9 @@ export default {
       'sidebarMinimized',
     ]),
     ...mapWritableState(useEventStore, ['event']),
+    showSearchForRoute() {
+      return this.$route.name === 'Explore';
+    },
     computedSidebarOpacity() {
       return `opacity: ${this.sidebarOpacity}`;
     },

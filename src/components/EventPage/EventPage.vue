@@ -357,7 +357,7 @@
                     >
                       <div
                         v-if="
-                          (computedTicketUrl || computedExternalUrl) && event
+                          (computedTicketName || computedExternalUrl) && event
                         "
                         class="event-buttons flex row items-center wrap o-100"
                         :class="

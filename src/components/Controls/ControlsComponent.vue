@@ -1,129 +1,234 @@
 <template>
   <div
-    class="inner-wrapper flex column grow no-wrap"
-    :class="$q.screen.gt.xs ? ' ' : ' t2'"
+    class="desktop-search-component q-mt-md flex row items-center no-wrap"
+    :class="{
+      'transport-map': mapStyle === 'transport',
+      'overlaying-map': overlayingMap,
+      'center-absolute': $route.name !== 'Explore' && $q.screen.gt.xs,
+    }"
   >
+    <div v-if="$q.screen.gt.xs" class="controls-wrapper flex no-wrap q-mr-sm">
+      <div class="controls-wrapper-inner">
+        <SearchComponent />
+      </div>
+    </div>
     <CustomQScroll
-      v-show="!searchbarShowing"
+      v-else
       ref="scroll"
       horizontal
       class="control-scroll-area"
       :thumb-style="
         $q.screen.gt.xs
           ? { bottom: '0px', height: '4px' }
-          : { bottom: '-8px', height: '0px' }
+          : { bottom: '0px', marginLeft: '16px', height: '0px' }
       "
     >
-      <div class="flex row scroll-wrapper items-center justify-between no-wrap">
-        <DateControl v-if="showDateControl" ref="dateControl" :key="1" />
+      <div class="scroll-inner flex row no-wrap items-center q-mr-md q-pl-xs">
+        <div
+          class="flex items-center no-wrap scroll-inner-inner"
+          v-show="
+            $q.screen.gt.md || ($q.screen.lt.lg && sidebarPanel === 'search')
+          "
+        >
+          <q-icon
+            @click="() => $router.go(-1)"
+            class="q-pr-md q-pl-sm"
+            size="sm"
+            name="mdi-chevron-left"
+            v-if="$q.screen.lt.lg && sidebarPanel === 'search'"
+          />
+          <div
+            class="controls-wrapper flex no-wrap"
+            :class="{
+              ' mobile-search-wrapper':
+                $q.screen.lt.lg && sidebarPanel === 'search',
+            }"
+          >
+            <div class="controls-wrapper-inner">
+              <SearchComponent />
+            </div>
+          </div>
+        </div>
+        <div
+          class="flex row items-center no-wrap"
+          v-show="$q.screen.lt.md && sidebarPanel !== 'search'"
+        >
+          <div
+            class="separator vertical"
+            v-if="$q.screen.gt.lg && false"
+            :class="{ 'q-mx-md': $q.screen.gt.md }"
+          />
+          <!--<div class="text-white q-ml-md">Filter:</div>-->
 
-        <div class="separator vertical" />
+          <ControlButton
+            @clear="clearDateFilter"
+            :isActive="!!controlDateRangeSelectedOption?.value"
+            :label="controlDateRangeSelectedOption?.label || 'Any Dates'"
+            iconName="las la-calendar"
+          >
+            <template v-slot="{ showing, hide }">
+              <DateControl :showing="showing" @hide="hide" />
+            </template>
+          </ControlButton>
 
-        <TagControl v-if="showTagControl" :key="2" ref="tagControl" />
-        <div class="separator vertical" />
+          <ControlButton
+            @clear="
+              () => {
+                controlTag = [];
+              }
+            "
+            class="q-ml-sm"
+            :isActive="controlTag?.length > 0"
+            :label="computedTagLabel"
+            iconName="mdi-pound"
+            iconSize="1.4em"
+          >
+            <template v-slot="{ showing, hide }">
+              <TagControl :showing="showing" @hide="hide" />
+            </template>
+          </ControlButton>
 
-        <ArtistControl v-if="showArtistControl" :key="3" ref="artistControl" />
+          <ControlButton
+            class="q-ml-sm"
+            :isActive="controlArtist.length > 0"
+            :label="computedArtistLabel"
+            iconName="las la-music"
+            iconSize="1.4em"
+            @clear="
+              () => {
+                controlArtist = [];
+              }
+            "
+          >
+            <template v-slot="{ showing, hide }">
+              <ArtistControl :showing="showing" @hide="hide" />
+            </template>
+          </ControlButton>
+
+          <!--
+          <div
+            class="controls-wrapper flex no-wrap q-ml-sm"
+            v-if="$q.screen.gt.xs && false"
+          >
+            <div class="controls-wrapper-inner">
+              <div style="height: 100%">
+                <q-btn
+                  class="button-control"
+                  :class="{
+                    active:
+                      (controlSize && controlSize.length > 0) ||
+                      (controlDuration && controlDuration.length > 0),
+                  }"
+                  >...
+                  <q-menu
+                    transition-show="jump-down"
+                    transition-hide="jump-up"
+                    anchor="bottom right"
+                    self="top right"
+                    class="more-menu"
+                    max-height="100vh"
+                  >
+                    <q-item v-if="ipadPortrait">
+                      <ArtistControl />
+                    </q-item>
+                    <q-item>
+                      <SizeControl />
+                    </q-item>
+                    <q-item>
+                      <DurationControl />
+                    </q-item>
+                    <q-item>
+                      <q-checkbox
+                        v-model="controlDateUnconfirmed"
+                        label="Date unconfirmed"
+                      />
+                    </q-item>
+                    <q-item>
+                      <q-checkbox
+                        v-model="controlEmptyLineup"
+                        label="Empty lineup"
+                      />
+                    </q-item>
+                  </q-menu>
+                </q-btn>
+              </div>
+            </div>
+          </div>
+-->
+
+          <ControlButton
+            class="q-ml-sm"
+            :isActive="controlSize.length > 0"
+            :label="'Size'"
+            iconName="las la-user-friends"
+            iconSize="1.4em"
+            @clear="
+              () => {
+                controlSize = [];
+              }
+            "
+          >
+            <template v-slot="{ showing, hide }">
+              <SizeControl :showing="showing" @hide="hide" />
+            </template>
+          </ControlButton>
+
+          <ControlButton
+            class="q-ml-sm"
+            :isActive="controlDuration.length > 0"
+            :label="'Duration'"
+            iconName="las la-clock"
+            iconSize="1.4em"
+            @clear="
+              () => {
+                controlDuration = [];
+              }
+            "
+          >
+            <template v-slot="{ showing, hide }">
+              <DurationControl :showing="showing" @hide="hide" />
+            </template>
+          </ControlButton>
+        </div>
       </div>
     </CustomQScroll>
-    <!-- show searchbar here on mobile-->
-    <div class="searchbar-wrapper" v-if="searchbarShowing && $q.screen.lt.md">
-      <q-input
-        @keydown.esc="
-          () => {
-            query = '';
-            $refs.search.blur();
-          }
-        "
-        ref="search"
-        borderless
-        autofocus
-        @focus="onSearchbarFocus()"
-        @blur="onSearchbarBlur()"
-        @clear="clearSearch()"
-        class="searchbar-input inter bold"
-        v-model="query"
-        @keyup.enter="() => $refs.search.blur()"
-        placeholder="Search places, events and more"
-      >
-        <template v-slot:prepend>
-          <q-icon name="mdi-magnify" class="q-my-md" />
-        </template>
-      </q-input>
-    </div>
-    <div
-      class="search-button-wrapper q-ml-md flex items-center justify-center"
-      v-if="false"
-    >
-      <div
-        class="search-button"
-        v-if="!searchbarShowing"
-        @click="() => (searchbarShowing = true)"
-      >
-        <q-icon name="mdi-magnify" size="large"></q-icon>
-      </div>
-      <div class="search-button" v-else @click="clearSearch()">
-        <q-icon name="mdi-close" size="large"></q-icon>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
-import ArtistControl from './ArtistControl.vue';
-import DateControl from './DateControl.vue';
-import DurationControl from './DurationControl.vue';
-import SizeControl from './SizeControl.vue';
-import TagControl from './TagControl.vue';
-import LocalityControl from './LocalityControl.vue';
-import { mapActions, mapState, mapWritableState } from 'pinia';
+import { mapState, mapActions, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
-import { useQueryStore } from 'src/stores/query';
-import { useSearchStore } from 'src/stores/search';
 import { useMapStore } from 'src/stores/map';
+import { useSearchStore } from 'src/stores/search';
+import { useQueryStore } from 'src/stores/query';
+import ArtistControl from 'src/components/Controls/ArtistControl.vue';
+import DateControl from 'src/components/Controls/DateControl.vue';
+import DurationControl from 'src/components/Controls/DurationControl.vue';
+import SizeControl from 'src/components/Controls/SizeControl.vue';
+import TagControl from 'src/components/Controls/TagControl.vue';
 import CustomQScroll from 'components/CustomQScroll.vue';
-
+import SearchComponent from 'src/components/Search/SearchComponent.vue';
+import ControlButton from 'src/components/Controls/ControlButton.vue';
 export default {
-  name: 'ControlsComponent',
   components: {
-    DateControl,
-    // DurationControl,
-    // SizeControl,
-    ArtistControl,
-    TagControl,
     CustomQScroll,
-    // LocalityControl,
+    ArtistControl,
+    DateControl,
+    DurationControl,
+    SizeControl,
+    TagControl,
+    SearchComponent,
+    ControlButton,
+  },
+  props: ['overlayingMap'],
+  data() {
+    return {};
   },
   watch: {
-    anyFiltersEnabled(newv) {
-      if (!newv) {
-        // scroll to start when removing filters
-        this.$refs.scroll.setScrollPosition('horizontal', 0, 150);
-      }
-    },
-    sidebarPanel(newv, oldv) {
-      // so we can return to previous sidebar panel after triggering search
-      this.previousSidebarPanel = oldv;
-    },
-    query(newv) {
-      if (newv?.length > 0) {
-        this.sidebarPanel = 'search';
-        if (this.$route.name !== 'Explore') {
-          this.$router.push({ name: 'Explore' });
-        }
-      }
-    },
     controlArtist: {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
           this.goToExplore();
-          setTimeout(() => {
-            if (this.$q.screen.lt.sm)
-              this.$refs.scroll.setScrollPosition(
-                'horizontal',
-                this.$refs.artistControl.$el.offsetLeft,
-                150
-              );
-          }, 100);
         }
       },
       deep: true,
@@ -132,12 +237,6 @@ export default {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
           this.goToExplore();
-          if (this.$q.screen.lt.sm)
-            this.$refs.scroll.setScrollPosition(
-              'horizontal',
-              this.$refs.tagControl.$el.offsetLeft,
-              150
-            );
         }
       },
       deep: true,
@@ -146,12 +245,6 @@ export default {
       handler(newVal) {
         if (newVal && newVal.end) {
           this.goToExplore();
-          if (this.$q.screen.lt.sm)
-            this.$refs.scroll.setScrollPosition(
-              'horizontal',
-              this.$refs.dateControl.$el.offsetLeft,
-              150
-            );
         }
       },
       deep: true,
@@ -160,12 +253,6 @@ export default {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
           this.goToExplore();
-          if (this.$q.screen.lt.sm)
-            this.$refs.scroll.setScrollPosition(
-              'horizontal',
-              this.$refs.sizeControl.$el.offsetLeft - 16,
-              150
-            );
         }
       },
       deep: true,
@@ -174,72 +261,76 @@ export default {
       handler(newVal) {
         if (newVal && newVal.length > 0) {
           this.goToExplore();
-          if (this.$q.screen.lt.sm)
-            this.$refs.scroll.setScrollPosition(
-              'horizontal',
-              this.$refs.durationControl.$el.offsetLeft,
-              150
-            );
         }
       },
       deep: true,
     },
   },
-  props: {
-    data: { type: Object },
-    showSelectedValue: {
-      default: false,
-      type: Boolean,
-    },
-    showOnlySelected: {
-      defaut: false,
-      type: Boolean,
-    },
-  },
-  data() {
-    return {
-      previousSidebarPanel: '',
-      previousShowPanel: '',
-    };
-  },
   methods: {
-    hideResultsAndPreviousPanel() {
-      if (this.sidebarPanel === 'search') {
-        // hide results and restore previous sidebar state
-        this.sidebarPanel = this.previousSidebarPanel;
-        if (this.sidebarPanel === 'explore') {
-          this.showPanel = false;
-        }
-      }
-    },
+    ...mapActions(useMainStore, ['loadIpInfo', 'getFineLocation']),
+    ...mapActions(useQueryStore, ['clearDateFilter']),
     goToExplore() {
       this.sidebarPanel = 'explore';
       if (this.$route.name !== 'Explore') {
         this.$router.push({ name: 'Explore', query: { view: 'explore' } });
       }
     },
-    clearSearch() {
-      this.query = null;
-      this.searchbarShowing = false;
-      this.hideResultsAndPreviousPanel();
-    },
-    onSearchbarFocus() {
-      if (this.query?.length > 0) {
-        this.sidebarPanel = 'search';
-        this.showPanel = true;
-      }
-    },
-    onSearchbarBlur() {
-      if (!this.query || this.query.length === 0) {
-        this.searchbarShowing = false;
-        this.hideResultsAndPreviousPanel();
-      }
+    clickLocation() {
+      this.getFineLocation();
+      this.sidebarPanel = 'nearby';
     },
   },
   computed: {
+    computedTagLabel() {
+      let label = '';
+      if (this.controlTag?.length > 0) {
+        for (let [index, tag] of this.controlTag.entries()) {
+          label += tag.tag;
+          if (index < this.controlTag.length - 1) {
+            label += ' + ';
+          }
+        }
+      } else {
+        label = 'All Tags';
+      }
+      return label;
+    },
+    computedArtistLabel() {
+      let label = '';
+      if (this.controlArtist?.length > 0) {
+        for (let [index, artist] of this.controlArtist.entries()) {
+          label += artist.name;
+          if (index < this.controlArtist.length - 1) {
+            label += ' + ';
+          }
+        }
+      } else {
+        label = 'All Artists';
+      }
+      return label;
+    },
+    ipadPortrait() {
+      // special layout case
+      return this.$q.screen.gt.sm && this.windowWidth < 1124;
+    },
+    ...mapState(useMapStore, ['mapStyle']),
     ...mapWritableState(useSearchStore, ['query', 'searchbarShowing']),
-    ...mapWritableState(useMainStore, ['showPanel', 'sidebarPanel']),
-    ...mapState(useQueryStore, [
+    ...mapWritableState(useMainStore, [
+      'sidebarPanel',
+      'showPanel',
+      'menubarOpacity',
+    ]),
+    ...mapState(useMainStore, [
+      'windowWidth',
+      'fineLocation',
+      'userLocationLoading',
+      'currentLocationCity',
+      'currentLocation',
+    ]),
+    ...mapState(useQueryStore, ['anyFiltersEnabled']),
+    ...mapWritableState(useQueryStore, [
+      'controlEmptyLineup',
+      'controlDateUnconfirmed',
       'controlDateRange',
       'controlFavorites',
       'controlDuration',
@@ -249,277 +340,358 @@ export default {
       'controlCountry',
       'controlRegion',
       'controlLocality',
-      'anyFiltersEnabled',
+      'controlDateRangeSelectedOption',
     ]),
-    dateControlActive() {
-      return !!this.controlDateRange.end;
-    },
-    durationControlActive() {
-      return this.controlDuration.length > 0;
-    },
-    sizeControlActive() {
-      return this.controlSize.length > 0;
-    },
-    artistControlActive() {
-      return this.controlArtist.length > 0;
-    },
-    tagControlActive() {
-      return this.controlTag.length > 0;
-    },
-    showDateControl() {
-      return (
-        !this.showOnlySelected ||
-        (this.showOnlySelected && this.dateControlActive)
-      );
-    },
-
-    showDurationControl() {
-      return (
-        !this.showOnlySelected ||
-        (this.showOnlySelected && this.durationControlActive)
-      );
-    },
-    showSizeControl() {
-      return (
-        !this.showOnlySelected ||
-        (this.showOnlySelected && this.sizeControlActive)
-      );
-    },
-    showArtistControl() {
-      return (
-        !this.showOnlySelected ||
-        (this.showOnlySelected && this.artistControlActive)
-      );
-    },
-    showTagControl() {
-      return (
-        !this.showOnlySelected ||
-        (this.showOnlySelected && this.tagControlActive)
-      );
-    },
-    showLocalityControl() {
-      return (
-        !this.showOnlySelected ||
-        (this.showOnlySelected &&
-          (!!this.controlCountry ||
-            !!this.controlRegion ||
-            !!this.controlLocality))
-      );
-    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.body--dark {
-  .inner-wrapper {
-    .separator {
-      border-color: $bi-4;
-    }
-    :deep(.button-control) {
-      // background: black;
-      color: $ti-1;
-
-      .q-btn__content {
-        .close-icon-wrapper {
-          background: $bi-4;
-          color: white;
-        }
-      }
-
-      .q-btn__wrapper {
-        &:before {
-          box-shadow: none;
-        }
-      }
-      &.active {
-        background: $bi-3 !important;
-      }
-    }
-  }
-}
 .body--light {
-  $item-inactive-background: $b-3;
-  $item-inactive-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
-  $item-inactive-border: 1px solid rgba(255, 255, 255, 0.2);
-
-  .inner-wrapper {
+  .desktop-search-component {
     .separator {
-      border-color: $b-4;
+      color: $t-4;
     }
+  }
+}
+.body--dark {
+  .desktop-search-component {
+    .separator {
+      color: $ti-4;
+    }
+  }
+}
 
-    :deep(.button-control) {
-      color: $t-1;
-      text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
-      /*
-      1
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      */
-      //background: $b-2;
-      transition: none;
-      //box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
-      //box-shadow: none !important;
-      &::before {
-        box-shadow: none !important;
-      }
-      .q-btn__content {
-        .close-icon-wrapper {
-          background: $b-4;
-          color: black;
-        }
-      }
-      .q-btn__wrapper {
-        &:before {
-          box-shadow: none;
-        }
-      }
-      &.active {
-        background: $b-3 !important;
-      }
-    }
-    .search-button-wrapper {
-      .search-button {
-        background: $b-3;
-        color: black;
+.desktop-search-component {
+  z-index: 104;
+  position: absolute;
+  top: 8px;
+  padding-left: 532px;
+  width: 100%;
+  display: flex;
+  pointer-events: none;
+  //max-width: 33vw;
+  justify-content: center;
+  //overflow-x: auto;
+  //overflow-y: visible;
+  &.center-absolute {
+    position: absolute;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .control-scroll-area {
+    height: 44px;
+    width: 100%;
+    .scroll-inner {
+      //justify-content: start;
+      //padding-left: 256px;
+      justify-content: center;
+      pointer-events: all;
+      .separator {
+        height: 16px;
+        border-left: 1px solid;
       }
     }
   }
 }
 
-.inner-wrapper {
-  width: 100%;
-  position: relative;
-  height: 48px;
-  border-radius: 48px;
-  overflow: hidden !important;
-  .control-scroll-area {
-    height: 48px;
-    width: 100%;
-    padding-right: 32px;
+.animated.slowest {
+  animation-duration: calc(var(--animate-duration) * 10);
+}
 
-    overflow-y: hidden;
-    :deep(.q-scrollarea__container) {
-      overflow-y: hidden !important;
-    }
+@media only screen and (max-width: 600px) {
+  .desktop-search-component {
+    padding-left: 0px;
+    top: 48px;
+    .control-scroll-area {
+      pointer-events: all;
 
-    .scroll-wrapper {
-      height: 48px;
-      padding-right: 64px;
-
-      :deep(.button-control) > :first-child {
-        padding-left: 16px;
-        background: green;
-      }
-    }
-  }
-
-  .searchbar-wrapper {
-    padding-left: 18px;
-    padding-right: 18px;
-
-    .searchbar-input {
-      margin-top: -4px;
-      :deep(.q-field__inner) {
-        .q-field__control::before {
-          border-color: transparent;
-          border: none;
+      .scroll-inner {
+        .scroll-inner-inner {
+          width: 100%;
+          .mobile-search-wrapper {
+            width: 100%;
+            .controls-wrapper-inner {
+              width: 100%;
+              :deep(.searchbar-wrapper) {
+                .searchbar-input {
+                  width: 100% !important;
+                }
+              }
+            }
+          }
         }
       }
     }
   }
-  .separator {
-    height: 16px;
-    border-left: 1px solid;
-    margin-left: -1px;
-    margin-right: -1px;
+}
+</style>
+
+<style lang="scss">
+.body--light {
+  .controls-wrapper {
+    //box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.);
+
+    .controls-wrapper-inner {
+      background: $b-2;
+      color: $t-1;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+
+      .button-control {
+        &.active {
+          background: white;
+          color: $t-1;
+        }
+        .q-btn__content {
+          .close-icon-wrapper {
+            background: $bi-4;
+            color: white;
+          }
+        }
+      }
+      .searchbar-wrapper {
+        .searchbar-input {
+          .q-field__inner {
+            .q-placeholder::placeholder {
+              opacity: 1;
+            }
+            input {
+              color: black !important;
+            }
+            .q-field__marginal {
+              font-size: unset !important;
+            }
+          }
+        }
+      }
+    }
   }
-  :deep(.button-control) {
-    height: 100%;
-    padding: 0px;
-    font-weight: 500;
-    font-family: Inter;
-    text-transform: capitalize;
-    font-size: normal;
-    border-radius: 0px !important;
-    box-shadow: none !important;
-    overflow: hidden;
-
-    &.active {
-      // font-weight: 600;
+  .overlaying-map {
+    .separator {
+      color: $ti-4;
     }
+    .controls-wrapper {
+      backdrop-filter: blur(40px);
+      //   box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
 
-    .q-btn__wrapper {
-      padding: 0;
+      .controls-wrapper-inner {
+        //background: rgba(255, 255, 255, 0.3);
+        background: linear-gradient(
+          rgba(100, 100, 100, 0.68),
+          rgba(100, 100, 100, 0.68)
+        );
+        color: $ti-1;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+
+        .searchbar-wrapper {
+          .searchbar-input {
+            .q-field__inner {
+              .q-placeholder::placeholder {
+                opacity: 0.8;
+              }
+              input {
+                color: white !important;
+              }
+              .q-field__marginal {
+                font-size: unset;
+                color: white !important;
+              }
+            }
+          }
+        }
+      }
     }
-    .q-btn__content {
-      .close-icon-wrapper {
+  }
+  .transport-map {
+    .controls-wrapper {
+      backdrop-filter: none;
+
+      .controls-wrapper-inner {
+        border: 1px solid rgba(0, 0, 0, 0.2);
         background: white;
-        color: black;
-        height: 48px;
-        padding: 4px 16px 4px 12px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      .button-label {
-        //   padding: 0px 12px;
-      }
-      white-space: nowrap;
-      .q-icon {
-        margin-right: -6px;
+        color: $t-1;
+
+        .searchbar-wrapper {
+          .searchbar-input {
+            .q-field__inner {
+              .q-placeholder::placeholder {
+                opacity: 1;
+              }
+              input {
+                color: $t-1 !important;
+              }
+              .q-field__marginal {
+                font-size: unset;
+                color: $t-1 !important;
+              }
+            }
+          }
+        }
       }
     }
   }
-  .search-button-wrapper {
-    position: absolute;
-    right: 16px;
+}
+
+.body--dark {
+  .controls-wrapper {
+    .controls-wrapper-inner {
+      color: $ti-2;
+      background: $bi-3;
+
+      //background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      .button-control {
+        .q-btn__content {
+          .close-icon-wrapper {
+            background: $bi-4;
+            color: white;
+          }
+        }
+        &.active {
+          background: white;
+          color: $t-1;
+        }
+      }
+    }
+  }
+  .overlaying-map {
+    .separator {
+      color: $ti-4;
+    }
+    .controls-wrapper {
+      backdrop-filter: blur(40px);
+      // box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+
+      .controls-wrapper-inner {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+
+        background: linear-gradient(
+          rgba(80, 80, 80, 0.6),
+          rgba(80, 80, 80, 0.6)
+        );
+        color: $ti-1;
+        //border: 1px solid rgba(255, 255, 255, 0.15);
+      }
+    }
+  }
+}
+.controls-wrapper {
+  //z-index: 105;
+  justify-content: center;
+  position: relative;
+  border-radius: 48px;
+  overflow: hidden;
+
+  .controls-wrapper-inner {
+    pointer-events: all;
+    overflow: hidden;
+    //transition: all 0.3s;
+    cursor: pointer;
+    // width: 510px;
     height: 100%;
-    .search-button {
-      padding: 4px 6px;
-      border-radius: 100%;
-      background: lightgrey;
-      color: black;
+    border-radius: 48px;
+
+    position: relative;
+    height: 44px;
+    align-content: center;
+
+    .searchbar-wrapper {
+      padding-left: 18px;
+      padding-right: 18px;
+      margin-top: 2px;
+
+      .searchbar-input {
+        margin-top: -4px;
+        .q-field__inner {
+          .q-field__control::before {
+            border-color: transparent;
+            border: none;
+            font-size: larger;
+          }
+          .q-field__marginal {
+            font-size: unset;
+            font-size: larger;
+          }
+          input {
+            font-weight: 500;
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+
+    .q-btn::before {
+      box-shadow: none !important;
+    }
+    .button-control {
+      height: 42px;
+      .button-label {
+        //font-size: 1em;
+        white-space: nowrap;
+        font-weight: 500;
+      }
+      .q-btn__content {
+        // padding-left: 8px;
+        // padding-right: 8px;
+        .close-icon-wrapper {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 48px;
+          padding: 2px;
+          margin-right: 8px;
+          margin-left: -6px;
+        }
+
+        white-space: nowrap;
+      }
+    }
+
+    .location-button-wrapper {
+      position: absolute;
+      left: -80px;
+      top: 4px;
+      border-radius: 24px;
+      background: transparent;
+    }
+  }
+  &.search-wrapper {
+    .controls-wrapper-inner {
+      height: 44px;
+      align-content: center;
     }
   }
 }
 
 @media only screen and (max-width: 599px) {
-  .body--light {
-  }
-  .body--dark {
-  }
-
-  .inner-wrapper {
-    mask-image: none;
-    height: 44px;
-    overflow-y: hidden;
-
-    .control-scroll-area {
-      margin-top: -2px;
-      overflow-y: hidden !important;
-
-      overflow-y: hidden;
-
-      .scroll-wrapper {
-        //height: 44px;
-        overflow-y: hidden;
-
-        padding-right: 24px;
+  .controls-wrapper {
+    .controls-wrapper-inner {
+      height: 42px;
+      .button-control {
+        height: 40px;
+      }
+      .searchbar-input {
+        input {
+          font-size: unset !important;
+        }
       }
     }
-    .searchbar-wrapper {
-      margin-top: -2px;
-    }
-    .search-button-wrapper {
-      position: absolute;
-      right: 8px;
-      height: 100%;
-    }
-    :deep(.button-control) {
-      .button-label {
-        :first-child {
-          //display: none
+    &.search-wrapper {
+      .controls-wrapper-inner {
+        height: 40px;
+        align-content: center;
+        .searchbar-input {
+          input {
+            font-size: 0.5rem !important;
+          }
         }
       }
     }

@@ -31,8 +31,8 @@
     >
       <q-route-tab
         :to="{ name: 'Explore' }"
-        exact
         key="1"
+        exact
         name="nearby"
         content-class="tab"
         label="Nearby"
@@ -49,7 +49,6 @@
       <q-route-tab
         :to="{ query: { view: 'explore' }, name: 'Explore' }"
         @click="() => (showPanel = false)"
-        exact
         key="2"
         name="explore"
         :icon="
@@ -110,7 +109,6 @@
         name="search"
         key="5"
         :ripple="false"
-        exact
         :to="{ query: { view: 'search' }, name: 'Explore' }"
       />
       <!--

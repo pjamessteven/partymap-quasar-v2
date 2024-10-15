@@ -4,7 +4,7 @@
       class="date-header flex row no-wrap grow ellipsis inter"
       :class="{
         ' q-px-md q-pb-md   t1  text-large  ': $q.screen.gt.sm,
-        'q-px-sm q-ml-xs q-py-md t1 semibold': $q.screen.lt.md,
+        'q-px-sm q-ml-xs q-py-md t1  semibold': $q.screen.lt.md,
       }"
     >
       <span v-if="!!altLabel">{{ altLabel }}</span>
@@ -85,7 +85,7 @@ export default {
       //width: calc(100% - 64px) !important;
       //padding-right: 64px !important;
       font-size: unset;
-      font-weight: 600;
+      font-weight: 700;
     }
   }
 }

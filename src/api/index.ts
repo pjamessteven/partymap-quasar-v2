@@ -70,9 +70,12 @@ axios.interceptors.response.use(
         const errorMessage = error.response.data.error.message;
         const errorCode = error.response.data.error.code;
         if (errorCode) {
-          Notify.create(t('error_codes.' + errorCode));
+          Notify.create({
+            message: t('error_codes.' + errorCode),
+            icon: 'error',
+          });
         } else if (errorMessage) {
-          Notify.create(errorMessage);
+          Notify.create({ message: errorMessage, icon: 'error' });
         }
       } else if (error.request) {
         /*

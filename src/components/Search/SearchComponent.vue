@@ -18,7 +18,11 @@
       class="searchbar-input inter bold"
       v-model="query"
       @keyup.enter="() => $refs.search.blur()"
-      placeholder="Search events, places, artists & tags"
+      :placeholder="
+        $q.screen.gt.xs
+          ? 'Search events, places, artists & tags'
+          : 'Search events, places & artists'
+      "
     >
       <template v-slot:prepend>
         <div class="q-mr-xs q-ml-" v-if="$q.screen.gt.xs">
@@ -70,7 +74,7 @@ export default {
         if (this.$route.name !== 'Explore') {
           this.$router.push({ name: 'Explore' });
         }
-      } else {
+      } else if (this.$q.screen.gt.xs) {
         this.hideResultsAndPreviousPanel();
       }
     },
@@ -87,19 +91,16 @@ export default {
     },
     clearSearch() {
       this.query = null;
-      this.searchbarShowing = false;
-      this.hideResultsAndPreviousPanel();
+      this.$refs.search.focus();
+      if (this.$q.screen.gt.xs) {
+        this.searchbarShowing = false;
+        this.hideResultsAndPreviousPanel();
+      }
     },
     onSearchbarFocus() {
       if (this.query?.length > 0) {
         this.sidebarPanel = 'search';
         this.showPanel = true;
-      }
-    },
-    onSearchbarBlur() {
-      if (!this.query || this.query.length === 0) {
-        this.searchbarShowing = false;
-        this.hideResultsAndPreviousPanel();
       }
     },
   },

@@ -53,7 +53,7 @@ export const useMainStore = defineStore('main', {
     sidebarMinimized: false,
     showSidebar: true,
     showSearchBox: false, // for menubar search
-    sidebarPanel: 'nearby',
+    sidebarPanel: '',
     showPanel: Screen.lt.sm,
     showPanelBackground: Screen.lt.sm,
     sidebarExpanded: false,
@@ -69,7 +69,7 @@ export const useMainStore = defineStore('main', {
     userLocationCountry: null,
     currentLocationFromSearch: false,
     currentLocation: null,
-    currentLocationCity: '',
+    currentLocationCity: 'In this area',
     currentLocationCountry: null,
     fineLocation: false,
     groupEventsByMonth: true,
@@ -136,30 +136,31 @@ export const useMainStore = defineStore('main', {
         );
         const data = await response.json();
         const address = data.address;
-
-        if (address?.city?.length > 0) {
-          city = address.city;
-        } else if (address?.town?.length > 0) {
-          city = address.town;
-        } else if (address?.village?.length > 0) {
-          city = address.village;
-        } else if (address.municipality) {
-          city = address.municipality;
-        } else if (address.administrativeLevels?.level1short) {
-          city = address.administrativeLevels?.level1short;
-        } else if (address.administrativeLevels?.level2short) {
-          city = address.administrativeLevels?.level2short;
-        } else if (address.suburb) {
-          city = address.suburb;
-        } else if (address.suburb) {
-          city = address.neighbourhood;
-        } else if (address.county) {
-          city = address.county;
-        } else if (address.state_district) {
-          city = address.state_district;
+        if (address) {
+          if (address?.city?.length > 0) {
+            city = address.city;
+          } else if (address?.town?.length > 0) {
+            city = address.town;
+          } else if (address?.village?.length > 0) {
+            city = address.village;
+          } else if (address?.municipality) {
+            city = address.municipality;
+          } else if (address?.administrativeLevels?.level1short) {
+            city = address.administrativeLevels?.level1short;
+          } else if (address.administrativeLevels?.level2short) {
+            city = address.administrativeLevels?.level2short;
+          } else if (address.suburb) {
+            city = address.suburb;
+          } else if (address.suburb) {
+            city = address.neighbourhood;
+          } else if (address.county) {
+            city = address.county;
+          } else if (address.state_district) {
+            city = address.state_district;
+          }
+          country = address.country;
+          state = address.state || address.state_district;
         }
-        country = address.country;
-        state = address.state || address.state_district;
       } catch (e) {
         throw e;
         // just show the co-ords if reverse geocoding fails
@@ -242,7 +243,8 @@ export const useMainStore = defineStore('main', {
         this.fineLocation = false;
         Notify.create({
           message:
-            "Can't get your fine location! \n\n Using rough  IP location instead.",
+            "Can't get your location! \n\n Using IP address location instead...",
+          icon: 'error',
         });
 
         this.userLocationLoading = false;

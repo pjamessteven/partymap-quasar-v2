@@ -1,5 +1,5 @@
 <template>
-  <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
+  <MenuWrapper :showing="showing" @hide="onHide()">
     <div
       class="flex row items-start"
       :class="$q.screen.lt.sm ? 'q-pb-xl' : undefined"

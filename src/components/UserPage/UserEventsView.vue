@@ -13,7 +13,7 @@
         <q-separator />
 -->
 
-    <transition enter-active-class="animated fadeIn">
+    <transition appear enter-active-class="animated fadeIn">
       <div
         class="flex column no-wrap scroll-content"
         :class="$q.screen.lt.sm ? 'q-px-sm ' : ''"

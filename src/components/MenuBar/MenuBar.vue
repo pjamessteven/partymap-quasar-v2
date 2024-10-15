@@ -14,16 +14,21 @@
     <div class="flex items-center no-wrap q-mr-md">
       <MenuBarLogo
         class="menubar-item logo"
-        :class="{ 'menubar-item-inverted': iconLeftColor === 'black' }"
+        :class="{
+          'menubar-item-inverted': iconLeftColor === 'black',
+          'o-000 pointer-events-none': previousRouteName && $q.screen.lt.xl,
+        }"
         v-show="
-          !previousRouteName || swipingDownMenuPageMobile || $q.screen.gt.sm
+          !previousRouteName || swipingDownMenuPageMobile || $q.screen.gt.xs
         "
       />
 
       <div
         class="tab-wrapper menubar-item flex items-center"
         :class="{ 'menubar-item-inverted': iconLeftColor === 'black' }"
-        v-if="$q.screen.gt.xs"
+        v-if="
+          $q.screen.gt.sm || ($q.screen.gt.xs && $route.name !== 'EventPage')
+        "
       >
         <div
           class="q-py-md q-mr-sm"
@@ -35,12 +40,7 @@
         <NavigationBar color="white" />
       </div>
     </div>
-    <DesktopSearchComponent
-      :class="{ 'q-mt-md': $q.screen.gt.lg }"
-      class="desktop-search-component"
-      v-if="$q.screen.gt.sm && showSearchForRoute"
-      :overlayingMap="overlayingContent"
-    />
+
     <transition
       appear
       enter-active-class="animated fadeIn slow"
@@ -48,25 +48,17 @@
     >
       <div
         class="back-button-wrapper menubar-item flex items-center no-wrap"
-        :class="{ 'menubar-inverted': iconColor === 'black' }"
+        :class="{ 'menubar-item-inverted': iconColor === 'black' }"
         v-if="
           previousRouteName &&
           this.$route.name !== 'Explore' &&
-          !swipingDownMenuPageMobile &&
-          $q.screen.lt.md
+          !swipingDownMenuPageMobile
         "
       >
-        <q-btn
-          class="back-button"
-          style="cursor: pointer"
-          :ripple="false"
-          flat
-          icon="mdi-chevron-left"
-          :label="previousRouteName"
-          color="white"
-          no-caps
-          @click="back()"
-        />
+        <div class="back-button flex items-center" @click="back">
+          <q-icon name="mdi-chevron-left" class="q-mr-sm" size="sm" />
+          {{ previousRouteName }}
+        </div>
       </div>
     </transition>
     <transition
@@ -90,7 +82,6 @@ import NavigationBar from 'src/components/NavigationBar.vue';
 import { useMainStore } from 'stores/main';
 import { mapState, mapWritableState } from 'pinia';
 import { StatusBar, Style } from '@capacitor/status-bar';
-import DesktopSearchComponent from 'src/components/Search/DesktopSearchComponent.vue';
 
 export default {
   name: 'MenuBar',
@@ -98,7 +89,6 @@ export default {
     MenuBarLogo,
     MenuBarButtons,
     NavigationBar,
-    DesktopSearchComponent,
   },
 
   data() {
@@ -151,21 +141,21 @@ export default {
       }
       if (previousRoute.name === 'Explore') {
         if (this.sidebarPanel === 'explore' || this.sidebarPanel === 'search') {
-          return this.$q.screen.lt.md ? 'Back' : 'Back to results';
+          return this.$q.screen.lt.sm ? 'Back' : 'Back to results';
         } else if (this.sidebarPanel === 'nearby') {
-          return this.$q.screen.lt.md ? 'Back' : 'Back home';
+          return this.$q.screen.lt.sm ? 'Back' : 'Back to nearby';
         } else if (this.sidebarPanel === 'profile') {
-          return this.$q.screen.lt.md ? 'Back' : 'Back';
+          return this.$q.screen.lt.sm ? 'Back' : 'Back';
         } else return 'null';
       } else if (
         previousRoute.name === 'EventPage' ||
         previousRoute.name === 'ArtistPage'
       ) {
-        return this.$q.screen.lt.md
+        return this.$q.screen.lt.sm
           ? 'Back'
           : 'Back to ' + previousRoute.query.name.replace(/_/g, ' ');
       } else if (previousRoute?.meta['friendlyName']) {
-        return this.$q.screen.lt.md
+        return this.$q.screen.lt.sm
           ? 'Back'
           : previousRoute.meta['friendlyName'];
       } else {
@@ -185,15 +175,7 @@ export default {
       'showPanel',
       'showPanelBackground',
     ]),
-    showSearchForRoute() {
-      return (
-        this.$route.name === 'Explore' ||
-        this.$route.name === 'BrowsePage' ||
-        this.$route.name === 'EventPage' ||
-        this.$route.name === 'ArtistPage' ||
-        this.$route.name === 'profile'
-      );
-    },
+
     ...mapWritableState(useMainStore, ['routerHistory']),
     swipingDownMenuPageMobile() {
       return this.$route.name === 'EventPage' && this.sidebarOpacity === 1;
@@ -251,8 +233,11 @@ export default {
     },
 
     iconLeftColor() {
-      if (this.$q.screen.gt.sm) {
-        if (!this.$q.dark.isActive && this.$route.name === 'Explore') {
+      if (this.$q.screen.gt.xs) {
+        if (
+          (!this.$q.dark.isActive && this.$route.name === 'Explore') ||
+          (this.$q.screen.gt.lg && this.$route.name === 'EventPage')
+        ) {
           return 'black';
         }
       }
@@ -375,12 +360,15 @@ export default {
       height: 24px;
     }
     .back-button {
+      color: white;
       opacity: 1;
       transition: opacity 0.3s ease;
       pointer-events: all;
       min-height: 72px;
       border-radius: 0px !important;
-      padding-right: 24px;
+      padding-right: 16px;
+      padding-left: 16px;
+      cursor: pointer;
     }
   }
 

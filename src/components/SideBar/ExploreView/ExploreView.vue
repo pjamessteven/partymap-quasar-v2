@@ -10,7 +10,7 @@
       <q-separator />
     </div>
 
-    <div class="mobile-panel-button" v-if="$q.screen.lt.md">
+    <div class="mobile-panel-button" v-if="$q.screen.lt.sm">
       <q-icon
         @click="showPanel ? $emit('hidePanel') : $emit('showPanel')"
         flat
@@ -73,11 +73,18 @@
           "
           class="scroll-area flex grow"
           :disableScroll="
-            $q.screen.lt.md && (!showPanelBackground || preventMapZoom)
+            $q.screen.lt.sm && (!showPanelBackground || preventMapZoom)
           "
         >
           <div class="flex column no-wrap scroll-content">
-            <div class="flex row items-end q-px-lg q-mb-sm no-wrap">
+            <div
+              class="flex row items-end q-mb-sm no-wrap"
+              :class="{
+                'q-px-lg ': $q.screen.gt.sm,
+                'q-px-sm ': $q.screen.lt.md,
+              }"
+              v-if="$q.screen.gt.xs"
+            >
               <div class="flex row no-wrap items-center">
                 <router-link
                   :to="{ name: 'Explore' }"
@@ -85,11 +92,7 @@
                 >
                   <q-btn
                     flat
-                    class=""
-                    :class="{
-                      'q-ml-md q-pa-sm': $q.screen.lt.md,
-                      'q-pa-md': $q.screen.gt.sm,
-                    }"
+                    :class="$q.screen.gt.sm ? 'q-pa-md' : 'q-pa-sm'"
                     :style="
                       $q.screen.gt.sm
                         ? 'margin-left: -16px; border-radius: 100px!important;'
@@ -97,7 +100,10 @@
                     "
                   >
                     <template v-slot:default>
-                      <q-icon size="sm" name="mdi-crosshairs" />
+                      <q-icon
+                        :size="$q.screen.gt.sm ? 'sm' : 'xs'"
+                        name="mdi-crosshairs"
+                      />
                     </template>
                   </q-btn>
                 </router-link>
@@ -106,78 +112,19 @@
               </div>
 
               <div
-                class="flex row items-center no-wrap q-ml-sm"
+                class="flex row items-center no-wrap"
+                :class="$q.screen.gt.sm ? 'q-ml-sm' : 'q-ml-xs'"
                 style="min-width: 220px"
               >
-                <q-icon name="las la-calendar" class="q-mr q-pa-md" size="sm" />
+                <q-icon
+                  name="las la-calendar"
+                  :class="$q.screen.gt.sm ? 'q-pa-md' : 'q-pa-sm'"
+                  :size="$q.screen.gt.sm ? 'sm' : 'xs'"
+                />
                 <DesktopDateSelect />
               </div>
             </div>
 
-            <!-- cities-->
-            <div
-              class="flex column q-mb-lg q-mt-md q-pt-sm"
-              v-if="topRegionsInArea?.length > 0 && mapZoomLevel < 7"
-            >
-              <div
-                v-if="false"
-                class="q-pb-md q-mt-sm t1 header"
-                :class="$q.screen.gt.sm ? 'q-px-lg  ' : ' '"
-              >
-                <div class="inter bolder text-large">Happening Places</div>
-              </div>
-
-              <div :style="$q.screen.gt.sm ? 'margin-bottom: -24px' : ''">
-                <CustomQScroll
-                  horizontal
-                  class="tag-scroll-area"
-                  :style="
-                    topRegionsInArea.length > 14
-                      ? 'height: 72px'
-                      : 'height: 36px'
-                  "
-                  style="width: 100%"
-                  :thumb-style="
-                    $q.screen.gt.sm
-                      ? { bottom: '0px', height: '0px' }
-                      : { bottom: '0px', height: '0px' }
-                  "
-                >
-                  <div
-                    class="flex column inter bolder text-h6 t3"
-                    style="word-break: keep-all; white-space: nowrap"
-                    :class="$q.screen.gt.sm ? 'q-pl-lg ' : 'q-pl-lg'"
-                  >
-                    <div class="flex row no-wrap q-gutter-md q-pr-xl">
-                      <div
-                        v-for="(region, index) in computedRegions1"
-                        :key="index"
-                        @click="clickTag(tag)"
-                        style="text-transform: capitalize"
-                        :class="$q.platform.is.ios ? 'no-hover' : ''"
-                      >
-                        {{ region.long_name }}
-                      </div>
-                    </div>
-
-                    <div
-                      class="flex row no-wrap q-gutter-md q-pt-sm"
-                      v-if="computedRegions2.length > 0"
-                    >
-                      <div
-                        v-for="(region, index) in computedRegions2"
-                        :key="index"
-                        @click="clickTag(tag)"
-                        style="text-transform: capitalize"
-                        :class="$q.platform.is.ios ? 'no-hover' : ''"
-                      >
-                        {{ region.long_name }}
-                      </div>
-                    </div>
-                  </div>
-                </CustomQScroll>
-              </div>
-            </div>
             <!-- selected artist (desktop only) -->
             <div
               class="flex column q-mt-md q-pt-sm"
@@ -210,16 +157,100 @@
 
             <transition appear enter-active-class="animated fadeIn slow">
               <div class="flex column" v-if="!isLoadingInitial">
-                <!-- tags -->
+                <!-- cities-->
                 <div
                   class="flex column q-mb-lg q-mt-md q-pt-sm"
-                  v-if="topTagsInArea?.length > 0 || controlTag.length > 0"
+                  v-if="
+                    topRegionsInArea?.length > 2 &&
+                    mapZoomLevel < 7 &&
+                    $q.screen.gt.sm
+                  "
+                >
+                  <div
+                    v-if="false"
+                    class="q-pb-md q-mt-sm t1 header"
+                    :class="$q.screen.gt.sm ? 'q-px-lg  ' : ' '"
+                  >
+                    <div class="inter bolder text-large">Happening Places</div>
+                  </div>
+
+                  <div :style="$q.screen.gt.sm ? 'margin-bottom: -24px' : ''">
+                    <CustomQScroll
+                      horizontal
+                      class="tag-scroll-area"
+                      :style="
+                        topRegionsInArea.length > 14
+                          ? 'height: 72px'
+                          : 'height: 36px'
+                      "
+                      style="width: 100%"
+                      :thumb-style="
+                        $q.screen.gt.xs
+                          ? {
+                              borderRadius: '0px',
+                              bottom: '0px',
+                              height: '4px',
+                              marginLeft: '24px',
+                              paddingLeft: '16px',
+                            }
+                          : { bottom: '0px', height: '0px' }
+                      "
+                    >
+                      <div
+                        class="flex column inter bolder text-h6 t3"
+                        style="word-break: keep-all; white-space: nowrap"
+                        :class="$q.screen.gt.sm ? 'q-pl-lg ' : 'q-pl-lg'"
+                      >
+                        <div class="flex row no-wrap q-gutter-md q-pr-xl">
+                          <div
+                            v-for="(region, index) in computedRegions1"
+                            :key="index"
+                            class="city"
+                            @click="clickRegion(region)"
+                            style="text-transform: capitalize"
+                            :class="$q.platform.is.ios ? 'no-hover' : ''"
+                          >
+                            {{ region.long_name }}
+                          </div>
+                        </div>
+
+                        <div
+                          class="flex row no-wrap q-gutter-md q-pt-sm"
+                          v-if="computedRegions2.length > 0"
+                        >
+                          <div
+                            v-for="(region, index) in computedRegions2"
+                            :key="index"
+                            class="city"
+                            @click="clickRegion(region)"
+                            style="text-transform: capitalize"
+                            :class="$q.platform.is.ios ? 'no-hover' : ''"
+                          >
+                            {{ region.long_name }}
+                          </div>
+                        </div>
+                      </div>
+                    </CustomQScroll>
+                  </div>
+                </div>
+                <!-- tags -->
+                <div
+                  class="flex column q-mt-md q-pt-sm"
+                  :class="{
+                    'q-mb-lg': $q.screen.gt.sm,
+                    'q-mb-md': $q.screen.lt.md,
+                  }"
+                  v-if="
+                    (topTagsInArea?.length > 0 || controlTag.length > 0) &&
+                    $q.screen.gt.xs
+                  "
                 >
                   <div
                     class="q-pb-md header"
-                    :class="
-                      $q.screen.gt.sm ? 'q-px-lg  t1' : ' t1 inter semibold'
-                    "
+                    :class="{
+                      'q-px-lg': $q.screen.gt.sm,
+                      'q-px-md': $q.screen.lt.md,
+                    }"
                   >
                     <div class="" v-if="topTagsInArea?.length">Hot Tags</div>
                     <div v-else-if="controlTag.length === 1">Selected Tag</div>
@@ -313,7 +344,7 @@
                   <ArtistsComponent
                     :class="$q.screen.gt.sm ? 'q-pl- q-mb-md' : ''"
                     :artists="topArtistsInArea"
-                    :size="$q.screen.gt.lg ? 'lg' : 'md'"
+                    :size="$q.screen.gt.lg ? 'md' : 'md'"
                     style="margin-top: -8px"
                   />
                 </div>
@@ -356,17 +387,19 @@
         <div class="flex column items-center no-wrap">
           <div
             class="inter q-mb-md"
+            :class="$q.screen.gt.xs && 'q-mt-xl'"
             style="font-weight: 600"
-            v-if="isLoadingInitial && (!sidebarMinimized || $q.screen.gt.sm)"
+            v-if="isLoadingInitial && (!sidebarMinimized || $q.screen.gt.xs)"
           >
             Finding what's good...
           </div>
           <div
             class="inter semibold q-mb-md"
+            :class="$q.screen.gt.xs && 'q-mt-xl'"
             v-else-if="
               !isLoadingInitial &&
               noResults &&
-              (!sidebarMinimized || $q.screen.gt.sm)
+              (!sidebarMinimized || $q.screen.gt.xs)
             "
             style="font-weight: 600"
           >
@@ -390,7 +423,7 @@
               <div class="flex row no-wrap">
                 <q-btn
                   no-caps
-                  style="border-radius: 48px !important"
+                  style="border-radius: 48px !important; height: 40px"
                   v-if="anyFiltersEnabled"
                   class="button-plain flex items-center"
                   @click="
@@ -399,19 +432,19 @@
                     }
                   "
                 >
-                  <div class="flex items-center row no-wrap">
+                  <div class="flex items-center row no-wrap q-px-xs">
                     <q-icon name="mdi-close" size="1rem" class="q-pr-md" />
                     <div>Clear filters</div>
                   </div>
                 </q-btn>
                 <q-btn
                   no-caps
-                  style="border-radius: 48px !important"
+                  style="border-radius: 48px !important; height: 40px"
                   v-if="mapZoomLevel > 2"
                   class="button-plain flex items-center q-ml-sm"
                   @click="zoomOut()"
                 >
-                  <div class="flex items-center row no-wrap">
+                  <div class="flex items-center row no-wrap q-px-xs">
                     <q-icon
                       name="mdi-magnify-minus-outline"
                       size="1rem"
@@ -505,6 +538,14 @@ export default {
       this.eventDatesLoading = true;
 
       this.controlArtist = [];
+    },
+    clickRegion(region) {
+      this.currentLocationCity = region.long_name;
+      this.currentLocationFromSearch = true;
+      toRaw(this.map).flyTo({
+        center: { lat: region.lat, lng: region.lng },
+        zoom: 7,
+      });
     },
     clickTag(tag) {
       // force loading state after clicking to prevent glitchy feeling ui
@@ -619,12 +660,7 @@ export default {
         if (to.name === 'Explore') {
           if (this.eventDates?.length === 0) {
             this.blockUpdates = false;
-            if (!this.currentLocation) {
-              await this.loadIpInfo();
-              this.getInitialList();
-            } else {
-              this.getInitialList();
-            }
+            this.getInitialList();
           }
         }
       },
@@ -690,6 +726,8 @@ export default {
       'showPanel',
       'showPanelBackground',
       'enablePanelSwipeDown',
+      'currentLocationCity',
+      'currentLocationFromSearch',
     ]),
     ...mapWritableState(useMapStore, ['map', 'blockUpdates', 'preventMapZoom']),
     ...mapState(useAuthStore, ['currentUser']),
@@ -954,6 +992,10 @@ export default {
       .tag-scroll-area {
         mask-image: linear-gradient(to left, transparent 0px, white 64px);
         width: 100%;
+        .city {
+          transition: all 0.3s;
+          cursor: pointer;
+        }
         .tag {
           opacity: 1;
           transition: all 0.3s ease;
@@ -996,6 +1038,11 @@ export default {
     background: transparent;
 
     .tag-scroll-area {
+      .city {
+        &:hover {
+          color: white;
+        }
+      }
       .tag {
         opacity: 1;
         transition: all 0.3s ease;
@@ -1040,6 +1087,11 @@ export default {
   .scroll-area {
     background: transparent;
     .tag-scroll-area {
+      .city {
+        &:hover {
+          color: black;
+        }
+      }
       .tag {
         // opacity: 1;
         transition: all 0.3s ease;
@@ -1079,9 +1131,9 @@ export default {
   }
 }
 
-@media only screen and (min-width: 1921px) {
-  .linear-progress {
-    // margin-top: 32px;
+@media only screen and (min-width: 600px) and (max-width: 1023px) {
+  .header {
+    font-size: unset;
   }
 }
 

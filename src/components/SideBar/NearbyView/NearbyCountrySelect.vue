@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex"
+    class="country-select flex"
     @click.capture="
       (event) => {
         inputValue = null;
@@ -20,20 +20,31 @@
       mode="out-in"
     >
       <q-select
-        style="min-width: 170px"
         :key="currentLocationCity"
         ref="locationSelect"
-        class="text-h5 inter bold country-select"
-        :input-style="$q.screen.gt.xs ? 'width: 169px;' : 'width: 250px'"
+        class="select inter bold"
+        :input-style="
+          $q.screen.gt.xs
+            ? 'width: 169px;'
+            : $q.screen.gt.sm
+            ? 'width: 250px'
+            : 'width: 150px'
+        "
         input-class="country-select-input"
         behavior="menu"
-        :class="
-          (!query || query?.length === 0) && !currentLocationCity
-            ? userLocationLoading
-              ? 'loading-placeholder'
-              : 'placeholder'
-            : ''
-        "
+        :class="{
+          'loading-placeholder':
+            (!query || query?.length === 0) &&
+            !currentLocationCity &&
+            userLocationLoading,
+          placeholder:
+            (!query || query?.length === 0) &&
+            !currentLocationCity &&
+            !userLocationLoading,
+          'text-h5': $q.screen.gt.sm,
+          'text-h4': $q.screen.lt.sm,
+          'text-large': $q.screen.lt.md,
+        }"
         :model-value="inputValue"
         :use-input="inputValue == null"
         @input-value="
@@ -79,7 +90,7 @@ import { useMainStore } from 'src/stores/main';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import _ from 'lodash';
 export default {
-  props: {},
+  props: { size: { type: String, default: 'md' } },
   data() {
     return {
       locationSearchResults: [],
@@ -190,44 +201,54 @@ export default {
 .body--light {
 }
 .country-select {
-  :deep(.q-field__native) {
+  .select {
     font-weight: 800 !important;
-    span {
-      line-height: 1.2em;
-    }
-  }
-  :deep(.country-select-input) {
-    font-weight: 800 !important;
-    height: 42px;
-  }
+    position: relative;
+    min-width: 170px;
 
-  font-weight: 800 !important;
-  position: relative;
-  &.placeholder {
-    &::before {
-      z-index: 2;
-      position: absolute;
-      left: 0px;
-      top: 12px;
-      height: 100%;
-      width: 100%;
-      content: 'Search places';
-      // color: grey;
-      font-weight: 800;
+    :deep(.q-field__native) {
+      font-weight: 800 !important;
+      span {
+        line-height: 1.2em;
+      }
+    }
+    :deep(.country-select-input) {
+      font-weight: 800 !important;
+      height: 42px;
+    }
+    &.placeholder {
+      &::before {
+        z-index: 2;
+        position: absolute;
+        left: 0px;
+        top: 12px;
+        height: 100%;
+        width: 100%;
+        content: 'Search places';
+        // color: grey;
+        font-weight: 800;
+      }
+    }
+    &.loading-placeholder {
+      &::before {
+        opacity: 0.68;
+        z-index: 2;
+        position: absolute;
+        left: 0px;
+        top: 8px;
+        height: 100%;
+        width: 100%;
+        content: '...';
+        // color: grey;
+        font-weight: 800;
+      }
     }
   }
-  &.loading-placeholder {
-    &::before {
-      opacity: 0.68;
-      z-index: 2;
-      position: absolute;
-      left: 0px;
-      top: 8px;
-      height: 100%;
-      width: 100%;
-      content: '...';
-      // color: grey;
-      font-weight: 800;
+}
+@media only screen and (max-width: 1023px) {
+  .country-select {
+    .select {
+      min-width: 130px;
     }
   }
 }

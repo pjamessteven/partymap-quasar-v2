@@ -15,7 +15,8 @@
         @map:moveend="moveend"
         @map:click="mapClick"
         @map:move="moving"
-        @loaded="mapLoaded"
+        @map:load="mapLoaded"
+        hash="state"
       >
         <mgl-raster-source
           :tile-size="pixelRatio >= 1.5 ? 128 : 168"
@@ -190,6 +191,19 @@ watch(
 );
 
 watch(
+  () => mainStore.userLocation,
+  (newv: LngLatLike | null) => {
+    if (mainStore.sidebarPanel === 'nearby' && newv) {
+      blockUpdates.value = true;
+      flyTo({
+        center: newv,
+        padding: getNearbyPagePadding(),
+      });
+    }
+  }
+);
+
+watch(
   () => mainStore.sidebarPanel,
   (newv: string, oldv: string) => {
     if (mainStore.userLocation && newv === 'nearby') {
@@ -253,6 +267,13 @@ const moving = (event) => {
   }
 };
 
+const mapLoaded = (event) => {
+  if (mainStore.sidebarPanel === 'explore' && Screen.gt.xs) {
+    debouncedReverseGeocode(map.map?.getCenter(), map.map?.getZoom());
+  }
+  mapStateToStore();
+};
+
 const debouncedClearMarkersAndLoadPoints = debounce(
   async () => {
     points.value = [];
@@ -264,27 +285,29 @@ const debouncedClearMarkersAndLoadPoints = debounce(
 
 const debouncedReverseGeocode = debounce(
   async (coords, zoom) => {
-    if (mapStore.mapZoomLevel <= 4) {
+    if (zoom <= 4) {
       mainStore.currentLocationCity = 'In this area';
     } else {
       const reverseGeo = await mainStore.reverseGecodeLocation(coords, zoom);
-      if (mapStore.mapZoomLevel > 9) {
-        const cityOrState = reverseGeo.city || reverseGeo.state;
-        if (cityOrState) {
-          mainStore.currentLocationCity = cityOrState; //+ ', ' + reverseGeo.country;
-        } else mainStore.currentLocationCity = reverseGeo.country;
-      } else if (mapStore.mapZoomLevel > 7) {
-        if (reverseGeo.state) {
-          mainStore.currentLocationCity = reverseGeo.state; // + ', ' + reverseGeo.country;
+      if (reverseGeo.country || reverseGeo.city) {
+        if (reverseGeo.country)
+          mainStore.currentLocationCountry = reverseGeo.country;
+        if (zoom > 9) {
+          const cityOrState = reverseGeo.city || reverseGeo.state;
+          if (cityOrState) {
+            mainStore.currentLocationCity = cityOrState; //+ ', ' + reverseGeo.country;
+          } else mainStore.currentLocationCity = reverseGeo.country;
+        } else if (zoom > 7) {
+          if (reverseGeo.state) {
+            mainStore.currentLocationCity = reverseGeo.state; // + ', ' + reverseGeo.country;
+          } else {
+            mainStore.currentLocationCity = reverseGeo.country;
+          }
         } else {
           mainStore.currentLocationCity = reverseGeo.country;
         }
-      } else {
-        mainStore.currentLocationCity = reverseGeo.country;
       }
 
-      if (reverseGeo.country)
-        mainStore.currentLocationCountry = reverseGeo.country;
       mainStore.currentLocationFromSearch = false;
       mainStore.userLocationLoading = false;
     }
@@ -293,21 +316,26 @@ const debouncedReverseGeocode = debounce(
   { leading: false, trailing: true }
 );
 
+const mapStateToStore = () => {
+  if (map.map) {
+    const center = map.map.getCenter();
+    const zoomLevel = map.map.getZoom();
+    mapStore.mapBounds = getPaddedBounds(map.map, getDefaultPadding());
+    mapStore.mapCenter = center;
+    mapStore.mapZoomLevel = zoomLevel;
+    mainStore.currentLocation = center;
+  }
+};
+
 const moveend = () => {
   mapStore.mapMoving = false;
   blockPeekMap.value = false;
   if (!blockUpdates.value) {
     if (map.map) {
-      const center = map.map.getCenter();
-      const zoomLevel = map.map.getZoom();
-      mapStore.mapBounds = getPaddedBounds(map.map, getDefaultPadding());
-      //mapStore.mapBounds = map.map.getBounds();
-      mapStore.mapCenter = center;
-      mapStore.mapZoomLevel = zoomLevel;
-      mainStore.currentLocation = center;
+      mapStateToStore();
       // dont rev. geocode immediatly after selecting search result
-      if (!mainStore.currentLocationFromSearch)
-        debouncedReverseGeocode(center, zoomLevel);
+      if (!mainStore.currentLocationFromSearch && Screen.gt.xs)
+        debouncedReverseGeocode(mapStore.mapCenter, mapStore.mapZoomLevel);
     }
     mainStore.currentLocationFromSearch = false;
   } else {
@@ -395,7 +423,7 @@ const getPaddedBounds = (map: Map, padding: PaddingOptions) => {
   const swPadded = map.unproject([padding.left, heightPx - padding.bottom]);
   const nePadded = map.unproject([widthPx - padding.right, padding.top]);
 
-  return new LngLatBounds(swPadded, nePadded);
+  return new LngLatBounds(swPadded, nePadded); //.adjustAntiMeridian();
 };
 
 const flyTo = ({

@@ -13,7 +13,7 @@
         width: $q.screen.gt.sm ? '12px' : '4px',
         borderRadius: '0px',
       }"
-      :class="!showPanelBackground && $q.screen.lt.md && 'disable-scroll'"
+      :class="!showPanelBackground && $q.screen.lt.sm && 'disable-scroll'"
       class="scroll-area flex grow"
     >
       <div class="scroll-stuff flex column">
@@ -22,25 +22,29 @@
           style="width: 100%"
           :class="{
             'q-px-lg ': $q.screen.gt.sm,
-            'q-px-md  q-mt-md ': $q.screen.lt.md,
+            'q-px-md  q-mt-md ': $q.screen.lt.sm,
+            'q-px-sm ': $q.screen.lt.md && $q.screen.gt.xs,
           }"
         >
           <div
             style="margin-top: -8px"
             class="ellipsis text-h4 inter bolder"
-            v-if="$q.screen.lt.md"
+            v-if="$q.screen.lt.sm"
           >
             <span class="">Near</span>
           </div>
           <div
-            class="flex items-end no-wrap"
+            class="flex no-wrap"
             :class="{
-              'justify-start text-h4': $q.screen.gt.sm,
-              'justify-between row reverse  text-h4': $q.screen.lt.md,
+              'justify-start items-end text-h4': $q.screen.gt.xs,
+              'justify-start row': $q.screen.lt.sm,
             }"
             style="width: 100%"
           >
-            <div class="flex row no-wrap items-center">
+            <div
+              class="flex row no-wrap items-center"
+              :class="{ 'reverse grow justify-between': $q.screen.lt.sm }"
+            >
               <q-btn
                 flat
                 class=""
@@ -60,19 +64,24 @@
                     <q-icon
                       name="mdi-crosshairs-gps"
                       class=""
-                      size="sm"
+                      :size="$q.screen.lt.sm || $q.screen.gt.sm ? 'sm' : 'xs'"
                       v-if="fineLocation && !currentLocationFromSearch"
                     />
-                    <q-icon size="sm" name="mdi-crosshairs" class="" v-else />
+                    <q-icon
+                      :size="$q.screen.lt.sm || $q.screen.gt.sm ? 'sm' : 'xs'"
+                      name="mdi-crosshairs"
+                      class=""
+                      v-else
+                    />
                   </div>
                   <div v-else style="position: relative" class="flex">
                     <q-icon
-                      size="sm"
+                      :size="$q.screen.lt.sm || $q.screen.gt.sm ? 'sm' : 'xs'"
                       style="z-index: 1"
                       name="mdi-crosshairs"
                     />
                     <q-icon
-                      size="sm"
+                      :size="$q.screen.lt.sm || $q.screen.gt.sm ? 'sm' : 'xs'"
                       style="z-index: 2; left: 0px"
                       class="animated infinite flash slowest absolute"
                       name="mdi-crosshairs-gps"
@@ -100,10 +109,19 @@
               <NearbyCountrySelect />
             </div>
             <div
-              class="flex row items-center no-wrap q-ml-sm"
+              class="flex row items-center no-wrap"
+              :class="{
+                ' q-ml-sm': $q.screen.gt.sm,
+                'q-ml-xs': $q.screen.lt.md,
+              }"
               style="min-width: 220px"
+              v-if="$q.screen.gt.xs"
             >
-              <q-icon name="las la-calendar" class="q-mr q-pa-md" size="sm" />
+              <q-icon
+                name="las la-calendar"
+                :class="$q.screen.gt.sm ? ' q-pa-md' : 'q-pa-sm'"
+                :size="$q.screen.gt.sm ? 'sm' : 'xs'"
+              />
               <DesktopDateSelect />
             </div>
           </div>
@@ -111,7 +129,8 @@
         <div
           class="flex message"
           :class="{
-            'q-mx-lg q-mb-sm q-mt-lg q-pa-md': $q.screen.gt.sm,
+            ' q-mb-sm q-mt-lg q-pa-md': $q.screen.gt.xs,
+            'q-mx-lg': $q.screen.gt.sm,
             'q-mx-md q-mt-md  q-pb-xs ': $q.screen.lt.md,
             b3: showMessage,
           }"
@@ -127,7 +146,9 @@
             }"
           >
             <div class="flex grow">
-              Welcome to PartyMap, the global directory of<br />
+              Welcome to PartyMap, the global directory of<br
+                v-if="$q.screen.gt.sm"
+              />
               doofs, festivals and underground culture!
             </div>
             <q-icon
@@ -495,7 +516,7 @@
             <div
               v-if="currentLocation"
               class="location-header q-py-sm q-mt-sm flex row items-center justify-between"
-              :class="$q.screen.lt.sm ? 'q-pl-md' : 'q-pl-lg'"
+              :class="$q.screen.lt.md ? 'q-pl-md' : 'q-pl-lg'"
             >
               <div class="flex items-center">
                 <div class="">
@@ -521,6 +542,7 @@
                       -->
             </div>
             <div
+              class="q-mt-xl q-pt-xl text-center"
               :class="$q.screen.gt.sm ? 'q-pl-lg t3 ' : 'q-pl-md t3'"
               v-if="
                 nearbyEventDates.length === 0 &&
@@ -529,7 +551,7 @@
                 !userLocationLoading
               "
             >
-              :/
+              Something went wrong...
             </div>
             <EventDateList
               class="q-mx-sm"
@@ -1021,21 +1043,19 @@ export default {
       this.sidebarPanelReady = true;
     }
 
-    if (this.$route.name === 'Explore') {
-      // otherwise will change on route change
-      // await this.loadIpInfo();
-      if (this.userLocation) {
-        this.restoreUserLocation();
-      } else {
-        try {
-          await this.getFineLocation();
-        } catch {
-          await this.loadIpInfo();
-        }
+    // otherwise will change on route change
+
+    if (this.userLocation) {
+      this.restoreUserLocation();
+    } else {
+      try {
+        await this.getFineLocation();
+      } catch {
+        await this.loadIpInfo();
+      }
+      if (this.eventDates?.length === 0) this.loadEverything();
+      else {
         if (this.eventDates?.length === 0) this.loadEverything();
-        else {
-          if (this.eventDates?.length === 0) this.loadEverything();
-        }
       }
     }
 
@@ -1282,17 +1302,16 @@ export default {
   }
 }
 
-@media only screen and (min-width: 1921px) {
-  .tag-scroll-area {
-    // margin-bottom: 16px;
-    .tag {
-      //font-size: 1rem;
-    }
-  }
-  .nav-button-container {
-    .nav-button {
-      // max-height: 64px;
-      //dth: 264px;
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
+  .nearby-page {
+    .scroll-area {
+      .scroll-stuff {
+        padding-top: 0px;
+        .location-header {
+          font-weight: 700;
+          font-size: unset;
+        }
+      }
     }
   }
 }
@@ -1317,7 +1336,7 @@ export default {
     .scroll-area {
       .scroll-stuff {
         .location-header {
-          font-weight: 600;
+          font-weight: 700;
           font-size: unset;
         }
         .loading-wrapper {

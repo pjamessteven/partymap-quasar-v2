@@ -9,14 +9,19 @@
   >
     <q-select
       ref="dateSelect"
-      class="text-h5 inter bold date-select"
+      class="inter bold date-select"
+      :class="{
+        'text-h5': $q.screen.gt.sm,
+        'text-h4': $q.screen.lt.sm,
+        'text-large': $q.screen.lt.md,
+      }"
       input-class="date-select-input"
       behavior="menu"
       :clearable="!!controlDateRangeSelectedOption?.label"
       :options="[]"
       :model-value="controlDateRangeSelectedOption?.label || 'Any Dates'"
       :hide-dropdown-icon="!!controlDateRangeSelectedOption?.label"
-      @clear="clearDateRange"
+      @clear="clear"
     >
     </q-select>
     <DateControl :showing="showing" @hide="showing = false" />
@@ -24,7 +29,7 @@
 </template>
 
 <script>
-import { mapWritableState } from 'pinia';
+import { mapWritableState, mapActions } from 'pinia';
 
 import _ from 'lodash';
 import { useQueryStore } from 'src/stores/query';
@@ -41,9 +46,9 @@ export default {
     };
   },
   methods: {
-    clearDateRange() {
-      this.controlDateRange = { start: moment().toISOString() };
-      this.controlDateRangeSelectedOption = null;
+    ...mapActions(useQueryStore, ['clearDateFilter']),
+    clear() {
+      this.clearDateFilter();
       this.showing = false;
     },
   },

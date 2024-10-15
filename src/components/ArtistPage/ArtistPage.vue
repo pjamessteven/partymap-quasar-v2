@@ -509,10 +509,6 @@ export default {
       }
     }
     .image-container {
-      //max-width: 400px;
-      // max-height: 400px;
-      // min-width: 400px;
-      //width: auto;
       position: absolute;
 
       right: 0px;
@@ -543,6 +539,7 @@ export default {
   }
   .main-content {
     max-width: 1024px;
+    padding-right: 332px;
     .ed-card {
       max-width: 599px;
     }
@@ -572,7 +569,7 @@ export default {
     .artist-content {
       .main-content {
         width: 100%;
-
+        padding-right: unset;
         .events {
           width: 100%;
           :deep(.ed-card) {

@@ -201,6 +201,10 @@ export const useQueryStore = defineStore('query', {
     },
   },
   actions: {
+    clearDateFilter() {
+      this.controlDateRange = { start: moment().toISOString(), end: null };
+      this.controlDateRangeSelectedOption = null;
+    },
     clearAllFilters() {
       this.controlDateRange = {
         start: this.startDate,

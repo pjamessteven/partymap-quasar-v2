@@ -14,7 +14,11 @@
         }"
       >
         <div class="flex items-center row no-wrap">
-          <div class="close-icon-wrapper" v-if="isActive" @click.stop="clear()">
+          <div
+            class="close-icon-wrapper"
+            v-if="isActive"
+            @click.stop="$emit('clear')"
+          >
             <q-icon style="font-size: 16px" name="mdi-close" />
           </div>
 
@@ -36,7 +40,7 @@
             style="margin-right: -8px"
           />
         </div>
-        <slot :showing="showing" @hide="showing = false" />
+        <slot :showing="showing" :hide="() => (showing = false)" />
       </q-btn>
     </div>
   </div>
@@ -46,12 +50,13 @@
 export default {
   components: {},
   props: {
-    showSelectedValue: {
+    isActive: {
       default: false,
       type: Boolean,
     },
-    clear: {
-      type: Function,
+    showSelectedValue: {
+      default: false,
+      type: Boolean,
     },
     label: {
       type: String,

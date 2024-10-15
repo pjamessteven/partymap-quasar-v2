@@ -1,5 +1,5 @@
 <template>
-  <MenuWrapper :showing="showing" @hide="onHide()" @show="onShow()">
+  <MenuWrapper :showing="showing" @hide="onHide()">
     <div
       class="q-gutter-sm flex column q-pr-md q-pa-xs"
       :class="$q.screen.lt.sm ? 'q-py-sm q-pb-xl' : ''"
