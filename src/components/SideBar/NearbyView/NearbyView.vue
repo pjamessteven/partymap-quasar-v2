@@ -22,7 +22,7 @@
           style="width: 100%"
           :class="{
             'q-px-lg ': $q.screen.gt.sm,
-            'q-px-md  q-mt-md ': $q.screen.lt.sm,
+            'q-px-md  q-mt-md ': $q.screen.lt.md,
             'q-px-sm ': $q.screen.lt.md && $q.screen.gt.xs,
           }"
         >
@@ -49,8 +49,8 @@
                 flat
                 class=""
                 :class="{
-                  'q-ml-md q-pa-sm': $q.screen.lt.md,
-                  'q-pa-md': $q.screen.gt.sm,
+                  'q-ml-md q-pa-sm': $q.screen.lt.sm,
+                  'q-pa-md': $q.screen.gt.xs,
                 }"
                 @click.stop="() => getFineLocation()"
                 :style="
@@ -64,24 +64,19 @@
                     <q-icon
                       name="mdi-crosshairs-gps"
                       class=""
-                      :size="$q.screen.lt.sm || $q.screen.gt.sm ? 'sm' : 'xs'"
+                      size="sm"
                       v-if="fineLocation && !currentLocationFromSearch"
                     />
-                    <q-icon
-                      :size="$q.screen.lt.sm || $q.screen.gt.sm ? 'sm' : 'xs'"
-                      name="mdi-crosshairs"
-                      class=""
-                      v-else
-                    />
+                    <q-icon size="sm" name="mdi-crosshairs" class="" v-else />
                   </div>
                   <div v-else style="position: relative" class="flex">
                     <q-icon
-                      :size="$q.screen.lt.sm || $q.screen.gt.sm ? 'sm' : 'xs'"
+                      size="sm"
                       style="z-index: 1"
                       name="mdi-crosshairs"
                     />
                     <q-icon
-                      :size="$q.screen.lt.sm || $q.screen.gt.sm ? 'sm' : 'xs'"
+                      size="sm"
                       style="z-index: 2; left: 0px"
                       class="animated infinite flash slowest absolute"
                       name="mdi-crosshairs-gps"
@@ -115,12 +110,12 @@
                 'q-ml-xs': $q.screen.lt.md,
               }"
               style="min-width: 220px"
-              v-if="$q.screen.gt.xs"
+              v-if="$q.screen.gt.sm"
             >
               <q-icon
                 name="las la-calendar"
                 :class="$q.screen.gt.sm ? ' q-pa-md' : 'q-pa-sm'"
-                :size="$q.screen.gt.sm ? 'sm' : 'xs'"
+                size="sm"
               />
               <DesktopDateSelect />
             </div>
@@ -279,10 +274,26 @@
             <!-- tags -->
             <div class="flex column" v-if="nearbyTags?.length >= 10">
               <div
-                class="q-py-md location-header"
+                class="q-py-md location-header location-header-select flex justify-between items-center"
                 :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
               >
-                <div class="text-">Hot tags in this area</div>
+                <div class="text-">Popular tags:</div>
+
+                <ControlSelect
+                  v-if="false"
+                  class="t2"
+                  @clear="
+                    () => {
+                      controlTag = [];
+                    }
+                  "
+                  :size="$q.screen.gt.sm ? 'sm' : 'xs'"
+                  :label="'All Tags'"
+                >
+                  <template v-slot="{ showing, hide }">
+                    <TagControl :showing="showing" @hide="hide" />
+                  </template>
+                </ControlSelect>
               </div>
               <div
                 class=""
@@ -345,10 +356,25 @@
             <!-- Display global tags if there's not many local tags-->
             <div class="flex column" v-else-if="tagOptions?.length > 0">
               <div
-                class="q-py-md location-header"
-                :class="$q.screen.gt.sm ? 'q-px-lg q-mt-sm' : 'q-pl-md'"
+                class="q-py-md location-header location-header-select flex justify-between items-center"
+                :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
               >
-                Hot tags around the world:
+                <div>Hot tags around the world:</div>
+                <ControlSelect
+                  v-if="false"
+                  class="t2"
+                  @clear="
+                    () => {
+                      controlTag = [];
+                    }
+                  "
+                  :size="$q.screen.gt.sm ? 'sm' : 'xs'"
+                  :label="'All Tags'"
+                >
+                  <template v-slot="{ showing, hide }">
+                    <TagControl :showing="showing" @hide="hide" />
+                  </template>
+                </ControlSelect>
               </div>
               <div>
                 <CustomQScroll
@@ -407,20 +433,35 @@
             <!-- artists -->
             <div class="flex column" v-if="nearbyArtists?.length > 5">
               <div
-                class="location-header q-py-md inter"
-                :class="$q.screen.gt.sm ? 'q-px-lg ' : 'q-pl-md t1'"
+                class="q-py-md location-header location-header-select flex justify-between items-center"
+                :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
               >
-                High profile artists
+                <div>High profile artists:</div>
+                <ControlSelect
+                  v-if="false"
+                  @clear="
+                    () => {
+                      controlTag = [];
+                    }
+                  "
+                  :size="$q.screen.gt.sm ? 'sm' : 'xs'"
+                  :label="'All Artists'"
+                >
+                  <template v-slot="{ showing, hide }">
+                    <ArtistControl :showing="showing" @hide="hide" />
+                  </template>
+                </ControlSelect>
               </div>
+
               <ArtistsComponent
-                :size="$q.screen.gt.lg ? 'lg' : 'md'"
+                :size="$q.screen.gt.md ? 'lg' : $q.screen.sm ? 'lg' : 'md'"
                 :artists="nearbyArtists"
                 :hasNext="nearbyArtistsHasNext"
                 :loadMore="debouncedLoadNearbyArtists"
                 :style="
                   $q.screen.gt.sm
-                    ? 'margin-bottom: -16px; margin-top: -12px; z-index: 2000'
-                    : ''
+                    ? 'margin-bottom: -16px; margin-top: -12px; z-index: 999'
+                    : 'margin-bottom: -8px;'
                 "
               />
             </div>
@@ -429,15 +470,27 @@
 
             <div class="flex column" v-else-if="artistOptions?.length > 0">
               <div
-                class="location-header q-py-md inter semibold"
-                :class="
-                  $q.screen.gt.sm
-                    ? 'q-pl-lg  q-mt-sm t1 inter bolder text-h6'
-                    : 'q-pl-md t1'
-                "
+                class="q-py-md location-header location-header-select flex justify-between items-center"
+                :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
               >
-                Top artists worldwide:
+                <div>Top artists worldwide:</div>
+                <ControlSelect
+                  v-if="false"
+                  @clear="
+                    () => {
+                      controlTag = [];
+                    }
+                  "
+                  :size="$q.screen.gt.sm ? 'sm' : 'xs'"
+                  :label="'All Artists'"
+                  iconName="las la-music"
+                >
+                  <template v-slot="{ showing, hide }">
+                    <ArtistControl :showing="showing" @hide="hide" />
+                  </template>
+                </ControlSelect>
               </div>
+
               <ArtistsComponent
                 :class="$q.screen.gt.sm ? 'q-pl-sm' : ''"
                 :artists="artistOptions"
@@ -447,7 +500,7 @@
                 :style="
                   $q.screen.gt.sm
                     ? 'margin-bottom: -16px; margin-top: -12px; z-index: 2000'
-                    : ''
+                    : 'margin-bottom: -8px;'
                 "
               />
             </div>
@@ -458,10 +511,10 @@
               v-if="currentUser && userEventDates?.length > 0"
             >
               <div
-                class="q-py-md q-mt-sm location-header flex justify-between"
+                class="q-py-md q-mt-md location-header flex justify-between"
                 :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-px-md'"
               >
-                <div class="text-">Your upcoming events:</div>
+                <div class="text-">Your events:</div>
                 <router-link
                   class="link-hover t3 inter semibold"
                   :to="{
@@ -561,6 +614,7 @@
               :hasNext="nearbyEventDatesHasNext"
               :loading="nearbyEventDatesLoading"
               :disableEndOfResultsMessage="true"
+              :twoColumnsMd="$q.screen.sm"
               :hideHeader="true"
             />
             <EventDatePosterList
@@ -617,6 +671,7 @@
               :groupByMonth="false"
               :eventDates="eventDates"
               :hasNext="eventDatesHasNext"
+              :twoColumnsMd="$q.screen.sm"
               :hideHeader="true"
             />
             <EventDatePosterList
@@ -666,6 +721,10 @@ import { useAuthStore } from 'src/stores/auth';
 import EventDatePoster from 'src/components/EventDatePoster.vue';
 import EventDateCard from 'src/components/EventDateCard.vue';
 import DesktopDateSelect from './DesktopDateSelect.vue';
+import ControlSelect from 'src/components/Controls/ControlSelect.vue';
+import TagControl from 'src/components/Controls/TagControl.vue';
+import ArtistControl from 'src/components/Controls/ArtistControl.vue';
+
 import _ from 'lodash';
 
 export default {
@@ -701,6 +760,9 @@ export default {
     // EventDateCard,
     NearbyCountrySelect,
     DesktopDateSelect,
+    ControlSelect,
+    TagControl,
+    ArtistControl,
   },
   data() {
     return {
@@ -844,6 +906,11 @@ export default {
     },
 
     clickTag(tag) {
+      // force loading state after clicking to prevent glitchy feeling ui
+      this.eventDates = [];
+      this.eventDatesGroupedByMonth = {};
+      this.eventDatesLoading = true;
+
       let index = this.controlTag?.findIndex((x) => x.tag === tag.tag);
       if (index > -1) {
         // tag already selected, do nothing
@@ -924,6 +991,9 @@ export default {
       'userEventDatesPage',
       'userEventDatesHasNext',
       'userEventDatesLoading',
+      'eventDatesGroupedByMonth',
+      'eventDates',
+      'eventDatesLoading',
     ]),
     ...mapWritableState(useNearbyStore, [
       'queryRadius',
@@ -1189,7 +1259,17 @@ export default {
         z-index: 1000;
         width: 100%;
         font-weight: 700;
+        // text-transform: uppercase;
+        //color: $t-2;
         font-size: 1rem;
+        &.location-header-select {
+          :deep(.q-field) {
+            .q-field__control::before {
+              border-bottom: none;
+            }
+          }
+        }
+
         // text-transform: lowercase;
       }
     }

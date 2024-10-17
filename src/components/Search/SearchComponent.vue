@@ -26,7 +26,7 @@
     >
       <template v-slot:prepend>
         <div class="q-mr-xs q-ml-" v-if="$q.screen.gt.xs">
-          <q-icon size="1.2em" name="mdi-magnify" />
+          <q-icon size="26px" name="mdi-magnify" />
         </div>
       </template>
       <template v-slot:append>

@@ -7,7 +7,7 @@
       v-bind:class="{
         shadow: $q.screen.gt.xs && false,
         'sidebar-mobile-expanded':
-          mainStore.showPanelBackground && $q.screen.lt.sm,
+          mainStore.showPanelBackground && $q.screen.lt.md,
         iphone: $q.platform.is.iphone || $q.platform.is.ipod,
       }"
     >
@@ -506,21 +506,9 @@ watch(
   }
 }
 
-@media only screen and (min-width: 1080px) {
+@media only screen and (min-width: 600px) and (max-width: 1023px) {
   .sidebar-wrapper {
-    .sidebar {
-    }
-  }
-}
-
-@media only screen and (min-width: 1280px) {
-  .sidebar-wrapper {
-    .sidebar {
-    }
-  }
-}
-@media only screen and (min-width: 1921px) {
-  .sidebar-wrapper {
+    padding: 0 0px;
     .sidebar {
     }
   }

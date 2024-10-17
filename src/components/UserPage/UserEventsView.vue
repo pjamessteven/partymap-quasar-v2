@@ -16,7 +16,10 @@
     <transition appear enter-active-class="animated fadeIn">
       <div
         class="flex column no-wrap scroll-content"
-        :class="$q.screen.lt.sm ? 'q-px-sm ' : ''"
+        :class="{
+          'q-px-sm': $q.screen.lt.sm,
+          'q-px-sm': $q.screen.sm,
+        }"
       >
         <div
           class="q-pt-sm q-mt-sm flex row no-wrap items-center control-bar"

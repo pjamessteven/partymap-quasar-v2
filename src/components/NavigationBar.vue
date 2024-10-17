@@ -81,7 +81,6 @@
       />
 
       <q-route-tab
-        v-if="$q.screen.lt.sm"
         name="profile"
         key="4"
         :icon="
@@ -91,7 +90,7 @@
               : 'mdi-emoticon-cool-outline'
             : undefined
         "
-        label="You"
+        label="Profile"
         content-class="tab"
         :ripple="false"
         :to="

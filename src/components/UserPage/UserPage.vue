@@ -14,7 +14,7 @@
           :class="$q.screen.gt.xs && 'q-px-md'"
           style="width: 100%"
         >
-          <div :class="$q.screen.lt.md && 'q-px-md'" style="width: 100%">
+          <div :class="$q.screen.lt.sm && 'q-px-md'" style="width: 100%">
             <q-tabs
               v-model="tab"
               dense

@@ -411,7 +411,7 @@ const getDefaultPadding = (): PaddingOptions => {
     return { top: 0, bottom: 0, left: 568, right: 0 };
   } else {
     // lt.md
-    return { top: 0, bottom: 0, left: 376, right: 0 };
+    return { top: 0, bottom: 250, left: 0, right: 0 };
   }
 };
 

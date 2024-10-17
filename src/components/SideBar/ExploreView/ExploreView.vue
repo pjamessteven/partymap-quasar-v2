@@ -10,7 +10,7 @@
       <q-separator />
     </div>
 
-    <div class="mobile-panel-button" v-if="$q.screen.lt.sm">
+    <div class="mobile-panel-button" v-if="$q.screen.lt.md">
       <q-icon
         @click="showPanel ? $emit('hidePanel') : $emit('showPanel')"
         flat
@@ -80,10 +80,10 @@
             <div
               class="flex row items-end q-mb-sm no-wrap"
               :class="{
-                'q-px-lg ': $q.screen.gt.sm,
+                'q-px-lg q-mb-lg q-pb-sm': $q.screen.gt.sm,
                 'q-px-sm ': $q.screen.lt.md,
               }"
-              v-if="$q.screen.gt.xs"
+              v-if="$q.screen.gt.sm"
             >
               <div class="flex row no-wrap items-center">
                 <router-link
@@ -100,10 +100,7 @@
                     "
                   >
                     <template v-slot:default>
-                      <q-icon
-                        :size="$q.screen.gt.sm ? 'sm' : 'xs'"
-                        name="mdi-crosshairs"
-                      />
+                      <q-icon size="sm" name="mdi-crosshairs" />
                     </template>
                   </q-btn>
                 </router-link>
@@ -119,7 +116,7 @@
                 <q-icon
                   name="las la-calendar"
                   :class="$q.screen.gt.sm ? 'q-pa-md' : 'q-pa-sm'"
-                  :size="$q.screen.gt.sm ? 'sm' : 'xs'"
+                  size="sm"
                 />
                 <DesktopDateSelect />
               </div>
@@ -128,7 +125,7 @@
             <!-- selected artist (desktop only) -->
             <div
               class="flex column q-mt-md q-pt-sm"
-              v-if="controlArtist?.length > 0 && $q.screen.gt.xs"
+              v-if="controlArtist?.length > 0 && $q.screen.gt.sm"
             >
               <div
                 class="q-pb-md header"
@@ -159,7 +156,7 @@
               <div class="flex column" v-if="!isLoadingInitial">
                 <!-- cities-->
                 <div
-                  class="flex column q-mb-lg q-mt-md q-pt-sm"
+                  class="flex column q-mb-lg q-mt-md q-pt-sm q-mb-md"
                   v-if="
                     topRegionsInArea?.length > 2 &&
                     mapZoomLevel < 7 &&
@@ -235,29 +232,51 @@
                 </div>
                 <!-- tags -->
                 <div
-                  class="flex column q-mt-md q-pt-sm"
+                  class="flex column"
                   :class="{
                     'q-mb-lg': $q.screen.gt.sm,
                     'q-mb-md': $q.screen.lt.md,
                   }"
                   v-if="
                     (topTagsInArea?.length > 0 || controlTag.length > 0) &&
-                    $q.screen.gt.xs
+                    $q.screen.gt.sm
                   "
                 >
                   <div
-                    class="q-pb-md header"
+                    class="q-pb-md header header-select flex row no-wrap items-center justify-between"
                     :class="{
                       'q-px-lg': $q.screen.gt.sm,
                       'q-px-md': $q.screen.lt.md,
                     }"
                   >
-                    <div class="" v-if="topTagsInArea?.length">Hot Tags</div>
-                    <div v-else-if="controlTag.length === 1">Selected Tag</div>
-                    <div v-else>Selected Tags</div>
+                    <span class="">
+                      <span
+                        class=""
+                        v-if="topTagsInArea?.length && controlTag.length == 0"
+                        >Hot Tags</span
+                      >
+                      <span v-else-if="controlTag.length === 1">
+                        Selected Tag
+                      </span>
+                      <span v-else>Selected Tags</span>:
+                    </span>
+                    <ControlSelect
+                      v-if="false"
+                      @clear="
+                        () => {
+                          controlTag = [];
+                        }
+                      "
+                      :size="$q.screen.gt.sm ? 'sm' : 'xs'"
+                      :label="'All Tags'"
+                    >
+                      <template v-slot="{ showing, hide }">
+                        <TagControl :showing="showing" @hide="hide" />
+                      </template>
+                    </ControlSelect>
                   </div>
 
-                  <div :style="$q.screen.gt.sm ? 'margin-bottom: -8px' : ''">
+                  <div>
                     <CustomQScroll
                       horizontal
                       class="tag-scroll-area"
@@ -328,24 +347,39 @@
                 </div>
                 <div
                   class="flex column"
+                  :style="$q.screen.gt.sm ? 'margin-top: -8px' : ''"
                   v-if="
                     topArtistsInArea?.length > 5 &&
-                    $q.screen.gt.xs &&
+                    $q.screen.gt.sm &&
                     controlArtist.length === 0
                   "
-                  style="margin-bottom: -8px"
                 >
                   <div
-                    class="header t1 q-pb-sm"
-                    :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
+                    class="header header-select t1 q-pb-sm justify-between flex no-wrap items-center"
+                    :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-px-md '"
                   >
-                    High Profile Artists
+                    <span>High Profile Artists:</span>
+                    <ControlSelect
+                      v-if="false"
+                      @clear="
+                        () => {
+                          controlTag = [];
+                        }
+                      "
+                      class="t2"
+                      :size="$q.screen.gt.sm ? 'sm' : 'xs'"
+                      :label="'All Artists'"
+                    >
+                      <template v-slot="{ showing, hide }">
+                        <ArtistControl :showing="showing" @hide="hide" />
+                      </template>
+                    </ControlSelect>
                   </div>
                   <ArtistsComponent
-                    :class="$q.screen.gt.sm ? 'q-pl- q-mb-md' : ''"
+                    :class="$q.screen.gt.sm ? 'q-pl- q-mb-md ' : ''"
                     :artists="topArtistsInArea"
-                    :size="$q.screen.gt.lg ? 'md' : 'md'"
-                    style="margin-top: -8px"
+                    :size="$q.screen.gt.md ? 'lg' : 'md'"
+                    style="margin-top: -0px"
                   />
                 </div>
 
@@ -356,6 +390,7 @@
                     :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
                     :eventDates="eventDates"
                     :hasNext="eventDatesHasNext"
+                    :twoColumnsMd="$q.screen.sm"
                     :loading="eventDatesLoading"
                     :eventDatesTotal="eventDatesTotal"
                   />
@@ -479,6 +514,9 @@ import { mapActions, mapWritableState, mapState } from 'pinia';
 import CustomQScroll from 'components/CustomQScroll.vue';
 import NearbyCountrySelect from '../NearbyView/NearbyCountrySelect.vue';
 import DesktopDateSelect from '../NearbyView/DesktopDateSelect.vue';
+import ControlSelect from 'src/components/Controls/ControlSelect.vue';
+import TagControl from 'src/components/Controls/TagControl.vue';
+import ArtistControl from 'src/components/Controls/ArtistControl.vue';
 
 export default {
   components: {
@@ -490,6 +528,9 @@ export default {
     CustomQScroll,
     NearbyCountrySelect,
     DesktopDateSelect,
+    ControlSelect,
+    TagControl,
+    ArtistControl,
   },
 
   async mounted() {
@@ -767,6 +808,33 @@ export default {
         (x) => this.controlTag.findIndex((y) => y.tag === x.tag) === -1
       );
     },
+    computedTagLabel() {
+      if (this.controlTag?.length > 0) {
+        let label = '';
+        for (let [index, tag] of this.controlTag.entries()) {
+          label += tag.tag;
+          if (index < this.controlTag.length - 1) {
+            label += ' + ';
+          }
+        }
+        return label;
+      }
+      return null;
+    },
+    computedArtistLabel() {
+      let label = '';
+      if (this.controlArtist?.length > 0) {
+        for (let [index, artist] of this.controlArtist.entries()) {
+          label += artist.name;
+          if (index < this.controlArtist.length - 1) {
+            label += ' + ';
+          }
+        }
+      } else {
+        label = 'All Artists';
+      }
+      return label;
+    },
     computedTotalTags() {
       return this.controlTag?.length + this.topTagsWithoutSelected.length;
     },
@@ -905,6 +973,13 @@ export default {
   width: 100%;
   font-weight: 700;
   font-size: 1rem;
+  &.header-select {
+    :deep(.q-field) {
+      .q-field__control::before {
+        border-bottom: none;
+      }
+    }
+  }
 }
 
 .event-list-vertical {
@@ -1054,8 +1129,8 @@ export default {
             background: rgba(36, 36, 36, 1);
           }
         }
-        &.selected {
-          background: rgba(24, 24, 24, 1);
+        &.tag-selected {
+          background: $bi-3;
         }
       }
     }
@@ -1104,6 +1179,9 @@ export default {
           &:hover {
             background: rgba(0, 0, 0, 0.1);
           }
+        }
+        &.tag-selected {
+          background: $b-2;
         }
       }
     }

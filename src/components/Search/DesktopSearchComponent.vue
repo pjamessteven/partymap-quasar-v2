@@ -38,8 +38,6 @@ export default {
 .body--light {
   .desktop-search-component {
     .controls-wrapper {
-      //box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.);
-
       .controls-wrapper-inner {
         background: $b-2;
         color: $t-1;
@@ -140,19 +138,6 @@ export default {
 
         //background: rgba(0, 0, 0, 0.5);
         border: 1px solid rgba(255, 255, 255, 0.1);
-
-        :deep(.button-control) {
-          .q-btn__content {
-            .close-icon-wrapper {
-              background: $bi-4;
-              color: white;
-            }
-          }
-          &.active {
-            background: white;
-            color: $t-1;
-          }
-        }
       }
     }
     &.overlaying-map {
@@ -218,71 +203,6 @@ export default {
       position: relative;
       height: 44px;
       align-content: center;
-
-      :deep(.searchbar-wrapper) {
-        padding-left: 18px;
-        padding-right: 18px;
-        margin-top: 2px;
-
-        .searchbar-input {
-          margin-top: -4px;
-          .q-field__inner {
-            .q-field__control::before {
-              border-color: transparent;
-              border: none;
-              font-size: larger;
-            }
-            .q-field__marginal {
-              font-size: unset;
-              font-size: larger;
-            }
-            input {
-              font-weight: 500;
-              font-size: 1rem;
-            }
-          }
-        }
-      }
-
-      :deep(.q-btn::before) {
-        box-shadow: none !important;
-      }
-      :deep(.button-control) {
-        height: 42px;
-        .button-label {
-          white-space: nowrap;
-          font-weight: 500;
-        }
-        .q-btn__content {
-          padding-left: 8px;
-          padding-right: 8px;
-          .close-icon-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 48px;
-            padding: 2px;
-            margin-right: 8px;
-            margin-left: -6px;
-          }
-
-          white-space: nowrap;
-        }
-      }
-
-      .location-button-wrapper {
-        position: absolute;
-        left: -80px;
-        top: 4px;
-        border-radius: 24px;
-        background: transparent;
-      }
-    }
-    &.search-wrapper {
-      .controls-wrapper-inner {
-        height: 44px;
-        align-content: center;
-      }
     }
   }
 }

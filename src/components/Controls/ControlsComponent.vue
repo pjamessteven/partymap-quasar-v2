@@ -7,7 +7,7 @@
       'center-absolute': $route.name !== 'Explore' && $q.screen.gt.xs,
     }"
   >
-    <div v-if="$q.screen.gt.xs" class="controls-wrapper flex no-wrap q-mr-sm">
+    <div v-if="$q.screen.gt.sm" class="controls-wrapper flex no-wrap q-mr-sm">
       <div class="controls-wrapper-inner">
         <SearchComponent />
       </div>
@@ -400,10 +400,12 @@ export default {
   animation-duration: calc(var(--animate-duration) * 10);
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 1023px) {
   .desktop-search-component {
     padding-left: 0px;
     top: 48px;
+    z-index: 501;
+
     .control-scroll-area {
       pointer-events: all;
 
@@ -424,6 +426,12 @@ export default {
         }
       }
     }
+  }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 1023px) {
+  .desktop-search-component {
+    top: 52px;
   }
 }
 </style>

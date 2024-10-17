@@ -157,7 +157,8 @@ export default {
 @media only screen and (max-width: 1024px) {
   .solid-page {
     .solid-page-content-width {
-      max-width: 599px;
+      //padding: 0px 32px;
+      //max-width: 800px;
     }
   }
   // sm

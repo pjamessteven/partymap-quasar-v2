@@ -8,7 +8,8 @@
       }"
     >
       <span v-if="!!altLabel">{{ altLabel }}</span>
-      <span v-else-if="dateString">{{ dateString }}</span>
+      <span v-else-if="dateString">Events in {{ dateString }}</span
+      >:
 
       <slot />
       <!--

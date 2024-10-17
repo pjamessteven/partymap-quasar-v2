@@ -17,7 +17,7 @@
       >
         <ControlsComponent
           :overlayingMap="!showPanelBackground"
-          v-show="$q.screen.lt.sm || ($q.screen.gt.sm && showSearchForRoute)"
+          v-show="$route.name === 'Explore'"
         />
       </Transition>
       <div
@@ -35,7 +35,7 @@
         >
           <MobileSideBar
             class="sidebar-component"
-            v-if="$q.screen.lt.sm"
+            v-if="$q.screen.lt.md"
             :class="{ hide: $q.screen.lt.sm && $route.name === 'EventPage' }"
           />
         </Transition>
@@ -43,7 +43,7 @@
           appear
           :enter-active-class="'animated slideInLeft'"
           :leave-active-class="'animated slideOutLeft'"
-          v-if="$q.screen.gt.xs"
+          v-if="$q.screen.gt.sm"
         >
           <SideBar
             class="sidebar-component"

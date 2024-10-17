@@ -65,7 +65,7 @@
   -->
 
     <router-link
-      v-if="$q.screen.gt.xs"
+      v-if="$q.screen.gt.md"
       class="flex link-hover"
       :to="
         currentUser
@@ -130,7 +130,7 @@
     </router-link>
 
     <q-btn
-      v-if="$q.screen.lt.sm"
+      v-if="$q.screen.lt.md"
       icon="mdi-magnify"
       @click="
         () => {

@@ -23,13 +23,7 @@
         :key="currentLocationCity"
         ref="locationSelect"
         class="select inter bold"
-        :input-style="
-          $q.screen.gt.xs
-            ? 'width: 169px;'
-            : $q.screen.gt.sm
-            ? 'width: 250px'
-            : 'width: 150px'
-        "
+        :input-style="$q.screen.gt.xs ? 'width: 169px;' : 'width: 250px'"
         input-class="country-select-input"
         behavior="menu"
         :class="{
@@ -42,8 +36,7 @@
             !currentLocationCity &&
             !userLocationLoading,
           'text-h5': $q.screen.gt.sm,
-          'text-h4': $q.screen.lt.sm,
-          'text-large': $q.screen.lt.md,
+          'text-h4': $q.screen.lt.md,
         }"
         :model-value="inputValue"
         :use-input="inputValue == null"
