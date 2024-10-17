@@ -206,11 +206,7 @@
                             "
                           />
                         </div>
-                        <q-separator />
-                        <div
-                          class=""
-                          :class="$q.screen.gt.sm ? 'q-mt-lg' : 'q-mt-md'"
-                        >
+                        <div class="q-mt-md">
                           <div class="flex row">
                             <div class="flex col" v-if="!editing">
                               <a
@@ -910,6 +906,30 @@ import CustomQScroll from 'components/CustomQScroll.vue';
 
 import _ from 'lodash';
 import common from 'assets/common';
+
+import DescriptionComponent from 'components/EventPage/DescriptionComponent.vue';
+import YoutubeVideoComponent from 'components/EventPage/YoutubeVideoComponent.vue';
+import SummaryComponent from 'components/EventPage/SummaryComponent.vue';
+import EventDates from 'components/EventPage/EventDates/EventDates.vue';
+
+import EventDateSidebarDesktop from 'components/EventPage/EventDates/EventDateSidebarDesktop.vue';
+import FeaturedMediaBackground from 'components/EventPage/Gallery/FeaturedMediaBackground.vue';
+import FeaturedMediaComponent from 'components/EventPage/Gallery/FeaturedMediaComponent.vue';
+import EventDateLineupComponent from 'components/EventPage/EventDates/EventDateLineupComponent.vue';
+import EventDateTicketUrlDialog from 'components/EventPage/EventDates/EventDateTicketUrlDialog.vue';
+
+// import HistoryComponent from 'components/EventPage/Activity/HistoryComponent.vue';
+
+import NextEventDateSummary from 'components/EventPage/EventDates/NextEventDateSummary.vue';
+import ReportDialog from './ReportDialog.vue';
+import TagsComponent from 'components/EventPage/Tags/TagsComponent.vue';
+import ReviewsComponent from './Reviews/ReviewsComponent.vue';
+import MobileSwipeHandle from '../MobileSwipeHandle.vue';
+import InterestedComponent from './InterestedComponent.vue';
+import SuggestionsDialog from './Suggestions/SuggestionsDialog.vue';
+import AddEventPhotosDialog from 'components/EventPage/Gallery/AddEventPhotosDialog.vue';
+import AddLineupPosterDialog from 'components/EventPage/Gallery/AddLineupPosterDialog.vue';
+import UploadNewLogoDialog from 'components/EventPage/Gallery/UploadNewLogoDialog.vue';
 
 import InnerLoading from 'components/InnerLoading.vue';
 import { useI18n } from 'vue-i18n';

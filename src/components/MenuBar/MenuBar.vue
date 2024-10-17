@@ -16,7 +16,7 @@
         class="menubar-item logo"
         :class="{
           'menubar-item-inverted': iconLeftColor === 'black',
-          'o-000 pointer-events-none': previousRouteName && $q.screen.lt.xl,
+          'o-000 pointer-events-none': !!previousRouteName && $q.screen.lt.xl,
         }"
         v-show="
           !previousRouteName || swipingDownMenuPageMobile || $q.screen.gt.xs
@@ -52,7 +52,8 @@
         v-if="
           previousRouteName &&
           this.$route.name !== 'Explore' &&
-          !swipingDownMenuPageMobile
+          !swipingDownMenuPageMobile &&
+          $q.screen.lt.xl
         "
       >
         <div class="back-button flex items-center" @click="back">
@@ -236,7 +237,9 @@ export default {
       if (this.$q.screen.gt.xs) {
         if (
           (!this.$q.dark.isActive && this.$route.name === 'Explore') ||
-          (this.$q.screen.gt.lg && this.$route.name === 'EventPage')
+          (this.$q.screen.gt.lg &&
+            this.$route.name === 'EventPage' &&
+            !this.$q.dark.isActive)
         ) {
           return 'black';
         }

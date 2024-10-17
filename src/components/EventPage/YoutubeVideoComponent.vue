@@ -10,14 +10,14 @@
           class="editing-outline"
           :class="editing ? 'q-pa-md' : ''"
         >
-          <YouTube
-            style="position: absolute"
-            :key="event.youtube_url"
-            v-if="event.youtube_url?.length > 0 && clientWidth > 0 && !editing"
-            :src="event.youtube_url"
+          <youtube-iframe
+            :video-id="videoId"
+            @ready="onStateChange"
+            :style="`position: absolute;`"
             :width="clientWidth"
             :height="computedHeight"
-            @stateChange="onStateChange"
+            :key="event.youtube_url"
+            v-if="videoId?.length > 0 && clientWidth > 0 && !editing"
           />
 
           <div v-else-if="editing" class="t4 flex items-center">
@@ -50,11 +50,12 @@
 import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import EditYoutubeUrlComponent from './EditYoutubeUrlComponent.vue';
-import YouTube from 'vue3-youtube';
+//import LazyYoutubeVideo from 'vue-lazy-youtube-video';
+import { YoutubeIframe } from '@vue-youtube/component';
 import _ from 'lodash';
 
 export default {
-  components: { EditYoutubeUrlComponent, YouTube },
+  components: { YoutubeIframe, EditYoutubeUrlComponent },
   props: {
     editing: Boolean,
   },
@@ -66,13 +67,12 @@ export default {
   },
   methods: {
     onStateChange(event) {
-      console.log('video event', event);
       // playback state of -1 is 'unstarted'
       //  https://developers.google.com/youtube/iframe_api_reference#Events
       // once video is started we want to allow auto rotation on mobile
-      if (event.data > -1) {
-        window.screen.orientation.unlock();
-      }
+      //  if (event.data > -1) {
+      window.screen.orientation.unlock();
+      // }
     },
     openEditorDialog() {
       if (this.editing) {
@@ -82,6 +82,21 @@ export default {
     handleResize() {
       if (this.$refs.container) {
         this.clientWidth = this.$refs.container.clientWidth;
+      }
+    },
+    getYouTubeVideoId(url) {
+      // Regular expression pattern to match YouTube URL formats
+      const regExp =
+        /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+
+      // Try to match the URL with the regular expression
+      const match = url.match(regExp);
+
+      // If a match is found and the captured group is 11 characters long (standard YouTube ID length)
+      if (match && match[2].length === 11) {
+        return match[2];
+      } else {
+        return null; // Return null if no valid YouTube ID is found
       }
     },
   },
@@ -96,7 +111,7 @@ export default {
     window.addEventListener('resize', this.debouncedHandleResize);
     this.clientWidth = this.$refs.container.clientWidth;
   },
-  beforeUnmount: function () {
+  beforeUnmount() {
     if (this.$q.platform.is.capacitor && this.$q.screen.lt.sm) {
       window.screen.orientation.lock('portrait');
     }
@@ -108,6 +123,9 @@ export default {
 
     computedHeight() {
       return this.clientWidth * (9 / 16);
+    },
+    videoId() {
+      return this.getYouTubeVideoId(this.event.youtube_url);
     },
   },
 };

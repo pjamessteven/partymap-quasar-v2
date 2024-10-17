@@ -17,7 +17,7 @@
               lng: event.location.lng,
             }),
             dateString: computedDateString,
-            locationDescription: event.location.description,
+            locationDescription: computedLocation,
             description: event.event.description,
             tags: JSON.stringify(event.event.event_tags),
           },
@@ -155,17 +155,10 @@
                     class="ellipsis"
                   >
                     <q-icon name="las la-map-marker" class="q-mr-sm" />{{
-                      event.location.locality.long_name
-                    }}<span v-if="event.location.locality?.region?.long_name"
-                      >,</span
-                    >
-                    {{ event.location.locality?.region?.long_name }}
-                  </span>
-                  <span v-else class="ellipsis">
-                    <q-icon name="las la-map-marker" class="q-mr-sm" />{{
-                      event.location.name
+                      computedLocation
                     }}
                   </span>
+
                   <span v-if="event.distance != null" class="o-050 ellipsis"
                     >&nbsp;({{
                       Intl.NumberFormat().format(
@@ -299,6 +292,21 @@ export default {
       } else if (this.event) {
         return this.monthYear(this.event.start_naive, this.event.tz);
       } else return '';
+    },
+    computedLocation() {
+      if (this.event?.location?.locality) {
+        if (this.event.location.locality.region?.long_name) {
+          return (
+            this.event.location.locality.long_name +
+            ', ' +
+            this.event.location.locality.region.long_name
+          );
+        } else {
+          return this.event.location.locality.long_name;
+        }
+      } else {
+        return this.event?.location?.name;
+      }
     },
   },
   created() {

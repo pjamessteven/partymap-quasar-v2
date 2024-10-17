@@ -12,7 +12,8 @@
         dim:
           mainStore.menubarOpacity === 1 &&
           route.name === 'EventPage' &&
-          $q.screen.gt.lg,
+          $q.screen.gt.lg &&
+          false,
       }"
     >
       <div class="sidebar-content flex column no-wrap">

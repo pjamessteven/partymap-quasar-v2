@@ -35,6 +35,7 @@ module.exports = configure(function (/* ctx */) {
       'appleLoginDesktop',
       'safeAreaAndroid',
       'addressbar-color',
+      'youtube',
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css

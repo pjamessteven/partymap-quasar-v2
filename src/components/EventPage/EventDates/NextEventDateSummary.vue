@@ -56,11 +56,7 @@
         :right="alignRight"
       />
       <div :class="$q.screen.gt.xs ? 'inter bold' : 'inter bold'">
-        {{
-          $route?.query?.locationDescription ||
-          ed?.location.description ||
-          '...'
-        }}
+        {{ $route?.query?.locationDescription || ed?.location.name || '...' }}
       </div>
     </div>
   </div>
