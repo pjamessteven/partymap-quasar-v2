@@ -2,7 +2,7 @@
   <div
     class="desktop-search-component q-mt-md flex row items-center no-wrap"
     :class="{
-      'transport-map': mapStyle === 'transport',
+      'transport-map': mapStyle !== 'satellite',
       'overlaying-map': overlayingMap,
       'center-absolute': $route.name !== 'Explore' && $q.screen.gt.xs,
     }"
@@ -366,7 +366,7 @@ export default {
   z-index: 104;
   position: absolute;
   top: 8px;
-  padding-left: 532px;
+  padding-left: 568px;
   width: 100%;
   display: flex;
   pointer-events: none;
@@ -381,7 +381,7 @@ export default {
   }
 
   .control-scroll-area {
-    height: 44px;
+    height: 48px;
     width: 100%;
     .scroll-inner {
       //justify-content: start;
@@ -506,7 +506,7 @@ export default {
               }
               .q-field__marginal {
                 font-size: unset;
-                color: white !important;
+                color: $ti-2 !important;
               }
             }
           }
@@ -519,8 +519,8 @@ export default {
       backdrop-filter: none;
 
       .controls-wrapper-inner {
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        background: white;
+        //border: 1px solid rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(2px);
         color: $t-1;
 
         .searchbar-wrapper {
@@ -538,6 +538,16 @@ export default {
               }
             }
           }
+        }
+      }
+    }
+    &.overlaying-map {
+      .controls-wrapper {
+        box-shadow: rgba(0, 0, 0, 0.2) 1.95px 1.95px 2.6px;
+
+        .controls-wrapper-inner {
+          //border: 1px solid rgba(0, 0, 0, 0.1);
+          background: rgba(255, 255, 255, 1);
         }
       }
     }
@@ -610,7 +620,11 @@ export default {
     position: relative;
     height: 44px;
     align-content: center;
+    transition: filter 0.3s ease;
 
+    &:hover {
+      filter: brightness(1.2);
+    }
     .searchbar-wrapper {
       padding-left: 18px;
       padding-right: 18px;

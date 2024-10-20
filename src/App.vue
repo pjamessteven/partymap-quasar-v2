@@ -587,26 +587,6 @@ body {
     }
   }
 
-  .leaflet-control-zoom-in {
-    background: black !important;
-    color: darkgrey;
-    border-bottom: none !important;
-    &:hover {
-      color: white;
-    }
-  }
-  .leaflet-control-zoom-out {
-    background: black !important;
-    color: darkgrey;
-    &:hover {
-      color: white;
-    }
-  }
-  .leaflet-touch .leaflet-control-layers,
-  .leaflet-touch .leaflet-bar {
-    border-color: rgb(26, 26, 26);
-  }
-
   .search-result {
     background: $bi-2;
     color: $ti-2;
@@ -682,12 +662,6 @@ body {
   .animated-shimmer {
     background: linear-gradient(to right, $bi-2 4%, #181818 25%, $bi-2 36%);
   }
-  :deep(.leaflet-bar a) {
-    z-index: 3;
-    background-color: black;
-    color: rgba(255, 255, 255, 0.48);
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  }
 
   .q-card {
     box-shadow: none;
@@ -699,12 +673,6 @@ body {
     background: $bi-2;
   }
 
-  :deep(.leaflet-container .leaflet-control-attribution) {
-    background: transparent !important;
-    a {
-      color: grey !important;
-    }
-  }
   .vc-container {
     background-color: $bi-3;
     border-color: rgb(26, 26, 26);

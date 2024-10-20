@@ -131,13 +131,11 @@ import common from 'assets/common';
 import EventDate from './EventDate.vue';
 import EditRruleDialog from './EditRruleDialog.vue';
 import RemoveRruleDialog from './RemoveRruleDialog.vue';
-//import Vue from 'vue';
 import CustomQScroll from 'components/CustomQScroll.vue';
 
 import { mapState, mapActions } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 
-// import 'leaflet/dist/leaflet.css';
 import { scroll } from 'quasar';
 
 const { getScrollTarget, setScrollPosition } = scroll;

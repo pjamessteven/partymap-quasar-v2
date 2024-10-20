@@ -1,18 +1,14 @@
-import { defineStore } from 'pinia';
-import { toRaw } from 'vue';
 import moment from 'moment';
+import { defineStore } from 'pinia';
 import {
   getArtistsRequest,
   getEventDatesRequest,
   getTagRequest,
 } from 'src/api';
-import { Artist, EventDate, Tag } from 'src/types/autogen_types';
 import { useMainStore } from 'src/stores/main';
 import { useQueryStore } from 'src/stores/query';
+import { Artist, EventDate, Tag } from 'src/types/autogen_types';
 import { useAuthStore } from './auth';
-import { useMapStore } from './map';
-import { O } from 'app/dist/spa/assets/index.bdd54828';
-import L from 'leaflet';
 interface NearbyState {
   loadingEverything: boolean;
 

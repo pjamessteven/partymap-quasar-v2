@@ -68,6 +68,7 @@ const mainStore = useMainStore();
       border: 1px solid black;
       background: black;
       border-top: 1px solid $bi-4;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
       &.sidebar-mobile-expanded {
         border-top-color: black;
       }
@@ -95,7 +96,7 @@ const mainStore = useMainStore();
       //  rgba(0, 0, 0, 0.15) 0px 7px 20px 3px,
       //  rgba(0, 0, 0, 0.1) 0px -3px 0px inset;
 
-      box-shadow: rgba(0, 0, 0, 0.68) 8px 0px 48px 4px;
+      box-shadow: rgba(0, 0, 0, 0.48) 8px 0px 48px 4px;
 
       background: white;
       //: 1px solid white;

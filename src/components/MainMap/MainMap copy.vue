@@ -31,13 +31,6 @@ import { useQueryStore } from 'src/stores/query';
 import { useQuasar } from 'quasar';
 
 import _ from 'lodash';
-import L from 'leaflet';
-
-import 'leaflet/dist/leaflet.css';
-import 'leaflet.markercluster/dist/MarkerCluster.css';
-import 'leaflet.markercluster';
-import 'leaflet.tilelayer.colorfilter';
-//import '../../../node_modules/leaflet.tilelayer.colorfilter/src/leaflet-tilelayer-colorfilter.js';
 
 import { shallowRef, onMounted } from 'vue';
 

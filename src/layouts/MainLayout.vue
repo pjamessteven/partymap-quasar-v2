@@ -128,7 +128,6 @@
 import MainMap from 'src/components/MainMap/MainMap.vue';
 import SideBar from 'components/SideBar/SideBar.vue';
 import MenuBar from 'components/MenuBar/MenuBar.vue';
-import DesktopSearchComponent from 'src/components/Search/DesktopSearchComponent.vue';
 import ControlsComponent from 'src/components/Controls/ControlsComponent.vue';
 import MenuBarLogo from 'src/components/MenuBar/MenuBarLogo.vue';
 import NavigationBar from 'src/components/NavigationBar.vue';
@@ -146,7 +145,6 @@ export default {
     MenuBar,
     MenuBarLogo,
     NavigationBar,
-    DesktopSearchComponent,
     ControlsComponent,
   },
   data() {

@@ -5,7 +5,7 @@
       class="flex justify-between no-wrap sidebar"
       id="sidebar"
       v-bind:class="{
-        shadow: $q.screen.gt.xs && false,
+        'shadow-strong': mapStore.mapStyle === 'satellite',
         'sidebar-mobile-expanded':
           mainStore.showPanelBackground && $q.screen.lt.md,
         iphone: $q.platform.is.iphone || $q.platform.is.ipod,
@@ -404,7 +404,9 @@ watch(
       }
     }
     if (to === 'nearby') {
-      showPanel();
+      //showPanel();
+      hidePanel();
+      mainStore.showPanel = false;
     }
   }
 );
@@ -439,12 +441,6 @@ watch(
   .sidebar-wrapper {
     .sidebar {
       background: white;
-
-      &.shadow {
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
-        //box-shadow: rgba(100, 100, 100, 0.05) 0px 0px 10px 5px;
-      }
       .sidebar-content {
         //background: rgba(100, 100, 100, 0.2);
         //backdrop-filter: blur(10px);
@@ -452,6 +448,14 @@ watch(
         .sidebar-content-inner {
           //background: black;
         }
+      }
+      box-shadow: rgba(0, 0, 0, 0.15) 1.95px -1.95px 3px !important;
+
+      &.shadow-strong {
+        box-shadow: rgba(0, 0, 0, 0.68) 1.95px -1.95px 5px !important;
+      }
+      &.sidebar-mobile-expanded {
+        box-shadow: none !important;
       }
     }
   }
@@ -510,6 +514,7 @@ watch(
   .sidebar-wrapper {
     padding: 0 0px;
     .sidebar {
+      border-radius: 28px;
     }
   }
 }
@@ -549,10 +554,6 @@ watch(
             }
           }
         }
-        :deep(.panels) {
-          //box-shadow: 0px 0px 48px 32px rgba(0, 0, 0, 0.6);
-          border-top: none !important;
-        }
       }
     }
   }
@@ -579,6 +580,8 @@ watch(
       max-width: 100vw;
       width: 100vw;
       border-radius: 18px;
+      //box-shadow: rgba(0, 0, 0, 0.2) 8px 0px 48px 4px !important;
+
       will-change: opacity, transform; //important for smoothness on android
       @supports ((top: var(--safe-area-inset-top))) {
         /*
@@ -595,6 +598,7 @@ watch(
         //  transform: translate3d(0, 120px, 0);
         //padding-bottom: 128px;
         border-radius: 0px;
+        box-shadow: none !important;
       }
 
       .sidebar-content {

@@ -6,7 +6,6 @@
     <EventDateTimeComponent :inline="false" />
     <EventDateLocationComponent
       class="q-mt-lg"
-      :key="selectedEventDate?.id"
       v-if="!!selectedEventDate?.location"
     />
   </div>

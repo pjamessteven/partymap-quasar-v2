@@ -368,7 +368,8 @@ export default {
       showAboutDialog: false,
       mapStyleOptions: [
         { label: this.$t('nav.satellite_map'), value: 'satellite' },
-        { label: this.$t('nav.transport_map'), value: 'transport' },
+        { label: 'Monochrome', value: 'monochrome' },
+        { label: 'Classic', value: 'classic' },
       ],
     };
   },

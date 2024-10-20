@@ -39,9 +39,10 @@
       <p />
       PartyMap would not have been possible without the amazing open source
       communtiy. Many thanks to the contributors of Vue, Python, Flask,
-      SQLAlchemy, PostgreSQL, PostGIS, Quasar and Leaflet. Thanks to Spotify,
-      Last.FM and Musicbrainz for artist info. And many thanks to you for
-      submitting your events and reviews!
+      SQLAlchemy, PostgreSQL, PostGIS, Quasar, OpenStreetMap, MapLibre GL and
+      TileServer GL. Thanks to Spotify, Last.FM and Musicbrainz for artist info.
+      Thanks to ESRI for the beautiful satellite imagery. And many thanks to you
+      for submitting your events and reviews!
       <p />
       Partymap itself is open source. Keen to contribute? Hell yeah!!! Let's
       build the best event platform on the internet!

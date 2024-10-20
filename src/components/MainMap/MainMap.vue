@@ -4,12 +4,13 @@
     :class="{
       'nearby-map-overlay-mobile': mainStore.sidebarPanel === 'nearby',
       'map-overlay-mobile-minimized': mainStore.sidebarMinimized,
+      'transport-map': mapStore.mapStyle !== 'satellite',
     }"
   >
     <UseDevicePixelRatio v-slot="{ pixelRatio: { pixelRatio } }">
       <mgl-map
         :pixel-ratio="pixelRatio"
-        :map-style="style"
+        :map-style="currentMapStyleUrl"
         :trackResize="true"
         @map:movestart="movestart"
         @map:moveend="moveend"
@@ -17,15 +18,10 @@
         @map:move="moving"
         @map:load="mapLoaded"
         hash="state"
+        :attribution-control="false"
       >
-        <mgl-raster-source
-          :tile-size="pixelRatio >= 1.5 ? 128 : 168"
-          source-id="satellite"
-          :tiles="[mapStore.satelliteMapTileUrl]"
-        >
-          <mgl-raster-layer layer-id="satellite" />
-        </mgl-raster-source>
         <mgl-navigation-control :position="'bottom-right'" />
+
         <mgl-geo-json-source
           v-show="showPoints"
           source-id="points"
@@ -37,6 +33,9 @@
             layer-id="clusters"
             :filter="['has', 'point_count']"
             :paint="clusterPaint"
+            @click="onClickCluster"
+            @mouseenter="mouseEnterPoint"
+            @mouseleave="mouseLeavePoint"
           />
 
           <!-- Cluster count labels -->
@@ -53,8 +52,8 @@
             :filter="['!', ['has', 'point_count']]"
             :paint="unclusteredPointPaint"
             @click="onClickPoint"
-            @mouseenter="onMouseOverPoint"
-            @mouseleave="mouseOverPoint = null"
+            @mouseenter="mouseEnterPoint"
+            @mouseleave="mouseLeavePoint"
           />
         </mgl-geo-json-source>
       </mgl-map>
@@ -77,14 +76,11 @@ import { UseDevicePixelRatio } from '@vueuse/components';
 import {
   MglMap,
   MglNavigationControl,
-  MglRasterSource,
-  MglRasterLayer,
   MglGeoJsonSource,
   MglCircleLayer,
   MglSymbolLayer,
   useMap,
 } from '@indoorequal/vue-maplibre-gl';
-import style from './style.json';
 import { onMounted, watch, nextTick, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { debounce } from 'lodash';
@@ -94,17 +90,20 @@ import {
   LngLatLike,
   Map,
   MapLayerMouseEvent,
-  Padding,
   PaddingOptions,
 } from 'maplibre-gl';
 import { storeToRefs } from 'pinia';
 import { Dialog, Screen } from 'quasar';
-//import markerDarkFilled from 'assets/marker-dark-filled.png';
+
 import EventSelectionComponent from './EventSelectionComponent.vue';
+import { useDevicePixelRatio } from '@vueuse/core';
 
 const mapStore = useMapStore();
 
-const { blockUpdates, peekMap, focusMarker } = storeToRefs(mapStore);
+const { blockUpdates, peekMap, focusMarker, currentMapStyleUrl } =
+  storeToRefs(mapStore);
+
+const { pixelRatio } = useDevicePixelRatio();
 
 const $route = useRoute();
 const $router = useRouter();
@@ -153,9 +152,7 @@ onMounted(async () => {
   if ($route.name === 'Explore') {
     queryStore.loadPoints();
   }
-  const imageCat = new Image();
-  //imageCat.src = markerDarkFilled;
-  console.log(imageCat);
+
   if (map.map) {
     const image = await map.map.loadImage('/src/assets/marker-dark-filled.png');
     map.map?.addImage('marker-dark', image.data, {
@@ -163,6 +160,26 @@ onMounted(async () => {
       content: [16, 16, 50, 50], // place text over left half of image, avoiding the 16px border
     });
     mapStore.map = map.map;
+  }
+
+  if ($route.name === 'Explore') {
+    if (mainStore.sidebarPanel === 'explore') {
+      map.map?.easeTo(
+        {
+          padding: getDefaultPadding(),
+          duration: 0,
+        },
+        { ignoreMoveEvents: true }
+      );
+    } else if (mainStore.sidebarPanel === 'nearby') {
+      map.map?.easeTo(
+        {
+          padding: getNearbyPagePadding(),
+          duration: 0,
+        },
+        { ignoreMoveEvents: true }
+      );
+    }
   }
 });
 
@@ -242,7 +259,11 @@ watch(
   { deep: true }
 );
 
-const movestart = () => {
+const movestart = (e: any) => {
+  console.log('ignore', e);
+  if (e.event.ignoreMoveEvents) {
+    return;
+  }
   if (!blockUpdates.value) {
     mapStore.mapMoving = true;
     mainStore.sidebarPanel = 'explore';
@@ -271,6 +292,20 @@ const mapLoaded = (event) => {
   if (mainStore.sidebarPanel === 'explore' && Screen.gt.xs) {
     debouncedReverseGeocode(map.map?.getCenter(), map.map?.getZoom());
   }
+
+  // set tilesize of satellite layer for 2x screens
+  const landsat = map.map?.getSource('landsat');
+  if (landsat && landsat.type === 'raster') {
+    landsat.tileSize = pixelRatio.value >= 1.5 ? 128 : 168;
+
+    // Force a re-render of the map
+    map.map?.style.sourceCaches['landsat'].clearTiles();
+    map.map?.style.sourceCaches['landsat'].update(map.map?.transform);
+    map.map?.triggerRepaint();
+  }
+
+  // set globe projection
+
   mapStateToStore();
 };
 
@@ -321,13 +356,17 @@ const mapStateToStore = () => {
     const center = map.map.getCenter();
     const zoomLevel = map.map.getZoom();
     mapStore.mapBounds = getPaddedBounds(map.map, getDefaultPadding());
+    console.log(mapStore.mapBounds, 'bbb');
     mapStore.mapCenter = center;
     mapStore.mapZoomLevel = zoomLevel;
     mainStore.currentLocation = center;
   }
 };
 
-const moveend = () => {
+const moveend = (e: any) => {
+  if (e.ignoreMoveEvents) {
+    return;
+  }
   mapStore.mapMoving = false;
   blockPeekMap.value = false;
   if (!blockUpdates.value) {
@@ -360,6 +399,8 @@ const mapClick = () => {
         $router.push({ name: 'Explore' });
       }
     }
+  } else {
+    mainStore.sidebarPanel = 'explore';
   }
 };
 
@@ -416,14 +457,28 @@ const getDefaultPadding = (): PaddingOptions => {
 };
 
 const getPaddedBounds = (map: Map, padding: PaddingOptions) => {
+  const bounds = map.getBounds();
+
+  if (map.getZoom() > 4) {
+    console.log('apply padding');
+    const pixelBounds = map.getContainer().getBoundingClientRect();
+    const widthPx = pixelBounds.width;
+    const heightPx = pixelBounds.height;
+    //map2.map?.fitBounds(bounds, { animate: false });
+    // project to regular map
+    const swPadded = map?.unproject([padding.left, heightPx - padding.bottom]);
+    const nePadded = map?.unproject([widthPx - padding.right, padding.top]);
+
+    return new LngLatBounds(swPadded, nePadded).adjustAntiMeridian();
+  } else return bounds.adjustAntiMeridian();
+
+  /*
   const pixelBounds = map.getContainer().getBoundingClientRect();
   const widthPx = pixelBounds.width;
   const heightPx = pixelBounds.height;
-
   const swPadded = map.unproject([padding.left, heightPx - padding.bottom]);
   const nePadded = map.unproject([widthPx - padding.right, padding.top]);
-
-  return new LngLatBounds(swPadded, nePadded); //.adjustAntiMeridian();
+*/
 };
 
 const flyTo = ({
@@ -439,10 +494,38 @@ const flyTo = ({
   map.map?.flyTo({ center, zoom, padding: padding || getDefaultPadding() });
 };
 
-const onMouseOverPoint = (e: MapLayerMouseEvent) => {
+const mouseEnterPoint = (e: MapLayerMouseEvent) => {
+  const canvas = map.map?.getCanvas();
+  if (canvas) {
+    canvas.style.cursor = 'pointer';
+  }
+  //
   const properties = e?.features?.[0]?.properties;
   if (properties?.events) {
     mouseOverPointEvents.value = JSON.parse(properties.events);
+  }
+};
+
+const mouseLeavePoint = (e: MapLayerMouseEvent) => {
+  const canvas = map.map?.getCanvas();
+  if (canvas) {
+    canvas.style.cursor = '';
+  }
+  mouseOverPointEvents.value = null;
+};
+
+const onClickCluster = async (e: MapLayerMouseEvent) => {
+  const features = e.features;
+  const clusterId = features?.[0]?.properties.cluster_id;
+  if (clusterId) {
+    const source = map.map?.getSource('points') as maplibregl.GeoJSONSource;
+    const zoom = await source.getClusterExpansionZoom(clusterId);
+    const coordinates = (features[0].geometry as GeoJSON.Point).coordinates;
+    if (zoom && coordinates)
+      map.map?.easeTo({
+        center: [coordinates[0], coordinates[1]],
+        zoom: zoom + 1,
+      });
   }
 };
 
@@ -501,14 +584,20 @@ watch(focusMarker, (newval: LngLat | null) => {
   if (newval) {
     blockUpdates.value = true;
     blockPeekMap.value = true;
+
     // save current map view so we can return to it
     if (newval.lat && newval.lng && map.map) {
+      const currentZoom = map.map.getZoom();
       mapStore.exploreMapView = {
         latlng: map.map.getCenter(),
-        zoom: map.map.getZoom(),
+        zoom: currentZoom,
       };
       blockUpdates.value = true;
-      flyTo({ center: newval, padding: getEventPagePadding() });
+      flyTo({
+        center: newval,
+        padding: getEventPagePadding(),
+        zoom: currentZoom > 9 ? currentZoom : 9,
+      });
     }
   } else {
     if (mapStore.exploreMapView)
@@ -567,11 +656,19 @@ function useRef(arg0: boolean) {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import 'maplibre-gl/dist/maplibre-gl.css';
+</style>
+
+<style lang="scss" scoped>
 .body--dark {
-  .maplibregl-map {
-    &:before {
+  .main-map {
+    :deep(.maplibregl-map) {
+      .maplibregl-control-container {
+        .maplibregl-ctrl-bottom-right {
+          filter: invert(1);
+        }
+      }
     }
   }
 }
@@ -594,7 +691,7 @@ function useRef(arg0: boolean) {
 }
 @property --bottomGradient3 {
   syntax: '<color>';
-  initial-value: rgba(0, 0, 0, 0.68);
+  initial-value: rgba(0, 0, 0, 0.48);
   inherits: false;
 }
 
@@ -609,6 +706,11 @@ function useRef(arg0: boolean) {
     width: 100%;
     z-index: 0;
     position: absolute;
+    canvas {
+      background: black;
+      //background: linear-gradient(to bottom, #6c5ce7, #74b9ff, #81ecec);
+      height: 1;
+    }
     &:before {
       position: absolute;
       content: '';
@@ -618,14 +720,21 @@ function useRef(arg0: boolean) {
       pointer-events: none;
       background: linear-gradient(
         rgba(0, 0, 0, 1),
-        rgba(0, 0, 0, 0.2) 148px,
+        rgba(0, 0, 0, 0.1) 148px,
         var(--bottomGradient1) 200px,
-        var(--bottomGradient2) calc(100% - 128px),
         var(--bottomGradient2) calc(100% - 200px),
         var(--bottomGradient3) 100%
       );
     }
   }
+  &.transport-map {
+    :deep(.maplibregl-map) {
+      &:before {
+        opacity: 0.5;
+      }
+    }
+  }
+
   .nearby-map-overlay-mobile {
     --bottomGradient1: rgba(0, 0, 0, 0.48);
   }
@@ -643,10 +752,14 @@ function useRef(arg0: boolean) {
 
 @media only screen and (max-width: 599px) {
   .main-map {
-    .maplibregl-ctrl-bottom-right {
-      bottom: calc(268px + env(safe-area-inset-bottom));
-      .maplibregl-ctrl-attrib {
-        display: none;
+    :deep(.maplibregl-map) {
+      .maplibregl-control-container {
+        .maplibregl-ctrl-bottom-right {
+          bottom: calc(248px + env(safe-area-inset-bottom));
+          .maplibregl-ctrl-attrib {
+            display: none;
+          }
+        }
       }
     }
   }

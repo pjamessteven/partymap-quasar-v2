@@ -96,8 +96,7 @@
 
 <script>
 import common from 'assets/common';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
+
 import { mapActions, mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 

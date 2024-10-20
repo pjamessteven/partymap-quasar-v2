@@ -340,12 +340,33 @@
                     showValidationErrors ? validationErrors.location : undefined
                   "
                 />
-
                 <div
                   class="location-map-wrapper satellite-enabled q-mt-md q-mb-lg"
-                  v-show="!!event.location"
+                  v-if="!!markerCoords"
                 >
-                  <div class="map" ref="map" />
+                  <UseDevicePixelRatio v-slot="{ pixelRatio: { pixelRatio } }">
+                    <mgl-map
+                      :map-style="satelliteMapStyleUrl"
+                      :pixel-ratio="pixelRatio"
+                      :center="markerCoords"
+                      :zoom="8"
+                      :attributionControl="false"
+                      :zoomC
+                    >
+                      <mgl-navigation-control :position="'bottom-right'" />
+
+                      <mgl-marker v-model:coordinates="markerCoords">
+                        <template v-slot:marker>
+                          <div
+                            :style="{
+                              backgroundColor: 'red',
+                              width: '10px',
+                              height: '10px',
+                            }"
+                          ></div> </template
+                      ></mgl-marker>
+                    </mgl-map>
+                  </UseDevicePixelRatio>
                   <div
                     class="location-map-select-msg flex justify-center items-center"
                   >
@@ -640,6 +661,12 @@ import { mapState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import { toRaw } from 'vue';
 import _ from 'lodash';
+import {
+  MglMap,
+  MglMarker,
+  MglNavigationControl,
+} from '@indoorequal/vue-maplibre-gl';
+import { UseDevicePixelRatio } from '@vueuse/components';
 
 export default {
   components: {
@@ -650,6 +677,10 @@ export default {
     GoogleLocationComponent,
     SelectTagsComponent,
     SelectArtistsComponent,
+    MglMap,
+    MglMarker,
+    MglNavigationControl,
+    UseDevicePixelRatio,
   },
   props: {
     host: { type: Boolean, default: false },
@@ -815,86 +846,24 @@ export default {
       } catch {}
       progressDialog.hide();
     },
-
-    initMap() {
-      this.map = null;
-      this.map = L.map(this.$refs.map, this.mapOptions);
-      // enable zooming after clicking map
-      this.map.on('click', () => {
-        this.map.scrollWheelZoom.enable();
-      });
-      this.map.on('mouseout', () => {
-        this.map.scrollWheelZoom.disable();
-      });
-
-      // tile layers
-
-      // style specific parameters
-      const detectRetina = this.mapStyle === 'satellite';
-
-      let opacity = 1;
-      if (this.mapStyle === 'toner') opacity = 0.68;
-
-      let filter = [];
-      if (this.mapStyle === 'transport' && this.$q.dark.isActive) {
-        filter = ['saturate:150%', 'brightness:100%'];
-      }
-
-      this.tileLayer = L.tileLayer(this.currentMapTileUrl, {
-        attribution: this.currentMapTileAttribution,
-        detectRetina,
-        filter,
-      });
-      this.tileLayer.setOpacity(opacity);
-      this.tileLayer.addTo(this.map);
-
-      if (this.mapStyle === 'satellite') {
-        // add additional label layer for satellite map
-        this.labelLayer = L.tileLayer(this.labelsMapTileUrl, {
-          detectRetina: false,
-        });
-        this.labelLayer.addTo(this.map);
-        this.labelLayer.setOpacity(0.68);
-      }
-    },
   },
-  watch: {
-    eventLocation: {
-      handler(newv) {
-        if (newv) {
-          setTimeout(() => {
-            this.map.invalidateSize();
-
-            const lat = newv.geometry.location.lat();
-            const lng = newv.geometry.location.lng();
-
-            // remove previous marker
-            if (this.markers && this.map.hasLayer(this.markers)) {
-              toRaw(this.map).removeLayer(this.markers);
-            }
-            // add location preview marker
-            this.map.setView([lat, lng], 12);
-            let marker = L.marker([lat, lng], {
-              icon: this.defaultIcon,
-              zIndexOffset: 5000,
-            });
-            this.mapMarkers = L.featureGroup([marker]);
-            this.mapMarkers.addTo(toRaw(this.map));
-          }, 100);
-        }
-      },
-      deep: true,
-    },
-  },
+  watch: {},
   computed: {
     ...mapState(useMapStore, [
-      'currentMapTileAttribution',
-      'currentMapTileUrl',
+      'satelliteMapStyleUrl',
       'labelsMapTileUrl',
       'defaultIcon',
       'mapStyle',
     ]),
     ...mapState(useAuthStore, ['currentUser']),
+    markerCoords() {
+      if (this.eventLocation)
+        return [
+          this.eventLocation.geometry.location.lng(),
+          this.eventLocation.geometry.location.lat(),
+        ];
+      else return null;
+    },
     eventLocation() {
       return this.event.location;
     },
@@ -925,9 +894,6 @@ export default {
       }
       return errors;
     },
-  },
-  mounted() {
-    this.initMap();
   },
   created() {
     this.debouncedFindExistingEvent = _.debounce(this.findExistingEvent, 150, {

@@ -85,7 +85,7 @@
               }"
               v-if="$q.screen.gt.sm"
             >
-              <div class="flex row no-wrap items-center">
+              <div class="flex row no-wrap items-end">
                 <router-link
                   :to="{ name: 'Explore' }"
                   style="text-decoration: none; color: inherit"
@@ -156,7 +156,8 @@
               <div class="flex column" v-if="!isLoadingInitial">
                 <!-- cities-->
                 <div
-                  class="flex column q-mb-lg q-mt-md q-pt-sm q-mb-md"
+                  :style="$q.screen.gt.sm ? 'margin-top: -8px' : ''"
+                  class="flex column q-mb-md"
                   v-if="
                     topRegionsInArea?.length > 2 &&
                     mapZoomLevel < 7 &&
@@ -171,7 +172,7 @@
                     <div class="inter bolder text-large">Happening Places</div>
                   </div>
 
-                  <div :style="$q.screen.gt.sm ? 'margin-bottom: -24px' : ''">
+                  <div>
                     <CustomQScroll
                       horizontal
                       class="tag-scroll-area"

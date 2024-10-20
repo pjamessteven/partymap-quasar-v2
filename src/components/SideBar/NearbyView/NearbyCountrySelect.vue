@@ -204,6 +204,9 @@ export default {
       span {
         line-height: 1.2em;
       }
+      .q-field__append{
+      align-items: flex-end;
+    }
     }
     :deep(.country-select-input) {
       font-weight: 800 !important;

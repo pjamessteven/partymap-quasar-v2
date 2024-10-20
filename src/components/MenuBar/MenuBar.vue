@@ -234,7 +234,7 @@ export default {
     },
 
     iconLeftColor() {
-      if (this.$q.screen.gt.xs) {
+      if (this.$q.screen.gt.sm) {
         if (
           (!this.$q.dark.isActive && this.$route.name === 'Explore') ||
           (this.$q.screen.gt.lg &&

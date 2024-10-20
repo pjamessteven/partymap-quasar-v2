@@ -1152,8 +1152,12 @@ export default {
       background: black;
     }
     .message {
-      // background: $bi-2;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: $bi-2;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+      &:hover {
+        background: $bi-3;
+      }
       .appstore-wrapper {
         //background: $bi-3;
         border: 1px solid rgba(255, 255, 255, 0.2);
@@ -1189,8 +1193,12 @@ export default {
     .message {
       //box-shadow: rgba(100, 100, 111, 0.05) 0px 7px 29px 0px;
       //background: $b-1;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-
+      // border: 1px solid rgba(0, 0, 0, 0.1);
+      background: $b-2;
+      transition: all 0.3s ease;
+      &:hover {
+        background: $b-3;
+      }
       .appstore-wrapper {
         //background: $b-2;
         border: 1px solid rgba(0, 0, 0, 0.1);

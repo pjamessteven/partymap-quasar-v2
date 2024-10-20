@@ -171,7 +171,7 @@
             </div>
             <div
               v-if="$q.screen.gt.sm"
-              class="description grow flex ellipsis q-mb-sm items-center"
+              class="description grow flex ellipsis q-mb-sm q-pr-md items-center"
               style="max-width: 100%"
             >
               {{ event.event.description }}
@@ -267,13 +267,12 @@ export default {
         return `background-image:  url("${this.imgThumbXsUrl}");
         background-size: cover;
         display: inline-block;
-        background-position: center;
+
         `;
       } else {
         return `background-image:  url("${this.imgThumbXsUrl}");
           background-size: cover;
           display: inline-block;
-          background-position: center;
           `;
       }
     },

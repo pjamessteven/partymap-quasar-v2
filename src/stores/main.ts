@@ -245,6 +245,7 @@ export const useMainStore = defineStore('main', {
           message:
             "Can't get your location! \n\n Using IP address location instead...",
           icon: 'error',
+          closeBtn: true,
         });
 
         this.userLocationLoading = false;

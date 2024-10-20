@@ -3,32 +3,57 @@
     class="ed-location flex row editing-outline ed-inline-card no-wrap"
     :class="{
       inline: inline,
+      'column items-stretch': inline,
       'editing q-px-md': editing || showMoreFields,
       'items-start': $q.screen.lt.sm,
       'items-center': $q.screen.gt.xs,
     }"
     @click="editing || showMoreFields ? (showEditDialog = true) : expand()"
   >
-    <q-icon
-      :size="$q.screen.gt.sm ? '2em' : '1.5rem'"
-      class="t2"
-      name="las la-map-marker"
-      v-if="inline"
-    />
-    <div
-      class="flex row grow align-center items-start justify-between no-wrap"
-      v-if="inline"
-    >
-      <div class="q-ml-md flex column" style="width: 100%">
-        <div class="flex grow no-wrap row items-center">
-          <div class="flex column" :class="$q.screen.gt.sm ? 'text-large' : ''">
-            <div class="t2">{{ selectedEventDate.location.name }}</div>
-            <div class="t4">
-              {{ selectedEventDate.location.description }}
+    <div class="flex row grow">
+      <q-icon
+        :size="$q.screen.gt.sm ? '2em' : '1.5rem'"
+        class="t2"
+        name="las la-map-marker"
+        v-if="inline"
+      />
+      <div
+        class="flex row grow align-center items-start justify-between no-wrap"
+        v-if="inline"
+      >
+        <div class="q-ml-md flex column" style="width: 100%">
+          <div class="flex grow no-wrap row items-center">
+            <div
+              class="flex column"
+              :class="$q.screen.gt.sm ? 'text-large' : ''"
+            >
+              <div class="t2">{{ selectedEventDate.location.name }}</div>
+              <div class="t4">
+                {{ selectedEventDate.location.description }}
+              </div>
             </div>
           </div>
+          <div v-if="$q.screen.lt.md">
+            <a
+              :href="computedMapsUrl"
+              target="_blank"
+              v-if="computedMapsUrl"
+              style="text-decoration: none; color: unset"
+            >
+              <q-btn
+                class="nav-button q-mt-sm"
+                flat
+                no-caps
+                size="md"
+                v-if="!editing"
+                icon="las la-directions"
+                label="Open in Maps "
+              >
+              </q-btn>
+            </a>
+          </div>
         </div>
-        <div v-if="$q.screen.lt.md">
+        <div v-if="$q.screen.gt.sm">
           <a
             :href="computedMapsUrl"
             target="_blank"
@@ -36,67 +61,58 @@
             style="text-decoration: none; color: unset"
           >
             <q-btn
-              class="nav-button q-mt-sm"
+              class="nav-button q-mt-sm q-ml-md"
               flat
+              style="width: 160px"
               no-caps
               size="md"
               v-if="!editing"
               icon="las la-directions"
-              label="Open in Maps "
+              label="Google Maps "
             >
             </q-btn>
           </a>
         </div>
-        <div
-          class="square-map flex"
-          :class="[inline ? 'q-mt-md' : '']"
-          v-if="showMap"
-        >
-          <div class="map-container satellite-enabled">
-            <div ref="map" class="map" @click.stop />
-          </div>
-        </div>
+        <q-icon
+          size="2em"
+          class="t3 q-ml-md"
+          name="mdi-chevron-down"
+          v-if="expandable && !expanded"
+        />
+        <q-icon
+          size="2em"
+          class="t3 q-ml-md"
+          name="mdi-chevron-up"
+          v-else-if="expandable && expanded"
+        />
       </div>
-      <div v-if="$q.screen.gt.sm">
-        <a
-          :href="computedMapsUrl"
-          target="_blank"
-          v-if="computedMapsUrl"
-          style="text-decoration: none; color: unset"
-        >
-          <q-btn
-            class="nav-button q-mt-sm q-ml-md"
-            flat
-            style="width: 160px"
-            no-caps
-            size="md"
-            v-if="!editing"
-            icon="las la-directions"
-            label="Google Maps "
-          >
-          </q-btn>
-        </a>
-      </div>
-      <q-icon
-        size="2em"
-        class="t3 q-ml-md"
-        name="mdi-chevron-down"
-        v-if="expandable && !expanded"
-      />
-      <q-icon
-        size="2em"
-        class="t3 q-ml-md"
-        name="mdi-chevron-up"
-        v-else-if="expandable && expanded"
-      />
     </div>
     <div
       class="square-map flex"
       :class="[inline ? 'q-mt-md' : '']"
-      v-if="!inline"
+      v-if="(!inline || showMap) && markerCoords"
     >
       <div class="map-container satellite-enabled">
-        <div ref="map" class="map" />
+        <UseDevicePixelRatio v-slot="{ pixelRatio: { pixelRatio } }">
+          <mgl-map
+            :map-style="classicMapStyleUrl"
+            :pixel-ratio="pixelRatio"
+            :center="markerCoords"
+            :zoom="8"
+            :attributionControl="false"
+          >
+            <mgl-marker v-model:coordinates="markerCoords">
+              <template v-slot:marker>
+                <div
+                  :style="{
+                    backgroundColor: 'red',
+                    width: '10px',
+                    height: '10px',
+                  }"
+                ></div> </template
+            ></mgl-marker>
+          </mgl-map>
+        </UseDevicePixelRatio>
       </div>
     </div>
     <q-dialog
@@ -111,16 +127,16 @@
 </template>
 
 <script>
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-
 import { mapState } from 'pinia';
 import EditEventDateDialog from './EditEventDateDialog.vue';
 import { useEventStore } from 'src/stores/event';
 import { useMapStore } from 'src/stores/map';
+import { MglMap, MglMarker } from '@indoorequal/vue-maplibre-gl';
+import { UseDevicePixelRatio } from '@vueuse/components';
+
 export default {
   name: 'EventDateMap',
-  components: { EditEventDateDialog },
+  components: { EditEventDateDialog, MglMap, UseDevicePixelRatio, MglMarker },
   props: {
     editing: Boolean,
     inline: Boolean, // desktop and mobile (only show text, no map)
@@ -131,68 +147,37 @@ export default {
     return {
       expanded: false,
       showEditDialog: false,
-      mapOptions: {
-        scrollWheelZoom: false,
-        zoomSnap: 1,
-        zoomControl: true,
-        maxBounds: L.latLngBounds(
-          L.latLng(-89.98155760646617, -Infinity),
-          L.latLng(89.99346179538875, Infinity)
-        ),
-        maxBoundsViscosity: 0.5,
-        worldCopyJump: true,
-        preferCanvas: true,
-        attribution:
-          'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
-      },
-
       map: null,
       tileLayer: null,
       labelLayer: null,
       markers: null,
+      markerCoords: null,
     };
   },
   watch: {
     selectedEventDate: {
       handler: function (newval) {
         if (newval) {
-          if (this.showMap && newval.location?.lat) {
-            //  this.addMarker();
+          if (newval?.location) {
+            this.markerCoords = [newval.location.lng, newval.location.lat];
           }
         }
       },
     },
   },
+  mounted() {
+    if (this.selectedEventDate) {
+      this.markerCoords = [
+        this.selectedEventDate.location.lng,
+        this.selectedEventDate.location.lat,
+      ];
+    }
+  },
   methods: {
     expand() {
       this.expanded = !this.expanded;
-      if (this.expanded && this.selectedEventDate.location) {
-        this.$nextTick(() => {
-          this.initMap();
-        });
-      }
     },
-    initMap() {
-      /*
-      this.map = null;
-      this.map = L.map(this.$refs.map, this.mapOptions).setView(
-        [
-          this.selectedEventDate.location.lat,
-          this.selectedEventDate.location.lng,
-        ],
-        7
-      );
-      // enable zooming after clicking map
-      this.map.on('click', () => {
-        this.map.scrollWheelZoom.enable();
-      });
-      this.map.on('mouseout', () => {
-        this.map.scrollWheelZoom.disable();
-      });
-      this.initTileLayers();
-      this.addMarker();
-      */
-    },
+
     addMarker() {
       if (this.markers && this.map.hasLayer(this.markers)) {
         this.map.removeLayer(this.markers);
@@ -231,12 +216,7 @@ export default {
   },
   computed: {
     ...mapState(useEventStore, ['selectedEventDate']),
-    ...mapState(useMapStore, [
-      'mapStyle',
-      'transportMapTileUrl',
-      'transportMapTileAttribution',
-      'defaultIcon',
-    ]),
+    ...mapState(useMapStore, ['mapStyle', 'classicMapStyleUrl', 'defaultIcon']),
     showMap() {
       return !this.inline || (this.inline && this.expandable && this.expanded);
     },
@@ -246,14 +226,6 @@ export default {
     computedMapsUrl() {
       return `https://www.google.com/maps/search/?api=1&query=${this.selectedEventDate?.location?.description}&query_place_id=${this.selectedEventDate?.location?.place_id}`;
     },
-  },
-  mounted() {
-    if (!this.inline && this.selectedEventDate != null) {
-      this.initMap();
-    }
-  },
-  beforeUnmount() {
-    if (this.map) this.map.remove();
   },
 };
 </script>
