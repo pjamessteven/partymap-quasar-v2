@@ -89,7 +89,7 @@ export default {
         border-top: 1px solid rgba(48, 48, 48);
         border-bottom: 1px solid rgba(48, 48, 48, 0.4);
         background: $bi-2;
-        box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.4),
+        box-shadow: 0 7px 4px -4px rgba(0, 0, 0, 0.4),
           0 12px 10px 2px rgba(0, 0, 0, 0.3), 0 5px 16px 4px rgba(0, 0, 0, 0.5);
       }
     }
@@ -106,8 +106,8 @@ export default {
     .artist-head {
       .artist-head-img {
         background: $b-2;
-        box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.4),
-          0 12px 17px 2px rgba(0, 0, 0, 0.2), 0 5px 10px 4px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.1),
+          0 1px 16px 2px rgba(0, 0, 0, 0.2), 0 5px 10px 4px rgba(0, 0, 0, 0.08);
       }
     }
   }
