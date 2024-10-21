@@ -13,7 +13,7 @@
         width: $q.screen.gt.sm ? '12px' : '4px',
         borderRadius: '0px',
       }"
-      :class="!showPanelBackground && $q.screen.lt.sm && 'disable-scroll'"
+      :disableScroll="!showPanelBackground && $q.screen.lt.md"
       class="scroll-area flex grow"
     >
       <div class="scroll-stuff flex column">
@@ -1250,6 +1250,7 @@ export default {
     :deep(.scroll) {
       //overflow-x: hidden;
       overflow-y: auto;
+      overflow-x: hidden;
     }
 
     &.disable-scroll {

@@ -5,6 +5,7 @@
         <q-item-label header
           >{{ $t('event.events_at') }} {{ data.name }}</q-item-label
         >
+
         <q-separator />
         <q-item
           clickable
@@ -15,7 +16,7 @@
           @click="showEventPage(item)"
         >
           <q-item-section>
-            <q-item-label>{{ item.name }}</q-item-label>
+            <q-item-label class="inter bold">{{ item.name }}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>

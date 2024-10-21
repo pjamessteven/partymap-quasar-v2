@@ -1168,11 +1168,15 @@ onBeforeRouteLeave((to, from, next) => {
     if ($q.platform.is.android) {
       if (previousRouteIsExplore.value) {
         setTimeout(() => {
-          mainStore.showPanelBackground = true;
-          mainStore.sidebarOpacity = 1;
+          if (mainStore.showPanel) {
+            mainStore.showPanelBackground = true;
+          }
         }, 0);
       }
-      setTimeout(() => next(), 300);
+      setTimeout(() => {
+        mainStore.sidebarOpacity = 1;
+        next();
+      }, 300);
     } else {
       setTimeout(() => {
         mainStore.sidebarOpacity = 1;
@@ -1379,6 +1383,7 @@ onMounted(() => {
   // called on initial mount
   // and every time it is re-inserted from the cache
   mainStore.sidebarOpacity = 0;
+
   setupSpring();
   if (scrollArea.value) {
     (scrollArea.value as any).setScrollPercentage('vertical', 0);
@@ -1792,7 +1797,7 @@ a {
           //border: none !important;
           min-height: 100vh;
           position: relative;
-          pointer-events: all;
+          pointer-events: all !important;
           padding-bottom: 0px;
           border-top-left-radius: 18px !important;
           border-top-right-radius: 18px !important;

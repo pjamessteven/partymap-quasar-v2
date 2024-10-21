@@ -7,7 +7,7 @@
       v-bind:class="{
         shadow: $q.screen.gt.xs && false,
         'sidebar-mobile-expanded':
-          mainStore.showPanelBackground && $q.screen.lt.sm,
+          mainStore.showPanelBackground && $q.screen.lt.md,
         iphone: $q.platform.is.iphone || $q.platform.is.ipod,
         dim:
           mainStore.menubarOpacity === 1 &&
@@ -132,6 +132,7 @@ const mainStore = useMainStore();
     left: 0px;
     padding-top: 64px;
     width: 568px;
+    max-width: 50vw;
     max-height: 100%;
     height: 100%;
     overflow: hidden;
@@ -189,7 +190,6 @@ const mainStore = useMainStore();
 
   .sidebar-wrapper {
     .sidebar {
-      width: 408px;
       @supports ((top: var(--safe-area-inset-top))) {
         //padding-bottom: calc(180px + var(--safe-area-inset-top));
       }

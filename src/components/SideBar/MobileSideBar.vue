@@ -96,7 +96,7 @@ const hiddenYPosition = () => {
   else if (
     mainStore.sidebarMinimized &&
     mainStore.sidebarPanel === 'explore' &&
-    $q.screen.lt.sm
+    $q.screen.lt.md
   )
     return window.innerHeight - 126 - mainStore.safeAreaInsets.top - iosOffset;
 
@@ -206,7 +206,7 @@ const dragHandler = ({
   movement: [x: number, y: number];
   dragging: boolean;
 }) => {
-  if ($q.screen.lt.sm) {
+  if ($q.screen.lt.md) {
     if (!dragging) {
       if (mainStore.showPanel && mainStore.enablePanelSwipeDown) {
         if (y > 30) {
@@ -360,10 +360,6 @@ const resize = (event: any) => {
   lastx.value = event.x;
 };
 
-const isMobile = computed(() => {
-  return $q.screen.lt.sm;
-});
-
 const togglePanel = () => {
   mainStore.showPanel = !mainStore.showPanel;
 
@@ -399,7 +395,7 @@ watch(
     }
     if (to === 'search') {
       mainStore.showPanel = true;
-      if ($q.screen.lt.sm) {
+      if ($q.screen.lt.md) {
         showPanel();
       }
     }
@@ -449,10 +445,10 @@ watch(
           //background: black;
         }
       }
-      box-shadow: rgba(0, 0, 0, 0.15) 1.95px -1.95px 3px !important;
+      box-shadow: rgba(0, 0, 0, 0.1) 1.95px -1.95px 3px !important;
 
       &.shadow-strong {
-        box-shadow: rgba(0, 0, 0, 0.68) 1.95px -1.95px 5px !important;
+        box-shadow: rgba(0, 0, 0, 0.4) 1.95px -1.95px 5px !important;
       }
       &.sidebar-mobile-expanded {
         box-shadow: none !important;

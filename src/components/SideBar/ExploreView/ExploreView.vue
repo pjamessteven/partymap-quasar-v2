@@ -21,7 +21,6 @@
         style="pointer-events: all"
       />
     </div>
-    <div class="touch-overlay" v-touch-swipe.vertical="handleSwipe" />
     <div class="event-list-inner">
       <div
         class="inter q-mb-md"
@@ -73,7 +72,7 @@
           "
           class="scroll-area flex grow"
           :disableScroll="
-            $q.screen.lt.sm && (!showPanelBackground || preventMapZoom)
+            $q.screen.lt.md && (!showPanelBackground || preventMapZoom)
           "
         >
           <div class="flex column no-wrap scroll-content">

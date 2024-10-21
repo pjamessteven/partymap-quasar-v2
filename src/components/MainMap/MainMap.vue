@@ -18,12 +18,17 @@
         @map:click="mapClick"
         @map:move="moving"
         @map:load="mapLoaded"
-        hash="state"
+        :hash="
+          $route.name === 'Explore' &&
+          mainStore.sidebarPanel !== 'nearby' &&
+          'state'
+        "
         :attribution-control="false"
       >
         <mgl-navigation-control :position="'bottom-right'" />
 
         <mgl-geo-json-source
+          v-if="mappedPoints"
           source-id="points"
           :data="mappedPoints"
           :cluster="false"
@@ -50,7 +55,7 @@ Cluster count labels
           <mgl-symbol-layer
             layer-id="unclustered-point"
             :layout="unclusteredPointLayout"
-            :paint="unclusteredPointPaint"
+            :paint="computedPaintStyle"
             @click="onClickPoint"
             @mouseenter="mouseEnterPoint"
             @mouseleave="mouseLeavePoint"
@@ -104,7 +109,7 @@ import {
   PaddingOptions,
 } from 'maplibre-gl';
 import { storeToRefs } from 'pinia';
-import { Dialog, Screen } from 'quasar';
+import { Dark, Dialog, Screen } from 'quasar';
 
 import EventSelectionComponent from './EventSelectionComponent.vue';
 import { useDevicePixelRatio } from '@vueuse/core';
@@ -112,7 +117,7 @@ import { API_URL, IS_LOCALHOST } from 'src/api';
 
 const mapStore = useMapStore();
 
-const { blockUpdates, peekMap, focusMarker, currentMapStyleUrl } =
+const { blockUpdates, peekMap, focusMarker, currentMapStyleUrl, mapStyle } =
   storeToRefs(mapStore);
 
 const { pixelRatio } = useDevicePixelRatio();
@@ -167,6 +172,35 @@ const mappedPoints = computed(() => ({
   })),
 }));
 
+const updateMarkers = () => {
+  /*
+  map.map?.removeLayer('unclustered-point')
+  map.map?.removeSource('points');
+  map.map?.addSource('points', {
+        type: 'geojson',
+        data: mappedPoints.value,
+      });
+      map.map?.addLayer('unclustered-point', {
+        type: 'geojson',
+        data: mappedPoints.value,
+      });
+      */
+  const source = map.map?.getSource('points') as maplibregl.GeoJSONSource;
+  source?.setData(mappedPoints.value);
+};
+
+/*
+watch(
+  () => mappedPoints,
+  () => {
+    if (map.map) {
+      updateMarkers();
+    }
+  },
+  { deep: true }
+);
+*/
+
 onMounted(async () => {
   if ($route.name === 'Explore') {
     queryStore.loadPoints();
@@ -183,6 +217,7 @@ onMounted(async () => {
         'https://content.partymap.com/statics/marker-dark-shadow.webp'
       );
     }
+    console.log('MAPP imagae', image);
     if (image)
       map.map?.addImage('marker-dark', image.data, {
         pixelRatio: 5,
@@ -452,7 +487,7 @@ const getEventPagePadding = (): PaddingOptions => {
   if (Screen.lt.sm) {
     return {
       top: 0,
-      bottom: window.innerHeight * 0.66 - 64,
+      bottom: window.innerHeight * 0.76 - 64,
       left: 0,
       right: 0,
     };
@@ -579,7 +614,7 @@ const onClickPoint = (e: MapLayerMouseEvent) => {
         component: EventSelectionComponent,
         // props forwarded to component
         componentProps: {
-          data: properties,
+          data: { ...properties, events: events },
         },
       });
     } else {
@@ -692,12 +727,33 @@ const clusterCountLayout = {
 
 const clusterCountPaint = {};
 
-const unclusteredPointPaint = {
+const computedPaintStyle = computed(() => {
+  if (mapStyle.value === 'satellite') {
+    return lightLabelPaint;
+  } else if (mapStyle.value === 'classic') {
+    return darkLabelPaint;
+  } else if (Dark.isActive) {
+    return lightLabelPaint;
+  } else {
+    return darkLabelPaint;
+  }
+});
+const lightLabelPaint = {
   'text-color': '#FFFFFF',
   'icon-halo-color': 'rgba(0, 0, 0, 1)',
   'icon-halo-width': 2,
   'icon-halo-blur': 0,
   'text-halo-color': '#000000',
+  'text-halo-width': 1,
+  'text-halo-blur': 1,
+};
+
+const darkLabelPaint = {
+  'text-color': '#000000',
+  'icon-halo-color': 'rgba(0, 0, 0, 1)',
+  'icon-halo-width': 2,
+  'icon-halo-blur': 0,
+  'text-halo-color': '#FFFFFF',
   'text-halo-width': 1,
   'text-halo-blur': 1,
 };
@@ -709,10 +765,10 @@ const unclusteredPointLayout = {
     ['zoom'],
     1,
     0.0, // At zoom level 10
-    5,
+    4,
     0.0, // At zoom level 10
-    6,
-    11, // At zoom level 8
+    5,
+    12, // At zoom level 8
     8,
     12, // At zoom level 20
   ],
@@ -721,15 +777,17 @@ const unclusteredPointLayout = {
   'text-offset': [0, 2.5], // Offset text below the icon
   'text-allow-overlap': false,
   'text-ignore-placement': false,
+  'text-anchor': 'top',
   'text-optional': true,
   //'icon-ignore-placement': true,
+  'icon-allow-overlap': false,
   'icon-image': 'marker-dark',
   'icon-size': [
     'interpolate',
     ['exponential', 1.5], // You can adjust the base of the exponential function
     ['zoom'],
     1,
-    0.25, // At zoom level 10
+    0.2, // At zoom level 10
     6,
     0.8, // At zoom level 8
     20,
@@ -809,9 +867,9 @@ function useRef(arg0: boolean) {
       background: linear-gradient(
         rgba(0, 0, 0, 1),
         rgba(0, 0, 0, 0.1) 148px,
-        var(--bottomGradient1) 200px,
-        var(--bottomGradient2) calc(100% - 200px),
-        var(--bottomGradient3) 100%
+        transparent 200px,
+        transparent calc(100% - 200px),
+        rgba(0, 0, 0, 0.48) 100%
       );
     }
   }

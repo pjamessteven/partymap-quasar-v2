@@ -366,7 +366,7 @@ export default {
   z-index: 104;
   position: absolute;
   top: 8px;
-  padding-left: 568px;
+  padding-left: min(50vw, 568px);
   width: 100%;
   display: flex;
   pointer-events: none;
