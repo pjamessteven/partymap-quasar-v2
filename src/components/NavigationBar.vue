@@ -35,7 +35,7 @@
         exact
         name="nearby"
         content-class="tab"
-        label="Nearby"
+        label="Home"
         :ripple="false"
         :icon="
           $q.screen.lt.sm
@@ -80,7 +80,8 @@
         :ripple="false"
       />
 
-      <q-route-tab
+      <!--
+            <q-route-tab
         name="profile"
         key="4"
         :icon="
@@ -90,7 +91,7 @@
               : 'mdi-emoticon-cool-outline'
             : undefined
         "
-        label="Profile"
+        label="Activity"
         content-class="tab"
         :ripple="false"
         :to="
@@ -101,6 +102,24 @@
               }
             : { path: '/login', query: { from: $route.path } }
         "
+        exact
+      />-->
+      <q-route-tab
+        name="activity"
+        key="4"
+        :icon="
+          $q.screen.lt.sm
+            ? $route.name === 'Activity'
+              ? 'mdi-emoticon-cool'
+              : 'mdi-emoticon-cool-outline'
+            : undefined
+        "
+        label="Activity"
+        content-class="tab"
+        :ripple="false"
+        :to="{
+          name: 'ActivityPage',
+        }"
         exact
       />
       <q-route-tab

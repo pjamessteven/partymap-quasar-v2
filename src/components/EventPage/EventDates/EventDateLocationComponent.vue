@@ -101,16 +101,8 @@
             :zoom="8"
             :attributionControl="false"
           >
-            <mgl-marker v-model:coordinates="markerCoords">
-              <template v-slot:marker>
-                <div
-                  :style="{
-                    backgroundColor: 'red',
-                    width: '10px',
-                    height: '10px',
-                  }"
-                ></div> </template
-            ></mgl-marker>
+            <mgl-marker v-model:coordinates="markerCoords" :paint="pointPaint">
+            </mgl-marker>
           </mgl-map>
         </UseDevicePixelRatio>
       </div>
@@ -152,6 +144,12 @@ export default {
       labelLayer: null,
       markers: null,
       markerCoords: null,
+      pointPaint: {
+        'circle-color': '#11b4da',
+        'circle-radius': 4,
+        'circle-stroke-width': 3,
+        'circle-stroke-color': '#fff',
+      },
     };
   },
   watch: {

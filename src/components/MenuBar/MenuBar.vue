@@ -135,6 +135,7 @@ export default {
       if (
         this.$route.name === 'Explore' ||
         this.$route.name === 'BrowsePage' ||
+        this.$route.name === 'ActivityPage' ||
         this.$route.name === 'UserPage' ||
         !previousRoute
       ) {

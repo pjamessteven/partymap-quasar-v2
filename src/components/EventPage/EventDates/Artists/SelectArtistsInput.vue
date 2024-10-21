@@ -43,10 +43,10 @@ import { getMusicBrainzArtist, getArtistsRequest } from 'src/api';
 import _ from 'lodash';
 
 export default {
-  props: { mode: String, artists: Array, defaultDate: String, prefill: String },
+  props: { artists: Array, prefill: String },
   data() {
     return {
-      results: null,
+      results: [],
       loadingResults: false,
       selectValue: null,
       artistsList: [],

@@ -1152,10 +1152,10 @@ export default {
   }
 
   .header {
-    background: $bi-1;
+    background: black;
   }
   .date-header {
-    background: $bi-1;
+    background: black;
   }
 }
 

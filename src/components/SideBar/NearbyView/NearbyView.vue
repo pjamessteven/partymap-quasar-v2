@@ -271,6 +271,66 @@
             style="cursor: default"
             v-if="computedSidebarPanelReady && !loadingEverything"
           >
+            <!-- your events-->
+            <div
+              class="flex column"
+              v-if="currentUser && userEventDates?.length > 0"
+            >
+              <div
+                class="q-py-md location-header flex justify-between"
+                :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-px-md'"
+              >
+                <div class="text-">Your events:</div>
+                <router-link
+                  class="link-hover t3 inter semibold"
+                  :to="{
+                    name: 'UserPage',
+                    params: { username: currentUser.username },
+                  }"
+                >
+                  View all <q-icon name="mdi-chevron-right" />
+                </router-link>
+              </div>
+              <div
+                class="q-mb-"
+                v-if="userEventDates && userEventDates.length > 0"
+              >
+                <CustomQScroll
+                  horizontal
+                  class="user-event-scroll-area"
+                  style="width: 100%"
+                  :thumb-style="
+                    $q.screen.gt.sm
+                      ? {
+                          bottom: '0px',
+                          height: '4px',
+                          borderRadius: '0px',
+                          marginLeft: '24px',
+                        }
+                      : { bottom: '0px', height: '0px' }
+                  "
+                >
+                  <div
+                    class="flex row no-wrap q-gutter-md"
+                    :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-px-md'"
+                  >
+                    <EventDatePoster
+                      v-for="(ed, index) in userEventDates"
+                      :key="index"
+                      :hideInfo="true"
+                      :event="ed[0]"
+                    />
+                  </div>
+                </CustomQScroll>
+              </div>
+              <div
+                :class="
+                  $q.screen.lt.md ? 'q-px-md ' : 'q-px-lg q-mt-sm q-mb-sm'
+                "
+              >
+                <q-separator />
+              </div>
+            </div>
             <!-- tags -->
             <div class="flex column" v-if="nearbyTags?.length >= 10">
               <div
@@ -505,66 +565,6 @@
               />
             </div>
             <!-- NEARBY EVENTS -->
-            <!-- your events-->
-            <div
-              class="flex column"
-              v-if="currentUser && userEventDates?.length > 0"
-            >
-              <div
-                class="q-py-md q-mt-md location-header flex justify-between"
-                :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-px-md'"
-              >
-                <div class="text-">Your events:</div>
-                <router-link
-                  class="link-hover t3 inter semibold"
-                  :to="{
-                    name: 'UserPage',
-                    params: { username: currentUser.username },
-                  }"
-                >
-                  View all <q-icon name="mdi-chevron-right" />
-                </router-link>
-              </div>
-              <div
-                class="q-mb-sm"
-                v-if="userEventDates && userEventDates.length > 0"
-              >
-                <CustomQScroll
-                  horizontal
-                  class="user-event-scroll-area"
-                  style="width: 100%"
-                  :thumb-style="
-                    $q.screen.gt.sm
-                      ? {
-                          bottom: '0px',
-                          height: '4px',
-                          borderRadius: '0px',
-                          marginLeft: '24px',
-                        }
-                      : { bottom: '0px', height: '0px' }
-                  "
-                >
-                  <div
-                    class="flex row no-wrap q-gutter-md"
-                    :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-px-md'"
-                  >
-                    <EventDatePoster
-                      v-for="(ed, index) in userEventDates"
-                      :key="index"
-                      :hideInfo="true"
-                      :event="ed[0]"
-                    />
-                  </div>
-                </CustomQScroll>
-              </div>
-              <div
-                :class="
-                  $q.screen.lt.md ? 'q-px-md ' : 'q-px-lg q-mt-sm q-mb-sm'
-                "
-              >
-                <q-separator />
-              </div>
-            </div>
 
             <div
               v-if="currentLocation"

@@ -1,5 +1,5 @@
 <template>
-  <q-card v-if="filteredActivities.length > 0">
+  <q-card v-if="filteredActivities.length > 0" flat>
     <div class="flex column q-pa-md">
       <div
         class="flew row items-center justify-between"
@@ -165,7 +165,7 @@ const targetName = computed(() => {
 const filteredActivities = computed(() => {
   // activities where the object_version doesn't match this transaction aren't relevant
   return props.transaction?.activities.filter(
-    (x) => x.object_version.transaction_id === props.transaction.transaction_id
+    (x) => x.object_version?.transaction_id === props.transaction.transaction_id
   );
 });
 

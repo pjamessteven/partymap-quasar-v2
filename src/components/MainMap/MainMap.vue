@@ -23,10 +23,9 @@
         <mgl-navigation-control :position="'bottom-right'" />
 
         <mgl-geo-json-source
-          v-show="showPoints"
           source-id="points"
           :data="mappedPoints"
-          :cluster="true"
+          :cluster="false"
         >
           <!-- Clustered points -->
           <mgl-circle-layer
@@ -646,7 +645,7 @@ const clusterCountPaint = {
 
 const unclusteredPointPaint = {
   'circle-color': '#11b4da',
-  'circle-radius': 4,
+  'circle-radius': 6,
   'circle-stroke-width': 3,
   'circle-stroke-color': '#fff',
 };
