@@ -5,8 +5,10 @@ import qs from 'qs';
 import { Notify } from 'quasar';
 import { i18n } from 'src/boot/i18n';
 
+export const IS_LOCALHOST = process.env.NODE_ENV === 'development';
+
 export const API_URL =
-  process.env.NODE_ENV === 'developments'
+  IS_LOCALHOST && false
     ? 'http://localhost:5000/api'
     : 'https://api.partymap.com/api';
 
