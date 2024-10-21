@@ -189,9 +189,23 @@ export default {
 
 <style lang="scss" scoped>
 .body--dark {
+  .country-select {
+    :deep(.q-field__control) {
+      &:before {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
 }
 
 .body--light {
+  .country-select {
+    :deep(.q-field__control) {
+      &:before {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
 }
 .country-select {
   .select {
@@ -204,9 +218,9 @@ export default {
       span {
         line-height: 1.2em;
       }
-      .q-field__append{
-      align-items: flex-end;
-    }
+      .q-field__append {
+        align-items: flex-end;
+      }
     }
     :deep(.country-select-input) {
       font-weight: 800 !important;

@@ -64,9 +64,23 @@ export default {
 
 <style lang="scss" scoped>
 .body--dark {
+  .date-select {
+    :deep(.q-field__control) {
+      &:before {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
 }
 
 .body--light {
+  .date-select {
+    :deep(.q-field__control) {
+      &:before {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
 }
 .date-select {
   :deep(.q-field__native) {
@@ -74,7 +88,7 @@ export default {
     span {
       line-height: 1.2em;
     }
-    .q-field__append{
+    .q-field__append {
       align-items: flex-end;
     }
   }
