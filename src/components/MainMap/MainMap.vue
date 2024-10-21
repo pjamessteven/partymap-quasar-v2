@@ -108,6 +108,7 @@ import { Dialog, Screen } from 'quasar';
 
 import EventSelectionComponent from './EventSelectionComponent.vue';
 import { useDevicePixelRatio } from '@vueuse/core';
+import { API_URL } from 'src/api';
 
 const mapStore = useMapStore();
 
@@ -174,20 +175,19 @@ onMounted(async () => {
   if (map.map) {
     mapStateToStore();
 
-    const image = await map.map.loadImage(
-      '/src/assets/marker-dark-shadow.webp'
-    );
-    map.map?.addImage('marker-dark', image.data, {
-      pixelRatio: 5,
-      content: [16, 16, 50, 50], // place text over left half of image, avoiding the 16px border
-    });
-    const image2 = await map.map.loadImage(
-      '/src/assets/marker-dark-shadow-cluster2.webp'
-    );
-    map.map?.addImage('marker-dark-cluster', image2.data, {
-      pixelRatio: 5,
-      content: [16, 16, 50, 50], // place text over left half of image, avoiding the 16px border
-    });
+    let image;
+    if (API_URL == 'https://api.partymap.com/api') {
+      image = await map.map.loadImage(
+        'https://content.partymap.com/statics/marker-dark-shadow.webp'
+      );
+    } else {
+      image = await map.map.loadImage('/src/assets/marker-dark-shadow.webp');
+      map.map?.addImage('marker-dark', image.data, {
+        pixelRatio: 5,
+        content: [16, 16, 50, 50], // place text over left half of image, avoiding the 16px border
+      });
+    }
+
     mapStore.map = map.map;
   }
 
