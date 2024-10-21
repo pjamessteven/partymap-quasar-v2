@@ -86,7 +86,11 @@
                   />
                   <InnerLoading
                     :solid="false"
-                    v-if="loading && !route.query?.thumbXsUrl && false"
+                    v-if="
+                      loading &&
+                      !route.query?.thumbXsUrl &&
+                      !$route.query.description
+                    "
                   />
 
                   <div class="header-content grow row">
@@ -162,6 +166,7 @@
                         <InnerLoading :solid="false" />
                       </div>
                       <div
+                        v-if="event?.description || $route.query.description"
                         class="flex row justify-between items-center"
                         style="width: 100%"
                         :class="{
@@ -194,7 +199,10 @@
                         :thumbXsUrl="route.query?.thumbXsUrl"
                       />
 
-                      <div class="flex column grow no-wrap">
+                      <div
+                        class="flex column grow no-wrap"
+                        v-if="event?.description || $route.query.description"
+                      >
                         <div
                           class="flex grow justify-start items-start"
                           v-if="!!event || !!route.query?.description"
@@ -207,7 +215,11 @@
                           />
                         </div>
                         <div class="q-mt-md">
-                          <div class="flex row">
+                          <div
+                            class="flex row"
+                            :class="{ 'o-000': !computedExternalUrlSubtitle }"
+                            style="transition: opacity 0.3s ease"
+                          >
                             <div class="flex col" v-if="!editing">
                               <a
                                 class="flex grow ellipsis"
