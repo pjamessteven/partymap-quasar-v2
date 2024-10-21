@@ -1039,7 +1039,7 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.3.tgz#4a2868d75d6d6963e423bcf90b7fd1be343409d3"
   integrity sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==
 
-"@indoorequal/vue-maplibre-gl@^7.6.1":
+"@indoorequal/vue-maplibre-gl@^7.7.0":
   version "7.7.0"
   resolved "https://registry.yarnpkg.com/@indoorequal/vue-maplibre-gl/-/vue-maplibre-gl-7.7.0.tgz#a04c6f629289fceb8cd4a9c52311cba14782052d"
   integrity sha512-sA4sZzO7Gt2dPPvhk5v6Fya9iH1hU/OWfBtpTi/0V2LDZdND0Gieo96WnziHel/FL3/ITBAaSwquMOGw6eKN+Q==
@@ -6304,9 +6304,10 @@ magic-string@^0.30.0, magic-string@^0.30.11:
   dependencies:
     "@jridgewell/sourcemap-codec" "^1.5.0"
 
-maplibre-gl@maplibre/maplibre-gl-js#v5.0.0-pre.2:
-  version "5.0.0-pre.2"
-  resolved "https://codeload.github.com/maplibre/maplibre-gl-js/tar.gz/b841ccc363b5be9c3d54bb3f983f70074989cc67"
+maplibre-gl@^4.7.1:
+  version "4.7.1"
+  resolved "https://registry.yarnpkg.com/maplibre-gl/-/maplibre-gl-4.7.1.tgz#06a524438ee2aafbe8bcd91002a4e01468ea5486"
+  integrity sha512-lgL7XpIwsgICiL82ITplfS7IGwrB1OJIw/pCvprDp2dhmSSEBgmPzYRvwYYYvJGJD7fxUv1Tvpih4nZ6VrLuaA==
   dependencies:
     "@mapbox/geojson-rewind" "^0.5.2"
     "@mapbox/jsonlint-lines-primitives" "^2.0.2"

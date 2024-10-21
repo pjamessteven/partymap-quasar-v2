@@ -90,7 +90,7 @@
     <div
       class="square-map flex"
       :class="[inline ? 'q-mt-md' : '']"
-      v-if="(!inline || showMap) && markerCoords"
+      v-if="(!inline || showMap) && markerCoords && false"
     >
       <div class="map-container satellite-enabled">
         <UseDevicePixelRatio v-slot="{ pixelRatio: { pixelRatio } }">
@@ -101,7 +101,16 @@
             :zoom="8"
             :attributionControl="false"
           >
-            <mgl-marker v-model:coordinates="markerCoords" :paint="pointPaint">
+            <mgl-marker v-model:coordinates="markerCoords">
+              <template v-slot:marker>
+                <div
+                  :style="{
+                    backgroundColor: 'red',
+                    width: '10px',
+                    height: '10px',
+                  }"
+                ></div>
+              </template>
             </mgl-marker>
           </mgl-map>
         </UseDevicePixelRatio>

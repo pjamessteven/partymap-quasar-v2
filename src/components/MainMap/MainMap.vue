@@ -12,6 +12,7 @@
         :pixel-ratio="pixelRatio"
         :map-style="currentMapStyleUrl"
         :trackResize="true"
+        :validateStyle="false"
         @map:movestart="movestart"
         @map:moveend="moveend"
         @map:click="mapClick"
@@ -27,33 +28,44 @@
           :data="mappedPoints"
           :cluster="false"
         >
-          <!-- Clustered points -->
+          <!-- Clustered points 
           <mgl-circle-layer
             layer-id="clusters"
             :filter="['has', 'point_count']"
             :paint="clusterPaint"
-            @click="onClickCluster"
             @mouseenter="mouseEnterPoint"
             @mouseleave="mouseLeavePoint"
           />
 
-          <!-- Cluster count labels -->
+Cluster count labels 
           <mgl-symbol-layer
+            @click="onClickCluster"
             layer-id="cluster-count"
             :filter="['has', 'point_count']"
             :layout="clusterCountLayout"
             :paint="clusterCountPaint"
           />
-
+    -->
           <!-- Unclustered points -->
-          <mgl-circle-layer
+          <mgl-symbol-layer
             layer-id="unclustered-point"
-            :filter="['!', ['has', 'point_count']]"
+            :layout="unclusteredPointLayout"
             :paint="unclusteredPointPaint"
             @click="onClickPoint"
             @mouseenter="mouseEnterPoint"
             @mouseleave="mouseLeavePoint"
           />
+
+          <!-- Unclustered points 
+          <mgl-symbol-layer
+            layer-id="unclustered-point-label"
+            :filter="['!', ['has', 'point_count']]"
+            :layout="unclusteredPointLabelLayout"
+            :paint="unclusteredPointLabelPaint"
+            @click="onClickPoint"
+            @mouseenter="mouseEnterPoint"
+            @mouseleave="mouseLeavePoint"
+          />-->
         </mgl-geo-json-source>
       </mgl-map>
     </UseDevicePixelRatio>
@@ -137,9 +149,16 @@ const delayedRouteName = ref();
 
 const mappedPoints = computed(() => ({
   type: 'FeatureCollection',
-  features: points.value.map((x) => ({
+  features: points.value.map((x: any) => ({
+    // TODO update type
     type: 'Feature',
-    properties: x,
+    properties: {
+      ...x,
+      label:
+        x.events.length > 1
+          ? x.name + ' (' + x.events.length + ' events)'
+          : x.events[0].name,
+    },
     geometry: {
       type: 'Point',
       coordinates: [x.lng, x.lat], // geojson [lng, lat] format.. wtf.
@@ -153,24 +172,27 @@ onMounted(async () => {
   }
 
   if (map.map) {
-    const image = await map.map.loadImage('/src/assets/marker-dark-filled.png');
+    mapStateToStore();
+
+    const image = await map.map.loadImage(
+      '/src/assets/marker-dark-shadow.webp'
+    );
     map.map?.addImage('marker-dark', image.data, {
+      pixelRatio: 5,
+      content: [16, 16, 50, 50], // place text over left half of image, avoiding the 16px border
+    });
+    const image2 = await map.map.loadImage(
+      '/src/assets/marker-dark-shadow-cluster2.webp'
+    );
+    map.map?.addImage('marker-dark-cluster', image2.data, {
       pixelRatio: 5,
       content: [16, 16, 50, 50], // place text over left half of image, avoiding the 16px border
     });
     mapStore.map = map.map;
   }
 
-  if ($route.name === 'Explore') {
-    if (mainStore.sidebarPanel === 'explore') {
-      map.map?.easeTo(
-        {
-          padding: getDefaultPadding(),
-          duration: 0,
-        },
-        { ignoreMoveEvents: true }
-      );
-    } else if (mainStore.sidebarPanel === 'nearby') {
+  if ($route.name !== 'EventPage') {
+    if (mainStore.sidebarPanel === 'nearby') {
       map.map?.easeTo(
         {
           padding: getNearbyPagePadding(),
@@ -178,6 +200,18 @@ onMounted(async () => {
         },
         { ignoreMoveEvents: true }
       );
+    } else {
+      map.map?.easeTo(
+        {
+          padding: getDefaultPadding(),
+          duration: 0,
+        },
+        { ignoreMoveEvents: true }
+      );
+
+      if (Screen.gt.xs) {
+        debouncedReverseGeocode(map.map?.getCenter(), map.map?.getZoom());
+      }
     }
   }
 });
@@ -287,19 +321,21 @@ const moving = (event) => {
   }
 };
 
-const mapLoaded = (event) => {
-  if (mainStore.sidebarPanel === 'explore' && Screen.gt.xs) {
-    debouncedReverseGeocode(map.map?.getCenter(), map.map?.getZoom());
-  }
+const mapStyleData = (event) => {
+  console.log('styledata');
+};
 
+const mapLoaded = (event) => {
   // set tilesize of satellite layer for 2x screens
   const landsat = map.map?.getSource('landsat');
   if (landsat && landsat.type === 'raster') {
     landsat.tileSize = pixelRatio.value >= 1.5 ? 128 : 168;
 
     // Force a re-render of the map
-    map.map?.style.sourceCaches['landsat'].clearTiles();
-    map.map?.style.sourceCaches['landsat'].update(map.map?.transform);
+    if (map.map?.style.sourceCaches['landsat']) {
+      map.map?.style.sourceCaches['landsat']?.clearTiles();
+      map.map?.style.sourceCaches['landsat']?.update(map.map?.transform);
+    }
     map.map?.triggerRepaint();
   }
 
@@ -419,10 +455,12 @@ const getEventPagePadding = (): PaddingOptions => {
       left: 0,
       right: 0,
     };
+  } else if (Screen.gt.lg) {
+    return { ...getDefaultPadding(), bottom: window.innerHeight * 0.82 - 64 };
   } else {
     return {
       top: 0,
-      bottom: window.innerHeight * 0.66 - 64,
+      bottom: window.innerHeight * 0.82 - 64,
       left: 0,
       right: 0,
     };
@@ -444,6 +482,7 @@ const getNearbyPagePadding = (): PaddingOptions => {
 };
 
 const getDefaultPadding = (): PaddingOptions => {
+  console.log('get default pad');
   // default padding for explore page
   if (Screen.lt.sm) {
     return { top: 0, bottom: 150, left: 0, right: 0 };
@@ -489,8 +528,9 @@ const flyTo = ({
   zoom?: number;
   padding?: PaddingOptions;
 }) => {
-  console.log('fly to');
-  map.map?.flyTo({ center, zoom, padding: padding || getDefaultPadding() });
+  //map.map?.easeTo({ padding: padding || getDefaultPadding(), duration: 0 });
+  map.map?.setPadding(padding || getDefaultPadding());
+  map.map?.flyTo({ center, zoom });
 };
 
 const mouseEnterPoint = (e: MapLayerMouseEvent) => {
@@ -529,6 +569,7 @@ const onClickCluster = async (e: MapLayerMouseEvent) => {
 };
 
 const onClickPoint = (e: MapLayerMouseEvent) => {
+  console.log('click', e.features);
   const properties = e?.features?.[0]?.properties;
   if (properties?.events) {
     const events = JSON.parse(properties.events);
@@ -583,7 +624,7 @@ watch(focusMarker, (newval: LngLat | null) => {
   if (newval) {
     blockUpdates.value = true;
     blockPeekMap.value = true;
-
+    console.log('NEWV');
     // save current map view so we can return to it
     if (newval.lat && newval.lng && map.map) {
       const currentZoom = map.map.getZoom();
@@ -592,6 +633,8 @@ watch(focusMarker, (newval: LngLat | null) => {
         zoom: currentZoom,
       };
       blockUpdates.value = true;
+      console.log('NEWV FLY');
+
       flyTo({
         center: newval,
         padding: getEventPagePadding(),
@@ -625,30 +668,75 @@ const clusterPaint = {
 };
 
 const clusterCountLayout = {
-  'icon-image': 'marker-dark',
-  'icon-size': 1,
+  'icon-image': 'marker-dark-cluster',
+  'icon-size': [
+    'interpolate',
+    ['exponential', 1.5], // You can adjust the base of the exponential function
+    ['zoom'],
+    1,
+    0.5, // At zoom level 10, the icon size will be 0.5 times the original size
+    8,
+    1, // At zoom level 15, the icon size will be the original size
+    20,
+    1.5, // At zoom level 20, the icon size will be 2 times the original size
+  ],
   'text-field': '{point_count_abbreviated}',
   'text-font': ['Arial Unicode MS Bold'],
   'text-size': 15,
-  'text-offset': [0, 1.5], // Offset text below the icon
+  'text-offset': [0, 0.2], // Offset text below the icon
   'text-anchor': 'top',
 
   //'icon-allow-overlap': true,
 };
 
-const clusterCountPaint = {
+const clusterCountPaint = {};
+
+const unclusteredPointPaint = {
   'text-color': '#FFFFFF',
   'icon-halo-color': 'rgba(0, 0, 0, 1)',
   'icon-halo-width': 2,
   'icon-halo-blur': 1,
+  'text-halo-color': '#000000',
+  'text-halo-width': 1,
+  'text-halo-blur': 1,
 };
 
-const unclusteredPointPaint = {
-  'circle-color': '#11b4da',
-  'circle-radius': 6,
-  'circle-stroke-width': 3,
-  'circle-stroke-color': '#fff',
+const unclusteredPointLayout = {
+  'text-size': [
+    'interpolate',
+    ['exponential', 1.5], // You can adjust the base of the exponential function
+    ['zoom'],
+    1,
+    0.0, // At zoom level 10
+    5,
+    0.0, // At zoom level 10
+    6,
+    11, // At zoom level 8
+    8,
+    12, // At zoom level 20
+  ],
+  'text-field': '{label}',
+  'text-font': ['Metropolis Regular'],
+  'text-offset': [0, 2.5], // Offset text below the icon
+  'text-allow-overlap': false,
+  'text-ignore-placement': false,
+  'text-optional': true,
+  //'icon-ignore-placement': true,
+  'icon-image': 'marker-dark',
+  'icon-size': [
+    'interpolate',
+    ['exponential', 1.5], // You can adjust the base of the exponential function
+    ['zoom'],
+    1,
+    0.25, // At zoom level 10
+    8,
+    0.8, // At zoom level 8
+    20,
+    1, // At zoom level 20
+  ],
 };
+
+const unclusteredPointLabelLayout = {};
 
 function useRef(arg0: boolean) {
   throw new Error('Function not implemented.');
