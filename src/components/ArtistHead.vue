@@ -107,7 +107,7 @@ export default {
       .artist-head-img {
         background: $b-2;
         box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.1),
-          0 1px 16px 2px rgba(0, 0, 0, 0.2), 0 5px 10px 4px rgba(0, 0, 0, 0.08);
+          0 6px 8px 2px rgba(0, 0, 0, 0.05), 0 5px 10px 4px rgba(0, 0, 0, 0.08);
       }
     }
   }

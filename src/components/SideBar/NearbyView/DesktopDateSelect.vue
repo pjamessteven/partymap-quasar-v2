@@ -67,7 +67,7 @@ export default {
   .date-select {
     :deep(.q-field__control) {
       &:before {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
       }
     }
   }
@@ -77,7 +77,7 @@ export default {
   .date-select {
     :deep(.q-field__control) {
       &:before {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.15);
       }
     }
   }
