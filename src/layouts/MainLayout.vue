@@ -1,6 +1,6 @@
 <template>
   <div class="main-layout">
-    <MainMap />
+    <MainMap :key="currentMapStyleUrl" />
 
     <div
       class="overlay"
@@ -199,7 +199,7 @@ export default {
     });
   },
   computed: {
-    ...mapWritableState(useMapStore, ['blockUpdates']),
+    ...mapWritableState(useMapStore, ['blockUpdates', 'currentMapStyleUrl']),
     ...mapWritableState(useMainStore, [
       'showSidebar',
       'overlayOpacity',

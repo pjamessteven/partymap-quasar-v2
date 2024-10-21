@@ -529,8 +529,8 @@ const flyTo = ({
   padding?: PaddingOptions;
 }) => {
   //map.map?.easeTo({ padding: padding || getDefaultPadding(), duration: 0 });
-  map.map?.setPadding(padding || getDefaultPadding());
-  map.map?.flyTo({ center, zoom });
+  //map.map?.setPadding();
+  map.map?.flyTo({ center, zoom, padding: padding || getDefaultPadding() });
 };
 
 const mouseEnterPoint = (e: MapLayerMouseEvent) => {
@@ -695,7 +695,7 @@ const unclusteredPointPaint = {
   'text-color': '#FFFFFF',
   'icon-halo-color': 'rgba(0, 0, 0, 1)',
   'icon-halo-width': 2,
-  'icon-halo-blur': 1,
+  'icon-halo-blur': 0,
   'text-halo-color': '#000000',
   'text-halo-width': 1,
   'text-halo-blur': 1,
@@ -729,7 +729,7 @@ const unclusteredPointLayout = {
     ['zoom'],
     1,
     0.25, // At zoom level 10
-    8,
+    6,
     0.8, // At zoom level 8
     20,
     1, // At zoom level 20

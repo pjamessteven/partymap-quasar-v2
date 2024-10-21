@@ -1663,9 +1663,9 @@
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
 "@quasar/app-vite@^1.0.0":
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/@quasar/app-vite/-/app-vite-1.10.1.tgz#0610d5136bd3af0d5718715f2f797f0cbc23dada"
-  integrity sha512-OSl/A/kXbXvvO72Dt2IndUWZH3+HGRjojyQE1gaCqZVc3HxY1ZRyikN39f32JbjSOsG7m4Eonp2JcK6bxodgQA==
+  version "1.10.2"
+  resolved "https://registry.yarnpkg.com/@quasar/app-vite/-/app-vite-1.10.2.tgz#69c7a50c7b9d32415204d222e8ea869456f51c8a"
+  integrity sha512-I/YO5m0vHMkAw8ewX8Fz1CSPFdZo+k5vWOTf6hc8B2wBfyYdqC8MsoP3YKJ4zNlBG6OMldrKEBIv+FPT4WNQzw==
   dependencies:
     "@quasar/render-ssr-error" "^1.0.3"
     "@quasar/vite-plugin" "^1.7.0"
@@ -1695,7 +1695,7 @@
     open "^8.4.0"
     register-service-worker "^1.7.2"
     rollup-plugin-visualizer "^5.5.4"
-    sass "^1.79.1"
+    sass "^1.80.2"
     semver "^7.3.5"
     serialize-javascript "^6.0.0"
     table "^6.8.0"
@@ -1703,9 +1703,9 @@
     webpack-merge "^5.8.0"
 
 "@quasar/app-webpack@^3.11.2":
-  version "3.14.1"
-  resolved "https://registry.yarnpkg.com/@quasar/app-webpack/-/app-webpack-3.14.1.tgz#0fc99d7559a5a318141ff3c3da17678196b316fa"
-  integrity sha512-m5Fe5wUh+KGNO7jAb4njkltUP6rkVdrKmuCvly3tQNuuDQgwwoetKQYwq/A0IkGSAzVbHIaODIV7F+tpsoqTkg==
+  version "3.14.2"
+  resolved "https://registry.yarnpkg.com/@quasar/app-webpack/-/app-webpack-3.14.2.tgz#f3ef8bfe2811bd2d408db65f5cc4761cfa7508a2"
+  integrity sha512-ZHrGtJtntWGaclF+aISjg9HwlwGIw+zKIqd3v2Q8a1cDxOr9Jf57hOFOfERUPp7r+7MoVzbmUFhthUUpOCaesA==
   dependencies:
     "@quasar/babel-preset-app" "^2.0.3"
     "@quasar/render-ssr-error" "^1.0.3"
@@ -1752,7 +1752,7 @@
     postcss-loader "7.0.2"
     postcss-rtlcss "4.0.1"
     register-service-worker "1.7.2"
-    sass-embedded "^1.33.0"
+    sass-embedded "^1.80.2"
     sass-loader "^16.0.1"
     semver "^7.6.0"
     table "6.8.2"
@@ -1815,9 +1815,9 @@
     serialize-javascript "^6.0.0"
 
 "@quasar/vite-plugin@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@quasar/vite-plugin/-/vite-plugin-1.7.0.tgz#8873391ed7f69677948180f6eb14aa0821747478"
-  integrity sha512-ia4w1n4DuPYm92MQLPNpMqLJID1WGGRyVGxkVeg8V+V25Vh3p9QBo++iuXR4sW/bCmzzx66Ko6VStsr1zp90GQ==
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@quasar/vite-plugin/-/vite-plugin-1.8.0.tgz#a6bf8453f54f6e78660573650d6256f78e8f5b4a"
+  integrity sha512-+LC+y29R7dV7Y7GuCZyuC7MZ7E2Qz8r1ViUFQbJEV4+sx3561d/kDKTM7ZS4UQlrGgU22/LCOUrTC07N7g3JGg==
 
 "@rollup/pluginutils@^4.1.0", "@rollup/pluginutils@^4.1.2":
   version "4.2.1"
@@ -4633,9 +4633,9 @@ eslint-config-prettier@^8.1.0:
   integrity sha512-SM8AMJdeQqRYT9O9zguiruQZaN7+z+E4eAP9oiLNGKMtomwaB1E9dcgUD6ZAn/eQAb52USbvezbiljfZUhbJcg==
 
 eslint-plugin-vue@^9.0.0:
-  version "9.29.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-9.29.0.tgz#fa1d62a88c22102be4fb8c275929698a1aee4b04"
-  integrity sha512-hamyjrBhNH6Li6R1h1VF9KHfshJlKgKEg3ARbGTn72CMNDSMhWbgC7NdkRDEh25AFW+4SDATzyNM+3gWuZii8g==
+  version "9.29.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-9.29.1.tgz#1af4f81347734f3e62eee4ba898c025bc5457662"
+  integrity sha512-MH/MbVae4HV/tM8gKAVWMPJbYgW04CK7SuzYRrlNERpxbO0P3+Zdsa2oAcFBW6xNu7W6lIkGOsFAMCRTYmrlWQ==
   dependencies:
     "@eslint-community/eslint-utils" "^4.4.0"
     globals "^13.24.0"
@@ -7470,9 +7470,9 @@ qs@6.13.0, qs@^6.12.3:
     side-channel "^1.0.6"
 
 quasar@^2.12.7:
-  version "2.17.0"
-  resolved "https://registry.yarnpkg.com/quasar/-/quasar-2.17.0.tgz#af92f90e8d6571479745eeb6bed20b1e0a40e789"
-  integrity sha512-xFWwCt4FGuaC0M4/MA5drjBiCP7kj/5BsUPv2+dDIlyQG9YGvKIewCnWYYt02r4ijRqJSzPb7TsH89Gzkno1Mg==
+  version "2.17.1"
+  resolved "https://registry.yarnpkg.com/quasar/-/quasar-2.17.1.tgz#3c479cf864507a77736f1a250152bdfc2bb90c6d"
+  integrity sha512-4tnprxb+oEFChqcHGeQnprTmsr9gRK/R4N2O6Gg0AxpP22G9ttKeeqhH7+Soyjdi9RUcc6d5Y49T6rRg4hGJXw==
 
 queue-microtask@^1.2.2:
   version "1.2.3"
@@ -7915,7 +7915,7 @@ sass-embedded-win32-x64@1.80.3:
   resolved "https://registry.yarnpkg.com/sass-embedded-win32-x64/-/sass-embedded-win32-x64-1.80.3.tgz#e797d2dc8597ad6541dbbccc90fd49f1f21cc563"
   integrity sha512-wehVA0atPloc6NKof/ctpW0agM+k7kiBLIpQs3/mi9FAlmTjxNnvntBPZIbl8n7AAExiLEir+x/LHC0yGhTfkg==
 
-sass-embedded@^1.33.0:
+sass-embedded@^1.80.2:
   version "1.80.3"
   resolved "https://registry.yarnpkg.com/sass-embedded/-/sass-embedded-1.80.3.tgz#9b0d99605f4f9921cb432f8052d33b03312acead"
   integrity sha512-aTxTl4ToSAWg7ILFgAe+kMenj+zNlwHmHK/ZNPrOM8+HTef1Q6zuxolptYLijmHdZHKSMOkWYHgo5MMN6+GIyg==
@@ -7956,7 +7956,7 @@ sass-loader@^16.0.1:
   dependencies:
     neo-async "^2.6.2"
 
-sass@^1.79.1:
+sass@^1.80.2:
   version "1.80.3"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.80.3.tgz#3f63dd527647d2b3de35f36acb971bda80517423"
   integrity sha512-ptDWyVmDMVielpz/oWy3YP3nfs7LpJTHIJZboMVs8GEC9eUmtZTZhMHlTW98wY4aEorDfjN38+Wr/XjskFWcfA==
