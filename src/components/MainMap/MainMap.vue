@@ -31,18 +31,19 @@
           v-if="mappedPoints"
           source-id="points"
           :data="mappedPoints"
-          :cluster="false"
+          :cluster="true"
         >
-          <!-- Clustered points 
+          <!-- Clustered points -->
           <mgl-circle-layer
             layer-id="clusters"
             :filter="['has', 'point_count']"
             :paint="clusterPaint"
-            @mouseenter="mouseEnterPoint"
-            @mouseleave="mouseLeavePoint"
+            @mouseenter="mouseEnterClusterPoint"
+            @click="onClickCluster"
+            @mouseleave="mouseLeaveClusterPoint"
           />
 
-Cluster count labels 
+          <!-- Cluster count labels -->
           <mgl-symbol-layer
             @click="onClickCluster"
             layer-id="cluster-count"
@@ -50,10 +51,11 @@ Cluster count labels
             :layout="clusterCountLayout"
             :paint="clusterCountPaint"
           />
-    -->
+
           <!-- Unclustered points -->
           <mgl-symbol-layer
             layer-id="unclustered-point"
+            :filter="['!', ['has', 'point_count']]"
             :layout="unclusteredPointLayout"
             :paint="computedPaintStyle"
             @click="onClickPoint"
@@ -589,6 +591,21 @@ const mouseLeavePoint = (e: MapLayerMouseEvent) => {
   mouseOverPointEvents.value = null;
 };
 
+const mouseEnterClusterPoint = (e: MapLayerMouseEvent) => {
+  const canvas = map.map?.getCanvas();
+  if (canvas) {
+    canvas.style.cursor = 'zoom-in';
+  }
+  //
+};
+
+const mouseLeaveClusterPoint = (e: MapLayerMouseEvent) => {
+  const canvas = map.map?.getCanvas();
+  if (canvas) {
+    canvas.style.cursor = '';
+  }
+};
+
 const onClickCluster = async (e: MapLayerMouseEvent) => {
   const features = e.features;
   const clusterId = features?.[0]?.properties.cluster_id;
@@ -695,37 +712,29 @@ watch(focusMarker, (newval: LngLat | null) => {
 });
 
 const clusterPaint = {
-  /*
-  'circle-color': 'rgba(0,0,0,0.8)',
-  'circle-radius': ['step', ['get', 'point_count'], 10, 10, 15, 30, 20],
-  'circle-stroke-width': 3,
-  'circle-stroke-color': '#fff',
-  */
+  'circle-color': 'rgba(0,0,0,0.68)',
+  //'circle-radius': ['step', ['get', 'point_count'], 12, 10, 10, 15, 17],
+  'circle-radius': 16,
+
+  'circle-stroke-width': 0,
+  'circle-stroke-color': 'rgba(32,32,32,1)',
 };
 
 const clusterCountLayout = {
-  'icon-image': 'marker-dark-cluster',
-  'icon-size': [
-    'interpolate',
-    ['exponential', 1.5], // You can adjust the base of the exponential function
-    ['zoom'],
-    1,
-    0.5, // At zoom level 10, the icon size will be 0.5 times the original size
-    8,
-    1, // At zoom level 15, the icon size will be the original size
-    20,
-    1.5, // At zoom level 20, the icon size will be 2 times the original size
-  ],
   'text-field': '{point_count_abbreviated}',
-  'text-font': ['Arial Unicode MS Bold'],
+  'text-font': ['Metropolis Bold'],
   'text-size': 15,
-  'text-offset': [0, 0.2], // Offset text below the icon
-  'text-anchor': 'top',
+  'text-offset': [0, 0.25], // Offset text below the icon
 
   //'icon-allow-overlap': true,
 };
 
-const clusterCountPaint = {};
+const clusterCountPaint = {
+  'text-color': '#FFFFFF',
+  'text-halo-color': '#000000',
+  'text-halo-width': 1,
+  'text-halo-blur': 1,
+};
 
 const computedPaintStyle = computed(() => {
   if (mapStyle.value === 'satellite') {
@@ -764,9 +773,9 @@ const unclusteredPointLayout = {
     ['exponential', 1.5], // You can adjust the base of the exponential function
     ['zoom'],
     1,
-    0.0, // At zoom level 10
+    10, // At zoom level 10
     4,
-    0.0, // At zoom level 10
+    10, // At zoom level 10
     5,
     12, // At zoom level 8
     8,
@@ -787,12 +796,25 @@ const unclusteredPointLayout = {
     ['exponential', 1.5], // You can adjust the base of the exponential function
     ['zoom'],
     1,
+    0.8, // At zoom level 10
+    6,
+    0.9, // At zoom level 8
+    20,
+    1.2, // At zoom level 20
+  ],
+  /*
+  'icon-size': [
+    'interpolate',
+    ['exponential', 1.5], // You can adjust the base of the exponential function
+    ['zoom'],
+    1,
     0.2, // At zoom level 10
     6,
     0.8, // At zoom level 8
     20,
     1, // At zoom level 20
   ],
+  */
 };
 
 const unclusteredPointLabelLayout = {};
