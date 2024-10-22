@@ -212,7 +212,7 @@ onMounted(async () => {
     if (IS_LOCALHOST) {
       marker = await map.map.loadImage('/src/assets/marker-dark-shadow.webp');
       clusterMarker = await map.map.loadImage(
-        '/src/assets/marker-cluster-4.webp'
+        '/src/assets/marker-cluster.webp'
       );
       /*
       clusterMarker2 = await map.map.loadImage(
@@ -233,7 +233,7 @@ onMounted(async () => {
         'https://content.partymap.com/statics/marker-dark-shadow.webp'
       );
       clusterMarker = await map.map.loadImage(
-        '/src/assets/marker-dark-shadow-2.webp'
+        '/src/assets/marker-cluster.webp'
       );
     }
     if (marker)
