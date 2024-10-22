@@ -233,7 +233,7 @@ onMounted(async () => {
         'https://content.partymap.com/statics/marker-dark-shadow.webp'
       );
       clusterMarker = await map.map.loadImage(
-        '/src/assets/marker-cluster.webp'
+        'https://content.partymap.com/statics/marker-cluster.webp'
       );
     }
     if (marker)
