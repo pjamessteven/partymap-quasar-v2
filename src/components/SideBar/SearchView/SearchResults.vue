@@ -9,7 +9,7 @@
       v-if="searchResults?.length > 0 || searchLocationResults?.length > 0"
     >
       <q-list separator v-if="eventResults?.length > 0">
-        <div class="text-h6 inter bolder q-my-sm q-ml-sm">Events</div>
+        <div class="text-h6 chicago bolder q-my-sm q-ml-sm">Events</div>
         <q-item
           clickable
           @click.stop="clickResult(result)"
@@ -30,7 +30,7 @@
         </q-item>
       </q-list>
       <q-list separator v-if="searchLocationResults?.length > 0">
-        <div class="text-h6 inter bolder q-my-sm q-ml-sm">Places</div>
+        <div class="text-h6 chicago bolder q-my-sm q-ml-sm">Places</div>
         <q-item
           clickable
           @click.stop="clickLocationResult(result)"
@@ -48,7 +48,7 @@
         </q-item>
       </q-list>
       <q-list separator v-if="artistResults?.length > 0">
-        <div class="text-h6 inter bolder q-my-sm q-ml-sm">Artists</div>
+        <div class="text-h6 chicago bolder q-my-sm q-ml-sm">Artists</div>
         <q-item
           clickable
           @click.stop="clickResult(result)"
@@ -70,7 +70,7 @@
       </q-list>
 
       <q-list separator v-if="tagResults?.length > 0">
-        <div class="text-h6 inter bolder q-my-sm q-ml-sm">Tags</div>
+        <div class="text-h6 chicago bolder q-my-sm q-ml-sm">Tags</div>
         <q-item
           clickable
           @click.stop="clickResult(result)"

@@ -31,21 +31,13 @@
           v-if="mappedPoints"
           source-id="points"
           :data="mappedPoints"
-          :cluster="true"
+          :cluster="false"
         >
-          <!-- Clustered points -->
-          <mgl-circle-layer
-            layer-id="clusters"
-            :filter="['has', 'point_count']"
-            :paint="clusterPaint"
+          <!-- Cluster count labels -->
+          <mgl-symbol-layer
             @mouseenter="mouseEnterClusterPoint"
             @click="onClickCluster"
             @mouseleave="mouseLeaveClusterPoint"
-          />
-
-          <!-- Cluster count labels -->
-          <mgl-symbol-layer
-            @click="onClickCluster"
             layer-id="cluster-count"
             :filter="['has', 'point_count']"
             :layout="clusterCountLayout"
@@ -211,17 +203,55 @@ onMounted(async () => {
   if (map.map) {
     mapStateToStore();
 
-    let image;
+    let marker;
+    let clusterMarker2;
+    let clusterMarker3;
+    let clusterMarker4;
+    let clusterMarker5;
     if (IS_LOCALHOST) {
-      image = await map.map.loadImage('/src/assets/marker-dark-shadow.webp');
+      marker = await map.map.loadImage('/src/assets/marker-dark-shadow.webp');
+      clusterMarker2 = await map.map.loadImage(
+        '/src/assets/marker-dark-shadow-2.webp'
+      );
+      clusterMarker3 = await map.map.loadImage(
+        '/src/assets/marker-dark-shadow-3.webp'
+      );
+      clusterMarker4 = await map.map.loadImage(
+        '/src/assets/marker-dark-shadow-4.webp'
+      );
+      clusterMarker5 = await map.map.loadImage(
+        '/src/assets/marker-dark-shadow-3.webp'
+      );
     } else {
-      image = await map.map.loadImage(
+      marker = await map.map.loadImage(
         'https://content.partymap.com/statics/marker-dark-shadow.webp'
       );
+      clusterMarker2 = await map.map.loadImage(
+        'https://content.partymap.com/statics/marker-cluster.webp'
+      );
     }
-    console.log('MAPP imagae', image);
-    if (image)
-      map.map?.addImage('marker-dark', image.data, {
+    if (marker)
+      map.map?.addImage('marker-dark', marker.data, {
+        pixelRatio: 5,
+        content: [16, 16, 50, 50], // place text over left half of image, avoiding the 16px border
+      });
+    if (clusterMarker2)
+      map.map?.addImage('cluster-marker-2', clusterMarker2.data, {
+        pixelRatio: 5,
+        content: [16, 16, 50, 50], // place text over left half of image, avoiding the 16px border
+      });
+    if (clusterMarker3)
+      map.map?.addImage('cluster-marker-3', clusterMarker3.data, {
+        pixelRatio: 5,
+        content: [16, 16, 50, 50], // place text over left half of image, avoiding the 16px border
+      });
+    if (clusterMarker4)
+      map.map?.addImage('cluster-marker-4', clusterMarker4.data, {
+        pixelRatio: 5,
+        content: [16, 16, 50, 50], // place text over left half of image, avoiding the 16px border
+      });
+    if (clusterMarker5)
+      map.map?.addImage('cluster-marker-5', clusterMarker5.data, {
         pixelRatio: 5,
         content: [16, 16, 50, 50], // place text over left half of image, avoiding the 16px border
       });
@@ -711,23 +741,7 @@ watch(focusMarker, (newval: LngLat | null) => {
   }
 });
 
-const clusterPaint = {
-  'circle-color': 'rgba(0,0,0,0.68)',
-  //'circle-radius': ['step', ['get', 'point_count'], 12, 10, 10, 15, 17],
-  'circle-radius': 16,
-
-  'circle-stroke-width': 0,
-  'circle-stroke-color': 'rgba(32,32,32,1)',
-};
-
-const clusterCountLayout = {
-  'text-field': '{point_count_abbreviated}',
-  'text-font': ['Metropolis Bold'],
-  'text-size': 15,
-  'text-offset': [0, 0.25], // Offset text below the icon
-
-  //'icon-allow-overlap': true,
-};
+const clusterPaint = {};
 
 const clusterCountPaint = {
   'text-color': '#FFFFFF',
@@ -773,9 +787,9 @@ const unclusteredPointLayout = {
     ['exponential', 1.5], // You can adjust the base of the exponential function
     ['zoom'],
     1,
-    10, // At zoom level 10
+    12, // At zoom level 10
     4,
-    10, // At zoom level 10
+    12, // At zoom level 10
     5,
     12, // At zoom level 8
     8,
@@ -783,7 +797,7 @@ const unclusteredPointLayout = {
   ],
   'text-field': '{label}',
   'text-font': ['Metropolis Regular'],
-  'text-offset': [0, 2.5], // Offset text below the icon
+  'text-offset': [0, 2], // Offset text below the icon
   'text-allow-overlap': false,
   'text-ignore-placement': false,
   'text-anchor': 'top',
@@ -796,9 +810,9 @@ const unclusteredPointLayout = {
     ['exponential', 1.5], // You can adjust the base of the exponential function
     ['zoom'],
     1,
-    0.8, // At zoom level 10
+    0.7, // At zoom level 10
     6,
-    0.9, // At zoom level 8
+    0.7, // At zoom level 8
     20,
     1.2, // At zoom level 20
   ],
@@ -817,7 +831,40 @@ const unclusteredPointLayout = {
   */
 };
 
-const unclusteredPointLabelLayout = {};
+const clusterCountLayout = {
+  ...unclusteredPointLayout,
+  'text-field': '{point_count_abbreviated} events',
+  /*
+  'text-font': ['Metropolis Bold'],
+  'text-size': 15,
+  'text-offset': [0, 0.25], // Offset text below the icon
+  */
+  'icon-image': [
+    'step',
+    ['get', 'point_count'],
+    'cluster-marker-2', // Default icon
+    3,
+    'cluster-marker-3', // At zoom level 10 and above, use medium icon
+    4,
+    'cluster-marker-4', // At zoom level 10 and above, use medium icon
+    5,
+    'cluster-marker-5', // At zoom level 15 and above, use large icon
+  ],
+  'icon-size': [
+    'interpolate',
+    ['exponential', 1.5], // You can adjust the base of the exponential function
+    ['zoom'],
+    1,
+    1, // At zoom level 10
+    6,
+    1, // At zoom level 8
+    20,
+    1.2, // At zoom level 20
+  ],
+  'text-offset': [0, 2.5], // Offset text below the icon
+
+  //'icon-allow-overlap': true,
+};
 
 function useRef(arg0: boolean) {
   throw new Error('Function not implemented.');

@@ -28,10 +28,10 @@
         >
           <div
             style="margin-top: -8px"
-            class="ellipsis text-h4 inter bolder"
+            class="ellipsis text-h4"
             v-if="$q.screen.lt.sm"
           >
-            <span class="">Near</span>
+            <span class="chicago bold upper">Near</span>
           </div>
           <div
             class="flex no-wrap"
@@ -439,7 +439,7 @@
               <div>
                 <CustomQScroll
                   horizontal
-                  :style="$q.screen.gt.sm ? 'margin-bottom: -8px' : ''"
+                  :style="$q.screen.gt.sm ? 'margin-bottom: 0px' : ''"
                   class="tag-scroll-area"
                   style="width: 100%"
                   :thumb-style="
@@ -578,10 +578,9 @@
                 <q-select
                   emit-value
                   dense
-                  borderless
                   map-options
                   behavior="menu"
-                  class="q-mx-xs radius-select inter o-050"
+                  class="q-mx-xs radius-select"
                   v-model="queryRadius"
                   :options="queryRadiusOptions"
                 />
@@ -1267,9 +1266,11 @@ export default {
         top: -1px;
         z-index: 1000;
         width: 100%;
-        font-weight: 700;
-        // text-transform: uppercase;
-        //color: $t-2;
+        font-weight: 500;
+        text-transform: lowercase;
+        font-style: italic;
+
+        font-family: 'Chicago';
         font-size: 1rem;
         &.location-header-select {
           :deep(.q-field) {
@@ -1375,10 +1376,15 @@ export default {
   .radius-select {
     margin-left: 6px;
     font-size: 0.91rem !important;
-    .q-field__inner {
+    :deep(.q-field__inner) {
       .q-field__control {
         font-size: unset !important;
         font-weight: 700 !important;
+        font-family: chicago;
+        font-style: 'italic';
+        &:before {
+          opacity: 0.68;
+        }
         .q-field__append {
           padding-left: 0px !important;
         }
@@ -1397,7 +1403,7 @@ export default {
       .scroll-stuff {
         padding-top: 0px;
         .location-header {
-          font-weight: 700;
+          font-weight: 500;
           font-size: unset;
         }
       }
@@ -1425,7 +1431,7 @@ export default {
     .scroll-area {
       .scroll-stuff {
         .location-header {
-          font-weight: 700;
+          font-weight: 500;
           font-size: unset;
         }
         .loading-wrapper {

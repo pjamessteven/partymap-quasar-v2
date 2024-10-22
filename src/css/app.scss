@@ -1,6 +1,25 @@
 // app global css in SCSS form
 
 @import '/src/css/inter/inter.css';
+@import '/src/css/chicago/chicago.css';
+//@import '/src/css/metropolis/inter.css';
+
+.chicago {
+  font-family: chicago;
+  font-style: italic;
+  &.bold {
+    font-weight: 700;
+  }
+  &.lower {
+    text-transform: lowercase;
+  }
+  &.upper {
+    text-transform: uppercase;
+  }
+  &.regular {
+    font-style: unset;
+  }
+}
 
 .card {
   border-radius: 0px;

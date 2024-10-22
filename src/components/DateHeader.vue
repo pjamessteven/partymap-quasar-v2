@@ -1,14 +1,14 @@
 <template>
   <div class="date-header-wrapper">
     <div
-      class="date-header flex row no-wrap grow ellipsis inter"
+      class="date-header chicago lower lex row no-wrap grow ellipsis"
       :class="{
-        ' q-px-md q-pb-md   t1  text-large  ': $q.screen.gt.sm,
-        'q-px-sm q-ml-xs q-py-md t1  semibold': $q.screen.lt.md,
+        ' q-px-md q-pb-md   t1   ': $q.screen.gt.sm,
+        'q-px-sm q-ml-xs q-py-md t1  ': $q.screen.lt.md,
       }"
     >
       <span v-if="!!altLabel">{{ altLabel }}</span>
-      <span v-else-if="dateString">Events in {{ dateString }}</span
+      <span v-else-if="dateString">events in {{ dateString }}</span
       >:
 
       <slot />
@@ -53,10 +53,12 @@ export default {
     width: 100%;
     display: flex;
     align-items: center;
-    // font-size: 1rem;
+    font-size: 1rem;
     font-weight: 700;
+    //text-transform: uppercase;
     //bottom: 4px;
     //padding: 32px 0;
+    font-weight: 500;
   }
 }
 
@@ -86,7 +88,7 @@ export default {
       //width: calc(100% - 64px) !important;
       //padding-right: 64px !important;
       font-size: unset;
-      font-weight: 700;
+      font-weight: 500;
     }
   }
 }

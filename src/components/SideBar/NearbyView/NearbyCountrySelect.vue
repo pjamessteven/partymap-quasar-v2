@@ -215,6 +215,9 @@ export default {
 
     :deep(.q-field__native) {
       font-weight: 800 !important;
+      font-family: 'Chicago';
+      font-style: italic;
+      text-transform: uppercase;
       span {
         line-height: 1.2em;
       }

@@ -23,7 +23,7 @@
     </div>
     <div class="event-list-inner">
       <div
-        class="inter q-mb-md"
+        class="q-mb-md"
         style="position: absolute; left: 24px; top: 16px; font-weight: 600"
         v-if="
           (isLoadingInitial || (mapMoving && !blockUpdates)) &&
@@ -127,7 +127,7 @@
               v-if="controlArtist?.length > 0 && $q.screen.gt.sm"
             >
               <div
-                class="q-pb-md header"
+                class="q-pb-md t1 header"
                 :class="$q.screen.gt.sm ? 'q-px-lg  t1' : ' t1 inter semibold'"
               >
                 <div v-if="controlArtist.length === 1">Selected Artist</div>
@@ -243,7 +243,7 @@
                   "
                 >
                   <div
-                    class="q-pb-md header header-select flex row no-wrap items-center justify-between"
+                    class="q-pb-md header t1 header-select flex row no-wrap items-center justify-between"
                     :class="{
                       'q-px-lg': $q.screen.gt.sm,
                       'q-px-md': $q.screen.lt.md,
@@ -376,10 +376,9 @@
                     </ControlSelect>
                   </div>
                   <ArtistsComponent
-                    :class="$q.screen.gt.sm ? 'q-pl- q-mb-md ' : ''"
+                    :class="$q.screen.gt.sm ? 'q-pl- q-mb-sm ' : ''"
                     :artists="topArtistsInArea"
                     :size="$q.screen.gt.md ? 'lg' : 'md'"
-                    style="margin-top: -0px"
                   />
                 </div>
 
@@ -412,7 +411,7 @@
       </div>
 
       <div
-        class="event-date-center t1 flex column grow no-wrap justify-center items-center"
+        class="event-date-center flex column grow no-wrap justify-center items-center"
         :style="
           $q.screen.lt.sm
             ? 'height: 144px; position: absolute; width: 100%; z-index: 500'
@@ -421,24 +420,24 @@
       >
         <div class="flex column items-center no-wrap">
           <div
-            class="inter q-mb-md"
+            class="chicago lower q-mb-md"
             :class="$q.screen.gt.xs && 'q-mt-xl'"
-            style="font-weight: 600"
+            style="font-weight: 500"
             v-if="isLoadingInitial && (!sidebarMinimized || $q.screen.gt.xs)"
           >
             Finding what's good...
           </div>
           <div
-            class="inter semibold q-mb-md"
+            class="chicago q-mb-md"
             :class="$q.screen.gt.xs && 'q-mt-xl'"
             v-else-if="
               !isLoadingInitial &&
               noResults &&
               (!sidebarMinimized || $q.screen.gt.xs)
             "
-            style="font-weight: 600"
+            style="font-weight: 500"
           >
-            Nothing coming up in this area
+            Nothing in this area
           </div>
           <div style="height: 20px; width: 200px" class="flex justify-center">
             <q-linear-progress
@@ -973,6 +972,12 @@ export default {
   width: 100%;
   font-weight: 700;
   font-size: 1rem;
+  font-family: 'Chicago';
+  font-style: italic;
+
+  font-weight: 500;
+  text-transform: lowercase;
+  font-style: italic;
   &.header-select {
     :deep(.q-field) {
       .q-field__control::before {

@@ -2,7 +2,7 @@
   <transition appear enter-active-class="animated fadeIn slow">
     <div class="flex column browse-">
       <div
-        class="text-h5 inter bolder"
+        class="text-h5 chicago lower"
         :class="$q.screen.gt.xs ? 'q-px-lg q-mt-xl' : 'q-px-md q-mt-lg'"
       >
         {{ title }}
