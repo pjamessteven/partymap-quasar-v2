@@ -201,6 +201,9 @@ export default {
     },
 
     computedStyle() {
+      if (this.$route.name === 'EventPage' && this.$q.screen.gt.lg) {
+        return 'opacity: 0;';
+      }
       if (
         this.$route.name === 'EventPage' ||
         this.$route.name === 'ArtistPage'

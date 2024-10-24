@@ -11,7 +11,7 @@
       class="flex row no-wrap grow items-center justify-between"
       v-if="inline && selectedEventDate != null"
     >
-      <div class="flex row items-center no-wrap">
+      <div class="flex row items-start no-wrap">
         <q-icon
           class="t2"
           name="las la-clock"
@@ -83,21 +83,22 @@
           v-else-if="!hasOccured"
         >
           <div class="t2">
-            <span>
+            <div>
               Usually happens in&nbsp;{{
                 month(selectedEventDate.start_naive, selectedEventDate.tz)
               }}
-            </span>
-            <br />
-            <span
-              class="t4 link-hover underline"
-              @click.stop="showEditDialog = true"
-              >Confirm exact date</span
-            >&nbsp;or&nbsp;<span
-              class="t4 link-hover underline"
-              @click.stop="showMarkCancelledDialog = true"
-              >Mark as cancelled
-            </span>
+            </div>
+            <div class="q-mt-xs">
+              <span
+                class="t4 link-hover underline"
+                @click.stop="showEditDialog = true"
+                >Confirm date</span
+              >&nbsp;or&nbsp;<span
+                class="t4 link-hover underline"
+                @click.stop="showMarkCancelledDialog = true"
+                >mark as cancelled
+              </span>
+            </div>
           </div>
         </div>
         <div

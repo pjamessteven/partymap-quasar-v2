@@ -12,7 +12,7 @@
         }"
       >
         <div
-          class="inter bolder text-large t2 event-page-header"
+          class="metropolis bolder text-h6 t2 event-page-header"
           v-if="editing & (event?.event_dates?.length === 0)"
         >
           Event Dates:

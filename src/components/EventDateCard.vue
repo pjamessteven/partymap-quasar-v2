@@ -11,7 +11,7 @@
           },
           query: {
             name: event.name.replace(/ /g, '_'),
-            thumbXsUrl: imgThumbXsUrl,
+            thumbXsUrl: imgThumbUrl,
             location: JSON.stringify({
               lat: event.location.lat,
               lng: event.location.lng,
@@ -56,7 +56,7 @@
               class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
             >
               <div
-                class="flex row items-baseline no-wrap inter bold q-mr-sm ellipsis"
+                class="flex row items-baseline no-wrap metropolis bold q-mr-sm ellipsis"
                 :class="{
                   'text-large q-mb-sm': $q.screen.gt.sm,
                   'q-mb-xs': $q.screen.lt.md,

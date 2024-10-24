@@ -15,7 +15,7 @@
             v-if="event.full_description?.length > 0"
             style="white-space: pre-line; word-break: break-word"
           >
-            <span v-if="!readMore && shouldTruncate" class="o-080">{{
+            <span v-if="!readMore && shouldTruncate && false" class="o-080">{{
               truncatedDescription
             }}</span
             ><span v-else>{{ event.full_description }}</span

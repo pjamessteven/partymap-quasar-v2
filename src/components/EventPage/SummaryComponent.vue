@@ -14,7 +14,8 @@
           class="q-mt-sm o-050"
           v-if="
             event?.description_attribute &&
-            event?.description_attribute?.length > 0
+            event?.description_attribute?.length > 0 &&
+            false
           "
         >
           <!--

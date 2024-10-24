@@ -2,7 +2,9 @@
   <div
     ref="eventPage"
     class="event-page"
-    :style="$q.screen.gt.lg ? 'padding-left: 512px;' : ''"
+    :class="{
+      'desktop-sidebar-padding': mainStore.desktopSidebarShowing,
+    }"
     :key="id"
   >
     <transition appear enter-active-class="animated fadeIn slow">
@@ -118,53 +120,30 @@
                               : ''
                           "
                         >
-                          <div>{{ computedName }}</div>
-                          <!--
-                        <q-icon
-                          class="q-ml-md"
-                          name="mdi-check-outline"
-                          v-if="event && event.host"
-                        >
-                          <q-tooltip
-                            :content-class="
-                              $q.dark.isActive
-                                ? 'bg-black text-white'
-                                : 'bg-white text-black'
-                            "
-                            :offset="[10, 10]"
-                            content-style="font-size: 16px"
-                          >
-                            {{ t('event.official_page') }}
-                          </q-tooltip></q-icon
-                        >
-                      -->
+                          <span>
+                            {{ computedName }}
+                            <q-icon
+                              class="o-070 q-mb-xs"
+                              name="mdi-check-decagram-outline"
+                              size="sm"
+                              v-if="event && event.host"
+                            >
+                              <q-tooltip
+                                :content-class="
+                                  $q.dark.isActive
+                                    ? 'bg-black text-white'
+                                    : 'bg-white text-black'
+                                "
+                                :offset="[10, 10]"
+                                content-style="font-size: 16px"
+                              >
+                                {{ t('event.official_page') }}
+                              </q-tooltip></q-icon
+                            >
+                          </span>
                         </div>
-                        <!--
-                      <q-icon
-                        v-touch-swipe="handleSwipe"
-                        v-if="$q.screen.lt.sm"
-                        @click="handleSwipe"
-                        flat
-                        name="mdi-chevron-down"
-                        class="mobile-hide-icon absolute"
-                        :class="{
-                          'q-pt-lg q-pb-xl q-px-lg': $q.screen.lt.sm,
-                        }"
-                        size="2em"
-                      />
-                      --></div>
-                      <div
-                        class="flex grow"
-                        style="position: relative"
-                        v-if="
-                          loading &&
-                          !!route.query?.thumbXsUrl &&
-                          $q.screen.gt.xs &&
-                          false
-                        "
-                      >
-                        <InnerLoading :solid="false" />
                       </div>
+
                       <div
                         v-if="event?.description || $route.query.description"
                         class="flex row justify-between items-center"
@@ -200,7 +179,7 @@
                       />
 
                       <div
-                        class="flex column grow no-wrap"
+                        class="flex column justify-start grow no-wrap"
                         v-if="event?.description || $route.query.description"
                       >
                         <div
@@ -1726,6 +1705,12 @@ a {
 .event-page {
   //transform: translate3d(0, 0, 0);
   //backface-visibility: hidden;
+  &.desktop-sidebar-padding {
+    padding-left: 512px;
+    .peek-address-wrapper {
+      padding-left: 512px;
+    }
+  }
 
   .peek-address-wrapper {
     position: absolute;
@@ -1797,6 +1782,7 @@ a {
           border-top-left-radius: 18px !important;
           border-top-right-radius: 18px !important;
           transition: transform 300ms;
+
           &.peek-map {
             // 256px represents how high the top of the panel is from the bottom
             transform: translate3d(

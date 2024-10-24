@@ -228,13 +228,14 @@ body {
   display: flex;
   flex-direction: column;
   .dialog-card-header {
+    font-family: 'Metropolis';
     position: relative;
     top: 0px;
     z-index: 100;
     padding: 16px 16px;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
     .text-h6 {
-      font-weight: 600 !important;
+      font-weight: 700 !important;
     }
   }
   .dialog-card-content {

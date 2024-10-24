@@ -11,7 +11,7 @@
           },
           query: {
             name: event.name.replace(/ /g, '_'),
-            thumbXsUrl: imgThumbXsUrl,
+            thumbXsUrl: imgThumbUrl,
             location: JSON.stringify({
               lat: event.location.lat,
               lng: event.location.lng,

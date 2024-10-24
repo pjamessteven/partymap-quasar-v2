@@ -31,7 +31,7 @@
             class="ellipsis text-h4"
             v-if="$q.screen.lt.sm"
           >
-            <span class="metropolis bolder t1">Near</span>
+            <span class="metropolis bolder">Near</span>
           </div>
           <div
             class="flex no-wrap"
@@ -1441,7 +1441,7 @@ export default {
       .scroll-stuff {
         .location-header {
           font-weight: 700;
-          font-size: unset;
+          font-size: 0.9rem;
         }
         .loading-wrapper {
           height: calc(100vh - 172px); // account for desktop hiddenYposition

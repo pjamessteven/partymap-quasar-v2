@@ -69,7 +69,7 @@
       :class="{ 'q-mt-md': $q.screen.gt.sm, 'q-px-md': $q.screen.lt.sm }"
       v-if="event.event_dates.length > 1"
     >
-      <div class="text-large inter bolder t2 q-pr-md">
+      <div class="metropolis bolder text-h6 t2 q-pr-md">
         <span v-if="event.next_date">
           {{ $t('event_dates.upcoming_dates') }}</span
         >
@@ -102,7 +102,7 @@
       :key="selectedEventDateIndex + 101"
       :class="{ 'q-px-md': $q.screen.lt.sm }"
     >
-      <div class="inter bolder t2 text-large q-pr-md event-page-header">
+      <div class="metropolis bolder t2 text-h6 q-pr-md event-page-header">
         <span v-if="event.event_dates.length > 1">Details:</span
         ><span v-else>Event details:</span>
       </div>

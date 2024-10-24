@@ -3,7 +3,7 @@
     <div
       class="date-header lex row no-wrap grow ellipsis"
       :class="{
-        ' q-px-md q-pb-md   t1   ': $q.screen.gt.sm,
+        ' q-px-md q-pb-md    t1   ': $q.screen.gt.sm,
         'q-px-sm q-ml-xs q-py-md t1  ': $q.screen.lt.md,
       }"
     >
@@ -85,6 +85,8 @@ export default {
       //width: calc(100% - 64px) !important;
       //padding-right: 64px !important;
       font-size: unset;
+      font-size: unset;
+      font-weight: 700;
     }
   }
 }

@@ -47,7 +47,10 @@
         >
           <SideBar
             class="sidebar-component"
-            v-show="$route.name === 'Explore' || $q.screen.gt.lg"
+            v-show="
+              $route.name === 'Explore' ||
+              ($q.screen.gt.lg && desktopSidebarShowing)
+            "
           />
         </Transition>
         <div
@@ -216,6 +219,7 @@ export default {
       'sidebarOpacity',
       'disableAnimations',
       'sidebarMinimized',
+      'desktopSidebarShowing',
     ]),
     ...mapWritableState(useEventStore, ['event']),
     showSearchForRoute() {

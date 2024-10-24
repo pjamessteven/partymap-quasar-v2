@@ -70,8 +70,7 @@
             >
               <span v-if="user?.description"> {{ user.description }} </span
               ><span v-else
-                >Get on PartyMap to stay up to date with what's relevant to
-                you.</span
+                >Get on PartyMap to stay up to date with what's going on!</span
               >
             </div>
           </div>

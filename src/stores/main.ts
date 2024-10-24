@@ -69,7 +69,7 @@ export const useMainStore = defineStore('main', {
     userLocationCountry: null,
     currentLocationFromSearch: false,
     currentLocation: null,
-    currentLocationCity: 'In This area',
+    currentLocationCity: Screen.lt.sm ? '...' : 'In This area',
     currentLocationCountry: null,
     fineLocation: false,
     groupEventsByMonth: true,
@@ -80,7 +80,14 @@ export const useMainStore = defineStore('main', {
       oldAndroid: true,
     },
   }),
-  getters: {},
+  getters: {
+    desktopSidebarShowing: (state): boolean => {
+      return (
+        Screen.gt.lg &&
+        (state.sidebarPanel === 'explore' || state.sidebarPanel === 'nearby')
+      );
+    },
+  },
   actions: {
     restoreUserLocation() {
       this.currentLocation = this.userLocation;

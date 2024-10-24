@@ -1,8 +1,15 @@
 <template>
   <div class="flex column">
-    <div class="inter bolder text-large t2 q-pr-md q-mb event-page-header">
+    <div class="metropolis bolder text-h6 t2 q-pr-md q-mb event-page-header">
       Reviews and experiences:
     </div>
+    <div
+      class="no-reviews t4 inter q-mb-sm"
+      v-if="event?.event_reviews?.length === 0"
+    >
+      No one has shared their experience yet... be the first!
+    </div>
+
     <div class="new-review q-mt-md q-pl-md q-pb-md">
       <div class="flex column grow">
         <div class="flex row items-end">
@@ -101,16 +108,8 @@
 
       <InnerLoading v-if="loading" />
     </div>
-    <div
-      class="no-reviews t4 inter q-mt-lg"
-      v-if="event?.event_reviews?.length === 0"
-      :style="
-        $q.screen.lt.sm || true ? 'text-align: center; padding: 0 32px;' : ''
-      "
-    >
-      No one has shared their experience yet... be the first!
-    </div>
-    <div v-else class="q-mt-md">
+
+    <div v-if="event?.event_reviews?.length > 0" class="q-mt-md">
       <ReviewComponent
         v-for="(review, index) in event.event_reviews"
         :key="index"

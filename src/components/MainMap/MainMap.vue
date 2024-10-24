@@ -416,7 +416,7 @@ const mapLoaded = (event) => {
   // hack for weird inconsisent behavior that I can't work out
   setTimeout(() => {
     updateMarkers();
-  }, 300);
+  }, 1000);
 };
 
 const debouncedClearMarkersAndLoadPoints = debounce(

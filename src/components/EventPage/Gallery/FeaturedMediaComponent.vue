@@ -51,25 +51,15 @@
         </video>
 -->
         <transition appear enter-active-class="animated fadeIn slower">
-          <div
-            style="
-              border-radius: 0px;
-              overflow: hidden;
-              width: 100%;
-              height: auto;
-            "
+          <img
             v-if="(!loaded && thumbXsUrl) || true"
-          >
-            <img
-              style="filter: blur(5px); transform: scale(1)"
-              :src="
-                thumbXsUrl ||
-                logo?.thumb_xxs_url ||
-                logo?.thumb_xs_url ||
-                logo?.thumb_url
-              "
-            />
-          </div>
+            :src="
+              thumbXsUrl ||
+              logo?.thumb_xxs_url ||
+              logo?.thumb_xs_url ||
+              logo?.thumb_url
+            "
+          />
         </transition>
         <transition appear enter-active-class="animated fadeIn slower">
           <img
@@ -201,7 +191,6 @@ export default {
   width: 100%;
   height: 100%;
   max-width: 100%;
-  //max-height: 400px;
 
   .editing-overlay {
     pointer-events: all;
@@ -257,6 +246,8 @@ export default {
         height: auto;
         max-width: 100%;
         width: 100%;
+        max-height: 400px;
+
         object-fit: contain;
         display: block;
         transition: opacity 0.3s;
