@@ -170,7 +170,6 @@ body {
   font-family: Inter, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto,
     Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Helvetica,
     Arial, sans-serif !important;
-  font-family: chicagoflf;
   //letter-spacing: unset !important;
   touch-action: none;
   overscroll-behavior-x: none;
@@ -194,8 +193,24 @@ body {
   opacity: 0.5;
 }
 
+.text-h1 {
+  font-family: 'InterDisplay';
+}
 .text-h2 {
   font-weight: 700;
+  font-family: 'InterDisplay';
+}
+.text-h3 {
+  font-family: 'InterDisplay';
+  font-family: 'Metropolis';
+}
+.text-h4 {
+  font-family: 'InterDisplay';
+  font-family: 'Metropolis';
+}
+.text-h5 {
+  font-family: 'InterDisplay';
+  font-family: 'Metropolis';
 }
 .text-h6 {
   //font-size: 18px;
@@ -203,6 +218,7 @@ body {
   line-height: 1.8rem;
   //letter-spacing: 0.0125em;
   letter-spacing: unset !important;
+  font-family: 'Metropolis';
 }
 .text-large {
   font-size: 1rem;

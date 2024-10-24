@@ -5,7 +5,6 @@
         <q-item-label header
           >{{ $t('event.events_at') }} {{ data.name }}</q-item-label
         >
-
         <q-separator />
         <q-item
           clickable
@@ -54,6 +53,7 @@ export default {
       this.focusMarker = {
         lat: this.data.lat,
         lng: this.data.lng,
+        place_id: this.data.place_id,
       };
       this.$router.push({
         name: 'EventPage',

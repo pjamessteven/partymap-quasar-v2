@@ -24,7 +24,7 @@
             name="mdi-account-music-outline"
           />
         </div>
-        <div class="artist-name q-mt-sm chicago ellipsis">
+        <div class="artist-name q-mt-sm ellipsis">
           {{ artist.name }}
         </div>
       </div>

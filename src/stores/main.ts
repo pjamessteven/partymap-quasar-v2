@@ -69,7 +69,7 @@ export const useMainStore = defineStore('main', {
     userLocationCountry: null,
     currentLocationFromSearch: false,
     currentLocation: null,
-    currentLocationCity: 'In this area',
+    currentLocationCity: 'In This area',
     currentLocationCountry: null,
     fineLocation: false,
     groupEventsByMonth: true,

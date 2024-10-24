@@ -13,7 +13,7 @@
     <div
       class="flex column grow q-px-md"
       style="position: relative !important"
-      :class="$q.screen.gt.xs ? 'q-px-lg q-pt-lg' : ''"
+      :class="$q.screen.gt.xs ? 'q-px-lg ' : ''"
     >
       <!--
       <div
@@ -145,6 +145,7 @@ export default {
 
 .search-view {
   height: 100%;
+  overflow: auto;
 }
 .searchbar-input {
   :deep(.q-field__inner) {

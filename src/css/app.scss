@@ -1,12 +1,14 @@
 // app global css in SCSS form
 
 @import '/src/css/inter/inter.css';
+@import '/src/css/metropolis/metropolis.css';
+/*
 @import '/src/css/chicago/chicago.css';
 //@import '/src/css/metropolis/inter.css';
 
 .chicago {
   font-family: chicago;
-  font-style: italic;
+  //font-style: italic;
   &.bold {
     font-weight: 700;
   }
@@ -20,6 +22,7 @@
     font-style: unset;
   }
 }
+  */
 
 .card {
   border-radius: 0px;
@@ -47,6 +50,22 @@
 
 .inter {
   font-family: 'Inter';
+  &.semibold {
+    font-weight: 500;
+  }
+  &.bold {
+    font-weight: 600;
+  }
+  &.bold2 {
+    font-weight: 700;
+  }
+  &.bolder {
+    font-weight: 800;
+  }
+}
+
+.metropolis {
+  font-family: 'Metropolis';
   &.semibold {
     font-weight: 500;
   }

@@ -124,6 +124,8 @@ export default {
 .searchbar-wrapper {
   .searchbar-input {
     :deep(.q-placeholder::placeholder) {
+      //   font-family: 'Metropolis';
+
       opacity: 0.9;
     }
   }

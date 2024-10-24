@@ -211,13 +211,16 @@ export default {
   .select {
     font-weight: 800 !important;
     position: relative;
-    min-width: 170px;
+    min-width: 150px;
 
     :deep(.q-field__native) {
       font-weight: 800 !important;
-      font-family: 'Chicago';
-      font-style: italic;
-      text-transform: uppercase;
+      //font-family: 'Chicago';
+      //  font-style: italic;
+      //text-transform: lowercase;
+      //text-transform: lowercase;
+      //text-transform: uppercase;
+      //text-transform: uppercase;
       span {
         line-height: 1.2em;
       }

@@ -4,17 +4,20 @@
       <div class="flex column" v-if="artist && !loading">
         <div class="flex column details">
           <div
-            class="q-mt-lg q-mb-sm inter bold o-080"
-            v-if="artist && artist.disambiguation?.length > 0"
+            class="q-mt-lg q-mb-sm metropolis bold o-080"
+            v-if="artist && artist.disambiguation?.length > 0 && false"
           >
             Disambiguation:
           </div>
-          <div class="o-080" v-if="artist && artist.disambiguation?.length > 0">
+          <div
+            class="o-080 q-mt-lg"
+            v-if="artist && artist.disambiguation?.length > 0"
+          >
             {{ artist.disambiguation }}
           </div>
 
           <div
-            class="q-mt-lg q-mb-sm inter bold o-080"
+            class="q-mt-lg q-mb-sm metropolis bold o-080"
             v-if="artist && artist.tags && artist.tags.length > 0 && !loading"
           >
             {{ $t('artists.tags') }}:
@@ -45,7 +48,7 @@
           </div>
 
           <div
-            class="q-mt-lg q-mb-sm inter bold o-080"
+            class="q-mt-lg q-mb-sm metropolis bold o-080"
             v-if="computedDescription && computedDescription.length > 0"
           >
             {{ $t('artists.description') }}:
@@ -81,7 +84,7 @@
           </div>
 
           <div
-            class="q-mt-lg q-mb-sm inter bold o-080"
+            class="q-mt-lg q-mb-sm metropolis bold o-080"
             v-if="urls && urls.length > 0"
           >
             {{ $t('artists.links') }}:

@@ -20,10 +20,7 @@
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
           <NearbyView
             style="height: 100%; width: 100%"
-            v-if="
-              mainStore.sidebarPanel == 'nearby' ||
-              mainStore.sidebarPanel === ''
-            "
+            v-if="mainStore.sidebarPanel == 'nearby'"
           />
           <keep-alive>
             <ExploreView
@@ -49,7 +46,7 @@ import SearchView from './SearchView/SearchView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
 import { useMainStore } from 'src/stores/main';
 
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRoute } from 'vue-router';
 

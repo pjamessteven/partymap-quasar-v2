@@ -31,6 +31,9 @@
     >
       <q-route-tab
         :to="{ name: 'Explore' }"
+        :class="{
+          'q-tab--active': sidebarPanel == 'nearby',
+        }"
         key="1"
         exact
         name="nearby"
@@ -236,6 +239,16 @@ export default {
       }
       return '';
     },
+  },
+  mounted() {
+    if (this.sidebarPanel === '') {
+      // no query for home view
+      if (!this.$route.query.view) {
+        this.sidebarPanel = 'nearby';
+      } else {
+        this.sidebarPanel = this.$route.query.view;
+      }
+    }
   },
 };
 </script>

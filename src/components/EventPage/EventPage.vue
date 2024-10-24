@@ -1152,7 +1152,7 @@ const deleteEvent = () => {
 onBeforeRouteLeave((to, from, next) => {
   event.value = null;
   selectedEventDate.value = null;
-  mapStore.focusMarker = null;
+  //mapStore.focusMarker = null;
 
   // transition out before going back on mobile
   if ($q.screen.lt.sm) {
@@ -1164,24 +1164,16 @@ onBeforeRouteLeave((to, from, next) => {
       damping: 50,
       mass: 1.8,
     });
-
-    if ($q.platform.is.android) {
-      if (previousRouteIsExplore.value) {
-        setTimeout(() => {
-          if (mainStore.showPanel) {
-            mainStore.showPanelBackground = true;
-          }
-        }, 0);
+    mainStore.sidebarOpacity = 1;
+    if ($q.platform.is.android || $q.platform.is.mobile) {
+      if (mainStore.showPanel) {
+        mainStore.showPanelBackground = true;
+        mainStore.sidebarOpacity = 1;
       }
+
       setTimeout(() => {
-        mainStore.sidebarOpacity = 1;
         next();
-      }, 300);
-    } else {
-      setTimeout(() => {
-        mainStore.sidebarOpacity = 1;
-      }, 50);
-      setTimeout(() => next(), 350);
+      }, 150);
     }
   } else {
     next();
@@ -1323,6 +1315,7 @@ const load = async () => {
         mapStore.focusMarker = {
           lat: response.data.next_date.location.lat,
           lng: response.data.next_date.location.lng,
+          place_id: response.data.next_date.location.place_id,
         };
       }
     } else if (
@@ -1343,6 +1336,7 @@ const load = async () => {
         mapStore.focusMarker = {
           lat: eventDateResponse.data.location.lat,
           lng: eventDateResponse.data.location.lng,
+          place_id: eventDateResponse.data.location.place_id,
         };
       }
     } else if (
@@ -1360,6 +1354,7 @@ const load = async () => {
       mapStore.focusMarker = {
         lat: eventDateResponse.data.location.lat,
         lng: eventDateResponse.data.location.lng,
+        place_id: eventDateResponse.data.location.place_id,
       };
     }
   } catch (error) {

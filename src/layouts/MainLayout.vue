@@ -69,6 +69,7 @@
         class="main-layout-router event-router"
         v-bind:class="{
           'mobile-map-view-router': $q.screen.lt.sm,
+          'event-router-ios': $q.platform.is.ios,
         }"
       >
         <Transition
@@ -185,7 +186,9 @@ export default {
     }
     if (from.name === 'EventPage') {
       this.sidebarOpacity = 1;
-
+      // focusMarker is set null here so we can transition out the event page in EventPage.vue onBeforeRouteLeave
+      // before the map starts to move
+      this.focusMarker = null;
       if (to.name === 'Explore') {
         // dont transition to eventpage from explore/artist pages on desktop
         this.eventPageTransition = true;
@@ -199,7 +202,11 @@ export default {
     });
   },
   computed: {
-    ...mapWritableState(useMapStore, ['blockUpdates', 'currentMapStyleUrl']),
+    ...mapWritableState(useMapStore, [
+      'blockUpdates',
+      'focusMarker',
+      'currentMapStyleUrl',
+    ]),
     ...mapWritableState(useMainStore, [
       'showSidebar',
       'overlayOpacity',
@@ -401,6 +408,9 @@ export default {
     .event-router {
       z-index: 4000 !important;
       pointer-events: none;
+      &.event-router-ios {
+        pointer-events: all;
+      }
     }
 
     .mobile-map-view-router {

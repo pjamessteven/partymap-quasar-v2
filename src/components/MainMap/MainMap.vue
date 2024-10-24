@@ -28,7 +28,6 @@
         <mgl-navigation-control :position="'bottom-right'" />
 
         <mgl-geo-json-source
-          v-if="mappedPoints"
           source-id="points"
           :data="mappedPoints"
           :cluster="true"
@@ -38,16 +37,16 @@
             @mouseenter="mouseEnterClusterPoint"
             @click="onClickCluster"
             @mouseleave="mouseLeaveClusterPoint"
-            layer-id="cluster-count"
-            :filter="['has', 'point_count']"
+            layer-id="clusters"
+            :filter="['has', 'point_count', ...currentEventFilter]"
             :layout="clusterCountLayout"
             :paint="clusterCountPaint"
           />
 
           <!-- Unclustered points -->
           <mgl-symbol-layer
-            layer-id="unclustered-point"
-            :filter="['!', ['has', 'point_count']]"
+            layer-id="unclustered-points"
+            :filter="['!', ['has', 'point_count'], ...currentEventFilter]"
             :layout="unclusteredPointLayout"
             :paint="computedPaintStyle"
             @click="onClickPoint"
@@ -108,8 +107,10 @@ import { Dark, Dialog, Screen } from 'quasar';
 import EventSelectionComponent from './EventSelectionComponent.vue';
 import { useDevicePixelRatio } from '@vueuse/core';
 import { API_URL, IS_LOCALHOST } from 'src/api';
+import { useSearchStore } from 'src/stores/search';
 
 const mapStore = useMapStore();
+const searchStore = useSearchStore();
 
 const { blockUpdates, peekMap, focusMarker, currentMapStyleUrl, mapStyle } =
   storeToRefs(mapStore);
@@ -167,67 +168,66 @@ const mappedPoints = computed(() => ({
 }));
 
 const updateMarkers = () => {
-  /*
-  map.map?.removeLayer('unclustered-point')
-  map.map?.removeSource('points');
-  map.map?.addSource('points', {
-        type: 'geojson',
-        data: mappedPoints.value,
-      });
-      map.map?.addLayer('unclustered-point', {
-        type: 'geojson',
-        data: mappedPoints.value,
-      });
-      */
   const source = map.map?.getSource('points') as maplibregl.GeoJSONSource;
   source?.setData(mappedPoints.value);
 };
 
-/*
+const updateLocationMarker = (userLocation: LngLat) => {
+  map.map?.addSource('userLocation', {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          properties: [],
+          geometry: {
+            type: 'Point',
+            coordinates: [userLocation.lng, userLocation.lat],
+          },
+        },
+      ],
+    },
+  });
+  map.map?.addLayer({
+    id: 'userLocation',
+    type: 'symbol',
+    source: 'userLocation',
+    layout: {
+      'icon-image': 'pulsing-dot',
+      'icon-ignore-placement': true,
+    },
+  });
+};
+
 watch(
-  () => mappedPoints,
+  () => mappedPoints.value,
   () => {
+    console.log('DEBUG points1');
+
     if (map.map) {
-      updateMarkers();
+      console.log('DEBUG points2');
+
+      // updateMarkers();
     }
   },
   { deep: true }
 );
-*/
 
 onMounted(async () => {
-  if ($route.name === 'Explore') {
-    queryStore.loadPoints();
-  }
+  queryStore.loadPoints();
 
   if (map.map) {
     mapStateToStore();
 
     let marker;
     let clusterMarker;
-    let clusterMarker2;
-    let clusterMarker3;
-    let clusterMarker4;
-    let clusterMarker5;
+
     if (IS_LOCALHOST) {
       marker = await map.map.loadImage('/src/assets/marker-dark-shadow.webp');
       clusterMarker = await map.map.loadImage(
         '/src/assets/marker-cluster.webp'
       );
-      /*
-      clusterMarker2 = await map.map.loadImage(
-        '/src/assets/marker-dark-shadow-2.webp'
-      );
-      clusterMarker3 = await map.map.loadImage(
-        '/src/assets/marker-dark-shadow-3.webp'
-      );
-      clusterMarker4 = await map.map.loadImage(
-        '/src/assets/marker-dark-shadow-4.webp'
-      );
-      clusterMarker5 = await map.map.loadImage(
-        '/src/assets/marker-dark-shadow-3.webp'
-      );
-      */
     } else {
       marker = await map.map.loadImage(
         'https://content.partymap.com/statics/marker-dark-shadow.webp'
@@ -247,29 +247,8 @@ onMounted(async () => {
         pixelRatio: 5,
         content: [16, 16, 50, 50], // place text over left half of image, avoiding the 16px border
       });
-    /*
-    if (clusterMarker2)
-      map.map?.addImage('cluster-marker-2', clusterMarker2.data, {
-        pixelRatio: 5,
-        content: [16, 16, 50, 50], // place text over left half of image, avoiding the 16px border
-      });
-    if (clusterMarker3)
-      map.map?.addImage('cluster-marker-3', clusterMarker3.data, {
-        pixelRatio: 5,
-        content: [16, 16, 50, 50], // place text over left half of image, avoiding the 16px border
-      });
-    if (clusterMarker4)
-      map.map?.addImage('cluster-marker-4', clusterMarker4.data, {
-        pixelRatio: 5,
-        content: [16, 16, 50, 50], // place text over left half of image, avoiding the 16px border
-      });
-    if (clusterMarker5)
-      map.map?.addImage('cluster-marker-5', clusterMarker5.data, {
-        pixelRatio: 5,
-        content: [16, 16, 50, 50], // place text over left half of image, avoiding the 16px border
-      });
-      */
 
+    map.map?.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
     mapStore.map = map.map;
   }
 
@@ -324,13 +303,20 @@ watch(
 
 watch(
   () => mainStore.userLocation,
-  (newv: LngLatLike | null) => {
-    if (mainStore.sidebarPanel === 'nearby' && newv) {
+  (newv: LngLat | null) => {
+    if (
+      mainStore.sidebarPanel === 'nearby' &&
+      newv &&
+      $route.name === 'Explore'
+    ) {
       blockUpdates.value = true;
       flyTo({
         center: newv,
         padding: getNearbyPagePadding(),
       });
+    }
+    if (newv) {
+      updateLocationMarker(newv);
     }
   }
 );
@@ -408,6 +394,8 @@ const mapStyleData = (event) => {
 };
 
 const mapLoaded = (event) => {
+  console.log('DEBUG pointsmapLoaded');
+
   // set tilesize of satellite layer for 2x screens
   const landsat = map.map?.getSource('landsat');
   if (landsat && landsat.type === 'raster') {
@@ -422,8 +410,13 @@ const mapLoaded = (event) => {
   }
 
   // set globe projection
-
   mapStateToStore();
+
+  // sometimes the marker data source needs to be manually set..
+  // hack for weird inconsisent behavior that I can't work out
+  setTimeout(() => {
+    updateMarkers();
+  }, 300);
 };
 
 const debouncedClearMarkersAndLoadPoints = debounce(
@@ -554,7 +547,9 @@ const getNearbyPagePadding = (): PaddingOptions => {
   if (Screen.lt.sm) {
     return {
       top: 0,
-      bottom: window.innerHeight / 2 - 86 + mainStore.safeAreaInsets.top,
+      bottom:
+        window.innerHeight -
+        (window.innerHeight / 2 - 86 + mainStore.safeAreaInsets.top),
       left: 0,
       right: 0,
     };
@@ -612,7 +607,12 @@ const flyTo = ({
 }) => {
   //map.map?.easeTo({ padding: padding || getDefaultPadding(), duration: 0 });
   //map.map?.setPadding();
-  map.map?.flyTo({ center, zoom, padding: padding || getDefaultPadding() });
+  map.map?.flyTo({
+    center,
+    zoom,
+    padding: padding || getDefaultPadding(),
+    speed: 2.4,
+  });
 };
 
 const mouseEnterPoint = (e: MapLayerMouseEvent) => {
@@ -665,6 +665,18 @@ const onClickCluster = async (e: MapLayerMouseEvent) => {
   }
 };
 
+const currentEventFilter = computed(() => {
+  if (focusMarker.value) {
+    return ['==', ['get', 'place_id'], focusMarker.value.place_id];
+  } else return [];
+});
+
+const searchEventFilter = computed(() => {
+  if (searchStore.query && searchStore.query.length > 0) {
+    return ['==', ['get', 'name'], searchStore.query];
+  } else return [];
+});
+
 const onClickPoint = (e: MapLayerMouseEvent) => {
   console.log('click', e.features);
   const properties = e?.features?.[0]?.properties;
@@ -679,10 +691,23 @@ const onClickPoint = (e: MapLayerMouseEvent) => {
         },
       });
     } else {
+      // filter markers
+      console.log(properties.place_id, 'place');
+      map.map?.setFilter('clusters', [
+        '==',
+        ['get', 'place_id'],
+        properties.place_id,
+      ]);
+      map.map?.setFilter('unclustered-points', [
+        '==',
+        ['get', 'place_id'],
+        properties.place_id,
+      ]);
       // show event page
       focusMarker.value = {
         lat: properties.lat,
         lng: properties.lng,
+        place_id: properties.place_id,
       };
       $router.push({
         name: 'EventPage',
@@ -755,7 +780,55 @@ watch(focusMarker, (newval: LngLat | null) => {
   }
 });
 
-const clusterPaint = {};
+const pulsingDotSize = 86;
+const pulsingDot = {
+  width: pulsingDotSize,
+  height: pulsingDotSize,
+  data: new Uint8Array(pulsingDotSize * pulsingDotSize * 4),
+
+  // get rendering context for the map canvas when layer is added to the map
+  onAdd() {
+    const canvas = document.createElement('canvas');
+    canvas.width = this.width;
+    canvas.height = this.height;
+    this.context = canvas.getContext('2d');
+  },
+
+  // called once before every frame where the icon will be used
+  render() {
+    const duration = 2000;
+    const t = (performance.now() % duration) / duration;
+
+    const radius = (pulsingDotSize / 2) * 0.3;
+    const outerRadius = (pulsingDotSize / 2) * 0.7 * t + radius;
+    const context = this.context;
+
+    // draw outer circle
+    context.clearRect(0, 0, this.width, this.height);
+    context.beginPath();
+    context.arc(this.width / 2, this.height / 2, outerRadius, 0, Math.PI * 2);
+    context.fillStyle = `rgba(255, 200, 200,${1 - t})`;
+    context.fill();
+
+    // draw inner circle
+    context.beginPath();
+    context.arc(this.width / 2, this.height / 2, radius, 0, Math.PI * 2);
+    context.fillStyle = 'rgba(0, 100, 255, 1)';
+    context.strokeStyle = 'white';
+    context.lineWidth = 2 + 4 * (1 - t);
+    context.fill();
+    context.stroke();
+
+    // update this image's data with data from the canvas
+    this.data = context.getImageData(0, 0, this.width, this.height).data;
+
+    // continuously repaint the map, resulting in the smooth animation of the dot
+    map.map?.triggerRepaint();
+
+    // return `true` to let the map know that the image was updated
+    return true;
+  },
+};
 
 const clusterCountPaint = {
   'text-color': '#FFFFFF',
@@ -801,13 +874,13 @@ const unclusteredPointLayout = {
     ['exponential', 1.5], // You can adjust the base of the exponential function
     ['zoom'],
     1,
-    13, // At zoom level 10
+    12, // At zoom level 10
     4,
-    14, // At zoom level 10
+    13, // At zoom level 10
     5,
-    14, // At zoom level 8
+    13, // At zoom level 8
     8,
-    12, // At zoom level 20
+    13, // At zoom level 20
   ],
   'text-field': '{label}',
   'text-font': ['Metropolis Regular'],

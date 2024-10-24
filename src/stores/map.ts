@@ -14,7 +14,7 @@ interface MapStoreState {
   mapStyle: 'satellite' | 'transport' | 'toner';
   mapBounds: LngLatBounds | null;
   mapCenter: LngLatLike | null;
-  focusMarker: LngLatLike | null;
+  focusMarker: { lat: number; lng: number; place_id: number } | null;
   eventDateHoverMarker: HoverMarker | null;
   exploreMapView: MapView | null;
   mapMoving: boolean;

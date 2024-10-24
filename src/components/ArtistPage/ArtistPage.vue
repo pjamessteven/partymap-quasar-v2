@@ -31,7 +31,7 @@
         </div>
 
         <div class="flex-column mobile-title q-pa-md">
-          <div class="text-h4 inter bolder">
+          <div class="text-h4 metropolis bolder">
             <b>{{ computedName }}</b>
           </div>
         </div>
@@ -57,7 +57,7 @@
           >
             <div class="flex column">
               <div
-                class="text-h2 inter bolder"
+                class="text-h2 metropolis bolder"
                 style="color: white; z-index: 2"
               >
                 {{ computedName }}
@@ -105,7 +105,7 @@
               :class="$q.screen.gt.sm ? ' q-px-lg' : ' q-mt-md q-px-md'"
             >
               <div class="flex column" v-if="artist" style="max-width: 100%">
-                <div class="q-mb-md inter bold t2">Upcoming events:</div>
+                <div class="q-mb-md metropolis bold t2">Upcoming events:</div>
                 <div
                   class="t3"
                   v-if="
@@ -152,7 +152,7 @@
                   artist.past_event_dates.length > 0
                 "
               >
-                <div class="q-mt-lg q-mb-md inter bold t2">
+                <div class="q-mt-lg q-mb-md metropolis bold t2">
                   {{ $t('artists.past_events') }}:
                 </div>
                 <EventDateCard

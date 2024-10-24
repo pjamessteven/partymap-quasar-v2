@@ -121,7 +121,6 @@
             ref="login"
             class=""
             outlined
-            filled
             v-bind:label="$t('auth.identifier')"
             v-model="identifier"
             @keyup.enter="_login"
@@ -129,7 +128,6 @@
           <q-input
             :class="{ 'o-000': loading }"
             outlined
-            filled
             class="q-mt-md"
             type="password"
             v-bind:label="$t('auth.password')"

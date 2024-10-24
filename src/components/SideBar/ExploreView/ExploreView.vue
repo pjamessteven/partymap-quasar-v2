@@ -23,7 +23,7 @@
     </div>
     <div class="event-list-inner">
       <div
-        class="q-mb-md"
+        class="q-mb-md metropolis bold"
         style="position: absolute; left: 24px; top: 16px; font-weight: 600"
         v-if="
           (isLoadingInitial || (mapMoving && !blockUpdates)) &&
@@ -355,7 +355,7 @@
                   "
                 >
                   <div
-                    class="header header-select t1 q-pb-sm justify-between flex no-wrap items-center"
+                    class="header header-select t1 justify-between flex no-wrap items-center"
                     :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-px-md '"
                   >
                     <span>High Profile Artists:</span>
@@ -376,7 +376,7 @@
                     </ControlSelect>
                   </div>
                   <ArtistsComponent
-                    :class="$q.screen.gt.sm ? 'q-pl- q-mb-sm ' : ''"
+                    :class="$q.screen.gt.sm ? 'q-pl- q-mb-md ' : ''"
                     :artists="topArtistsInArea"
                     :size="$q.screen.gt.md ? 'lg' : 'md'"
                   />
@@ -420,15 +420,14 @@
       >
         <div class="flex column items-center no-wrap">
           <div
-            class="chicago lower q-mb-md"
+            class="metropolis bold q-mb-md"
             :class="$q.screen.gt.xs && 'q-mt-xl'"
-            style="font-weight: 500"
             v-if="isLoadingInitial && (!sidebarMinimized || $q.screen.gt.xs)"
           >
             Finding what's good...
           </div>
           <div
-            class="chicago q-mb-md"
+            class="metropolis bold q-mb-md"
             :class="$q.screen.gt.xs && 'q-mt-xl'"
             v-else-if="
               !isLoadingInitial &&
@@ -970,14 +969,13 @@ export default {
 .header {
   z-index: 1000;
   width: 100%;
-  font-weight: 700;
   font-size: 1rem;
-  font-family: 'Chicago';
-  font-style: italic;
+  //  font-family: 'Chicago';
+  //  font-style: italic;
+  font-family: 'Metropolis';
+  font-weight: 700;
 
-  font-weight: 500;
-  text-transform: lowercase;
-  font-style: italic;
+  //font-style: italic;
   &.header-select {
     :deep(.q-field) {
       .q-field__control::before {

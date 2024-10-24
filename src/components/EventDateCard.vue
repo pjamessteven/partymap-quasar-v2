@@ -15,6 +15,7 @@
             location: JSON.stringify({
               lat: event.location.lat,
               lng: event.location.lng,
+              place_id: event.location.place_id,
             }),
             dateString: computedDateString,
             locationDescription: computedLocation,

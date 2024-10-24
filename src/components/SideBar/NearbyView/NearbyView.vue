@@ -31,7 +31,7 @@
             class="ellipsis text-h4"
             v-if="$q.screen.lt.sm"
           >
-            <span class="chicago bold upper">Near</span>
+            <span class="metropolis bolder t1">Near</span>
           </div>
           <div
             class="flex no-wrap"
@@ -493,8 +493,12 @@
             <!-- artists -->
             <div class="flex column" v-if="nearbyArtists?.length > 5">
               <div
-                class="q-py-md location-header location-header-select flex justify-between items-center"
-                :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
+                class="location-header location-header-select flex justify-between items-center"
+                :class="
+                  $q.screen.gt.sm
+                    ? 'q-px-lg q-py-md'
+                    : 'q-pl-md q-pt-md q-pb-sm '
+                "
               >
                 <div>High profile artists:</div>
                 <ControlSelect
@@ -530,7 +534,7 @@
 
             <div class="flex column" v-else-if="artistOptions?.length > 0">
               <div
-                class="q-py-md location-header location-header-select flex justify-between items-center"
+                class="q-pt-md q-pb-sm location-header location-header-select flex justify-between items-center"
                 :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
               >
                 <div>Top artists worldwide:</div>
@@ -567,8 +571,20 @@
             <!-- NEARBY EVENTS -->
 
             <div
-              v-if="currentLocation"
-              class="location-header q-py-sm q-mt-sm flex row items-center justify-between"
+              class="q-mt-xl q-pt-xl text-center metropolis bold text-large"
+              :class="$q.screen.gt.sm ? 'q-pl-lg t1' : 'q-pl-md t1'"
+              v-if="
+                nearbyEventDates.length === 0 &&
+                !loadingEverything &&
+                !nearbyEventDatesLoading &&
+                !userLocationLoading
+              "
+            >
+              Waiting for location...
+            </div>
+            <div
+              v-else-if="currentLocation"
+              class="location-header sticky q-py-sm q-mt-sm flex row items-center justify-between"
               :class="$q.screen.lt.md ? 'q-pl-md' : 'q-pl-lg'"
             >
               <div class="flex items-center">
@@ -592,18 +608,6 @@
                         v-if="$q.screen.gt.sm "
                       />
                       -->
-            </div>
-            <div
-              class="q-mt-xl q-pt-xl text-center"
-              :class="$q.screen.gt.sm ? 'q-pl-lg t3 ' : 'q-pl-md t3'"
-              v-if="
-                nearbyEventDates.length === 0 &&
-                !loadingEverything &&
-                !nearbyEventDatesLoading &&
-                !userLocationLoading
-              "
-            >
-              Something went wrong...
             </div>
             <EventDateList
               class="q-mx-sm"
@@ -640,7 +644,7 @@
             <!-- ALL EVENTS -->
 
             <div
-              class="location-header q-pl-sm flex row items-center justify-between"
+              class="location-header sticky q-pl-sm flex row items-center justify-between"
               :class="$q.screen.gt.sm ? 'q-mt-sm' : ''"
               v-if="eventDates && eventDates?.length > 0"
               style="height: 56px"
@@ -1262,16 +1266,19 @@ export default {
       position: relative;
       padding-top: 8px;
       .location-header {
-        position: sticky;
-        top: -1px;
         z-index: 1000;
         width: 100%;
-        font-weight: 500;
-        text-transform: lowercase;
-        font-style: italic;
+        font-weight: 700;
+        font-family: 'Metropolis';
+        //  text-transform: lowercase;
+        // font-style: italic;
 
-        font-family: 'Chicago';
+        //        font-family: 'Chicago';
         font-size: 1rem;
+        &.sticky {
+          position: sticky;
+          top: -1px;
+        }
         &.location-header-select {
           :deep(.q-field) {
             .q-field__control::before {
@@ -1303,6 +1310,7 @@ export default {
       z-index: 5000;
       //border-radius: 9px;
       cursor: pointer;
+      font-weight: 400;
     }
   }
 
@@ -1377,11 +1385,12 @@ export default {
     margin-left: 6px;
     font-size: 0.91rem !important;
     :deep(.q-field__inner) {
+      font-weight: 700 !important;
+
       .q-field__control {
         font-size: unset !important;
         font-weight: 700 !important;
-        font-family: chicago;
-        font-style: 'italic';
+        //font-family: 'Metropolis';
         &:before {
           opacity: 0.68;
         }
@@ -1403,7 +1412,7 @@ export default {
       .scroll-stuff {
         padding-top: 0px;
         .location-header {
-          font-weight: 500;
+          font-weight: 700;
           font-size: unset;
         }
       }
@@ -1431,7 +1440,7 @@ export default {
     .scroll-area {
       .scroll-stuff {
         .location-header {
-          font-weight: 500;
+          font-weight: 700;
           font-size: unset;
         }
         .loading-wrapper {
