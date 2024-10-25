@@ -45,6 +45,27 @@
               class="flex row no-wrap items-center"
               :class="{ 'reverse grow justify-between': $q.screen.lt.sm }"
             >
+              <div
+                class="flex row items-center no-wrap"
+                :class="{
+                  ' q-ml-sm': $q.screen.gt.sm,
+                  'q-ml-xs': $q.screen.lt.md,
+                }"
+                style="min-width: 220px"
+                :style="
+                  $q.screen.gt.sm
+                    ? 'margin-left: -16px; border-radius: 100px!important;'
+                    : 'margin-left: 0px; border-radius: 100px!important;'
+                "
+                v-if="$q.screen.gt.sm"
+              >
+                <q-icon
+                  name="las la-calendar"
+                  :class="$q.screen.gt.sm ? ' q-pa-md' : 'q-pa-sm'"
+                  size="sm"
+                />
+                <DesktopDateSelect />
+              </div>
               <q-btn
                 flat
                 class=""
@@ -55,7 +76,7 @@
                 @click.stop="() => getFineLocation()"
                 :style="
                   $q.screen.gt.sm
-                    ? 'margin-left: -16px; border-radius: 100px!important;'
+                    ? ' border-radius: 100px!important;'
                     : 'margin-left: 0px; border-radius: 100px!important;'
                 "
               >
@@ -102,22 +123,6 @@
                 </template>
               </q-btn>
               <NearbyCountrySelect />
-            </div>
-            <div
-              class="flex row items-center no-wrap"
-              :class="{
-                ' q-ml-sm': $q.screen.gt.sm,
-                'q-ml-xs': $q.screen.lt.md,
-              }"
-              style="min-width: 220px"
-              v-if="$q.screen.gt.sm"
-            >
-              <q-icon
-                name="las la-calendar"
-                :class="$q.screen.gt.sm ? ' q-pa-md' : 'q-pa-sm'"
-                size="sm"
-              />
-              <DesktopDateSelect />
             </div>
           </div>
         </div>
@@ -1268,7 +1273,7 @@ export default {
       .location-header {
         z-index: 1000;
         width: 100%;
-        font-weight: 700;
+        font-weight: 800;
         font-family: 'Metropolis';
         //  text-transform: lowercase;
         // font-style: italic;

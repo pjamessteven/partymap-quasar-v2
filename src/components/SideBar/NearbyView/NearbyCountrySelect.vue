@@ -54,9 +54,9 @@
         map-options
         @popup-show="
           () => {
-            inputValue = null;
+            // inputValue = null;
 
-            $refs.locationSelect.updateInputValue('', true);
+            // $refs.locationSelect.updateInputValue('', true);
 
             $nextTick(() => $refs.locationSelect.focus());
             return false;
@@ -209,7 +209,7 @@ export default {
 }
 .country-select {
   .select {
-    font-weight: 800 !important;
+    font-weight: 900 !important;
     position: relative;
     min-width: 150px;
 
@@ -220,8 +220,14 @@ export default {
       //text-transform: lowercase;
       //text-transform: lowercase;
       //text-transform: uppercase;
-      //text-transform: uppercase;
+      // text-transform: uppercase;
+
+      max-width: 214px;
+
       span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         line-height: 1.2em;
       }
       .q-field__append {

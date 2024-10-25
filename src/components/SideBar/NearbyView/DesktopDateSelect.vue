@@ -14,6 +14,7 @@
         'text-h5': $q.screen.gt.sm,
         'text-h4': $q.screen.lt.sm,
         'text-large': $q.screen.lt.md,
+        'dates-selected': !!controlDateRangeSelectedOption?.label,
       }"
       input-class="date-select-input"
       behavior="menu"
@@ -97,8 +98,9 @@ export default {
     height: 42px;
   }
 
-  font-weight: 800 !important;
+  font-weight: 900 !important;
   position: relative;
+  // text-transform: uppercase;
   &.placeholder {
     &::before {
       z-index: 2;
@@ -125,6 +127,10 @@ export default {
       // color: grey;
       font-weight: 800;
     }
+  }
+  &.dates-selected {
+    width: 150px;
+    font-size: 1rem;
   }
 }
 </style>

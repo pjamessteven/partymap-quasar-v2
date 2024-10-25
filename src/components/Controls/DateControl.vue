@@ -520,9 +520,10 @@ export default {
       // set button label
       let label = this.$t('top_controls.custom');
 
-      const startDate = moment(value.start).format('Do MMM YYYY');
-      const endDate = moment(value.end).format('Do MMM YYYY');
-
+      //const startDate = moment(value.start).format('Do MMM YYYY');
+      //const endDate = moment(value.end).format('Do MMM YYYY');
+      const startDate = moment(value.start).format('DD/MM/YYYY');
+      const endDate = moment(value.end).format('DD/MM/YYYY');
       if (startDate === endDate) {
         label = startDate;
       } else {

@@ -65,7 +65,7 @@
             <div class="flex row grow no-wrap items-baseline">
               <q-icon size="xs" name="las la-bullhorn" />
               <div class="flex column grow q-ml-lg">
-                <p class="text-large metropolis bold">Event name</p>
+                <p class="text-large inter bold">Event name</p>
                 <q-input
                   class="grow"
                   :error="!!validationErrors.name && showValidationErrors"
@@ -110,10 +110,10 @@
             <div class="flex row grow no-wrap items-baseline q-mt-md">
               <q-icon size="xs" name="las la-images" />
               <div class="flex column grow q-ml-lg">
-                <span class="text-large metropolis bold">Event images</span>
+                <span class="text-large inter bold">Event images</span>
                 <div class="flex row q-gutter-sm q-mt-sm">
                   <q-card class="b2 shadow-1 flex column q-pa-md grow">
-                    <div class="text-large metropolis bold">Event logo</div>
+                    <div class="text-large inter bold">Event logo</div>
                     <span class="t2"
                       >Upload the logo/main image (required).</span
                     >
@@ -135,7 +135,7 @@
                     </div>
                   </q-card>
                   <q-card class="b2 shadow-1 flex column q-pa-md grow">
-                    <div class="text-large metropolis bold">Lineup poster</div>
+                    <div class="text-large inter bold">Lineup poster</div>
                     <span class="t2">Upload a lineup poster (optional)</span>
                     <MultipleMediaSelector
                       label="Select/Drop Lineup Poster"
@@ -148,7 +148,7 @@
                     />
                   </q-card>
                   <q-card class="b2 shadow-1 flex column q-pa-md grow">
-                    <div class="text-large metropolis bold">Other photos</div>
+                    <div class="text-large inter bold">Other photos</div>
                     <span class="t2"
                       >Upload some photos from previous editions of this event
                       (optional)</span
@@ -178,7 +178,7 @@
             <div class="flex row grow no-wrap items-baseline q-mt-md">
               <q-icon size="xs" name="las la-align-left" />
               <div class="flex column grow q-ml-lg">
-                <span class="text-large metropolis bold">
+                <span class="text-large inter bold">
                   {{ $t('description.summary') }}
                 </span>
                 <span class="t2 q-mb-md">
@@ -229,7 +229,7 @@
             <div class="flex row grow no-wrap items-baseline q-mt-md">
               <q-icon size="xs" name="las la-align-left" />
               <div class="flex column grow q-ml-lg">
-                <span class="text-large metropolis bold">
+                <span class="text-large inter bold">
                   {{ $t('description.detailed_description') }}&nbsp;(Optional)
                 </span>
                 <span class="t2 q-mb-sm">
@@ -280,7 +280,7 @@
             <div class="flex row grow no-wrap items-baseline q-mb-lg">
               <q-icon size="xs" name="las la-tags" />
               <div class="flex column grow q-ml-lg">
-                <span class="text-large metropolis bold">Tags</span>
+                <span class="text-large inter bold">Tags</span>
                 <span class="t2 q-mb-md">
                   What makes this event stand out, and what music can one
                   expect?
@@ -301,7 +301,7 @@
             >
               <q-icon size="xs" name="las la-external-link-alt" />
               <div class="flex column grow q-ml-lg">
-                <span class="text-large metropolis bold">
+                <span class="text-large inter bold">
                   {{ $t('add.url') }}
                 </span>
                 <span class="t2 q-mb-md">
@@ -326,7 +326,7 @@
             <div class="flex row grow no-wrap items-baseline q-mt-md">
               <q-icon size="xs" name="las la-map-marker" />
               <div class="flex column grow q-ml-lg">
-                <span class="text-large metropolis bold">
+                <span class="text-large inter bold">
                   {{ $t('add.location') }}
                 </span>
                 <span class="t2 q-mb-md">
@@ -370,7 +370,7 @@
                   <div
                     class="location-map-select-msg flex justify-center items-center"
                   >
-                    <div class="metropolis bold o-o50">Location preview</div>
+                    <div class="inter bold o-o50">Location preview</div>
                   </div>
                 </div>
 
@@ -383,7 +383,7 @@
             <div class="flex row grow no-wrap items-baseline q-mt-">
               <q-icon size="xs" name="las la-calendar-day" />
               <div class="flex column grow q-ml-lg">
-                <span class="text-large metropolis bold">Date and Time</span>
+                <span class="text-large inter bold">Date and Time</span>
                 <span class="t2 q-mb-md">
                   Select a date range. {{ $t('add.please_select_date_msg_2') }}
                 </span>
@@ -410,7 +410,7 @@
             <div class="flex row grow no-wrap items-baseline q-mt-md">
               <q-icon size="xs" name="las la-external-link-alt" />
               <div class="flex column grow q-ml-lg">
-                <span class="text-large metropolis bold">
+                <span class="text-large inter bold">
                   {{ $t('add.recurrence') }}
                 </span>
                 <span class="t2">
@@ -461,7 +461,7 @@
             >
               <q-icon size="xs" name="las la-external-link-alt" />
               <div class="flex column grow q-ml-lg">
-                <span class="text-large metropolis bold">
+                <span class="text-large inter bold">
                   {{ $t('add.url') }}
                 </span>
                 <span class="t2 q-mb-md">
@@ -483,7 +483,7 @@
             <div class="flex row grow no-wrap items-baseline q-mt-md">
               <q-icon size="xs" name="las la-align-left" />
               <div class="flex column grow q-ml-lg">
-                <span class="text-large metropolis bold">
+                <span class="text-large inter bold">
                   {{ $t('add.lineup') }}
                 </span>
                 <div
@@ -522,7 +522,7 @@
             <div class="flex row grow no-wrap items-baseline q-mt-md">
               <q-icon size="xs" name="las la-user-friends" />
               <div class="flex column grow q-ml-lg">
-                <span class="text-large metropolis bold">
+                <span class="text-large inter bold">
                   {{ $t('add.size_how_many') }}
                 </span>
                 <span class="t2 q-mb-md">
@@ -552,7 +552,7 @@
             <div class="flex row grow no-wrap items-baseline q-mt-sm">
               <q-icon size="xs" name="las la-external-link-alt" />
               <div class="flex column grow q-ml-lg">
-                <span class="text-large metropolis bold"> YouTube URL </span>
+                <span class="text-large inter bold"> YouTube URL </span>
                 <span class="t2 q-mb-md">
                   Paste the YouTube link to the after-movie or promo video here.
                 </span>
@@ -602,15 +602,15 @@
         <div>
           <div
             v-if="Object.keys(validationErrors).length > 0"
-            class="t1 metropolis bold text-large no-wrap flex items-center"
+            class="t1 inter bold text-large no-wrap flex items-center"
             :class="$q.screen.gt.xs ? 'q-ml-lg' : 'q-mt-lg'"
           >
             <q-icon name="mdi-alert-circle" size="2em" style="color: red" />
-            <div class="q-ml-md">Missing required information...</div>
+            <div class="q-ml-md t1">Missing required information...</div>
           </div>
           <div
             v-else
-            class="t1 metropolis bold text-large no-wrap flex items-center"
+            class="t1 inter bold text-large no-wrap flex items-center"
             :class="$q.screen.gt.xs ? 'q-ml-lg' : 'q-mt-lg'"
           >
             <q-icon name="mdi-check" size="2em" style="color: green" />
@@ -631,7 +631,7 @@
         <div class="flex row no-wrap q-ma-lg">
           <q-btn
             icon-right="las la-undo"
-            class="soft-button-shadow metropolis bold q-mr-md"
+            class="soft-button-shadow inter bold q-mr-md"
             label="Reset"
             v-on:click="reset"
           />
@@ -639,7 +639,7 @@
             :class="event.host === null ? 'card-disabled' : ''"
             icon-right="mdi-chevron-right"
             color="primary"
-            class="soft-button-shadow metropolis bold"
+            class="soft-button-shadow inter bold"
             label="Submit"
             :disable="Object.keys(validationErrors).length > 0"
             v-on:click="submitEvent"

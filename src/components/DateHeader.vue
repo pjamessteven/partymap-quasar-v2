@@ -54,7 +54,7 @@ export default {
     display: flex;
     align-items: center;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 800;
     font-family: 'Metropolis';
   }
 }

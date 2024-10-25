@@ -84,6 +84,23 @@
               }"
               v-if="$q.screen.gt.sm"
             >
+              <div
+                class="flex row items-center no-wrap"
+                :class="$q.screen.gt.sm ? 'q-ml-sm' : 'q-ml-xs'"
+                style="min-width: 220px"
+                :style="
+                  $q.screen.gt.sm
+                    ? 'margin-left: -16px; '
+                    : 'margin-left: 0px; '
+                "
+              >
+                <q-icon
+                  name="las la-calendar"
+                  :class="$q.screen.gt.sm ? 'q-pa-md' : 'q-pa-sm'"
+                  size="sm"
+                />
+                <DesktopDateSelect />
+              </div>
               <div class="flex row no-wrap items-end">
                 <router-link
                   :to="{ name: 'Explore' }"
@@ -92,11 +109,7 @@
                   <q-btn
                     flat
                     :class="$q.screen.gt.sm ? 'q-pa-md' : 'q-pa-sm'"
-                    :style="
-                      $q.screen.gt.sm
-                        ? 'margin-left: -16px; border-radius: 100px!important;'
-                        : 'margin-left: 0px; border-radius: 100px!important;'
-                    "
+                    style="border-radius: 100px !important"
                   >
                     <template v-slot:default>
                       <q-icon size="sm" name="mdi-crosshairs" />
@@ -105,19 +118,6 @@
                 </router-link>
 
                 <NearbyCountrySelect />
-              </div>
-
-              <div
-                class="flex row items-center no-wrap"
-                :class="$q.screen.gt.sm ? 'q-ml-sm' : 'q-ml-xs'"
-                style="min-width: 220px"
-              >
-                <q-icon
-                  name="las la-calendar"
-                  :class="$q.screen.gt.sm ? 'q-pa-md' : 'q-pa-sm'"
-                  size="sm"
-                />
-                <DesktopDateSelect />
               </div>
             </div>
 
@@ -428,15 +428,14 @@
           </div>
           <div
             class="metropolis bold q-mb-md"
-            :class="$q.screen.gt.xs && 'q-mt-xl'"
+            :class="$q.screen.gt.xs && 'q-mt-xl q-pb-xs'"
             v-else-if="
               !isLoadingInitial &&
               noResults &&
               (!sidebarMinimized || $q.screen.gt.xs)
             "
-            style="font-weight: 500"
           >
-            Nothing in this area
+            Nothing coming up in this area
           </div>
           <div style="height: 20px; width: 200px" class="flex justify-center">
             <q-linear-progress
@@ -973,7 +972,7 @@ export default {
   //  font-family: 'Chicago';
   //  font-style: italic;
   font-family: 'Metropolis';
-  font-weight: 700;
+  font-weight: 800;
 
   //font-style: italic;
   &.header-select {

@@ -83,30 +83,6 @@
         :ripple="false"
       />
 
-      <!--
-            <q-route-tab
-        name="profile"
-        key="4"
-        :icon="
-          $q.screen.lt.sm
-            ? $route.name === 'UserPage'
-              ? 'mdi-emoticon-cool'
-              : 'mdi-emoticon-cool-outline'
-            : undefined
-        "
-        label="Activity"
-        content-class="tab"
-        :ripple="false"
-        :to="
-          currentUser
-            ? {
-                name: 'UserPage',
-                params: { username: currentUser.username },
-              }
-            : { path: '/login', query: { from: $route.path } }
-        "
-        exact
-      />-->
       <q-route-tab
         name="activity"
         key="4"
@@ -132,19 +108,30 @@
         :ripple="false"
         :to="{ query: { view: 'search' }, name: 'Explore' }"
       />
-      <!--
-      <q-tab
-        key="4"
+
+      <q-route-tab
         name="profile"
+        key="5"
         :icon="
-          sidebarPanel === 'profile'
-            ? 'mdi-account-circle'
-            : 'mdi-account-circle-outline'
+          $q.screen.lt.sm
+            ? $route.name === 'UserPage'
+              ? 'mdi-emoticon-cool'
+              : 'mdi-emoticon-cool-outline'
+            : undefined
         "
-        :label="$q.screen.gt.xs ? undefined : 'You'"
+        label="Profile"
         content-class="tab"
         :ripple="false"
-      />-->
+        :to="
+          currentUser
+            ? {
+                name: 'UserPage',
+                params: { username: currentUser.username },
+              }
+            : { path: '/login', query: { from: $route.path } }
+        "
+        exact
+      />
     </q-tabs>
   </div>
 </template>

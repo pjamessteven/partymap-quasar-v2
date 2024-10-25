@@ -40,7 +40,7 @@
             layer-id="clusters"
             :filter="['has', 'point_count', ...currentEventFilter]"
             :layout="clusterCountLayout"
-            :paint="clusterCountPaint"
+            :paint="computedPaintStyle"
           />
 
           <!-- Unclustered points -->
@@ -226,7 +226,7 @@ onMounted(async () => {
     if (IS_LOCALHOST) {
       marker = await map.map.loadImage('/src/assets/marker-dark-shadow.webp');
       clusterMarker = await map.map.loadImage(
-        '/src/assets/marker-cluster.webp'
+        '/src/assets/marker-dark-shadow-cluster7.webp'
       );
     } else {
       marker = await map.map.loadImage(
@@ -389,13 +389,7 @@ const moving = (event) => {
   }
 };
 
-const mapStyleData = (event) => {
-  console.log('styledata');
-};
-
 const mapLoaded = (event) => {
-  console.log('DEBUG pointsmapLoaded');
-
   // set tilesize of satellite layer for 2x screens
   const landsat = map.map?.getSource('landsat');
   if (landsat && landsat.type === 'raster') {
@@ -807,7 +801,7 @@ const pulsingDot = {
     context.clearRect(0, 0, this.width, this.height);
     context.beginPath();
     context.arc(this.width / 2, this.height / 2, outerRadius, 0, Math.PI * 2);
-    context.fillStyle = `rgba(255, 200, 200,${1 - t})`;
+    context.fillStyle = `rgba(0, 100, 255,${1 - t})`;
     context.fill();
 
     // draw inner circle
@@ -828,13 +822,6 @@ const pulsingDot = {
     // return `true` to let the map know that the image was updated
     return true;
   },
-};
-
-const clusterCountPaint = {
-  'text-color': '#FFFFFF',
-  'text-halo-color': '#000000',
-  'text-halo-width': 1,
-  'text-halo-blur': 1,
 };
 
 const computedPaintStyle = computed(() => {
