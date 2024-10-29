@@ -31,7 +31,7 @@
             <span v-if="computedTicketSellerName">{{
               computedTicketSellerName
             }}</span
-            ><span v-else>Get tickets to this event</span></span
+            ><span v-else>{{ $t('event_dates.get_tickets') }}</span></span
           >
         </div>
         <!--
@@ -49,7 +49,7 @@ Direct link when only one ticket available
             class="nav-button primary"
             flat
             style="width: 190px"
-            label="Buy tickets"
+            :label="$t('event_dates.buy_tickets')"
             :color="$q.dark.isActive ? 'white' : 'black'"
             icon="las la-external-link-alt"
             :class="$q.screen.gt.sm ? '' : 'flex grow'"
@@ -62,7 +62,7 @@ Direct link when only one ticket available
           class="nav-button primary"
           flat
           style="width: 190px"
-          label="Buy tickets"
+          :label="$t('event_dates.buy_tickets')"
           icon="las la-external-link-alt"
           :class="$q.screen.gt.sm ? '' : 'flex grow'"
         />
@@ -74,7 +74,7 @@ Direct link when only one ticket available
         style="cursor: pointer"
       >
         <span>
-          <u>{{ $t('event_date_inline.add_ticket_url') }}</u>
+          <u>{{ $t('event_dates.add_links_ticket_url') }}</u>
         </span>
       </div>
     </div>
@@ -93,7 +93,7 @@ Direct link when only one ticket available
       </div>
       <div v-else class="t4">
         <span>
-          <u>{{ $t('event_date_inline.add_ticket_url') }}</u>
+          <u>{{ $t('event_dates.add_ticket_url') }}</u>
         </span>
       </div>
     </div>

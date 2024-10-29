@@ -16,7 +16,7 @@
     >
       <div v-if="selectedEventDate.size" class="flex column">
         ~{{ selectedEventDate.size.toLocaleString('en-US') }}&nbsp;{{
-          $t('event_date_inline.size_people')
+          $t('event_dates.size_people')
         }}
       </div>
       <div
@@ -24,7 +24,7 @@
         class="t4 link-hover underline"
         @click="showEditingDialog = true"
       >
-        {{ $t('event_date_inline.add_size') }}
+        {{ $t('event_dates.add_size') }}
       </div>
     </div>
     <q-dialog

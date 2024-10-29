@@ -176,7 +176,9 @@
       >
         <div class="flex row wrap items-center">
           <q-icon left size="1em" name="las la-ticket-alt" />
-          <div class="card-title q-pr-md">Ticketing URL</div>
+          <div class="card-title q-pr-md">
+            {{ $t('event_dates.ticket_url') }}
+          </div>
         </div>
       </q-card-section>
 

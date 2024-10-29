@@ -7,15 +7,15 @@
     </div>
     <div class="flex column q-pt-md">
       <div v-if="currentUser && !currentUser.pw_enabled">
-        {{ $t('manage_account.facebook_login_message_1') }}
+        {{ $t('manage_account.oauth_message_1') }}
         <br />
-        {{ $t('manage_account.facebook_login_message_2') }}
+        {{ $t('manage_account.oauth_message_2') }}
       </div>
       <div
         v-else-if="currentUser && currentUser.pw_enabled && currentUser.oauth"
       >
         <div class="t2">
-          You can log in with Facebook Login or your email address,
+          {{ $t('manage_account.oauth_message_3') }}
           <b>{{ currentUser?.email }}</b>
         </div>
       </div>

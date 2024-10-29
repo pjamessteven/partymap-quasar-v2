@@ -28,9 +28,12 @@
             "
             >"</span
           ><span
+            v-if="!showOriginal"
             style="white-space: pre-line; word-break: break-word"
-            v-html="selectedEventDate.description"
-          ></span
+            >{{
+              selectedEventDate.description_t || selectedEventDate.description
+            }}</span
+          ><span v-else>{{ selectedEventDate.description }}</span
           ><span
             v-if="
               selectedEventDate.description_attribute &&
@@ -41,7 +44,20 @@
               class="link-hover o-050"
               target="_blank"
               :href="computedAttributeUrl"
-              >[source]</a
+              >[{{ $t('event_dates.source') }}]</a
+            ></span
+          ><span v-if="isTranslation">
+            <p />
+
+            <span class="o-040" v-if="!showOriginal">
+              - {{ $t('translate.translated') }}&nbsp;</span
+            >
+            <span class="o-040 link-hover" @click="showOriginal = !showOriginal"
+              >[<span v-if="!showOriginal">{{
+                $t('translate.show_original')
+              }}</span
+              ><span v-else>{{ $t('translate.show_translation') }}</span
+              >]</span
             ></span
           >
         </div>
@@ -51,7 +67,7 @@
           v-if="showMoreFields"
           @click="showEditingDialog = true"
         >
-          Edit description
+          {{ $t('event_dates.edit_ed_description') }}
         </div>
       </div>
       <div
@@ -61,7 +77,7 @@
         style="cursor: pointer"
       >
         <span>
-          <u>{{ $t('event_date_inline.add_info') }}</u>
+          <u>{{ $t('event_dates.add_info') }}</u>
         </span>
       </div>
     </div>
@@ -90,7 +106,7 @@ export default {
   },
   watch: {},
   data() {
-    return { showEditingDialog: false };
+    return { showEditingDialog: false, showOriginal: false };
   },
   props: {
     editing: Boolean,
@@ -98,6 +114,13 @@ export default {
   },
   methods: {},
   computed: {
+    isTranslation() {
+      return (
+        this.selectedEventDate?.description_t &&
+        this.selectedEventDate?.description !==
+          this.selectedEventDate?.description_t
+      );
+    },
     ...mapState(useEventStore, [
       'event',
       'selectedEventDate',

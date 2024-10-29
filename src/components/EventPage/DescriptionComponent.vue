@@ -1,8 +1,10 @@
 <template>
   <div v-if="!!event">
     <div class="flex column q-mb-md">
-      <div class="inter bolder text-large t2 q-pr-md q-mb-sm event-page-header">
-        Description:
+      <div
+        class="metropolis bolder text-h6 t2 q-pr-md q-mb-sm event-page-header"
+      >
+        {{ $t('event.description') }}:
       </div>
 
       <div class="description text-large" :class="editing ? 'editing ' : ''">
@@ -50,7 +52,7 @@
               ></span
             ></span
           ><span v-else class="t4 inter text-large q-mt-sm">
-            Add a general description for this event. There's nothing here yet.
+            {{ $t('event.add_description') }}
           </span>
         </div>
       </div>
@@ -94,8 +96,8 @@ export default {
     ...mapState(useEventStore, ['event']),
     isTranslation() {
       return (
-        this.description_t &&
-        this.event.description !== this.event.description_t
+        this.event?.description_t &&
+        this.event?.description !== this.event?.description_t
       );
     },
     shouldTruncate() {

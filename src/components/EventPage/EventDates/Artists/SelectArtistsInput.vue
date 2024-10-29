@@ -14,7 +14,7 @@
     map-options
     :options="results"
     @filter="filterFn"
-    label="Search for artists"
+    :label="$t('event_dates.search_for_artists')"
   >
     <template v-slot:append>
       <q-icon name="search" class="q-pa-md" />
@@ -24,7 +24,9 @@
         <q-item-section>
           <q-item-label>
             {{ scope.opt.name }}
-            <span v-if="scope.opt.newRecord">(Create new record)</span>
+            <span v-if="scope.opt.newRecord"
+              >({{ $t('event_dates.create_new_record') }})</span
+            >
           </q-item-label>
           <q-item-label caption>
             {{ scope.opt.disambiguation }}

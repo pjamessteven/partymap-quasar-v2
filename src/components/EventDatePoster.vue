@@ -76,7 +76,7 @@
                   v-if="event.cancelled"
                   class="q-my-xs"
                   color="red"
-                  :label="$t('event_date_inline.cancelled')"
+                  :label="$t('event_dates.cancelled')"
                 />
                 <span v-else-if="event.date_confirmed">{{
                   relativeHumanTime(
@@ -85,7 +85,7 @@
                     event.tz
                   )
                 }}</span>
-                <span v-else>Date TBC</span>
+                <span v-else>{{ $t('event_dates.date_tbc') }}</span>
               </div>
             </div>
 
@@ -127,7 +127,7 @@
                     v-if="event.cancelled"
                     class="q-my-xs"
                     color="red"
-                    :label="$t('event_date_inline.cancelled')"
+                    :label="$t('event_dates.cancelled')"
                   />
                   <span v-else-if="event.date_confirmed">{{
                     relativeHumanTime(

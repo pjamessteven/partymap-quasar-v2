@@ -52,7 +52,7 @@
         <Tag
           v-if="(!query || query.length == 0) && hasNext"
           :key="-2"
-          :value="'...show more'"
+          :value="'...' + $t('event.more_dates')"
           v-on:selected="loadMoreTopTags()"
         />
       </div>

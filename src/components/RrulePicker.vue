@@ -87,7 +87,7 @@
       <q-radio
         v-model="dateMode"
         val="rough"
-        label="Roughly every month (Confirm future dates later)"
+        :label="$t('add.every_month_rough')"
       />
     </div>
     <div
@@ -145,8 +145,8 @@
         val="rough"
         :label="
           separationCount == 1
-            ? 'Every year around this time (Confirm exact future dates later)'
-            : 'Every second year around this time (Confirm exact future dates later)'
+            ? $t('add.every_year_rough')
+            : $t('add.every_second_year_rough')
         "
       />
     </div>
@@ -231,12 +231,12 @@ export default {
         // 2 = second etc.
         var counterDate = dayjs(startDate);
         var date = dayjs(startDate);
-        var weekday = date.isoWeekday();
+        var weekday = date.weekday();
         counterDate.set('date', 1);
         var count = 1;
         var numOfWeekdaysInMonth = 0;
         while (counterDate.date() < date.date()) {
-          if (counterDate.isoWeekday() === weekday) {
+          if (counterDate.weekday() === weekday) {
             count++;
           }
           counterDate.set('date', counterDate.date() + 1);
@@ -247,12 +247,12 @@ export default {
         var datemax = dayjs(startDate);
         datemax.set('date', datemax.daysInMonth());
         while (counterDate.date() < datemax.date()) {
-          if (counterDate.isoWeekday() === weekday) {
+          if (counterDate.weekday() === weekday) {
             numOfWeekdaysInMonth += 1;
           }
           // handle last case (this is such a bitch)
           if (counterDate.date() + 1 === datemax.date()) {
-            if (datemax.isoWeekday() === weekday) {
+            if (datemax.weekday() === weekday) {
               numOfWeekdaysInMonth += 1;
             }
           }
@@ -271,7 +271,7 @@ export default {
     },
     dayOfWeek() {
       if (this.dateTime && !this.absoluteDate) {
-        return dayjs(this.dateTime.start).isoWeekday();
+        return dayjs(this.dateTime.start).weekday();
       } else {
         return null;
       }
@@ -301,7 +301,7 @@ export default {
     },
     selectedWeekday() {
       if (this.dateTime) {
-        var mom = dayjs(this.dateTime.start).isoWeekday();
+        var mom = dayjs(this.dateTime.start).weekday();
         switch (mom) {
           case 1:
             return 'Monday';

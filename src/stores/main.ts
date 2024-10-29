@@ -124,8 +124,8 @@ export const useMainStore = defineStore('main', {
         //fail silently
         console.log(error);
         this.userLocationLoading = false;
-        this.currentLocationCity = 'No IP location!';
-        this.userLocationCity = 'No IP location!';
+        this.currentLocationCity = 'No location!';
+        this.userLocationCity = 'No location!';
 
         return;
         //throw error;

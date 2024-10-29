@@ -19,7 +19,7 @@
             v-if="ed?.cancelled"
             class="q-my-xs q-mr-sm"
             color="red"
-            :label="$t('event_date_inline.cancelled')"
+            :label="$t('event_dates.cancelled')"
           />
           <span v-if="hasOccured">Past event in&nbsp;</span>
           <span v-if="ed?.date_confirmed == true">
@@ -28,7 +28,7 @@
           <span v-else-if="!ed?.date_confirmed">
             {{ monthYear(ed?.start_naive, ed?.tz) }}&nbsp;<span
               v-if="!hasOccured && !ed?.cancelled"
-              >(Date TBC)</span
+              >({{ $t('event_dates.date_tbc') }})</span
             ></span
           >
           <!--

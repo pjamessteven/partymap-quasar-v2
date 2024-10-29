@@ -7,11 +7,11 @@
       <div v-else-if="mode === 'reportEvent'" class="text-h6">
         {{ $t('report.report_event') }}
       </div>
-      <div v-else-if="mode === 'reportContribution'" class="text-h6">
-        Report contribution
+      <div v-else-if="mode === 'reportReview'" class="text-h6">
+        {{ $t('report.report_review') }}
       </div>
       <div v-else-if="mode === 'reportMediaItem'" class="text-h6">
-        Report photo
+        {{ $t('report.report_media') }}
       </div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />
@@ -33,8 +33,7 @@
       </div>
 
       <div class="t2" v-else>
-        Please let us know, in detail, what your issue is with this content. If
-        we have any follow up questions, we will be in touch.
+        {{ $t('report.report_message') }}
       </div>
 
       <q-input

@@ -63,7 +63,7 @@
     <span
       class="link-hover t3 q-mt-lg q-mb-sm"
       @click="copyLineupFromExistingEvent = !copyLineupFromExistingEvent"
-      >[Copy lineup from a similar event?]</span
+      >[{{ $t('event_dates.copy_lineup_from_similar_event') }}]</span
     >
     <SelectEventInput
       class="q-mt-sm"

@@ -25,7 +25,7 @@
           style="cursor: pointer"
         >
           <span>
-            <u>{{ $t('event_date_inline.add_lineup') }}</u>
+            <u>{{ $t('event_dates.add_lineup') }}</u>
           </span>
         </div>
       -->
@@ -80,10 +80,10 @@
                 :class="{ 'text-large': $q.screen.gt.sm }"
               >
                 <u class="t4 q-ml-sm" v-if="!showAllArtists">{{
-                  $t('event_date_inline.show_all')
+                  $t('event_dates.show_all')
                 }}</u>
                 <u class="t4 q-ml-sm" v-else>{{
-                  $t('event_date_inline.show_less')
+                  $t('event_dates.show_less')
                 }}</u>
               </div>
             </div>

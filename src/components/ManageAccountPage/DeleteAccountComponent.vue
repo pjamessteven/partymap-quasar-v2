@@ -6,7 +6,7 @@
       </p>
     </div>
     <div class="flex column q-pt-md">
-      <div class="t2">
+      <div class="t1">
         {{ $t('manage_account.delete_account_msg') }}
       </div>
       <div>

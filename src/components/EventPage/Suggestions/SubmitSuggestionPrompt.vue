@@ -11,7 +11,7 @@
           class="q-mt-md"
           type="textarea"
           outlined
-          placeholder="Say why this improvement is needed (optional)"
+          :placeholder="$t('suggestions.tell_us_why_improvement_needed')"
           v-model="message"
         />
         <vue-hcaptcha

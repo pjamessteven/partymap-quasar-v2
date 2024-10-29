@@ -1,14 +1,15 @@
 <template>
   <q-card class="flex column dialog-card fullscreen-mobile-card">
     <q-card-section class="header row items-center dialog-card-header">
-      <div class="inter bolder text-h6">Buy Tickets</div>
+      <div class="inter bolder text-h6">
+        {{ $t('event_dates.buy_tickets') }}
+      </div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>
     <q-card-section class="t2 dialog-card-content">
       <div class="q-mb-lg t3">
-        We earn comission when you buy tickets through PartyMap.com - this helps
-        keep us running. Buy all your tickets through us xoxo
+        {{ $t('event_dates.we_earn_commission') }}
       </div>
       <div
         class="flex column"
@@ -24,7 +25,7 @@
                 >&nbsp;-&nbsp;{{ ticket.price_max }}</span
               >&nbsp;{{ ticket.price_currency_code }}
             </div>
-            <div class="t3" v-else>No price listed</div>
+            <div class="t3" v-else>{{ $t('event_dates.no_price_listed') }}</div>
           </div>
           <a
             style="text-decoration: none; color: unset"

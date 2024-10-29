@@ -32,7 +32,7 @@
           <q-item-section avatar>
             <q-icon :name="userInterested ? 'mdi-star' : 'mdi-star-outline'" />
           </q-item-section>
-          <q-item-section>Interested</q-item-section>
+          <q-item-section> {{ $t('event.interested') }} </q-item-section>
         </q-item>
         <q-item
           :active="userGoing"
@@ -54,7 +54,7 @@
               "
             />
           </q-item-section>
-          <q-item-section>Going</q-item-section>
+          <q-item-section> {{ $t('event.going') }} </q-item-section>
         </q-item>
       </q-list>
     </MenuWrapper>

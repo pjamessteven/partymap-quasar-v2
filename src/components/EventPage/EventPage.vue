@@ -258,7 +258,9 @@
                                   <div
                                     class="flex column ellipsis items-start q-ml-sm q-pl-xs"
                                   >
-                                    <div class="">Get tickets!</div>
+                                    <div class="">
+                                      {{ $t('event.get_tickets') }}
+                                    </div>
                                     <div
                                       class="o-050 ellipsis text- q-mb-xs"
                                       style="
@@ -645,7 +647,7 @@
                                   </q-item-section>
                                 </q-item>
                                 <q-item
-                                  v-if="currentUserIsStaff"
+                                  v-if="currentUserIsStaff && false"
                                   v-ripple
                                   v-close-popup
                                   v-on:click="showingHistory = true"
@@ -680,26 +682,14 @@
                         />
 
                         <EventDates />
-                        <!--
+
                         <div
-                          class="inter bolder text-large t2 q-pr-md event-page-header"
+                          class="metropolis bolder text-h6 t2 q-pr-md event-page-header"
                           v-if="event?.youtube_url?.length > 0"
+                          :class="{ 'q-mx-md': $q.screen.lt.sm }"
                         >
-                          Aftermovie:
+                          {{ $t('event.aftermovie') }}:
                         </div>
-                        -->
-
-                        <DescriptionComponent
-                          :editing="editing"
-                          v-if="
-                            editing ||
-                            (event.full_description &&
-                              event?.full_description?.length > 0)
-                          "
-                          :class="{ 'q-px-md': $q.screen.lt.sm }"
-                        />
-
-                        <EventDateLineupComponent />
 
                         <YoutubeVideoComponent
                           :key="event?.youtube_url"
@@ -712,6 +702,18 @@
                             !!event
                           "
                         />
+
+                        <DescriptionComponent
+                          :editing="editing"
+                          v-if="
+                            editing ||
+                            (event.full_description &&
+                              event?.full_description?.length > 0)
+                          "
+                          :class="{ 'q-px-md': $q.screen.lt.sm }"
+                        />
+
+                        <EventDateLineupComponent />
 
                         <ReviewsComponent
                           class="q-mb-xl"
@@ -1227,7 +1229,7 @@ const share = () => {
   if (navigator.share) {
     navigator.share({
       title: event.value?.name,
-      text: 'Check out ' + event.value?.name + ' on PartyMap',
+      text: t('event.check_out') + event.value?.name + t('event.on_partymap'),
       url: computedUrl.value,
     });
   } else {
@@ -1244,17 +1246,17 @@ const share = () => {
         document.execCommand('copy');
 
         /* Alert the copied text */
-        $q.notify('Copied event link to clipboard');
+        $q.notify(t('event.copied_link'));
       } catch (err) {
-        $q.notify('Sharing not supported in this browser :(');
+        $q.notify(t('event.sharing_not_supported'));
       }
       return;
     } else {
       // do it the modern way
       navigator.clipboard
         .writeText(computedUrl.value)
-        .then(() => $q.notify('Copied event link to clipboard'))
-        .catch(() => $q.notify('Sharing not supported in this browser :('));
+        .then(() => $q.notify(t('event.copied_link')))
+        .catch(() => $q.notify(t('event.sharing_not_supported')));
     }
   }
 };

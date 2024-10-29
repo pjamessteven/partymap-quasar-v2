@@ -20,9 +20,9 @@
         style="cursor: pointer"
       >
         <span v-if="selectedEventDate.artists?.length === 0">
-          {{ $t('event_date_inline.add_lineup') }}
+          {{ $t('event_dates.add_lineup') }}
         </span>
-        <span v-else> Edit the lineup </span>
+        <span v-else> {{ $t('event_dates.add_lineup') }} </span>
       </div>
     </div>
     <q-dialog

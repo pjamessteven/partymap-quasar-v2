@@ -22,8 +22,10 @@
       class="inter bolder t2 text-large q-pr-md event-page-header"
       v-if="computedImages?.length > 0"
     >
-      <span v-if="selectedDateImages?.length > 0">Photos from this date:</span>
-      <span v-else>All photos:</span>
+      <span v-if="selectedDateImages?.length > 0"
+        >{{ $t('event_dates.photos_from_this_date') }}:</span
+      >
+      <span v-else>{{ $t('event_dates.all_photos') }}:</span>
     </div>
 
     <CustomQScroll
@@ -103,8 +105,9 @@
       :class="{ 'q-px-md': $q.screen.lt.sm }"
     >
       <div class="metropolis bolder t2 text-h6 q-pr-md event-page-header">
-        <span v-if="event.event_dates.length > 1">Details:</span
-        ><span v-else>Event details:</span>
+        <span v-if="event.event_dates.length > 1"
+          >{{ $t('event_dates.details') }}:</span
+        ><span v-else>{{ $t('event_dates.event_details') }}:</span>
       </div>
 
       <q-list class="q-mb-md" style="position: relative">
@@ -153,10 +156,10 @@
             :class="{ 'text-large': $q.screen.gt.sm }"
           >
             <u class="t4 q-ml-sm" v-if="!showMoreFields">{{
-              $t('event_date_inline.add_missing_information')
+              $t('event_dates.add_missing_information')
             }}</u>
             <u class="t4 q-ml-sm" v-else>{{
-              $t('event_date_inline.hide_missing_information')
+              $t('event_dates.hide_missing_information')
             }}</u>
           </div>
         </div>

@@ -15,7 +15,7 @@
           class="metropolis bolder text-h6 t2 event-page-header"
           v-if="editing & (event?.event_dates?.length === 0)"
         >
-          Event Dates:
+          {{ $t('event_dates.event_dates') }}:
         </div>
         <q-card
           class="flex row justify-start grow no-wrap schedule-msg-buttons q-mt-sm q-pa-md q-mb-md"

@@ -27,7 +27,9 @@
       </div>
 
       <div v-if="mode === 'ticketUrl'">
-        <q-btn @click="addTicketUrl">Add ticket URL</q-btn>
+        <q-btn @click="addTicketUrl">{{
+          $t('event_dates.add_ticket_url')
+        }}</q-btn>
         <q-card
           class="flex column q-pa-sm q-mt-sm"
           v-for="(ticket, index) of tickets"
@@ -161,7 +163,7 @@
       <!-- DELETE ED -->
 
       <div v-if="mode === 'delete'">
-        Are you sure you want to delete this date?
+        {{ $t('event_dates.delete_are_you_sure') }}
         <p />
         <b>{{ localDateTimeLong(ed.start, ed.tz) }}</b>
 

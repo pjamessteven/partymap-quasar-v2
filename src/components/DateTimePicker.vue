@@ -159,13 +159,13 @@ export default {
             }
 
             start = dayjs(start)
-              .seconds(0)
-              .milliseconds(0)
+              .set('seconds', 0)
+              .set('milliseconds', 0)
               .utcOffset(0, true)
               .format('YYYY-MM-DD HH:mm:ss');
             end = dayjs(end)
-              .seconds(0)
-              .milliseconds(0)
+              .set('seconds', 0)
+              .set('milliseconds', 0)
               .utcOffset(0, true)
               .format('YYYY-MM-DD HH:mm:ss');
             this.$emit('dateRange', { start: start, end: end });
@@ -189,8 +189,8 @@ export default {
           }
           dt = dayjs(dt)
             .utcOffset(0, true)
-            .seconds(0)
-            .milliseconds(0)
+            .set('seconds', 0)
+            .set('milliseconds', 0)
             .format('YYYY-MM-DD HH:mm:ss');
           this.$emit('singleDate', dt);
         }

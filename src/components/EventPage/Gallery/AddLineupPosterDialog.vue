@@ -2,7 +2,9 @@
   <q-card class="upload-dialog q-pa-md">
     <div class="flex row wrap items-center no-wrap q-mb-md">
       <div class="flex column">
-        <div class="text-h6 card-title q-pr-md">Add lineup poster</div>
+        <div class="text-h6 card-title q-pr-md">
+          {{ $t(event.add_lineup_poster) }}
+        </div>
       </div>
     </div>
     <q-select
@@ -16,7 +18,7 @@
       emit-value
       map-options
       :options="eventDates"
-      label="Event Date"
+      :label="$t(event.event_date)"
     >
       <template v-slot:append>
         <q-icon name="mdi-calendar-outline" class="q-pa-md" />

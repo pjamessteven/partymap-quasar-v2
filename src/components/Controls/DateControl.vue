@@ -546,20 +546,20 @@ export default {
     getThisWeekendDateRange() {
       const weekendStart = 5; // friday
       const weekendEnd = 7; // sunday
-      const today = dayjs().isoWeekday();
+      const today = dayjs().weekday();
       var startTime;
       var endTime;
       // get start time
       if (today <= weekendStart) {
         // if it's not friday yet, return this friday
-        startTime = dayjs().isoWeekday(weekendStart);
+        startTime = dayjs().weekday(weekendStart);
       } else if (today >= weekendStart && today <= weekendEnd) {
         // it's past friday, but already or before Sunday
         // so return current time
         startTime = dayjs();
       } else {
         // return next friday (not going to happen - for completeness)
-        startTime = dayjs().add(1, 'weeks').isoWeekday(weekendStart);
+        startTime = dayjs().add(1, 'weeks').weekday(weekendStart);
       }
       // return this sunday
       endTime = dayjs()
@@ -567,7 +567,7 @@ export default {
         .set('minute', 0)
         .set('second', 0)
         .set('millisecond', 0)
-        .isoWeekday(weekendEnd)
+        .weekday(weekendEnd)
         .add(23, 'hours')
         .add(59, 'minutes');
       return { start: startTime.toISOString(), end: endTime.toISOString() };
@@ -584,7 +584,7 @@ export default {
         .set('minute', 0)
         .set('second', 0)
         .set('millisecond', 0)
-        .isoWeekday(weekendStart)
+        .weekday(weekendStart)
         .add(1, 'weeks');
 
       // get end time
@@ -594,7 +594,7 @@ export default {
         .set('minute', 0)
         .set('second', 0)
         .set('millisecond', 0)
-        .isoWeekday(weekendEnd)
+        .weekday(weekendEnd)
         .add(23, 'hours')
         .add(59, 'minutes')
         .add(1, 'weeks');

@@ -1,13 +1,13 @@
 <template>
   <div class="flex column">
     <div class="metropolis bolder text-h6 t2 q-pr-md q-mb event-page-header">
-      Reviews and experiences:
+      {{ $t('reviews.reviews_and_experiences') }}
     </div>
     <div
       class="no-reviews t4 inter q-mb-sm"
       v-if="event?.event_reviews?.length === 0"
     >
-      No one has shared their experience yet... be the first!
+      {{ $t('reviews.no_reviews') }}
     </div>
 
     <div class="new-review q-mt-md q-pl-md q-pb-md">
@@ -45,13 +45,12 @@
           @filesSelected="review.media_items = $event"
         />
         <div class="t2 q-mt-md" v-show="review.media_items.length > 0">
-          Please make sure that you have the consent of all people in your
-          photos before uploading.
+          {{ $t('reviews.consent_msg') }}
         </div>
         <div class="flex column" v-if="currentUser && review.text.length > 0">
           <div class="flex column items-start">
             <div class="t2 q-mt-sm" v-if="review.rating === 0">
-              Select a rating
+              {{ $t('reviews.select_rating') }}
             </div>
             <div
               class="flex row justify-between items-end grow no-wrap"
@@ -80,7 +79,8 @@
                 color="primary"
                 :disabled="review.rating === 0 || loading"
                 @click="handleSubmitReview"
-                >Submit
+              >
+                {{ $t('reviews.submit') }}
               </q-btn>
             </div>
           </div>
@@ -95,8 +95,9 @@
               query: { from: $route.path },
             })
           "
-          >Login to post reviews</q-btn
         >
+          {{ $t('reviews.login_msg') }}
+        </q-btn>
         <transition
           appear
           enter-active-class="animated fadeIn"

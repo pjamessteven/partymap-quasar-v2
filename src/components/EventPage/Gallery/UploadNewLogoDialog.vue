@@ -16,7 +16,9 @@
               {{ $t('suggestions.upload_new_logo_msg') }}
             </div>
           </div>
-          <div class="flex column" v-else>Upload a new logo</div>
+          <div class="flex column" v-else>
+            {{ $t('event.upload_new_logo') }}
+          </div>
         </div>
         <MultipleMediaSelector
           :singleSelectMode="true"

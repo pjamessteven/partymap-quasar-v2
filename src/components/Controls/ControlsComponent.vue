@@ -607,7 +607,7 @@ export default {
   position: relative;
   border-radius: 48px;
   overflow: hidden;
-  // font-family: 'Metropolis';
+  font-family: 'Metropolis';
   .controls-wrapper-inner {
     pointer-events: all;
     overflow: hidden;
@@ -631,7 +631,7 @@ export default {
       margin-top: 2px;
 
       .searchbar-input {
-        margin-top: -4px;
+        margin-top: -2px;
 
         .q-field__inner {
           .q-field__control::before {
@@ -646,8 +646,8 @@ export default {
           input {
             font-weight: 500;
             font-size: 1rem;
-            //letter-spacing: 0.5px;
-            // font-family: 'Metropolis';
+            letter-spacing: 0.5px;
+            font-family: 'Metropolis';
           }
         }
       }
@@ -664,7 +664,8 @@ export default {
         //font-size: 1em;
         letter-spacing: 0.5px;
         white-space: nowrap;
-        font-weight: 500;
+        font-weight: 600;
+        margin-top: 1px;
         //font-size: 0.9rem;
       }
       .q-btn__content {

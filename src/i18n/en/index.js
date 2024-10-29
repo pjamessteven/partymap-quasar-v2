@@ -62,9 +62,11 @@ export default {
     confirm_password: 'Confirm password',
     password_updated: 'Your password has been updated.',
     no_password_message: 'You have not yet set a password.',
-    facebook_login_message_1: 'Your account was created with Facebook Login.',
-    facebook_login_message_2:
+    oauth_message_1: 'Your account was created with Facebook Login.',
+    oauth_message_2:
       'You must create a password below if you would like to be able to log in with your email address.',
+    oauth_message_3:
+      'You can also log into your account with third party services (Apple, Google, FaceBook) associated with this email address: ',
     email_address: 'Email address',
     update_email: 'Update email address',
     email_verification: 'Email verification',
@@ -76,7 +78,7 @@ export default {
       'There was a problem verifying your email. Please check that the URL is correct. Contact info@partymap.com for support.',
     delete_account: 'Delete account',
     delete_account_msg:
-      'Deleting your account will also delete all of your contributions to PartyMap.',
+      'Deleting your account will delete all of your contributions to PartyMap (events, reviews, photos, etc.)',
     delete_account_confirm: 'Are you sure you want to delete your account?',
     deleting_account: 'Deleting account',
     no_way_back: "There's no going back now...",
@@ -157,18 +159,15 @@ export default {
     never_share_or_sell: 'We will never share or sell your information.',
     only_store_email: 'We only store your email address.',
   },
-  home: {
-    popular_tags: 'Popular tags',
-    upcoming_near_you: 'Events nearby',
-    featured_events: 'Featured',
-    recently_added: 'Recently added',
-    recent_edits: 'Recent edits',
-  },
+
   event: {
     event: 'Event',
+    event_date: 'Event date',
     events_at: 'There are several events at this location: ',
-    more_dates: 'Show more',
+    show_more: 'Show more',
     show_less: 'Show less',
+    upload_new_logo: 'Upload new logo',
+    add_lineup_poster: 'Add lineup poster',
     favorite: 'Save to favorites',
     favorited: 'Remove from favorites',
     edit_event: 'Edit Event',
@@ -196,6 +195,19 @@ export default {
     official_page: 'Official page',
     save_event: 'Save',
     unsave_event: 'Unsave',
+    interested: 'Interested', // i'm interested
+    going: 'Going', // i'm going
+    km: 'km',
+    get_tickets: 'Get Tickets!',
+    aftermovie: 'Aftermovie',
+    checkout_out: 'Check out ', // look at {{event}} on PartyMap
+    on_partymap: ' on PartyMap',
+    copied_link: 'Copied link to clipboard!',
+    sharing_not_supported: 'Sharing not support in this browser :(',
+    description: 'Description',
+    add_description:
+      "There's nothing here yet... Add a detailed description for this event!",
+    update_description: 'Update Event Description',
   },
   add_event: {
     please_select_an_option: 'Submit an event:',
@@ -273,7 +285,7 @@ export default {
     hot_tags: 'Hot tags',
     high_profile_artists: 'High profile artists',
     clear_filters: 'Clear filters',
-    clear_filters: 'Zoom out',
+    zoom_out: 'Zoom out',
   },
   browse_page: {
     nature: 'Nature',
@@ -422,6 +434,11 @@ export default {
     of_every_second_month: 'of every second month',
     every_year: 'every year',
     every_second_year: 'every second year',
+    every_year_rough:
+      'Every year around this time (Confirm exact future dates later)',
+    every_second_year_rough:
+      'Every second year around this time (Confirm future dates later)',
+    every_month_rough: 'Roughly every month (Confirm future dates later)',
     week: 'week',
     month: 'month',
     year: 'year',
@@ -598,7 +615,7 @@ export default {
     message: 'Message',
     submit_improvement: 'Submit improvement',
     tell_us_why_improvement_needed:
-      'Tell us why this improvement is needed. Please give a source if possible.',
+      'Tell us why this improvement is needed. Please give a source if possible. ',
     upload_new_logo: 'Upload a new logo',
     upload_new_logo_msg: 'Please do not upload copyrighted images.',
     suggestions: 'Suggestions',
@@ -629,12 +646,17 @@ export default {
       'Videos may take up to 10 minutes to be processed after uploading.',
   },
   event_dates: {
+    past_event: 'Past event',
+    date_tbc: 'Date TBA',
+    tbc: 'TBA',
     upcoming_dates: 'Upcoming dates',
     no_upcoming_dates: 'No upcoming dates',
     this_event_doesnt_have_upcoming_dates:
       "This event doesn't have any upcoming dates",
     next_event: 'Next event',
     edit: 'Edit date',
+    details: 'Details',
+    event_details: 'Event Details',
     description: 'Event date details',
     event_details: 'Details:',
     delete_event_date: 'Delete event date',
@@ -665,10 +687,51 @@ export default {
     schedule_msg:
       'Schedule is enabled, future dates will be automatically generated.',
     lineup: 'Lineup:',
+    photos_from_this_date: 'Photos from this date',
+    all_photos: 'All photos',
+    starts: 'Starts',
+    ends: 'Ends',
+    directions: 'Directions',
+    add_info: 'Add a description for this specific date (for recurring events)',
+    add_links_ticket_url: 'Add links to buy tickets',
+    add_ticket_url: 'Add ticket URL',
+    ticket_url: 'Ticket URL',
+    add_url: 'Add a link to the website or Facebook page',
+    add_lineup: 'Add the lineup',
+    edit_lineup: 'Edit the Lineup',
+    show_all: 'Show all',
+    show_less: 'Show less',
+    add_size: 'Add the size of this event',
+    size_people: 'people attending',
+    cancelled: 'CANCELLED',
+    mark_date_as_cancelled: 'Mark as cancelled',
+    mark_date_as_happening: 'Mark event date as happening',
+    add_missing_information: 'Edit this page',
+    hide_missing_information: 'Hide missing information',
+    copy_lineup_from_similar_event: 'Copy linup from similar event?',
+    create_new_record: 'Create new record',
+    search_for_artists: 'Search for artists',
+    source: 'source',
+    edit_ed_description: 'Edit description for date',
+    delete_are_you_sure: 'Are you sure you want to delete this date?',
+    location: 'Location',
+    no_results: 'No results',
+    event_dates: 'Event Dates',
+    happened_on: 'Happened on', // happened on {{date}}
+    happened_in: 'Happened in', // happened in {{month}}
+    usually_happens_in: 'Usually happens in', // usually happens in {{month}}
+    confirm_date: 'Confirm date',
+    facebook_page: 'Facebook Page',
+    visit_website: 'Visit website',
+    get_tickets: 'Get tickets to this event',
+    buy_tickets: 'No price listed',
+    no_price_listed: 'Buy tickets',
+    we_earn_commission: `We earn comission on some tickets bought through PartyMap.com - this helps
+        keep us running. Buy all your tickets through us xoxo`,
+    update_selected_date: 'Update the selected date',
   },
   edit_event_date: {
     updating_event_date: 'Updating event date...',
-
     external_url: 'External URL',
     external_url_msg: 'Add a link to the website or Facebook page',
     size: 'Size',
@@ -699,24 +762,7 @@ export default {
     submitted_msg:
       'Your suggestion will show on the page after it has been reviewd. Thanks for contirbuting to PartyMap!',
   },
-  event_date_inline: {
-    starts: 'Starts',
-    ends: 'Ends',
-    directions: 'Directions',
-    add_info: 'Add a description for this specific date (for recurring events)',
-    add_ticket_url: 'Add links to buy tickets',
-    add_url: 'Add a link to the website or Facebook page',
-    add_lineup: 'Add the lineup',
-    show_all: 'Show all',
-    show_less: 'Show less',
-    add_size: 'Add the size of this event',
-    size_people: 'people attending',
-    cancelled: 'CANCELLED',
-    mark_date_as_cancelled: 'Mark as cancelled',
-    mark_date_as_happening: 'Mark event date as happening',
-    add_missing_information: 'Edit this page',
-    hide_missing_information: 'Hide missing information',
-  },
+
   edit_event: {
     remove_schedule: 'Remove schedule',
     remove_schedule_msg:
@@ -878,8 +924,21 @@ export default {
     thanks_msg:
       "Your feedback has been sent. If you left us your email address, we'll get back to you soon.",
   },
+  reviews: {
+    reviews_and_experiences: 'Reviews and Experiences',
+    no_reviews: 'No one has shared their experience yet... be the first!',
+    consent_msg: `Please make sure that you have the consent of all people in your
+          photos before uploading.`,
+    select_rating: 'Select rating',
+    submit: 'Post review',
+    login_msg: 'Login to post reviews',
+    report: 'Report review',
+    delete: 'Delete review',
+  },
   report: {
     report_event: 'Report event',
+    report_media: 'Report media',
+    report_review: 'Report review',
     sending_report: 'Sending report',
     please_tell_us_your_problem:
       'Please tell us what your problem is with this event.',
@@ -898,9 +957,11 @@ export default {
       'Once you are verified as the host you will have full control over your event page and the verified badge will show.',
     claim_input_msg:
       'Tell us how you would like to verify yourself as the host',
+    report_message: `Please let us know, in detail, what your issue is with this content. If
+        we have any follow up questions, we will be in touch.`,
   },
   about: {
-    about: 'About',
+    about: 'What is this?',
     welcome:
       'Welcome to your global directory of festivals, doofs, and underground culture!',
     1: `PartyMap is a crowd-sourced, community-driven platform for discovering

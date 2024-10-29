@@ -19,13 +19,13 @@
         @click="showEditingDialog = true"
         class="flex items-start column"
       >
-        <q-badge color="red" :label="$t('event_date_inline.cancelled')" />
+        <q-badge color="red" :label="$t('event_dates.cancelled')" />
         <u
           class="t4 q-mt-sm link-hover underline"
           style="cursor: pointer"
           v-if="editing || showMoreFields"
           @click="showEditingDialog = true"
-          >Mark as happening</u
+          >{{ $t('edit_event_dates.uncancel') }}</u
         >
       </div>
       <div
@@ -35,7 +35,7 @@
         style="cursor: pointer"
       >
         <span>
-          <u>{{ $t('event_date_inline.mark_date_as_cancelled') }}</u>
+          <u>{{ $t('event_dates.mark_date_as_cancelled') }}</u>
         </span>
       </div>
     </div>

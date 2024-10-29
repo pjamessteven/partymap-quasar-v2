@@ -65,8 +65,8 @@
             :label="
               computedExternalUrl &&
               computedExternalUrl.indexOf('facebook') > -1
-                ? 'Facebook Page'
-                : 'Visit website'
+                ? $t('event_dates.facebook_page')
+                : $t('event_dates.visit_website')
             "
             :color="$q.dark.isActive ? 'white' : 'black'"
             icon="las la-external-link-alt"
@@ -81,7 +81,7 @@
         style="cursor: pointer"
       >
         <span>
-          <u>{{ $t('event_date_inline.add_url') }}</u>
+          <u>{{ $t('event_dates.add_url') }}</u>
         </span>
       </div>
     </div>

@@ -86,8 +86,8 @@ export default {
     ...mapState(useEventStore, ['event']),
     isTranslation() {
       return (
-        this.event.description_t &&
-        this.event.description !== this.event.description_t
+        this.event?.description_t &&
+        this.event?.description !== this.event?.description_t
       );
     },
   },

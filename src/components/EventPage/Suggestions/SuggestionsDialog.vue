@@ -42,7 +42,9 @@
         "
         class="q-mt-sm"
       >
-        <q-item-label header>Update the selected date </q-item-label>
+        <q-item-label header>
+          {{ $t('event_dates.update_selected_date') }}</q-item-label
+        >
 
         <q-expansion-item :content-inset-level="1">
           <template v-slot:header>

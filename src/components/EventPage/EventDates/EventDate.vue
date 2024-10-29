@@ -30,13 +30,17 @@
             v-if="ed?.cancelled && false"
             class="q-my-xs"
             color="red"
-            :label="$t('event_date_inline.cancelled')"
+            :label="$t('event_dates.cancelled')"
           />
           <div class="t2" v-else-if="ed.date_confirmed">
             <span>{{ localDay(ed.start_naive, null) }}</span>
           </div>
-          <span v-else-if="!hasOccured" class="t2">Date TBC</span>
-          <span v-else-if="hasOccured" class="t2">Past event in</span>
+          <span v-else-if="!hasOccured" class="t2">{{
+            $t('event_dates.date_tbc')
+          }}</span>
+          <span v-else-if="hasOccured" class="t2">{{
+            $t('event_dates.past_event')
+          }}</span>
           <div class="t2" style="text-align: center">
             <span v-if="ed.date_confirmed">{{
               localDate(ed.start_naive, null)

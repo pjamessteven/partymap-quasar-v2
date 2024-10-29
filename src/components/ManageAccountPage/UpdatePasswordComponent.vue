@@ -11,7 +11,7 @@
           {{ $t('manage_account.no_password_message') }}
         </div>
       </div>
-      <div v-else class="t2">Change your password here.</div>
+      <div v-else class="t1">Change your password here.</div>
       <div class="q-mt-md">
         <div class="flex row">
           <q-input

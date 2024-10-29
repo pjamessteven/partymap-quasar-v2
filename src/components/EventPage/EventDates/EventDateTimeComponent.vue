@@ -24,7 +24,9 @@
           v-if="selectedEventDate?.date_confirmed"
         >
           <div class="t2" v-if="selectedEventDate.start_naive">
-            <span class="inter" v-if="hasOccured">Happened on:&nbsp;</span>
+            <span class="inter" v-if="hasOccured"
+              >{{ $t('event_dates.happened_on') }}:&nbsp;</span
+            >
 
             <span v-if="$q.screen.gt.xs">
               {{
@@ -60,7 +62,7 @@
             class="t4"
             :class="$q.screen.gt.sm ? 'text-large' : ''"
           >
-            <span>{{ $t('event_date_inline.ends') }}&nbsp;</span>
+            <span>{{ $t('event_dates.ends') }}&nbsp;</span>
             <span v-if="$q.screen.gt.xs">{{
               localDateTimeLong(
                 selectedEventDate.end_naive,
@@ -84,7 +86,7 @@
         >
           <div class="t2">
             <div>
-              Usually happens in&nbsp;{{
+              {{ $t('event_dates.usually_happens_in') }}&nbsp;{{
                 month(selectedEventDate.start_naive, selectedEventDate.tz)
               }}
             </div>
@@ -92,11 +94,11 @@
               <span
                 class="t4 link-hover underline"
                 @click.stop="showEditDialog = true"
-                >Confirm date</span
+                >{{ $t('event_dates.confirm_date') }}</span
               >&nbsp;or&nbsp;<span
                 class="t4 link-hover underline"
                 @click.stop="showMarkCancelledDialog = true"
-                >mark as cancelled
+                >{{ $t('event_dates.mark_date_as_cancelled') }}
               </span>
             </div>
           </div>
@@ -108,7 +110,7 @@
         >
           <div class="t2">
             <span>
-              Happened in&nbsp;{{
+              {{ $t('event_dates.happened_in') }}&nbsp;{{
                 monthYear(selectedEventDate.start_naive, selectedEventDate.tz)
               }}
             </span>

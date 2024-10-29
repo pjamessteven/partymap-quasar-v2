@@ -8,7 +8,7 @@
       :error-message="errorMessage"
       :loading="loading"
       v-model="selectedPlace"
-      :label="'Location'"
+      :label="$t('event_dates.location')"
       :options="autoCompleteResults"
       @filter="locationSearchFilter"
       @update:model-value="getPlaceInformation"
@@ -26,7 +26,9 @@
     >
       <template v-slot:no-option>
         <q-item>
-          <q-item-section class="text-grey"> No results </q-item-section>
+          <q-item-section class="text-grey">
+            {{ $t('event_dates.no_results') }}
+          </q-item-section>
         </q-item>
       </template>
     </q-select>

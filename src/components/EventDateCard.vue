@@ -93,7 +93,7 @@
             <q-badge
               class="q-my-xs"
               color="red"
-              :label="$t('event_date_inline.cancelled')"
+              :label="$t('event_dates.cancelled')"
               v-if="event.cancelled"
             />
             <span v-if="!event.cancelled">
@@ -110,7 +110,7 @@
                     v-if="event.cancelled"
                     class="q-my-xs"
                     color="red"
-                    :label="$t('event_date_inline.cancelled')"
+                    :label="$t('event_dates.cancelled')"
                   />
 
                   <span v-else
@@ -146,15 +146,12 @@
                     </span>
                     <span v-else>
                       {{ monthYear(event.start_naive, event.tz)
-                      }}<span class="o-060">&nbsp;(TBC)</span>
+                      }}<span class="o-060">&nbsp;({{ $t('event.tbc') }})</span>
                     </span>
                   </div>
                 </div>
                 <div style="width: 100%" class="ellipsis">
-                  <span
-                    v-if="event.location && event.location.locality"
-                    class="ellipsis"
-                  >
+                  <span v-if="computedLocation" class="ellipsis">
                     <q-icon name="las la-map-marker" class="q-mr-sm" />{{
                       computedLocation
                     }}
@@ -165,7 +162,7 @@
                       Intl.NumberFormat().format(
                         parseInt(Number(event.distance) / 1000)
                       )
-                    }}km)</span
+                    }}{{ $t('event.km') }})</span
                   >
                 </div>
               </div>

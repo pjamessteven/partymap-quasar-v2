@@ -38,7 +38,7 @@
               <q-icon name="mdi-alert-circle-outline" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>Report review</q-item-label>
+              <q-item-label> {{ $t('reviews.report') }} </q-item-label>
             </q-item-section>
           </q-item>
           <!-- SHOW delete if admin or creator -->
@@ -53,7 +53,7 @@
               <q-icon name="mdi-delete" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>Delete review</q-item-label>
+              <q-item-label>{{ $t('reviews.delete') }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-menu>
@@ -175,7 +175,7 @@ export default {
       return this.currentUser.username === this.review.creator.username;
     },
     isTranslation() {
-      return this.review.text_t && this.review.text !== this.review.text_t;
+      return this.review?.text_t && this.review.text !== this.review?.text_t;
     },
   },
   methods: {
