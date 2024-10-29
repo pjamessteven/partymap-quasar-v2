@@ -213,7 +213,7 @@ import DateTimePicker from 'components/DateTimePicker.vue';
 import GoogleLocationComponent from 'components/GoogleLocationComponent.vue';
 import SelectArtistsComponent from 'components/EventPage/EventDates/Artists/SelectArtistsComponent.vue';
 import SubmitSuggestionPrompt from 'components/EventPage/Suggestions/SubmitSuggestionPrompt.vue';
-import moment from 'moment-timezone';
+import * as dayjs from 'dayjs';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
 import { mapActions, mapState } from 'pinia';
@@ -329,7 +329,7 @@ export default {
     computedEventDateYear() {
       // use end to consider new years festivals
       if (this.eventDate?.date_time?.end) {
-        return moment(this.eventDate.date_time.end).year();
+        return dayjs(this.eventDate.date_time.end).year();
       } else return null;
     },
     computedEventDateCountry() {

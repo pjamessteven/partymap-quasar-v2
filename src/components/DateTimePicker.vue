@@ -70,7 +70,7 @@
 
 <script>
 import { DatePicker } from 'v-calendar';
-import moment from 'moment-timezone';
+import * as dayjs from 'dayjs';
 import _ from 'lodash';
 import { useAuthStore } from 'src/stores/auth';
 import { mapState } from 'pinia';
@@ -158,12 +158,12 @@ export default {
               console.log(start, end);
             }
 
-            start = moment(start)
+            start = dayjs(start)
               .seconds(0)
               .milliseconds(0)
               .utcOffset(0, true)
               .format('YYYY-MM-DD HH:mm:ss');
-            end = moment(end)
+            end = dayjs(end)
               .seconds(0)
               .milliseconds(0)
               .utcOffset(0, true)
@@ -187,7 +187,7 @@ export default {
             mins = Number(newVal.startMinutes);
             dt.setMinutes(mins);
           }
-          dt = moment(dt)
+          dt = dayjs(dt)
             .utcOffset(0, true)
             .seconds(0)
             .milliseconds(0)
@@ -203,17 +203,17 @@ export default {
     ...mapState(useAuthStore, ['currentUserIsStaff']),
   },
   beforeMount() {
-    var local = moment();
+    var local = dayjs();
 
     if (this.value) {
       // THIS ASSUMES THAT THE INPUT IS A NAIVE DATETIME STRING
       // LIKE 2021-12-23 11:00:00 OR 2021-12-26T14:00:00Z
       // we need to 'convert' it to local time
-      var start = moment
+      var start = dayjs
         .utc(this.value.start)
         .subtract(local.utcOffset(), 'm')
         .toDate();
-      var end = moment
+      var end = dayjs
         .utc(this.value.end)
         .subtract(local.utcOffset(), 'm')
         .toDate();
@@ -229,7 +229,7 @@ export default {
       };
       this.dt = dt;
     } else if (this.singleValue) {
-      this.dt.date = moment
+      this.dt.date = dayjs
         .utc(this.singleValue)
         .subtract(local.utcOffset(), 'm')
         .toDate();

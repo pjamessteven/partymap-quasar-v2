@@ -1,5 +1,5 @@
 <template>
-  <router-view />
+  <router-view :key="forceUpdate" />
   <transition leave-active-class="animated fadeOut">
     <SplashScreen v-if="!assetsLoaded || loggingInWithToken" />
   </transition>
@@ -13,6 +13,8 @@ import SplashScreen from './components/SplashScreen.vue';
 import { App } from '@capacitor/app';
 import { Browser } from '@capacitor/browser';
 import { CapacitorCookies } from '@capacitor/core'; // leave this, even though unused, the import is needed for cookies to work on iOS
+import * as dayjs from 'dayjs';
+import { createMetaMixin } from 'quasar';
 
 export default {
   components: { SplashScreen },
@@ -21,34 +23,43 @@ export default {
     return {
       assetsLoaded: false,
       loggingInWithToken: false,
+      forceUpdate: 0,
     };
   },
-  meta: {
-    // meta tags
-    title: 'PartyMap',
-    meta: {
-      viewport: {
-        name: 'viewport',
-        content:
-          'width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0,user-scalable=no;user-scalable=0;',
-      }, // THIS META TAG ENABLES 'FAST TAPPING' ON IOS DEVICES
-      description: {
-        name: 'description',
-        content:
-          'PartyMap is a community-driven and crowd-sourced platform for discovering festivals and events around the world and near you.',
-      },
-      keywords: {
-        name: 'keywords',
-        content:
-          'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list',
-      },
-    },
-  },
+  mixins: [
+    createMetaMixin(function () {
+      // "this" here refers to your component
+      return {
+        // assuming `this.myTitle` exists in your mixed in component
+        title: this.$t('meta.main_title'),
+        meta: {
+          viewport: {
+            name: 'viewport',
+            content:
+              'width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0,user-scalable=no;user-scalable=0;',
+          }, // THIS META TAG ENABLES 'FAST TAPPING' ON IOS DEVICES
+          description: {
+            name: 'description',
+            content: this.$t('meta.main_description'),
+          },
+          keywords: {
+            name: 'keywords',
+            content: this.$t('meta.main_tags'),
+          },
+        },
+      };
+    }),
+  ],
+
   methods: {
     ...mapActions(useAuthStore, ['checkAuthCookie', 'login']),
   },
   computed: {
-    ...mapWritableState(useMainStore, ['compactView', 'groupEventsByMonth']),
+    ...mapWritableState(useMainStore, [
+      'compactView',
+      'groupEventsByMonth',
+      'language',
+    ]),
 
     screen() {
       return this.$q.screen;
@@ -64,6 +75,19 @@ export default {
         }
       },
       deep: true,
+    },
+    language: {
+      handler: async function (newv) {
+        if (newv === 'cn') {
+          await import('dayjs/locale/zh-cn');
+          dayjs.locale('zh-cn'); // use locale
+        }
+        if (newv === 'en') {
+          dayjs.locale('en'); // use locale
+        } else {
+        }
+        this.forceUpdate += 1;
+      },
     },
   },
   mounted() {

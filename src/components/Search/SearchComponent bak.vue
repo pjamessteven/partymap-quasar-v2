@@ -87,7 +87,7 @@
                 "
                 :offset="[10, 10]"
               >
-                {{ $t('landing_page.improve_location') }}
+                {{ $t('nearby_view.improve_location') }}
               </q-tooltip>
             </template>
           </q-icon>

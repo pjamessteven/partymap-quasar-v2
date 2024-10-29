@@ -84,24 +84,6 @@
       />
 
       <q-route-tab
-        name="activity"
-        key="4"
-        :icon="
-          $q.screen.lt.sm
-            ? $route.name === 'Activity'
-              ? 'mdi-emoticon-cool'
-              : 'mdi-emoticon-cool-outline'
-            : undefined
-        "
-        label="Activity"
-        content-class="tab"
-        :ripple="false"
-        :to="{
-          name: 'ActivityPage',
-        }"
-        exact
-      />
-      <q-route-tab
         v-show="false"
         name="search"
         key="5"
@@ -110,6 +92,7 @@
       />
 
       <q-route-tab
+        :style="$q.screen.gt.sm ? 'margin-left: -2px' : ''"
         name="profile"
         key="5"
         :icon="
@@ -119,7 +102,7 @@
               : 'mdi-emoticon-cool-outline'
             : undefined
         "
-        label="Profile"
+        label="You"
         content-class="tab"
         :ripple="false"
         :to="
@@ -312,6 +295,7 @@ export default {
   }
 }
 .navigation-bar {
+  font-family: 'Metropolis';
   :deep(.desktop-tabs) {
     .q-tab {
       //padding-top: 4px;

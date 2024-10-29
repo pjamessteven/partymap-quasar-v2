@@ -138,7 +138,7 @@ import { computed } from 'vue';
 import DateHeader from './DateHeader.vue';
 import EventDateCard from './EventDateCard.vue';
 import { useQuasar } from 'quasar';
-import moment from 'moment-timezone';
+import * as dayjs from 'dayjs';
 const $q = useQuasar();
 
 const main = useMainStore();
@@ -172,7 +172,7 @@ const props = withDefaults(defineProps<Props>(), {
 const yearMonthToString = (yearMonth: string) => {
   const year = Number(yearMonth.substring(0, 2));
   const month = Number(yearMonth.substring(2, 4));
-  return moment()
+  return dayjs()
     .set('day', 1)
     .set('month', month)
     .set('year', year)
@@ -228,7 +228,7 @@ const computedTotalResultMessage = computed(() => {
 const yearMonths = computed(() => {
   const yearMonths: any = {};
   // get next 12 yearMonths
-  let date = moment().set('day', 1);
+  let date = dayjs().set('day', 1);
   for (let i = 0; i < 11; i++) {
     yearMonths[date.format('YYMM')] = false;
     date.add(1, 'month');

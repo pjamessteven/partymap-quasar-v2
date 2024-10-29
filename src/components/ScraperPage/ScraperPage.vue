@@ -251,7 +251,7 @@ import {
   searchTicketmaster,
 } from 'src/api';
 import SelectTagsComponent from 'components/EventPage/Tags/SelectTagsComponent.vue';
-import moment from 'moment';
+import * as dayjs from 'dayjs';
 import countryCodes from 'src/assets/country-code';
 import gptSamplePrompt from './gptJsonSample.ts';
 import GptQuery from './GptQuery.vue';
@@ -285,7 +285,7 @@ export default {
         keyword: 'music festival',
       },
       musicbrainzSearch: {
-        begin: moment().year(),
+        begin: dayjs().year(),
         name: null,
         place: null,
         tag: null,
@@ -297,7 +297,7 @@ export default {
         {
           name: '',
           country: '',
-          year: moment().year(),
+          year: dayjs().year(),
         },
       ],
       page: 0,
@@ -353,7 +353,7 @@ export default {
         {
           name: '',
           country: '',
-          year: moment().year(),
+          year: dayjs().year(),
         },
       ];
     },
@@ -361,7 +361,7 @@ export default {
       this.gptEventsToGet.push({
         name: '',
         country: '',
-        year: moment().year(),
+        year: dayjs().year(),
       });
     },
     async searchMusicbrainz() {
@@ -374,7 +374,7 @@ export default {
       if (this.musicbrainzSearch.begin) {
         queryString +=
           ' AND begin:' +
-          moment(this.musicbrainzSearch.begin).format('yyyy-MM-DD');
+          dayjs(this.musicbrainzSearch.begin).format('yyyy-MM-DD');
       }
       */
 
@@ -437,12 +437,12 @@ export default {
         page: this.page,
         keyword: this.ticketMasterSearch.keyword,
         startDateTime: this.ticketMasterSearch.dateRange.start
-          ? moment(this.ticketMasterSearch.dateRange.start).format(
+          ? dayjs(this.ticketMasterSearch.dateRange.start).format(
               'yyyy-MM-DDTHH:mm:ssZ'
             )
           : undefined,
         endDateTime: this.ticketMasterSearch.dateRange.end
-          ? moment(this.ticketMasterSearch.dateRange.end).format(
+          ? dayjs(this.ticketMasterSearch.dateRange.end).format(
               'yyyy-MM-DDTHH:mm:ssZ'
             )
           : undefined,
@@ -597,7 +597,7 @@ export default {
         // date
         let start = null;
         if (this.selectedResult.date.start_date) {
-          start = moment(this.selectedResult.start_date, 'MMM, D');
+          start = dayjs(this.selectedResult.start_date, 'MMM, D');
         }
 
         let end = null;
@@ -652,7 +652,7 @@ export default {
 
             start = start.set({ hours: startTime, minutes: startMinutes });
             if (hasEndTime) {
-              end = moment(start).set({ hours: endTime, minutes: endMinutes });
+              end = dayjs(start).set({ hours: endTime, minutes: endMinutes });
             }
           } else {
             // we can assume it has an end date but no time
@@ -664,7 +664,7 @@ export default {
               let toDay = to.pop();
               let toMonth = to.pop();
               let toYear = toMonth < start.month ? start.year + 1 : start.year;
-              end = moment(start).set({
+              end = dayjs(start).set({
                 day: toDay,
                 month: toMonth,
                 year: toYear,

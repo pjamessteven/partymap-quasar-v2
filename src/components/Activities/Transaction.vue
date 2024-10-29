@@ -2,47 +2,63 @@
   <q-card v-if="filteredActivities.length > 0" flat>
     <div class="flex column q-pa-md">
       <div
-        class="flew row items-center justify-between"
+        class="flew row items-center no-wrap justify-between"
         @click="expanded = !expanded"
       >
-        <div class="flex row">
-          <RouterLink
-            target="_blank"
-            v-if="showUsername"
-            class="link-hover q-mr-sm"
-            :to="{
-              name: 'UserPage',
-              params: { username: transaction.username },
-            }"
-          >
-            {{ transaction.username }}
-          </RouterLink>
+        <div v-if="false">
+          {{
+            props.transaction.activities.map((x) => ({
+              object: x.object_type,
+              target: x.target_type,
+              verb: x.verb,
+            }))
+          }}
+        </div>
 
-          <div>
-            <b>
-              {{ actionText }}
-              <router-link
-                v-if="transaction.target_type === 'Event'"
-                style="text-decoration: none; color: inherit"
+        <div class="flex column">
+          <div class="flex row">
+            <div>
+              <RouterLink
                 target="_blank"
-                class="link-hover"
+                v-if="showUsername"
+                class="link-hover q-mr-sm"
                 :to="{
-                  name: 'EventPage',
-                  params: {
-                    id: transaction.target_version.id,
-                  },
-                  query: {
-                    name: transaction.target_version.name.replace(/ /g, '_'),
-                  },
+                  name: 'UserPage',
+                  params: { username: transaction.username },
                 }"
-                >{{ targetName }}</router-link
               >
-              {{ common.timeAgo(transaction.issued_at) }}</b
-            >
+                @{{ transaction.username }}
+              </RouterLink>
+              <b>
+                {{ actionText }}
+                <u>
+                  <router-link
+                    v-if="isCreateEvent || isUpdateEvent || isCreateReview"
+                    style="text-decoration: none; color: inherit"
+                    target="_blank"
+                    class="link-hover"
+                    :to="{
+                      name: 'EventPage',
+                      params: {
+                        id: targetEvent.id,
+                      },
+                      query: {
+                        name: targetEvent?.name.replace(/ /g, '_'),
+                      },
+                    }"
+                    >{{ targetEvent?.name }}</router-link
+                  ></u
+                >
+              </b>
+            </div>
           </div>
-          <div class="o-020 q-ml-md">#{{ transaction.transaction_id }}</div>
+          <div class="o-040">
+            #{{ transaction.transaction_id }} -
+            {{ common.timeAgo(transaction.issued_at) }}
+          </div>
         </div>
         <q-btn
+          v-if="showDropDown"
           flat
           :icon="expanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"
           @click.stop="expanded = !expanded"
@@ -51,41 +67,45 @@
       </div>
 
       <div class="q-mt-md q-gutter-sm flex column" v-if="expanded">
-        <TagActivities
-          v-if="tagActivities?.length > 0"
-          :activities="tagActivities"
-        />
-        <ArtistActivities
-          v-if="artistActivities?.length > 0"
-          :activities="artistActivities"
-        />
-        <MediaItemActivities
-          v-if="mediaItemActivities?.length > 0"
-          :activities="mediaItemActivities"
-        />
+        <ul>
+          <TagActivities
+            v-if="tagActivities?.length > 0"
+            :activities="tagActivities"
+          />
+          <ArtistActivities
+            v-if="artistActivities?.length > 0"
+            :activities="artistActivities"
+          />
+          <MediaItemActivities
+            v-if="mediaItemActivities?.length > 0"
+            :activities="mediaItemActivities"
+          />
 
-        <div v-for="(activity, index) in filteredActivities" :key="index">
-          <LocationActivity
-            v-if="activity.object_type === 'EventLocation'"
-            :activity="activity"
-            :transaction="activity.transaction"
-          />
-          <EventDateActivity
-            v-if="activity.object_type === 'EventDate'"
-            :activity="activity"
-            :transaction="activity.transaction"
-          />
-          <EventActivity
-            v-if="activity.object_type === 'Event'"
-            :activity="activity"
-            :transaction="activity.transaction"
-          />
-          <EventReviewActivity
-            v-if="activity.object_type === 'EventReview'"
-            :activity="activity"
-            :transaction="activity.transaction"
-          />
-        </div>
+          <div v-for="(activity, index) in filteredActivities" :key="index">
+            <!--<TransactionInfo v-if="showTransactionInfo" :activity="activity" /> -->
+            <EventActivity
+              v-if="activity.object_type === 'Event'"
+              :activity="activity"
+              :transaction="activity.transaction"
+            />
+            <LocationActivity
+              v-if="activity.object_type === 'EventLocation'"
+              :activity="activity"
+              :transaction="activity.transaction"
+            />
+            <EventDateActivity
+              v-if="activity.object_type === 'EventDate'"
+              :activity="activity"
+              :transaction="activity.transaction"
+            />
+
+            <EventReviewActivity
+              v-if="activity.object_type === 'EventReview'"
+              :activity="activity"
+              :transaction="activity.transaction"
+            />
+          </div>
+        </ul>
       </div>
     </div>
   </q-card>
@@ -114,52 +134,59 @@ const props = withDefaults(defineProps<Props>(), {
 
 const expanded = ref(false);
 
-const targetVerb = computed(() => {
-  const verb = props.transaction.activities?.[0]?.verb; // assuming the target activity is always last to be added in a transaction
-  const objectType = props.transaction.activities?.[0]?.object_type;
-  const targetType = props.transaction.target_type;
+const isCreateEvent = computed(
+  () =>
+    props.transaction.activities.findIndex(
+      (x) => x.object_type === 'Event' && x.verb === 'create'
+    ) > -1
+);
 
-  if (
-    targetType === 'Event' &&
-    (objectType === 'EventDate' ||
-      objectType === 'EventArtist' ||
-      objectType === 'EventTag')
-  ) {
-    // even though the verb might be create for the activity, we're really updating the page
-    return 'Updated';
+const isUpdateEvent = computed(
+  () =>
+    props.transaction.activities.findIndex(
+      (x) => x.target_type === 'Event' && x.verb === 'update'
+    ) > -1
+);
+
+const isCreateReview = computed(
+  () =>
+    props.transaction.activities.findIndex(
+      (x) => x.object_type === 'EventReview' && x.verb === 'create'
+    ) > -1
+);
+
+const isApprovedEvent = computed(() => {
+  const changeset = eventActivities.value?.[0]?.object_version.changeset;
+  if (changeset && 'hidden' in changeset) {
+    if (changeset['hidden'][0] === true && changeset['hidden'][1] === false) {
+      // ignore initial false cancelled value on event date create
+      return true;
+    }
   }
-  if (verb === 'create') {
-    return 'Created';
-  } else if (verb === 'update') {
-    return 'Updated';
-  } else if (verb === 'delete') {
-    return 'Deleted';
-  } else return 'Modified';
+  return false;
 });
+
+const showDropDown = computed(() => {
+  return !isApprovedEvent.value;
+});
+const targetEvent = computed(
+  () =>
+    props.transaction.activities?.find((x) => x.target_type === 'Event')
+      ?.target_version
+);
 
 const actionText = computed(() => {
-  const targetType = props.transaction.target_type;
-  const objectType = props.transaction.activities?.[0]?.object_type;
-  if (objectType === 'EventReview') {
-    return 'Reviewed ';
+  if (isCreateEvent.value) {
+    return 'Created the event ';
+  } else if (isApprovedEvent.value) {
+    return 'Approved the event';
+  } else if (isUpdateEvent.value) {
+    return 'Updated the event';
+  } else if (isCreateReview.value) {
+    return 'Reviewed the event';
+  } else {
+    return 'Did something to ';
   }
-  if (targetType === 'Event') {
-    return targetVerb.value + ' the event page for ';
-  } else if (targetType === 'Artist') {
-    return targetVerb.value + ' the artist page for ';
-  } else return 'Unknown';
-});
-
-const targetName = computed(() => {
-  const targetType = props.transaction.target_type;
-
-  if (targetType === 'Event') {
-    const eventName = props.transaction.target_version.name;
-    return eventName;
-  } else if (targetType === 'Artist') {
-    const artistName = props.transaction.target_version.name;
-    return artistName;
-  } else return 'Unknown';
 });
 
 const filteredActivities = computed(() => {

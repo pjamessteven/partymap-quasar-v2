@@ -7,50 +7,35 @@
     </q-card-section>
 
     <q-card-section class="t2 dialog-card-content">
-      <span
-        >Welcome to the global directory of festivals, doofs, and underground
-        parties!
-      </span>
+      <span>{{ $t('about.welcome') }} </span>
       <p />
-      <b>About</b>
+      <b>{{ $t('about.about') }}</b>
       <p />
-      PartyMap is a crowd-sourced, community-driven platform for discovering
-      festivals and experiences around the world. I built this because I wished
-      something like this existed. If you have any thoughts, ideas or
-      suggestions about PartyMap then please contact me through the
-      <span class="link-hover underline" @click="showFeedbackDialog = true"
-        >feedback form</span
-      >
-      or by email to
+      {{ $t('about.1') }}
+      <span class="link-hover underline" @click="showFeedbackDialog = true">{{
+        $t('about.2')
+      }}</span>
+      {{ $t('about.3') }}
       <a class="link-hover underline" href="mailto:info@partymap.com"
         >info@partymap.com</a
       >
       <p />
-      <b>How does it work?</b>
+      <b>{{ $t('about.4') }}</b>
       <p />
-      Anyone can add anything, as long as the information is already public on
-      the internet. Anyone can also make changes to event pages that have no
-      owner. If you add your own event and you are the host, you will have full
-      control of the event page and other users will not be able to modify it.
-      All submissions and changes are moderated, and as the site grows I will be
-      seeking regional moderators.
+      {{ $t('about.5') }}
       <p />
-      <b>Open Source</b>
+      <b> {{ $t('about.6') }} </b>
       <p />
-      PartyMap would not have been possible without the amazing open source
-      communtiy. Many thanks to the contributors of Vue, Python, Flask,
-      SQLAlchemy, PostgreSQL, PostGIS, Quasar, OpenStreetMap, MapLibre GL and
-      TileServer GL. Thanks to Spotify, Last.FM and Musicbrainz for artist info.
-      Thanks to ESRI for the beautiful satellite imagery. And many thanks to you
-      for submitting your events and reviews!
+      {{ $t('about.7') }}
+
       <p />
-      Partymap itself is open source. Keen to contribute? Hell yeah!!! Let's
-      build the best event platform on the internet!
+      {{ $t('about.8') }}
+
       <p></p>
-      If you want to get involved you can find us on
+      {{ $t('about.9') }}
       <a href="https://discord.gg/BD7BwrZA">Discord</a>
       <p />
-      Source code:
+      {{ $t('about.10') }}
       <p />
       <a href="https://github.com/pjamessteven/partymap-backend"
         >PartyMap Backend on Github</a
@@ -61,7 +46,7 @@
       <p />
 
       <p />
-      <b>Donate</b>
+      <b> {{ $t('about.11') }} </b>
       <p />
       {{ $t('about.message_3') }}
       <a
@@ -87,7 +72,7 @@
       >
       -->
       <p />
-      <b>I hate PartyMap!</b>
+      <b> {{ $t('about.i_hate_partymap') }} </b>
       <p />
       {{ $t('about.message_2') }}
       <p />

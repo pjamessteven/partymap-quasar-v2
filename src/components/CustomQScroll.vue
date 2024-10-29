@@ -4,6 +4,7 @@
     ref="scroll"
     v-bind="{ ...$attrs, ...$props }"
     :class="disableScroll && 'disable-scroll'"
+    delay="0"
   >
     <slot></slot>
   </q-scroll-area>
@@ -32,6 +33,9 @@ export default {
     setScrollPercentage(direction, offset, duration) {
       this.$refs.scroll.setScrollPercentage(direction, offset, duration);
     },
+    onScrollEnd() {
+      this.$emit('scrollend');
+    },
   },
   computed: {},
 
@@ -39,6 +43,11 @@ export default {
     // on ios, the mouseover event in the q-scroll component causes users
     // to have to click twice on their target
     // so we remove these events
+    this.$refs.scroll.$el.firstElementChild.addEventListener(
+      'scrollend',
+      this.onScrollEnd
+    );
+
     if (this.$q.platform.is.ios && this.$refs.scroll.$el._vei) {
       this.$refs.scroll.$el.removeEventListener(
         'mouseleave',
@@ -49,6 +58,12 @@ export default {
         this.$refs.scroll.$el._vei.onMouseenter
       );
     }
+  },
+  beforeUnmount() {
+    this.$refs.scroll.$el.firstElementChild.removeEventListener(
+      'scrollend',
+      this.onScrollEnd()
+    );
   },
 };
 </script>

@@ -127,7 +127,7 @@ import { mapState, mapActions } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
 import common from 'src/assets/common';
-import moment from 'moment-timezone';
+import * as dayjs from 'dayjs';
 
 export default {
   components: { MultipleMediaSelector, InnerLoading, ReviewComponent },
@@ -153,7 +153,7 @@ export default {
         return [
           { id: null, label: 'Date not listed' },
           ...this.event?.event_dates
-            .filter((x) => moment(x.start_naive) < moment())
+            .filter((x) => dayjs(x.start_naive) < dayjs())
             .map((x) => ({ id: x.id, label: this.getEdLabel(x) })),
         ];
       } else return [];
@@ -169,11 +169,11 @@ export default {
       } else if (this.event.rrule?.recurring_type === 2) {
         // monthly
         // return month year
-        return this.event.name + ' ' + moment(ed.start_naive).format('MM YYYY');
+        return this.event.name + ' ' + dayjs(ed.start_naive).format('MM YYYY');
       } else if (this.event.rrule?.recurring_type === 3) {
         // yearly
         // return year
-        return this.event.name + ' ' + moment(ed.start_naive).format('YYYY');
+        return this.event.name + ' ' + dayjs(ed.start_naive).format('YYYY');
       }
     },
     ...mapActions(useEventStore, ['addReview']),
@@ -182,11 +182,20 @@ export default {
       if (!this.review.rating) {
         this.review.rating = 0;
       }
-      await this.addReview({
-        ...this.review,
-        event_date_id: this.selectedDate?.id || undefined,
-      });
-      this.loading = false;
+      try {
+        await this.addReview({
+          ...this.review,
+          event_date_id: this.selectedDate?.id || undefined,
+        });
+        this.review = {
+          media_items: [],
+          text: '',
+          rating: 0,
+          event_date_id: null,
+        };
+      } finally {
+        this.loading = false;
+      }
     },
   },
   created() {

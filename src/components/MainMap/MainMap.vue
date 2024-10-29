@@ -108,6 +108,9 @@ import EventSelectionComponent from './EventSelectionComponent.vue';
 import { useDevicePixelRatio } from '@vueuse/core';
 import { API_URL, IS_LOCALHOST } from 'src/api';
 import { useSearchStore } from 'src/stores/search';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const mapStore = useMapStore();
 const searchStore = useSearchStore();
@@ -157,7 +160,7 @@ const mappedPoints = computed(() => ({
       ...x,
       label:
         x.events.length > 1
-          ? x.name + ' (' + x.events.length + ' events)'
+          ? x.name + ' (' + x.events.length + ' ' + t('general.events') + ')'
           : x.events[0].name,
     },
     geometry: {
@@ -425,7 +428,7 @@ const debouncedClearMarkersAndLoadPoints = debounce(
 const debouncedReverseGeocode = debounce(
   async (coords, zoom) => {
     if (zoom <= 4) {
-      mainStore.currentLocationCity = 'In this area';
+      mainStore.currentLocationCity = t('nearby_view.in_this_area');
     } else {
       const reverseGeo = await mainStore.reverseGecodeLocation(coords, zoom);
       if (reverseGeo.country || reverseGeo.city) {
@@ -907,7 +910,7 @@ const unclusteredPointLayout = {
 
 const clusterCountLayout = {
   ...unclusteredPointLayout,
-  'text-field': '{point_count_abbreviated} events',
+  'text-field': '{point_count_abbreviated} ' + t('general.events'),
   /*
   'text-font': ['Metropolis Bold'],
   'text-size': 15,

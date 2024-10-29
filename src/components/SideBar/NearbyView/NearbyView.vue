@@ -6,6 +6,7 @@
     <CustomQScroll
       ref="scroll"
       @scroll="onScroll"
+      @scrollend="onScrollEnd"
       vertical
       :thumb-style="{
         marginTop: '16px',
@@ -31,7 +32,9 @@
             class="ellipsis text-h4"
             v-if="$q.screen.lt.sm"
           >
-            <span class="metropolis bolder">Near</span>
+            <span class="metropolis bolder">
+              {{ $t('nearby_view.near') }}
+            </span>
           </div>
           <div
             class="flex no-wrap"
@@ -113,11 +116,10 @@
                     :offset="[10, 10]"
                   >
                     <span v-if="!fineLocation">
-                      Using rough location from your IP address. Click to
-                      improve your location.
+                      {{ $t('nearby_view.rough_location') }}
                     </span>
                     <span v-else>
-                      {{ $t('landing_page.improve_location') }}
+                      {{ $t('nearby_view.improve_location') }}
                     </span>
                   </q-tooltip>
                 </template>
@@ -146,10 +148,7 @@
             }"
           >
             <div class="flex grow">
-              Welcome to PartyMap, the global directory of<br
-                v-if="$q.screen.gt.sm"
-              />
-              doofs, festivals and underground culture!
+              {{ $t('about.welcome') }}
             </div>
             <q-icon
               class="q-ml-md"
@@ -161,16 +160,15 @@
             v-if="showMessage"
             class="flex column items-start justify-start grow t1 q-mt-md inter semibold q-mb-sm"
           >
-            PartyMap is a community-driven, crowd-sourced platform for finding
-            parties and festivals around the world!
-            <p />
-            Anyone can submit an event that they know about, as long as the
-            information is already public. <br />Anyone can also suggest changes
-            to an event if the information is out of date. No account needed!
+            {{ $t('nearby_view.message_1') }}
 
             <p />
+            {{ $t('nearby_view.message_2') }}
 
-            This is a work in progress... More features coming soon! &#128526;
+            <p />
+            {{ $t('nearby_view.message_3') }}
+
+            &#128526;
 
             <p />
             - Pete
@@ -188,8 +186,8 @@
                 <div class="appstore-wrapper flex items-center q-py-sm q-px-md">
                   <q-icon name="mdi-apple" size="1.5rem" class="q-mr-sm" />
                   <!--PartyMap on the App Store-->
-                  <span style="text-decoration: italic"
-                    >PartyMap on the App Store</span
+                  <span style="text-decoration: italic">
+                    {{ $t('nearby_view.app_store') }}</span
                   >
                 </div>
               </a>
@@ -207,9 +205,9 @@
                     size="1.5rem"
                     class="q-mr-sm"
                   />
-                  <span style="text-decoration: italic"
-                    >PartyMap on Google Play</span
-                  >
+                  <span style="text-decoration: italic">
+                    {{ $t('nearby_view.play_store') }}
+                  </span>
                 </div>
               </a>
             </div>
@@ -285,7 +283,7 @@
                 class="q-py-md location-header flex justify-between"
                 :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-px-md'"
               >
-                <div class="text-">Your events:</div>
+                <div class="text-">{{ $t('nearby_view.your_events') }}</div>
                 <router-link
                   class="link-hover t3 inter semibold"
                   :to="{
@@ -293,7 +291,8 @@
                     params: { username: currentUser.username },
                   }"
                 >
-                  View all <q-icon name="mdi-chevron-right" />
+                  {{ $t('nearby_view.view_all') }}
+                  <q-icon name="mdi-chevron-right" />
                 </router-link>
               </div>
               <div
@@ -342,7 +341,7 @@
                 class="q-py-md location-header location-header-select flex justify-between items-center"
                 :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
               >
-                <div class="text-">Popular tags:</div>
+                <div class="text-">{{ $t('nearby_view.popular_tags') }}</div>
 
                 <ControlSelect
                   v-if="false"
@@ -424,7 +423,7 @@
                 class="q-py-md location-header location-header-select flex justify-between items-center"
                 :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
               >
-                <div>Hot tags around the world:</div>
+                <div>{{ $t('nearby_view.hot_tags_around_world') }}</div>
                 <ControlSelect
                   v-if="false"
                   class="t2"
@@ -505,7 +504,7 @@
                     : 'q-pl-md q-pt-md q-pb-sm '
                 "
               >
-                <div>High profile artists:</div>
+                <div>{{ $t('nearby_view.high_profile_artists') }}</div>
                 <ControlSelect
                   v-if="false"
                   @clear="
@@ -542,7 +541,7 @@
                 class="q-pt-md q-pb-sm location-header location-header-select flex justify-between items-center"
                 :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
               >
-                <div>Top artists worldwide:</div>
+                <div>{{ $t('nearby_view.top_artists_worldwide') }}</div>
                 <ControlSelect
                   v-if="false"
                   @clear="
@@ -582,10 +581,10 @@
                 nearbyEventDates.length === 0 &&
                 !loadingEverything &&
                 !nearbyEventDatesLoading &&
-                !userLocationLoading
+                userLocationLoading
               "
             >
-              Waiting for location...
+              {{ $t('nearby_view.waiting_for_location') }}
             </div>
             <div
               v-else-if="currentLocation"
@@ -594,7 +593,7 @@
             >
               <div class="flex items-center">
                 <div class="">
-                  {{ $t('landing_page.events_within') }}
+                  {{ $t('nearby_view.events_within') }}
                 </div>
                 <q-select
                   emit-value
@@ -644,7 +643,7 @@
                 'q-pl-md': $q.screen.lt.md,
               }"
             >
-              {{ $t('landing_page.no_events_in_area') }}
+              {{ $t('nearby_view.no_events_in_area') }}
             </div>
             <!-- ALL EVENTS -->
 
@@ -661,7 +660,7 @@
                 :class="$q.screen.gt.sm ? 'q-pl-md' : 'q-pl-sm'"
               >
                 <div class="ellipsis" v-if="eventDates">
-                  {{ $t('landing_page.all_upcoming_events') }}:
+                  {{ $t('nearby_view.all_upcoming_events') }}:
                 </div>
               </div>
               <!--
@@ -736,27 +735,7 @@ import ArtistControl from 'src/components/Controls/ArtistControl.vue';
 import _ from 'lodash';
 
 export default {
-  name: 'LandingPage',
-  meta() {
-    return {
-      // this accesses the "title" property in your Vue "data";
-      // whenever "title" prop changes, your meta will automatically update
-      title: 'PartyMap | The Global Map of Festivals and Events',
-      meta: {
-        description: {
-          name: 'description',
-          content:
-            'PartyMap is a community-driven platform for discovering festivals and events near you and around the world.',
-        },
-        keywords: {
-          name: 'keywords',
-          content:
-            'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list',
-        },
-      },
-    };
-  },
-
+  name: 'NearbyView',
   components: {
     CustomQScroll,
     ArtistsComponent,
@@ -875,16 +854,7 @@ export default {
     onScroll(info) {
       this.scrollPosition = info.verticalPosition;
 
-      if (info.verticalPosition <= 0) {
-        if (!this.$q.platform.has.touch) {
-          setTimeout(() => {
-            // behavior fix for desktop scroll
-            this.enablePanelSwipeDown = true;
-          }, 250);
-        } else {
-          this.enablePanelSwipeDown = true;
-        }
-      } else {
+      if (info.verticalPosition > 0) {
         this.enablePanelSwipeDown = false;
       }
       // infinite scrolling
@@ -895,6 +865,11 @@ export default {
         } else if (this.eventDatesHasNext) {
           this.debouncedLoadEventDates();
         }
+      }
+    },
+    onScrollEnd() {
+      if (this.scrollPosition <= 1) {
+        this.enablePanelSwipeDown = true;
       }
     },
     addParamsToLocation(params) {
@@ -1228,7 +1203,7 @@ export default {
         // opacity: 1;
         transition: all 0.3s ease;
         background: rgba(255, 255, 255, 0);
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.15);
         //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
 
         //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px 0px;
@@ -1273,7 +1248,7 @@ export default {
       .location-header {
         z-index: 1000;
         width: 100%;
-        font-weight: 800;
+        font-weight: 700;
         font-family: 'Metropolis';
         //  text-transform: lowercase;
         // font-style: italic;

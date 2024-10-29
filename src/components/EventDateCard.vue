@@ -175,7 +175,7 @@
               class="description grow flex ellipsis q-mb-sm q-pr-md items-center"
               style="max-width: 100%"
             >
-              {{ event.event.description }}
+              {{ event.event.description_t || event.event.description }}
             </div>
             <!-- scroll area here (qscroll or regular) area causes performance issues on android-->
             <CustomQScroll

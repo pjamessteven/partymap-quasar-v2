@@ -154,7 +154,7 @@
 </template>
 
 <script>
-import moment from 'moment';
+import * as dayjs from 'dayjs';
 
 export default {
   components: {},
@@ -229,8 +229,8 @@ export default {
         // 0 = the last day of week in month
         // 1 = first day in month
         // 2 = second etc.
-        var counterDate = moment(startDate);
-        var date = moment(startDate);
+        var counterDate = dayjs(startDate);
+        var date = dayjs(startDate);
         var weekday = date.isoWeekday();
         counterDate.set('date', 1);
         var count = 1;
@@ -242,9 +242,9 @@ export default {
           counterDate.set('date', counterDate.date() + 1);
         }
         // Get number of occurances of this weekday in month
-        counterDate = moment(startDate);
+        counterDate = dayjs(startDate);
         counterDate.set('date', 1);
-        var datemax = moment(startDate);
+        var datemax = dayjs(startDate);
         datemax.set('date', datemax.daysInMonth());
         while (counterDate.date() < datemax.date()) {
           if (counterDate.isoWeekday() === weekday) {
@@ -271,7 +271,7 @@ export default {
     },
     dayOfWeek() {
       if (this.dateTime && !this.absoluteDate) {
-        return moment(this.dateTime.start).isoWeekday();
+        return dayjs(this.dateTime.start).isoWeekday();
       } else {
         return null;
       }
@@ -285,23 +285,23 @@ export default {
     },
     dayOfMonth() {
       if (this.dateTime) {
-        return moment(this.dateTime.start).date();
+        return dayjs(this.dateTime.start).date();
       } else return null;
     },
     monthOfYear() {
       if (this.dateTime) {
-        return moment(this.dateTime.start).month() + 1;
+        return dayjs(this.dateTime.start).month() + 1;
       } else return null;
     },
     selectedDate() {
       if (this.dateTime) {
-        var mom = moment(this.dateTime.start);
+        var mom = dayjs(this.dateTime.start);
         return mom.date();
       } else return null;
     },
     selectedWeekday() {
       if (this.dateTime) {
-        var mom = moment(this.dateTime.start).isoWeekday();
+        var mom = dayjs(this.dateTime.start).isoWeekday();
         switch (mom) {
           case 1:
             return 'Monday';
@@ -323,7 +323,7 @@ export default {
     },
     selectedMonth() {
       if (this.dateTime) {
-        var mom = moment(this.dateTime.start).month();
+        var mom = dayjs(this.dateTime.start).month();
         switch (mom) {
           case 0:
             return 'January';
@@ -355,7 +355,7 @@ export default {
     },
     startTime() {
       if (this.dateTime && this.dateTime.start) {
-        return moment.utc(this.dateTime.start).format('h:mm A');
+        return dayjs.utc(this.dateTime.start).format('h:mm A');
       } else return null;
     },
   },

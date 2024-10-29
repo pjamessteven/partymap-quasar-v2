@@ -102,7 +102,7 @@ import GptArtistQuery from './GptArtistQuery.vue';
 import { mapState, mapActions } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
-import moment from 'moment-timezone';
+import * as dayjs from 'dayjs';
 
 export default {
   components: {
@@ -385,7 +385,7 @@ export default {
     },
     computedEventYear() {
       if (this.eventYear) return this.eventYear;
-      else if (this.defaultDate) return moment(this.defaultDate).year();
+      else if (this.defaultDate) return dayjs(this.defaultDate).year();
       else return null;
     },
   },

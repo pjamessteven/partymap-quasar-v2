@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import moment from 'moment';
+import * as dayjs from 'dayjs';
 import { Screen, Notify } from 'quasar';
 
 import {
@@ -108,7 +108,7 @@ interface QueryState {
 
 // when we reset controls we need to reset to this date
 // otherwise it triggers a change when we don't want one
-const startDate = moment().toISOString();
+const startDate = dayjs().toISOString();
 
 export const useQueryStore = defineStore('query', {
   state: (): QueryState => ({
@@ -202,7 +202,7 @@ export const useQueryStore = defineStore('query', {
   },
   actions: {
     clearDateFilter() {
-      this.controlDateRange = { start: moment().toISOString(), end: null };
+      this.controlDateRange = { start: dayjs().toISOString(), end: null };
       this.controlDateRangeSelectedOption = null;
     },
     clearAllFilters() {
@@ -271,12 +271,12 @@ export const useQueryStore = defineStore('query', {
           size_options: null,
           date_min:
             tense === 'future'
-              ? moment().toISOString()
-              : moment().subtract(10, 'years').toISOString(),
+              ? dayjs().toISOString()
+              : dayjs().subtract(10, 'years').toISOString(),
           date_max:
             tense === 'future'
-              ? moment().add(10, 'years').toISOString()
-              : moment().toISOString(),
+              ? dayjs().add(10, 'years').toISOString()
+              : dayjs().toISOString(),
           query: undefined,
           sort_option: 'date',
           page: this.userEventDatesPage,
@@ -403,7 +403,7 @@ export const useQueryStore = defineStore('query', {
         const map = useMapStore();
         this.artistsLoading = true;
         const response = await getArtistsRequest({
-          date_min: moment().toISOString(),
+          date_min: dayjs().toISOString(),
           date_max: null,
           page: this.artistsPage,
           per_page: 10,
@@ -495,7 +495,7 @@ export const groupEventDatesByMonth = (
 ) => {
   for (const ed of eventDates) {
     // assumes eventDates are sorted by time
-    const start = moment(ed?.[0].start_naive);
+    const start = dayjs(ed?.[0].start_naive);
     const yearMonth = Number(start.format('YYMM')); // should be int
     if (!existingDates[yearMonth]) {
       existingDates[yearMonth] = [];

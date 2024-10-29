@@ -7,9 +7,26 @@
         style="word-break: break-word"
         :class="editing ? 'q-pa-md' : ''"
       >
-        <span class="o-080">{{
-          event?.description || $route.query?.description
-        }}</span>
+        <span class="o-080" v-if="!showOriginal">{{
+          event?.description_t ||
+          event?.description ||
+          $route.query?.description
+        }}</span
+        ><span v-else>{{ event?.description }}</span
+        ><span v-if="isTranslation">
+          <p />
+
+          <span class="o-040" v-if="!showOriginal">
+            - {{ $t('translate.translated') }}&nbsp;</span
+          >
+          <span class="o-040 link-hover" @click="showOriginal = !showOriginal"
+            >[<span v-if="!showOriginal">{{
+              $t('translate.show_original')
+            }}</span
+            ><span v-else>{{ $t('translate.show_translation') }}</span
+            >]</span
+          >
+        </span>
         <div
           class="q-mt-sm o-050"
           v-if="
@@ -54,6 +71,7 @@ export default {
   data() {
     return {
       showEditingDialog: false,
+      showOriginal: false,
     };
   },
   methods: {
@@ -66,6 +84,12 @@ export default {
   watch: {},
   computed: {
     ...mapState(useEventStore, ['event']),
+    isTranslation() {
+      return (
+        this.event.description_t &&
+        this.event.description !== this.event.description_t
+      );
+    },
   },
 };
 </script>

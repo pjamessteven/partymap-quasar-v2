@@ -35,6 +35,7 @@
         vertical
         ref="scrollArea"
         @scroll="onScrollMainContent"
+        @scrollend="onScrollEnd"
         class="scroll-area flex grow"
         :class="disableScroll ? 'disable-scroll' : ''"
         :thumb-style="
@@ -925,6 +926,8 @@ import UploadNewLogoDialog from 'components/EventPage/Gallery/UploadNewLogoDialo
 import InnerLoading from 'components/InnerLoading.vue';
 import { useI18n } from 'vue-i18n';
 import { useDrag } from '@vueuse/gesture';
+import { useMeta } from 'quasar';
+
 import {
   MotionVariants,
   useMotionControls,
@@ -1048,7 +1051,7 @@ const dragHandler = ({
   delta,
   initial,
 }) => {
-  if (scrollPercentage.value <= 0) {
+  if (scrollPercentage.value <= 0 && enableSwipeDown.value) {
     if (swipeY == 1) {
       goBack();
       return;
@@ -1179,6 +1182,9 @@ const onScrollMainContent = (info: any) => {
   // var height = window.innerHeight / 3 - 120; // this is the height of the gap between menu bar and top of event card
   scrollPercentage.value = info.verticalPercentage;
   let verticalPostion = info.verticalPosition;
+  if (scrollPercentage.value > 0) {
+    enableSwipeDown.value = false;
+  }
   // menubar should always show on large screens (when sidebar is open)c
   if ($q.screen.lt.md) {
     //this.menubarOpacity = ((info.target.scrollTop * 1.5) / 100) * -1 + 1;
@@ -1202,14 +1208,12 @@ const onScrollMainContent = (info: any) => {
     }
     //this.overlayOpacity = ((info.target.scrollTop * 0.5) / 100) * 1;
   }
+};
 
-  if (scrollPercentage.value <= 0) {
-    setTimeout(() => {
-      // behavior fix for desktop scroll
-      enableSwipeDown.value = true;
-    }, 250);
-  } else {
-    enableSwipeDown.value = false;
+const onScrollEnd = () => {
+  console.log('onscrollend');
+  if (scrollPercentage.value == 0) {
+    enableSwipeDown.value = true;
   }
 };
 
@@ -1489,6 +1493,44 @@ const computedTicketName = computed(() => {
   } else {
     return null;
   }
+});
+
+useMeta(() => {
+  return {
+    // whenever "title" from above changes, your meta will automatically update
+    title:
+      computedName?.value +
+      ' ' +
+      common.year(
+        selectedEventDate.value?.start_naive,
+        selectedEventDate.value?.tz
+      ) +
+      t('meta.on_partymap'),
+    meta: {
+      description: {
+        name: 'description',
+        content:
+          t('meta.more_about') +
+          computedName?.value +
+          t('meta.in') +
+          common.monthYear(
+            selectedEventDate.value?.start_naive,
+            selectedEventDate.value?.tz
+          ) +
+          '! ' +
+          event.value?.description,
+      },
+      keywords: {
+        name: 'keywords',
+        content:
+          computedName?.value +
+          ', ' +
+          selectedEventDate.value?.location.description +
+          ', ' +
+          t('meta.event_page_tags'),
+      },
+    },
+  };
 });
 </script>
 

@@ -158,7 +158,7 @@
 <script>
 import 'v-calendar/dist/style.css';
 
-import moment from 'moment';
+import * as dayjs from 'dayjs';
 import { mapWritableState } from 'pinia';
 import { useQueryStore } from 'src/stores/query';
 import { DatePicker } from 'v-calendar';
@@ -229,23 +229,27 @@ export default {
       switch (newVal.value) {
         case null: // all future dates
           this.controlDateRange = {
-            start: moment().hour(0).minute(0).seconds(0).toISOString(),
+            start: dayjs()
+              .set('hour', 0)
+              .set('minute', 0)
+              .set('second', 0)
+              .toISOString(),
             end: null,
           };
           break;
         case 'today':
           this.controlDateRange = {
-            start: moment()
-              .hour(0)
-              .minute(0)
-              .seconds(0)
-              .milliseconds(0)
+            start: dayjs()
+              .set('hour', 0)
+              .set('minute', 0)
+              .set('second', 0)
+              .set('millisecond', 0)
               .toISOString(),
-            end: moment()
-              .hour(0)
-              .minute(0)
-              .seconds(0)
-              .milliseconds(0)
+            end: dayjs()
+              .set('hour', 0)
+              .set('minute', 0)
+              .set('second', 0)
+              .set('millisecond', 0)
               .add(23, 'hours')
               .add(59, 'minutes')
               .toISOString(),
@@ -260,220 +264,224 @@ export default {
           break;
         case 'week':
           this.controlDateRange = {
-            start: moment().hour(0).minute(0).seconds(0).toISOString(),
-            end: moment()
-              .hour(0)
-              .minute(0)
-              .seconds(0)
+            start: dayjs()
+              .set('hour', 0)
+              .set('minute', 0)
+              .set('second', 0)
+              .toISOString(),
+            end: dayjs()
+              .set('hour', 0)
+              .set('minute', 0)
+              .set('second', 0)
               .add(7, 'days')
               .toISOString(),
           };
           break;
         case 'month':
           this.controlDateRange = {
-            start: moment().hour(0).minute(0).seconds(0).toISOString(),
-            end: moment()
-              .hour(0)
-              .minute(0)
-              .seconds(0)
+            start: dayjs()
+              .set('hour', 0)
+              .set('minute', 0)
+              .set('second', 0)
+              .toISOString(),
+            end: dayjs()
+              .set('hour', 0)
+              .set('minute', 0)
+              .set('second', 0)
               .add(1, 'month')
               .toISOString(),
           };
 
           break;
         case 'jan':
-          var year = moment().year();
-          if (moment().month() > 0) {
+          var year = dayjs().year();
+          if (dayjs().month() > 0) {
             // if jan has passed then it should be next jan
             year += 1;
           }
-          var start = moment()
-            .hour(0)
-            .minute(0)
-            .seconds(0)
-            .date(1)
-            .month(0)
-            .year(year);
+          var start = dayjs()
+            .set('hour', 0)
+            .set('minute', 0)
+            .set('second', 0)
+            .set('date', 1)
+            .set('month', 0)
+            .set('year', year);
           this.controlDateRange = {
             start: start.toISOString(),
             end: start.add(1, 'month').toISOString(),
           };
           break;
         case 'feb':
-          var year = moment().year();
-          if (moment().month() > 1) {
+          var year = dayjs().year();
+          if (dayjs().month() > 1) {
             // if jan has passed then it should be next jan
             year += 1;
           }
-          var start = moment()
-            .hour(0)
-            .minute(0)
-            .seconds(0)
-            .date(1)
-            .month(1)
-            .year(year);
+          var start = dayjs()
+            .set('hour', 0)
+            .set('minute', 0)
+            .set('second', 0)
+            .set('date', 1)
+            .set('month', 1)
+            .set('year', year);
           this.controlDateRange = {
             start: start.toISOString(),
             end: start.add(1, 'month').toISOString(),
           };
           break;
         case 'mar':
-          var year = moment().year();
-          if (moment().month() > 2) {
+          var year = dayjs().year();
+          if (dayjs().month() > 2) {
             // if jan has passed then it should be next jan
             year += 1;
           }
-          var start = moment()
-            .hour(0)
-            .minute(0)
-            .seconds(0)
-            .date(1)
-            .month(2)
-            .year(year);
+          var start = dayjs()
+            .set('hour', 0)
+            .set('minute', 0)
+            .set('second', 0)
+            .set('date', 1)
+            .set('month', 2)
+            .set('year', year);
           this.controlDateRange = {
             start: start.toISOString(),
             end: start.add(1, 'month').toISOString(),
           };
           break;
         case 'apr':
-          var year = moment().year();
-          if (moment().month() > 3) {
+          var year = dayjs().year();
+          if (dayjs().month() > 3) {
             // if jan has passed then it should be next jan
             year += 1;
           }
-          var start = moment()
-            .hour(0)
-            .minute(0)
-            .seconds(0)
-            .date(1)
-            .month(3)
-            .year(year);
+          var start = dayjs()
+            .set('hour', 0)
+            .set('minute', 0)
+            .set('second', 0)
+            .set('date', 1)
+            .set('month', 3)
+            .set('year', year);
           this.controlDateRange = {
             start: start.toISOString(),
             end: start.add(1, 'month').toISOString(),
           };
           break;
         case 'may':
-          var year = moment().year();
-          if (moment().month() > 4) {
+          var year = dayjs().year();
+          if (dayjs().month() > 4) {
             // if jan has passed then it should be next jan
             year += 1;
           }
-          var start = moment()
-            .hour(0)
-            .minute(0)
-            .seconds(0)
-            .date(1)
-            .month(4)
-            .year(year);
+          var start = dayjs()
+            .set('hour', 0)
+            .set('minute', 0)
+            .set('second', 0)
+            .set('date', 1)
+            .set('month', 4)
+            .set('year', year);
           this.controlDateRange = {
             start: start.toISOString(),
             end: start.add(1, 'month').toISOString(),
           };
           break;
         case 'jun':
-          var year = moment().year();
-          if (moment().month() > 5) {
+          var year = dayjs().year();
+          if (dayjs().month() > 5) {
             // if jan has passed then it should be next jan
             year += 1;
           }
-          var start = moment()
-            .hour(0)
-            .minute(0)
-            .seconds(0)
-            .date(1)
-            .month(5)
-            .year(year);
+          var start = dayjs()
+            .set('hour', 0)
+            .set('minute', 0)
+            .set('second', 0)
+            .set('date', 1)
+            .set('month', 5)
+            .set('year', year);
           this.controlDateRange = {
             start: start.toISOString(),
             end: start.add(1, 'month').toISOString(),
           };
           break;
         case 'jul':
-          var year = moment().year();
-          if (moment().month() > 6) {
+          var year = dayjs().year();
+          if (dayjs().month() > 6) {
             // if jan has passed then it should be next jan
             year += 1;
           }
-          var start = moment()
-            .hour(0)
-            .minute(0)
-            .seconds(0)
-            .date(1)
-            .month(6)
-            .year(year);
+          var start = dayjs()
+            .set('hour', 0)
+            .set('minute', 0)
+            .set('second', 0)
+            .set('date', 1)
+            .set('month', 6)
+            .set('year', year);
           this.controlDateRange = {
             start: start.toISOString(),
             end: start.add(1, 'month').toISOString(),
           };
           break;
         case 'aug':
-          var year = moment().year();
-          if (moment().month() > 7) {
+          var year = dayjs().year();
+          if (dayjs().month() > 7) {
             // if jan has passed then it should be next jan
             year += 1;
           }
-          var start = moment()
-            .hour(0)
-            .minute(0)
-            .seconds(0)
-            .date(1)
-            .month(7)
-            .year(year);
+          var start = dayjs()
+            .set('minute', 0)
+            .set('second', 0)
+            .set('date', 1)
+            .set('month', 7)
+            .set('year', year);
           this.controlDateRange = {
             start: start.toISOString(),
             end: start.add(1, 'month').toISOString(),
           };
           break;
         case 'sep':
-          var year = moment().year();
-          if (moment().month() > 8) {
+          var year = dayjs().year();
+          if (dayjs().month() > 8) {
             // if jan has passed then it should be next jan
             year += 1;
           }
-          var start = moment()
-            .hour(0)
-            .minute(0)
-            .seconds(0)
-            .date(1)
-            .month(8)
-            .year(year);
+          var start = dayjs()
+            .set('minute', 0)
+            .set('second', 0)
+            .set('date', 1)
+            .set('month', 8)
+            .set('year', year);
           this.controlDateRange = {
             start: start.toISOString(),
             end: start.add(1, 'month').toISOString(),
           };
           break;
         case 'oct':
-          var year = moment().year();
-          if (moment().month() > 9) {
+          var year = dayjs().year();
+          if (dayjs().month() > 9) {
             // if jan has passed then it should be next jan
             year += 1;
           }
-          var start = moment()
-            .hour(0)
-            .minute(0)
-            .seconds(0)
-            .date(1)
-            .month(9)
-            .year(year);
+          var start = dayjs()
+            .set('minute', 0)
+            .set('second', 0)
+            .set('date', 1)
+            .set('month', 9)
+            .set('year', year);
           this.controlDateRange = {
             start: start.toISOString(),
             end: start.add(1, 'month').toISOString(),
           };
           break;
         case 'nov':
-          var year = moment().year();
-          if (moment().month() > 10) {
+          var year = dayjs().year();
+          if (dayjs().month() > 10) {
             // if jan has passed then it should be next jan
             year += 1;
           }
-          var start = moment()
-            .hour(0)
-            .minute(0)
-            .seconds(0)
-            .date(1)
-            .month(10)
-            .year(year);
+          var start = dayjs()
+            .set('minute', 0)
+            .set('second', 0)
+            .set('date', 1)
+            .set('month', 10)
+            .set('year', year);
           this.controlDateRange = {
             start: start.toISOString(),
             end: start.add(1, 'month').toISOString(),
@@ -481,14 +489,13 @@ export default {
           break;
         case 'dec':
           // december never passes
-          var year = moment().year();
-          var start = moment()
-            .hour(0)
-            .minute(0)
-            .seconds(0)
-            .date(1)
-            .month(11)
-            .year(year);
+          var year = dayjs().year();
+          var start = dayjs()
+            .set('minute', 0)
+            .set('second', 0)
+            .set('date', 1)
+            .set('month', 11)
+            .set('year', year);
           this.controlDateRange = {
             start: start.toISOString(),
             end: start.add(1, 'month').toISOString(),
@@ -510,7 +517,7 @@ export default {
       }
     },
     clearDateRange() {
-      this.controlDateRange = { start: moment().toISOString() };
+      this.controlDateRange = { start: dayjs().toISOString() };
       this.controlDateRangeSelectedOption = null;
     },
     onHide() {
@@ -520,10 +527,10 @@ export default {
       // set button label
       let label = this.$t('top_controls.custom');
 
-      //const startDate = moment(value.start).format('Do MMM YYYY');
-      //const endDate = moment(value.end).format('Do MMM YYYY');
-      const startDate = moment(value.start).format('DD/MM/YYYY');
-      const endDate = moment(value.end).format('DD/MM/YYYY');
+      //const startDate = dayjs(value.start).format('Do MMM YYYY');
+      //const endDate = dayjs(value.end).format('Do MMM YYYY');
+      const startDate = dayjs(value.start).format('DD/MM/YYYY');
+      const endDate = dayjs(value.end).format('DD/MM/YYYY');
       if (startDate === endDate) {
         label = startDate;
       } else {
@@ -539,27 +546,27 @@ export default {
     getThisWeekendDateRange() {
       const weekendStart = 5; // friday
       const weekendEnd = 7; // sunday
-      const today = moment().isoWeekday();
+      const today = dayjs().isoWeekday();
       var startTime;
       var endTime;
       // get start time
       if (today <= weekendStart) {
         // if it's not friday yet, return this friday
-        startTime = moment().isoWeekday(weekendStart);
+        startTime = dayjs().isoWeekday(weekendStart);
       } else if (today >= weekendStart && today <= weekendEnd) {
         // it's past friday, but already or before Sunday
         // so return current time
-        startTime = moment();
+        startTime = dayjs();
       } else {
         // return next friday (not going to happen - for completeness)
-        startTime = moment().add(1, 'weeks').isoWeekday(weekendStart);
+        startTime = dayjs().add(1, 'weeks').isoWeekday(weekendStart);
       }
       // return this sunday
-      endTime = moment()
-        .hour(0)
-        .minute(0)
-        .seconds(0)
-        .milliseconds(0)
+      endTime = dayjs()
+        .set('hour', 0)
+        .set('minute', 0)
+        .set('second', 0)
+        .set('millisecond', 0)
         .isoWeekday(weekendEnd)
         .add(23, 'hours')
         .add(59, 'minutes');
@@ -572,21 +579,21 @@ export default {
       var endTime;
       // get start time
       // if it's not friday yet, return this friday
-      startTime = moment()
-        .hour(0)
-        .minute(0)
-        .seconds(0)
-        .milliseconds(0)
+      startTime = dayjs()
+        .set('hour', 0)
+        .set('minute', 0)
+        .set('second', 0)
+        .set('millisecond', 0)
         .isoWeekday(weekendStart)
         .add(1, 'weeks');
 
       // get end time
       // return this sunday
-      endTime = moment()
-        .hour(0)
-        .minute(0)
-        .seconds(0)
-        .milliseconds(0)
+      endTime = dayjs()
+        .set('hour', 0)
+        .set('minute', 0)
+        .set('second', 0)
+        .set('millisecond', 0)
         .isoWeekday(weekendEnd)
         .add(23, 'hours')
         .add(59, 'minutes')
@@ -600,8 +607,8 @@ export default {
       'controlDateRangeSelectedOption',
     ]),
     monthOptionsOrderedFromNow() {
-      var currentMonth = moment().month();
-      var currentYear = moment().year();
+      var currentMonth = dayjs().month();
+      var currentYear = dayjs().year();
       var months = [];
       for (var i = 0; i < 12; i++) {
         if (currentMonth === 11) {

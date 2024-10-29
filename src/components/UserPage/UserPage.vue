@@ -6,7 +6,7 @@
           :username="username"
           :class="{
             'q-mt-lg q-mb-lg q-px-md': $q.screen.gt.xs,
-            'q-mx-sm  q-my-md q-mb-md': $q.screen.lt.sm,
+            'q-mx-md  q-my-md q-mb-md': $q.screen.lt.sm,
           }"
         />
         <div
@@ -39,17 +39,19 @@
           <q-separator />
         </div>
 
-        <UserEventsView
-          v-if="tab === 'events'"
-          :scrollPercentage="scrollPercentage"
-          :username="username"
-        />
-        <ActivityView
-          v-else-if="tab === 'activity'"
-          :username="username"
-          :scrollPercentage="scrollPercentage"
-        />
-        <div class="q-pa-lg" v-else>Coming soon!</div>
+        <div :class="$q.screen.gt.xs ? 'q-px-md' : 'q-px-sm'">
+          <UserEventsView
+            v-if="tab === 'events'"
+            :scrollPercentage="scrollPercentage"
+            :username="username"
+          />
+          <ActivityView
+            v-else-if="tab === 'activity'"
+            :username="username"
+            :scrollPercentage="scrollPercentage"
+          />
+          <div class="q-pa-lg" v-else>Coming soon!</div>
+        </div>
       </div>
     </template>
   </SolidPage>

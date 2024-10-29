@@ -69,7 +69,22 @@
       class="q-my-sm"
     />
     <div>
-      {{ review.text }}
+      <span v-if="showOriginal"> {{ review.text }} </span
+      ><span v-else>
+        {{ review.text_t }}
+      </span>
+      <span v-if="isTranslation">
+        <p />
+
+        <span class="o-040" v-if="!showOriginal">
+          - {{ $t('translate.translated') }}&nbsp;</span
+        >
+        <span class="o-040 link-hover" @click="showOriginal = !showOriginal"
+          >[<span v-if="!showOriginal">{{ $t('translate.show_original') }}</span
+          ><span v-else>{{ $t('translate.show_translation') }}</span
+          >]</span
+        >
+      </span>
     </div>
     <CustomQScroll
       horizontal
@@ -149,6 +164,7 @@ export default {
       currentMediaItemIndex: null,
       loading: false,
       showingReportDialog: false,
+      showOriginal: false,
     };
   },
   watch: {},
@@ -157,6 +173,9 @@ export default {
     ...mapWritableState(useEventStore, ['event']),
     currentUserIsCreator() {
       return this.currentUser.username === this.review.creator.username;
+    },
+    isTranslation() {
+      return this.review.text_t && this.review.text !== this.review.text_t;
     },
   },
   methods: {

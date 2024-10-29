@@ -46,7 +46,7 @@ import _ from 'lodash';
 import SelectArtistsDialog from './Artists/SelectArtistsDialog.vue';
 import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
-import moment from 'moment-timezone';
+import * as dayjs from 'dayjs';
 export default {
   name: 'EventDateAddArtistsComponent',
   components: {
@@ -99,7 +99,7 @@ export default {
   computed: {
     ...mapState(useEventStore, ['event', 'selectedEventDate']),
     computedEventDateYear() {
-      return moment(this.selectedEventDate.start_naive).year();
+      return dayjs(this.selectedEventDate.start_naive).year();
     },
     computedEventDateCountry() {
       return this.selectedEventDate?.location?.description?.split(',').pop();

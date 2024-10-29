@@ -7,7 +7,7 @@
             class="q-mt-lg q-mb-sm metropolis bold o-080"
             v-if="artist && artist.disambiguation?.length > 0 && false"
           >
-            Disambiguation:
+            {{ $t('artist_page.disambiguation') }}:
           </div>
           <div
             class="o-080 q-mt-lg"
@@ -20,7 +20,7 @@
             class="q-mt-lg q-mb-sm metropolis bold o-080"
             v-if="artist && artist.tags && artist.tags.length > 0 && !loading"
           >
-            {{ $t('artists.tags') }}:
+            {{ $t('artist_page.tags') }}:
           </div>
           <!--
             <div
@@ -51,7 +51,7 @@
             class="q-mt-lg q-mb-sm metropolis bold o-080"
             v-if="computedDescription && computedDescription.length > 0"
           >
-            {{ $t('artists.description') }}:
+            {{ $t('artist_page.description') }}:
           </div>
           <!--
             <div
@@ -73,21 +73,23 @@
               v-if="longDescription && !showFullDescription"
               @click="showFullDescription = true"
               class="link-hover underline q-ml-xs"
-              >...show more</span
             >
+              {{ $t('artist_page.show_more') }}
+            </span>
             <span
               v-if="longDescription && showFullDescription"
               @click="showFullDescription = false"
               class="link-hover underline"
-              >...show less</span
             >
+              {{ $t('artist_page.show_less') }}
+            </span>
           </div>
 
           <div
             class="q-mt-lg q-mb-sm metropolis bold o-080"
             v-if="urls && urls.length > 0"
           >
-            {{ $t('artists.links') }}:
+            {{ $t('artist_page.links') }}:
           </div>
 
           <div class="flex column q-gutter-sm q-pt-xs" style="max-width: 100%">
@@ -113,29 +115,7 @@ import { useMapStore } from 'src/stores/map';
 
 import { useMainStore } from 'src/stores/main';
 export default {
-  name: 'ArtistPage',
-  meta() {
-    return {
-      // this accesses the "title" property in your Vue "data";
-      // whenever "title" prop changes, your meta will automatically update
-      title: this.computedName + ' | PartyMap',
-      meta: {
-        description: {
-          name: 'description',
-          content:
-            'Upcoming festivals and event where ' +
-            this.computedName +
-            ' is  playing. ' +
-            this.computedDescription,
-        },
-        keywords: {
-          name: 'keywords',
-          content:
-            'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list, soundcloud, bandcamp, youtube',
-        },
-      },
-    };
-  },
+  name: 'ArtistDetails',
   components: {
     //SolidPage,
     ArtistUrl,

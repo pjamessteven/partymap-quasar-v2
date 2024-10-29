@@ -44,35 +44,33 @@ export default {
       user: null,
       items: {
         nature: {
-          title: 'Nature',
-          tagline: 'Festivals set in idyllic locations',
+          title: this.$t('browse_page.nature'),
+          tagline: this.$t('browse_page.nature_desc'),
           description: '',
         },
         burn: {
-          title: 'Burns',
-          tagline:
-            'Anarchistic self-organized festivals that follow the ten prinicpals',
+          title: this.$t('browse_page.burn'),
+          tagline: this.$t('browse_page.burn_desc'),
           description: '',
         },
         beach: {
-          title: 'Beach',
-          tagline: 'Get your toes wet',
+          title: this.$t('browse_page.beach'),
+          tagline: this.$t('browse_page.beach_desc'),
           description: '',
         },
         psychedelic: {
-          title: 'Psychedelic',
-          tagline: 'Think outside the box ',
+          title: this.$t('browse_page.psychedelic'),
+          tagline: this.$t('browse_page.psychedelic_desc'),
           description: '',
         },
         sustainability: {
-          title: 'Sustainability',
-          tagline:
-            'Festivals that emphasize their effort to reduce their environmental footprint',
+          title: this.$t('browse_page.sustainability'),
+          tagline: this.$t('browse_page.sustainability_desc'),
           description: '',
         },
         healing: {
-          title: 'Healing',
-          tagline: 'Renew and transform...',
+          title: this.$t('browse_page.healing'),
+          tagline: this.$t('browse_page.healing_desc'),
           description: '',
           tag: '',
         },

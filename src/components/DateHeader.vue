@@ -8,7 +8,7 @@
       }"
     >
       <span v-if="!!altLabel">{{ altLabel }}</span>
-      <span v-else-if="dateString">Events in {{ dateString }}</span
+      <span v-else-if="dateString">{{ dateString }}</span
       >:
 
       <slot />
@@ -20,7 +20,7 @@
   </div>
 </template>
 <script>
-import moment from 'moment-timezone';
+import * as dayjs from 'dayjs';
 
 export default {
   props: {
@@ -31,7 +31,7 @@ export default {
   computed: {
     dateString() {
       if (this.date) {
-        return '' + moment(this.date).format('MMMM YYYY');
+        return '' + dayjs(this.date).format('MMMM YYYY');
       } else {
         return '';
       }
@@ -54,7 +54,7 @@ export default {
     display: flex;
     align-items: center;
     font-size: 1rem;
-    font-weight: 800;
+    font-weight: 700;
     font-family: 'Metropolis';
   }
 }

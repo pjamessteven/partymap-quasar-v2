@@ -105,16 +105,16 @@
               :class="$q.screen.gt.sm ? ' q-px-lg' : ' q-mt-md q-px-md'"
             >
               <div class="flex column" v-if="artist" style="max-width: 100%">
-                <div class="q-mb-md metropolis bold t2">Upcoming events:</div>
+                <div class="q-mb-md metropolis bold t2">
+                  {{ $t('artist_page.upcoming_events') }}
+                </div>
                 <div
                   class="t3"
                   v-if="
                     !artist.future_event_dates ||
                     (artist?.future_event_dates?.length === 0 && !loading)
                   "
-                >
-                  No upcoming events for this artist.
-                </div>
+                ></div>
                 <div v-else></div>
                 <EventDateCard
                   style="max-width: 599px"
@@ -133,7 +133,8 @@
                   @click="viewOnMap"
                   v-if="artist?.future_event_dates?.length > 0"
                 >
-                  View all upcoming on the map
+                  {{ $t('artist_page.view_on_map') }}
+
                   <q-icon
                     name="mdi-chevron-right"
                     size="1rem"
@@ -153,7 +154,7 @@
                 "
               >
                 <div class="q-mt-lg q-mb-md metropolis bold t2">
-                  {{ $t('artists.past_events') }}:
+                  {{ $t('artist_page.past_events') }}:
                 </div>
                 <EventDateCard
                   v-for="(ed, index) in artist.past_event_dates"
@@ -172,7 +173,8 @@
               :class="$q.screen.gt.sm ? 'q-px-lg q-pb-lg' : 'q-px-md '"
             >
               <div class="t3">
-                Artist info courtesey of
+                {{ $t('artist_page.artist_info_courtesey_of') }}
+
                 <a
                   href="https://musicbrainz.org/"
                   class="link-hover underline"
@@ -185,7 +187,7 @@
                   target="_blank"
                   >Last.fm</a
                 >
-                and
+                {{ $t('artist_page.and') }}
                 <a
                   href="https://spotify.com/"
                   class="link-hover underline"
@@ -193,7 +195,7 @@
                   >Spotify</a
                 >.
                 <span class="link-hover" @click="refreshArtist">
-                  [Fetch latest info]</span
+                  [{{ $t('artist_page.fetch_latest_info') }}]</span
                 >
               </div>
             </div>
@@ -218,30 +220,37 @@ import { useAuthStore } from 'src/stores/auth';
 import { useQueryStore } from 'src/stores/query';
 import { useMapStore } from 'src/stores/map';
 import { useMainStore } from 'src/stores/main';
+import { createMetaMixin } from 'quasar';
+
 export default {
   name: 'ArtistPage',
-  meta() {
-    return {
-      // this accesses the "title" property in your Vue "data";
-      // whenever "title" prop changes, your meta will automatically update
-      title: this.computedName + ' | PartyMap',
-      meta: {
-        description: {
-          name: 'description',
-          content:
-            'Upcoming festivals and event where ' +
-            this.computedName +
-            ' is  playing. ' +
-            this.computedDescription,
+  mixins: [
+    createMetaMixin(function () {
+      // "this" here refers to your component
+      return {
+        // assuming `this.myTitle` exists in your mixed in component
+        title: this.computedName + ' ' + this.$t('meta.events_on_partymap'),
+        meta: {
+          description: {
+            name: 'description',
+            content:
+              this.$t('meta.upcoming_events_featuring') +
+                ' ' +
+                this.computedName +
+                this.artist?.disambiguation?.length >
+              0
+                ? '( ' + this.artist.disambiguation + ') '
+                : '' + '. ' + this.computedDescription,
+          },
+          keywords: {
+            name: 'keywords',
+            content:
+              this.computedName + ', ' + this.$t('meta.artist_page_tags'),
+          },
         },
-        keywords: {
-          name: 'keywords',
-          content:
-            'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list, soundcloud, bandcamp, youtube',
-        },
-      },
-    };
-  },
+      };
+    }),
+  ],
   components: {
     EventDateCard,
     ArtistDetails,

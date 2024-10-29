@@ -1,8 +1,6 @@
 <template>
-  <q-card>
+  <li>
     <div class="flex column q-pa-md">
-      <TransactionInfo v-if="showTransactionInfo" :activity="activity" />
-
       <div>
         <b>
           {{ verb }} the date
@@ -20,22 +18,30 @@
                 eventDateId: activity.object_version.id,
               },
             }"
-            >{{
-              common.localDateTimeShort(activity.object_version.start_naive)
-            }}</router-link
+            ><u>{{
+              common.localDateTimeLong(activity.object_version.start_naive)
+            }}</u></router-link
           ></b
         >:
         <p />
 
-        <div
-          v-for="(change, index) in Object.keys(computedChangeSet)"
-          :key="index"
-        >
-          <b>{{ change }}:</b> {{ computedChangeSet[change][1] }}
-        </div>
+        <ul>
+          <li
+            v-for="(change, index) in Object.keys(computedChangeSet)"
+            :key="index"
+          >
+            <span v-if="change == 'cancelled'"
+              >Marked this date as cancelled</span
+            >
+            <span v-else>
+              <b style="text-transform: capitalize">{{ change }}:</b>
+              {{ computedChangeSet[change][1] }}</span
+            >
+          </li>
+        </ul>
       </div>
     </div>
-  </q-card>
+  </li>
 </template>
 
 <script setup lang="ts">
@@ -43,33 +49,50 @@ import { Activity } from 'src/types/autogen_types';
 import { computed, ref } from 'vue';
 import common from 'src/assets/common';
 
-const ignored_changesets = [
-  'start',
-  'end',
-  'event',
-  'event_id',
-  'id',
-  'created_at',
-  'updated_at',
-  'creator_id',
-  'tag_id',
-  'thumb_filename',
-  'type',
-  'location', // shows in object_versions, location_id is universal so is used instead
-  'changeset',
-  'end_transaction_id',
-  'previous',
-  'transaction_id',
-  'location_id',
-  'transaction',
-  'index',
-  'day_of_month',
-  'day_of_week',
-  'month_of_year',
-  'recurring_type',
-  'week_of_month',
-  'separation_count',
-];
+const ignored_changesets = computed(() => {
+  let ignored = [
+    'start',
+    'end',
+    'event',
+    'event_id',
+    'id',
+    'created_at',
+    'updated_at',
+    'creator_id',
+    'tag_id',
+    'thumb_filename',
+    'type',
+    'location', // shows in object_versions, location_id is universal so is used instead
+    'changeset',
+    'end_transaction_id',
+    'previous',
+    'transaction_id',
+    'location_id',
+    'transaction',
+    'index',
+    'day_of_month',
+    'day_of_week',
+    'month_of_year',
+    'recurring_type',
+    'week_of_month',
+    'separation_count',
+  ];
+
+  const changeset = props.activity.changeset;
+
+  if ('cancelled' in changeset) {
+    if (
+      changeset['cancelled'][0] === null &&
+      changeset['cancelled'][1] === false
+    ) {
+      // ignore initial false cancelled value on event date create
+      ignored.push('cancelled');
+    }
+    ignored.push('date_confirmed');
+  }
+
+  return ignored;
+});
 
 interface Props {
   activity: Activity;
@@ -86,7 +109,7 @@ const verb = computed(() => {
   if (verb === 'create') {
     return 'Created ';
   } else if (verb === 'update') {
-    return 'Updated info for';
+    return 'Updated';
   } else if (verb === 'delete') {
     return 'Deleted';
   } else return verb;
@@ -94,7 +117,7 @@ const verb = computed(() => {
 
 const computedChangeSet = computed(() => {
   let changeset = Object.keys(props.activity.changeset)
-    .filter((key) => ignored_changesets.indexOf(key) === -1)
+    .filter((key) => ignored_changesets.value.indexOf(key) === -1)
     .reduce((cur, key) => {
       return Object.assign(cur, { [key]: props.activity.changeset[key] });
     }, {});
@@ -110,6 +133,8 @@ const computedChangeSet = computed(() => {
         changeset['start_naive'][1]
       );
     }
+    changeset['Start Date'] = changeset['start_naive'];
+    delete changeset['start_naive'];
   }
   if (changeset['end_naive']) {
     if (changeset['end_naive'][0]) {
@@ -122,6 +147,12 @@ const computedChangeSet = computed(() => {
         changeset['end_naive'][1]
       );
     }
+    changeset['End Date'] = changeset['end_naive'];
+    delete changeset['end_naive'];
+  }
+  if (changeset['tz']) {
+    changeset['Timezone'] = changeset['tz'];
+    delete changeset['tz'];
   }
 
   return changeset;

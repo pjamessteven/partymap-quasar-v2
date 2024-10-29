@@ -36,6 +36,7 @@ module.exports = configure(function (/* ctx */) {
       'safeAreaAndroid',
       'addressbar-color',
       'youtube',
+      'dayjs',
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css

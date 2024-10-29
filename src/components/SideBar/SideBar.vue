@@ -16,6 +16,9 @@
           false,
       }"
     >
+      <!--
+      <div class="desktop-controls-bg" />
+-->
       <div class="sidebar-content flex column no-wrap">
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
           <NearbyView
@@ -66,6 +69,10 @@ const mainStore = useMainStore();
       background: black;
       border-top: 1px solid $bi-4;
       border-right: 1px solid rgba(255, 255, 255, 0.1);
+      .desktop-controls-bg {
+        background: $bi-2;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      }
       &.sidebar-mobile-expanded {
         border-top-color: black;
       }
@@ -97,7 +104,11 @@ const mainStore = useMainStore();
 
       background: white;
       //: 1px solid white;
-
+      .desktop-controls-bg {
+        // border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+          rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+      }
       &.shadow {
         border: 1px solid rgba(0, 0, 0, 0.1);
         box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
@@ -106,7 +117,7 @@ const mainStore = useMainStore();
       .sidebar-content {
         //background: rgba(100, 100, 100, 0.2);
         //backdrop-filter: blur(10px);
-        background: white;
+        //  background: white;
         .sidebar-content-inner {
           //background: black;
         }
@@ -153,6 +164,13 @@ const mainStore = useMainStore();
       z-index: 5000;
       cursor: ew-resize;
       opacity: 0.48;
+    }
+    .desktop-controls-bg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 136px;
     }
 
     .sidebar-content {

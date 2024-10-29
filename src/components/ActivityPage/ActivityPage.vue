@@ -23,6 +23,7 @@
               style="width: 100%"
             >
               <q-tab
+                v-if="false"
                 name="you"
                 no-caps
                 :disabled="!currentUser"

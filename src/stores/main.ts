@@ -7,6 +7,9 @@ import { Notify } from 'quasar';
 import { Screen, Platform } from 'quasar';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { LngLat, LngLatLike } from 'maplibre-gl';
+import { i18n } from 'src/boot/i18n';
+
+const { t } = i18n.global;
 
 interface MainStoreState {
   windowWidth: number;
@@ -41,6 +44,7 @@ interface MainStoreState {
   tips: {
     [key: string]: boolean;
   };
+  language: string;
 }
 const localTips = localStorage.getItem('tips');
 
@@ -69,7 +73,7 @@ export const useMainStore = defineStore('main', {
     userLocationCountry: null,
     currentLocationFromSearch: false,
     currentLocation: null,
-    currentLocationCity: Screen.lt.sm ? '...' : 'In This area',
+    currentLocationCity: Screen.lt.sm ? '...' : t('nearby_view.in_this_area'),
     currentLocationCountry: null,
     fineLocation: false,
     groupEventsByMonth: true,
@@ -79,6 +83,7 @@ export const useMainStore = defineStore('main', {
       hidePanelTip: true,
       oldAndroid: true,
     },
+    language: 'en',
   }),
   getters: {
     desktopSidebarShowing: (state): boolean => {

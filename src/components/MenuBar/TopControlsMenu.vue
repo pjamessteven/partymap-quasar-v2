@@ -243,16 +243,15 @@
     </q-item>
 
     <q-item
-      v-if="currentUser && currentUser.role >= 30"
       v-ripple
-      v-on:click="$router.push({ name: 'WorkQueuePage' })"
+      v-on:click="$router.push({ name: 'ActivityPage' })"
       clickable
     >
       <q-item-section avatar>
         <q-icon name="mdi-format-list-bulleted" />
       </q-item-section>
       <q-item-section>
-        <q-item-label>Work Queue</q-item-label>
+        <q-item-label>All Activity</q-item-label>
       </q-item-section>
     </q-item>
 
@@ -331,6 +330,23 @@
       />
     </q-item>
 
+    <q-item-label header class="q-pb-none">{{
+      $t('top_controls.lang_options')
+    }}</q-item-label>
+    <q-item>
+      <q-select
+        style="margin-top: -8px"
+        borderless
+        behavior="menu"
+        class="flex grow"
+        v-model="language"
+        :options="languageOptions"
+        emit-value
+        square
+        map-options
+      />
+    </q-item>
+
     <q-dialog
       v-model="showFeedbackDialog"
       transition-show="jump-up"
@@ -371,6 +387,7 @@ export default {
         { label: 'Monochrome', value: 'monochrome' },
         { label: 'Classic', value: 'classic' },
       ],
+      languageOptions: ['en', 'fr', 'cn', 'jp'],
     };
   },
   methods: {
@@ -428,6 +445,7 @@ export default {
       'compactView',
       'groupEventsByMonth',
       'disableAnimations',
+      'language',
     ]),
     ...mapWritableState(useMapStore, ['mapStyle']),
   },

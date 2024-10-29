@@ -72,6 +72,21 @@
           }
         "
       >
+        <template v-slot:prepend v-if="false">
+          <router-link
+            :to="{ name: 'Explore' }"
+            style="text-decoration: none; color: inherit"
+          >
+            <q-btn
+              flat
+              :class="$q.screen.gt.sm ? 'q-pa-md' : 'q-pa-sm'"
+              style="border-radius: 100px !important"
+            >
+              <template v-slot:default>
+                <q-icon size="sm" name="mdi-crosshairs" />
+              </template>
+            </q-btn> </router-link
+        ></template>
       </q-select>
     </transition>
   </div>
@@ -192,7 +207,7 @@ export default {
   .country-select {
     :deep(.q-field__control) {
       &:before {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       }
     }
   }
@@ -202,16 +217,18 @@ export default {
   .country-select {
     :deep(.q-field__control) {
       &:before {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
       }
     }
   }
 }
 .country-select {
   .select {
-    font-weight: 900 !important;
+    font-weight: 800 !important;
     position: relative;
     min-width: 150px;
+    //font-family: 'logotype' !important;
+    //text-transform: uppercase;
 
     :deep(.q-field__native) {
       font-weight: 800 !important;

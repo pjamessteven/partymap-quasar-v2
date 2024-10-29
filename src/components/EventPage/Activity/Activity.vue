@@ -213,7 +213,7 @@
 <script>
 import { revertEventActivityRequest } from 'src/api';
 import common from 'assets/common';
-import moment from 'moment';
+import * as dayjs from 'dayjs';
 import { detailedDiff } from 'deep-object-diff';
 
 export default {
@@ -280,7 +280,7 @@ export default {
       });
     },
     formatDate(date) {
-      return moment(date).utc().format('LLLL');
+      return dayjs(date).utc().format('LLLL');
     },
   },
   watch: {},

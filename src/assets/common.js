@@ -1,4 +1,4 @@
-import moment from 'moment-timezone';
+import * as dayjs from 'dayjs';
 import { i18n } from 'src/boot/i18n.ts';
 
 const { t } = i18n.global;
@@ -67,8 +67,8 @@ const ordinalsShort = [
 ];
 
 export const localDayOfMonth = (t, tz) => {
-  //moment.locale($t.locale)
-  const dayOfMonth = parseInt(moment.tz(t, tz).format('D')) - 1;
+  //dayjs.locale($t.locale)
+  const dayOfMonth = parseInt(dayjs.tz(t, tz).format('D')) - 1;
   return ordinalsShort[dayOfMonth];
 };
 
@@ -83,7 +83,7 @@ export default {
     if (utcDate.indexOf('Z') === -1) {
       utcDate = utcDate + 'Z';
     }
-    var timestamp = moment(utcDate).utc();
+    var timestamp = dayjs(utcDate).utc();
     timestamp = timestamp.valueOf();
     var locales = {
       prefix: '',
@@ -141,168 +141,100 @@ export default {
     const ONE_WEEK = ONE_DAY * 7;
     const ONE_MONTH = ONE_WEEK * 4.35;
 
-    moment.locale(locale);
-    t1 = moment.tz(t1, timezone).valueOf();
+    t1 = dayjs.tz(t1, timezone).valueOf();
 
     if (t2) {
-      t2 = moment.tz(t2, timezone).valueOf();
+      t2 = dayjs.tz(t2, timezone).valueOf();
     }
 
     // mins and hours must be chopped off of day measure so we're measuring from the start of each day.
-    const t1DateNoTime = moment
+    const t1DateNoTime = dayjs
       .tz(t1, timezone)
-      .hour(0)
-      .minute(0)
-      .seconds(0)
+      .set('hour', 0)
+      .set('minute', 0)
+      .set('second', 0)
       .valueOf();
 
-    const now = moment().valueOf();
+    const now = dayjs().valueOf();
 
-    const nowDateNoTime = moment
+    const nowDateNoTime = dayjs()
       .tz(timezone)
-      .hour(0)
-      .minute(0)
-      .seconds(0)
+      .set('hour', 0)
+      .set('minute', 0)
+      .set('second', 0)
       .valueOf();
 
-    const differenceMs = Math.abs(t1 - now);
     const differenceDaysMs = Math.abs(t1DateNoTime - nowDateNoTime);
 
-    const monthsDifference = Math.floor(
-      differenceDaysMs / 1000 / 60 / (60 * 24 * 7 * 4)
-    );
-
-    const weeksDifference = Math.floor(
-      differenceDaysMs / 1000 / 60 / (60 * 24 * 7)
-    );
     const daysDifference = Math.floor(differenceDaysMs / 1000 / 60 / (60 * 24));
-    const hoursDifference = Math.round(differenceMs / ONE_HOUR);
-    const minutesDifference = Math.round(differenceMs / ONE_MINUTE);
 
     if (now > t1) {
       if (t2 && now < t2) {
         return this.$t('time.happening_now');
-      } else if (monthsDifference >= 1) {
-        if (monthsDifference === 1) {
-          return monthsDifference + ' ' + this.$t('time.month_ago');
-        } else {
-          return monthsDifference + ' ' + this.$t('time.months_ago');
-        }
-      } else if (weeksDifference >= 1) {
-        if (weeksDifference === 1) {
-          return weeksDifference + ' ' + this.$t('time.week_ago');
-        } else {
-          return weeksDifference + ' ' + this.$t('time.weeks_ago');
-        }
-      } else if (daysDifference >= 1) {
-        if (daysDifference === 1) {
-          return daysDifference + ' ' + this.$t('time.day_ago');
-        } else {
-          return daysDifference + ' ' + this.$t('time.days_ago');
-        }
-      } else if (hoursDifference >= 1) {
-        if (hoursDifference === 1) {
-          return hoursDifference + ' ' + this.$t('time.hour_ago');
-        } else {
-          return hoursDifference + ' ' + this.$t('time.hours_ago');
-        }
-      } else {
-        if (minutesDifference < 1) {
-          return minutesDifference + ' ' + this.$t('time.seconds_ago');
-        } else if (minutesDifference === 1) {
-          return minutesDifference + ' ' + this.$t('time.minute_ago');
-        } else {
-          return minutesDifference + ' ' + this.$t('time.minutes_ago');
-        }
       }
     } else {
       if (daysDifference === 0) {
         return this.$t('time.happening_today');
-      } else if (monthsDifference >= 1) {
-        if (monthsDifference === 1) {
-          return monthsDifference + ' ' + this.$t('time.month_away');
-        } else {
-          return monthsDifference + ' ' + this.$t('time.months_away');
-        }
-      } else if (weeksDifference >= 1) {
-        if (weeksDifference === 1) {
-          return weeksDifference + ' ' + this.$t('time.week_away');
-        } else {
-          return weeksDifference + ' ' + this.$t('time.weeks_away');
-        }
-      } else if (daysDifference === 1) {
-        return daysDifference + ' ' + this.$t('time.day_away');
-      } else {
-        return daysDifference + ' ' + this.$t('time.days_away');
       }
     }
+
+    return dayjs.tz(t1, timezone).fromNow();
   },
   localDateTimeLong: function (t, tz) {
-    moment.locale(locale);
-    var m = moment.tz(t, tz);
+    var m = dayjs.tz(t, tz);
     return m.format('dddd') + ', ' + m.format('LLL');
   },
   localDateTimeShort: function (t, tz) {
-    moment.locale(locale);
-    var m = moment.tz(t, tz);
+    var m = dayjs.tz(t, tz);
     return m.format('ddd') + ' ' + m.format('lll');
   },
   isInPast: function (t, tz) {
-    moment.locale(locale);
-    var m = moment.tz(t, tz);
-    return m.isBefore(moment());
+    var m = dayjs.tz(t, tz);
+    return m.isBefore(dayjs());
   },
   month: function (t, tz) {
-    moment.locale(locale);
-    var m = moment.tz(t, tz);
+    var m = dayjs.tz(t, tz);
     return m.format('MMMM');
   },
   monthYear: function (t, tz) {
-    moment.locale(locale);
-    var m = moment.tz(t, tz);
+    var m = dayjs.tz(t, tz);
     return m.format('MMMM') + ' ' + m.format('YYYY');
   },
+  year: function (t, tz) {
+    var m = dayjs.tz(t, tz);
+    return m.format('YYYY');
+  },
   localDateWithWeekday: function (t, tz) {
-    moment.locale(locale);
-    var m = moment.tz(t, tz);
-    return m.format('ddd') + ' ' + m.format('ll');
+    var m = dayjs.tz(t, tz);
+    return m.format('dddd') + ' ' + m.format('LL');
   },
   localDateLong: function (t, tz) {
-    moment.locale(locale);
-    var m = moment.tz(t, tz);
-    return m.format('dddd') + ', ' + moment.tz(t, tz).format('LL');
+    var m = dayjs.tz(t, tz);
+    return m.format('dddd') + ', ' + dayjs.tz(t, tz).format('LL');
   },
   localDate: function (t, tz) {
-    moment.locale(locale);
-    return moment.tz(t, tz).format('LL');
+    return dayjs.tz(t, tz).format('LL');
   },
   localDateISOString: function (t, tz) {
-    moment.locale(locale);
-    return moment.tz(t, tz).toISOString();
+    return dayjs.tz(t, tz).toISOString();
   },
   localDay: function (t, tz) {
-    moment.locale(locale);
-    return moment.tz(t, tz).format('dddd');
+    return dayjs.tz(t, tz).format('dddd');
   },
   localTimeCompact: function (t, tz) {
-    moment.locale(locale);
-    return moment.tz(t, tz).format('LT');
+    return dayjs.tz(t, tz).format('LT');
   },
   dateUTCToLocal: function (t) {
-    moment.locale(locale);
-    return moment.utc(t).local().format('MMMM Do YYYY');
+    return dayjs.utc(t).local().format('MMMM Do YYYY');
   },
   dateTimeUTCToLocal: function (t) {
-    moment.locale(locale);
-    return moment.utc(t).local().format('MMMM Do YYYY, h:mm a');
+    return dayjs.utc(t).local().format('MMMM Do YYYY, h:mm a');
   },
   dateTimeUTCToLocalCompact: function (t) {
-    moment.locale(locale);
-    return moment.utc(t).local().format('MMMM Do, h:mm a');
+    return dayjs.utc(t).local().format('MMMM Do, h:mm a');
   },
   timeZoneAbbreviention: function (t, tz) {
-    moment.locale(locale);
-    return moment.tz.zone(tz).abbr(moment(t).valueOf());
+    return tz;
   },
   simplifiedRecurringPattern: function (rrule) {
     var ordinals = [

@@ -1,16 +1,20 @@
+import { defaults } from 'autoprefixer';
 import axios from 'axios';
+import { config } from 'process';
 //var qs = require('qs')
 import 'qs';
 import qs from 'qs';
-import { Notify } from 'quasar';
+import { Lang, Notify } from 'quasar';
+import common from 'src/assets/common';
 import { i18n } from 'src/boot/i18n';
+
+// axios.defaults.headers.common['Lang-Presf'] = 'cn';
 
 export const IS_LOCALHOST = process.env.NODE_ENV === 'development';
 
-export const API_URL =
-  IS_LOCALHOST && false
-    ? 'http://localhost:5000/api'
-    : 'https://api.partymap.com/api';
+export const API_URL = IS_LOCALHOST
+  ? 'http://localhost:5000/api'
+  : 'https://api.partymap.com/api';
 
 export const PLACE_AUTOCOMPLETE_API_URL =
   'https://maps.googleapis.com/maps/api/place/autocomplete/json';
@@ -33,12 +37,15 @@ const { t } = i18n.global;
 
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.defaults.headers.common['Accept'] = 'application/json';
+axios.defaults.headers.common['lang'] = 'cn';
+
 axios.defaults.withCredentials = true;
 axios.interceptors.request.use((request) => {
   if (process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line
     // console.log('Starting Request', request);
   }
+  //request.headers.set('Lang-Pref', 'cn');
   return request;
 });
 
@@ -110,7 +117,7 @@ export function getFestivalInfo(
         ...params,
       },
       response_mode: 'blocking',
-      user: 'pjamessteven',
+      user: DIFY_USER,
     },
     {
       signal: abortSignal,

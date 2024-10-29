@@ -20,8 +20,8 @@
       @keyup.enter="() => $refs.search.blur()"
       :placeholder="
         $q.screen.gt.xs
-          ? 'Search events, places, artists & tags'
-          : 'Search events, places & artists'
+          ? $t('search.search_box_text')
+          : $t('search.search_box_text_mobile')
       "
     >
       <template v-slot:prepend>

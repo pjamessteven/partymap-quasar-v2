@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import moment from 'moment';
+import * as dayjs from 'dayjs';
 import { Screen, Notify } from 'quasar';
 
 import { getEventDatesRequest } from 'src/api';
@@ -28,7 +28,7 @@ interface BrowseState {
 
 // when we reset controls we need to reset to this date
 // otherwise it triggers a change when we don't want one
-const startDate = moment().toISOString();
+const startDate = dayjs().toISOString();
 
 export const useBrowseStore = defineStore('browse', {
   state: (): BrowseState => ({

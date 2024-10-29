@@ -20,10 +20,18 @@
       behavior="menu"
       :clearable="!!controlDateRangeSelectedOption?.label"
       :options="[]"
-      :model-value="controlDateRangeSelectedOption?.label || 'Any Dates'"
+      :model-value="
+        controlDateRangeSelectedOption?.label || $t(`nearby_view.any_dates`)
+      "
       :hide-dropdown-icon="!!controlDateRangeSelectedOption?.label"
       @clear="clear"
     >
+      <template v-slot:prepend v-if="false">
+        <q-icon
+          name="las la-calendar"
+          :class="$q.screen.gt.sm ? ' q-pl-sm q-mr-xs' : 'q-pa-sm'"
+          size="sm"
+      /></template>
     </q-select>
     <DateControl :showing="showing" @hide="showing = false" />
   </div>
@@ -35,7 +43,7 @@ import { mapWritableState, mapActions } from 'pinia';
 import _ from 'lodash';
 import { useQueryStore } from 'src/stores/query';
 import DateControl from 'src/components/Controls/DateControl.vue';
-import moment from 'moment';
+import * as dayjs from 'dayjs';
 
 export default {
   components: { DateControl },
@@ -68,7 +76,7 @@ export default {
   .date-select {
     :deep(.q-field__control) {
       &:before {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       }
     }
   }
@@ -78,12 +86,14 @@ export default {
   .date-select {
     :deep(.q-field__control) {
       &:before {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
       }
     }
   }
 }
 .date-select {
+  // font-family: 'logotype' !important;
+  //text-transform: uppercase;
   :deep(.q-field__native) {
     font-weight: 800 !important;
     span {

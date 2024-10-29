@@ -103,10 +103,29 @@
                 no-caps
                 class="button-plain flex items-center"
                 :class="{
-                  active:
-                    mode === 'hosting' ||
-                    mode === 'created' ||
-                    mode === 'following',
+                  active: mode === 'hosting',
+                }"
+                @click="
+                  () => {
+                    mode = 'hosting';
+                  }
+                "
+              >
+                <div class="flex items-center row no-wrap">
+                  <q-icon
+                    name="mdi-check-decagram-outline"
+                    class="q-pr-md"
+                    size="1rem"
+                  />
+                  <div>Hosting</div>
+                </div>
+              </q-btn>
+
+              <q-btn
+                no-caps
+                class="button-plain flex items-center"
+                :class="{
+                  active: mode === 'created' || mode === 'following',
                 }"
                 @click="
                   () => {
@@ -129,18 +148,6 @@
                   class="menu-wrapper inter bold"
                 >
                   <q-list :class="$q.screen.lt.sm ? 'q-pb-xl' : undefined">
-                    <q-item
-                      v-close-popup
-                      :active="mode === 'hosting'"
-                      clickable
-                      @click="
-                        () => {
-                          mode = 'hosting';
-                        }
-                      "
-                    >
-                      <q-item-section> Hosting</q-item-section>
-                    </q-item>
                     <q-item
                       v-close-popup
                       :active="mode === 'created'"
@@ -241,7 +248,7 @@
             :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
             :eventDates="userEventDates"
             :hasNext="userEventDatesHasNext"
-            :twoColumnsMd="true"
+            :twoColumnsMd="$q.screen.gt.xs"
           />
         </transition>
         <transition appear enter-active-class="animated fadeIn slower">

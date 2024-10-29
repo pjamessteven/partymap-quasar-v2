@@ -48,7 +48,7 @@
                 src="~assets/g-logo.png"
                 class="q-mr-sm"
               />
-              Sign in with Google
+              {{ $t('auth.log_in_with_google') }}
             </q-btn>
             <q-btn
               style="width: 231px; font-size: 15px; background: white"
@@ -67,7 +67,7 @@
                 style="color: #0165e1"
                 size="16px"
               />
-              Sign in with Facebook
+              {{ $t('auth.log_in_with_facebook') }}
             </q-btn>
             <q-btn
               v-if="$q.platform.is.ios && $q.platform.is.capacitor"
@@ -83,7 +83,7 @@
                 style="color: black"
                 size="16px"
               />
-              Sign in with Apple
+              {{ $t('auth.log_in_with_apple') }}
             </q-btn>
             <vue-apple-login
               v-else
@@ -102,7 +102,7 @@
             style="text-align: center; font-size: small"
             v-if="false"
           >
-            We only store your email address.
+            {{ $t('auth.only_store_email') }}
           </div>
         </q-card-section>
 
@@ -196,7 +196,7 @@
         <div class="separator q-mt-md" />
 
         <div class="t4 q-mt-md" style="text-align: center; font-size: small">
-          We will never share or sell your information.
+          {{ $t('auth.never_share_or_sell') }}
           <div class="q-mt-sm">
             <a
               class="link-hover underline"

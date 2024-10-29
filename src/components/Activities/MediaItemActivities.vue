@@ -1,8 +1,10 @@
 <template>
-  <q-card>
+  <li>
     <div class="flex column q-pa-md">
       <TransactionInfo v-if="showTransactionInfo" :activity="activities[0]" />
       <div class="flex column no-wrap" v-if="activitiesByVerb.create">
+        <b>Added media:</b>
+
         <div class="flex row q-gutter-sm q-mt-md">
           <div
             v-for="(activity, index) in activitiesByVerb.create"
@@ -35,7 +37,7 @@
         </div>
       </div>
     </div>
-  </q-card>
+  </li>
 </template>
 
 <script setup lang="ts">

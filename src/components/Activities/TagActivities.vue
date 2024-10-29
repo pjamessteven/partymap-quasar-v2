@@ -1,5 +1,5 @@
 <template>
-  <q-card>
+  <li>
     <div class="flex column q-pa-md">
       <TransactionInfo v-if="showTransactionInfo" :activity="activities[0]" />
       <div class="flex row no-wrap items-center" v-if="activitiesByVerb.create">
@@ -8,6 +8,7 @@
             >s</span
           ></b
         >
+        <p />
         <TagComponent
           v-for="(activity, index) in activitiesByVerb.create"
           :value="activity.object_version.tag"
@@ -32,7 +33,7 @@
         ></TagComponent>
       </div>
     </div>
-  </q-card>
+  </li>
 </template>
 
 <script setup lang="ts">

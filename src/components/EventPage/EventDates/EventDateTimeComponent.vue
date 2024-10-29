@@ -165,7 +165,7 @@
 <script>
 import { Calendar } from 'v-calendar';
 import common from 'assets/common';
-import moment from 'moment-timezone';
+import * as dayjs from 'dayjs';
 
 import EditEventDateDialog from './EditEventDateDialog.vue';
 import EventDateMarkCancelledDialog from './EventDateMarkCancelledDialog.vue';
@@ -189,7 +189,7 @@ export default {
               const calendar = this.$refs.calendar;
               if (calendar) {
                 this.moveToDate(
-                  moment
+                  dayjs
                     .utc(this.selectedEventDate.start_naive)
                     .subtract(this.local.utcOffset(), 'm')
                     .toDate()
@@ -205,7 +205,7 @@ export default {
     return {
       expanded: false,
       showEditDialog: false,
-      local: moment(),
+      local: dayjs(),
       showMarkCancelledDialog: false,
     };
   },
@@ -234,7 +234,7 @@ export default {
           const calendar = this.$refs.calendar;
           if (calendar) {
             calendar.move(
-              moment
+              dayjs
                 .utc(this.selectedEventDate.start_naive)
                 .subtract(this.local.utcOffset(), 'm')
                 .toDate()
@@ -266,11 +266,11 @@ export default {
       // we need to 'convert' it to local time
       if (this.selectedEventDate && this.selectedEventDate.start_naive) {
         var range = {
-          start: moment
+          start: dayjs
             .utc(this.selectedEventDate.start_naive)
             .subtract(this.local.utcOffset(), 'm')
             .toDate(),
-          end: moment
+          end: dayjs
             .utc(this.selectedEventDate.end_naive)
             .subtract(this.local.utcOffset(), 'm')
             .toDate(),
@@ -287,11 +287,11 @@ export default {
       if (this.event && this.event.event_dates) {
         return this.event.event_dates.map((x) => {
           return {
-            start: moment
+            start: dayjs
               .utc(x.start_naive)
               .subtract(this.local.utcOffset(), 'm')
               .toDate(),
-            end: moment
+            end: dayjs
               .utc(x.end_naive)
               .subtract(this.local.utcOffset(), 'm')
               .toDate(),
@@ -306,11 +306,11 @@ export default {
 
       var mappedAvailableDates = this.event.event_dates.map((x) => {
         return {
-          start: moment
+          start: dayjs
             .utc(x.start_naive)
             .subtract(this.local.utcOffset(), 'm')
             .toDate(),
-          end: moment
+          end: dayjs
             .utc(x.end_naive)
             .subtract(this.local.utcOffset(), 'm')
             .toDate(),

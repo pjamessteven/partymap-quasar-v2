@@ -1,5 +1,5 @@
 <template>
-  <q-card>
+  <li>
     <div class="flex column q-pa-md">
       <TransactionInfo v-if="showTransactionInfo" :activity="activity" />
 
@@ -20,7 +20,7 @@
         class="q-my-sm"
       />
     </div>
-  </q-card>
+  </li>
 </template>
 
 <script setup lang="ts">

@@ -31,7 +31,7 @@
           $q.screen.lt.sm
         "
       >
-        Finding what's good...
+        {{ $t('explore_view.finding_whats_good') }}
       </div>
       <div
         class="inter q-mb-md"
@@ -43,7 +43,7 @@
           $q.screen.lt.sm
         "
       >
-        Nothing coming up in this area
+        {{ $t('explore_view.nothing_coming_up') }}
       </div>
 
       <div
@@ -53,6 +53,7 @@
         <CustomQScroll
           vertical
           @scroll="onScrollMainContent"
+          @scrollend="onScrollEnd"
           ref="scroll"
           :thumb-style="
             $q.screen.gt.sm
@@ -123,15 +124,17 @@
 
             <!-- selected artist (desktop only) -->
             <div
-              class="flex column q-mt-md q-pt-sm"
+              class="flex column q-mb-md q-pt-sm"
               v-if="controlArtist?.length > 0 && $q.screen.gt.sm"
             >
               <div
                 class="q-pb-md t1 header"
                 :class="$q.screen.gt.sm ? 'q-px-lg  t1' : ' t1 inter semibold'"
               >
-                <div v-if="controlArtist.length === 1">Selected Artist</div>
-                <div v-else>Selected Artists</div>
+                <div v-if="controlArtist.length === 1">
+                  {{ $t('explore_view.selected_artist') }}
+                </div>
+                <div v-else>{{ $t('explore_view.selected_artists') }}</div>
               </div>
               <div class="tag-scroll-area q-px-lg t1 flex justify-start">
                 <div
@@ -156,11 +159,12 @@
                 <!-- cities-->
                 <div
                   :style="$q.screen.gt.sm ? 'margin-top: -8px' : ''"
-                  class="flex column q-mb-md"
+                  class="flex column q-mb-lg"
                   v-if="
                     topRegionsInArea?.length > 2 &&
                     mapZoomLevel < 7 &&
-                    $q.screen.gt.sm
+                    $q.screen.gt.sm &&
+                    false
                   "
                 >
                   <div
@@ -194,7 +198,7 @@
                       "
                     >
                       <div
-                        class="flex column inter bolder text-h6 t3"
+                        class="flex column inter bolder text-h5 t3"
                         style="word-break: keep-all; white-space: nowrap"
                         :class="$q.screen.gt.sm ? 'q-pl-lg ' : 'q-pl-lg'"
                       >
@@ -253,12 +257,14 @@
                       <span
                         class=""
                         v-if="topTagsInArea?.length && controlTag.length == 0"
-                        >Hot Tags</span
                       >
-                      <span v-else-if="controlTag.length === 1">
-                        Selected Tag
+                        {{ $t('explore_view.hot_tags') }}
                       </span>
-                      <span v-else>Selected Tags</span>:
+                      <span v-else-if="controlTag.length === 1">
+                        {{ $t('explore_view.selected_tag') }}
+                      </span>
+                      <span v-else> {{ $t('explore_view.selected_tags') }}</span
+                      >:
                     </span>
                     <ControlSelect
                       v-if="false"
@@ -358,7 +364,7 @@
                     class="header header-select t1 justify-between flex no-wrap items-center"
                     :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-px-md '"
                   >
-                    <span>High Profile Artists:</span>
+                    <span> {{ $t('explore_view.high_profile_artists') }}:</span>
                     <ControlSelect
                       v-if="false"
                       @clear="
@@ -424,7 +430,7 @@
             :class="$q.screen.gt.xs && 'q-mt-xl'"
             v-if="isLoadingInitial && (!sidebarMinimized || $q.screen.gt.xs)"
           >
-            Finding what's good...
+            {{ $t('explore_view.finding_whats_good') }}
           </div>
           <div
             class="metropolis bold q-mb-md"
@@ -435,7 +441,7 @@
               (!sidebarMinimized || $q.screen.gt.xs)
             "
           >
-            Nothing coming up in this area
+            {{ $t('explore_view.nothing_coming_up') }}
           </div>
           <div style="height: 20px; width: 200px" class="flex justify-center">
             <q-linear-progress
@@ -466,7 +472,7 @@
                 >
                   <div class="flex items-center row no-wrap q-px-xs">
                     <q-icon name="mdi-close" size="1rem" class="q-pr-md" />
-                    <div>Clear filters</div>
+                    <div>{{ $t('explore_view.clear_filters') }}</div>
                   </div>
                 </q-btn>
                 <q-btn
@@ -482,7 +488,7 @@
                       size="1rem"
                       class="q-pr-md"
                     />
-                    <div>Zoom out</div>
+                    <div>{{ $t('explore_view.zoom_out') }}</div>
                   </div>
                 </q-btn>
               </div>
@@ -633,21 +639,17 @@ export default {
 
     onScrollMainContent(info) {
       this.mainContentScrollPosition = info.verticalPosition;
-      if (info.verticalPosition <= 0) {
-        if (!this.$q.platform.has.touch) {
-          setTimeout(() => {
-            // behavior fix for desktop scroll
-            this.enablePanelSwipeDown = true;
-          }, 250);
-        } else {
-          this.enablePanelSwipeDown = true;
-        }
-      } else {
+      if (info.verticalPosition > 0) {
         this.enablePanelSwipeDown = false;
       }
       if (info.verticalPercentage > 0.99) {
         // reached bottom
         this.debouncedLoadMore();
+      }
+    },
+    onScrollEnd() {
+      if (this.mainContentScrollPosition == 0) {
+        this.enablePanelSwipeDown = true;
       }
     },
     delayedGetInitial() {
@@ -805,33 +807,7 @@ export default {
         (x) => this.controlTag.findIndex((y) => y.tag === x.tag) === -1
       );
     },
-    computedTagLabel() {
-      if (this.controlTag?.length > 0) {
-        let label = '';
-        for (let [index, tag] of this.controlTag.entries()) {
-          label += tag.tag;
-          if (index < this.controlTag.length - 1) {
-            label += ' + ';
-          }
-        }
-        return label;
-      }
-      return null;
-    },
-    computedArtistLabel() {
-      let label = '';
-      if (this.controlArtist?.length > 0) {
-        for (let [index, artist] of this.controlArtist.entries()) {
-          label += artist.name;
-          if (index < this.controlArtist.length - 1) {
-            label += ' + ';
-          }
-        }
-      } else {
-        label = 'All Artists';
-      }
-      return label;
-    },
+
     computedTotalTags() {
       return this.controlTag?.length + this.topTagsWithoutSelected.length;
     },
@@ -972,7 +948,7 @@ export default {
   //  font-family: 'Chicago';
   //  font-style: italic;
   font-family: 'Metropolis';
-  font-weight: 800;
+  font-weight: 700;
 
   //font-style: italic;
   &.header-select {
@@ -1173,7 +1149,7 @@ export default {
         // opacity: 1;
         transition: all 0.3s ease;
         background: rgba(255, 255, 255, 0);
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.15);
         //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
 
         //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px 0px;

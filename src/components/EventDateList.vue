@@ -120,7 +120,7 @@ import { computed } from 'vue';
 import DateHeader from './DateHeader.vue';
 import EventDateCard from './EventDateCard.vue';
 import { useQuasar } from 'quasar';
-import moment from 'moment-timezone';
+import * as dayjs from 'dayjs';
 const $q = useQuasar();
 
 const main = useMainStore();

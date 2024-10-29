@@ -111,29 +111,8 @@ import _ from 'lodash';
 import ArtistUrl from 'src/components/ArtistUrl.vue';
 
 export default {
-  name: 'AristProfile',
-  meta() {
-    return {
-      // this accesses the "title" property in your Vue "data";
-      // whenever "title" prop changes, your meta will automatically update
-      title: this.computedName + ' | PartyMap',
-      meta: {
-        description: {
-          name: 'description',
-          content:
-            'Upcoming festivals and event where ' +
-            this.computedName +
-            ' is  playing. ' +
-            this.computedDescription,
-        },
-        keywords: {
-          name: 'keywords',
-          content:
-            'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list, soundcloud, bandcamp, youtube',
-        },
-      },
-    };
-  },
+  name: 'UserListItem',
+
   components: {
     ArtistUrl,
   },

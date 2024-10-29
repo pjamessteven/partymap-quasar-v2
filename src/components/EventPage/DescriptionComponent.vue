@@ -15,21 +15,11 @@
             v-if="event.full_description?.length > 0"
             style="white-space: pre-line; word-break: break-word"
           >
-            <span v-if="!readMore && shouldTruncate && false" class="o-080">{{
-              truncatedDescription
-            }}</span
-            ><span v-else>{{ event.full_description }}</span
+            <span v-if="!showOriginal">{{
+              event.full_description_t || event.full_description
+            }}</span>
+            <span v-else>{{ event.full_description }}</span
             >&nbsp;<span
-              class="link-hover underline primary"
-              @click="readMore = !readMore"
-              v-if="!readMore && shouldTruncate"
-              >Read more...</span
-            ><span
-              class="link-hover underline primary"
-              @click="readMore = !readMore"
-              v-if="readMore && shouldTruncate"
-              >Show less</span
-            ><span
               class="o-050"
               v-if="
                 event.full_description_attribute &&
@@ -42,6 +32,21 @@
                 target="_blank"
                 :href="computedAttributeUrl"
                 >{{ computedAttributeDomain }}</a
+              ></span
+            ><span v-if="isTranslation">
+              <p />
+
+              <span class="o-040" v-if="!showOriginal">
+                - {{ $t('translate.translated') }}&nbsp;</span
+              >
+              <span
+                class="o-040 link-hover"
+                @click="showOriginal = !showOriginal"
+                >[<span v-if="!showOriginal">{{
+                  $t('translate.show_original')
+                }}</span
+                ><span v-else>{{ $t('translate.show_translation') }}</span
+                >]</span
               ></span
             ></span
           ><span v-else class="t4 inter text-large q-mt-sm">
@@ -74,6 +79,7 @@ export default {
     return {
       showEditingDialog: false,
       readMore: false,
+      showOriginal: false,
     };
   },
   methods: {
@@ -86,6 +92,12 @@ export default {
   watch: {},
   computed: {
     ...mapState(useEventStore, ['event']),
+    isTranslation() {
+      return (
+        this.description_t &&
+        this.event.description !== this.event.description_t
+      );
+    },
     shouldTruncate() {
       return (
         this.truncatedDescription?.length < this.event?.full_description?.length

@@ -288,7 +288,7 @@ export default {
   computed: {
     ...mapState(useEventStore, ['event', 'selectedEventDate']),
     computedEventDateYear() {
-      return moment(this.selectedEventDate.start_naive).year();
+      return dayjs(this.selectedEventDate.start_naive).year();
     },
     computedEventDateCountry() {
       return selectedEventDate?.location?.description?.split(',').pop();

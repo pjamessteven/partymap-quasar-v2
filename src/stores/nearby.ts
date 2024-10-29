@@ -1,4 +1,4 @@
-import moment from 'moment';
+import * as dayjs from 'dayjs';
 import { defineStore } from 'pinia';
 import {
   getArtistsRequest,
@@ -132,7 +132,7 @@ export const useNearbyStore = defineStore('nearby', {
       const main = useMainStore();
       try {
         const response = await getTagRequest({
-          date_min: moment().toISOString(),
+          date_min: dayjs().toISOString(),
           date_max: null,
           page: this.nearbyTagsPage,
           per_page: 20,
@@ -155,7 +155,7 @@ export const useNearbyStore = defineStore('nearby', {
       const main = useMainStore();
       try {
         const response = await getArtistsRequest({
-          date_min: moment().toISOString(),
+          date_min: dayjs().toISOString(),
           date_max: null,
           page: this.nearbyArtistsPage,
           per_page: 10,
@@ -199,7 +199,7 @@ export const useNearbyStore = defineStore('nearby', {
       try {
         const response = await getEventDatesRequest({
           location: JSON.stringify(main.currentLocation),
-          date_min: moment().toISOString(),
+          date_min: dayjs().toISOString(),
           date_max: null,
           radius: this.queryRadius,
           page: this.nearbyEventDatesPage,
@@ -242,7 +242,7 @@ export const useNearbyStore = defineStore('nearby', {
         this.eventDatesRequestId = requestId;
 
         const response = await getEventDatesRequest({
-          date_min: moment().toISOString(),
+          date_min: dayjs().toISOString(),
           date_max: null,
           page: this.eventDatesPage,
           per_page: 10,

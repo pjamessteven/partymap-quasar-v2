@@ -8,26 +8,32 @@ export default {
     no_changes: 'No changes to show.',
     save_changes: 'Save changes',
     undo: 'Undo',
+    events: 'events',
+  },
+  meta: {
+    main_title: 'PartyMap | Festivals and Underground Culture ',
+    main_description:
+      "PartyMap is a community-driven platform for discovering festivals and events around the world and near you. Explore the world and find out what's good!",
+    main_tags:
+      'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list',
+    events_on_partymap: 'Events on PartyMap',
+    upcoming_events_featuring: 'Upcoming festivals and events featuring ', // name of artist
+    artist_page_tags:
+      'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list, soundcloud, bandcamp, youtube',
+    on_partymap: 'on PartyMap',
+    more_about: 'More about', // {{event name}},
+    in: ' in ',
+    event_page_tags:
+      'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list',
   },
   search: {
     search: 'Search',
-    search_box_text: 'Find events, artists, places...',
+    search_box_text: 'Search events, places, artists & tags',
+    search_box_text_mobile: 'Search events, places & artists',
     tags: 'Tags',
     events: 'Events',
-    locations: 'Locations',
-  },
-  list_view: {
-    search: 'Search',
-    events: 'events',
-    artists: 'artists',
-    places: 'places',
-    country: 'Country',
-    state: 'State',
-    region: 'Region',
-    locality: 'Town or city',
-    no_results: 'No results',
-    show_filters: 'Show filters',
-    hide_filters: 'Hide filters',
+    places: 'Places',
+    artists: 'Artists',
   },
   error_codes: {
     USERNAME_TAKEN: 'Username already taken',
@@ -113,7 +119,9 @@ export default {
     create_message:
       'Choose a username that represents your organization or your events.',
     back_to_login: 'Back to login',
-    log_in_with_facebook: 'Continue with Facebook',
+    log_in_with_facebook: 'Sign in with Facebook',
+    log_in_with_apple: 'Sign in with Apple',
+    log_in_with_google: 'Sign in with Google',
     sign_up_with_email: 'Sign up with email address',
     or: 'or',
     sign_up: 'Sign Up',
@@ -146,6 +154,8 @@ export default {
     password_reset_email_sent: "We've sent you an email, check your inbox!",
     your_pw_has_been_reset_and_logged_in_as:
       'Your password has been reset and you are now logged in',
+    never_share_or_sell: 'We will never share or sell your information.',
+    only_store_email: 'We only store your email address.',
   },
   home: {
     popular_tags: 'Popular tags',
@@ -220,10 +230,25 @@ export default {
     finding_location: 'Finding location...',
     no_upcoming_events_in_area: 'No upcoming events here',
   },
-  landing_page: {
+  nearby_view: {
+    near: 'Near',
+    message_1: `PartyMap is a community-driven, crowd-sourced platform for finding
+            parties and festivals around the world!`,
+    message_2: `Anyone can submit an event that they know about, as long as the
+            information is already public. Anyone can also suggest changes
+            to an event if the information is out of date. No account needed!`,
+    message_3: ' This is a work in progress... More features coming soon! ',
+    app_store: 'PartyMap on the App Store',
+    play_store: 'PartyMap on Google Play',
+    rough_location:
+      'Using rough location from your IP address. Click to improve your location.',
     improve_location: 'Improve location',
     top_artists_in_area: 'Top artists',
+    top_artists_worldwide: 'Top artists worldwide',
+    high_profile_artists: 'High profile artists:',
     top_tags_in_area: 'Top tags',
+    popular_tags: 'Popular tags:',
+    hot_tags_around_world: 'Hot tags around the world:',
     events_within: 'Events within',
     all_upcoming_events: 'Events around the world',
     no_artists_in_area: 'There are no artists to show in this area.',
@@ -232,16 +257,54 @@ export default {
     tagline: 'THE GLOBAL DIRECTORY OF FESTIVALS AND EVENTS',
     explore_map: 'EXPLORE THE MAP',
     explore: 'EXPLORE',
+    your_events: 'Your events:',
+    view_all: 'View all',
+    waiting_for_location: 'Waiting for location',
+    any_dates: 'Any Dates',
+    in_this_area: 'In this area',
   },
-  location_status: {
-    events_on_map: 'Showing events on map',
-    show_all: 'Show all events',
-    show_on_map: 'Follow map',
-    showing_all: 'Showing all events',
-    events_near: 'Events near',
-    all_events: 'Events around the world:',
-    radius: 'Radius',
-    events_within: 'Upcoming near',
+  explore_view: {
+    finding_whats_good: "Finding what's good...",
+    nothing_coming_up: 'Nothing coming up in this area',
+    selected_artist: 'Selected artist',
+    selected_artists: 'Selected artists',
+    selected_tag: 'Selected tag',
+    selected_tags: 'Selected tags',
+    hot_tags: 'Hot tags',
+    high_profile_artists: 'High profile artists',
+    clear_filters: 'Clear filters',
+    clear_filters: 'Zoom out',
+  },
+  browse_page: {
+    nature: 'Nature',
+    nature_desc: 'Festivals set in idyllic locations',
+    burn: 'Burns',
+    burn_desc:
+      'Anarchistic self-organized festivals that follow the ten prinicpals of Burning Man',
+    beach: 'Beach',
+    beach_desc: 'Get your toes wet',
+    psychedelic: 'Psychedelic',
+    psychedelic_desc: 'Think outside the box',
+    sustainability: 'Sustainability',
+    sustainability_desc:
+      'Festivals that emphasize their effort to reduce their environmental footprint',
+    healing: 'Healing',
+    healing_desc: 'Renew and transform...',
+  },
+  artist_page: {
+    upcoming_events: 'Upcoming events:',
+    past_events: 'Past events',
+    no_upcoming_events: 'No upcoming events for this artist.',
+    view_on_map: 'View all upcoming on the map',
+    artist_info_courtesey_of: 'Artist info courtesey of ', // music brainz, lastfm, and spotify,
+    and: ' and ',
+    fetch_latest_info: 'Fetch latest info',
+    links: 'Links',
+    tags: 'Tags',
+    description: 'Description',
+    disambiguation: 'Disambiguation',
+    show_more: '...show more',
+    show_less: '...show less',
   },
   nav: {
     settings: 'Settings',
@@ -253,11 +316,7 @@ export default {
     back: 'Back',
     back_to_map: 'Back to map',
   },
-  shortcuts: {
-    near_me_today: 'Show events on nearby today',
-    near_me_weekend: 'Show events on nearby this weekend',
-    all: 'Show all events',
-  },
+
   top_controls: {
     nearby: 'Nearby',
     tag_search: 'search tags, events or a location',
@@ -556,11 +615,6 @@ export default {
   artists: {
     add_time: 'Add time',
     remove_time: 'Remove time',
-    links: 'Links',
-    upcoming_events: 'Upcoming events',
-    past_events: 'Past events',
-    tags: 'Tags',
-    description: 'Description',
   },
   gallery: {
     more: 'More',
@@ -846,6 +900,35 @@ export default {
       'Tell us how you would like to verify yourself as the host',
   },
   about: {
+    about: 'About',
+    welcome:
+      'Welcome to your global directory of festivals, doofs, and underground culture!',
+    1: `PartyMap is a crowd-sourced, community-driven platform for discovering
+      festivals and experiences around the world. I built this because I wished
+      something like this existed. If you have any thoughts, ideas or
+      suggestions about PartyMap then please contact me through the`,
+    2: 'feedback form',
+    3: 'or by email to',
+    4: 'How does it work?',
+    5: `Anyone can add anything, as long as the information is already public on
+      the internet. Anyone can also make changes to event pages that have no
+      owner. If you add your own event and you are the host, you will have full
+      control of the event page and other users will not be able to modify it.
+      All submissions and changes are moderated, and as the site grows I will be
+      seeking regional moderators.`,
+    6: 'Open Source',
+    7: `PartyMap would not have been possible without the amazing open source
+      communtiy. Many thanks to the contributors of Vue, Python, Flask,
+      SQLAlchemy, PostgreSQL, PostGIS, Quasar, OpenStreetMap, MapLibre GL and
+      TileServer GL. Thanks to Spotify, Last.FM and Musicbrainz for artist info.
+      Thanks to ESRI for the beautiful satellite imagery. And many thanks to you
+      for submitting your events and reviews!`,
+    8: `Partymap itself is open source. Keen to contribute? Hell yeah!!! Let's
+      build the best event platform on the internet!`,
+    9: 'If you want to get involved, join us online: ',
+    10: 'Source code:',
+    11: 'Donate',
+    i_hate_partymap: 'I hate PartyMap!',
     message_2:
       'If your event has been listed by someone and you would like to have it removed, please look for the report button at the bottom of the event page. ',
     message_3:
@@ -857,5 +940,133 @@ export default {
     read_terms_and_conditions: 'Terms and conditions',
     privacy_policy: 'Privacy policy',
     terms_and_conditions: 'Terms and conditions',
+  },
+  translate: {
+    translated: 'Translated',
+    show_original: 'Show original',
+    show_translation: 'Show translation',
+  },
+  privacy: {
+    header: 'What is this all about?',
+    1: `Privacy is really important. As the creator of PartyMap I have taken a
+        lot of care in regards to how I am handling and storing data. This
+        privacy policy formally outlines these concerns and explains what data
+        is collected and recorded by PartyMap and how we use it.`,
+    2: ` If you have additional questions or require more information about our
+        Privacy Policy, do not hesitate to contact us.`,
+    3: `This Privacy Policy applies only to our online activities and is valid
+        for visitors to our website with regards to the information that they
+        shared and/or collect in PartyMap. This policy is not applicable to any
+        information collected offline or via channels other than this website.`,
+    4: 'Consent',
+    5: `I promise that there's nothing nasty in here, but it must be said that
+        by using our website, you hereby consent to our Privacy Policy and agree
+        to its terms.`,
+    6: 'Information we collect',
+    7: `The personal information that you are asked to provide, and the reasons
+        why you are asked to provide it, will be made clear to you at the point
+        we ask you to provide your personal information.`,
+    8: `If you contact us directly, we may receive additional information about
+        you such as your name, email address, phone number, the contents of the
+        message and/or attachments you may send us, and any other information
+        you may choose to provide.`,
+    9: `When you register for an Account, we may ask for your contact
+        information, including items such as name, company name, address, email
+        address, and/or telephone number.`,
+    10: `When you connect to PartyMap.com, your IP address, browser user-agent
+        and rough location is logged.`,
+    11: 'Third-party login disclaimer (Google and FaceBook)',
+    12: `When you login with your Google or Facebook account, we don't receive
+        your login credentials as these are processed by Google or Facebook (the
+        authentication provider). We request the bare-minumum information from
+        the authentication provider, and we store only your email address in our
+        system.`,
+    13: `If you delete your PartyMap account, your data will be removed
+        completely from our database.`,
+    14: `If you originally logged in with Google or Facebook, but you want to be
+        able to log in with an email and passowrd combination, you can add a
+        password from the account page and continue to log in with the email
+        address affiliated with the third-party login provider and your newly
+        created password.`,
+    15: `NOTE: YOU MUST DO THIS BEFORE DELETING OR DE-ACTIVATING YOUR FACEBOOK OR
+        GOOGLE ACCOUNT.`,
+    16: 'How we use your information ',
+    17: 'We use the information we collect in various ways, including to:',
+    18: 'Provide, operate, and maintain our website',
+    19: 'Improve, personalize, and expand our website',
+    20: 'Understand and analyze how you use our website',
+    21: 'Develop new products, services, features, and functionality',
+    22: `Communicate with you, either directly or through one of our partners,
+          including for customer service, to provide you with updates and other
+          information relating to the website, and for marketing and promotional
+          purposes`,
+    23: 'Send you emails',
+    24: 'Find and prevent fraud',
+    25: 'Log Files',
+    26: `PartyMap follows a standard procedure of using log files. These files
+        log visitors when they visit websites. All hosting companies do this and
+        a part of hosting services' analytics. The information collected by log
+        files include internet protocol (IP) addresses, browser type, Internet
+        Service Provider (ISP), date and time stamp, referring/exit pages, and
+        possibly the number of clicks. These are not linked to any information
+        that is personally identifiable. The purpose of the information is for
+        analyzing trends, administering the site, tracking users' movement on
+        the website, and gathering demographic information.`,
+    27: 'Cookies and Web Beacons',
+    28: `Like most websites, PartyMap uses cookies. The only cookie that PartyMap
+        stores in your browser is a session token which is used to keep you
+        logged into your account. We don't do any creepy tracking.`,
+    29: 'Third Party Privacy Policies',
+    30: `PartyMap's Privacy Policy does not apply to other advertisers or
+        websites. Thus, we are advising you to consult the respective Privacy
+        Policies of these third-party ad servers for more detailed information.
+        It may include their practices and instructions about how to opt-out of
+        certain options.`,
+    31: `You can choose to disable cookies through your individual browser
+        options. To know more detailed information about cookie management with
+        specific web browsers, it can be found at the browsers' respective
+        websites.`,
+    32: 'CCPA Privacy Rights (Do Not Sell My Personal Information)',
+    33: `Under the CCPA, among other rights, California consumers have the right
+        to:`,
+    34: `Request that a business that collects a consumer's personal data
+          disclose the categories and specific pieces of personal data that a
+          business has collected about consumers.`,
+    35: `Request that a business delete any personal data about the consumer
+          that a business has collected.`,
+    36: `Request that a business that sells a consumer's personal data, not
+          sell the consumer's personal data.`,
+    37: `If you make a request, we have one month to respond to you. If you would
+        like to exercise any of these rights, please contact us.`,
+    38: 'GDPR Data Protection Rights',
+    39: `We would like to make sure you are fully aware of all of your data
+        protection rights. Every user is entitled to the following:`,
+    40: `The right to access – You have the right to request copies of your
+          personal data. We may charge you a small fee for this service.`,
+    41: `The right to rectification – You have the right to request that we
+          correct any information you believe is inaccurate. You also have the
+          right to request that we complete the information you believe is
+          incomplete.`,
+    42: `The right to erasure – You have the right to request that we erase
+          your personal data, under certain conditions.`,
+    43: `The right to restrict processing – You have the right to request that
+          we restrict the processing of your personal data, under certain
+          conditions.`,
+    44: `The right to object to processing – You have the right to object to
+          our processing of your personal data, under certain conditions.`,
+    45: `The right to data portability – You have the right to request that we
+          transfer the data that we have collected to another organization, or
+          directly to you, under certain conditions.`,
+    46: `If you make a request, we have one month to respond to you. If you would
+        like to exercise any of these rights, please contact us.`,
+    47: "Children's Information",
+    48: `Another part of our priority is adding protection for children while
+        using the internet. We encourage parents and guardians to observe,
+        participate in, and/or monitor and guide their online activity.`,
+    49: `PartyMap does not knowingly collect any Personal Identifiable
+        Information from children under the age of 13. If you think that your
+        child provided this kind of information on our website, we strongly
+        encourage you to contact us immediately and we will do our best efforts
+        to promptly remove such information from our records.`,
   },
 };

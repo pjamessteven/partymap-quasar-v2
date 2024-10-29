@@ -1,18 +1,19 @@
 <template>
-  <q-card v-if="Object.keys(computedChangeSet).length > 0">
+  <li v-if="Object.keys(computedChangeSet).length > 0">
     <div class="flex column q-pa-md">
-      <TransactionInfo v-if="showTransactionInfo" :activity="activity" />
+      <b> {{ verb }} the event page: </b>
 
-      <div>
-        <div
+      <ul>
+        <li
           v-for="(change, index) in Object.keys(computedChangeSet)"
           :key="index"
         >
-          <b>{{ change }}:</b> {{ computedChangeSet[change][1] }}
-        </div>
-      </div>
+          <b style="text-transform: capitalize">{{ change }}:</b>
+          {{ computedChangeSet[change][1] }}
+        </li>
+      </ul>
     </div>
-  </q-card>
+  </li>
 </template>
 
 <script setup lang="ts">
@@ -38,6 +39,7 @@ const ignored_changesets = [
   'previous',
   'transaction_id',
   'location_id',
+  'hidden',
   'transaction',
   'index',
   'rrule_id',
@@ -100,6 +102,24 @@ const computedChangeSet = computed(() => {
         changeset['end_naive'][1]
       );
     }
+  }
+
+  if (changeset['description']) {
+    changeset['Summary'] = changeset['description'];
+    delete changeset['description'];
+  }
+  if (changeset['description_attribute']) {
+    changeset['Summary attribute'] = changeset['description_attribute'];
+    delete changeset['description_attribute'];
+  }
+  if (changeset['full_description']) {
+    changeset['Description'] = changeset['full_description'];
+    delete changeset['full_description'];
+  }
+  if (changeset['full_description_attribute']) {
+    changeset['Description attribute'] =
+      changeset['full_description_attribute'];
+    delete changeset['full_description_attribute'];
   }
 
   return changeset;
