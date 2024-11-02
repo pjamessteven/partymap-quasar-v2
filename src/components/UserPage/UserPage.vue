@@ -23,16 +23,24 @@
               style="width: 100%"
             >
               <q-tab name="events" no-caps>
-                <div class="text-large inter bold q-pa-sm">Events</div>
+                <div class="text-large inter bold q-pa-sm">
+                  {{ $t('user_profile.events') }}
+                </div>
               </q-tab>
               <q-tab name="activity" no-caps>
-                <div class="text-large inter bold q-pa-sm">Activity</div>
+                <div class="text-large inter bold q-pa-sm">
+                  {{ $t('user_profile.activity') }}
+                </div>
               </q-tab>
               <q-tab name="following" no-caps>
-                <div class="text-large inter bold q-pa-sm">Following</div>
+                <div class="text-large inter bold q-pa-sm">
+                  {{ $t('user_profile.following') }}
+                </div>
               </q-tab>
               <q-tab name="followers" no-caps>
-                <div class="text-large inter bold q-pa-sm">Followers</div>
+                <div class="text-large inter bold q-pa-sm">
+                  {{ $t('user_profile.followers') }}
+                </div>
               </q-tab>
             </q-tabs>
           </div>
@@ -50,7 +58,7 @@
             :username="username"
             :scrollPercentage="scrollPercentage"
           />
-          <div class="q-pa-lg" v-else>Coming soon!</div>
+          <div class="q-pa-lg" v-else>{{ $t('user_profile.coming_soon') }}</div>
         </div>
       </div>
     </template>

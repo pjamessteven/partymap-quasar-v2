@@ -1,7 +1,9 @@
 <template>
   <q-card class="flex column dialog-card fullscreen-mobile-card">
     <q-card-section class="header row items-center dialog-card-header">
-      <div class="inter bolder text-h6">Mark as cancelled</div>
+      <div class="inter bolder text-h6">
+        {{ $t('edit_event_date.mark_as_cancelled') }}
+      </div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>
@@ -10,11 +12,10 @@
         <q-item clickable class="q-pa-md" @click="showCancelDateDialog = true">
           <q-item-section>
             <q-item-label class="text-large inter bold q-mb-sm">
-              Mark only this event date as cancelled
+              {{ $t('edit_event_date.mark_only_this_as_cancelled') }}
             </q-item-label>
             <q-item-label class="t3">
-              Choose this option if the next event date is cancelled, but the
-              event will happen again next year or some other time.
+              {{ $t('edit_event_date.mark_only_this_as_cancelled_msg') }}
             </q-item-label>
           </q-item-section>
           <q-item-section avatar v-if="$q.screen.gt.xs">
@@ -25,12 +26,10 @@
         <q-item clickable class="q-pa-md" @click="showRemoveRruleDialog = true">
           <q-item-section>
             <q-item-label class="text-large inter bold q-mb-sm">
-              Cancel all future event dates
+              {{ $t('edit_event_date.cancel_all') }}
             </q-item-label>
             <q-item-label class="t3">
-              Choose this option if the festival likely isn't going to happen
-              again. The event page will still be searchable on PartyMap and can
-              be bought back to life if the festival makes a come-back.
+              {{ $t('edit_event_date.cancel_all_msg') }}
             </q-item-label>
           </q-item-section>
           <q-item-section avatar v-if="$q.screen.gt.xs">

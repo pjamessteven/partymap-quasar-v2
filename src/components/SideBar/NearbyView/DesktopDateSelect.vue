@@ -96,6 +96,7 @@ export default {
   //text-transform: uppercase;
   :deep(.q-field__native) {
     font-weight: 800 !important;
+    text-transform: capitalize;
     span {
       line-height: 1.2em;
     }

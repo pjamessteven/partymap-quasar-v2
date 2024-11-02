@@ -104,11 +104,11 @@ export default {
     },
     computedLabel() {
       if (this.userGoing) {
-        return 'Going';
+        return this.$t('user_profile.going');
       } else if (this.userInterested) {
-        return 'Interested';
+        return this.$t('user_profile.insterested');
       } else {
-        return 'You';
+        return this.$t('user_profile.you');
       }
     },
   },

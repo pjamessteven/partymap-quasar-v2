@@ -227,9 +227,6 @@ export default {
     showMap() {
       return !this.inline || (this.inline && this.expandable && this.expanded);
     },
-    darkMode() {
-      return this.$q.dark.isActive;
-    },
     computedMapsUrl() {
       return `https://www.google.com/maps/search/?api=1&query=${this.selectedEventDate?.location?.description}&query_place_id=${this.selectedEventDate?.location?.place_id}`;
     },

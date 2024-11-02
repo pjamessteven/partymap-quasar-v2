@@ -8,6 +8,7 @@ import {
   LngLatLike,
   Map,
 } from 'maplibre-gl';
+import { useLocalStorage } from '@vueuse/core';
 
 interface MapStoreState {
   map: null | Map;
@@ -28,7 +29,7 @@ interface MapStoreState {
 export const useMapStore = defineStore('map', {
   state: (): MapStoreState => ({
     map: null,
-    mapStyle: 'satellite',
+    mapStyle: useLocalStorage('mapStyle', 'satellite'),
     mapBounds: null, // calculated visible bounds (minus sidebar/mobile nav)
     mapCenter: null, // calculated center (minus sidebar/mobile nav)
     focusMarker: null, // previously eventPageFocus

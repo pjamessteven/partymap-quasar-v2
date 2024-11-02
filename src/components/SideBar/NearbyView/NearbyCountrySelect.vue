@@ -227,6 +227,8 @@ export default {
     font-weight: 800 !important;
     position: relative;
     min-width: 150px;
+    text-transform: capitalize;
+
     //font-family: 'logotype' !important;
     //text-transform: uppercase;
 

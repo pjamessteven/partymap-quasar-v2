@@ -63,7 +63,10 @@
           <ControlButton
             @clear="clearDateFilter"
             :isActive="!!controlDateRangeSelectedOption?.value"
-            :label="controlDateRangeSelectedOption?.label || 'Any Dates'"
+            :label="
+              controlDateRangeSelectedOption?.label ||
+              $t('top_controls.any_dates')
+            "
             iconName="las la-calendar"
           >
             <template v-slot="{ showing, hide }">
@@ -159,7 +162,7 @@
           <ControlButton
             class="q-ml-sm"
             :isActive="controlSize.length > 0"
-            :label="'Size'"
+            :label="$t('top_controls.size')"
             iconName="las la-user-friends"
             iconSize="1.4em"
             @clear="
@@ -176,7 +179,7 @@
           <ControlButton
             class="q-ml-sm"
             :isActive="controlDuration.length > 0"
-            :label="'Duration'"
+            :label="$t('top_controls.duration')"
             iconName="las la-clock"
             iconSize="1.4em"
             @clear="
@@ -291,7 +294,7 @@ export default {
           }
         }
       } else {
-        label = 'All Tags';
+        label = this.$t('top_controls.all_tags');
       }
       return label;
     },
@@ -305,7 +308,7 @@ export default {
           }
         }
       } else {
-        label = 'All Artists';
+        label = this.$t('top_controls.all_artists');
       }
       return label;
     },

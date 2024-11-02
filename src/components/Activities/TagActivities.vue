@@ -3,11 +3,7 @@
     <div class="flex column q-pa-md">
       <TransactionInfo v-if="showTransactionInfo" :activity="activities[0]" />
       <div class="flex row no-wrap items-center" v-if="activitiesByVerb.create">
-        <b
-          >Added tag<span v-if="activitiesByVerb?.create?.length > 1"
-            >s</span
-          ></b
-        >
+        <b>{{ tc('activity.add_tag', activitiesByVerb?.create?.length) }} </b>
         <p />
         <TagComponent
           v-for="(activity, index) in activitiesByVerb.create"
@@ -21,10 +17,9 @@
         v-if="activitiesByVerb?.delete"
       >
         <b
-          >Removed tag<span v-if="activitiesByVerb.delete?.length > 1"
-            >s</span
-          ></b
-        >
+          >{{ tc('activity.remove_tag', activitiesByVerb?.delete?.length) }}
+        </b>
+
         <TagComponent
           v-for="(activity, index) in activitiesByVerb.delete"
           :value="activity.object_version.tag"
@@ -41,21 +36,15 @@ import { Activity } from 'src/types/autogen_types';
 import { computed, ref } from 'vue';
 import TransactionInfo from './TransactionInfo.vue';
 import TagComponent from '../TagComponent.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t, tc } = useI18n();
+
 interface Props {
   activities: Activity[];
   showTransactionInfo?: boolean;
 }
 
-const targetVerb = computed(() => {
-  const targetVerb = props.activities[0].verb; // assuming the target activity is always last to be added in a transaction
-  if (targetVerb === 'create') {
-    return 'Added';
-  } else if (targetVerb === 'update') {
-    return 'Updated';
-  } else if (targetVerb === 'delete') {
-    return 'Removed';
-  } else return 'Modified';
-});
 const props = withDefaults(defineProps<Props>(), {
   activities: null,
   showTransactionInfo: false,

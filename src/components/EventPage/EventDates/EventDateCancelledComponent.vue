@@ -25,7 +25,7 @@
           style="cursor: pointer"
           v-if="editing || showMoreFields"
           @click="showEditingDialog = true"
-          >{{ $t('edit_event_dates.uncancel') }}</u
+          >{{ $t('edit_event_date.uncancel') }}</u
         >
       </div>
       <div

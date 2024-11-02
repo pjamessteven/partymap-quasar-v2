@@ -60,11 +60,9 @@ import {
   useSpring,
 } from '@vueuse/motion';
 import { ref, watch, toRaw, onMounted, computed } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { useQuasar } from 'quasar';
 import { useMapStore } from 'src/stores/map';
 const $q = useQuasar();
-const { t } = useI18n();
 const route = useRoute();
 
 const sidebar = ref();

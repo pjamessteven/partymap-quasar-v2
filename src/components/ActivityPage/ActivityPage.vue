@@ -32,7 +32,9 @@
                 <div class="text-large inter bold q-pa-sm">Your Feed</div>
               </q-tab>
               <q-tab name="all" no-caps>
-                <div class="text-large inter bold q-pa-sm">All Activity</div>
+                <div class="text-large inter bold q-pa-sm">
+                  {{ $t('activity.all_activity') }}
+                </div>
               </q-tab>
             </q-tabs>
           </div>
@@ -41,7 +43,7 @@
             v-if="tab === 'all'"
             :scrollPercentage="scrollPercentage"
           />
-          <div class="q-pa-lg" v-else>Coming soon!</div>
+          <div class="q-pa-lg" v-else>{{ $t('activity.coming_soon') }}</div>
         </div>
       </div>
     </template>

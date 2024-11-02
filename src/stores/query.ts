@@ -20,7 +20,9 @@ import {
 import { useMainStore } from './main';
 import { useMapStore } from './map';
 import { useAuthStore } from './auth';
+import { i18n } from 'src/boot/i18n';
 
+const { t } = i18n.global;
 // TODO: improve interface
 
 interface QueryState {
@@ -394,7 +396,7 @@ export const useQueryStore = defineStore('query', {
       } catch (error) {
         this.eventDatesLoading = false;
         this.eventDatesHasNext = false;
-        Notify.create('Network error');
+        Notify.create(t('error_codes.network_error'));
         throw error;
       }
     },

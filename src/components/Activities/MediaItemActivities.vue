@@ -3,7 +3,7 @@
     <div class="flex column q-pa-md">
       <TransactionInfo v-if="showTransactionInfo" :activity="activities[0]" />
       <div class="flex column no-wrap" v-if="activitiesByVerb.create">
-        <b>Added media:</b>
+        <b>{{ t('activity.added_media') }}:</b>
 
         <div class="flex row q-gutter-sm q-mt-md">
           <div
@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="flex column no-wrap" v-if="activitiesByVerb?.update">
-        <b>Modified these items:</b>
+        <b>{{ t('activity.modified_items') }}:</b>
         <div class="flex row q-gutter-sm q-mt-md">
           <div
             v-for="(activity, index) in activitiesByVerb.update"
@@ -45,21 +45,14 @@ import { Activity } from 'src/types/autogen_types';
 import { computed, ref } from 'vue';
 import TransactionInfo from './TransactionInfo.vue';
 import TagComponent from '../TagComponent.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 interface Props {
   activities: Activity[];
   showTransactionInfo?: boolean;
 }
 
-const targetVerb = computed(() => {
-  const targetVerb = props.activities[0].verb; // assuming the target activity is always last to be added in a transaction
-  if (targetVerb === 'create') {
-    return 'Added';
-  } else if (targetVerb === 'update') {
-    return 'Updated';
-  } else if (targetVerb === 'delete') {
-    return 'Removed';
-  } else return 'Modified';
-});
 const props = withDefaults(defineProps<Props>(), {
   activities: null,
   showTransactionInfo: false,

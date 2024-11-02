@@ -10,17 +10,18 @@
           class="editing-outline"
           :class="editing ? 'q-pa-md' : ''"
         >
-          <youtube-iframe
-            :video-id="videoId"
-            @ready="onStateChange"
-            :style="`position: absolute;`"
-            :width="clientWidth"
-            :height="computedHeight"
-            :key="event.youtube_url"
-            v-if="videoId?.length > 0 && clientWidth > 0 && !editing"
-          />
-
-          <div v-else-if="editing" class="t4 flex items-center">
+          <div v-show="!editing">
+            <youtube-iframe
+              :video-id="videoId"
+              @ready="onStateChange"
+              :style="`position: absolute;`"
+              :width="clientWidth"
+              :height="computedHeight"
+              :key="event.youtube_url"
+              v-if="videoId?.length > 0 && clientWidth > 0"
+            />
+          </div>
+          <div v-if="editing" class="t4 flex items-center">
             <q-icon
               :size="$q.screen.gt.sm ? '2em' : '1.5rem'"
               class="t4 q-mr-md"

@@ -39,7 +39,7 @@
             header
             class="t3 q-pb-sm inter"
             v-if="controlTag?.length > 0"
-            >Selected tags:</q-item-label
+            >{{ $t('top_controls.selected_tags') }}:</q-item-label
           >
           <div
             class="flex row q-gutter-sm q-px-md q-pt-sm q-mb-xs"
@@ -59,7 +59,7 @@
             header
             class="t3 q-pb-sm inter"
             v-if="(!query || query.length == 0) && topTagsInArea?.length > 0"
-            >Top tags in this area:</q-item-label
+            >{{ $t('top_controls.top_tags_in_area') }}:</q-item-label
           >
           <div
             class="flex row q-gutter-sm q-px-md q-pt-sm q-mb-xs"
@@ -77,10 +77,10 @@
             header
             class="t3 q-pb-sm inter"
             v-if="!query || query.length == 0"
-            >Top tags worldwide:</q-item-label
+            >{{ $t('top_controls.top_tags_worldwide') }}:</q-item-label
           >
           <q-item-label header class="t3 q-pb-sm inter" v-else
-            >Search results:</q-item-label
+            >{{ $t('top_controls.search_results') }}:</q-item-label
           >
           <div class="flex row q-gutter-sm q-px-md q-pt-sm q-pb-lg">
             <Tag

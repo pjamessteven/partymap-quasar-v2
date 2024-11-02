@@ -39,7 +39,7 @@
             header
             class="t3 q-pb-sm"
             v-if="(!query || query.length == 0) && topArtistsInArea?.length > 0"
-            >Top artists in this area:</q-item-label
+            >{{ $t('top_controls.top_artists_in_area') }}:</q-item-label
           >
 
           <div
@@ -60,7 +60,7 @@
             header
             class="t3 q-pb-sm"
             v-if="!query || query.length == 0"
-            >Top artists worldwide:</q-item-label
+            >{{ $t('top_controls.top_artists_worldwide') }}:</q-item-label
           >
 
           <div

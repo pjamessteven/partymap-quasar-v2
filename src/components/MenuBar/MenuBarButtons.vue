@@ -198,14 +198,7 @@ export default {
   },
   watch: {},
   data() {
-    return {
-      options: [],
-      selectedOptions: null,
-      settings: [
-        { label: this.$t('nav.dark_mode'), value: 'darkmode' },
-        { label: this.$t('nav.watercolor'), value: 'watercolor' },
-      ],
-    };
+    return {};
   },
   methods: {
     showAddEventDialog() {

@@ -42,14 +42,13 @@
           </p>
           <p />
           <p class="t2">
-            Please do not upload copyrighted content to Partymap. If you do it
-            will be removed from the website.
+            {{ $t('add.copyright_warning') }}
           </p>
         </div>
         <div class="flex column">
           <div class="sticky-header flex column">
             <p class="text-large metropolis bolder t1 q-mb-md q-mt-md">
-              Event Details:
+              {{ $t('add.event_details') }}
             </p>
           </div>
 
@@ -65,7 +64,7 @@
             <div class="flex row grow no-wrap items-baseline">
               <q-icon size="xs" name="las la-bullhorn" />
               <div class="flex column grow q-ml-lg">
-                <p class="text-large inter bold">Event name</p>
+                <p class="text-large inter bold">{{ $t('add.name') }}</p>
                 <q-input
                   class="grow"
                   :error="!!validationErrors.name && showValidationErrors"
@@ -110,15 +109,17 @@
             <div class="flex row grow no-wrap items-baseline q-mt-md">
               <q-icon size="xs" name="las la-images" />
               <div class="flex column grow q-ml-lg">
-                <span class="text-large inter bold">Event images</span>
+                <span class="text-large inter bold">
+                  {{ $t('add.event_images') }}
+                </span>
                 <div class="flex row q-gutter-sm q-mt-sm">
                   <q-card class="b2 shadow-1 flex column q-pa-md grow">
-                    <div class="text-large inter bold">Event logo</div>
-                    <span class="t2"
-                      >Upload the logo/main image (required).</span
-                    >
+                    <div class="text-large inter bold">
+                      {{ $t('add.event_logo') }}
+                    </div>
+                    <span class="t2"> {{ $t('add.event_logo_msg') }}</span>
                     <MultipleMediaSelector
-                      label="Select/Drop Logo"
+                      :label="$t('add.select_logo')"
                       :singleSelectMode="true"
                       :showUploadButton="false"
                       :disableCaption="true"
@@ -135,10 +136,12 @@
                     </div>
                   </q-card>
                   <q-card class="b2 shadow-1 flex column q-pa-md grow">
-                    <div class="text-large inter bold">Lineup poster</div>
-                    <span class="t2">Upload a lineup poster (optional)</span>
+                    <div class="text-large inter bold">
+                      {{ $t('add.lineup_poster') }}
+                    </div>
+                    <span class="t2">{{ $t('add.lineup_poster_msg') }}</span>
                     <MultipleMediaSelector
-                      label="Select/Drop Lineup Poster"
+                      :label="$t('add.select_lineup_poster')"
                       :singleSelectMode="false"
                       :showUploadButton="false"
                       :disableCaption="true"
@@ -148,16 +151,13 @@
                     />
                   </q-card>
                   <q-card class="b2 shadow-1 flex column q-pa-md grow">
-                    <div class="text-large inter bold">Other photos</div>
-                    <span class="t2"
-                      >Upload some photos from previous editions of this event
-                      (optional)</span
-                    >
-                    <span class="t2"
-                      >Please make sure that you have consent of all
-                      identifiable people before uploading photos from parties
-                      and festivals.</span
-                    >
+                    <div class="text-large inter bold">
+                      {{ $t('add.other_photos') }}
+                    </div>
+                    <span class="t2">{{ $t('add.other_photos_msg') }}</span>
+                    <span class="t2">{{
+                      $t('add.other_photos_msg_consent')
+                    }}</span>
 
                     <MultipleMediaSelector
                       label="Select/Drop Photos"
@@ -230,13 +230,10 @@
               <q-icon size="xs" name="las la-align-left" />
               <div class="flex column grow q-ml-lg">
                 <span class="text-large inter bold">
-                  {{ $t('description.detailed_description') }}&nbsp;(Optional)
+                  {{ $t('add.detailed_description') }}
                 </span>
                 <span class="t2 q-mb-sm">
-                  Here you can tell people what they can expect in detail.
-                  Please also provide an
-                  <u> English translation</u>
-                  if the description is in another languge.
+                  {{ $t('add.detailed_description_msg') }}
                 </span>
 
                 <q-input
@@ -280,10 +277,11 @@
             <div class="flex row grow no-wrap items-baseline q-mb-lg">
               <q-icon size="xs" name="las la-tags" />
               <div class="flex column grow q-ml-lg">
-                <span class="text-large inter bold">Tags</span>
+                <span class="text-large inter bold">
+                  {{ $t('add.tags') }}
+                </span>
                 <span class="t2 q-mb-md">
-                  What makes this event stand out, and what music can one
-                  expect?
+                  {{ $t('add.tags_msg') }}
                 </span>
                 <SelectTagsComponent
                   :showTopTags="true"
@@ -370,7 +368,9 @@
                   <div
                     class="location-map-select-msg flex justify-center items-center"
                   >
-                    <div class="inter bold o-o50">Location preview</div>
+                    <div class="inter bold o-o50">
+                      {{ $t('add.location_preview') }}
+                    </div>
                   </div>
                 </div>
 
@@ -383,9 +383,9 @@
             <div class="flex row grow no-wrap items-baseline q-mt-">
               <q-icon size="xs" name="las la-calendar-day" />
               <div class="flex column grow q-ml-lg">
-                <span class="text-large inter bold">Date and Time</span>
+                <span class="text-large inter bold">{{ $t('add.date') }}</span>
                 <span class="t2 q-mb-md">
-                  Select a date range. {{ $t('add.please_select_date_msg_2') }}
+                  {{ $t('add.please_select_date_msg') }}
                 </span>
                 <div
                   v-if="!!validationErrors.date_time && showValidationErrors"
@@ -414,7 +414,7 @@
                   {{ $t('add.recurrence') }}
                 </span>
                 <span class="t2">
-                  Will this event happen again, or is it a one-off?
+                  {{ $t('add.recurrence_msg') }}
                 </span>
                 <div
                   v-if="
@@ -442,7 +442,7 @@
               class="text-large metropolis bolder t1 q-mb-md q-mt-md"
               :class="{}"
             >
-              Optional Information:
+              {{ $t('add.optional_information') }}:
             </p>
           </div>
           <div
@@ -495,8 +495,7 @@
                   "
                 >
                   <span class="t2 q-mb-md">
-                    Search for the talented artists that are playing at this
-                    event.
+                    {{ $t('add.lineup_msg2') }}
                   </span>
                   <SelectArtistsComponent
                     :eventName="event.name"
@@ -526,8 +525,7 @@
                   {{ $t('add.size_how_many') }}
                 </span>
                 <span class="t2 q-mb-md">
-                  Give a rough estimate of how many people will be attending
-                  this event.
+                  {{ $t('add.size_msg') }}
                 </span>
                 <q-input
                   outlined
@@ -552,15 +550,17 @@
             <div class="flex row grow no-wrap items-baseline q-mt-sm">
               <q-icon size="xs" name="las la-external-link-alt" />
               <div class="flex column grow q-ml-lg">
-                <span class="text-large inter bold"> YouTube URL </span>
+                <span class="text-large inter bold">{{
+                  $t('add.youtube_url')
+                }}</span>
                 <span class="t2 q-mb-md">
-                  Paste the YouTube link to the after-movie or promo video here.
+                  {{ $t('add.youtube_url_msg') }}
                 </span>
                 <q-input
                   outlined
                   color="bg-grey-7"
                   v-model="event.youtube_url"
-                  label="YouTube URL"
+                  :label="$t('add.youtube_url')"
                   style="padding-bottom: 0px"
                 />
                 <p />
@@ -606,7 +606,7 @@
             :class="$q.screen.gt.xs ? 'q-ml-lg' : 'q-mt-lg'"
           >
             <q-icon name="mdi-alert-circle" size="2em" style="color: red" />
-            <div class="q-ml-md t1">Missing required information...</div>
+            <div class="q-ml-md t1">{{ $t('add.validation_error') }}</div>
           </div>
           <div
             v-else
@@ -615,7 +615,7 @@
           >
             <q-icon name="mdi-check" size="2em" style="color: green" />
             <div class="q-ml-md t1">
-              Looks good! Thank you for contributing!
+              {{ $t('add.validated') }}
             </div>
           </div>
           <!--
@@ -632,7 +632,7 @@
           <q-btn
             icon-right="las la-undo"
             class="soft-button-shadow inter bold q-mr-md"
-            label="Reset"
+            :label="$t('add.reset')"
             v-on:click="reset"
           />
           <q-btn
@@ -640,7 +640,7 @@
             icon-right="mdi-chevron-right"
             color="primary"
             class="soft-button-shadow inter bold"
-            label="Submit"
+            :label="$t('add.submit')"
             :disable="Object.keys(validationErrors).length > 0"
             v-on:click="submitEvent"
           />

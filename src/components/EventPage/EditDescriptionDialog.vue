@@ -3,7 +3,7 @@
     <q-card-section class="flex column no-wrap dialog-card-header">
       <div class="flex items-center no-wrap justify-between grow">
         <div class="text-h6 card-title q-pr-md">
-          {{ $t('description.update_description') }}
+          {{ $t('description.edit_description') }}
         </div>
         <q-btn icon="close" class="q-ml-md" flat round dense v-close-popup />
       </div>

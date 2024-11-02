@@ -13,8 +13,8 @@ import SplashScreen from './components/SplashScreen.vue';
 import { App } from '@capacitor/app';
 import { Browser } from '@capacitor/browser';
 import { CapacitorCookies } from '@capacitor/core'; // leave this, even though unused, the import is needed for cookies to work on iOS
-import * as dayjs from 'dayjs';
 import { createMetaMixin } from 'quasar';
+import { i18n, setI18nLanguage } from 'src/boot/i18n.ts';
 
 export default {
   components: { SplashScreen },
@@ -53,12 +53,14 @@ export default {
 
   methods: {
     ...mapActions(useAuthStore, ['checkAuthCookie', 'login']),
+    ...mapActions(useMainStore, ['setLocale']),
   },
   computed: {
     ...mapWritableState(useMainStore, [
       'compactView',
       'groupEventsByMonth',
-      'language',
+      'languagePref',
+      'darkModePref',
     ]),
 
     screen() {
@@ -76,21 +78,29 @@ export default {
       },
       deep: true,
     },
-    language: {
-      handler: async function (newv) {
-        if (newv === 'cn') {
-          await import('dayjs/locale/zh-cn');
-          dayjs.locale('zh-cn'); // use locale
-        }
-        if (newv === 'en') {
-          dayjs.locale('en'); // use locale
-        } else {
-        }
-        this.forceUpdate += 1;
-      },
+  },
+  watch: {
+    languagePref() {
+      this.forceUpdate += 1;
     },
   },
   mounted() {
+    // dark mode setting
+    this.$q.dark.set(
+      this.darkModePref === 'true'
+        ? true
+        : this.darkModePref === 'false'
+        ? false
+        : this.darkModePref
+    );
+
+    // set i18n language
+    if (this.languagePref) {
+      setI18nLanguage(i18n, this.languagePref);
+    }
+    // set date locale (best locale is chosen in i18n.ts boot file)
+    this.setLocale(i18n.global.locale.value);
+
     // performance is like molassys on old versions of webview
     if (this.$q.platform.is.android && this.$q.platform.is.capacitor) {
       let androidWebviewVersion = navigator.userAgent

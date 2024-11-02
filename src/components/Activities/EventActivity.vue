@@ -1,7 +1,7 @@
 <template>
   <li v-if="Object.keys(computedChangeSet).length > 0">
     <div class="flex column q-pa-md">
-      <b> {{ verb }} the event page: </b>
+      <b> {{ verb }}: </b>
 
       <ul>
         <li
@@ -20,6 +20,9 @@
 import { Activity } from 'src/types/autogen_types';
 import { computed, ref } from 'vue';
 import common from 'src/assets/common';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const ignored_changesets = [
   'start',
@@ -64,11 +67,11 @@ const props = withDefaults(defineProps<Props>(), {
 const verb = computed(() => {
   const verb = props.activity.verb;
   if (verb === 'create') {
-    return 'Created ';
+    return t('activities.created_event_page');
   } else if (verb === 'update') {
-    return 'Updated info';
+    return t('activities.updated_event_page');
   } else if (verb === 'delete') {
-    return 'Deleted';
+    return t('activities.deleted_event_page');
   } else return verb;
 });
 

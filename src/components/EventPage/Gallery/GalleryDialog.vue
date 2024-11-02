@@ -56,7 +56,9 @@
                     <q-icon name="mdi-delete-outline" />
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>Delete photo</q-item-label>
+                    <q-item-label>{{
+                      $t('reviews.delete_photo')
+                    }}</q-item-label>
                   </q-item-section>
                 </q-item>
                 <!-- SHOW REPORT if not host -->
@@ -71,7 +73,9 @@
                     <q-icon name="mdi-alert-circle-outline" />
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>Report photo</q-item-label>
+                    <q-item-label>{{
+                      $t('reviews.report_photo')
+                    }}</q-item-label>
                   </q-item-section>
                 </q-item>
               </q-menu>

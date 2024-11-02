@@ -56,6 +56,7 @@ export default {
     font-size: 1rem;
     font-weight: 700;
     font-family: 'Metropolis';
+    text-transform: capitalize;
   }
 }
 

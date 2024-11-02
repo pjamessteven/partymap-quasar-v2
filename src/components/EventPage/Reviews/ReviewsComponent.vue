@@ -14,7 +14,7 @@
       <div class="flex column grow">
         <div class="flex row items-end">
           <q-input
-            label="Share your experience!"
+            :label="$t('reviews.share_your_experience')"
             rounded
             autogrow
             class="grow"

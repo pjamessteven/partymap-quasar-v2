@@ -3,7 +3,7 @@
     <div class="flex column q-pa-md">
       <div>
         <b>
-          {{ verb }} the date
+          {{ verb }}
           <router-link
             v-if="
               activity.object_version?.event_id && activity.object_version?.id
@@ -48,6 +48,9 @@
 import { Activity } from 'src/types/autogen_types';
 import { computed, ref } from 'vue';
 import common from 'src/assets/common';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const ignored_changesets = computed(() => {
   let ignored = [
@@ -107,11 +110,11 @@ const props = withDefaults(defineProps<Props>(), {
 const verb = computed(() => {
   const verb = props.activity.verb;
   if (verb === 'create') {
-    return 'Created ';
+    return t('activitiy.created_date');
   } else if (verb === 'update') {
-    return 'Updated';
+    return t('activitiy.updated_date');
   } else if (verb === 'delete') {
-    return 'Deleted';
+    return t('activitiy.deleted_date');
   } else return verb;
 });
 

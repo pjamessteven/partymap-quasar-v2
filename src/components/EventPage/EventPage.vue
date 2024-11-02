@@ -259,7 +259,7 @@
                                     class="flex column ellipsis items-start q-ml-sm q-pl-xs"
                                   >
                                     <div class="">
-                                      {{ $t('event.get_tickets') }}
+                                      {{ t('event.get_tickets') }}
                                     </div>
                                     <div
                                       class="o-050 ellipsis text- q-mb-xs"
@@ -407,9 +407,7 @@
                               <!-- show share button -->
                               <q-btn
                                 class="button-light"
-                                :label="
-                                  $q.screen.gt.xs ? 'Share' : t('event.share')
-                                "
+                                :label="t('event.share')"
                                 no-caps
                                 flat
                                 icon="mdi-share"
@@ -429,11 +427,7 @@
                                     $q.screen.gt.xs ? 'q-mr-sm' : 'q-mr-sm'
                                   "
                                 ></q-icon>
-                                {{
-                                  $q.screen.gt.xs
-                                    ? 'Save to device'
-                                    : 'Save to device'
-                                }}
+                                {{ t('event.save_to_device') }}
                               </q-btn>
 
                               <q-btn
@@ -441,7 +435,7 @@
                                 flat
                                 no-caps
                                 icon="mdi-image-plus-outline"
-                                :label="'Add photos'"
+                                :label="t('event.add_photos')"
                               >
                                 <q-menu
                                   transition-show="jump-down"
@@ -503,7 +497,7 @@
                                 v-if="currentUserCanEdit"
                                 flat
                                 class="button-light"
-                                :label="'Edit Page'"
+                                :label="t('event.edit')"
                                 no-caps
                                 :icon="
                                   $q.screen.gt.xs
@@ -688,7 +682,7 @@
                           v-if="event?.youtube_url?.length > 0"
                           :class="{ 'q-mx-md': $q.screen.lt.sm }"
                         >
-                          {{ $t('event.aftermovie') }}:
+                          {{ t('event.aftermovie') }}:
                         </div>
 
                         <YoutubeVideoComponent
@@ -1474,9 +1468,9 @@ const computedExternalUrlTitle = computed(() => {
     computedExternalUrl.value &&
     computedExternalUrl.value?.indexOf('facebook') > -1
   ) {
-    return 'Facebook Page';
+    return t('event_dates.facebook_page');
   } else {
-    return 'Visit Website';
+    return t('event_dates.visit_website');
   }
 });
 

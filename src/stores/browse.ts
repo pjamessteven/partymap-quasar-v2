@@ -7,6 +7,9 @@ import { EventDate } from 'src/types/autogen_types';
 import { useMainStore } from './main';
 
 import { groupEventDatesByMonth } from './query';
+import { i18n } from 'src/boot/i18n';
+
+const { t } = i18n.global;
 
 // TODO: improve interface
 
@@ -87,7 +90,7 @@ export const useBrowseStore = defineStore('browse', {
       } catch (error) {
         item.eventDatesLoading = false;
         item.eventDatesHasNext = false;
-        Notify.create('Network error');
+        Notify.create(t('error_codes.network_error'));
 
         throw error;
       }

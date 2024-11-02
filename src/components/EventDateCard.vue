@@ -127,9 +127,13 @@
                       event.event.rrule &&
                       event.event.rrule.separation_count > 0
                     "
-                    class="o-070 no-wrap ellipsis q-ml-xs"
+                    class="o-070 no-wrap ellipsis q-ml-sm"
                   >
-                    <q-icon size="1em" class="q-mr-sm" name="las la-redo-alt" />
+                    <q-icon
+                      size="1em"
+                      class="q-mr-sm q-pb-xs"
+                      name="las la-redo-alt"
+                    />
                     <span v-if="$q.screen.gt.sm">{{
                       simplifiedRecurringPattern(event.event.rrule)
                     }}</span>
@@ -137,7 +141,7 @@
                 </span>
                 <div
                   class="flex row items-center no-wrap ellipsis"
-                  style="width: 100%"
+                  style="width: 100%; text-transform: capitalize"
                 >
                   <q-icon name="las la-calendar" class="q-mr-sm" />
                   <div class="flex row no-wrap ellipsis">
@@ -146,7 +150,9 @@
                     </span>
                     <span v-else>
                       {{ monthYear(event.start_naive, event.tz)
-                      }}<span class="o-060">&nbsp;({{ $t('event.tbc') }})</span>
+                      }}<span class="o-060"
+                        >&nbsp;({{ $t('event_dates.tbc') }})</span
+                      >
                     </span>
                   </div>
                 </div>

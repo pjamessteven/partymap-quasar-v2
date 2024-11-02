@@ -2,15 +2,14 @@
   <q-card class="edit-card dialog-card">
     <q-card-section class="flex column no-wrap dialog-card-header">
       <div class="flex items-center no-wrap justify-between grow">
-        <div class="text-h6 card-title q-pr-md">Update Event Video</div>
+        <div class="text-h6 card-title q-pr-md">{{ $t('update_video') }}</div>
         <q-btn icon="close" class="q-ml-md" flat round dense v-close-popup />
       </div>
     </q-card-section>
     <q-card-section class="dialog-card-content">
       <div class="t2 q-mb-md">
         <div class="t2">
-          Add the aftermovie or promo video for this event by pasting a Youtube
-          URL.
+          {{ $t('update_video_msg') }}
         </div>
       </div>
       <q-input

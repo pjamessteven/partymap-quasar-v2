@@ -4,11 +4,10 @@
       <TransactionInfo v-if="showTransactionInfo" :activity="activities[0]" />
       <div class="flex column no-wrap" v-if="activitiesByVerb.create">
         <div>
-          <b
-            >Added artist<span v-if="activitiesByVerb?.create?.length > 1"
-              >s</span
-            >
-            to the lineup for the date
+          <b>
+            {{
+              tc('activity.add_artist', activitiesByVerb?.create?.length)
+            }}&nbsp;{{ t('activity.to_the_lineup') }}
             <router-link
               v-if="
                 activities[0]?.target_version?.event_id &&
@@ -43,10 +42,9 @@
       </div>
       <div class="flex column no-wrap q-mt-sm" v-if="activitiesByVerb?.delete">
         <div>
-          Removed artist<span v-if="activitiesByVerb.delete?.length > 1"
-            >s</span
-          >
-          from the lineup
+          {{
+            tc('activity.remove_artist', activitiesByVerb?.delete?.length)
+          }}&nbsp;{{ t('activity.from_the_lineup') }}
         </div>
         <div
           class="flex column no-wrap q-mt-sm"
@@ -67,24 +65,16 @@ import ArtistListItem from 'src/components/EventPage/EventDates/Artists/ArtistLi
 import { Activity } from 'src/types/autogen_types';
 import { computed, ref } from 'vue';
 import TransactionInfo from './TransactionInfo.vue';
-import TagComponent from '../TagComponent.vue';
 import common from 'src/assets/common';
+import { useI18n } from 'vue-i18n';
+
+const { t, tc } = useI18n();
 
 interface Props {
   activities: Activity[];
   showTransactionInfo?: boolean;
 }
 
-const targetVerb = computed(() => {
-  const targetVerb = props.activities[0].verb; // assuming the target activity is always last to be added in a transaction
-  if (targetVerb === 'create') {
-    return 'Added';
-  } else if (targetVerb === 'update') {
-    return 'Updated';
-  } else if (targetVerb === 'delete') {
-    return 'Removed';
-  } else return 'Modified';
-});
 const props = withDefaults(defineProps<Props>(), {
   activities: null,
   showTransactionInfo: false,

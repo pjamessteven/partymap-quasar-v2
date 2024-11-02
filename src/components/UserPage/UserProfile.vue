@@ -51,7 +51,7 @@
             <q-input
               v-if="editing"
               v-model="user.alias"
-              label="Full Name (Optional)"
+              :label="$t('user_profile.name_label')"
               maxlength="200"
             />
 
@@ -67,7 +67,7 @@
             <q-input
               v-else
               v-model="user.description"
-              label="A little bit about you or your organisation"
+              :label="$t('user_profile.description_label')"
               maxlength="1000"
               counter
             />
@@ -79,7 +79,7 @@
               @click.stop="() => (editing = !editing)"
               class="nav-button flex items-center justify-between q-mr-sm"
             >
-              <span>Edit Profile</span>
+              <span>{{ $t('user_profile.edit_profile') }}</span>
               <q-icon
                 name="mdi-square-edit-outline"
                 :size="$q.screen.gt.xs ? '1rem' : '1rem'"
@@ -94,7 +94,7 @@
               @click.stop="share()"
               class="nav-button flex items-center justify-between q-mr-sm"
             >
-              <span v-if="$q.screen.lt.sm">Share</span><span v-else>Share</span>
+              <span>{{ $t('general.share') }}</span>
               <q-icon
                 name="mdi-share"
                 :size="$q.screen.gt.xs ? '1rem' : '1rem'"
@@ -109,7 +109,7 @@
               @click.stop="() => updateUser()"
               class="nav-button flex items-center justify-between q-mr-sm"
             >
-              <span>Done</span>
+              <span>{{ $t('general.done') }}</span>
               <q-icon
                 name="mdi-check"
                 :size="$q.screen.gt.xs ? '1.5rem' : '1rem'"
@@ -124,7 +124,7 @@
               @click.stop="() => loadCurrentUserDetails()"
               class="nav-button flex items-center justify-between q-mr-sm"
             >
-              <span>Cancel</span>
+              <span>{{ $t('general.cancel') }}</span>
               <q-icon
                 name="mdi-close"
                 :size="$q.screen.gt.xs ? '1.5rem' : '1rem'"
@@ -145,7 +145,9 @@
     >
       <q-card class="avatar-dialog dialog-card fullscreen-mobile-card">
         <q-card-section class="row items-center dialog-card-header">
-          <div class="text-h6 inter bolder">Upload new avatar</div>
+          <div class="text-h6 inter bolder">
+            {{ $t('user_profile.upload_avatar') }}
+          </div>
           <q-space />
           <q-btn
             icon="close"
@@ -161,7 +163,8 @@
         <q-card-section
           class="t2 dialog-card-content flex column no-wrap items-start justify-start"
         >
-          Your avatar will be visible to everyone on PartyMap.
+          {{ $t('user_profile.avatar_msg') }}
+
           <MultipleMediaSelector
             ref="mediaSelector"
             :avatarMode="true"

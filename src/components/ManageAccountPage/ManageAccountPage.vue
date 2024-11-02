@@ -1,6 +1,8 @@
 <template>
   <SolidPage>
-    <template v-slot:title> <div>Manage Account</div></template>
+    <template v-slot:title>
+      <div>{{ $t('manage_account.manage_account') }}</div></template
+    >
     <template v-slot>
       <div class="flex column" :class="$q.screen.lt.sm ? 'q-mt-sm' : 'q-mt-lg'">
         <UpdateEmailAddressComponent />

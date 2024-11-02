@@ -22,7 +22,7 @@
               dense
               v-model="dt.startHours"
               :options="hours"
-              label="hour"
+              :label="$t('add.hour')"
               class="time-select"
             >
             </q-select>
@@ -32,7 +32,7 @@
               dense
               v-model="dt.startMinutes"
               :options="minutes"
-              label="min"
+              :label="$t('add.minutes')"
               class="time-select"
             >
             </q-select>
@@ -48,7 +48,7 @@
               dense
               v-model="dt.endHours"
               :options="hours"
-              label="hour"
+              :label="$t('add.hour')"
               class="time-select"
             />
             <div class="q-px-xs">:</div>
@@ -58,7 +58,7 @@
               dense
               v-model="dt.endMinutes"
               :options="minutes"
-              label="min"
+              :label="$t('add.minutes')"
               class="time-select"
             />
           </div>

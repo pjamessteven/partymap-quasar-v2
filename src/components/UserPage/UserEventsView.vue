@@ -77,7 +77,7 @@
               >
                 <div class="flex items-center row no-wrap">
                   <q-icon name="mdi-check-circle" class="q-pr-md" size="1rem" />
-                  <div>Going</div>
+                  <div>{{ $t('user_profile.going') }}</div>
                 </div>
               </q-btn>
 
@@ -95,7 +95,7 @@
               >
                 <div class="flex items-center row no-wrap">
                   <q-icon name="mdi-star-outline" class="q-pr-md" size="1rem" />
-                  <div>Interested</div>
+                  <div>{{ $t('user_profile.interested') }}</div>
                 </div>
               </q-btn>
 
@@ -117,7 +117,7 @@
                     class="q-pr-md"
                     size="1rem"
                   />
-                  <div>Hosting</div>
+                  <div>{{ $t('user_profile.hosting') }}</div>
                 </div>
               </q-btn>
 
@@ -139,7 +139,7 @@
                     class="q-pr-md"
                     size="1rem"
                   />
-                  <div>More</div>
+                  <div>{{ $t('user_profile.more') }}</div>
                 </div>
                 <MenuWrapper
                   :showing="showingYouMenu"
@@ -158,7 +158,9 @@
                         }
                       "
                     >
-                      <q-item-section> Created</q-item-section>
+                      <q-item-section>
+                        {{ $t('user_profile.created') }}
+                      </q-item-section>
                     </q-item>
                     <q-item
                       v-close-popup
@@ -170,7 +172,9 @@
                         }
                       "
                     >
-                      <q-item-section> Contributed/Reviewed </q-item-section>
+                      <q-item-section>
+                        {{ $t('user_profile.reviewed') }}
+                      </q-item-section>
                     </q-item>
                   </q-list>
                 </MenuWrapper>
@@ -199,7 +203,7 @@
                     class="q-pr-md"
                     size="1rem"
                   />
-                  <div>Upcoming</div>
+                  <div>{{ $t('user_profile.upcoming') }}</div>
                 </div>
               </q-btn>
 
@@ -217,7 +221,7 @@
               >
                 <div class="flex items-center row no-wrap">
                   <q-icon name="mdi-history" class="q-pr-md" size="1rem" />
-                  <div>Past</div>
+                  <div>{{ $t('user_profile.past') }}</div>
                 </div>
               </q-btn>
             </div>

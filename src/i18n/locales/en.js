@@ -1,6 +1,3 @@
-// This is just an example,
-// so you can safely delete all default props below
-
 export default {
   general: {
     cancel: 'Cancel',
@@ -9,6 +6,10 @@ export default {
     save_changes: 'Save changes',
     undo: 'Undo',
     events: 'events',
+    end_of_results: 'End of results',
+    no_results: 'No results',
+    share: 'Share',
+    done: 'Done',
   },
   meta: {
     main_title: 'PartyMap | Festivals and Underground Culture ',
@@ -44,6 +45,9 @@ export default {
     ACCOUNT_PENIDNG: 'Account has not been activated. Check your email!',
     no_location:
       'Check that partymap.com has permission to access your location.',
+    ip_location:
+      "Can't get your location! \n\n Using IP address location instead...",
+    network_error: 'Network error! Check your connection...',
   },
   user_profile: {
     my_events: 'My events',
@@ -54,8 +58,33 @@ export default {
       "Are you sure you want to delete this event? This can't be undone",
     pending_moderation: 'Pending moderation',
     only_visible_to_you: 'Only visible to you',
+    not_signed_in: "You're not signed in",
+    get_on_partymap: "Get on PartyMap to stay up to date with what's going on!",
+    view_profile: 'View Profile',
+    edit_profile: 'Edit Profile',
+    lets_go: "Let's go",
+    name_label: 'Full Name (Optional)',
+    description_label: 'A little bit about you or your organisation',
+    upload_avatar: 'Upload new avatar',
+    avatar_msg: 'Your avatar will be visible to everyone on PartyMap.',
+    events: 'Events',
+    activity: 'Activity',
+    following: 'Following',
+    followers: 'Followers',
+    coming_soon: 'Coming soon!',
+    all: 'All',
+    you: 'You',
+    going: 'Going',
+    interested: 'Interested',
+    hosting: 'Hosting',
+    created: 'Submitted',
+    reviewed: 'Reviewed',
+    upcoming: 'Upcoming',
+    past: 'Past',
+    more: 'More',
   },
   manage_account: {
+    manage_account: 'Manage Account',
     password: 'Password',
     update_password: 'Update password',
     new_password: 'New password',
@@ -147,7 +176,7 @@ export default {
     account_already_activated_error_tilte: "You're all good!",
     account_already_activated_error_msg:
       'Your account has already been activated',
-    forgot_password: 'Forgot your password?',
+    forgot_password: 'Forgot password?',
     forgot_password_message:
       "We'll send you an email containing a link to a page where you can reset your password.",
     reset_password: 'Reset password',
@@ -208,6 +237,7 @@ export default {
     add_description:
       "There's nothing here yet... Add a detailed description for this event!",
     update_description: 'Update Event Description',
+    save_to_device: 'Save to device',
   },
   add_event: {
     please_select_an_option: 'Submit an event:',
@@ -227,7 +257,7 @@ export default {
     explore: 'Explore Map',
     favorites: 'Favorites',
     add_event: 'Add an Event',
-    dark_mode: 'Dark Mode',
+
     login: 'Log in',
     logout: 'Log out',
     search: 'Search',
@@ -292,7 +322,7 @@ export default {
     nature_desc: 'Festivals set in idyllic locations',
     burn: 'Burns',
     burn_desc:
-      'Anarchistic self-organized festivals that follow the ten prinicpals of Burning Man',
+      'Anarchistic self-organized festivals that follow the ten prinicpals of Burning Man', // don't translate 'Burning Man'
     beach: 'Beach',
     beach_desc: 'Get your toes wet',
     psychedelic: 'Psychedelic',
@@ -318,7 +348,13 @@ export default {
     show_more: '...show more',
     show_less: '...show less',
   },
+
+  profile: {},
   nav: {
+    home: 'Home',
+    explore: 'Explore',
+    browse: 'Browse',
+    you: 'You',
     settings: 'Settings',
     dark_mode: 'Dark mode',
     watercolor: 'Watercolour',
@@ -347,15 +383,25 @@ export default {
     month_d: 'Happening this month',
     all: 'All',
     all_d: 'Until the end of time',
+    any_dates: 'Any Dates',
+    all_tags: 'All Tags',
+    all_artists: 'All Artists',
+    size: 'Size',
+    duration: 'Duration',
     custom: 'Custom',
-    custom_d: 'Select date range',
+    select_date_range: 'Select a date range',
+    select_end_date: 'Select end date',
     select_dates: 'Dates',
     select_duration: 'Duration',
     select_size: 'Size',
     select_artist: 'Artists',
     select_tags: 'Type',
-    top_tags_in_area: 'Top tags',
-    top_artists_in_area: 'Top artists',
+    top_tags_in_area: 'Top tags in this area',
+    top_tags_worldwide: 'Top tags worldwide',
+    selected_tags: 'Selected tags',
+    search_results: 'Search results',
+    top_artists_in_area: 'Top artists in this area',
+    top_artists_worldwide: 'Top artists worldwide',
     search_artists: 'Search artists',
     artist_page: 'View profile',
     search_tags: 'Search tags',
@@ -368,7 +414,7 @@ export default {
     four_days: '4 days',
     five_days_plus: '5 days or longer',
     sort_results_by: 'Sort results by:',
-    map_options: 'Map style:',
+    map_options: 'Map',
     sort_by_date: 'Sort by date (Soonest)',
     distance: 'Distance (Closest)',
     shortcuts: 'Shortcuts',
@@ -379,6 +425,13 @@ export default {
     people: 'people',
     saved_events: 'Saved events',
     quick_submit: 'Add an an event!',
+    lang_options: 'Language',
+    all_activity: 'All activity',
+    submit_event: 'Submit event',
+    dark_mode: 'Theme',
+    on: 'Dark',
+    off: 'Light',
+    auto: 'Auto',
   },
   add: {
     info: 'Info',
@@ -391,7 +444,7 @@ export default {
     name: 'Event name',
     description: 'Event description',
     tags: 'Tags',
-    tags_msg: 'For example: free, drum and bass, burn',
+    tags_msg: 'What makes this event stand out, and what music can one expect?',
     url: 'Optional link to main event webpage',
     ticketing_url: 'Link to ticketing page',
     select_location: 'Select location',
@@ -399,10 +452,12 @@ export default {
       'Some ideas: festival, cultural, spiritual, camping, free, hiphop, trance, metal, alcohol free, psychedelic, drug testing, wheelchair accessible...',
     enter_location: 'Enter location',
     location_caption: 'Search for a venue or an address.',
+    location_preview: 'Location preview',
     date: 'Date and Time',
     review: 'Review',
     recurrence: 'Event Schedule',
     recurrence_caption: 'Select how often this event occurs.',
+    recurrence_msg: 'Will this event happen again, or is it a one-off?',
     event_start: 'Event start',
     event_end: 'Event end',
     hour: 'Hour',
@@ -410,9 +465,7 @@ export default {
     ampm: 'AM/PM',
     please_select_date_first: 'Please select the date and time first',
     please_select_date_msg:
-      'Select a range if the event will happen over multiple days',
-    please_select_date_msg_2:
-      "If it's a one-day event you will need to double click to select the day.",
+      "Select a date range. If it's a one-day event you will need to double click to select the day.",
     start_time: 'Start time',
     remove_start_time: '- Remove start time',
     end_date: 'Select event end date',
@@ -450,6 +503,8 @@ export default {
       'Just a rough estimate - please round to the nearest hundred or thousand attendees',
     size: 'Size',
     size_how_many: 'Size',
+    size_msg:
+      'Give a rough estimate of how many people will be attending this event.',
     url: 'External URL',
     url_msg: 'A link to the website or Facebook page.',
     add_event_date: 'Add date',
@@ -458,6 +513,8 @@ export default {
     pending_moderation_msg:
       'This event will show on the map after we have approved it.',
     lineup: 'Lineup',
+    lineup_msg2:
+      'Search for the talented artists that are playing at this event.',
     lineup_msg:
       'Add artists and performance times to the lineup for this event. If there is more than one stage at this event you can use the plus sign to add additional stages.',
     required_information: 'Required information',
@@ -471,6 +528,34 @@ export default {
     event_poster_image_msg: 'Upload a promotional image for this event.',
     event_poster_image_msg2:
       'We recommend a portrait poster for the best look!',
+    search_for_event: 'Search for PartyMap event',
+    youtube_url: 'YouTube URL',
+    youtube_url_msg:
+      'Paste the YouTube link to the after-movie or promo video here.',
+    reset: 'Reset',
+    submit: 'Submit',
+    detailed_description: 'Detailed description (Optional)',
+    detailed_description_msg:
+      'Here you can tell people what they can expect in detail. You can write in any language.',
+    event_images: 'Event Images',
+    event_logo: 'Event logo',
+    event_logo_msg:
+      'Upload the logo or main cover image for this event (required)',
+    select_logo: 'Select/Drop Logo',
+    lineup_poster: 'Lineup Poster',
+    lineup_poster_msg: 'Upload a lineup poster (optional)',
+    select_lineup_poster: 'Select/Drop Lineup Poster',
+    other_photos: 'Other photos',
+    other_photos_msg:
+      'Upload some photos from previous editions of this event (optional)',
+    other_photos_msg_consent:
+      'Please make sure that you have consent of all identifiable people before uploading photos from parties and festivals.',
+    optional_information: 'Optional Information',
+    event_details: 'Event Details',
+    copyright_warning:
+      'Please do not upload copyrighted content to Partymap. If you do it will be removed from the website.',
+    validation_error: 'Missing required information...',
+    validated: 'Looks good! Thank you for contributing!',
   },
   add_event_date: {
     add_new_event_date: 'Add event date',
@@ -489,13 +574,14 @@ export default {
   },
   description: {
     edit_description: 'Update main description',
+    edit_summary: 'Update summary',
     keep_it_short: 'Keep it short and sweet.',
     summary: 'Summary',
     attribute_msg: 'Description source URL',
     attribute_msg_long:
       'If you did not write this yourself, please give the source.',
     summary_msg:
-      'A short description that will be shown at the top of the event page.',
+      'A short description that will be shown at the top of the event page. You can write in any language.',
     detailed_description: 'Detailed description',
     detailed_description_msg: 'A detailed description of this upcoming event.',
     put_more_details_in_event_date:
@@ -559,6 +645,31 @@ export default {
     the_tag: 'the tag',
     load_more: 'Load more',
     sorted_by_recent: 'Sorted by most recent',
+    all_activity: 'All Activity',
+    coming_soon: 'Coming soon!',
+    created_event: 'Created the event',
+    approved_event: 'Approved the event',
+    updated_event: 'Updated the event',
+    reviewed_event: 'Reviewed the event',
+    did_something: 'Did something',
+    add_tag: 'Added tag | Added tags',
+    remove_tag: 'Removed tag | Removed tags',
+    added_artist: 'Added an artist | Added artists',
+    added_artist: 'Removed an artist | Removed artists',
+    to_the_lineup: 'to the lineup for the date ',
+    from_the_lineup: 'from the lineup',
+    added_media: 'Added media',
+    modified_items: 'Modified these items',
+    created_event_page: 'Create the event page',
+    updated_event_page: 'Updated the event page',
+    deleted_event_page: 'Deleted the event page',
+    set_location: 'Set the location for the date',
+    changed_location: 'Changed the location for the date',
+    created_date: 'Create the event date',
+    updated_date: 'Updated the event date',
+    deleted_date: 'Deleted the event date',
+    created_review: 'Wrote a review',
+    changed_review: 'Edited their review',
   },
   versions: {
     revert_changes: 'Revert changes',
@@ -761,13 +872,36 @@ export default {
     submitted: 'Suggestion submitted',
     submitted_msg:
       'Your suggestion will show on the page after it has been reviewd. Thanks for contirbuting to PartyMap!',
+    tickets: 'Tickets',
+    tickets_msg:
+      'Add links for users to directly access tickets for this event',
+    cancelled: 'Mark this date as happening',
+    cancelled_msg:
+      'This date was previously marked as cancelled. Are you really sure you want to mark is as happening?',
+    cancel: 'Mark this date as cancelled',
+    cancel_msg:
+      'Only do this if this date has been cancelled. The event will still show up on PartyMap. Are you sure you want to mark the event as cancelled?',
+    ticket_description: 'Ticket description',
+    min_price: 'Min price',
+    max_price: 'Max price (set the same if only one tier available)',
+    ticket_currency: 'Ticket Currency',
+    mark_as_cancelled: 'Mark as cancelled',
+    mark_only_this_as_cancelled: 'Mark only this event date as cancelled',
+    mark_only_this_as_cancelled_msg:
+      'Choose this option if the next event date is cancelled, but the event will happen again next year or some other time.',
+    cancel_all: 'Cancel all future dates',
+    cancel_all_msg: `Choose this option if the festival likely isn't going to happen
+              again. The event page will still be searchable on PartyMap and can
+              be bought back to life if the festival makes a come-back.`,
   },
-
   edit_event: {
     remove_schedule: 'Remove schedule',
     remove_schedule_msg:
       'Does the event not happen on a regular schedule anymore? This action will delete all future scheduled event dates.',
     updating_event: 'Updating event...',
+    update_video: 'Update event video',
+    update_video_msg:
+      'Add the aftermovie or promo video for this event by pasting a Youtube URL.',
   },
   tags: {
     tag_event: 'Edit tags',
@@ -779,46 +913,11 @@ export default {
     search_for_tag: 'Search for tag',
     top_tags: 'Top tags',
   },
-  contribution: {
-    title: 'Contributions',
-    contribute_to_this_event: 'Make a contribution',
-    upload_photos: 'Add photos',
-    pick_files: 'Pick files',
-    abort_upload: 'Abort upload',
-    upload_progress: 'Upload progress',
-    submit: 'Submit',
-    upvote: 'Upvote',
-    downvote: 'Downvote',
-    close: 'Close', // close window
-    added_by: 'added by',
-    created_this_event: 'created_this_event',
-    best: 'Best',
-    worst: 'Worst',
-    newest: 'Newest',
-    oldest: 'Oldest',
-    add_label: 'Submit photos, an experience or a review.',
-  },
+
   time: {
     time: 'time',
     happening_now: 'Happening now',
     happening_today: 'Happening today',
-    month_ago: 'month ago',
-    months_ago: 'months ago',
-    seconds_ago: 'seconds ago',
-    week_ago: 'week ago',
-    weeks_ago: 'weeks ago',
-    hour_ago: 'hour ago',
-    hours_ago: 'hours ago',
-    minute_ago: 'minutes ago',
-    minutes_ago: 'minutes ago',
-    days_ago: 'days ago',
-    day_ago: 'day ago',
-    day_away: 'day away',
-    days_away: 'days away',
-    week_away: 'week away',
-    weeks_away: 'weeks away',
-    month_away: 'month away',
-    months_away: 'months away',
     every: 'Every',
     day: 'day',
     day_of_the_month: 'day of the month',
@@ -926,6 +1025,7 @@ export default {
   },
   reviews: {
     reviews_and_experiences: 'Reviews and Experiences',
+    share_your_experience: 'Share your experience!',
     no_reviews: 'No one has shared their experience yet... be the first!',
     consent_msg: `Please make sure that you have the consent of all people in your
           photos before uploading.`,
@@ -934,6 +1034,8 @@ export default {
     login_msg: 'Login to post reviews',
     report: 'Report review',
     delete: 'Delete review',
+    delete_photo: 'Delete photo',
+    report_photo: 'Report photo',
   },
   report: {
     report_event: 'Report event',
@@ -963,7 +1065,7 @@ export default {
   about: {
     about: 'What is this?',
     welcome:
-      'Welcome to your global directory of festivals, doofs, and underground culture!',
+      'Welcome to the universal directory of music festivals, doofs, and underground culture!',
     1: `PartyMap is a crowd-sourced, community-driven platform for discovering
       festivals and experiences around the world. I built this because I wished
       something like this existed. If you have any thoughts, ideas or
@@ -1008,126 +1110,60 @@ export default {
     show_translation: 'Show translation',
   },
   privacy: {
-    header: 'What is this all about?',
-    1: `Privacy is really important. As the creator of PartyMap I have taken a
-        lot of care in regards to how I am handling and storing data. This
-        privacy policy formally outlines these concerns and explains what data
-        is collected and recorded by PartyMap and how we use it.`,
-    2: ` If you have additional questions or require more information about our
-        Privacy Policy, do not hesitate to contact us.`,
-    3: `This Privacy Policy applies only to our online activities and is valid
-        for visitors to our website with regards to the information that they
-        shared and/or collect in PartyMap. This policy is not applicable to any
-        information collected offline or via channels other than this website.`,
-    4: 'Consent',
-    5: `I promise that there's nothing nasty in here, but it must be said that
-        by using our website, you hereby consent to our Privacy Policy and agree
-        to its terms.`,
-    6: 'Information we collect',
-    7: `The personal information that you are asked to provide, and the reasons
-        why you are asked to provide it, will be made clear to you at the point
-        we ask you to provide your personal information.`,
-    8: `If you contact us directly, we may receive additional information about
-        you such as your name, email address, phone number, the contents of the
-        message and/or attachments you may send us, and any other information
-        you may choose to provide.`,
-    9: `When you register for an Account, we may ask for your contact
-        information, including items such as name, company name, address, email
-        address, and/or telephone number.`,
-    10: `When you connect to PartyMap.com, your IP address, browser user-agent
-        and rough location is logged.`,
-    11: 'Third-party login disclaimer (Google and FaceBook)',
-    12: `When you login with your Google or Facebook account, we don't receive
-        your login credentials as these are processed by Google or Facebook (the
-        authentication provider). We request the bare-minumum information from
-        the authentication provider, and we store only your email address in our
-        system.`,
-    13: `If you delete your PartyMap account, your data will be removed
-        completely from our database.`,
-    14: `If you originally logged in with Google or Facebook, but you want to be
-        able to log in with an email and passowrd combination, you can add a
-        password from the account page and continue to log in with the email
-        address affiliated with the third-party login provider and your newly
-        created password.`,
-    15: `NOTE: YOU MUST DO THIS BEFORE DELETING OR DE-ACTIVATING YOUR FACEBOOK OR
-        GOOGLE ACCOUNT.`,
-    16: 'How we use your information ',
-    17: 'We use the information we collect in various ways, including to:',
-    18: 'Provide, operate, and maintain our website',
-    19: 'Improve, personalize, and expand our website',
-    20: 'Understand and analyze how you use our website',
-    21: 'Develop new products, services, features, and functionality',
-    22: `Communicate with you, either directly or through one of our partners,
-          including for customer service, to provide you with updates and other
-          information relating to the website, and for marketing and promotional
-          purposes`,
-    23: 'Send you emails',
-    24: 'Find and prevent fraud',
-    25: 'Log Files',
-    26: `PartyMap follows a standard procedure of using log files. These files
-        log visitors when they visit websites. All hosting companies do this and
-        a part of hosting services' analytics. The information collected by log
-        files include internet protocol (IP) addresses, browser type, Internet
-        Service Provider (ISP), date and time stamp, referring/exit pages, and
-        possibly the number of clicks. These are not linked to any information
-        that is personally identifiable. The purpose of the information is for
-        analyzing trends, administering the site, tracking users' movement on
-        the website, and gathering demographic information.`,
-    27: 'Cookies and Web Beacons',
-    28: `Like most websites, PartyMap uses cookies. The only cookie that PartyMap
-        stores in your browser is a session token which is used to keep you
-        logged into your account. We don't do any creepy tracking.`,
-    29: 'Third Party Privacy Policies',
-    30: `PartyMap's Privacy Policy does not apply to other advertisers or
-        websites. Thus, we are advising you to consult the respective Privacy
-        Policies of these third-party ad servers for more detailed information.
-        It may include their practices and instructions about how to opt-out of
-        certain options.`,
-    31: `You can choose to disable cookies through your individual browser
-        options. To know more detailed information about cookie management with
-        specific web browsers, it can be found at the browsers' respective
-        websites.`,
-    32: 'CCPA Privacy Rights (Do Not Sell My Personal Information)',
-    33: `Under the CCPA, among other rights, California consumers have the right
-        to:`,
-    34: `Request that a business that collects a consumer's personal data
-          disclose the categories and specific pieces of personal data that a
-          business has collected about consumers.`,
-    35: `Request that a business delete any personal data about the consumer
-          that a business has collected.`,
-    36: `Request that a business that sells a consumer's personal data, not
-          sell the consumer's personal data.`,
-    37: `If you make a request, we have one month to respond to you. If you would
-        like to exercise any of these rights, please contact us.`,
-    38: 'GDPR Data Protection Rights',
-    39: `We would like to make sure you are fully aware of all of your data
-        protection rights. Every user is entitled to the following:`,
-    40: `The right to access – You have the right to request copies of your
-          personal data. We may charge you a small fee for this service.`,
-    41: `The right to rectification – You have the right to request that we
-          correct any information you believe is inaccurate. You also have the
-          right to request that we complete the information you believe is
-          incomplete.`,
-    42: `The right to erasure – You have the right to request that we erase
-          your personal data, under certain conditions.`,
-    43: `The right to restrict processing – You have the right to request that
-          we restrict the processing of your personal data, under certain
-          conditions.`,
-    44: `The right to object to processing – You have the right to object to
-          our processing of your personal data, under certain conditions.`,
-    45: `The right to data portability – You have the right to request that we
-          transfer the data that we have collected to another organization, or
-          directly to you, under certain conditions.`,
-    46: `If you make a request, we have one month to respond to you. If you would
-        like to exercise any of these rights, please contact us.`,
-    47: "Children's Information",
-    48: `Another part of our priority is adding protection for children while
-        using the internet. We encourage parents and guardians to observe,
-        participate in, and/or monitor and guide their online activity.`,
-    49: `PartyMap does not knowingly collect any Personal Identifiable
-        Information from children under the age of 13. If you think that your
-        child provided this kind of information on our website, we strongly
-        encourage you to contact us immediately and we will do our best efforts
-        to promptly remove such information from our records.`,
+    1: 'Privacy is really important. This privacy policy formally outlines these concerns and explains what data is collected and recorded by PartyMap and how we use it.',
+    2: 'This Privacy Policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in PartyMap. This policy is not applicable to any information collected offline or via channels other than this website.',
+    3: 'Consent',
+    4: 'By using PartyMap, you hereby consent to our Privacy Policy and agree to its terms.',
+    5: 'Information we collect',
+    6: 'Your email address when you register',
+    7: 'Basic information, such as your name, if you provide it.',
+    8: 'IP address, browser details, page views and approximate location when you visit',
+    9: 'Messages you send us directly',
+    10: 'How we use your information',
+    11: 'We use your information to:',
+    12: 'Operate and improve PartyMap',
+    13: 'Communicate with you about our servies',
+    14: 'Prevent fraud',
+    15: 'Third-party login disclaimer (Google, FaceBook and Apple)',
+    16: "When you use Google or Facebook to log in, we only store your email address. We don't receive your login credentials or any other information.",
+    17: 'Important: If you plan to delete your Google or Facebook account, add a password to your PartyMap account first to maintain access.',
+    18: 'Cookies',
+    19: "We use only a cookie to keep you logged in. We don't use any tracking cookies.",
+    20: "Children's Privacy",
+    21: 'PartyMap does not knowingly collect information from children under 13.',
+    22: 'Changes to This Policy',
+    23: 'We may update this policy from time to time. Please review it periodically.',
+    24: 'If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.',
+  },
+  terms_and_conditions: {
+    1: 'PartyMap Terms of Service',
+    2: '1. Acceptance of Terms',
+    3: "By using PartyMap, you agree to these terms. If you disagree, please don't use our app.",
+    4: '2. User Accounts',
+    5: "You're responsible for maintaining your account security.",
+    6: 'You must be at least 13 years old to use PartyMap.',
+    7: 'Provide accurate and complete information when creating an account.',
+    8: '3. User Content',
+    9: 'You retain ownership of your content.',
+    10: 'By posting, you grant PartyMap a license to use your content.',
+    11: "Don't post illegal, offensive, or harmful content.",
+    12: '4. Prohibited Activities',
+    13: "Don't misuse our services or interfere with other users.",
+    14: "Don't attempt to access restricted areas of the app.",
+    15: "Don't use PartyMap for illegal activities.",
+    16: '5. Intellectual Property',
+    17: 'PartyMap and its content are protected by copyright and other laws.',
+    18: '6. Termination',
+    19: 'We may suspend or terminate your account for violations of these terms.',
+    20: '7. Disclaimers',
+    21: 'PartyMap is provided "as is" without warranties of any kind.',
+    22: '8. Limitation of Liability',
+    23: "PartyMap isn't liable for any damages resulting from your use of the app.",
+    24: '9. Changes to Terms',
+    25: 'We may update these terms. Check regularly for changes.',
+    26: '10. Governing Law',
+    27: 'These terms are governed by New Zealand law.',
+    28: 'By using PartyMap, you agree to these terms. For questions, contact info@partymap.com',
+    29: 'Last updated: 2nd of November 2024',
   },
 };

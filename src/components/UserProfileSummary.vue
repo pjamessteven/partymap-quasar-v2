@@ -58,7 +58,7 @@
                 /><span v-if="user.alias">
                   -&nbsp;{{ user.alias }}
                 </span> </span
-              ><span v-else> You're not signed in </span>
+              ><span v-else>{{ $t('user_profile.not_signed_in') }} </span>
             </div>
 
             <div
@@ -69,16 +69,14 @@
               }"
             >
               <span v-if="user?.description"> {{ user.description }} </span
-              ><span v-else
-                >Get on PartyMap to stay up to date with what's going on!</span
-              >
+              ><span v-else>{{ $t('user_profile.get_on_partymap') }}</span>
             </div>
           </div>
         </div>
         <div class="action-buttons flex row items-center t3">
           <span v-if="$q.screen.gt.xs">
-            <span v-if="user">View Profile</span>
-            <span v-else>Let's go</span>
+            <span v-if="user">{{ $t('user_profile.view_profile') }}</span>
+            <span v-else>{{ $t('user_profile.lets_go') }}</span>
           </span>
           <q-icon
             name="mdi-chevron-right"

@@ -58,7 +58,7 @@
             autogrow
             color="bg-grey-7"
             v-model="ticket.description"
-            label="Ticket description"
+            :label="$t('add.ticket_description')"
           />
           <div class="flex row no-wrap">
             <q-input
@@ -68,7 +68,7 @@
               autogrow
               color="bg-grey-7"
               v-model="ticket.price_min"
-              label="Min Price"
+              :label="$t('add.min_price')"
             />
             <q-input
               class="q-mr-sm"
@@ -77,7 +77,7 @@
               autogrow
               color="bg-grey-7"
               v-model="ticket.price_max"
-              label="Max Price"
+              :label="$t('add.max_price')"
             />
             <q-input
               dense
@@ -85,7 +85,7 @@
               autogrow
               color="bg-grey-7"
               v-model="ticket.price_currency_code"
-              label="Ticket Currency"
+              :label="$t('add.ticket_currency')"
             />
           </div>
         </q-card>
@@ -257,23 +257,20 @@ export default {
           message: this.$t('edit_event_date.external_url_msg'),
         },
         ticketUrl: {
-          title: 'Tickets',
-          message:
-            'Add links for users to directly access tickets for this event',
+          title: this.$t('edit_event_date.tickets'),
+          message: this.$t('edit_event_date.tickets_msg'),
         },
         size: {
-          title: 'Size',
+          title: this.$t('edit_event_date.size'),
           message: this.$t('edit_event_date.size_msg'),
         },
         description: {
-          title: 'Description',
-          message:
-            "A detailed description about what's happening on this date. If you are not the host and you did not write this, please provide a source.",
+          title: this.$t('edit_event_date.description'),
+          message: this.$t('edit_event_date.description_msg'),
         },
         date: {
           title: this.$t('edit_event_date.date'),
-          message:
-            'Double click a date to select a single day, or select a range if the event happens over multiple days. Time is in 24hr format.',
+          message: this.$t('edit_event_date.date_msg'),
         },
         location: {
           title: this.$t('edit_event_date.location'),
@@ -281,14 +278,14 @@ export default {
         },
         cancel: {
           title: this.ed.cancelled
-            ? 'Mark this date as happening'
-            : 'Mark this date as cancelled',
+            ? this.$t('edit_event_date.cancelled')
+            : this.$t('edit_event_date.cancel'),
           message: this.ed.cancelled
-            ? 'This date was previously marked as cancelled. Are you really sure you want to mark is as happening?'
-            : 'Only do this if this date has been cancelled. The event will still show up on PartyMap. Are you sure you want to mark the event as cancelled?',
+            ? this.$t('edit_event_date.cancelled_msg')
+            : this.$t('edit_event_date.cancel_msg'),
         },
         delete: {
-          title: 'Delete Event Date',
+          title: this.$t('edit_event_date.delete'),
         },
       },
     };

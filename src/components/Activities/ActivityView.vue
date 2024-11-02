@@ -26,14 +26,14 @@
       />
       <div v-else class="q-my-lg q-mb-xl">
         <div v-if="transactions.length > 0" class="t4 inter semibold q-mt-md">
-          End of results
+          {{ $t('general.end_of_results') }}
         </div>
         <div
           v-else-if="transactions.length === 0 && !isLoading"
           :class="$q.screen.lt.sm ? 'q-mt-lg t4 semibold' : 'q-mt-lg'"
           class="t4 inter"
         >
-          No results
+          {{ $t('general.no_results') }}
         </div>
       </div>
     </div>

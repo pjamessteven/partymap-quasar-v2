@@ -177,7 +177,7 @@ export default {
   },
   data() {
     return {
-      title: 'Select a date range',
+      title: this.$t('top_controls.select_date_range'),
       customDateRange: null,
       modelConfig: {
         type: 'string',
@@ -510,10 +510,10 @@ export default {
   },
   methods: {
     dayclick() {
-      if (this.title === 'Select date range') {
-        this.title = 'Select end date';
+      if (this.title === this.$t('top_controls.select_date_range')) {
+        this.title = this.$t('top_controls.select_end_date');
       } else {
-        this.title = 'Select date range';
+        this.title = this.$t('top_controls.select_date_range');
       }
     },
     clearDateRange() {

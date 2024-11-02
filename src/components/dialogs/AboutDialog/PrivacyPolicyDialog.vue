@@ -7,10 +7,6 @@
     </q-card-section>
 
     <q-card-section class="t2 dialog-card-content">
-      <u
-        ><b>{{ $t('privacy.header') }}</b></u
-      >
-      <p />
       <p>
         {{ $t('privacy.1') }}
       </p>
@@ -19,174 +15,90 @@
         {{ $t('privacy.2') }}
       </p>
 
-      <p>
-        {{ $t('privacy.3') }}
-      </p>
-
       <u
-        ><b> {{ $t('privacy.4') }}</b></u
+        ><b> {{ $t('privacy.3') }}</b></u
       >
       <p />
 
       <p>
-        {{ $t('privacy.5') }}
+        {{ $t('privacy.4') }}
       </p>
 
       <u
-        ><b> {{ $t('privacy.6') }}</b></u
+        ><b> {{ $t('privacy.5') }}</b></u
       >
       <p />
-
-      <p>
-        {{ $t('privacy.7') }}
-      </p>
-      <p>
-        {{ $t('privacy.8') }}
-      </p>
-      <p>
-        {{ $t('privacy.9') }}
-      </p>
-      <p>
-        {{ $t('privacy.10') }}
-      </p>
+      <ul>
+        <li>
+          {{ $t('privacy.6') }}
+        </li>
+        <li>
+          {{ $t('privacy.7') }}
+        </li>
+        <li>
+          {{ $t('privacy.8') }}
+        </li>
+        <li>
+          {{ $t('privacy.9') }}
+        </li>
+      </ul>
 
       <u
         ><b> {{ $t('privacy.11') }} </b></u
       >
       <p />
-      <p>
-        {{ $t('privacy.12') }}
-      </p>
-      <p>
-        {{ $t('privacy.13') }}
-      </p>
-      <p>
-        {{ $t('privacy.14') }}
-      </p>
-
-      <p>
-        {{ $t('privacy.15') }}
-      </p>
+      <ul>
+        <li>
+          {{ $t('privacy.12') }}
+        </li>
+        <li>
+          {{ $t('privacy.13') }}
+        </li>
+        <li>
+          {{ $t('privacy.14') }}
+        </li>
+      </ul>
+      <p></p>
 
       <u
-        ><b>{{ $t('privacy.16') }} </b></u
+        ><b> {{ $t('privacy.15') }} </b></u
       >
       <p />
 
+      <p>{{ $t('privacy.16') }}</p>
       <p>{{ $t('privacy.17') }}</p>
 
-      <ul>
-        <li>{{ $t('privacy.18') }}</li>
-        <li>{{ $t('privacy.19') }}</li>
-        <li>{{ $t('privacy.20') }}</li>
-        <li>{{ $t('privacy.21') }}</li>
-        <li>
-          {{ $t('privacy.22') }}
-        </li>
-        <li>{{ $t('privacy.23') }}</li>
-        <li>{{ $t('privacy.24') }}</li>
-      </ul>
-
       <u
-        ><b>{{ $t('privacy.25') }}</b></u
+        ><b>{{ $t('privacy.18') }}</b></u
       >
       <p />
 
       <p>
-        {{ $t('privacy.26') }}
+        {{ $t('privacy.19') }}
       </p>
 
       <u
-        ><b>{{ $t('privacy.27') }}</b></u
+        ><b>{{ $t('privacy.20') }}</b></u
       >
       <p />
 
       <p>
-        {{ $t('privacy.28') }}
+        {{ $t('privacy.21') }}
       </p>
 
       <u
-        ><b>{{ $t('privacy.29') }}</b></u
+        ><b>{{ $t('privacy.22') }}</b></u
       >
       <p />
 
       <p>
-        {{ $t('privacy.30') }}
+        {{ $t('privacy.23') }}
       </p>
 
       <p>
-        {{ $t('privacy.31') }}
+        {{ $t('privacy.24') }}
       </p>
-
-      <u
-        ><b> {{ $t('privacy.32') }} </b></u
-      >
-      <p />
-
-      <p>
-        {{ $t('privacy.33') }}
-      </p>
-      <ul>
-        <li>
-          {{ $t('privacy.34') }}
-        </li>
-        <li>
-          {{ $t('privacy.35') }}
-        </li>
-        <li>
-          {{ $t('privacy.36') }}
-        </li>
-      </ul>
-      <p>
-        {{ $t('privacy.37') }}
-      </p>
-
-      <u
-        ><b> {{ $t('privacy.38') }} </b></u
-      >
-      <p />
-
-      <p>
-        {{ $t('privacy.39') }}
-      </p>
-      <ul>
-        <li>
-          {{ $t('privacy.40') }}
-        </li>
-        <li>
-          {{ $t('privacy.41') }}
-        </li>
-        <li>
-          {{ $t('privacy.42') }}
-        </li>
-        <li>
-          {{ $t('privacy.43') }}
-        </li>
-        <li>
-          {{ $t('privacy.44') }}
-        </li>
-        <li>
-          {{ $t('privacy.45') }}
-        </li>
-      </ul>
-
-      <p>
-        {{ $t('privacy.46') }}
-      </p>
-
-      <u
-        ><b> {{ $t('privacy.47') }} </b></u
-      >
-      <p />
-
-      <p>
-        {{ $t('privacy.48') }}
-      </p>
-
-      <p>
-        {{ $t('privacy.49') }}
-      </p></q-card-section
-    >
+    </q-card-section>
   </q-card>
 </template>
 

@@ -5,7 +5,7 @@
 
       <div>
         <b
-          >{{ verb }} the location for the date
+          >{{ verb }}
           <router-link
             v-if="
               activity.target_version?.event_id && activity.target_version?.id
@@ -35,6 +35,9 @@
 <script setup lang="ts">
 import { Activity } from 'src/types/autogen_types';
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 import common from 'src/assets/common';
 interface Props {
@@ -50,11 +53,9 @@ const props = withDefaults(defineProps<Props>(), {
 const verb = computed(() => {
   const verb = props.activity.verb;
   if (verb === 'create') {
-    return 'Set';
+    return t('activities.set_location');
   } else if (verb === 'update') {
-    return 'Changed';
-  } else if (verb === 'delete') {
-    return 'Deleted';
+    return t('activities.changed_location');
   } else return verb;
 });
 

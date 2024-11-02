@@ -14,7 +14,7 @@
     map-options
     :options="results"
     @filter="filterFn"
-    label="Search for PartyMap event"
+    :label="$t('add.search_for_event')"
   >
     <template v-slot:append>
       <q-icon name="search" class="q-pa-md" />

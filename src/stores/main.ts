@@ -8,6 +8,9 @@ import { Screen, Platform } from 'quasar';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { LngLat, LngLatLike } from 'maplibre-gl';
 import { i18n } from 'src/boot/i18n';
+import * as dayjs from 'dayjs';
+
+import { useLocalStorage } from '@vueuse/core';
 
 const { t } = i18n.global;
 
@@ -15,7 +18,7 @@ interface MainStoreState {
   windowWidth: number;
   safeAreaInsets: { [key: string]: number };
   disableAnimations: boolean;
-  darkMode: boolean;
+  darkModePref: boolean | 'auto';
   showSidebar: boolean;
   showSearchBox: boolean;
   sidebarPanel: string;
@@ -53,7 +56,7 @@ export const useMainStore = defineStore('main', {
     windowWidth: 0,
     safeAreaInsets: { top: 0, bottom: 0, left: 0, right: 0 },
     disableAnimations: false,
-    darkMode: false,
+    darkModePref: useLocalStorage('darkModePref', 'auto'),
     sidebarMinimized: false,
     showSidebar: true,
     showSearchBox: false, // for menubar search
@@ -68,7 +71,7 @@ export const useMainStore = defineStore('main', {
     overlayOpacity: 0,
     ipInfo: null,
     userLocationLoading: false,
-    userLocation: null,
+    userLocation: null, // don't store in localStorage as this is sensitive
     userLocationCity: null,
     userLocationCountry: null,
     currentLocationFromSearch: false,
@@ -83,7 +86,7 @@ export const useMainStore = defineStore('main', {
       hidePanelTip: true,
       oldAndroid: true,
     },
-    language: 'en',
+    languagePref: useLocalStorage('languagePref', null),
   }),
   getters: {
     desktopSidebarShowing: (state): boolean => {
@@ -94,6 +97,18 @@ export const useMainStore = defineStore('main', {
     },
   },
   actions: {
+    async setLocale(localeString: string) {
+      const lowercaseLocale = localeString.toLowerCase();
+      console.log(lowercaseLocale);
+      try {
+        await import(`dayjs/locale/${lowercaseLocale}.js`);
+        dayjs.locale(lowercaseLocale);
+      } catch (e) {
+        console.log('locale not supported', e);
+        await import('dayjs/locale/en');
+        dayjs.locale('en');
+      }
+    },
     restoreUserLocation() {
       this.currentLocation = this.userLocation;
       this.currentLocationCity = this.userLocationCity;
@@ -254,8 +269,7 @@ export const useMainStore = defineStore('main', {
       } else {
         this.fineLocation = false;
         Notify.create({
-          message:
-            "Can't get your location! \n\n Using IP address location instead...",
+          message: t('error_codes.ip_location'),
           icon: 'error',
           closeBtn: true,
         });

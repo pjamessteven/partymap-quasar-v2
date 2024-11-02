@@ -189,7 +189,7 @@
             no-caps
             size="md"
             icon-right="mdi-chevron-right"
-            label="Forgot password?"
+            :label="$t('auth.forgot_password')"
             @click="$router.push({ name: 'ForgotPassword' })"
           />
         </div>
@@ -347,7 +347,6 @@ export default {
     },
   },
   computed: {
-    ...mapState(useMainStore, ['darkMode']),
     ...mapWritableState(useQueryStore, ['userEventDatesPage']),
     facebookLoginUrl() {
       let url;

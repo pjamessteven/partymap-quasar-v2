@@ -4,7 +4,8 @@
       <TransactionInfo v-if="showTransactionInfo" :activity="activity" />
 
       <div v-if="showTransactionInfo">
-        <b>{{ verb }} a review </b>:
+        <b>{{ verb }}</b
+        >:
         <p />
       </div>
       <div>
@@ -26,6 +27,9 @@
 <script setup lang="ts">
 import { Activity } from 'src/types/autogen_types';
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 import common from 'src/assets/common';
 interface Props {
@@ -41,11 +45,9 @@ const props = withDefaults(defineProps<Props>(), {
 const verb = computed(() => {
   const verb = props.activity.verb;
   if (verb === 'create') {
-    return 'Created ';
+    return t('activity.create');
   } else if (verb === 'update') {
-    return 'Changed ';
-  } else if (verb === 'delete') {
-    return 'Deleted ';
+    return t('activity.update');
   } else return verb;
 });
 

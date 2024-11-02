@@ -38,7 +38,7 @@
         exact
         name="nearby"
         content-class="tab"
-        label="Home"
+        :label="$t('nav.home')"
         :ripple="false"
         :icon="
           $q.screen.lt.sm
@@ -61,7 +61,7 @@
               : 'mdi-earth'
             : undefined
         "
-        label="Explore"
+        :label="$t('nav.explore')"
         content-class="tab"
         :ripple="false"
       />
@@ -71,7 +71,7 @@
         exact
         key="3"
         name="browse"
-        label="Browse"
+        :label="$t('nav.browse')"
         :icon="
           $q.screen.lt.sm
             ? $route.name === 'BrowsePage'
@@ -102,7 +102,7 @@
               : 'mdi-emoticon-cool-outline'
             : undefined
         "
-        label="You"
+        :label="$t('nav.you')"
         content-class="tab"
         :ripple="false"
         :to="

@@ -93,7 +93,7 @@
           "
           class="t4 inter semibold q-mt-md"
         >
-          End of results
+          {{ $t('general.end_of_results') }}
         </div>
         <div
           v-else-if="
@@ -106,7 +106,7 @@
           class="t4 inter"
         >
           <span v-if="$route.name === 'Explore'"></span
-          ><span v-else>No results</span>
+          ><span v-else> {{ $t('general.no_results') }} </span>
         </div>
       </div>
     </div>

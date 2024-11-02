@@ -121,6 +121,10 @@ import EventDateActivity from './EventDateActivity.vue';
 import EventReviewActivity from './EventReviewActivity.vue';
 import EventActivity from './EventActivity.vue';
 import MediaItemActivities from './MediaItemActivities.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+
 interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   transaction: any;
@@ -177,15 +181,15 @@ const targetEvent = computed(
 
 const actionText = computed(() => {
   if (isCreateEvent.value) {
-    return 'Created the event ';
+    return;
   } else if (isApprovedEvent.value) {
-    return 'Approved the event';
+    return t('activity.approved_event');
   } else if (isUpdateEvent.value) {
-    return 'Updated the event';
+    return t('activity.updated_event');
   } else if (isCreateReview.value) {
-    return 'Reviewed the event';
+    return t('activity.reviewed_event');
   } else {
-    return 'Did something to ';
+    return t('activity.did_something');
   }
 });
 
