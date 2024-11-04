@@ -8,7 +8,7 @@ import { Screen, Platform } from 'quasar';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { LngLat, LngLatLike } from 'maplibre-gl';
 import { i18n } from 'src/boot/i18n';
-import * as dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 import importLocale from 'src/import-locale';
 import { useLocalStorage } from '@vueuse/core';
 import axios from 'axios';

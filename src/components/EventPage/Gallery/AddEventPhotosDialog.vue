@@ -42,7 +42,7 @@ import MultipleMediaSelector from 'components/MultipleMediaSelector.vue';
 import { useEventStore } from 'src/stores/event';
 import { mapState, mapActions, mapWritableState } from 'pinia';
 import common from 'assets/common';
-import * as dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 export default {
   components: { MultipleMediaSelector },
   props: {

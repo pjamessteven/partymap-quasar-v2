@@ -43,7 +43,7 @@ import { mapWritableState, mapActions } from 'pinia';
 import _ from 'lodash';
 import { useQueryStore } from 'src/stores/query';
 import DateControl from 'src/components/Controls/DateControl.vue';
-import * as dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 
 export default {
   components: { DateControl },

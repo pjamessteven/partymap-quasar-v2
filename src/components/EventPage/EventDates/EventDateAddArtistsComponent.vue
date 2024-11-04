@@ -46,7 +46,7 @@ import _ from 'lodash';
 import SelectArtistsDialog from './Artists/SelectArtistsDialog.vue';
 import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
-import * as dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 export default {
   name: 'EventDateAddArtistsComponent',
   components: {

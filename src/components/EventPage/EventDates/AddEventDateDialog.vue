@@ -215,7 +215,7 @@ import DateTimePicker from 'components/DateTimePicker.vue';
 import GoogleLocationComponent from 'components/GoogleLocationComponent.vue';
 import SelectArtistsComponent from 'components/EventPage/EventDates/Artists/SelectArtistsComponent.vue';
 import SubmitSuggestionPrompt from 'components/EventPage/Suggestions/SubmitSuggestionPrompt.vue';
-import * as dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
 import { mapActions, mapState } from 'pinia';

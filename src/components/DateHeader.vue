@@ -20,7 +20,7 @@
   </div>
 </template>
 <script>
-import * as dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 
 export default {
   props: {

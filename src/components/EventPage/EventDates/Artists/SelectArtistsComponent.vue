@@ -102,7 +102,7 @@ import GptArtistQuery from './GptArtistQuery.vue';
 import { mapState, mapActions } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
-import * as dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 
 export default {
   components: {

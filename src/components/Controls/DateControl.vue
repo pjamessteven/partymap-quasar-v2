@@ -158,7 +158,7 @@
 <script>
 import 'v-calendar/dist/style.css';
 
-import * as dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 import { mapWritableState } from 'pinia';
 import { useQueryStore } from 'src/stores/query';
 import { DatePicker } from 'v-calendar';

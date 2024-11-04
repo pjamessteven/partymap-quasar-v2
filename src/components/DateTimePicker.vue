@@ -70,7 +70,7 @@
 
 <script>
 import { DatePicker } from 'v-calendar';
-import * as dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 import _ from 'lodash';
 import { useAuthStore } from 'src/stores/auth';
 import { mapState } from 'pinia';

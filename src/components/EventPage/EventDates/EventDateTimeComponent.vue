@@ -167,7 +167,7 @@
 <script>
 import { Calendar } from 'v-calendar';
 import common from 'assets/common';
-import * as dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 
 import EditEventDateDialog from './EditEventDateDialog.vue';
 import EventDateMarkCancelledDialog from './EventDateMarkCancelledDialog.vue';

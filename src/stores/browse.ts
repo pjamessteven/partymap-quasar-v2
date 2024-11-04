@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import * as dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 import { Screen, Notify } from 'quasar';
 
 import { getEventDatesRequest } from 'src/api';

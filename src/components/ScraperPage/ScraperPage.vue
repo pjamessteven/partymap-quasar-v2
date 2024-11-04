@@ -251,7 +251,7 @@ import {
   searchTicketmaster,
 } from 'src/api';
 import SelectTagsComponent from 'components/EventPage/Tags/SelectTagsComponent.vue';
-import * as dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 import countryCodes from 'src/assets/country-code';
 import gptSamplePrompt from './gptJsonSample.ts';
 import GptQuery from './GptQuery.vue';

@@ -1,4 +1,4 @@
-import * as dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 import { i18n } from 'src/boot/i18n.ts';
 
 const { t } = i18n.global;

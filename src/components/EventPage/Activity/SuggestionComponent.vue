@@ -192,7 +192,7 @@
 import ArtistListItem from 'src/components/EventPage/EventDates/Artists/ArtistListItem.vue';
 import common from 'assets/common';
 import { updateSuggestionRequest } from 'src/api';
-import * as dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 
 import { mapActions } from 'pinia';
 import { useEventStore } from 'src/stores/event';

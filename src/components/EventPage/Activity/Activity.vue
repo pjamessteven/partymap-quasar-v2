@@ -213,7 +213,7 @@
 <script>
 import { revertEventActivityRequest } from 'src/api';
 import common from 'assets/common';
-import * as dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 import { detailedDiff } from 'deep-object-diff';
 
 export default {
