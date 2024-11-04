@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
-import dynamicImport from 'vite-plugin-dynamic-import';
 
 export default defineConfig({
   build: {
