@@ -83,31 +83,7 @@ module.exports = configure(function (/* ctx */) {
       // extendViteConf(viteConf) {},
       // viteVuePluginOptions: {},
 
-      vitePlugins: [
-        [
-          '@intlify/vite-plugin-vue-i18n',
-          {
-            // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
-            // compositionOnly: false,
-
-            // you need to set i18n resource including paths !
-            include: path.resolve(__dirname, './src/i18n/**'),
-          },
-        ],
-        [
-          'dynamicImport',
-          {
-            // used for conditionally importing locales
-            filter(id) {
-              // `node_modules` is exclude by default, so we need to include it explicitly
-              // https://github.com/vite-plugin/vite-plugin-dynamic-import/blob/v1.3.0/src/index.ts#L133-L135
-              if (id.includes('/node_modules/dayjs')) {
-                return true;
-              }
-            },
-          },
-        ],
-      ],
+      vitePlugins: [],
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
