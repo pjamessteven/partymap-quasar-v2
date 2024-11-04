@@ -27,6 +27,7 @@ export default async function getTranslations(locale) {
       return (await import('src/i18n/locales/nl.js')).default;
     case 'pl':
       return (await import('src/i18n/locales/pl.js')).default;
+    /*
     case 'ar':
       return (await import('src/i18n/locales/ar.js')).default;
     case 'fa':
@@ -123,6 +124,7 @@ export default async function getTranslations(locale) {
       return (await import('src/i18n/locales/tr.js')).default;
     case 'mi':
       return (await import('src/i18n/locales/mi.js')).default;
+      */
     default:
       return (await import('src/i18n/locales/en.js')).default; // Default to English if locale not found
   }
