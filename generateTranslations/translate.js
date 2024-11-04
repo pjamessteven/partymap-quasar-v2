@@ -11,9 +11,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const excludeLocaleCodes = ['fr', 'en']; // List of target languages
+/*
 const targetLanguages = translations.supportedLocaleCodes
   .filter((item) => !excludeLocaleCodes.includes(item))
-  .splice(0, 10);
+  .splice(10, 20);
+*/
+const targetLanguages = ['hindi'];
 
 const apiEndpoint = 'http://localhost/v1/workflows/run'; // Translation API endpoint
 const apiKey = 'app-lPgMjENDzIiMthTVETpTFvJW'; // API key for authentication
@@ -64,22 +67,6 @@ async function translateFile(targetLanguages, apiEndpoint, apiKey) {
     const outputFilePath = path.join(__dirname, `${language}.json`);
     fs.writeFileSync(outputFilePath, JSON.stringify(translatedData, null, 2));
     console.log(`Translation for ${language} saved to ${outputFilePath}`);
-  }
-}
-
-function parseJsonString(text) {
-  // Extract the content between the triple backticks
-  const jsonContent = text.match(/```json\n([\s\S]*?)```/)[1];
-
-  // Remove any leading/trailing whitespace
-  const trimmedJson = jsonContent.trim();
-
-  // Parse the JSON string
-  try {
-    return JSON.parse(trimmedJson);
-  } catch (error) {
-    console.error('Error parsing JSON:', error);
-    return null;
   }
 }
 
