@@ -1,6 +1,7 @@
 import { boot } from 'quasar/wrappers';
 import { createI18n } from 'vue-i18n';
 import { nextTick } from 'vue';
+import getTranslations from 'src/import-translation';
 
 import { supportedLocaleCodes } from 'src/i18n';
 
@@ -51,13 +52,13 @@ export const getBestMatchingLocale = () => {
 export async function loadLocaleMessages(i18n, locale) {
   // load locale messages with dynamic import
   try {
-    const messages = await import(`/src/i18n/locales/${locale}.js`);
-    // set locale and locale message
-    i18n.global.setLocaleMessage(locale, messages.default);
+    const messages = await getTranslations(locale);
+    // set locale and locale message)
+    i18n.global.setLocaleMessage(locale, messages);
   } catch (e) {
     const messages = await import('/src/i18n/locales/en.js');
     // set locale and locale message
-    i18n.global.setLocaleMessage('en', messages.default);
+    i18n.global.setLocaleMessage('en', messages);
   }
 
   return nextTick();
