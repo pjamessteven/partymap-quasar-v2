@@ -288,7 +288,7 @@ export default {
       let label = '';
       if (this.controlTag?.length > 0) {
         for (let [index, tag] of this.controlTag.entries()) {
-          label += tag.tag;
+          label += tag.tag_t || tag.tag;
           if (index < this.controlTag.length - 1) {
             label += ' + ';
           }
@@ -611,6 +611,9 @@ export default {
   border-radius: 48px;
   overflow: hidden;
   font-family: 'Metropolis';
+  &:lang(ru) {
+    font-family: 'InterDisplay';
+  }
   .controls-wrapper-inner {
     pointer-events: all;
     overflow: hidden;
@@ -651,6 +654,9 @@ export default {
             font-size: 1rem;
             letter-spacing: 0.5px;
             font-family: 'Metropolis';
+            &:lang(ru) {
+              font-family: 'InterDisplay';
+            }
           }
         }
       }
@@ -709,7 +715,7 @@ export default {
     .controls-wrapper-inner {
       height: 42px;
       .button-control {
-        height: 42px;
+        height: 40px;
       }
       .searchbar-input {
         input {

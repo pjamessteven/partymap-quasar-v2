@@ -296,6 +296,9 @@ export default {
 }
 .navigation-bar {
   font-family: 'Metropolis';
+  &:lang(ru) {
+    font-family: 'InterDisplay';
+  }
   :deep(.desktop-tabs) {
     .q-tab {
       //padding-top: 4px;

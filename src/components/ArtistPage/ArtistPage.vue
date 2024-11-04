@@ -239,7 +239,8 @@ export default {
                 this.computedName +
                 this.artist?.disambiguation?.length >
               0
-                ? '( ' + this.artist.disambiguation + ') '
+                ? '( ' + this.artist.disambiguation_t ||
+                  this.artist.disambiguation + ') '
                 : '' + '. ' + this.computedDescription,
           },
           keywords: {
@@ -348,27 +349,27 @@ export default {
     ...mapState(useAuthStore, ['currentUser']),
     ...mapWritableState(useMapStore, ['map']),
     longDescription() {
-      if (
-        this.artist &&
-        this.artist.description &&
-        this.artist.description.length > 300
-      ) {
+      const description = this.artist.description_t || this.artist.description;
+
+      if (description && description.length > 300) {
         return true;
       } else {
         return false;
       }
     },
     computedDescription() {
-      if (this.artist && this.artist.description) {
+      const description =
+        this.artist?.description_t || this.artist?.description;
+      if (description) {
         if (this.showFullDescription) {
-          return this.artist.description;
+          return description;
         } else {
-          return this.artist.description.slice(0, 300);
+          return description.slice(0, 300);
         }
       } else return null;
     },
     computedName() {
-      if (this.artist && this.artist.name) {
+      if (this.artist?.name) {
         return this.artist.name;
       } else if (this.$route.query.name) {
         return this.$route.query.name.replace(/_/g, ' ');

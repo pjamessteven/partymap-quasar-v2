@@ -12,8 +12,9 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/',
+    path: '/:lang?',
     name: 'Explore',
+    props: true,
     component: () => import('src/layouts/MainLayout.vue'),
     meta: {
       auth: false,
@@ -22,7 +23,7 @@ const routes: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: '/event/:id/:eventDateId?',
+        path: 'event/:id/:eventDateId?',
         name: 'EventPage',
         components: {
           event: EventPage,
@@ -35,7 +36,7 @@ const routes: RouteRecordRaw[] = [
       },
 
       {
-        path: '/browse',
+        path: 'browse',
         name: 'BrowsePage',
         component: () => import('src/components/BrowsePage/BrowsePage.vue'),
         props: true,
@@ -47,7 +48,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/activity',
+        path: 'activity',
         name: 'ActivityPage',
         component: () => import('src/components/ActivityPage/ActivityPage.vue'),
         props: true,
@@ -59,7 +60,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/privacy_policy',
+        path: 'privacy_policy',
         name: 'PrivacyPage',
         component: () =>
           import('src/components/dialogs/AboutDialog/PrivacyPolicyDialog.vue'),
@@ -72,7 +73,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/support',
+        path: 'support',
         name: 'SupportPage',
         component: () =>
           import('src/components/dialogs/AboutDialog/AboutDialog.vue'),
@@ -85,7 +86,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/terms_and_conditions',
+        path: 'terms_and_conditions',
         name: 'TermsAndConditionsPage',
         component: () =>
           import(
@@ -109,7 +110,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/login',
+        path: 'login',
         name: 'Login',
         component: Login,
 
@@ -119,7 +120,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/register',
+        path: 'register',
         name: 'Register',
         component: () => import('src/components/Auth/Register.vue'),
         meta: {
@@ -129,7 +130,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/forgot',
+        path: 'forgot',
         name: 'ForgotPassword',
         component: () => import('src/components/Auth/ForgotPassword.vue'),
         meta: {
@@ -139,7 +140,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/reset_password/:identifier/:token',
+        path: 'reset_password/:identifier/:token',
         name: 'ResetPassword',
         component: () => import('src/components/Auth/ResetPassword.vue'),
         props: true,
@@ -150,7 +151,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/username',
+        path: 'username',
         name: 'ChooseUsername',
         component: () => import('src/components/Auth/ChooseUsername.vue'),
         meta: {
@@ -160,7 +161,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/add/verified_event/',
+        path: 'add/verified_event/',
         name: 'AddEventHost',
         component: () => import('src/components/AddEventPage/AddEventPage.vue'),
         props: { host: true },
@@ -171,7 +172,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/add/public_event/',
+        path: 'add/public_event/',
         name: 'AddEventPublic',
         component: () => import('src/components/AddEventPage/AddEventPage.vue'),
         props: { host: false },
@@ -183,7 +184,7 @@ const routes: RouteRecordRaw[] = [
       },
 
       {
-        path: '/account',
+        path: 'account',
         name: 'ManageAccount',
         component: () =>
           import('src/components/ManageAccountPage/ManageAccountPage.vue'),
@@ -195,7 +196,7 @@ const routes: RouteRecordRaw[] = [
       },
 
       {
-        path: '/user/:username?',
+        path: 'user/:username?',
         name: 'UserPage',
         component: () => import('src/components/UserPage/UserPage.vue'),
         props: true,
@@ -207,7 +208,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/activate/:token',
+        path: 'activate/:token',
         name: 'Activate',
         component: () => import('src/components/Auth/Activate.vue'),
         props: true,
@@ -218,7 +219,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/change_email/:token',
+        path: 'change_email/:token',
         name: 'ConfirmEmail',
         component: () =>
           import('src/components/ManageAccountPage/ConfirmEmail.vue'),
@@ -230,7 +231,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/admin',
+        path: 'admin',
         name: 'AdminPage',
         components: {
           default: () => import('src/components/AdminPage/AdminPage.vue'),
@@ -242,7 +243,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/todo',
+        path: 'todo',
         name: 'WorkQueuePage',
         components: {
           default: () =>

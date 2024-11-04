@@ -1,4 +1,4 @@
-const supportedLocales = {
+export const supportedLocales = {
   en: {
     label: 'English',
     value: 'en',
@@ -39,6 +39,10 @@ const supportedLocales = {
     label: 'Português',
     value: 'pt',
   },
+  'pt-br': {
+    label: 'Português (Brasil)',
+    value: 'pt-br',
+  },
   nl: {
     label: 'Nederlands',
     value: 'nl',
@@ -47,6 +51,64 @@ const supportedLocales = {
     label: 'Polski',
     value: 'pl',
   },
+  hi: {
+    label: 'हिन्दी',
+    value: 'hi',
+  },
+  /*
+  lv: {
+    label: 'Latviešu',
+    value: 'lv',
+  },
+  lt: {
+    label: 'Lietuvių',
+    value: 'lt',
+  },
+  hu: {
+    label: 'Magyar',
+    value: 'hu',
+  },
+  nb: {
+    label: 'Norsk',
+    value: 'nb',
+  },
+  fi: {
+    label: 'Suomi',
+    value: 'fi',
+  },
+  sv: {
+    label: 'Svenska',
+    value: 'sv',
+  },
+  da: {
+    label: 'Dansk',
+    value: 'da',
+  },
+  tr: {
+    label: 'Türkçe',
+    value: 'tr',
+  },
+  ko: {
+    label: '한국어',
+    value: 'ko',
+  },
+  ro: {
+    label: 'Română',
+    value: 'ro',
+  },
+  sq: {
+    label: 'Shqip',
+    value: 'sq',
+  },
+  sk: {
+    label: 'Slovenčina',
+    value: 'sk',
+  },
+  sl: {
+    label: 'Slovenščina',
+    value: 'sl',
+  },
+
   ar: {
     label: 'العربية',
     value: 'ar',
@@ -63,10 +125,7 @@ const supportedLocales = {
     label: 'Winaray',
     value: 'war',
   },
-  sv: {
-    label: 'Svenska',
-    value: 'sv',
-  },
+
   uk: {
     label: 'Українська',
     value: 'uk',
@@ -108,10 +167,7 @@ const supportedLocales = {
     label: 'Cymraeg',
     value: 'cy',
   },
-  da: {
-    label: 'Dansk',
-    value: 'da',
-  },
+
   et: {
     label: 'Eesti',
     value: 'et',
@@ -132,18 +188,12 @@ const supportedLocales = {
     label: 'Galego',
     value: 'gl',
   },
-  ko: {
-    label: '한국어',
-    value: 'ko',
-  },
-  hy: {
+
+  'hy-am': {
     label: 'Հայերեն',
-    value: 'hy',
+    value: 'hy-am',
   },
-  hi: {
-    label: 'हिन्दी',
-    value: 'hi',
-  },
+
   hr: {
     label: 'Hrvatski',
     value: 'hr',
@@ -160,18 +210,7 @@ const supportedLocales = {
     label: 'ქართული',
     value: 'ka',
   },
-  lv: {
-    label: 'Latviešu',
-    value: 'lv',
-  },
-  lt: {
-    label: 'Lietuvių',
-    value: 'lt',
-  },
-  hu: {
-    label: 'Magyar',
-    value: 'hu',
-  },
+
   mk: {
     label: 'Македонски',
     value: 'mk',
@@ -184,10 +223,7 @@ const supportedLocales = {
     label: 'မြန်မာဘာသာ',
     value: 'my',
   },
-  nb: {
-    label: 'Norsk',
-    value: 'nb',
-  },
+
   uz: {
     label: 'Oʻzbekcha / Ўзбекча',
     value: 'uz',
@@ -196,30 +232,12 @@ const supportedLocales = {
     label: 'Қазақша / Qazaqşa / قازاقشا',
     value: 'kk',
   },
-  ro: {
-    label: 'Română',
-    value: 'ro',
-  },
-  sq: {
-    label: 'Shqip',
-    value: 'sq',
-  },
-  sk: {
-    label: 'Slovenčina',
-    value: 'sk',
-  },
-  sl: {
-    label: 'Slovenščina',
-    value: 'sl',
-  },
+
   sr: {
     label: 'Српски / Srpski',
     value: 'sr',
   },
-  fi: {
-    label: 'Suomi',
-    value: 'fi',
-  },
+
   ta: {
     label: 'தமிழ்',
     value: 'ta',
@@ -240,16 +258,14 @@ const supportedLocales = {
     label: 'تۆرکجه',
     value: 'tk',
   },
-  tr: {
-    label: 'Türkçe',
-    value: 'tr',
-  },
+
   mi: {
     label: 'Māori',
     value: 'mi',
   },
+  */
 };
 
-const supportedLocaleCodes = Object.keys(supportedLocales);
+export const supportedLocaleCodes = Object.keys(supportedLocales);
 
-export { supportedLocales, supportedLocaleCodes };
+export default { supportedLocales, supportedLocaleCodes };

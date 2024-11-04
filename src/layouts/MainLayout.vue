@@ -136,10 +136,11 @@ import ControlsComponent from 'src/components/Controls/ControlsComponent.vue';
 import MenuBarLogo from 'src/components/MenuBar/MenuBarLogo.vue';
 import NavigationBar from 'src/components/NavigationBar.vue';
 import MobileSideBar from 'src/components/SideBar/MobileSideBar.vue';
-import { mapWritableState } from 'pinia';
+import { mapWritableState, mapActions } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import { useMainStore } from 'src/stores/main';
 import { useEventStore } from 'src/stores/event';
+import { i18n, setI18nLanguage, loadLocaleMessages } from 'src/boot/i18n.ts';
 
 export default {
   components: {
@@ -158,6 +159,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(useMainStore, ['setLocale', 'forceUpdate']),
     clickOverlay() {
       this.showPanel = false;
       this.sidebarPanel = 'explore';
@@ -203,6 +205,27 @@ export default {
     this.$nextTick(() => {
       next();
     });
+  },
+  async beforeRouteEnter(to, from, next) {
+    const routeLocale = to.params.lang;
+    const userLangPref = localStorage.getItem('languagePref');
+    const locale = userLangPref || routeLocale;
+    // set i18n language
+    if (locale) {
+      await loadLocaleMessages(i18n, locale);
+      setI18nLanguage(i18n, locale);
+    }
+    if (userLangPref) {
+      next((vm) => {
+        vm.$router.replace({ ...to, params: { lang: userLangPref } });
+      });
+    } else {
+      next();
+    }
+  },
+  beforeMount() {
+    // set date locale (best locale is chosen in i18n.ts boot file)
+    this.setLocale(i18n.global.locale.value);
   },
   computed: {
     ...mapWritableState(useMapStore, [

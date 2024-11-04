@@ -34,7 +34,7 @@
           v-for="(tag, index) in computedResults"
           :key="index"
           :showIcons="true"
-          :value="tag.tag"
+          :value="tag.tag_t || tag.tag"
           :disabled="tagsList.indexOf(tag.tag) > -1"
           v-on:selected="onSelectTag(tag.tag)"
         />

@@ -46,7 +46,7 @@
             v-if="controlTag?.length > 0"
           >
             <Tag
-              :value="tag.tag"
+              :value="tag.tag_t || tag.tag"
               :key="index"
               @click="clickTag(tag)"
               :selected="true"
@@ -66,7 +66,7 @@
             v-if="(!query || query.length == 0) && topTagsInArea?.length > 0"
           >
             <Tag
-              :value="tag.tag"
+              :value="tag.tag_t || tag.tag"
               :key="index"
               @click="clickTag(tag)"
               :disabled="controlTag?.findIndex((x) => x.tag === tag.tag) > -1"

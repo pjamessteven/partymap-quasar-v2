@@ -126,7 +126,7 @@
               class="t4"
               v-if="artist.disambiguation || artist.area"
             >
-              {{ artist.disambiguation }}
+              {{ artist.disambiguation_t || artist.disambiguation }}
               <span v-if="artist.area">
                 <span v-if="artist.area.name"> ({{ artist.area.name }}) </span>
                 <span v-else> ({{ artist.area }}) </span>

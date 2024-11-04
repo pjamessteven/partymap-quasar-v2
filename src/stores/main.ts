@@ -9,10 +9,10 @@ import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { LngLat, LngLatLike } from 'maplibre-gl';
 import { i18n } from 'src/boot/i18n';
 import * as dayjs from 'dayjs';
-
+import importLocale from 'src/import-locale';
 import { useLocalStorage } from '@vueuse/core';
-
-const { t } = i18n.global;
+import axios from 'axios';
+const { t, locale } = i18n.global;
 
 interface MainStoreState {
   windowWidth: number;
@@ -48,6 +48,7 @@ interface MainStoreState {
     [key: string]: boolean;
   };
   language: string;
+  forceUpdate: number;
 }
 const localTips = localStorage.getItem('tips');
 
@@ -87,6 +88,7 @@ export const useMainStore = defineStore('main', {
       oldAndroid: true,
     },
     languagePref: useLocalStorage('languagePref', null),
+    forceUpdate: 0,
   }),
   getters: {
     desktopSidebarShowing: (state): boolean => {
@@ -97,11 +99,16 @@ export const useMainStore = defineStore('main', {
     },
   },
   actions: {
+    forceUpdate() {
+      this.forceUpdate += 1;
+    },
     async setLocale(localeString: string) {
       const lowercaseLocale = localeString.toLowerCase();
-      console.log(lowercaseLocale);
+
+      axios.defaults.headers.common['lang'] = lowercaseLocale;
+
       try {
-        await import(`dayjs/locale/${lowercaseLocale}.js`);
+        await importLocale(localeString);
         dayjs.locale(lowercaseLocale);
       } catch (e) {
         console.log('locale not supported', e);
@@ -153,7 +160,7 @@ export const useMainStore = defineStore('main', {
       let state;
       try {
         const response: any = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?lat=${coords.lat}&lon=${coords.lng}&format=json&addressdetails=1`,
+          `https://nominatim.openstreetmap.org/reverse?lat=${coords.lat}&lon=${coords.lng}&format=json&addressdetails=1&accept-language=${locale.value},en`,
           {
             method: 'GET',
             headers: {

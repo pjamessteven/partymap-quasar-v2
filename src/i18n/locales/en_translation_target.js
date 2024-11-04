@@ -1,8 +1,7 @@
-export default {
+const translation = {
   general: {
     cancel: 'Cancel',
     OK: 'Ok',
-    no_changes: 'No changes to show.',
     save_changes: 'Save changes',
     undo: 'Undo',
     events: 'events',
@@ -14,7 +13,7 @@ export default {
   meta: {
     main_title: 'PartyMap | Festivals and Underground Culture ',
     main_description:
-      "PartyMap is a community-driven platform for discovering festivals and events around the world and near you. Explore the world and find out what's good!",
+      "Find feativals and events in your area and around the world. PartyMap is a community platform for everybody. Explore the map and find what's good!",
     main_tags:
       'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list',
     events_on_partymap: 'Events on PartyMap',
@@ -29,8 +28,8 @@ export default {
   },
   search: {
     search: 'Search',
-    search_box_text: 'Events, places, artists & tags',
-    search_box_text_mobile: 'Events, places, artists & tags',
+    search_box_text: 'Search events, places, artists & tags',
+    search_box_text_mobile: 'Search events, places, artists & tags',
     tags: 'Tags',
     events: 'Events',
     places: 'Places',
@@ -117,21 +116,10 @@ export default {
     role_0_message: 'You do not have the ability to create events.',
     role_10: 'Event Host',
     role_10_message: 'You have the ability to create events.',
-    become_an_event_host: 'Become an event host',
   },
   auth: {
-    host_login: 'Host login',
     login: 'Login',
     login_to_partymap: 'Log in',
-    request_invite: 'Request host account',
-    invite_email_subject: 'Invitation request',
-    invite_email_body:
-      'Hi, my name is... %0A%0A%0AI am from...%0A%0AI want to be on Partymap because... %0A%0AThe events me or my organization host are... %0A%0A%0A%0AThanks!',
-    request_an_invitation: 'Request an invitation',
-    only_verified_hosts: 'Only verified hosts can post events to PartyMap.',
-    promo_message: 'Make it easier for people to find out about your events',
-    request_invite_message:
-      'Tell us a little bit about yourself and the events that you or your organization host and we will get back to you.',
     welcome_back: 'Welcome back!',
     welcome: 'Welcome',
     logout: 'Logout',
@@ -185,10 +173,10 @@ export default {
     password_reset_email_sent: "We've sent you an email, check your inbox!",
     your_pw_has_been_reset_and_logged_in_as:
       'Your password has been reset and you are now logged in',
-    never_share_or_sell: 'We will never share or sell your information.',
+    never_share_or_sell:
+      'Your information is safe with us. We will never share or sell your information.',
     only_store_email: 'We only store your email address.',
   },
-
   event: {
     event: 'Event',
     event_date: 'Event date',
@@ -326,7 +314,7 @@ export default {
     beach: 'Beach',
     beach_desc: 'Get your toes wet',
     psychedelic: 'Psychedelic',
-    psychedelic_desc: 'Think outside the box',
+    psychedelic_desc: 'Open your third eye',
     sustainability: 'Sustainability',
     sustainability_desc:
       'Festivals that emphasize their effort to reduce their environmental footprint',
@@ -348,8 +336,6 @@ export default {
     show_more: '...show more',
     show_less: '...show less',
   },
-
-  profile: {},
   nav: {
     home: 'Home',
     explore: 'Explore',
@@ -545,6 +531,7 @@ export default {
     lineup_poster: 'Lineup Poster',
     lineup_poster_msg: 'Upload a lineup poster (optional)',
     select_lineup_poster: 'Select/Drop Lineup Poster',
+    select_drop: 'Select/Drop',
     other_photos: 'Other photos',
     other_photos_msg:
       'Upload some photos from previous editions of this event (optional)',
@@ -1170,3 +1157,5 @@ export default {
     29: 'Last updated: 2nd of November 2024',
   },
 };
+
+module.exports = translation;

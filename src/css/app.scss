@@ -78,6 +78,9 @@
   &.bolder {
     font-weight: 800;
   }
+  &:lang(ru) {
+    font-family: 'InterDisplay' !important;
+  }
 }
 
 .stratos {

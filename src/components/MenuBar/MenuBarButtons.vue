@@ -89,7 +89,9 @@
           <!--
           <q-icon name="mdi-calendar-star" class="q-mr-md q-ml-md t2" />
           -->
-          <div class="q-px-md q-pl-md" style="white-space: nowrap">Sign in</div>
+          <div class="q-px-md q-pl-md" style="white-space: nowrap">
+            {{ $t('auth.login') }}
+          </div>
           <q-avatar
             :color="color"
             class="o-070"

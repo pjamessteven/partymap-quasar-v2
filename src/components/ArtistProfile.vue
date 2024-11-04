@@ -40,7 +40,7 @@
                 class="ellipsis o-070 q-mt-sm"
                 v-if="artist.disambiguation && artist.disambiguation.length > 0"
               >
-                {{ artist.disambiguation }}
+                {{ artist.disambiguation_t || artist.disambiguation }}
               </div>
 
               <div
@@ -51,7 +51,7 @@
                 style="max-width: 200px"
               >
                 <span v-for="(at, index) in artist.tags" :key="index">
-                  {{ at.tag
+                  {{ at.tag_t || at.tag
                   }}<span v-if="index + 1 !== artist.tags.length">,&nbsp;</span>
                 </span>
               </div>

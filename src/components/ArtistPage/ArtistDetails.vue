@@ -13,7 +13,7 @@
             class="o-080 q-mt-lg"
             v-if="artist && artist.disambiguation?.length > 0"
           >
-            {{ artist.disambiguation }}
+            {{ artist.disambiguation_t || artist.disambiguation }}
           </div>
 
           <div
@@ -42,7 +42,7 @@
             <Tag
               v-for="(at, index) in artist.tags"
               :key="index"
-              :value="at.tag"
+              :value="at.tag_t || at.tag"
               :label="at.label"
             ></Tag>
           </div>

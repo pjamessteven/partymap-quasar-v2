@@ -119,7 +119,7 @@
                     </div>
                     <span class="t2"> {{ $t('add.event_logo_msg') }}</span>
                     <MultipleMediaSelector
-                      :label="$t('add.select_logo')"
+                      :label="$t('add.select_drop')"
                       :singleSelectMode="true"
                       :showUploadButton="false"
                       :disableCaption="true"
@@ -141,7 +141,7 @@
                     </div>
                     <span class="t2">{{ $t('add.lineup_poster_msg') }}</span>
                     <MultipleMediaSelector
-                      :label="$t('add.select_lineup_poster')"
+                      :label="$t('add.select_drop')"
                       :singleSelectMode="false"
                       :showUploadButton="false"
                       :disableCaption="true"
@@ -160,7 +160,7 @@
                     }}</span>
 
                     <MultipleMediaSelector
-                      label="Select/Drop Photos"
+                      :label="$t('add.select_drop')"
                       :singleSelectMode="false"
                       :showUploadButton="false"
                       :disableCaption="true"
@@ -628,9 +628,9 @@
   </div>
   -->
         </div>
-        <div class="flex row no-wrap q-ma-lg">
+        <div class="flex row items-center justify-center no-wrap q-my-lg">
           <q-btn
-            icon-right="las la-undo"
+            icon-left="las la-undo"
             class="soft-button-shadow inter bold q-mr-md"
             :label="$t('add.reset')"
             v-on:click="reset"

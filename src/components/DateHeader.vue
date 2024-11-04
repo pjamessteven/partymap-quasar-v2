@@ -57,6 +57,9 @@ export default {
     font-weight: 700;
     font-family: 'Metropolis';
     text-transform: capitalize;
+    &:lang(ru) {
+      font-family: 'InterDisplay';
+    }
   }
 }
 

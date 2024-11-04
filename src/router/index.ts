@@ -7,6 +7,7 @@ import {
 
 import routes from './routes';
 import { useMainStore } from 'stores/main';
+import { i18n } from 'src/boot/i18n.ts';
 
 /*
  * If not building with SSR mode, you can
@@ -49,6 +50,18 @@ const Router = createRouter({
   // quasar.conf.js -> build -> vueRouterMode
   // quasar.conf.js -> build -> publicPath
   history: createHistory(process.env.VUE_ROUTER_BASE),
+});
+
+Router.beforeEach((to, from) => {
+  const lang = to.params.lang || from.params.lang || i18n.global.locale.value; // Default to 'en' if no language is specified
+
+  if (!to.params.lang && from.params.lang) {
+    // If the new route doesn't have a lang param but the old one did, add it
+    return {
+      ...to,
+      params: { ...to.params, lang },
+    };
+  }
 });
 
 export default Router;

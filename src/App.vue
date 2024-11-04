@@ -14,7 +14,7 @@ import { App } from '@capacitor/app';
 import { Browser } from '@capacitor/browser';
 import { CapacitorCookies } from '@capacitor/core'; // leave this, even though unused, the import is needed for cookies to work on iOS
 import { createMetaMixin } from 'quasar';
-import { i18n, setI18nLanguage } from 'src/boot/i18n.ts';
+import { i18n } from 'src/boot/i18n.ts';
 
 export default {
   components: { SplashScreen },
@@ -23,7 +23,6 @@ export default {
     return {
       assetsLoaded: false,
       loggingInWithToken: false,
-      forceUpdate: 0,
     };
   },
   mixins: [
@@ -53,7 +52,6 @@ export default {
 
   methods: {
     ...mapActions(useAuthStore, ['checkAuthCookie', 'login']),
-    ...mapActions(useMainStore, ['setLocale']),
   },
   computed: {
     ...mapWritableState(useMainStore, [
@@ -61,10 +59,14 @@ export default {
       'groupEventsByMonth',
       'languagePref',
       'darkModePref',
+      'forceUpdate',
     ]),
 
     screen() {
       return this.$q.screen;
+    },
+    currentLanguage() {
+      return i18n.global.locale.value;
     },
   },
   watch: {
@@ -78,6 +80,9 @@ export default {
       },
       deep: true,
     },
+    currentLanguage(newLang) {
+      document.documentElement.lang = newLang;
+    },
   },
   watch: {
     languagePref() {
@@ -85,6 +90,9 @@ export default {
     },
   },
   mounted() {
+    console.log('params', this.$route);
+    document.documentElement.lang = this.currentLanguage;
+
     // dark mode setting
     this.$q.dark.set(
       this.darkModePref === 'true'
@@ -93,13 +101,6 @@ export default {
         ? false
         : this.darkModePref
     );
-
-    // set i18n language
-    if (this.languagePref) {
-      setI18nLanguage(i18n, this.languagePref);
-    }
-    // set date locale (best locale is chosen in i18n.ts boot file)
-    this.setLocale(i18n.global.locale.value);
 
     // performance is like molassys on old versions of webview
     if (this.$q.platform.is.android && this.$q.platform.is.capacitor) {
@@ -227,32 +228,29 @@ body {
   opacity: 0.5;
 }
 
-.text-h1 {
-  font-family: 'InterDisplay';
-}
 .text-h2 {
   font-weight: 700;
-  font-family: 'InterDisplay';
 }
-.text-h3 {
-  font-family: 'InterDisplay';
+
+.text-h6,
+.text-h5,
+.text-h4,
+.text-h3,
+.text-h2,
+.text-h1 {
   font-family: 'Metropolis';
+
+  &:lang(ru) {
+    font-family: 'InterDisplay' !important;
+  }
 }
-.text-h4 {
-  font-family: 'InterDisplay';
-  font-family: 'Metropolis';
-}
-.text-h5 {
-  font-family: 'InterDisplay';
-  font-family: 'Metropolis';
-}
+
 .text-h6 {
   //font-size: 18px;
   font-weight: 500;
   line-height: 1.8rem;
   //letter-spacing: 0.0125em;
   letter-spacing: unset !important;
-  font-family: 'Metropolis';
 }
 .text-large {
   font-size: 1rem;
@@ -262,7 +260,6 @@ body {
   display: flex;
   flex-direction: column;
   .dialog-card-header {
-    font-family: 'Metropolis';
     position: relative;
     top: 0px;
     z-index: 100;

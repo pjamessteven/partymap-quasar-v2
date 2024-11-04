@@ -48,7 +48,7 @@
                 src="~assets/g-logo.png"
                 class="q-mr-sm"
               />
-              {{ $t('auth.log_in_with_google') }}
+              Sign in with Google
             </q-btn>
             <q-btn
               style="width: 231px; font-size: 15px; background: white"
@@ -67,7 +67,7 @@
                 style="color: #0165e1"
                 size="16px"
               />
-              {{ $t('auth.log_in_with_facebook') }}
+              Sign in with FaceBook
             </q-btn>
             <q-btn
               v-if="$q.platform.is.ios && $q.platform.is.capacitor"
@@ -83,7 +83,7 @@
                 style="color: black"
                 size="16px"
               />
-              {{ $t('auth.log_in_with_apple') }}
+              Sign in with Apple
             </q-btn>
             <vue-apple-login
               v-else
@@ -144,7 +144,7 @@
               flat
               class="nav-button q-mb-md inter bold text-large q-mr-sm"
               type="a"
-              label="Sign up"
+              v-bind:label="$t('auth.sign_up')"
               @click="$router.push({ name: 'Register' })"
             />
             <q-btn

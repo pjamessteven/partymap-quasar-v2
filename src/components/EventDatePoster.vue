@@ -187,7 +187,7 @@
                     class="q-mr-xs"
                     v-for="(et, index) in event.event.event_tags"
                     :key="index"
-                    :value="et.tag"
+                    :value="et.tag_t || et.tag"
                   ></Tag>
                 </div>
               </div>

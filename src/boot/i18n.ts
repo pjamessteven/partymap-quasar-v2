@@ -2,7 +2,7 @@ import { boot } from 'quasar/wrappers';
 import { createI18n } from 'vue-i18n';
 import { nextTick } from 'vue';
 
-import { messages, supportedLocaleCodes } from 'src/i18n';
+import { supportedLocaleCodes } from 'src/i18n';
 
 export type MessageLanguages = keyof typeof messages;
 // Type-define 'en-US' as the master schema for the resource
@@ -50,10 +50,15 @@ export const getBestMatchingLocale = () => {
 
 export async function loadLocaleMessages(i18n, locale) {
   // load locale messages with dynamic import
-  const messages = await import(`/src/i18n/locales/${locale}.js`);
-
-  // set locale and locale message
-  i18n.global.setLocaleMessage(locale, messages.default);
+  try {
+    const messages = await import(`/src/i18n/locales/${locale}.js`);
+    // set locale and locale message
+    i18n.global.setLocaleMessage(locale, messages.default);
+  } catch (e) {
+    const messages = await import('/src/i18n/locales/en.js');
+    // set locale and locale message
+    i18n.global.setLocaleMessage('en', messages.default);
+  }
 
   return nextTick();
 }

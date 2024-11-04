@@ -14,7 +14,7 @@
           :small="small"
           v-for="(et, index) in computedTags"
           :key="index"
-          :value="et.tag"
+          :value="et.tag_t || et.tag"
           style="pointer-events: none"
         />
         <Tag

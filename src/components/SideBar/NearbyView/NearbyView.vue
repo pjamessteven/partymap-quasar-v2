@@ -51,10 +51,9 @@
               <div
                 class="flex row items-center no-wrap"
                 :class="{
-                  ' q-ml-sm': $q.screen.gt.sm,
+                  ' q-mx-sm': $q.screen.gt.sm,
                   'q-ml-xs': $q.screen.lt.md,
                 }"
-                style="min-width: 220px"
                 :style="
                   $q.screen.gt.sm
                     ? 'margin-left: -16px; border-radius: 100px!important;'
@@ -396,7 +395,7 @@
                         style="text-transform: capitalize"
                         :class="$q.platform.is.ios ? 'no-hover' : ''"
                       >
-                        {{ tag.tag }}
+                        {{ tag.tag_t || tag.tag }}
                       </div>
                     </div>
                     <div class="flex row no-wrap q-gutter-sm q-pt-sm">
@@ -410,7 +409,7 @@
                         style="text-transform: capitalize"
                         :class="$q.platform.is.ios ? 'no-hover' : ''"
                       >
-                        {{ tag.tag }}
+                        {{ tag.tag_t || tag.tag }}
                       </div>
                     </div>
                   </div>
@@ -473,7 +472,7 @@
                         style="text-transform: capitalize"
                         :class="$q.platform.is.ios ? 'no-hover' : ''"
                       >
-                        {{ tag.tag }}
+                        {{ tag.tag_t || tag.tag }}
                       </div>
                     </div>
                     <div class="flex row no-wrap q-gutter-sm q-pt-sm">
@@ -487,7 +486,7 @@
                         style="text-transform: capitalize"
                         :class="$q.platform.is.ios ? 'no-hover' : ''"
                       >
-                        {{ tag.tag }}
+                        {{ tag.tag_t || tag.tag }}
                       </div>
                     </div>
                   </div>
@@ -1250,10 +1249,9 @@ export default {
         width: 100%;
         font-weight: 700;
         font-family: 'Metropolis';
-        //  text-transform: lowercase;
-        // font-style: italic;
-
-        //        font-family: 'Chicago';
+        &:lang(ru) {
+          font-family: 'InterDisplay';
+        }
         font-size: 1rem;
         &.sticky {
           position: sticky;

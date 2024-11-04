@@ -43,7 +43,7 @@
               class="ellipsis o-070 q-mt-sm"
               v-if="artist.disambiguation && artist.disambiguation.length > 0"
             >
-              {{ artist.disambiguation }}
+              {{ artist.disambiguation_t || artist.disambiguation }}
             </div>
 
             <div

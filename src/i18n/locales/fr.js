@@ -122,19 +122,8 @@ export default {
     become_an_event_host: "Devenir un organisateur d'événements",
   },
   auth: {
-    host_login: 'Connexion organisateur',
     login: 'Connexion',
     login_to_partymap: 'Se connecter',
-    request_invite: 'Demander un compte organisateur',
-    invite_email_subject: "Demande d'invitation",
-    invite_email_body:
-      "Bonjour, je m'appelle... %0A%0A%0AJe viens de...%0A%0AJe veux être sur Partymap parce que... %0A%0ALes événements que moi ou mon organisation organisons sont... %0A%0A%0A%0AMerci !",
-    request_an_invitation: 'Demander une invitation',
-    only_verified_hosts:
-      'Seuls les organisateurs vérifiés peuvent publier des événements sur PartyMap.',
-    promo_message: 'Facilitez la découverte de vos événements',
-    request_invite_message:
-      'Parlez-nous un peu de vous et des événements que vous ou votre organisation organisez et nous vous recontacterons.',
     welcome_back: 'Bon retour !',
     welcome: 'Bienvenue',
     logout: 'Déconnexion',
@@ -301,7 +290,7 @@ export default {
     your_events: 'Vos événements :',
     view_all: 'Voir tout',
     waiting_for_location: 'En attente de la localisation',
-    any_dates: 'Toutes les dates',
+    any_dates: 'Toutes dates',
     in_this_area: 'Cette zone',
   },
   explore_view: {
@@ -546,6 +535,7 @@ export default {
     event_logo_msg:
       "Téléchargez le logo ou l'image de couverture principale de cet événement (requis)",
     select_logo: 'Sélectionner/Déposer le logo',
+    select_drop: 'Sélectionner/Déposer',
     lineup_poster: 'Affiche de la programmation',
     lineup_poster_msg:
       'Téléchargez une affiche de la programmation (optionnel)',

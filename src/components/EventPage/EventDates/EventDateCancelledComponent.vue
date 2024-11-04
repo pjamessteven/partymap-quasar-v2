@@ -19,7 +19,11 @@
         @click="showEditingDialog = true"
         class="flex items-start column"
       >
-        <q-badge color="red" :label="$t('event_dates.cancelled')" />
+        <q-badge
+          color="red"
+          class="text-large"
+          :label="$t('event_dates.cancelled')"
+        />
         <u
           class="t4 q-mt-sm link-hover underline"
           style="cursor: pointer"

@@ -227,7 +227,7 @@ export default {
     font-weight: 800 !important;
     position: relative;
     min-width: 150px;
-    text-transform: capitalize;
+    //text-transform: capitalize; // dont do this because deutsch
 
     //font-family: 'logotype' !important;
     //text-transform: uppercase;

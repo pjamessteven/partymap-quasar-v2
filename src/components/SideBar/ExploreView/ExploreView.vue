@@ -87,8 +87,7 @@
             >
               <div
                 class="flex row items-center no-wrap"
-                :class="$q.screen.gt.sm ? 'q-ml-sm' : 'q-ml-xs'"
-                style="min-width: 220px"
+                :class="$q.screen.gt.sm ? 'q-mx-sm' : 'q-ml-xs'"
                 :style="
                   $q.screen.gt.sm
                     ? 'margin-left: -16px; '
@@ -319,7 +318,7 @@
                               style="margin-left: -4px; font-size: 18px"
                               name="mdi-close-circle q-mr-xs"
                             />
-                            {{ tag.tag }}
+                            {{ tag.tag_t || tag.tag }}
                           </div>
                           <div
                             v-for="(tag, index) in computedTags1"
@@ -329,7 +328,7 @@
                             style="text-transform: capitalize"
                             :class="$q.platform.is.ios ? 'no-hover' : ''"
                           >
-                            {{ tag.tag }}
+                            {{ tag.tag_t || tag.tag }}
                           </div>
                         </div>
                         <div
@@ -344,7 +343,7 @@
                             style="text-transform: capitalize"
                             :class="$q.platform.is.ios ? 'no-hover' : ''"
                           >
-                            {{ tag.tag }}
+                            {{ tag.tag_t || tag.tag }}
                           </div>
                         </div>
                       </div>
@@ -949,7 +948,9 @@ export default {
   //  font-style: italic;
   font-family: 'Metropolis';
   font-weight: 700;
-
+  &:lang(ru) {
+    font-family: 'InterDisplay';
+  }
   //font-style: italic;
   &.header-select {
     :deep(.q-field) {

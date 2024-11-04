@@ -14,7 +14,7 @@ export default {
   meta: {
     main_title: 'PartyMap | Festivals and Underground Culture ',
     main_description:
-      "PartyMap is a community-driven platform for discovering festivals and events around the world and near you. Explore the world and find out what's good!",
+      "Find feativals and events in your area and around the world. PartyMap is a community platform for everybody. Explore the map and find what's good!",
     main_tags:
       'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list',
     events_on_partymap: 'Events on PartyMap',
@@ -120,18 +120,8 @@ export default {
     become_an_event_host: 'Become an event host',
   },
   auth: {
-    host_login: 'Host login',
     login: 'Login',
     login_to_partymap: 'Log in',
-    request_invite: 'Request host account',
-    invite_email_subject: 'Invitation request',
-    invite_email_body:
-      'Hi, my name is... %0A%0A%0AI am from...%0A%0AI want to be on Partymap because... %0A%0AThe events me or my organization host are... %0A%0A%0A%0AThanks!',
-    request_an_invitation: 'Request an invitation',
-    only_verified_hosts: 'Only verified hosts can post events to PartyMap.',
-    promo_message: 'Make it easier for people to find out about your events',
-    request_invite_message:
-      'Tell us a little bit about yourself and the events that you or your organization host and we will get back to you.',
     welcome_back: 'Welcome back!',
     welcome: 'Welcome',
     logout: 'Logout',
@@ -185,7 +175,8 @@ export default {
     password_reset_email_sent: "We've sent you an email, check your inbox!",
     your_pw_has_been_reset_and_logged_in_as:
       'Your password has been reset and you are now logged in',
-    never_share_or_sell: 'We will never share or sell your information.',
+    never_share_or_sell:
+      'Your information is safe with us. We will never share or sell your information.',
     only_store_email: 'We only store your email address.',
   },
 
@@ -326,7 +317,7 @@ export default {
     beach: 'Beach',
     beach_desc: 'Get your toes wet',
     psychedelic: 'Psychedelic',
-    psychedelic_desc: 'Think outside the box',
+    psychedelic_desc: 'Open your third eye',
     sustainability: 'Sustainability',
     sustainability_desc:
       'Festivals that emphasize their effort to reduce their environmental footprint',
@@ -542,6 +533,7 @@ export default {
     event_logo_msg:
       'Upload the logo or main cover image for this event (required)',
     select_logo: 'Select/Drop Logo',
+    select_drop: 'Select/Drop',
     lineup_poster: 'Lineup Poster',
     lineup_poster_msg: 'Upload a lineup poster (optional)',
     select_lineup_poster: 'Select/Drop Lineup Poster',
