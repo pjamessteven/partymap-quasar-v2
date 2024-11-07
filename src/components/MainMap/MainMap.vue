@@ -7,6 +7,35 @@
       'transport-map': mapStore.mapStyle !== 'satellite',
     }"
   >
+    <transition
+      appear
+      enter-active-class="animated fadeIn slow"
+      leave
+      leave-active-class="animated fadeOut"
+    >
+      <div
+        :style="popupStyle"
+        v-if="hoveredPointEvents"
+        :key="hoveredPointEvents[0].event_id"
+        @mouseenter="cancelHoverTimeout"
+        @mouseleave="setHoverTimeout"
+        @click="hoveredPointEvents = null"
+      >
+        <EventDateCardLoader
+          v-if="hoveredPointEvents?.length === 1"
+          :eventId="hoveredPointEvents[0].event_id"
+          :name="hoveredPointEvents[0].name"
+        />
+        <div v-else>
+          <q-card>
+            <q-item v-for="event in hoveredPointEvents" :key="event.event_id">
+              {{ event.name }}
+            </q-item>
+          </q-card>
+        </div>
+      </div>
+    </transition>
+
     <UseDevicePixelRatio v-slot="{ pixelRatio: { pixelRatio } }">
       <mgl-map
         :pixel-ratio="pixelRatio"
@@ -36,6 +65,7 @@
           <mgl-symbol-layer
             @mouseenter="mouseEnterClusterPoint"
             @click="onClickCluster"
+            @mousemove="mouseMovePoint"
             @mouseleave="mouseLeaveClusterPoint"
             layer-id="clusters"
             :filter="['has', 'point_count', ...currentEventFilter]"
@@ -50,6 +80,7 @@
             :layout="unclusteredPointLayout"
             :paint="computedPaintStyle"
             @click="onClickPoint"
+            @mousemove="mouseMovePoint"
             @mouseenter="mouseEnterPoint"
             @mouseleave="mouseLeavePoint"
           />
@@ -99,11 +130,12 @@ import {
   LngLatLike,
   Map,
   MapLayerMouseEvent,
+  MapGeoJsonFeature,
   PaddingOptions,
 } from 'maplibre-gl';
 import { storeToRefs } from 'pinia';
 import { Dark, Dialog, Screen } from 'quasar';
-
+import EventDateCardLoader from 'components/EventDateCardLoader.vue';
 import EventSelectionComponent from './EventSelectionComponent.vue';
 import { useDevicePixelRatio } from '@vueuse/core';
 import { API_URL, IS_LOCALHOST } from 'src/api';
@@ -131,7 +163,7 @@ const queryStore = useQueryStore();
 
 const blockPeekMap = ref(false);
 
-const mouseOverPointEvents = ref(null);
+const hoveredPointEvents = ref(null);
 
 const {
   points,
@@ -273,7 +305,7 @@ onMounted(async () => {
         { ignoreMoveEvents: true }
       );
 
-      if (Screen.gt.xs) {
+      if (Screen.gt.xs && mainStore.sidebarPanel == 'explore') {
         debouncedReverseGeocode(map.map?.getCenter(), map.map?.getZoom());
       }
     }
@@ -612,16 +644,39 @@ const flyTo = ({
   });
 };
 
+const popupStyle = ref({
+  position: 'absolute',
+  left: '0px',
+  top: '0px',
+  'z-index': 1,
+  'max-width': '450px',
+});
+
+const hoverTimeout = ref();
+
+const cancelHoverTimeout = () => {
+  clearTimeout(hoverTimeout.value);
+};
+
+const setHoverTimeout = () => {
+  hoverTimeout.value = setTimeout(() => {
+    hoveredPointEvents.value = null;
+  }, 300);
+};
+
 const mouseEnterPoint = (e: MapLayerMouseEvent) => {
   const canvas = map.map?.getCanvas();
   if (canvas) {
     canvas.style.cursor = 'pointer';
   }
-  //
-  const properties = e?.features?.[0]?.properties;
-  if (properties?.events) {
-    mouseOverPointEvents.value = JSON.parse(properties.events);
-  }
+
+  const eventsAtPoint = JSON.parse(e?.features?.[0]?.properties.events);
+  const coords = e?.features?.[0]?.geometry.coordinates;
+  showPopup(eventsAtPoint, coords);
+};
+
+const mouseMovePoint = (e: MapLayerMouseEvent) => {
+  cancelHoverTimeout();
 };
 
 const mouseLeavePoint = (e: MapLayerMouseEvent) => {
@@ -629,15 +684,25 @@ const mouseLeavePoint = (e: MapLayerMouseEvent) => {
   if (canvas) {
     canvas.style.cursor = '';
   }
-  mouseOverPointEvents.value = null;
+  setHoverTimeout();
 };
 
-const mouseEnterClusterPoint = (e: MapLayerMouseEvent) => {
+const mouseEnterClusterPoint = async (e: MapLayerMouseEvent) => {
   const canvas = map.map?.getCanvas();
   if (canvas) {
     canvas.style.cursor = 'zoom-in';
   }
-  //
+  const source = map.map?.getSource('points');
+  const clusterId = e?.features?.[0]?.properties.cluster_id;
+  const pointCount = e?.features?.[0]?.properties.point_count;
+  const coords = e?.features?.[0]?.geometry.coordinates;
+  const features = await source.getClusterLeaves(clusterId, pointCount);
+
+  const eventsAtPoint = features.reduce((accumulator, currentObject) => {
+    return [...accumulator, ...currentObject.properties.events];
+  }, []);
+
+  showPopup(eventsAtPoint, coords);
 };
 
 const mouseLeaveClusterPoint = (e: MapLayerMouseEvent) => {
@@ -645,9 +710,36 @@ const mouseLeaveClusterPoint = (e: MapLayerMouseEvent) => {
   if (canvas) {
     canvas.style.cursor = '';
   }
+  mouseLeavePoint;
+};
+
+const showPopup = (
+  eventsAtPoint: { event_id: number; name: string }[],
+  pointCoords
+) => {
+  // show popup on large screens
+  if (Screen.gt.sm) {
+    if (eventsAtPoint[0].event_id === hoveredPointEvents.value?.[0]?.event_id) {
+      cancelHoverTimeout();
+    } else {
+      hoveredPointEvents.value = eventsAtPoint;
+    }
+    // update popup location
+    const pointPx = map?.map.project(pointCoords);
+    popupStyle.value.left =
+      Math.min(pointPx.x - 225, window.innerWidth - 450) + 'px';
+    if (pointPx.y - 286 < 86) {
+      // if too high, put popup below
+      popupStyle.value.top = pointPx.y + 48 + 'px';
+    } else {
+      popupStyle.value.top = Math.max(pointPx.y - 270, 0) + 'px';
+    }
+  }
 };
 
 const onClickCluster = async (e: MapLayerMouseEvent) => {
+  hoveredPointEvents.value = null;
+
   const features = e.features;
   const clusterId = features?.[0]?.properties.cluster_id;
   if (clusterId) {
@@ -675,6 +767,7 @@ const searchEventFilter = computed(() => {
 });
 
 const onClickPoint = (e: MapLayerMouseEvent) => {
+  hoveredPointEvents.value = null;
   console.log('click', e.features);
   const properties = e?.features?.[0]?.properties;
   if (properties?.events) {
@@ -985,6 +1078,7 @@ function useRef(arg0: boolean) {
   width: 100%;
   height: 100%;
   z-index: 0;
+
   :deep(.maplibregl-map) {
     height: 100%;
     width: 100%;

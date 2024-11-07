@@ -369,7 +369,7 @@ export default {
     month_d: 'Passiert in diesem Monat ',
     all: 'Alle',
     all_d: 'Bis zum Ende der Zeit',
-    any_dates: 'Beliebige Datumsangaben',
+    any_dates: 'Alle Daten',
     all_tags: 'Tags',
     all_artists: 'Künstler',
     size: 'Größe',

@@ -1,26 +1,32 @@
 <template>
-  <transition appear enter-active-class="animated fadeIn">
-    <div class="ed-card" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
+  <div
+    class="ed-card"
+    :class="{ isPopup }"
+    @mouseenter="mouseEnter"
+    @mouseleave="mouseLeave"
+  >
+    <transition appear enter-active-class="animated fadeIn slower">
       <router-link
-        style="text-decoration: none; color: inherit"
+        v-if="event"
+        style="text-decoration: none; color: inherit; z-index: 1"
         :to="{
           name: 'EventPage',
           params: {
-            id: event.event_id,
-            eventDateId: event.id,
+            id: event?.event_id,
+            eventDateId: event?.id,
           },
           query: {
-            name: event.name.replace(/ /g, '_'),
+            name: event?.name.replace(/ /g, '_'),
             thumbXsUrl: imgThumbUrl,
             location: JSON.stringify({
-              lat: event.location.lat,
-              lng: event.location.lng,
-              place_id: event.location.place_id,
+              lat: event?.location.lat,
+              lng: event?.location.lng,
+              place_id: event?.location.place_id,
             }),
             dateString: computedDateString,
             locationDescription: computedLocation,
-            description: event.event.description,
-            tags: JSON.stringify(event.event.event_tags),
+            description: event?.event.description,
+            tags: JSON.stringify(event?.event.event_tags),
           },
         }"
       >
@@ -33,18 +39,19 @@
           <div
             class="image-container flex justify-center items-center shadow-2xl"
           >
-            <img
-              style="filter: blur(2px); transform: scale(1.2)"
-              :src="imgThumbXsUrl"
-              class="image not-loaded"
-              v-show="!loadedImage"
-            />
-            <transition enter-active-class="animated fadeIn">
+            <transition appear enter-active-class="animated fadeIn slow">
+              <img
+                style="filter: blur(2px); transform: scale(1.2); z-index: 2"
+                :src="imgThumbXsUrl"
+                class="not-loaded"
+              />
+            </transition>
+            <transition appear enter-active-class="animated fadeIn slow">
               <img
                 :src="imgThumbUrl"
-                class="image"
                 @load="() => (loadedImage = true)"
                 v-show="loadedImage"
+                style="z-index: 3"
               />
             </transition>
           </div>
@@ -62,11 +69,11 @@
                   'q-mb-xs': $q.screen.lt.md,
                 }"
               >
-                <span class="ellipsis">{{ event.name }}</span>
+                <span class="ellipsis">{{ event?.name || name }}</span>
                 <q-icon
                   class="q-ml-sm o-080"
                   name="mdi-check-decagram"
-                  v-if="event.event.host"
+                  v-if="event?.event.host"
                 >
                   <q-tooltip
                     :content-class="
@@ -86,6 +93,7 @@
             <div
               class="flex column justify-center card-bottom-text o-070 q-mb-sm q-pr-md"
               style="font-weight: 400; width: 100%"
+              v-if="event"
             >
               <!--
 
@@ -174,7 +182,7 @@
               </div>
             </div>
             <div
-              v-if="$q.screen.gt.sm"
+              v-if="$q.screen.gt.sm && event"
               class="description grow flex ellipsis q-mb-sm q-pr-md items-center"
               style="max-width: 100%"
             >
@@ -182,7 +190,7 @@
             </div>
             <!-- scroll area here (qscroll or regular) area causes performance issues on android-->
             <CustomQScroll
-              v-if="!$q.platform.is.androi || true"
+              v-if="!$q.platform.is.android || true"
               horizontal
               style="min-height: 39px; margin-bottom: -8px"
               class="q-mt-xs"
@@ -194,9 +202,7 @@
             >
               <div
                 class="tag-container flex row no-wrap ellipsis q-pr-md"
-                v-if="
-                  event.event.event_tags && event.event.event_tags.length > 0
-                "
+                v-if="event?.event?.event_tags?.length > 0"
               >
                 <Tag
                   :small="true"
@@ -211,9 +217,7 @@
               <div
                 class="tag-container flex row no-wrap"
                 style="overflow-x: hidden"
-                v-if="
-                  event.event.event_tags && event.event.event_tags.length > 0
-                "
+                v-if="event?.event?.event_tags?.length > 0"
               >
                 <Tag
                   class="q-mr-xs"
@@ -226,8 +230,51 @@
           </div>
         </div>
       </router-link>
+    </transition>
+    <div
+      v-if="isPopup"
+      style="
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 0;
+      "
+    >
+      <div
+        class="ed-card-content flex row no-wrap q-py-md q-pl-md"
+        style="width: 100%"
+      >
+        <div
+          class="image-container flex justify-center items-center shadow-2xl"
+        >
+          <img
+            style="filter: blur(2px); transform: scale(1.2)"
+            class="image not-loaded"
+          />
+        </div>
+        <div
+          class="flex column grow q-pl-md"
+          style="width: 100%; overflow: hidden"
+        >
+          <div
+            class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
+          >
+            <div
+              class="flex row items-baseline no-wrap metropolis bold q-mr-sm ellipsis"
+              :class="{
+                'text-large q-mb-sm': $q.screen.gt.sm,
+                'q-mb-xs': $q.screen.lt.md,
+              }"
+            >
+              <span class="ellipsis">{{ event?.name || name }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script>
@@ -244,10 +291,8 @@ export default {
   },
   props: {
     event: Object,
-    shortDate: {
-      default: false,
-      type: Boolean,
-    },
+    isPopup: Boolean,
+    name: String,
   },
   data() {
     return {
@@ -256,7 +301,7 @@ export default {
   },
   methods: {
     mouseEnter() {
-      if (this.$q.screen.gt.xs)
+      if (this.$q.screen.gt.xs && !this.isPopup)
         this.eventDateHoverMarker = {
           lat: this.event.location.lat,
           lng: this.event.location.lng,
@@ -271,7 +316,6 @@ export default {
         return `background-image:  url("${this.imgThumbXsUrl}");
         background-size: cover;
         display: inline-block;
-
         `;
       } else {
         return `background-image:  url("${this.imgThumbXsUrl}");
@@ -305,7 +349,7 @@ export default {
             this.event.location.locality.region.long_name
           );
         } else {
-          return this.event.location.locality.long_name;
+          return this.event?.location?.locality?.long_name;
         }
       } else {
         return this.event?.location?.name;
@@ -338,6 +382,9 @@ export default {
       opacity: 0.4;
     }
     .ed-card-content {
+      .image-container {
+        background: $bi-3;
+      }
     }
     .card-background {
       background: $bi-4;
@@ -381,6 +428,9 @@ export default {
       border-top: 1px solid (rgba(255, 255, 255, 0.2));
 
       color: white !important;
+      .image-container {
+        background: $bi-3;
+      }
     }
 
     .event-info {
@@ -399,12 +449,17 @@ export default {
   overflow: hidden;
   position: relative;
   transform: translate3d(0, 0, 0);
+  width: 100%;
   @supports (font: -apple-system-body) and (-webkit-appearance: none) {
     -webkit-backface-visibility: hidden;
     -webkit-transform: translate3d(0, 0, 0);
     // translate3d is a hack for safari to force gpu rendering of blur()
   }
 
+  &.isPopup {
+    height: 238px;
+    width: 450px;
+  }
   &:before {
     content: '';
     position: absolute;
@@ -471,9 +526,6 @@ export default {
       font-size: small;
     }
     .image-container {
-      //max-width: 400px;
-      // max-height: 400px;
-      // min-width: 400px;
       width: 100%;
       position: relative;
       overflow: hidden;
@@ -485,14 +537,14 @@ export default {
       z-index: 1;
       border-radius: 9px;
 
-      .image {
+      img {
+        position: absolute;
+        pointer-events: none;
         height: 100%;
         width: 100%;
         max-height: 100%;
         max-width: 100%;
         object-fit: cover;
-        z-index: 2;
-        pointer-events: none;
       }
     }
   }

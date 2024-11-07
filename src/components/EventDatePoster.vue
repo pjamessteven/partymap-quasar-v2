@@ -28,7 +28,7 @@
           >
             <transition appear enter-active-class="animated fadeIn slower">
               <img
-                style="filter: blur(2px); transform: scale(1.2); z-index: 2"
+                style="transform: scale(1.1); z-index: 2"
                 :src="imgThumbXsUrl"
                 class="not-loaded"
               />
@@ -457,13 +457,7 @@ export default {
       box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
         rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
         rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-      .image-container-bg {
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        z-index: 1;
-        transform: scale(1.2);
-      }
+
       img {
         position: absolute;
         pointer-events: none;

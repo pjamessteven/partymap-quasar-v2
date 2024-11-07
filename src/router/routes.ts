@@ -20,6 +20,7 @@ const routes: RouteRecordRaw[] = [
       auth: false,
       mapOverlay: true,
       friendlyName: 'Explore',
+      backNavigation: false,
     },
     children: [
       {
@@ -32,6 +33,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: true,
+          backNavigation: true,
         },
       },
 
@@ -44,7 +46,6 @@ const routes: RouteRecordRaw[] = [
           auth: false,
           mapOverlay: false,
           friendlyName: 'Browse',
-          noBackNavigation: false,
         },
       },
       {
@@ -56,7 +57,6 @@ const routes: RouteRecordRaw[] = [
           auth: false,
           mapOverlay: false,
           friendlyName: 'Activity',
-          noBackNavigation: false,
         },
       },
       {
@@ -69,7 +69,6 @@ const routes: RouteRecordRaw[] = [
           auth: false,
           mapOverlay: false,
           friendlyName: 'Privacy',
-          noBackNavigation: false,
         },
       },
       {
@@ -82,7 +81,6 @@ const routes: RouteRecordRaw[] = [
           auth: false,
           mapOverlay: false,
           friendlyName: 'Support',
-          noBackNavigation: false,
         },
       },
       {
@@ -97,7 +95,6 @@ const routes: RouteRecordRaw[] = [
           auth: false,
           mapOverlay: false,
           friendlyName: 'Privacy',
-          noBackNavigation: false,
         },
       },
       {
@@ -107,6 +104,7 @@ const routes: RouteRecordRaw[] = [
         props: true,
         meta: {
           mapOverlay: false,
+          backNavigation: true,
         },
       },
       {
@@ -126,7 +124,6 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: true,
-          noBackNavigation: true,
         },
       },
       {
@@ -136,7 +133,6 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: true,
-          noBackNavigation: true,
         },
       },
       {
@@ -147,7 +143,6 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: true,
-          noBackNavigation: true,
         },
       },
       {
@@ -157,7 +152,6 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: true,
-          noBackNavigation: true,
         },
       },
       {
@@ -168,7 +162,6 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: false,
-          noBackNavigation: true,
         },
       },
       {
@@ -179,7 +172,6 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: false,
-          noBackNavigation: true,
         },
       },
 
@@ -204,7 +196,6 @@ const routes: RouteRecordRaw[] = [
           auth: false,
           mapOverlay: false,
           friendlyName: 'User page',
-          noBackNavigation: true,
         },
       },
       {
@@ -215,7 +206,6 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: true,
-          noBackNavigation: true,
         },
       },
       {
@@ -227,7 +217,6 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: true,
-          noBackNavigation: true,
         },
       },
       {
