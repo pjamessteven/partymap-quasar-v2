@@ -1,6 +1,6 @@
 <template>
   <div class="flex column">
-    <div class="metropolis bolder text-h6 t2 q-pr-md q-mb event-page-header">
+    <div class="metropolis bolder text-h6 t1 q-pr-md q-mb event-page-header">
       {{ $t('reviews.reviews_and_experiences') }}
     </div>
     <div

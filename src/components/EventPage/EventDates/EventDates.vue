@@ -19,7 +19,7 @@
           -->
 
     <div
-      class="inter bolder t2 text-large q-pr-md event-page-header"
+      class="inter bolder t1 text-large q-pr-md event-page-header"
       v-if="computedImages?.length > 0"
     >
       <span v-if="selectedDateImages?.length > 0"
@@ -71,7 +71,7 @@
       :class="{ 'q-mt-md': $q.screen.gt.sm, 'q-px-md': $q.screen.lt.sm }"
       v-if="event.event_dates.length > 1"
     >
-      <div class="metropolis bolder text-h6 t2 q-pr-md">
+      <div class="metropolis bolder text-h6 t1 q-pr-md">
         <span v-if="event.next_date">
           {{ $t('event_dates.upcoming_dates') }}</span
         >
@@ -104,7 +104,7 @@
       :key="selectedEventDateIndex + 101"
       :class="{ 'q-px-md': $q.screen.lt.sm }"
     >
-      <div class="metropolis bolder t2 text-h6 q-pr-md event-page-header">
+      <div class="metropolis bolder t1 text-h6 q-pr-md event-page-header">
         <span v-if="event.event_dates.length > 1"
           >{{ $t('event_dates.details') }}:</span
         ><span v-else>{{ $t('event_dates.event_details') }}:</span>
@@ -142,7 +142,7 @@
           v-if="
             !!selectedEventDate &&
             !editing &&
-            !event.host &&
+            (!event.host || currentUserIsHost) &&
             (informationMissing || showMoreFields)
           "
           class="flex row items-center no-wrap link-hover ed-inline-card editing-outline q-py-md"
@@ -150,13 +150,19 @@
           @click="editing = true"
           style="cursor: pointer"
         >
-          <q-icon size="2em" name="las la-edit" class="t4" />
+          <q-icon
+            size="2em"
+            :name="currentUserIsHost ? 'las la-edit' : 'las la-hand-peace'"
+            class="t4"
+          />
           <div
             class="flex column q-ml-md t2"
             :class="{ 'text-large': $q.screen.gt.sm }"
           >
             <u class="t4 q-ml-sm" v-if="!showMoreFields">{{
-              $t('event_dates.add_missing_information')
+              currentUserIsHost
+                ? $t('event_dates.add_missing_information')
+                : $t('suggestions.improve_this_page')
             }}</u>
             <u class="t4 q-ml-sm" v-else>{{
               $t('event_dates.hide_missing_information')
@@ -358,7 +364,7 @@ export default {
           visible:
             (eventDate.tickets != null && eventDate.tickets.length > 0) ||
             (this.eventHasHost && this.showMoreFields) ||
-            this.editing,
+            (this.editing && this.currentUser?.role > 20),
         },
         {
           type: 'EventDateDescriptionComponent',

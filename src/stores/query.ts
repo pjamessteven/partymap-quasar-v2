@@ -89,12 +89,12 @@ interface QueryState {
   userEventDatesHasNext: boolean;
   userEventDatesLoading: boolean;
   userEventDatesGroupedByMonth: {
-    [key: number]: [EventDate, string][];
+    [key: number]: EventDate[];
   };
 
   eventDates: [EventDate, string][];
   eventDatesGroupedByMonth: {
-    [key: number]: [EventDate, string][];
+    [key: number]: EventDate[];
   };
   eventDatesPage: number;
   eventDatesHasNext: boolean;
@@ -285,7 +285,7 @@ export const useQueryStore = defineStore('query', {
           per_page: 20,
           distinct: true,
           all_related_to_user: mode === 'all' ? _username : undefined,
-          following_user: mode === 'following' ? _username : undefined,
+          reviewed_user: mode === 'reviewed' ? _username : undefined,
           going_user: mode === 'going' ? _username : undefined,
           interested_user: mode === 'interested' ? _username : undefined,
           host_user: mode === 'hosting' ? _username : undefined,
@@ -363,6 +363,7 @@ export const useQueryStore = defineStore('query', {
           empty_lineup: this.controlEmptyLineup || undefined,
           date_unconfirmed: this.controlDateUnconfirmed || undefined,
         });
+
         if (this.eventDatesRequestId === requestId) {
           // only save data in store if this is the latest request
           // this prevents the list updating at weird times if there are a lot of
@@ -492,12 +493,12 @@ export const useQueryStore = defineStore('query', {
 });
 
 export const groupEventDatesByMonth = (
-  existingDates: { [key: number]: [EventDate, string][] } = {},
-  eventDates: [EventDate, string][]
+  existingDates: { [key: number]: EventDate[] } = {},
+  eventDates: EventDate[]
 ) => {
   for (const ed of eventDates) {
     // assumes eventDates are sorted by time
-    const start = dayjs(ed?.[0].start_naive);
+    const start = dayjs(ed?.start_naive);
     const yearMonth = Number(start.format('YYMM')); // should be int
     if (!existingDates[yearMonth]) {
       existingDates[yearMonth] = [];

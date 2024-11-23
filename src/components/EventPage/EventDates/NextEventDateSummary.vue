@@ -15,22 +15,24 @@
         :class="$q.screen.gt.xs ? 'inter bold' : 'inter bold'"
       >
         <div v-if="!!ed">
+          <span>
+            <span v-if="hasOccured">Past event in&nbsp;</span>
+            <span v-if="ed?.date_confirmed == true">
+              {{ localDateWithWeekday(ed?.start_naive, ed?.tz) }}
+            </span>
+            <span v-else-if="!ed?.date_confirmed">
+              {{ monthYear(ed?.start_naive, ed?.tz) }}&nbsp;<span
+                v-if="!hasOccured && !ed?.cancelled"
+                >({{ $t('event_dates.date_tbc') }})</span
+              ></span
+            >
+          </span>
           <q-badge
             v-if="ed?.cancelled"
-            class="q-my-xs q-mr-sm"
+            class="q-my-xs q-ml-sm"
             color="red"
             :label="$t('event_dates.cancelled')"
           />
-          <span v-if="hasOccured">Past event in&nbsp;</span>
-          <span v-if="ed?.date_confirmed == true">
-            {{ localDateWithWeekday(ed?.start_naive, ed?.tz) }}
-          </span>
-          <span v-else-if="!ed?.date_confirmed">
-            {{ monthYear(ed?.start_naive, ed?.tz) }}&nbsp;<span
-              v-if="!hasOccured && !ed?.cancelled"
-              >({{ $t('event_dates.date_tbc') }})</span
-            ></span
-          >
           <!--
           <span class="t3">
             [{{ timeZoneAbbreviention(ed.event_start, ed.tz) }}]

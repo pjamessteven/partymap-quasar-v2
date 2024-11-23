@@ -3,7 +3,7 @@
     <q-tabs
       :class="{
         'light-button': color === 'white',
-        'inter bolder desktop-tabs': $q.screen.gt.xs,
+        'metropolis bolder desktop-tabs': $q.screen.gt.xs,
       }"
       class="tabs"
       @click.stop
@@ -30,12 +30,11 @@
       "
     >
       <q-route-tab
-        :to="{ name: 'Explore' }"
+        :to="{ name: 'Explore', query: { view: 'nearby' } }"
         :class="{
           'q-tab--active': sidebarPanel == 'nearby',
         }"
         key="1"
-        exact
         name="nearby"
         content-class="tab"
         :label="$t('nav.home')"
@@ -92,7 +91,7 @@
       />
 
       <q-route-tab
-        :style="$q.screen.gt.sm ? 'margin-left: -2px' : ''"
+        :style="$q.screen.gt.xs ? 'margin-left: -2px' : ''"
         name="profile"
         key="5"
         :icon="
@@ -155,7 +154,7 @@ export default {
       handler: function (newval) {
         if (newval === 'nearby') {
           if (this.$route.query.view) {
-            this.$router.push({ name: 'Explore' });
+            this.$router.push({ name: 'Explore', query: { view: 'nearby' } });
           }
         } else if (newval === 'explore') {
           this.$router.push({ name: 'Explore', query: { view: 'explore' } });

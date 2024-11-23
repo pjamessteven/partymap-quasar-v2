@@ -1,15 +1,15 @@
 <template>
   <q-card class="edit-card dialog-card">
-    <q-card-section class="flex column no-wrap dialog-card-header">
-      <div class="flex items-center no-wrap justify-between grow">
-        <div class="text-h6 card-title q-pr-md">{{ $t('update_video') }}</div>
-        <q-btn icon="close" class="q-ml-md" flat round dense v-close-popup />
+    <q-card-section class="flex row justify-between no-wrap dialog-card-header">
+      <div class="text-h6 card-title q-pr-md">
+        {{ $t('edit_event.update_video') }}
       </div>
+      <q-btn icon="close" class="q-ml-md" flat round dense v-close-popup />
     </q-card-section>
     <q-card-section class="dialog-card-content">
       <div class="t2 q-mb-md">
         <div class="t2">
-          {{ $t('update_video_msg') }}
+          {{ $t('edit_event.update_video_msg') }}
         </div>
       </div>
       <q-input

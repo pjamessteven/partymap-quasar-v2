@@ -103,7 +103,7 @@
               </div>
               <div class="flex row no-wrap items-end">
                 <router-link
-                  :to="{ name: 'Explore' }"
+                  :to="{ name: 'Explore', query: { view: 'nearby' } }"
                   style="text-decoration: none; color: inherit"
                 >
                   <q-btn
@@ -112,7 +112,7 @@
                     style="border-radius: 100px !important"
                   >
                     <template v-slot:default>
-                      <q-icon size="sm" name="mdi-crosshairs" />
+                      <q-icon size="sm" name="mdi-crosshairs-gps" />
                     </template>
                   </q-btn>
                 </router-link>
@@ -157,21 +157,20 @@
               <div class="flex column" v-if="!isLoadingInitial">
                 <!-- cities-->
                 <div
-                  :style="$q.screen.gt.sm ? 'margin-top: -8px' : ''"
+                  :style="$q.screen.gt.sm ? 'margin-top: 0px' : ''"
                   class="flex column q-mb-lg"
                   v-if="
                     topRegionsInArea?.length > 2 &&
                     mapZoomLevel < 7 &&
-                    $q.screen.gt.sm &&
-                    false
+                    $q.screen.gt.sm
                   "
                 >
                   <div
-                    v-if="false"
                     class="q-pb-md q-mt-sm t1 header"
+                    v-if="false"
                     :class="$q.screen.gt.sm ? 'q-px-lg  ' : ' '"
                   >
-                    <div class="inter bolder text-large">Happening Places</div>
+                    <div class="inter bolder text-large">Busy places:</div>
                   </div>
 
                   <div>
@@ -197,36 +196,55 @@
                       "
                     >
                       <div
-                        class="flex column inter bolder text-h5 t3"
+                        class="flex column inter bolder text-h6 q-pl-lg"
                         style="word-break: keep-all; white-space: nowrap"
-                        :class="$q.screen.gt.sm ? 'q-pl-lg ' : 'q-pl-lg'"
+                        :class="{
+                          t3: $q.dark.isActive,
+                          t4: !$q.dark.isActive,
+                        }"
                       >
-                        <div class="flex row no-wrap q-gutter-md q-pr-xl">
+                        <div class="flex row no-wrap q-gutter-sm q-pr-xl">
                           <div
                             v-for="(region, index) in computedRegions1"
                             :key="index"
-                            class="city"
                             @click="clickRegion(region)"
-                            style="text-transform: capitalize"
-                            :class="$q.platform.is.ios ? 'no-hover' : ''"
                           >
-                            {{ region.long_name }}
+                            <span
+                              class="city"
+                              style="text-transform: capitalize"
+                              :class="$q.platform.is.ios ? 'no-hover' : ''"
+                            >
+                              {{ region.long_name }}
+                            </span>
+                            <span
+                              class="q-ml-sm"
+                              v-if="index < computedRegions1.length - 1"
+                              >·
+                            </span>
                           </div>
                         </div>
 
                         <div
-                          class="flex row no-wrap q-gutter-md q-pt-sm"
+                          class="flex row no-wrap q-gutter-sm q-pt-sm"
                           v-if="computedRegions2.length > 0"
                         >
                           <div
                             v-for="(region, index) in computedRegions2"
                             :key="index"
-                            class="city"
                             @click="clickRegion(region)"
-                            style="text-transform: capitalize"
-                            :class="$q.platform.is.ios ? 'no-hover' : ''"
                           >
-                            {{ region.long_name }}
+                            <span
+                              style="text-transform: capitalize"
+                              :class="$q.platform.is.ios ? 'no-hover' : ''"
+                              class="city"
+                            >
+                              {{ region.long_name }}
+                            </span>
+                            <span
+                              class="q-ml-sm"
+                              v-if="index < computedRegions1.length - 1"
+                              >·
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -324,7 +342,7 @@
                             v-for="(tag, index) in computedTags1"
                             :key="index"
                             @click="clickTag(tag)"
-                            class="tag t2 text- inter semibold"
+                            class="tag t2 text- inter"
                             style="text-transform: capitalize"
                             :class="$q.platform.is.ios ? 'no-hover' : ''"
                           >
@@ -339,7 +357,7 @@
                             v-for="(tag, index) in computedTags2"
                             :key="index"
                             @click="clickTag(tag)"
-                            class="tag t2 text- inter semibold"
+                            class="tag t2 inter"
                             style="text-transform: capitalize"
                             :class="$q.platform.is.ios ? 'no-hover' : ''"
                           >
@@ -352,7 +370,11 @@
                 </div>
                 <div
                   class="flex column"
-                  :style="$q.screen.gt.sm ? 'margin-top: -8px' : ''"
+                  :style="
+                    $q.screen.gt.sm
+                      ? 'margin-top: -8px; margin-bottom: -8px'
+                      : ''
+                  "
                   v-if="
                     topArtistsInArea?.length > 5 &&
                     $q.screen.gt.sm &&
@@ -585,6 +607,7 @@ export default {
     clickRegion(region) {
       this.currentLocationCity = region.long_name;
       this.currentLocationFromSearch = true;
+      console.log(region);
       toRaw(this.map).flyTo({
         center: { lat: region.lat, lng: region.lng },
         zoom: 7,

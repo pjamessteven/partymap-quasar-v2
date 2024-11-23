@@ -1,6 +1,20 @@
 <template>
   <div class="shadow">
-    <EventDateCard :event="event?.next_date" :name="name" :isPopup="true" />
+    <RouterLink
+      style="text-decoration: none; color: inherit; z-index: 1"
+      :to="{
+        name: 'EventPage',
+        params: {
+          id: eventId,
+        },
+        query: {
+          name: name.replace(/ /g, '_'),
+          location: coords,
+        },
+      }"
+    >
+      <EventDateCard :event="event?.next_date" :name="name" :isPopup="true" />
+    </RouterLink>
   </div>
 </template>
 
@@ -14,6 +28,7 @@ export default {
   props: {
     eventId: Number,
     name: String,
+    coords: Object,
   },
   data() {
     return {

@@ -78,8 +78,8 @@ export default {
     going: 'Je participe',
     interested: 'Intéressé',
     hosting: "J'organise",
-    created: 'Soumis',
-    reviewed: 'Évalués',
+    created: 'Ajouté par moi',
+    reviewed: 'Mes commentaires',
     upcoming: 'À venir',
     past: 'Passés',
     more: 'Plus',
@@ -228,17 +228,17 @@ export default {
     save_to_device: "Enregistrer sur l'appareil",
   },
   add_event: {
-    please_select_an_option: 'Soumettre un événement :',
+    please_select_an_option: 'Ajouter un événement :',
     event_i_know_about: "Je ne suis pas l'organisateur",
     event_i_know_about_msg:
-      "Tout le monde peut soumettre un événement à PartyMap, tant que les informations sur l'événement sont déjà publiques sur internet.",
+      "Tout le monde peut ajouter un événement à PartyMap, tant que les informations sur l'événement sont déjà publiques sur internet.",
     event_i_know_about_msg_long:
-      "Tout le monde peut soumettre un événement à PartyMap, tant que les informations sur l'événement sont déjà publiques sur internet. Tout le monde pourra mettre à jour la page de l'événement si les informations deviennent obsolètes. Tous les événements sont modérés avant d'apparaître sur la carte.",
+      "Tout le monde peut ajouter un événement à PartyMap, tant que les informations sur l'événement sont déjà publiques sur internet. Tout le monde pourra mettre à jour la page de l'événement si les informations deviennent obsolètes. Tous les événements sont modérés avant d'apparaître sur la carte.",
     i_am_host: "Je suis l'organisateur",
     i_am_host_msg:
       'Connexion requise. Nous pourrions également demander une vérification avant de publier votre événement.',
-    add_your_event: 'Soumettre votre événement',
-    add_public_event: 'Soumettre un événement',
+    add_your_event: 'Ajouter votre événement',
+    add_public_event: 'Ajouter un événement',
   },
   sidebar: {
     home: 'Accueil',
@@ -265,7 +265,7 @@ export default {
     message_1:
       'PartyMap est une plateforme communautaire et collaborative pour trouver des fêtes et des festivals partout dans le monde !',
     message_2:
-      "Tout le monde peut soumettre un événement qu'il connaît, tant que l'information est déjà publique. Tout le monde peut également suggérer des modifications à un événement si l'information est obsolète. Aucun compte nécessaire !",
+      "Tout le monde peut ajouter un événement qu'il connaît, tant que l'information est déjà publique. Tout le monde peut également suggérer des modifications à un événement si l'information est obsolète. Aucun compte nécessaire !",
     message_3:
       ' Ceci est un travail en cours... Plus de fonctionnalités à venir prochainement ! ',
     app_store: "PartyMap sur l'App Store",
@@ -315,10 +315,10 @@ export default {
     beach_desc: 'Mouillez-vous les orteils',
     psychedelic: 'Psychédélique',
     psychedelic_desc: 'Pensez hors des sentiers battus',
-    sustainability: 'Durabilité',
+    sustainability: 'Résilience Environnementale',
     sustainability_desc:
       "Festivals qui mettent l'accent sur leurs efforts pour réduire leur empreinte environnementale",
-    healing: 'Guérison',
+    healing: 'Healing et Bien-Être',
     healing_desc: 'Renouvelez-vous et transformez-vous...',
   },
   artist_page: {
@@ -342,7 +342,7 @@ export default {
     home: 'Accueil',
     explore: 'Explorer',
     browse: 'Parcourir',
-    you: 'Vous',
+    you: 'Profil',
     settings: 'Paramètres',
     dark_mode: 'Mode sombre',
     watercolor: 'Aquarelle',
@@ -383,8 +383,8 @@ export default {
     select_size: 'Taille',
     select_artist: 'Artistes',
     select_tags: 'Type',
-    top_tags_in_area: 'Tags populaires dans cette zone',
-    top_tags_worldwide: 'Tags populaires dans le monde',
+    top_tags_in_area: 'Top tags locaux',
+    top_tags_worldwide: 'Top tags globaux',
     selected_tags: 'Tags sélectionnés',
     search_results: 'Résultats de recherche',
     top_artists_in_area: 'Artistes populaires dans cette zone',
@@ -414,7 +414,7 @@ export default {
     quick_submit: 'Ajouter un événement !',
     lang_options: 'Langue',
     all_activity: 'Toutes les activités',
-    submit_event: 'Soumettre un événement',
+    submit_event: 'Ajouter un événement',
     dark_mode: 'Thème',
     on: 'Sombre',
     off: 'Clair',
@@ -427,7 +427,7 @@ export default {
     location: 'Lieu',
     schedule: 'Programme',
     continue: 'Continuer',
-    add: 'Soumettre à PartyMap',
+    add: 'Ajouter à PartyMap',
     name: "Nom de l'événement",
     description: "Description de l'événement",
     tags: 'Tags',
@@ -526,7 +526,7 @@ export default {
     youtube_url_msg:
       "Collez ici le lien YouTube vers l'aftermovie ou la vidéo promotionnelle.",
     reset: 'Réinitialiser',
-    submit: 'Soumettre',
+    submit: 'Ajouter',
     detailed_description: 'Description détaillée (Optionnel)',
     detailed_description_msg:
       "Ici, vous pouvez expliquer en détail ce à quoi les gens peuvent s'attendre. Vous pouvez écrire dans n'importe quelle langue.",
@@ -647,7 +647,7 @@ export default {
     created_event: "A créé l'événement",
     approved_event: "A approuvé l'événement",
     updated_event: "A mis à jour l'événement",
-    reviewed_event: "A examiné l'événement",
+    reviewed_event: "A don son avis sur l'événement",
     did_something: 'A fait quelque chose',
     add_tag: 'A ajouté un tag | A ajouté des tags',
     remove_tag: 'A supprimé un tag | A supprimé des tags',
@@ -725,7 +725,7 @@ export default {
     delete: 'Supprimer cette date',
     delete_msg: 'Cette date ne devrait pas être ici, supprimez-la complètement',
     message: 'Message',
-    submit_improvement: 'Soumettre une amélioration',
+    submit_improvement: 'Ajouter une amélioration',
     tell_us_why_improvement_needed:
       'Dites-nous pourquoi cette amélioration est nécessaire. Veuillez donner une source si possible.',
     upload_new_logo: 'Télécharger un nouveau logo',
@@ -1145,7 +1145,7 @@ export default {
     20: 'Vie privée des enfants',
     21: "PartyMap ne collecte pas sciemment d'informations auprès des enfants de moins de 13 ans.",
     22: 'Modifications de cette politique',
-    23: 'Nous pouvons mettre à jour cette politique de temps à autre. Veuillez la consulter périodiquement.',
+    23: 'Nous pouvons mettre à jour cette charte de temps à autre. Veuillez la consulter périodiquement.',
     24: "Si vous avez d'autres questions ou avez besoin de plus d'informations sur notre politique de confidentialité, n'hésitez pas à nous contacter.",
   },
   terms_and_conditions: {

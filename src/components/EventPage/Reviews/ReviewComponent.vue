@@ -1,15 +1,16 @@
 <template>
   <div class="review flex column q-mt-md">
-    <div class="flex row t3 items-center">
-      <RouterLink
-        class="link-hover"
-        :to="{
-          name: 'UserPage',
-          params: { username: review.creator.username },
-        }"
-        >{{ review.creator.username }}</RouterLink
-      >&nbsp;({{ timeAgo(review.created_at) }})
-
+    <div class="flex row t3 items-center justify-between">
+      <span>
+        <RouterLink
+          class="link-hover"
+          :to="{
+            name: 'UserPage',
+            params: { username: review.creator.username },
+          }"
+          >{{ review.creator.username }}</RouterLink
+        >&nbsp;({{ timeAgo(review.created_at) }})
+      </span>
       <q-btn flat icon="mdi-dots-vertical" class="q-px-sm t4" size="sm">
         <q-tooltip
           :content-class="
@@ -71,7 +72,7 @@
     <div>
       <span v-if="showOriginal"> {{ review.text }} </span
       ><span v-else>
-        {{ review.text_t }}
+        {{ review.text_t || review.text }}
       </span>
       <span v-if="isTranslation">
         <p />

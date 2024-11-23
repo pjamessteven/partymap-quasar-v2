@@ -79,7 +79,11 @@ export default {
     return minutes + ':' + seconds;
   },
   timeAgo: function (utcDate) {
+    return dayjs.tz(utcDate).fromNow();
+
     // TIMESTAMP STRING MUST END WITH Z
+
+    /*
     if (utcDate.indexOf('Z') === -1) {
       utcDate = utcDate + 'Z';
     }
@@ -131,6 +135,7 @@ export default {
     words += distance + separator + locales.sufix;
 
     return words.trim();
+    */
   },
   // this funciton assumes t1 and t2 are in UTC
   // t2 is an option end date

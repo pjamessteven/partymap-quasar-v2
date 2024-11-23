@@ -669,7 +669,7 @@ const translation = {
     times: 'times',
   },
   suggestions: {
-    improve_this_page: 'Edit this page',
+    improve_this_page: 'Improve this page',
     improve_this_page_msg:
       'If the information on this page is incorrect you can help other people by updating it! All updates are moderated.',
     general: 'General',

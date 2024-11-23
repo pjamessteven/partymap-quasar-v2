@@ -125,7 +125,7 @@
                 no-caps
                 class="button-plain flex items-center"
                 :class="{
-                  active: mode === 'created' || mode === 'following',
+                  active: mode === 'created' || mode === 'reviewed',
                 }"
                 @click="
                   () => {
@@ -164,11 +164,11 @@
                     </q-item>
                     <q-item
                       v-close-popup
-                      :active="mode === 'following'"
+                      :active="mode === 'reviewed'"
                       clickable
                       @click="
                         () => {
-                          mode = 'following';
+                          mode = 'reviewed';
                         }
                       "
                     >

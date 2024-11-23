@@ -5,20 +5,44 @@
       class="flex justify-between no-wrap sidebar"
       id="sidebar"
       v-bind:class="{
-        shadow: $q.screen.gt.xs && false,
+        shadow: Screen.gt.xs && false,
         'sidebar-mobile-expanded':
-          mainStore.showPanelBackground && $q.screen.lt.md,
-        iphone: $q.platform.is.iphone || $q.platform.is.ipod,
+          mainStore.showPanelBackground && Screen.lt.md,
+        iphone: Platform.is.iphone || Platform.is.ipod,
         dim:
           mainStore.menubarOpacity === 1 &&
           route.name === 'EventPage' &&
-          $q.screen.gt.lg &&
+          Screen.gt.lg &&
           false,
       }"
     >
       <!--
       <div class="desktop-controls-bg" />
 -->
+      <q-btn
+        @click="showAddEventDialog"
+        no-caps
+        flat
+        rounded
+        class="add-button nav-button o-080"
+        v-if="Screen.gt.sm && false"
+        style="font-size: 0.8rem"
+      >
+        <q-tooltip
+          :offset="[10, 10]"
+          style="font-size: 16px !important"
+          class="metropolis"
+          :class="Dark.isActive ? 'b3 text-white' : 'b2 text-black'"
+        >
+          {{ t('top_controls.submit_event') }}
+        </q-tooltip>
+
+        <q-icon
+          name="las la-plus"
+          size="xs"
+          style="margin-left: -12px; margin-right: -12px; padding: 0"
+        ></q-icon>
+      </q-btn>
       <div class="sidebar-content flex column no-wrap">
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
           <NearbyView
@@ -48,17 +72,41 @@ import ExploreView from './ExploreView/ExploreView.vue';
 import SearchView from './SearchView/SearchView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
 import { useMainStore } from 'src/stores/main';
+import AddEventDialog from 'components/dialogs/AddEventDialog.vue';
 
-import { onMounted, ref } from 'vue';
-import { useQuasar } from 'quasar';
+import { ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { Screen, Dialog, Dark, Platform } from 'quasar';
+import { useAuthStore } from 'src/stores/auth';
+import { useRouter } from 'vue-router';
 
-const $q = useQuasar();
+const router = useRouter();
+const { t } = useI18n();
 
 const route = useRoute();
 
 const sidebar = ref();
 const mainStore = useMainStore();
+const authStore = useAuthStore();
+
+const showAddEventDialog = () => {
+  Dialog.create({
+    component: AddEventDialog,
+  }).onOk((data) => {
+    if (!authStore.currentUser && data.host) {
+      router.push({ name: 'Login' });
+    } else if (data.host) {
+      router.push({
+        name: 'AddEventHost',
+      });
+    } else {
+      router.push({
+        name: 'AddEventPublic',
+      });
+    }
+  });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -133,6 +181,7 @@ const mainStore = useMainStore();
   pointer-events: none;
   justify-content: start;
   display: flex;
+
   .sidebar {
     position: relative;
     flex-shrink: 0;
@@ -155,6 +204,15 @@ const mainStore = useMainStore();
     }
     &:hover {
       opacity: 1;
+    }
+    .add-button {
+      position: absolute;
+      right: 16px;
+      top: 18px;
+      border-radius: 100px !important;
+      &::before {
+        //border-color: $b-4 !important;
+      }
     }
     .resizer {
       position: absolute;

@@ -20,6 +20,7 @@ interface MainStoreState {
   disableAnimations: boolean;
   darkModePref: boolean | 'auto';
   showSidebar: boolean;
+  sidebarWidth: number;
   showSearchBox: boolean;
   sidebarPanel: string;
   sidebarMinimized: boolean;
@@ -60,6 +61,7 @@ export const useMainStore = defineStore('main', {
     darkModePref: useLocalStorage('darkModePref', 'auto'),
     sidebarMinimized: false,
     showSidebar: true,
+    sidebarWidth: useLocalStorage('sidebarWidth', '568'),
     showSearchBox: false, // for menubar search
     sidebarPanel: '',
     showPanel: Screen.lt.sm,

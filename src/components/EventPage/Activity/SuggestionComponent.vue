@@ -252,6 +252,7 @@ export default {
     this.dateTimeUTCToLocal = common.dateTimeUTCToLocal;
     this.recurringPatternKebab = common.recurringPatternKebab;
     this.timeAgo = common.timeAgo;
+    this.dayjs = dayjs;
   },
 };
 </script>

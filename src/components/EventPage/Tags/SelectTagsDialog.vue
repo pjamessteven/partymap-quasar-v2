@@ -1,5 +1,5 @@
 <template>
-  <q-card>
+  <q-card class="dialog-card">
     <q-card-section class="flex items-center dialog-card-header">
       <div class="text-h6">{{ $t('suggestions.event_tags') }}</div>
       <q-space />
@@ -7,7 +7,7 @@
     </q-card-section>
 
     <q-card-section class="flex column no-wrap q-pt-none">
-      <div class="t3 q-mb-md">{{ $t('suggestions.event_tags_msg') }}</div>
+      <div class="t3 q-my-md">{{ $t('suggestions.event_tags_msg') }}</div>
       <SelectTagsComponent
         :showTopTags="true"
         :existing-tags="existingTags"

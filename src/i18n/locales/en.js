@@ -76,8 +76,8 @@ export default {
     you: 'You',
     going: 'Going',
     interested: 'Interested',
-    hosting: 'Hosting',
-    created: 'Submitted',
+    hosting: "Events I'm hosting",
+    created: 'Added by me',
     reviewed: 'Reviewed',
     upcoming: 'Upcoming',
     past: 'Past',
@@ -674,7 +674,7 @@ export default {
     times: 'times',
   },
   suggestions: {
-    improve_this_page: 'Edit this page',
+    improve_this_page: 'Improve this page',
     improve_this_page_msg:
       'If the information on this page is incorrect you can help other people by updating it! All updates are moderated.',
     general: 'General',
@@ -1117,7 +1117,7 @@ export default {
     13: 'Communicate with you about our servies',
     14: 'Prevent fraud',
     15: 'Third-party login disclaimer (Google, FaceBook and Apple)',
-    16: "When you use Google or Facebook to log in, we only store your email address. We don't receive your login credentials or any other information.",
+    16: "When you use Google or Facebook to log in, we only store your email address. We don't receive your login credentials or any other information. If you delete your PartyMap account, your data will be removed completely from our database.",
     17: 'Important: If you plan to delete your Google or Facebook account, add a password to your PartyMap account first to maintain access.',
     18: 'Cookies',
     19: "We use only a cookie to keep you logged in. We don't use any tracking cookies.",

@@ -372,10 +372,9 @@ export default {
 <style lang="scss" scoped>
 .body--dark {
   .ed-card {
-    outline: 1px solid black;
+    // outline: 1px solid black;
     border-top: 1px solid rgba(48, 48, 48);
-    background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9));
-    background: linear-gradient($bi-2, $bi-3);
+    background: linear-gradient(black, $bi-2);
 
     .ed-card-bg {
       background: $bi-3;
@@ -411,7 +410,6 @@ export default {
 
     box-shadow: rgba(0, 0, 0, 0.12) 0px 3px 8px;
     font-smooth: always;
-    background: black;
     background: linear-gradient($bi-2, $bi-3);
 
     .card-background {
@@ -450,6 +448,7 @@ export default {
   position: relative;
   transform: translate3d(0, 0, 0);
   width: 100%;
+
   @supports (font: -apple-system-body) and (-webkit-appearance: none) {
     -webkit-backface-visibility: hidden;
     -webkit-transform: translate3d(0, 0, 0);

@@ -34,7 +34,7 @@
             />
           </div>
           <div
-            class="artist-name q-mt-sm inter semibold ellipsis"
+            class="artist-name q-mt-sm t2 ellipsis"
             :class="{ 'text-large': false }"
           >
             {{ artist.name }}
@@ -143,6 +143,9 @@ export default {
     max-width: 96px;
     font-size: 10px;
     margin-right: -42px;
+    .artist-name {
+      padding: 0px 4px;
+    }
   }
 
   &.size-md {
@@ -154,6 +157,7 @@ export default {
       font-size: small;
       max-width: 90px;
       margin-left: 10px;
+      padding: 0px 4px;
     }
   }
 
@@ -161,6 +165,9 @@ export default {
     width: 164px;
     height: 196px;
     max-width: 164px;
+    .artist-name {
+      padding: 0px 12px;
+    }
   }
 
   .card-bottom-background {
@@ -196,7 +203,7 @@ export default {
       transition: all 0.3s ease;
       position: relative;
       box-shadow: rgba(0, 0, 0, 0.1) 0px 6px 24px 0px,
-        rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+        rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
       img {
         position: absolute;
         top: 50%;

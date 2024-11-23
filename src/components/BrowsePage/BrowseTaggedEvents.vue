@@ -36,7 +36,7 @@
               v-for="(ed, index) in eventDates"
               :key="index"
               :hideInfo="true"
-              :event="ed[0]"
+              :event="ed"
             />
           </div>
         </CustomQScroll>

@@ -9,30 +9,75 @@
   >
     <transition
       appear
-      enter-active-class="animated fadeIn slow"
+      enter-active-class="animated fadeIn fast"
       leave
-      leave-active-class="animated fadeOut"
+      leave-active-class="animated fadeOut fast"
     >
       <div
         :style="popupStyle"
         v-if="hoveredPointEvents"
         :key="hoveredPointEvents[0].event_id"
-        @mouseenter="cancelHoverTimeout"
-        @mouseleave="setHoverTimeout"
-        @click="hoveredPointEvents = null"
       >
         <EventDateCardLoader
+          class="hover-popup"
           v-if="hoveredPointEvents?.length === 1"
           :eventId="hoveredPointEvents[0].event_id"
           :name="hoveredPointEvents[0].name"
+          :coords="
+            JSON.stringify({
+              lat: hoverPointerCoords?.[1],
+              lng: hoverPointerCoords?.[0],
+            })
+          "
+          @mousemove="cancelHoverTimeout"
+          @mouseenter="cancelHoverTimeout"
+          @mouseleave="() => setHoverTimeout()"
+          @click="hoveredPointEvents = null"
         />
-        <div v-else>
-          <q-card>
-            <q-item v-for="event in hoveredPointEvents" :key="event.event_id">
-              {{ event.name }}
-            </q-item>
-          </q-card>
-        </div>
+
+        <q-card
+          class="hover-popup-multiple"
+          v-else
+          @mouseenter="cancelHoverTimeout"
+          @mouseleave="() => setHoverTimeout()"
+          @mousemove="cancelHoverTimeout"
+        >
+          <div
+            class="ti-3 text-bold"
+            style="padding: 16px; padding-bottom: 4px"
+          >
+            {{ hoveredPointEvents?.length }} {{ t('general.events') }}
+          </div>
+          <div class="q-py-xs">
+            <RouterLink
+              v-for="event in hoveredPointEvents"
+              class=""
+              style="text-decoration: none; color: white; z-index: 1"
+              :to="{
+                name: 'EventPage',
+                params: {
+                  id: event.event_id,
+                },
+                query: {
+                  name: event.name.replace(/ /g, '_'),
+                  location: JSON.stringify({
+                    lat: hoverPointerCoords?.[1],
+                    lng: hoverPointerCoords?.[0],
+                  }),
+                },
+              }"
+              :key="event.event_id"
+            >
+              <q-item
+                clickable
+                @click="hoveredPointEvents = null"
+                class="metropolis ti-1 flex items-center"
+              >
+                {{ event.name }}
+              </q-item>
+            </RouterLink>
+          </div>
+        </q-card>
       </div>
     </transition>
 
@@ -65,7 +110,7 @@
           <mgl-symbol-layer
             @mouseenter="mouseEnterClusterPoint"
             @click="onClickCluster"
-            @mousemove="mouseMovePoint"
+            @mousemove="cancelHoverTimeout"
             @mouseleave="mouseLeaveClusterPoint"
             layer-id="clusters"
             :filter="['has', 'point_count', ...currentEventFilter]"
@@ -80,7 +125,7 @@
             :layout="unclusteredPointLayout"
             :paint="computedPaintStyle"
             @click="onClickPoint"
-            @mousemove="mouseMovePoint"
+            @mousemove="cancelHoverTimeout"
             @mouseenter="mouseEnterPoint"
             @mouseleave="mouseLeavePoint"
           />
@@ -104,6 +149,13 @@
       leave-active-class="animated fadeOut"
     >
       <div class="markers-loading-overlay" v-if="loadingPoints"></div>
+    </transition>
+    <transition
+      appear
+      enter-active-class="animated fadeIn"
+      leave-active-class="animated fadeOut"
+    >
+      <div class="event-page-overlay" v-if="$route.name === 'EventPage'"></div>
     </transition>
   </div>
 </template>
@@ -164,6 +216,7 @@ const queryStore = useQueryStore();
 const blockPeekMap = ref(false);
 
 const hoveredPointEvents = ref(null);
+const hoverPointerCoords = ref<LngLat | null>(null);
 
 const {
   points,
@@ -650,6 +703,10 @@ const popupStyle = ref({
   top: '0px',
   'z-index': 1,
   'max-width': '450px',
+  display: 'flex',
+  'justify-content': 'center',
+  'pointer-events': 'auto',
+  width: '450px',
 });
 
 const hoverTimeout = ref();
@@ -669,14 +726,11 @@ const mouseEnterPoint = (e: MapLayerMouseEvent) => {
   if (canvas) {
     canvas.style.cursor = 'pointer';
   }
-
+  /*
   const eventsAtPoint = JSON.parse(e?.features?.[0]?.properties.events);
   const coords = e?.features?.[0]?.geometry.coordinates;
   showPopup(eventsAtPoint, coords);
-};
-
-const mouseMovePoint = (e: MapLayerMouseEvent) => {
-  cancelHoverTimeout();
+  */
 };
 
 const mouseLeavePoint = (e: MapLayerMouseEvent) => {
@@ -684,7 +738,9 @@ const mouseLeavePoint = (e: MapLayerMouseEvent) => {
   if (canvas) {
     canvas.style.cursor = '';
   }
+  /*
   setHoverTimeout();
+  */
 };
 
 const mouseEnterClusterPoint = async (e: MapLayerMouseEvent) => {
@@ -697,12 +753,13 @@ const mouseEnterClusterPoint = async (e: MapLayerMouseEvent) => {
   const pointCount = e?.features?.[0]?.properties.point_count;
   const coords = e?.features?.[0]?.geometry.coordinates;
   const features = await source.getClusterLeaves(clusterId, pointCount);
-
+  /*
   const eventsAtPoint = features.reduce((accumulator, currentObject) => {
     return [...accumulator, ...currentObject.properties.events];
   }, []);
 
   showPopup(eventsAtPoint, coords);
+  */
 };
 
 const mouseLeaveClusterPoint = (e: MapLayerMouseEvent) => {
@@ -710,7 +767,9 @@ const mouseLeaveClusterPoint = (e: MapLayerMouseEvent) => {
   if (canvas) {
     canvas.style.cursor = '';
   }
-  mouseLeavePoint;
+  /*
+  mouseLeavePoint();
+  */
 };
 
 const showPopup = (
@@ -724,10 +783,14 @@ const showPopup = (
     } else {
       hoveredPointEvents.value = eventsAtPoint;
     }
+
     // update popup location
+    hoverPointerCoords.value = pointCoords;
     const pointPx = map?.map.project(pointCoords);
-    popupStyle.value.left =
+
+    popupStyle.value.left = // fix thiss
       Math.min(pointPx.x - 225, window.innerWidth - 450) + 'px';
+
     if (pointPx.y - 286 < 86) {
       // if too high, put popup below
       popupStyle.value.top = pointPx.y + 48 + 'px';
@@ -1079,6 +1142,19 @@ function useRef(arg0: boolean) {
   height: 100%;
   z-index: 0;
 
+  .hover-popup: {
+    pointer-events: 'all';
+  }
+  .hover-popup-multiple {
+    pointer-events: 'all';
+    overflow-y: auto;
+    max-height: 250px;
+    width: 250px;
+    //font-size: 1rem;
+    background: linear-gradient($bi-2, $bi-1);
+
+    color: $ti-1;
+  }
   :deep(.maplibregl-map) {
     height: 100%;
     width: 100%;
@@ -1125,6 +1201,19 @@ function useRef(arg0: boolean) {
     z-index: 1000;
     height: 100%;
     width: 100%;
+  }
+
+  .event-page-overlay {
+    background: linear-gradient(
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 0) 20%,
+      rgba(0, 0, 0, 1) 100%
+    );
+    position: absolute;
+    z-index: 2000;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
   }
 }
 

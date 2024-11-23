@@ -25,8 +25,12 @@
       "
     >
       <template v-slot:prepend>
-        <div class="q-mr-xs q-ml-" v-if="$q.screen.gt.xs">
-          <q-icon size="26px" name="mdi-magnify" />
+        <div
+          class="q-mr-xs q-ml- flex items-center"
+          v-if="$q.screen.gt.xs"
+          style="transform: scale(-1, 1)"
+        >
+          <q-icon size="22px" name="las la-search" />
         </div>
       </template>
       <template v-slot:append>

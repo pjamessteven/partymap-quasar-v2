@@ -1,12 +1,10 @@
 <template>
   <q-card class="edit-card dialog-card">
-    <q-card-section class="flex column no-wrap dialog-card-header">
-      <div class="flex items-center no-wrap justify-between grow">
-        <div class="text-h6 card-title q-pr-md">
-          {{ $t('description.edit_description') }}
-        </div>
-        <q-btn icon="close" class="q-ml-md" flat round dense v-close-popup />
+    <q-card-section class="no-wrap justify-between flex dialog-card-header">
+      <div class="text-h6 card-title q-pr-md">
+        {{ $t('description.edit_description') }}
       </div>
+      <q-btn icon="close" class="q-ml-md" flat round dense v-close-popup />
     </q-card-section>
     <q-card-section class="dialog-card-content">
       <div class="t2 q-mb-md">
@@ -46,10 +44,6 @@
         v-on:click="updateDescription"
       />
     </q-card-section>
-
-    <q-inner-loading :showing="loading">
-      <q-spinner-ios :color="$q.dark.isActive ? 'white' : 'black'" size="2em" />
-    </q-inner-loading>
   </q-card>
 </template>
 
@@ -70,7 +64,6 @@ export default {
   },
   data() {
     return {
-      loading: false,
       description: null,
       attribute: null,
     };
@@ -78,7 +71,6 @@ export default {
   methods: {
     ...mapActions(useEventStore, ['updateEvent', 'suggestEventEdit']),
     async updateDescription() {
-      this.loading = true;
       if (this.currentUserCanEdit) {
         const progressDialog = this.$q.dialog({
           title: this.$t('edit_event.updating_event'),
@@ -92,7 +84,6 @@ export default {
           full_description: this.description,
           full_description_attribute: this.attribute,
         });
-        this.loading = false;
         progressDialog.hide();
         this.$emit('closeDialog'); // close parent dialog
       } else {
@@ -133,11 +124,9 @@ export default {
                   this.$emit('closeDialog');
                 });
               progressDialog.hide();
-              this.loading = false;
               this.$emit('closeDialog');
             } catch (e) {
               progressDialog.hide();
-              this.loading = false;
             }
           });
       }

@@ -58,7 +58,7 @@
             autogrow
             color="bg-grey-7"
             v-model="ticket.description"
-            :label="$t('add.ticket_description')"
+            :label="$t('edit_event_date.ticket_description')"
           />
           <div class="flex row no-wrap">
             <q-input
@@ -68,7 +68,7 @@
               autogrow
               color="bg-grey-7"
               v-model="ticket.price_min"
-              :label="$t('add.min_price')"
+              :label="$t('edit_event_date.min_price')"
             />
             <q-input
               class="q-mr-sm"
@@ -77,7 +77,7 @@
               autogrow
               color="bg-grey-7"
               v-model="ticket.price_max"
-              :label="$t('add.max_price')"
+              :label="$t('edit_event_date.max_price')"
             />
             <q-input
               dense
@@ -85,7 +85,7 @@
               autogrow
               color="bg-grey-7"
               v-model="ticket.price_currency_code"
-              :label="$t('add.ticket_currency')"
+              :label="$t('edit_event_date.ticket_currency')"
             />
           </div>
         </q-card>

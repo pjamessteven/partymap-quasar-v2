@@ -377,11 +377,11 @@ export function revertEventActivityRequest(id) {
 // edit event
 
 export function editEventRequest(id, payload) {
-  return axios.put(`${API_URL}/event/${id}/`, payload);
+  return axios.put(`${API_URL}/event/${id}`, payload);
 }
 
 export function deleteEventRequest(id) {
-  return axios.delete(`${API_URL}/event/${id}/`);
+  return axios.delete(`${API_URL}/event/${id}`);
 }
 
 // event suggestions
@@ -540,7 +540,7 @@ export function toggleEventDateGoingRequest(eventId) {
 }
 
 export function updateEventRequest(eventId, payload) {
-  return axios.put(`${API_URL}/event/${eventId}/`, payload);
+  return axios.put(`${API_URL}/event/${eventId}`, payload);
 }
 
 export function suggestUpdateEventRequest(eventId, payload) {

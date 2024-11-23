@@ -116,6 +116,7 @@ import SelectArtistsDialog from './SelectArtistsDialog.vue';
 
 import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
+import { default as dayjs } from 'dayjs';
 
 export default {
   name: 'ArtistsComponent',

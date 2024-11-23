@@ -22,7 +22,7 @@
           class="flex column mobile-location-header"
           style="width: 100%"
           :class="{
-            'q-px-lg ': $q.screen.gt.sm,
+            'q-px-lg  q-mb-sm': $q.screen.gt.sm,
             'q-px-md  q-mt-md ': $q.screen.lt.md,
             'q-px-sm ': $q.screen.lt.md && $q.screen.gt.xs,
           }"
@@ -130,20 +130,16 @@
         <div
           class="flex message"
           :class="{
-            ' q-mb-sm q-mt-lg q-pa-md': $q.screen.gt.xs,
-            'q-mx-lg': $q.screen.gt.sm,
+            ' q-mt-lg ': $q.screen.gt.xs,
+            'q-mx-lg q-mb-sm q-pb-xs': $q.screen.gt.sm,
             'q-mx-md q-mt-md  q-pb-xs ': $q.screen.lt.md,
-            b3: showMessage,
           }"
           @click="showMessage = !showMessage"
         >
           <div
-            class="flex grow no-wrap justify-between inter"
+            class="flex grow no-wrap justify-between t1 metropolis items-start"
             :class="{
-              't2 items-center ': $q.screen.lt.md,
-              '   inter  text-large t2 ': $q.screen.gt.sm,
-
-              ' items-end': $q.screen.gt.sm,
+              'text-large  ': $q.screen.gt.sm,
             }"
           >
             <div class="flex grow">
@@ -157,20 +153,26 @@
           </div>
           <div
             v-if="showMessage"
-            class="flex column items-start justify-start grow t1 q-mt-md inter semibold q-mb-sm"
+            class="flex column items-start justify-start grow t1 metropolis q-mt-md q-mb-sm"
           >
-            {{ $t('nearby_view.message_1') }}
+            <div
+              :class="{
+                'text-large  ': $q.screen.gt.sm,
+              }"
+            >
+              {{ $t('nearby_view.message_1') }}
 
-            <p />
-            {{ $t('nearby_view.message_2') }}
+              <p />
+              {{ $t('nearby_view.message_2') }}
 
-            <p />
-            {{ $t('nearby_view.message_3') }}
+              <p />
+              {{ $t('nearby_view.message_3') }}
 
-            &#128526;
+              &#128526;
 
-            <p />
-            - Pete
+              <p />
+              - Pete
+            </div>
             <div
               class="flex q-gutter-md q-mt-sm"
               v-if="!$q.platform.is.nativeMobile"
@@ -285,6 +287,7 @@
                 <div class="text-">{{ $t('nearby_view.your_events') }}</div>
                 <router-link
                   class="link-hover t3 inter semibold"
+                  style="font-size: smaller"
                   :to="{
                     name: 'UserPage',
                     params: { username: currentUser.username },
@@ -321,7 +324,7 @@
                       v-for="(ed, index) in userEventDates"
                       :key="index"
                       :hideInfo="true"
-                      :event="ed[0]"
+                      :event="ed"
                     />
                   </div>
                 </CustomQScroll>
@@ -391,7 +394,7 @@
                         )"
                         :key="index"
                         @click="clickTag(tag)"
-                        class="tag t2 text- inter semibold"
+                        class="tag t2"
                         style="text-transform: capitalize"
                         :class="$q.platform.is.ios ? 'no-hover' : ''"
                       >
@@ -405,7 +408,7 @@
                         )"
                         :key="index"
                         @click="clickTag(tag)"
-                        class="tag t2 text- inter semibold"
+                        class="tag t2"
                         style="text-transform: capitalize"
                         :class="$q.platform.is.ios ? 'no-hover' : ''"
                       >
@@ -468,7 +471,7 @@
                         )"
                         :key="index"
                         @click="clickTag(tag)"
-                        class="tag t2 text- inter semibold"
+                        class="tag t2"
                         style="text-transform: capitalize"
                         :class="$q.platform.is.ios ? 'no-hover' : ''"
                       >
@@ -482,7 +485,7 @@
                         )"
                         :key="index"
                         @click="clickTag(tag)"
-                        class="tag t2 text- inter semibold"
+                        class="tag t2"
                         style="text-transform: capitalize"
                         :class="$q.platform.is.ios ? 'no-hover' : ''"
                       >
@@ -579,8 +582,7 @@
               v-if="
                 nearbyEventDates.length === 0 &&
                 !loadingEverything &&
-                !nearbyEventDatesLoading &&
-                userLocationLoading
+                !nearbyEventDatesLoading
               "
             >
               {{ $t('nearby_view.waiting_for_location') }}
@@ -730,7 +732,7 @@ import DesktopDateSelect from './DesktopDateSelect.vue';
 import ControlSelect from 'src/components/Controls/ControlSelect.vue';
 import TagControl from 'src/components/Controls/TagControl.vue';
 import ArtistControl from 'src/components/Controls/ArtistControl.vue';
-
+import { useMapStore } from 'src/stores/map';
 import _ from 'lodash';
 
 export default {
@@ -1001,6 +1003,7 @@ export default {
       'eventDatesHasNext',
       'eventDatesPages',
     ]),
+    ...mapWritableState(useMapStore, ['map']),
     computedSidebarPanelReady() {
       if (this.$q.screen.lt.sm) {
         return this.sidebarPanelReady;
@@ -1134,11 +1137,11 @@ export default {
       background: black;
     }
     .message {
-      background: $bi-2;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      //background: $bi-3;
+      //border: 1px solid rgba(255, 255, 255, 0.05);
       transition: all 0.3s ease;
       &:hover {
-        background: $bi-3;
+        // background: $bi-4;
       }
       .appstore-wrapper {
         //background: $bi-3;
@@ -1176,10 +1179,10 @@ export default {
       //box-shadow: rgba(100, 100, 111, 0.05) 0px 7px 29px 0px;
       //background: $b-1;
       // border: 1px solid rgba(0, 0, 0, 0.1);
-      background: $b-2;
+      //background: $b-2;
       transition: all 0.3s ease;
       &:hover {
-        background: $b-3;
+        // background: $b-3;
       }
       .appstore-wrapper {
         //background: $b-2;
@@ -1232,7 +1235,7 @@ export default {
     :deep(.scroll) {
       //overflow-x: hidden;
       overflow-y: auto;
-      overflow-x: hidden;
+      overflow-x: auto;
     }
 
     &.disable-scroll {

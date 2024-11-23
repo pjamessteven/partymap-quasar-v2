@@ -5,7 +5,7 @@
     @click="openAddTagDialog()"
   >
     <div
-      class="editing-outline flex row no-wrap items-center"
+      class="editing-outline flex row no-wrap items-center inter"
       :class="editing ? 'q-pa-md' : ''"
       :style="editing ? 'margin-left: 0px!important;' : ''"
     >

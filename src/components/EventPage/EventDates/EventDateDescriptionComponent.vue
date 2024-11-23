@@ -63,7 +63,7 @@
         </div>
 
         <div
-          class="t4 link-hover underline q-mt-md flex"
+          class="t4 link-hover underline"
           v-if="showMoreFields"
           @click="showEditingDialog = true"
         >
@@ -72,7 +72,7 @@
       </div>
       <div
         v-else
-        class="t4"
+        class="t4 link-hover underline"
         @click="showEditingDialog = true"
         style="cursor: pointer"
       >

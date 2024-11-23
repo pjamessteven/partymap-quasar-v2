@@ -126,7 +126,9 @@ export default {
       return this.clientWidth * (9 / 16);
     },
     videoId() {
-      return this.getYouTubeVideoId(this.event.youtube_url);
+      if (this.event.youtube_url) {
+        return this.getYouTubeVideoId(this.event.youtube_url);
+      } else return null;
     },
   },
 };

@@ -92,7 +92,7 @@
                     v-if="
                       loading &&
                       !route.query?.thumbXsUrl &&
-                      !$route.query.description
+                      !route.query.description
                     "
                   />
 
@@ -146,7 +146,7 @@
                       </div>
 
                       <div
-                        v-if="event?.description || $route.query.description"
+                        v-if="event?.description || route.query.description"
                         class="flex row justify-between items-center"
                         style="width: 100%"
                         :class="{
@@ -181,7 +181,7 @@
 
                       <div
                         class="flex column justify-start grow no-wrap"
-                        v-if="event?.description || $route.query.description"
+                        v-if="event?.description || route.query.description"
                       >
                         <div
                           class="flex grow justify-start items-start"
@@ -196,7 +196,7 @@
                         </div>
                         <div class="q-mt-md">
                           <div
-                            class="flex row"
+                            class="flex row metropolis"
                             :class="{ 'o-000': !computedExternalUrlSubtitle }"
                             style="transition: opacity 0.3s ease"
                           >
@@ -279,9 +279,7 @@
                         </div>
                         <div
                           class="flex row justify-between items-end no-wrap tags-wrapper o-080"
-                          :class="
-                            $q.screen.gt.sm ? 'q-pt-lg q-mt-sm' : 'q-mt-md'
-                          "
+                          :class="$q.screen.gt.sm ? 'q-pt-lg ' : 'q-mt-md'"
                         >
                           <TagsComponent :small="false" :editing="editing" />
                         </div>
@@ -561,9 +559,9 @@
                                   @click="
                                     currentUser
                                       ? (showingClaimDialog = true)
-                                      : $router.push({
+                                      : router.push({
                                           path: '/login',
-                                          query: { from: $route.path },
+                                          query: { from: route.path },
                                         })
                                   "
                                   clickable
@@ -678,7 +676,7 @@
                         <EventDates />
 
                         <div
-                          class="metropolis bolder text-h6 t2 q-pr-md event-page-header"
+                          class="metropolis bolder text-h6 t1 q-pr-md event-page-header"
                           v-if="event?.youtube_url?.length > 0"
                           :class="{ 'q-mx-md': $q.screen.lt.sm }"
                         >

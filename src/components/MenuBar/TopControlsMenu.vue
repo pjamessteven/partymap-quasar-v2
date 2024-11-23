@@ -1,5 +1,5 @@
 <template>
-  <div class="top-controls">
+  <div class="top-controls metropolis">
     <div>
       <q-item
         class="q-mt-sm"

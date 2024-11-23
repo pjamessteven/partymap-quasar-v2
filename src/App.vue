@@ -90,7 +90,6 @@ export default {
     },
   },
   mounted() {
-    console.log('params', this.$route);
     document.documentElement.lang = this.currentLanguage;
 
     // dark mode setting
@@ -260,6 +259,10 @@ body {
   display: flex;
   flex-direction: column;
   .dialog-card-header {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    align-items: center;
     position: relative;
     top: 0px;
     z-index: 100;
@@ -284,7 +287,7 @@ body {
   /* ... */
   .dialog-card {
     .dialog-card-header {
-      background: $b-1;
+      background: $b-2;
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
   }
@@ -428,7 +431,7 @@ body {
       0 0px 0 1px rgba(0, 0, 0, 0.02); */
     //box-shadow: none;
 
-    background: white;
+    // background: white;
   }
   .q-field__control::before {
     // border-color: rgb(230,230,230) !important;
@@ -520,12 +523,12 @@ body {
   background: black !important;
   //background: #1a202c!important;
   .dialog-card {
-    background: $bi-2;
+    background: $bi-2 !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     .dialog-card-header {
       //color: rgba(255, 255, 255, 0.67);
 
-      background: $bi-2;
+      background: $bi-3 !important;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
     }
   }

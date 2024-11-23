@@ -56,7 +56,7 @@
           $q.screen.lt.xl
         "
       >
-        <div class="back-button flex items-center" @click="back">
+        <div class="back-button flex metropolis items-center" @click="back">
           <q-icon name="mdi-chevron-left" class="q-mr-sm" size="sm" />
           {{ previousRouteName }}
         </div>
@@ -180,10 +180,14 @@ export default {
 
     ...mapWritableState(useMainStore, ['routerHistory']),
     swipingDownMenuPageMobile() {
-      return this.$route.name === 'EventPage' && this.sidebarOpacity === 1;
+      return (
+        this.$route.name === 'EventPage' &&
+        this.sidebarOpacity === 1 &&
+        this.$q.screen.lt.sm
+      );
     },
     previousRouteName() {
-      if (this.routerHistory.length == 1) return null;
+      if (this.routerHistory.length <= 2) return null;
       const previousRoute = this.routerHistory[this.routerHistory.length - 1];
       if (previousRoute) {
         if (previousRoute.meta?.noBackNavigation) {
@@ -267,7 +271,7 @@ export default {
     },
     overlayingContent() {
       return (
-        (((this.$route.name === 'EventPage' && this.sidebarOpacity === 0) ||
+        ((this.$route.name === 'EventPage' ||
           this.$route.name === 'ArtistPage') &&
           ((this.$q.screen.gt.xs && this.menubarOpacity === 0) ||
             this.$q.screen.lt.sm)) ||

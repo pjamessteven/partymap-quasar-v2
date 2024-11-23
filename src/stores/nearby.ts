@@ -12,7 +12,7 @@ import { useAuthStore } from './auth';
 interface NearbyState {
   loadingEverything: boolean;
 
-  queryRadius: number | null;
+  queryRadius: number;
 
   nearbyTags: Tag[];
   nearbyTagsHasNext: boolean;
@@ -41,7 +41,7 @@ export const useNearbyStore = defineStore('nearby', {
   state: (): NearbyState => ({
     loadingEverything: false,
 
-    queryRadius: null,
+    queryRadius: 0,
     nearbyTags: [],
     nearbyTagsHasNext: true,
     nearbyTagsPage: 1,
@@ -87,10 +87,10 @@ export const useNearbyStore = defineStore('nearby', {
       const main = useMainStore();
 
       try {
-        if (main.currentLocation) await this.loadNearbyEventDates();
-
-        // do the following concurrently
         if (main.currentLocation) {
+          // first get nearby event dates as this returns and sets queryRadius
+          await this.loadNearbyEventDates();
+          // then do the following concurrently
           await Promise.all([
             this.loadNearbyArtists(),
             this.loadNearbyTags(),

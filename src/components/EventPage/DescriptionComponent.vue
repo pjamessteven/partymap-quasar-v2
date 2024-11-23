@@ -2,7 +2,7 @@
   <div v-if="!!event">
     <div class="flex column q-mb-md">
       <div
-        class="metropolis bolder text-h6 t2 q-pr-md q-mb-sm event-page-header"
+        class="metropolis bolder text-h6 t1 q-pr-md q-mb-sm event-page-header"
       >
         {{ $t('event.description') }}:
       </div>

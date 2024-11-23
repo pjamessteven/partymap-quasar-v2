@@ -1,5 +1,7 @@
 <template>
-  <div class="menubar-content flex row justify-end items-stretch no-wrap">
+  <div
+    class="menubar-content metropolis flex row justify-end items-stretch no-wrap"
+  >
     <!--
     <transition
       enter-active-class="animated fadeIn"
@@ -65,7 +67,7 @@
   -->
 
     <router-link
-      v-if="$q.screen.gt.md"
+      v-if="$q.screen.gt.md && false"
       class="flex link-hover"
       :to="
         currentUser
@@ -133,7 +135,8 @@
 
     <q-btn
       v-if="$q.screen.lt.md"
-      icon="mdi-magnify"
+      icon="las la-search"
+      style="transform: scale(-1, 1)"
       @click="
         () => {
           $router.push({ name: 'Explore', query: { view: 'search' } });
@@ -148,7 +151,7 @@
     </q-btn>
     <q-btn
       class="menubar-button"
-      icon="mdi-menu"
+      icon="las la-bars"
       flat
       :class="{
         'light-button': color === 'white',

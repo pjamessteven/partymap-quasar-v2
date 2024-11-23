@@ -15,9 +15,7 @@
           :key="yearMonth + '-header'"
           class="header q-mt-"
           :class="$q.screen.lt.sm ? '' : ''"
-          :date="
-            eventDatesGroupedByMonth[Number(yearMonth)][0]?.[0].start_naive
-          "
+          :date="eventDatesGroupedByMonth[Number(yearMonth)]?.[0].start_naive"
         >
         </DateHeader>
         <div
@@ -31,7 +29,7 @@
           <EventDateCard
             v-for="(date, index) in eventDatesGroupedByMonth[Number(yearMonth)]"
             :key="index"
-            :event="date[0]"
+            :event="date"
             :short-date="true"
           >
           </EventDateCard>
@@ -50,7 +48,7 @@
         <EventDateCard
           v-for="(date, index) in eventDates"
           :key="index"
-          :event="date[0]"
+          :event="date"
           :short-date="true"
         >
         </EventDateCard>
@@ -126,9 +124,9 @@ const $q = useQuasar();
 const main = useMainStore();
 
 interface Props {
-  eventDates: [EventDate, string][];
+  eventDates: EventDate[];
   eventDatesGroupedByMonth?: {
-    [key: number]: [EventDate, string][];
+    [key: number]: EventDate[];
   };
   groupByMonth?: boolean;
   hasNext: boolean;
