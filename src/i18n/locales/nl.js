@@ -216,7 +216,7 @@ export default {
     km: 'km',
     get_tickets: 'Koop tickets!',
     aftermovie: 'Aftermovie',
-    checkout_out: 'Bekijk ', // Bekijk {{event}} op PartyMap
+    check_out: 'Bekijk ', // Bekijk {{event}} op PartyMap
     on_partymap: ' op PartyMap',
     copied_link: 'Link gekopieerd naar klembord!',
     sharing_not_supported: 'Delen wordt niet ondersteund in deze browser :(',
@@ -1104,7 +1104,7 @@ export default {
     13: 'Met u te communiceren over onze diensten',
     14: 'Fraude te voorkomen',
     15: 'Derdelogin disclaimer (Google, Facebook en Apple)',
-    16: 'Wanneer u Google of Facebook gebruikt om in te loggen, slaan we alleen uw e-mailadres op. We ontvangen geen inloggegevens of andere informatie.',
+    16: "Wanneer u Google of Facebook gebruikt om in te loggen, slaan we alleen uw e-mailadres op. We ontvangen uw inloggegevens of andere informatie niet. Als u uw PartyMap-account verwijdert, worden uw gegevens volledig uit onze database verwijderd. U kunt uw account verwijderen via de 'Account'-pagina.",
     17: 'Belangrijk: Als u van plan bent uw Google- of Facebook-account te verwijderen, voeg dan eerst een wachtwoord toe aan uw PartyMap-account om toegang te behouden.',
     18: 'Cookies',
     19: 'We gebruiken alleen een cookie om u ingelogd te houden. We gebruiken geen trackingcookies.',

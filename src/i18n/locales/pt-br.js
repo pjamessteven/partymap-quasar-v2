@@ -219,7 +219,7 @@ export default {
     km: 'km',
     get_tickets: 'Comprar ingressos!',
     aftermovie: 'Aftermovie',
-    checkout_out: 'Confira ', // veja {{event}} no PartyMap
+    check_out: 'Confira ', // veja {{event}} no PartyMap
     on_partymap: ' no PartyMap',
     copied_link: 'Link copiado para a área de transferência!',
     sharing_not_supported: 'Compartilhamento não suportado neste navegador :(',
@@ -1101,7 +1101,7 @@ export default {
     13: 'Comunicar-se com você sobre nossos serviços',
     14: 'Prevenir fraudes',
     15: 'Aviso de login de terceiros (Google, Facebook e Apple)',
-    16: 'Quando usar o Google ou Facebook para entrar, armazenamos apenas seu endereço de email. Não recebemos suas credenciais de login ou qualquer outra informação.',
+    16: "Quando você usa o Google ou o Facebook para fazer login, armazenamos apenas o seu endereço de e-mail. Não recebemos suas credenciais de login ou qualquer outra informação. Se você excluir sua conta PartyMap, seus dados serão completamente removidos do nosso banco de dados. Você pode excluir sua conta na página 'Conta'.",
     17: 'Importante: Se planeja excluir sua conta do Google ou Facebook, adicione uma senha à sua conta do PartyMap primeiro para manter o acesso.',
     18: 'Cookies',
     19: 'Usamos apenas um cookie para manter você logado. Não usamos cookies de rastreamento.',

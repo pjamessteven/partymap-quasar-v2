@@ -215,7 +215,7 @@ export default {
     going: 'Partecipante',
     km: 'km',
     aftermovie: 'Aftermovie',
-    checkout_out: 'Vedi',
+    check_out: 'Vedi',
     copied_link: 'Link copiato negli appunti!',
     sharing_not_supported:
       'La condivisione non è supportata in questo browser :(',
@@ -1094,7 +1094,7 @@ export default {
     13: 'Comunicare con te sui nostri servizi',
     14: 'Prevenire frodi',
     15: "Disclaimer per l'accesso a terze parti (Google, Facebook e Apple)",
-    16: 'Quando utilizzi Google o Facebook per accedere, memorizziamo solo il tuo indirizzo email. Non riceviamo le tue credenziali di accesso o altre informazioni.',
+    16: "Quando usi Google o Facebook per accedere, memorizziamo solo il tuo indirizzo email. Non riceviamo le tue credenziali di accesso o altre informazioni. Se elimini il tuo account PartyMap, i tuoi dati verranno completamente rimossi dal nostro database. Puoi eliminare il tuo account dalla pagina 'Account'.",
     17: "Importante: se hai intenzione di cancellare il tuo account Google o Facebook, aggiungi una password al tuo account prima di mantenere l'accesso.",
     18: 'Cookie',
     19: 'Utilizziamo solo un cookie per tenerti connesso. Non utilizziamo cookie di tracciamento.',

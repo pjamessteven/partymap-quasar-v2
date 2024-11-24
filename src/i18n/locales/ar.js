@@ -213,7 +213,7 @@ export default {
     going: 'ذاهب',
     km: 'كم',
     aftermovie: 'فيديو ما بعد الحدث',
-    checkout_out: 'تحقق من ',
+    check_out: 'تحقق من ',
     on_partymap: ' على PartyMap',
     copied_link: 'تم نسخ الرابط إلى الحافظة!',
     sharing_not_supported: 'المشاركة غير مدعومة في هذا المتصفح :(',

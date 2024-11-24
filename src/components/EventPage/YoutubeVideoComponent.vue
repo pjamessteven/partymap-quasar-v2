@@ -72,7 +72,8 @@ export default {
       //  https://developers.google.com/youtube/iframe_api_reference#Events
       // once video is started we want to allow auto rotation on mobile
       //  if (event.data > -1) {
-      if (window.screen?.orientation) window.screen.orientation.unlock();
+      if (window.screen?.orientation?.unlock)
+        window.screen.orientation.unlock();
       // }
     },
     openEditorDialog() {

@@ -205,7 +205,7 @@ export default {
     km: 'km',
     get_tickets: 'Get Tickets!',
     aftermovie: 'Aftermovie',
-    checkout_out: 'Check out ', // look at {{event}} on PartyMap
+    check_out: 'Check out ', // look at {{event}} on PartyMap
     on_partymap: ' on PartyMap',
     copied_link: 'Copied link to clipboard!',
     sharing_not_supported: 'Sharing not support in this browser :(',
@@ -1030,7 +1030,7 @@ export default {
     13: '與您就我們的服務進行溝通',
     14: '防止欺詐',
     15: '第三方登入免責聲明（Google、Facebook和Apple）',
-    16: '當您使用Google或Facebook登入時，我們只會存儲您的電子郵箱地址。我们不会收到您的登入憑證或任何其他信息。',
+    16: "當您使用Google或Facebook登入時，我們只會儲存您的電子郵件地址。我們不會收到您的登入憑證或任何其他資訊。如果您刪除您的PartyMap帳戶，您的資料將從我們的資料庫中完全移除。您可以從'帳戶'頁面刪除您的帳戶。",
     17: '重要提示：如果您計劃刪除Google或Facebook帳戶，請先為您的PartyMap帳戶添加密碼，以保持訪問權限。',
     18: 'Cookie',
     19: '我們只使用一個Cookie來保持您登入狀態。我們不使用任何追蹤Cookie。',

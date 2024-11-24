@@ -220,7 +220,7 @@ export default {
     km: 'km',
     get_tickets: 'Get Tickets!',
     aftermovie: 'Aftermovie',
-    checkout_out: 'Check out ', // look at {{event}} on PartyMap
+    check_out: 'Check out ', // look at {{event}} on PartyMap
     on_partymap: ' on PartyMap',
     copied_link: 'Copied link to clipboard!',
     sharing_not_supported: 'Sharing not support in this browser :(',

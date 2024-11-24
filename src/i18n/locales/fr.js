@@ -217,7 +217,7 @@ export default {
     going: "J'y vais",
     km: 'km',
     aftermovie: 'Aftermovie',
-    checkout_out: 'Découvrez ',
+    check_out: 'Découvrez ',
     on_partymap: ' sur PartyMap',
     copied_link: 'Lien copié dans le presse-papiers !',
     sharing_not_supported:
@@ -1138,7 +1138,7 @@ export default {
     13: 'Communiquer avec vous au sujet de nos services',
     14: 'Prévenir la fraude',
     15: 'Avertissement de connexion pour les tierces parties (Google, Facebook et Apple)',
-    16: 'Lorsque vous utilisez Google ou Facebook pour vous connecter, nous ne stockons que votre adresse e-mail. Nous ne recevons pas vos identifiants de connexion ni aucune autre information.',
+    16: "Lorsque vous utilisez Google ou Facebook pour vous connecter, nous ne stockons que votre adresse e-mail. Nous ne recevons pas vos identifiants de connexion ni aucune autre information. Si vous supprimez votre compte PartyMap, vos données seront complètement supprimées de notre base de données. Vous pouvez supprimer votre compte depuis la page 'Compte'.",
     17: "Important : Si vous prévoyez de supprimer votre compte Google ou Facebook, ajoutez d'abord un mot de passe à votre compte PartyMap pour maintenir l'accès.",
     18: 'Cookies',
     19: "Nous n'utilisons qu'un cookie pour vous garder connecté. Nous n'utilisons pas de cookies de suivi.",

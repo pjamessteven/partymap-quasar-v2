@@ -205,7 +205,7 @@ export default {
     km: '公里',
     get_tickets: '获取门票！',
     aftermovie: '活动回顾视频',
-    checkout_out: '查看 ', // 在PartyMap上查看{{event}}
+    check_out: '查看 ', // 在PartyMap上查看{{event}}
     on_partymap: ' 在PartyMap上',
     copied_link: '链接已复制到剪贴板！',
     sharing_not_supported: '此浏览器不支持分享 :(',
@@ -1026,7 +1026,7 @@ export default {
     13: '关于我们的服务与您沟通',
     14: '防止欺诈',
     15: '第三方登录免责声明（Google、Facebook和Apple）',
-    16: '当您使用Google或Facebook登录时，我们只存储您的电子邮件地址。我们不会收到您的登录凭据或其他任何信息。',
+    16: "当您使用谷歌或脸书登录时，我们只会存储您的电子邮件地址。我们不会收到您的登录凭证或任何其他信息。如果您删除您的PartyMap账户，您的数据将从我们的数据库中完全移除。您可以从'账户'页面删除您的账户。",
     17: '重要提示：如果您计划删除Google或Facebook账户，请先为PartyMap账户添加密码，以保持访问。',
     18: 'cookies',
     19: '我们只使用一个cookie来保持您登录状态。我们不使用任何跟踪cookie。',
