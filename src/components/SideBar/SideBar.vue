@@ -30,8 +30,7 @@
       >
         <q-tooltip
           :offset="[10, 10]"
-          style="font-size: 16px !important"
-          class="metropolis"
+          style="font-size: 14px !important"
           :class="Dark.isActive ? 'b3 text-white' : 'b2 text-black'"
         >
           {{ t('top_controls.submit_event') }}

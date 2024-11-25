@@ -708,7 +708,7 @@
                         <EventDateLineupComponent />
 
                         <ReviewsComponent
-                          class="q-mb-xl"
+                          class="q-mb-xl q-mt-md"
                           :class="{ 'q-px-md': $q.screen.lt.sm }"
                         />
                       </div>
@@ -750,15 +750,17 @@
                   class="flex column"
                   :class="$q.screen.gt.xs ? 'items-start' : ' q-pb-md'"
                 >
-                  <div class="t4">{{ event.page_views }} page views</div>
+                  <div class="t4">
+                    <q-icon name="mdi-eye-outline" class="q-mr-sm" />{{
+                      event.page_views
+                    }}
+                    views
+                  </div>
                   <div class="t4 flex column items-start no-wrap q-mt-xs">
-                    <div v-if="event?.last_transaction?.user?.username">
+                    <div>
+                      <q-icon name="mdi-refresh" class="q-mr-sm" />
                       <span
-                        class="link-hover underline"
-                        @click="showingHistory = showingHistory"
-                        >{{ t('event.last_updated') }}</span
-                      ><span>
-                        &nbsp;{{
+                        >{{ t('event.last_updated') }} &nbsp;{{
                           timeAgo(event.last_transaction.issued_at + 'Z')
                         }}
                       </span>
@@ -774,7 +776,7 @@
                   -->
                     </div>
 
-                    <div v-else-if="event?.transaction?.user?.username">
+                    <div v-if="event?.transaction?.user?.username && false">
                       <!-- shown when displaying EventVersion -->
                       <span
                         class="link-hover underline"

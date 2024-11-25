@@ -20,9 +20,8 @@
           <div class="flex row items-center no-wrap">
             <div class="flex row">
               <router-link
-                style="color: black"
                 v-if="items[currentIndex]?.creator?.username"
-                class="link-hover t3 inter semibold"
+                class="link-hover inter semibold"
                 :to="{
                   name: 'UserPage',
                   params: { username: items[currentIndex]?.creator?.username },
@@ -89,9 +88,10 @@
       <q-carousel
         swipeable
         animated
-        arrows
+        v-touch-swipe.vertical="() => $emit('onClose')"
+        :arrows="items.length > 1"
         v-model="currentIndex"
-        :thumbnails="showThumbnails"
+        :thumbnails="items.length > 1"
         infinite
         transition-prev="jump-right"
         transition-next="jump-left"
@@ -254,9 +254,9 @@ export default {
       }
     }
     .info-panel {
-      background: white;
+      background: $bi-3;
       border-radius: 18px;
-      color: black;
+      color: $ti-2;
     }
   }
   .q-carousel {

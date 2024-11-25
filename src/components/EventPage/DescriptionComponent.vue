@@ -29,11 +29,8 @@
               "
             >
               <p />
-              -&nbsp;<a
-                class="link-hover"
-                target="_blank"
-                :href="computedAttributeUrl"
-                >{{ computedAttributeDomain }}</a
+              <a class="link-hover" target="_blank" :href="computedAttributeUrl"
+                >[{{ computedAttributeDomain }}]</a
               ></span
             ><span v-if="isTranslation">
               <p />

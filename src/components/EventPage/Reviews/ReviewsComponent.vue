@@ -1,16 +1,10 @@
 <template>
-  <div class="flex column">
+  <div class="reviews-component flex column">
     <div class="metropolis bolder text-h6 t1 q-pr-md q-mb event-page-header">
-      {{ $t('reviews.reviews_and_experiences') }}
-    </div>
-    <div
-      class="no-reviews t4 inter q-mb-sm"
-      v-if="event?.event_reviews?.length === 0"
-    >
-      {{ $t('reviews.no_reviews') }}
+      {{ $t('reviews.reviews_and_experiences') }}:
     </div>
 
-    <div class="new-review q-mt-md q-pl-md q-pb-md">
+    <div class="new-review q-mt-sm q-pl-md q-pb-md">
       <div class="flex column grow">
         <div class="flex row items-end">
           <q-input
@@ -108,6 +102,15 @@
       </div>
 
       <InnerLoading v-if="loading" />
+    </div>
+
+    <div
+      class="no-reviews text-large t4 inter q-mb-sm flex grow justify-center items-center"
+      v-if="event?.event_reviews?.length === 0"
+    >
+      <div style="width: 260px; text-align: center">
+        {{ $t('reviews.no_reviews') }}
+      </div>
     </div>
 
     <div v-if="event?.event_reviews?.length > 0" class="q-mt-md">
@@ -228,16 +231,18 @@ export default {
     }
   }
 }
-
-.new-review {
-  position: relative;
-  height: auto;
-  border-radius: 9px;
-  overflow: hidden;
-  transition: height 0.3s ease;
-  .panel {
-    padding-top: 8px !important;
-    //  border-radius: 9px;
+.reviews-component {
+  min-height: 66vh;
+  .new-review {
+    position: relative;
+    height: auto;
+    border-radius: 9px;
+    overflow: hidden;
+    transition: height 0.3s ease;
+    .panel {
+      padding-top: 8px !important;
+      //  border-radius: 9px;
+    }
   }
 }
 .media-select {

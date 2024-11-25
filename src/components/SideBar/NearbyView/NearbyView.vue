@@ -137,7 +137,7 @@
           @click="showMessage = !showMessage"
         >
           <div
-            class="flex grow no-wrap justify-between t1 metropolis items-start"
+            class="flex grow no-wrap justify-between t2 inter items-start"
             :class="{
               'text-large  ': $q.screen.gt.sm,
             }"
@@ -153,7 +153,7 @@
           </div>
           <div
             v-if="showMessage"
-            class="flex column items-start justify-start grow t1 metropolis q-mt-md q-mb-sm"
+            class="flex column items-start justify-start grow t2 inter q-mt-md q-mb-sm"
           >
             <div
               :class="{
@@ -585,7 +585,7 @@
                 !nearbyEventDatesLoading
               "
             >
-              {{ $t('nearby_view.waiting_for_location') }}
+              {{ $t('nearby_view.waiting_for_location') }}...
             </div>
             <div
               v-else-if="currentLocation"

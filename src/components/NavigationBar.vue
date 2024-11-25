@@ -3,7 +3,7 @@
     <q-tabs
       :class="{
         'light-button': color === 'white',
-        'metropolis bolder desktop-tabs': $q.screen.gt.xs,
+        ' bolder desktop-tabs': $q.screen.gt.xs,
       }"
       class="tabs"
       @click.stop
@@ -294,7 +294,7 @@ export default {
   }
 }
 .navigation-bar {
-  font-family: 'Metropolis';
+  font-family: 'Inter';
   &:lang(ru) {
     font-family: 'InterDisplay';
   }

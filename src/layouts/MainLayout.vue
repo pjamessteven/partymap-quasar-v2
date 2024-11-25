@@ -16,6 +16,7 @@
         :leave-active-class="'animated fadeOut'"
       >
         <ControlsComponent
+          class="controls-component"
           :overlayingMap="!showPanelBackground"
           v-show="$route.name === 'Explore'"
         />
@@ -513,44 +514,41 @@ export default {
     }
 
     .main-inner-layout {
+      .controls-component {
+        position: absolute;
+        z-index: 105;
+        width: 100vw;
+        max-width: 100vw;
+        // android
+        @supports ((top: var(--safe-area-inset-top))) {
+          top: calc(48px + var(--safe-area-inset-top));
+        }
+        // ios specific padding
+        @supports (
+          (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+            (-webkit-appearance: none)
+        ) {
+          top: calc(48px + env(safe-area-inset-top));
+        }
+      }
       .sidebar-component-wrapper {
         position: unset;
         height: unset;
         transition: opacity 0.3s ease;
         // will-change: opacity; breaks blur on controls
         //transform: translate3d(0, 0, 0);
-        .search-component {
-          position: absolute;
-
-          z-index: 105;
-          width: 100vw;
-          max-width: 100vw;
-          // android
-          @supports ((top: var(--safe-area-inset-top))) {
-            top: calc(68px + var(--safe-area-inset-top));
-          }
-          // ios specific padding
-          @supports (
-            (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
-              (-webkit-appearance: none)
-          ) {
-            top: calc(68px + env(safe-area-inset-top));
-          }
-        }
       }
     }
   }
   .native-mobile {
     .main-inner-layout {
-      .sidebar-component-wrapper {
-        // ios specific padding for capcaitor app
-        .search-component {
-          @supports (
-            (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
-              (-webkit-appearance: none)
-          ) {
-            top: calc(68px + env(safe-area-inset-top) - 8px);
-          }
+      // ios specific padding for capcaitor app
+      .controls-component {
+        @supports (
+          (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+            (-webkit-appearance: none)
+        ) {
+          top: calc(48px + env(safe-area-inset-top) - 8px);
         }
       }
     }

@@ -194,6 +194,9 @@ import { API_URL, IS_LOCALHOST } from 'src/api';
 import { useSearchStore } from 'src/stores/search';
 import { useI18n } from 'vue-i18n';
 
+import markerImage from '/src/assets/marker-dark-shadow.webp';
+import clusterMarkerImage from '/src/assets/marker-dark-shadow-cluster7.webp';
+
 const { t } = useI18n();
 
 const mapStore = useMapStore();
@@ -310,16 +313,19 @@ onMounted(async () => {
 
     let marker;
     let clusterMarker;
-
-    if (IS_LOCALHOST) {
+    console.log('mapmark mounted');
+    if (IS_LOCALHOST || true) {
       marker = await map.map.loadImage('/src/assets/marker-dark-shadow.webp');
       clusterMarker = await map.map.loadImage(
         '/src/assets/marker-dark-shadow-cluster7.webp'
       );
     } else {
+      console.log('mapmark mounted2');
+
       marker = await map.map.loadImage(
         'https://content.partymap.com/statics/marker-dark-shadow.webp'
       );
+      console.log('mapmark 3', marker);
       clusterMarker = await map.map.loadImage(
         'https://content.partymap.com/statics/marker-cluster.webp'
       );
@@ -631,7 +637,7 @@ const getNearbyPagePadding = (): PaddingOptions => {
       top: 0,
       bottom:
         window.innerHeight -
-        (window.innerHeight / 2 - 86 + mainStore.safeAreaInsets.top),
+        (window.innerHeight / 2 - 32 + mainStore.safeAreaInsets.top),
       left: 0,
       right: 0,
     };

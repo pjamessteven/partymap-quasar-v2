@@ -35,12 +35,12 @@
           :style="editing ? 'pointer-events: none' : ''"
         >
           <a
-            class="t3 link-hover q-mr-sm"
+            class="t3 link-hover ellipsis q-mr-sm"
             :href="computedExternalUrl"
             style="text-decoration: none; line-break: anywhere"
             target="_blank"
           >
-            {{ urlSubstring }}
+            {{ computedExternalUrl }}
           </a>
         </div>
         <!--

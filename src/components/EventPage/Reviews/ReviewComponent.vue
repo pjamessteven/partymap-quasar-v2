@@ -29,7 +29,9 @@
         >
           <!-- SHOW REPORT if not creator -->
           <q-item
-            v-if="review.creator_id !== currentUser.id"
+            v-if="
+              review.creator?.username !== currentUser?.username || !currentUser
+            "
             v-close-popup
             v-ripple
             v-on:click="showingReportDialog = true"
@@ -44,7 +46,10 @@
           </q-item>
           <!-- SHOW delete if admin or creator -->
           <q-item
-            v-if="review.creator_id == currentUser.id || currentUser.role > 20"
+            v-if="
+              review.creator?.username == currentUser?.username ||
+              currentUser?.role > 20
+            "
             v-close-popup
             v-ripple
             v-on:click="handleDeleteReview"

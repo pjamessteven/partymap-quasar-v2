@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="menubar-content metropolis flex row justify-end items-stretch no-wrap"
-  >
+  <div class="menubar-content flex row justify-end items-stretch no-wrap">
     <!--
     <transition
       enter-active-class="animated fadeIn"

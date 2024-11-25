@@ -1,5 +1,5 @@
 <template>
-  <div class="top-controls metropolis">
+  <div class="top-controls inter">
     <div>
       <q-item
         class="q-mt-sm"
@@ -75,7 +75,14 @@
           <q-item-label>{{ $t('sidebar.logout') }}</q-item-label>
         </q-item-section>
       </q-item>
-
+      <q-item v-ripple @click="showAddEventDialog()" clickable>
+        <q-item-section avatar>
+          <q-icon name="mdi-plus" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>{{ $t('top_controls.submit_event') }}</q-item-label>
+        </q-item-section>
+      </q-item>
       <q-item
         v-if="currentUser && currentUser.role >= 30"
         v-ripple
@@ -114,15 +121,6 @@
         </q-item-section>
         <q-item-section>
           <q-item-label>{{ $t('sidebar.my_account') }}</q-item-label>
-        </q-item-section>
-      </q-item>
-
-      <q-item v-ripple @click="showAddEventDialog()" clickable>
-        <q-item-section avatar>
-          <q-icon name="mdi-plus" />
-        </q-item-section>
-        <q-item-section>
-          <q-item-label>{{ $t('top_controls.submit_event') }}</q-item-label>
         </q-item-section>
       </q-item>
 

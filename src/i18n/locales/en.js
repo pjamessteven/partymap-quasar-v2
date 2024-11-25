@@ -1117,7 +1117,7 @@ export default {
     13: 'Communicate with you about our servies',
     14: 'Prevent fraud',
     15: 'Third-party login disclaimer (Google, FaceBook and Apple)',
-    16: "When you use Google or Facebook to log in, we only store your email address. We don't receive your login credentials or any other information. If you delete your PartyMap account, your data will be removed completely from our database.",
+    16: "When you use Google or Facebook to log in, we only store your email address. We don't receive your login credentials or any other information. If you delete your PartyMap account, your data will be removed completely from our database. You can delete your account from the 'Account' page.",
     17: 'Important: If you plan to delete your Google or Facebook account, add a password to your PartyMap account first to maintain access.',
     18: 'Cookies',
     19: "We use only a cookie to keep you logged in. We don't use any tracking cookies.",

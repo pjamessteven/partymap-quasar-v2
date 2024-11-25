@@ -315,7 +315,9 @@ export default {
     */
   },
   mounted() {
-    this.debouncedScrollSelectedEdIntoView();
+    setTimeout(() => {
+      this.debouncedScrollSelectedEdIntoView();
+    }, 300);
   },
 };
 </script>
