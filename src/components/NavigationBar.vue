@@ -444,8 +444,8 @@ export default {
     bottom: 0;
     border-bottom: none !important;
     justify-content: unset;
-    @supports (top: env(safe-area-inset-bottom)) {
-      padding-bottom: calc(env(safe-area-inset-bottom) - 16px);
+    @supports (top: var(--safe-area-inset-bottom)) {
+      padding-bottom: calc(var(--safe-area-inset-bottom) - 16px);
     }
     :deep(.q-tabs) {
       width: 100%;

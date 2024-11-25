@@ -296,10 +296,10 @@ export default {
     }
     // ios specific padding
     @supports (
-      (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+      (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
         (-webkit-appearance: none)
     ) {
-      top: calc(68px + env(safe-area-inset-top));
+      top: calc(68px + var(--safe-area-inset-top));
     }
     .controls-wrapper {
       .controls-wrapper-inner {
@@ -311,10 +311,10 @@ export default {
     // ios specific padding for capcaitor app
     .search-component {
       @supports (
-        (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+        (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
           (-webkit-appearance: none)
       ) {
-        top: calc(68px + env(safe-area-inset-top) - 8px);
+        top: calc(68px + var(--safe-area-inset-top) - 8px);
       }
     }
   }

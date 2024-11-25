@@ -1207,8 +1207,7 @@ const onScrollMainContent = (info: any) => {
 };
 
 const onScrollEnd = () => {
-  console.log('onscrollend');
-  if (scrollPercentage.value == 0) {
+  if (scrollPercentage.value <= 0) {
     enableSwipeDown.value = true;
   }
 };
@@ -2012,7 +2011,7 @@ a {
     max-width: 96vw !important;
 
     @supports (
-      (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+      (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
         (-webkit-appearance: none)
     ) {
       // stupid border radius fix for ios 15

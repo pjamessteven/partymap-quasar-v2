@@ -327,8 +327,8 @@ export default {
   }
   // android
   @supports ((top: var(--safe-area-inset-top))) {
-    //padding-top: calc(env(safe-area-inset-top));
-    //height: calc(env(safe-area-inset-top) + 62px);
+    //padding-top: calc(var(--safe-area-inset-top));
+    //height: calc(var(--safe-area-inset-top) + 62px);
     top: var(--safe-area-inset-top);
   }
   // ios specific top padding
@@ -462,10 +462,10 @@ export default {
         @supports ((top: var(--safe-area-inset-top))) {
           @media screen and (max-width: 375px) {
             //  iphone 7
-            top: env(safe-area-inset-top);
+            top: var(--safe-area-inset-top);
           }
           @media screen and (min-width: 376px) {
-            top: calc(env(safe-area-inset-top) - 8px);
+            top: calc(var(--safe-area-inset-top) - 8px);
           }
         }
         .menubar-background {
@@ -473,12 +473,12 @@ export default {
             @media screen and (max-width: 375px) {
               //  iphone 7
               padding-top: var(--safe-area-inset-top);
-              height: calc(env(safe-area-inset-top) + 62px);
+              height: calc(var(--safe-area-inset-top) + 62px);
               top: 0px;
             }
             @media screen and (min-width: 376px) {
               padding-top: var(--safe-area-inset-top);
-              height: calc(env(safe-area-inset-top) + 62px - 8px);
+              height: calc(var(--safe-area-inset-top) + 62px - 8px);
               position: fixed;
               top: 0px;
             }

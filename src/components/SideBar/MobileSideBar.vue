@@ -623,7 +623,7 @@ watch(
       .sidebar {
         &.iphone {
           @supports (
-            (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+            (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
               (-webkit-appearance: none)
           ) {
             @media screen and (max-width: 375px) {

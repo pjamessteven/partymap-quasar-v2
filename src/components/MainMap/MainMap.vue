@@ -186,14 +186,14 @@ import {
   PaddingOptions,
 } from 'maplibre-gl';
 import { storeToRefs } from 'pinia';
-import { Dark, Dialog, Screen } from 'quasar';
+import { Dark, Dialog, Platform, Screen } from 'quasar';
 import EventDateCardLoader from 'components/EventDateCardLoader.vue';
 import EventSelectionComponent from './EventSelectionComponent.vue';
 import { useDevicePixelRatio } from '@vueuse/core';
 import { API_URL, IS_LOCALHOST } from 'src/api';
 import { useSearchStore } from 'src/stores/search';
 import { useI18n } from 'vue-i18n';
-
+import { CapacitorHttp } from '@capacitor/core';
 import markerImage from '/src/assets/marker-dark-shadow.webp';
 import clusterMarkerImage from '/src/assets/marker-dark-shadow-cluster7.webp';
 
@@ -313,23 +313,10 @@ onMounted(async () => {
 
     let marker;
     let clusterMarker;
-    console.log('mapmark mounted');
-    if (IS_LOCALHOST || true) {
-      marker = await map.map.loadImage('/src/assets/marker-dark-shadow.webp');
-      clusterMarker = await map.map.loadImage(
-        '/src/assets/marker-dark-shadow-cluster7.webp'
-      );
-    } else {
-      console.log('mapmark mounted2');
 
-      marker = await map.map.loadImage(
-        'https://content.partymap.com/statics/marker-dark-shadow.webp'
-      );
-      console.log('mapmark 3', marker);
-      clusterMarker = await map.map.loadImage(
-        'https://content.partymap.com/statics/marker-cluster.webp'
-      );
-    }
+    marker = await map.map.loadImage(markerImage);
+    clusterMarker = await map.map.loadImage(clusterMarkerImage);
+
     if (marker)
       map.map?.addImage('marker-dark', marker.data, {
         pixelRatio: 5,
@@ -484,6 +471,7 @@ const moving = (event) => {
 };
 
 const mapLoaded = (event) => {
+  console.log('MAPLOADED1');
   // set tilesize of satellite layer for 2x screens
   const landsat = map.map?.getSource('landsat');
   if (landsat && landsat.type === 'raster') {
@@ -497,7 +485,6 @@ const mapLoaded = (event) => {
     map.map?.triggerRepaint();
   }
 
-  // set globe projection
   mapStateToStore();
 
   // sometimes the marker data source needs to be manually set..
@@ -1228,7 +1215,7 @@ function useRef(arg0: boolean) {
     :deep(.maplibregl-map) {
       .maplibregl-control-container {
         .maplibregl-ctrl-bottom-right {
-          bottom: calc(248px + env(safe-area-inset-bottom));
+          bottom: calc(248px + var(--safe-area-inset-bottom));
           .maplibregl-ctrl-attrib {
             display: none;
           }

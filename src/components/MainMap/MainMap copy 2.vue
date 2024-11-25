@@ -534,6 +534,7 @@ export default {
       this.focusMarker = {
         lat: data.lat,
         lng: data.lng,
+        place_id:
       };
       if (data.events[0])
         this.$router.push({
@@ -1382,7 +1383,7 @@ canvas {
   :deep(.leaflet-top) {
     top: unset;
     transform: unset;
-    bottom: calc(268px + env(safe-area-inset-bottom));
+    bottom: calc(268px + var(--safe-area-inset-bottom));
   }
   .location-button-wrapper {
     .location-button {

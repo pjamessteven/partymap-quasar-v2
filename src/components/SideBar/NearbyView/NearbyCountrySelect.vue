@@ -290,6 +290,9 @@ export default {
   .country-select {
     .select {
       min-width: 130px;
+      :deep(.q-field__native) {
+        max-width: unset;
+      }
     }
   }
 }

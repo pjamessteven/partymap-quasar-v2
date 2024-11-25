@@ -117,7 +117,7 @@
         class="nav-bar"
         v-if="$q.screen.lt.sm"
         :style="
-          $route.name === 'EventPage' ||
+          (sidebarOpacity && $route.name === 'EventPage') ||
           $route.name === 'Explore' ||
           $route.name === 'UserPage' ||
           $route.name === 'BrowsePage'
@@ -370,16 +370,16 @@ export default {
     }
     // ios specific top padding
     @supports (
-        (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+        (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
           (-webkit-appearance: none)
       )
       and (max-width: 599px) {
-      padding-top: calc(env(safe-area-inset-top) - 8px);
+      padding-top: calc(var(--safe-area-inset-top) - 8px);
     }
 
-    @supports (top: env(safe-area-inset-bottom)) {
+    @supports (top: var(--safe-area-inset-bottom)) {
       // we only really care about bottom padding when it's overlaying the nav bar
-      //padding-bottom: calc(env(safe-area-inset-bottom) - 16px);
+      //padding-bottom: calc(var(--safe-area-inset-bottom) - 16px);
     }
     .sidebar-overlay {
       opacity: 1;
@@ -501,15 +501,15 @@ export default {
       padding-top: calc(62px + var(--safe-area-inset-top));
       // ios specific top padding
       @supports (
-        (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+        (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
           (-webkit-appearance: none)
       ) {
         padding-top: calc(62px + var(--safe-area-inset-top) - 8px);
       }
 
-      @supports (top: env(safe-area-inset-bottom)) {
+      @supports (top: var(--safe-area-inset-bottom)) {
         // we only really care about bottom padding when it's overlaying the nav bar
-        // padding-bottom: calc(env(safe-area-inset-bottom) - 16px);
+        // padding-bottom: calc(var(--safe-area-inset-bottom) - 16px);
       }
     }
 
@@ -525,10 +525,10 @@ export default {
         }
         // ios specific padding
         @supports (
-          (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+          (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
             (-webkit-appearance: none)
         ) {
-          top: calc(48px + env(safe-area-inset-top));
+          top: calc(48px + var(--safe-area-inset-top));
         }
       }
       .sidebar-component-wrapper {
@@ -545,10 +545,10 @@ export default {
       // ios specific padding for capcaitor app
       .controls-component {
         @supports (
-          (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+          (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
             (-webkit-appearance: none)
         ) {
-          top: calc(48px + env(safe-area-inset-top) - 8px);
+          top: calc(48px + var(--safe-area-inset-top) - 8px);
         }
       }
     }

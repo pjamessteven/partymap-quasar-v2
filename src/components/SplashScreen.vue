@@ -86,15 +86,15 @@
 
         &.iphone {
           @supports (
-            (top: env(safe-area-inset-top)) and (font: -apple-system-body) and
+            (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
               (-webkit-appearance: none)
           ) {
             @media screen and (max-width: 375px) {
               //  iphone 7
-              top: env(safe-area-inset-top);
+              top: var(--safe-area-inset-top);
             }
             @media screen and (min-width: 376px) {
-              top: calc(env(safe-area-inset-top) - 8px);
+              top: calc(var(--safe-area-inset-top) - 8px);
             }
           }
         }

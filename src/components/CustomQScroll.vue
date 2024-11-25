@@ -14,7 +14,7 @@
 export default {
   props: ['disableScroll'],
   data() {
-    return {};
+    return { isScrolling: null };
   },
   watch: {
     disableScroll: function (newv) {
@@ -24,9 +24,6 @@ export default {
     },
   },
   methods: {
-    onScroll(event) {
-      console.log(event);
-    },
     setScrollPosition(direction, offset, duration) {
       this.$refs.scroll.setScrollPosition(direction, offset, duration);
     },
@@ -34,19 +31,32 @@ export default {
       this.$refs.scroll.setScrollPercentage(direction, offset, duration);
     },
     onScrollEnd() {
+      console.log('SCROLLEND');
       this.$emit('scrollend');
     },
   },
   computed: {},
 
   mounted() {
+    // safari doesn't support scrollend
+
+    if (this.$q.platform.is.ios || this.$q.platform.is.safari) {
+      this.$refs.scroll.$el.firstElementChild.addEventListener('scroll', () => {
+        if (this.isScrolling) window.clearTimeout(this.isScrolling);
+        this.isScrolling = setTimeout(() => {
+          this.onScrollEnd(); // Trigger onScrollEnd after scroll stops
+        }, 150); // Adjust the timeout as needed
+      });
+    } else {
+      this.$refs.scroll.$el.firstElementChild.addEventListener(
+        'scrollend',
+        this.onScrollEnd
+      );
+    }
+
     // on ios, the mouseover event in the q-scroll component causes users
     // to have to click twice on their target
     // so we remove these events
-    this.$refs.scroll.$el.firstElementChild.addEventListener(
-      'scrollend',
-      this.onScrollEnd
-    );
 
     if (this.$q.platform.is.ios && this.$refs.scroll.$el._vei) {
       this.$refs.scroll.$el.removeEventListener(
