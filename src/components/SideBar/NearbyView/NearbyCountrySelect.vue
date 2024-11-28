@@ -116,7 +116,7 @@ export default {
         const providerCity = new OpenStreetMapProvider({
           params: {
             limit: 5,
-            featureType: 'city',
+            'accept-language': this.languagePref,
           },
         });
         const providerCountry = new OpenStreetMapProvider({
@@ -127,7 +127,6 @@ export default {
           providerCountry.search({ query }),
         ]);
 
-        console.log('results', citySearchResponse, countrySearchResponse);
         const combinedSearchResults = [
           ...countrySearchResponse,
           ...citySearchResponse,
@@ -190,6 +189,7 @@ export default {
       'fineLocation',
       'currentLocationCity',
       'currentLocationCountry',
+      'languagePref',
     ]),
   },
   created() {

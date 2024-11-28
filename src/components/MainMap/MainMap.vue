@@ -418,7 +418,12 @@ watch(
     if (newv === 'explore') {
       showPoints.value = true;
       blockUpdates.value = false;
-      if (oldv === 'nearby' && mainStore.userLocation && Screen.lt.sm) {
+      if (
+        oldv === 'nearby' &&
+        mainStore.userLocation &&
+        !mainStore.currentLocationFromSearch &&
+        Screen.lt.sm
+      ) {
         flyTo({ center: mainStore.userLocation });
       }
     }
@@ -892,7 +897,6 @@ watch(focusMarker, (newval: LngLat | null) => {
   if (newval) {
     blockUpdates.value = true;
     blockPeekMap.value = true;
-    console.log('NEWV');
     // save current map view so we can return to it
     if (newval.lat && newval.lng && map.map) {
       const currentZoom = map.map.getZoom();

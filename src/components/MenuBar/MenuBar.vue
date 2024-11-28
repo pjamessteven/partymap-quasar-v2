@@ -56,7 +56,7 @@
           $q.screen.lt.xl
         "
       >
-        <div class="back-button flex metropolis items-center" @click="back">
+        <div class="back-button flex inter bold items-center" @click="back">
           <q-icon name="mdi-chevron-left" class="q-mr-sm" size="sm" />
           {{ previousRouteName }}
         </div>

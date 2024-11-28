@@ -56,6 +56,11 @@
       >
         <div class="row flex grow main-row no-wrap justify-center">
           <div
+            class="event-page-ios-overlay"
+            v-if="$q.platform.is.ios"
+            @click="$router.go(-1)"
+          />
+          <div
             ref="contentCard"
             class="content-card flex column no-wrap"
             :class="{
@@ -196,7 +201,7 @@
                         </div>
                         <div class="q-mt-md">
                           <div
-                            class="flex row metropolis"
+                            class="flex row inter"
                             :class="{ 'o-000': !computedExternalUrlSubtitle }"
                             style="transition: opacity 0.3s ease"
                           >
@@ -278,7 +283,7 @@
                           </div>
                         </div>
                         <div
-                          class="flex row justify-between items-end no-wrap tags-wrapper o-080"
+                          class="flex row justify-between items-end no-wrap tags-wrapper o-00"
                           :class="$q.screen.gt.sm ? 'q-pt-lg ' : 'q-mt-md'"
                         >
                           <TagsComponent :small="false" :editing="editing" />
@@ -1762,6 +1767,7 @@ a {
       max-width: 1024px;
     }
   }
+
   .event-page-overlay {
     background: rgba(0, 0, 0, 0.5);
     width: 100%;
@@ -1807,6 +1813,15 @@ a {
       .main-row {
         position: relative;
         pointer-events: none;
+        .event-page-ios-overlay {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          z-index: 0;
+          pointer-events: all;
+          margin-top: -64px;
+        }
+
         .content-card {
           min-height: 2000px;
           margin-top: Max(calc((100vh - 66vh) - 64px), 0px);

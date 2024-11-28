@@ -1159,7 +1159,7 @@ export default {
         opacity: 1;
         transition: all 0.3s ease;
         background: black;
-        border: 1px solid rgba(255, 255, 255, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.4);
         &:not(.no-hover) {
           &:hover {
             opacity: 1;
