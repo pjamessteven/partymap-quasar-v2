@@ -1,11 +1,14 @@
 <template>
   <q-dialog ref="dialog">
     <q-card class="q-dialog-plugin dialog-card">
+      <q-card-section class="header row items-center dialog-card-header">
+        <div class="flex column">
+          <div class="text-h6">{{ data.name }}</div>
+          <div class="t3">{{ $t('event.events_at') }}</div>
+        </div>
+      </q-card-section>
+
       <q-list bordered separator v-if="data && data.events">
-        <q-item-label header
-          >{{ $t('event.events_at') }} {{ data.name }}</q-item-label
-        >
-        <q-separator />
         <q-item
           clickable
           v-ripple
@@ -87,4 +90,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.dialog-card {
+  max-width: 90vw;
+}
+</style>

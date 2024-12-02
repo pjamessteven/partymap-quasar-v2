@@ -261,7 +261,6 @@ body {
   .dialog-card-header {
     display: flex;
     flex-direction: row;
-    flex-grow: 1;
     align-items: center;
     position: relative;
     top: 0px;
@@ -1108,7 +1107,6 @@ body {
 
       border-radius: 0px !important;
       .dialog-card-header {
-        flex-grow: 1;
         width: 100%;
         align-items: center;
         display: flex;
