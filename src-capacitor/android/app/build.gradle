@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 
 android {
     namespace "org.partymap.com"
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "org.partymap.com"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 7
-        versionName "1.3.0"
+        versionCode 8
+        versionName "1.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -16,22 +16,12 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
-    signingConfigs{
-      debug{
-        keyAlias 'partymap'
-        keyPassword 'ku2n9395'
-        storeFile file('../../partymap.keystore')
-        storePassword 'ku2n9395'
-      }
-    }
     buildTypes {
-      release {
-          minifyEnabled false
-          proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-      }
-      debug{
-        signingConfig signingConfigs.debug
-      }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
     }
 }
 

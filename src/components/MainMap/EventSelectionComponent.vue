@@ -1,18 +1,27 @@
 <template>
   <q-dialog ref="dialog">
     <q-card class="q-dialog-plugin dialog-card">
-      <q-card-section class="header row items-center dialog-card-header">
+      <q-card-section
+        class="header row items-center justify-between dialog-card-header"
+      >
         <div class="flex column">
           <div class="text-h6">{{ data.name }}</div>
-          <div class="t3">{{ $t('event.events_at') }}</div>
         </div>
+        <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
 
-      <q-list bordered separator v-if="data && data.events">
+      <div
+        class="t3 q-mt-md q-mb-md q-ml-md"
+        style="font-weight: 600 !important"
+      >
+        {{ $t('event.events_at') }}
+      </div>
+      <q-separator />
+      <q-list separator v-if="data && data.events">
         <q-item
           clickable
           v-ripple
-          class="event q-pa-md"
+          class="event"
           v-for="(item, index) in consolidatedList"
           :key="index"
           @click="showEventPage(item)"

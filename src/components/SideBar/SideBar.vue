@@ -19,6 +19,7 @@
       <!--
       <div class="desktop-controls-bg" />
 -->
+      <!--
       <q-btn
         @click="showAddEventDialog"
         no-caps
@@ -41,6 +42,43 @@
           size="xs"
           style="margin-left: -12px; margin-right: -12px; padding: 0"
         ></q-icon>
+      </q-btn>
+      -->
+      <q-btn
+        class="button-control add-button"
+        flat
+        v-if="authStore.currentUserIsStaff"
+        :class="{
+          active:
+            queryStore.controlDateUnconfirmed || queryStore.controlEmptyLineup,
+        }"
+      >
+        <q-icon
+          name="mdi-dots-vertical"
+          size="xs"
+          style="margin-left: -12px; margin-right: -12px; padding: 0"
+        ></q-icon>
+        <q-menu
+          transition-show="jump-down"
+          transition-hide="jump-up"
+          anchor="bottom right"
+          self="top right"
+          class="more-menu"
+          max-height="100vh"
+        >
+          <q-item>
+            <q-checkbox
+              v-model="queryStore.controlDateUnconfirmed"
+              label="Date unconfirmed"
+            />
+          </q-item>
+          <q-item>
+            <q-checkbox
+              v-model="queryStore.controlEmptyLineup"
+              label="Empty lineup"
+            />
+          </q-item>
+        </q-menu>
       </q-btn>
       <div class="sidebar-content flex column no-wrap">
         <div style="height: 100%; width: 100%" class="sidebar-content-inner">
@@ -71,6 +109,7 @@ import ExploreView from './ExploreView/ExploreView.vue';
 import SearchView from './SearchView/SearchView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
 import { useMainStore } from 'src/stores/main';
+import { useQueryStore } from 'src/stores/query';
 import AddEventDialog from 'components/dialogs/AddEventDialog.vue';
 
 import { ref } from 'vue';
@@ -88,6 +127,7 @@ const route = useRoute();
 const sidebar = ref();
 const mainStore = useMainStore();
 const authStore = useAuthStore();
+const queryStore = useQueryStore();
 
 const showAddEventDialog = () => {
   Dialog.create({

@@ -1,0 +1,70 @@
+PODS:
+  - AashuDubeyCapacitorStatusbarSafeArea (2.1.1):
+    - Capacitor
+  - Capacitor (5.4.2):
+    - CapacitorCordova
+  - CapacitorApp (5.0.6):
+    - Capacitor
+  - CapacitorBrowser (5.1.0):
+    - Capacitor
+  - CapacitorCommunityAppleSignIn (5.0.0):
+    - Capacitor
+  - CapacitorCordova (5.4.2)
+  - CapacitorGeolocation (5.0.6):
+    - Capacitor
+  - CapacitorSplashScreen (5.0.6):
+    - Capacitor
+  - CapacitorStatusBar (5.0.6):
+    - Capacitor
+  - CordovaPlugins (5.4.2):
+    - CapacitorCordova
+
+DEPENDENCIES:
+  - "AashuDubeyCapacitorStatusbarSafeArea (from `../../node_modules/@aashu-dubey/capacitor-statusbar-safe-area`)"
+  - "Capacitor (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
+  - "CapacitorBrowser (from `../../node_modules/@capacitor/browser`)"
+  - "CapacitorCommunityAppleSignIn (from `../../node_modules/@capacitor-community/apple-sign-in`)"
+  - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorGeolocation (from `../../node_modules/@capacitor/geolocation`)"
+  - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
+  - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
+  - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
+
+EXTERNAL SOURCES:
+  AashuDubeyCapacitorStatusbarSafeArea:
+    :path: "../../node_modules/@aashu-dubey/capacitor-statusbar-safe-area"
+  Capacitor:
+    :path: "../../node_modules/@capacitor/ios"
+  CapacitorApp:
+    :path: "../../node_modules/@capacitor/app"
+  CapacitorBrowser:
+    :path: "../../node_modules/@capacitor/browser"
+  CapacitorCommunityAppleSignIn:
+    :path: "../../node_modules/@capacitor-community/apple-sign-in"
+  CapacitorCordova:
+    :path: "../../node_modules/@capacitor/ios"
+  CapacitorGeolocation:
+    :path: "../../node_modules/@capacitor/geolocation"
+  CapacitorSplashScreen:
+    :path: "../../node_modules/@capacitor/splash-screen"
+  CapacitorStatusBar:
+    :path: "../../node_modules/@capacitor/status-bar"
+  CordovaPlugins:
+    :path: "../capacitor-cordova-ios-plugins"
+
+SPEC CHECKSUMS:
+  AashuDubeyCapacitorStatusbarSafeArea: 4833bf7ac284b54c6650f0d80634552094fd3229
+  Capacitor: 8a9db42d105f55843cd8ed2a3cb54e2b78e7f102
+  CapacitorApp: 024e1b1bea5f883d79f6330d309bc441c88ad04a
+  CapacitorBrowser: 7a0fb6a1011abfaaf2dfedfd8248f942a8eda3d6
+  CapacitorCommunityAppleSignIn: eafdd59b18b38161fa5cceee7b0e31312b122958
+  CapacitorCordova: cfcc06b698481da655415985eeb2b8da363f8451
+  CapacitorGeolocation: 7be5f77abc205c0efe319fff8587a7183e7b0240
+  CapacitorSplashScreen: 5fa2ab5e46cf5cc530cf16a51c80c7a986579ccd
+  CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
+  CordovaPlugins: ca3af46bb9a5d7129049d0fd0a01435d0c1bd332
+
+PODFILE CHECKSUM: 1118b69607271a3bc008afc4ec688d221422335d
+
+COCOAPODS: 1.16.2

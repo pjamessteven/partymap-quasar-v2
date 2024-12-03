@@ -1,22 +1,22 @@
 PODS:
-  - AashuDubeyCapacitorStatusbarSafeArea (2.1.1):
+  - AashuDubeyCapacitorStatusbarSafeArea (3.0.0):
     - Capacitor
-  - Capacitor (5.4.2):
+  - Capacitor (6.2.0):
     - CapacitorCordova
-  - CapacitorApp (5.0.6):
+  - CapacitorApp (6.0.2):
     - Capacitor
-  - CapacitorBrowser (5.1.0):
+  - CapacitorBrowser (6.0.4):
     - Capacitor
-  - CapacitorCommunityAppleSignIn (5.0.0):
+  - CapacitorCommunityAppleSignIn (6.0.0):
     - Capacitor
-  - CapacitorCordova (5.4.2)
-  - CapacitorGeolocation (5.0.6):
+  - CapacitorCordova (6.2.0)
+  - CapacitorGeolocation (6.0.2):
     - Capacitor
-  - CapacitorSplashScreen (5.0.6):
+  - CapacitorSplashScreen (6.0.3):
     - Capacitor
-  - CapacitorStatusBar (5.0.6):
+  - CapacitorStatusBar (6.0.2):
     - Capacitor
-  - CordovaPlugins (5.4.2):
+  - CordovaPlugins (6.2.0):
     - CapacitorCordova
 
 DEPENDENCIES:
@@ -54,16 +54,16 @@ EXTERNAL SOURCES:
     :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
-  AashuDubeyCapacitorStatusbarSafeArea: 4833bf7ac284b54c6650f0d80634552094fd3229
-  Capacitor: 8a9db42d105f55843cd8ed2a3cb54e2b78e7f102
-  CapacitorApp: 024e1b1bea5f883d79f6330d309bc441c88ad04a
-  CapacitorBrowser: 7a0fb6a1011abfaaf2dfedfd8248f942a8eda3d6
-  CapacitorCommunityAppleSignIn: eafdd59b18b38161fa5cceee7b0e31312b122958
-  CapacitorCordova: cfcc06b698481da655415985eeb2b8da363f8451
-  CapacitorGeolocation: 7be5f77abc205c0efe319fff8587a7183e7b0240
-  CapacitorSplashScreen: 5fa2ab5e46cf5cc530cf16a51c80c7a986579ccd
-  CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
-  CordovaPlugins: ca3af46bb9a5d7129049d0fd0a01435d0c1bd332
+  AashuDubeyCapacitorStatusbarSafeArea: b32e282503c277e7e6bd2b030feef16658476b5b
+  Capacitor: 1f3c7b9802d958cd8c4eb63895fff85dff2e1eea
+  CapacitorApp: 2a8c3a0b0814322e5e6e15fe595f02c3808f0f8b
+  CapacitorBrowser: ef0529d16cd8839281050c350e7bbee4f5c6d65f
+  CapacitorCommunityAppleSignIn: c8bba4ca8ff6ff843367ece13ee8af24e9266eb9
+  CapacitorCordova: b33e7f4aa4ed105dd43283acdd940964374a87d9
+  CapacitorGeolocation: 9db9e7ed7cfb5d5d8f01b108ab483ad9c9d2865d
+  CapacitorSplashScreen: 68893659d77b5f82d753b3a70475082845e3039c
+  CapacitorStatusBar: 3b9ac7d0684770522c532d1158a1434512ab1477
+  CordovaPlugins: 08731213c63ccf137c576da2926bf4b3a8c40f17
 
 PODFILE CHECKSUM: 1118b69607271a3bc008afc4ec688d221422335d
 

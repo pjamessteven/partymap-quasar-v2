@@ -201,10 +201,12 @@ export const useMainStore = defineStore('main', {
         throw e;
         // just show the co-ords if reverse geocoding fails
       }
+
       return { city, country, state };
     },
     async getFineLocation() {
       let fineLocation;
+      let unknownCityCoords;
       try {
         fineLocation = await new Promise<LngLatLike>((resolve, reject) => {
           if (navigator.geolocation && !Platform.is.capacitor) {
@@ -213,7 +215,7 @@ export const useMainStore = defineStore('main', {
               async (position) => {
                 // show coords while loading place name
                 if (!this.userLocation) {
-                  const unknownCityCoords =
+                  unknownCityCoords =
                     position.coords.latitude.toFixed(1) +
                     ', ' +
                     position.coords.longitude.toFixed(1);
@@ -237,7 +239,7 @@ export const useMainStore = defineStore('main', {
               .then(async (position) => {
                 // show coords while loading place name
                 if (!this.userLocation) {
-                  const unknownCityCoords =
+                  unknownCityCoords =
                     position.coords.latitude.toFixed(1) +
                     ', ' +
                     position.coords.longitude.toFixed(1);
@@ -272,6 +274,10 @@ export const useMainStore = defineStore('main', {
         this.currentLocation = fineLocation;
         this.currentLocationCountry = this.userLocationCountry;
         this.currentLocationCity = this.userLocationCity;
+
+        if (!this.currentLocationCity && unknownCityCoords) {
+          this.currentLocationCity = unknownCityCoords;
+        }
 
         this.userLocationLoading = false;
         this.currentLocationFromSearch = false;

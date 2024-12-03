@@ -12,9 +12,10 @@ import { i18n } from 'src/boot/i18n';
 
 export const IS_LOCALHOST = process.env.NODE_ENV === 'development';
 
-export const API_URL = IS_LOCALHOST
-  ? 'http://localhost:5000/api'
-  : 'https://api.partymap.com/api';
+export const API_URL =
+  IS_LOCALHOST && false
+    ? 'http://localhost:5000/api'
+    : 'https://api.partymap.com/api';
 
 export const PLACE_AUTOCOMPLETE_API_URL =
   'https://maps.googleapis.com/maps/api/place/autocomplete/json';

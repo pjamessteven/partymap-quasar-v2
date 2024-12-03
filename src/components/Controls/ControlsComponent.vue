@@ -107,7 +107,6 @@
               <ArtistControl :showing="showing" @hide="hide" />
             </template>
           </ControlButton>
-
           <!--
           <div
             class="controls-wrapper flex no-wrap q-ml-sm"
@@ -158,7 +157,6 @@
             </div>
           </div>
 -->
-
           <ControlButton
             class="q-ml-sm"
             :isActive="controlSize.length > 0"

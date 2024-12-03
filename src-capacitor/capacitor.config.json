@@ -2,6 +2,7 @@
   "appId": "org.partymap.com",
   "appName": "PartyMap",
   "server": {
+    "androidScheme": "https",
     "hostname": "api.partymap.com"
   },
   "bundledWebRuntime": false,
@@ -12,7 +13,7 @@
       "enabled": true
     },
     "CapacitorHttp": {
-      "enabled": false
+      "enabled": true
     },
     "SplashScreen": {
       "backgroundColor": "#282828"
@@ -23,6 +24,6 @@
     "limitsNavigationsToAppBoundDomains": true
   },
   "android": {
-    "versionCode": 7
+    "versionCode": 8
   }
 }
