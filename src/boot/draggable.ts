@@ -1,7 +1,7 @@
-import { boot } from 'quasar/wrappers';
+import { defineBoot } from '#q-app/wrappers';
 import { GesturePlugin } from '@vueuse/gesture';
 import { MotionPlugin } from '@vueuse/motion';
-export default boot(({ app }) => {
+export default defineBoot(({ app }) => {
   app.use(GesturePlugin);
   app.use(MotionPlugin);
 });

@@ -8,7 +8,7 @@ import {
   passwordResetRequest,
   appleLoginRequest,
 } from 'src/api';
-import { PrivateUser } from 'src/types/autogen_types';
+import type { PrivateUser } from 'src/types/autogen_types';
 
 interface AuthState {
   currentUser: PrivateUser | null;
@@ -26,18 +26,21 @@ export const useAuthStore = defineStore('auth', {
   },
   actions: {
     async checkAuthCookie() {
-      const response = await checkAuthenticatedRequest();
-      const user: PrivateUser = response.data;
-      console.log(response.data);
-      if (user) {
-        this.currentUser = user;
-        // for facebook signup
-        // ask user to choose a username if they haven't
-        if (user.username === null) {
-          this.$router.replace('/username');
+      try {
+        const response = await checkAuthenticatedRequest();
+        const user: PrivateUser = response.data;
+        if (user) {
+          this.currentUser = user;
+          // for facebook signup
+          // ask user to choose a username if they haven't
+          if (user.username === null) {
+            this.$router.replace('/username');
+          }
         }
+      } catch (e) {
+      } finally {
+        this.hasCheckedAuthCookie = true;
       }
-      this.hasCheckedAuthCookie = true;
     },
     async register(payload: {
       email: string;

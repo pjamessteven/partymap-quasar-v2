@@ -1,4 +1,4 @@
-import { store } from 'quasar/wrappers';
+import { defineStore } from '#q-app/wrappers';
 import { createPinia } from 'pinia';
 import { markRaw } from 'vue';
 import router from 'src/router';
@@ -24,7 +24,7 @@ declare module 'pinia' {
  * with the Store instance.
  */
 
-export default store((/* { ssrContext } */) => {
+export default defineStore((/* { ssrContext } */) => {
   const pinia = createPinia();
   // You can add Pinia plugins here
   // pinia.use(SomePiniaPlugin)

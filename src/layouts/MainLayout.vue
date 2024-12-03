@@ -1,7 +1,8 @@
 <template>
   <div class="main-layout">
-    <MainMap :key="currentMapStyleUrl" />
-
+    <q-no-ssr>
+      <MainMap :key="currentMapStyleUrl" />
+    </q-no-ssr>
     <div
       class="overlay"
       :class="overlayOpacityTransition ? 'overlay-transition' : ''"
@@ -130,7 +131,7 @@
 </template>
 
 <script lang="ts">
-import MainMap from 'src/components/MainMap/MainMap.vue';
+//import MainMap from 'src/components/MainMap/MainMap.vue';
 import SideBar from 'components/SideBar/SideBar.vue';
 import MenuBar from 'components/MenuBar/MenuBar.vue';
 import ControlsComponent from 'src/components/Controls/ControlsComponent.vue';
@@ -142,21 +143,24 @@ import { useMapStore } from 'src/stores/map';
 import { useMainStore } from 'src/stores/main';
 import { useEventStore } from 'src/stores/event';
 import { i18n, setI18nLanguage, loadLocaleMessages } from 'src/boot/i18n.ts';
-
+import { defineAsyncComponent } from 'vue';
 export default {
   components: {
-    MainMap,
     SideBar,
     MobileSideBar,
     MenuBar,
     MenuBarLogo,
     NavigationBar,
     ControlsComponent,
+    MainMap: defineAsyncComponent(
+      () => import('/src/components/MainMap/MainMap.vue')
+    ),
   },
   data() {
     return {
       overlayOpacityTransition: true,
       eventPageTransition: false,
+      isMainMapLoaded: false,
     };
   },
   methods: {
@@ -209,7 +213,12 @@ export default {
   },
   async beforeRouteEnter(to, from, next) {
     const routeLocale = to.params.lang;
-    const userLangPref = localStorage.getItem('languagePref');
+
+    let userLangPref;
+    if (process['client']) {
+      userLangPref = localStorage.getItem('languagePref');
+    }
+
     const locale = userLangPref || routeLocale;
     // set i18n language
     if (locale) {
@@ -228,6 +237,7 @@ export default {
     // set date locale (best locale is chosen in i18n.ts boot file)
     this.setLocale(i18n.global.locale.value);
   },
+
   computed: {
     ...mapWritableState(useMapStore, [
       'blockUpdates',

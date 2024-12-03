@@ -106,29 +106,7 @@ import { useEventStore } from 'src/stores/event';
 
 export default {
   data() {
-    return {
-      showMap: false,
-      opened: false,
-      mapOptions: {
-        scrollWheelZoom: false,
-        zoomSnap: 1,
-        zoom: 3,
-        zoomControl: true,
-        minZoom: 2,
-        maxBounds: L.latLngBounds(
-          L.latLng(-89.98155760646617, -Infinity),
-          L.latLng(89.99346179538875, Infinity)
-        ),
-        maxBoundsViscosity: 0.5,
-        worldCopyJump: true,
-        preferCanvas: true,
-        attribution:
-          'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
-      },
-      map: null,
-      tileLayer: null,
-      markers: null,
-    };
+    return {};
   },
   components: {},
   props: {

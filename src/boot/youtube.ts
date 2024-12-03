@@ -1,5 +1,5 @@
-import { boot } from 'quasar/wrappers';
+import { defineBoot } from '#q-app/wrappers';
 import { createManager } from '@vue-youtube/core';
-export default boot(({ app }) => {
+export default defineBoot(({ app }) => {
   app.use(createManager());
 });

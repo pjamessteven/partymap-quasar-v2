@@ -1,7 +1,7 @@
 <template>
   <router-view :key="forceUpdate" />
   <transition leave-active-class="animated fadeOut">
-    <SplashScreen v-if="!assetsLoaded || loggingInWithToken" />
+    <SplashScreen v-if="!true || loggingInWithToken" />
   </transition>
 </template>
 
@@ -183,7 +183,7 @@ export default {
     }
     */
 
-    setTimeout(() => (this.assetsLoaded = true), 1000);
+    // setTimeout(() => (this.assetsLoaded = true), 1000);
 
     this.$q.dark.set('auto');
     this.$q.addressbarColor.set('#181818');

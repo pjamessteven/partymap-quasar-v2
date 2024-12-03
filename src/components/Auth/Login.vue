@@ -240,7 +240,7 @@ import TermsAndConditionsDialog from 'src/components/dialogs/AboutDialog/TermsAn
 import PrivacyPolicyDialog from 'src/components/dialogs/AboutDialog/PrivacyPolicyDialog.vue';
 import { useQueryStore } from 'src/stores/query';
 import { Browser } from '@capacitor/browser';
-import { SignInWithApple } from '@capacitor-community/apple-sign-in';
+//import { SignInWithApple } from '@capacitor-community/apple-sign-in';
 import shajs from 'sha.js';
 
 export default {
@@ -301,29 +301,38 @@ export default {
       };
       this.loading = true;
 
-      SignInWithApple.authorize(options)
-        .then(async (result) => {
-          console.log('result', result);
-          // Handle user information
-          // Validate token with server and create new session
-          const currentUser = await this.appleLogin(
-            result.response.identityToken
-          );
-          if (!currentUser.username) {
-            this.$router.replace({ name: 'ChooseUsername' });
-          } else {
-            this.userEventDatesPage = 1;
-            try {
-              await this.loadUserEventDates('all', 'future');
-            } catch {}
-            this.$router.push('/');
-          }
-          this.loading = false;
+      import('@capacitor-community/apple-sign-in')
+        .then((SignInWithApple) => {
+          SignInWithApple.authorize(options)
+            .then(async (result) => {
+              console.log('result', result);
+              // Handle user information
+              // Validate token with server and create new session
+              const currentUser = await this.appleLogin(
+                result.response.identityToken
+              );
+              if (!currentUser.username) {
+                this.$router.replace({ name: 'ChooseUsername' });
+              } else {
+                this.userEventDatesPage = 1;
+                try {
+                  await this.loadUserEventDates('all', 'future');
+                } catch {}
+                this.$router.push('/');
+              }
+              this.loading = false;
+            })
+            .catch((error) => {
+              console.log(error);
+              this.$q.notify('Apple login failed, please try again...');
+              this.loading = false;
+            });
         })
         .catch((error) => {
-          console.log(error);
-          this.$q.notify('Apple login failed, please try again...');
-          this.loading = false;
+          console.error(
+            'Error importing @capacitor-community/apple-sign-in:',
+            error
+          );
         });
     },
     async onAppleDesktopLoginSuccess(data) {

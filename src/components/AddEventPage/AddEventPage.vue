@@ -340,7 +340,7 @@
                 />
                 <div
                   class="location-map-wrapper satellite-enabled q-mt-md q-mb-lg"
-                  v-if="!!markerCoords"
+                  v-if="!!markerCoords && mglMap"
                 >
                   <UseDevicePixelRatio v-slot="{ pixelRatio: { pixelRatio } }">
                     <mgl-map
@@ -664,11 +664,7 @@ import { mapState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import { toRaw } from 'vue';
 import _ from 'lodash';
-import {
-  MglMap,
-  MglMarker,
-  MglNavigationControl,
-} from '@indoorequal/vue-maplibre-gl';
+
 import { UseDevicePixelRatio } from '@vueuse/components';
 
 export default {
@@ -680,9 +676,6 @@ export default {
     GoogleLocationComponent,
     SelectTagsComponent,
     SelectArtistsComponent,
-    MglMap,
-    MglMarker,
-    MglNavigationControl,
     UseDevicePixelRatio,
   },
   props: {
@@ -690,6 +683,10 @@ export default {
   },
   data() {
     return {
+      MglMap: null,
+      MglMarker: null,
+      MglNavigationControl: null,
+
       showValidationErrors: false,
       descriptionAttribute: null,
       fullDescriptionAttribute: null,
@@ -851,6 +848,20 @@ export default {
     },
   },
   watch: {},
+  mounted() {
+    if (process.env.CLIENT) {
+      // Dynamically import vue-maplibre-gl components only on the client-side
+      import('@indoorequal/vue-maplibre-gl')
+        .then((module) => {
+          this.MglMap = module.MglMap;
+          this.MglMarker = module.MglMarker;
+          this.MglNavigationControl = module.MglNavigationControl;
+        })
+        .catch((error) => {
+          console.error('Error loading vue-maplibre-gl:', error);
+        });
+    }
+  },
   computed: {
     ...mapState(useMapStore, [
       'satelliteMapStyleUrl',

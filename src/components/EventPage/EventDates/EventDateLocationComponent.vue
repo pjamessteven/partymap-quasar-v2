@@ -132,12 +132,11 @@ import { mapState } from 'pinia';
 import EditEventDateDialog from './EditEventDateDialog.vue';
 import { useEventStore } from 'src/stores/event';
 import { useMapStore } from 'src/stores/map';
-import { MglMap, MglMarker } from '@indoorequal/vue-maplibre-gl';
 import { UseDevicePixelRatio } from '@vueuse/components';
 
 export default {
   name: 'EventDateMap',
-  components: { EditEventDateDialog, MglMap, UseDevicePixelRatio, MglMarker },
+  components: { EditEventDateDialog, UseDevicePixelRatio },
   props: {
     editing: Boolean,
     inline: Boolean, // desktop and mobile (only show text, no map)
@@ -146,6 +145,8 @@ export default {
   },
   data() {
     return {
+      MglMap: null,
+      MglMarker: null,
       expanded: false,
       showEditDialog: false,
       map: null,
@@ -173,6 +174,18 @@ export default {
     },
   },
   mounted() {
+    if (process.env.CLIENT) {
+      // Dynamically import vue-maplibre-gl components only on the client-side
+      import('@indoorequal/vue-maplibre-gl')
+        .then((module) => {
+          this.MglMap = module.MglMap;
+          this.MglMarker = module.MglMarker;
+          this.MglNavigationControl = module.MglNavigationControl;
+        })
+        .catch((error) => {
+          console.error('Error loading vue-maplibre-gl:', error);
+        });
+    }
     if (this.selectedEventDate) {
       this.markerCoords = [
         this.selectedEventDate.location.lng,

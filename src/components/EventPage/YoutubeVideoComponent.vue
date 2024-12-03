@@ -11,15 +11,17 @@
           :class="editing ? 'q-pa-md' : ''"
         >
           <div v-show="!editing">
-            <youtube-iframe
-              :video-id="videoId"
-              @ready="onStateChange"
-              :style="`position: absolute;`"
-              :width="clientWidth"
-              :height="computedHeight"
-              :key="event.youtube_url"
-              v-if="videoId?.length > 0 && clientWidth > 0"
-            />
+            <q-no-ssr>
+              <youtube-iframe
+                :video-id="videoId"
+                @ready="onStateChange"
+                :style="`position: absolute;`"
+                :width="clientWidth"
+                :height="computedHeight"
+                :key="event.youtube_url"
+                v-if="videoId?.length > 0 && clientWidth > 0"
+              />
+            </q-no-ssr>
           </div>
           <div v-if="editing" class="t4 flex items-center">
             <q-icon

@@ -1,70 +1,57 @@
-import { boot } from 'quasar/wrappers';
+// src/boot/locale.js
 import { createI18n } from 'vue-i18n';
-import { nextTick } from 'vue';
+import { defineBoot } from '#q-app/wrappers';
 import getTranslations from 'src/import-translation';
 
-import { supportedLocaleCodes } from 'src/i18n';
+let locale;
 
-export type MessageLanguages = keyof typeof messages;
-// Type-define 'en-US' as the master schema for the resource
-export type MessageSchema = (typeof messages)['en-US'];
-
-// See https://vue-i18n.intlify.dev/guide/advanced/typescript.html#global-resource-schema-type-definition
-/* eslint-disable @typescript-eslint/no-empty-interface */
-declare module 'vue-i18n' {
-  // define the locale messages schema
-  export interface DefineLocaleMessage extends MessageSchema {}
-
-  // define the datetime format schema
-  export interface DefineDateTimeFormat {}
-
-  // define the number format schema
-  export interface DefineNumberFormat {}
+if (process.env.CLIENT) {
+  // Client-side: Get the user's language preference from localStorage
+  const userLangPref = localStorage.getItem('languagePref');
+  locale = userLangPref || getBestMatchingLocale(); // `getBestMatchingLocale()` is your custom function
+} else {
+  locale = 'en';
 }
-/* eslint-enable @typescript-eslint/no-empty-interface */
 
-export const getBestMatchingLocale = () => {
-  // Get browser languages
-  const browserLangs = navigator.languages || [
-    navigator.language || navigator.userLanguage,
-  ];
+// Initialize the i18n instance
+const i18n = createI18n({
+  locale,
+  legacy: false, // Enable composition API mode
+});
 
-  // attempt to find first the exact matching locale
-  // (for Brazilian Portguese as an example)
-  for (const lang of browserLangs) {
-    if (supportedLocaleCodes.includes(lang)) {
-      return lang;
-    }
+export default defineBoot(async ({ app, ssrContext }) => {
+  // Use i18n in the app
+  app.use(i18n);
+
+  if (process.env.CLIENT && ssrContext) {
+    // Server-side (SSR): Get the Accept-Language header from the request
+    const acceptLanguage = ssrContext.req.headers['accept-language'];
+    locale = acceptLanguage ? acceptLanguage.split(',')[0] : 'en'; // Default to 'en' if no language is found
+    i18n.global.locale.value = locale;
   }
 
-  // otherwise find general locale
-  for (const lang of browserLangs) {
-    const shortLang = lang.split('-')[0]; // Get language code without region
-    if (supportedLocaleCodes.includes(shortLang)) {
-      return shortLang;
-    }
-  }
+  // Dynamically load the locale messages
+  await loadLocaleMessages(i18n, locale);
+});
 
-  // Return default locale if no match found
-  return 'en';
-};
+// Export the i18n instance for later use
+export { i18n };
 
+// Dynamically load locale messages
 export async function loadLocaleMessages(i18n, locale) {
-  // load locale messages with dynamic import
   try {
     const messages = await getTranslations(locale);
-    // set locale and locale message)
     i18n.global.setLocaleMessage(locale, messages);
-  } catch (e) {
+  } catch (error) {
+    console.error(`Failed to load locale messages for "${locale}"`, error);
     const messages = await import('/src/i18n/locales/en.js');
     // set locale and locale message
     i18n.global.setLocaleMessage('en', messages);
   }
-
-  return nextTick();
 }
 
 export const setI18nLanguage = (i18n, locale) => {
+  console.log(i18n.global, i18n.mode, 'global');
   if (i18n.mode === 'legacy') {
     i18n.global.locale = locale;
   } else {
@@ -80,18 +67,10 @@ export const setI18nLanguage = (i18n, locale) => {
   document.querySelector('html').setAttribute('lang', locale);
 };
 
-const userLangPref = localStorage.getItem('languagePref');
-const locale = userLangPref || getBestMatchingLocale();
-
-const i18n = createI18n({
-  locale,
-  legacy: false,
-});
-
-export default boot(async ({ app }) => {
-  // Set i18n instance on app
-  app.use(i18n);
-  await loadLocaleMessages(i18n, locale);
-});
-
-export { i18n };
+// Function to get the best matching locale from the browser
+function getBestMatchingLocale() {
+  const browserLang = navigator.language || navigator.userLanguage; // Get the browser's language
+  // Check for 'en', 'fr', etc. and return a matching locale
+  if (browserLang.startsWith('fr')) return 'fr';
+  return 'en'; // Default to 'en'
+}

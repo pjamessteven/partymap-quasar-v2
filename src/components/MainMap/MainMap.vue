@@ -176,15 +176,14 @@ import {
 import { onMounted, watch, nextTick, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { debounce } from 'lodash';
-import {
+import type {
   LngLat,
-  LngLatBounds,
   LngLatLike,
   Map,
   MapLayerMouseEvent,
-  MapGeoJsonFeature,
   PaddingOptions,
 } from 'maplibre-gl';
+import { LngLatBounds, MapGeoJsonFeature } from 'maplibre-gl';
 import { storeToRefs } from 'pinia';
 import { Dark, Dialog, Platform, Screen } from 'quasar';
 import EventDateCardLoader from 'components/EventDateCardLoader.vue';

@@ -1,4 +1,4 @@
-import { boot } from 'quasar/wrappers';
+import { defineBoot } from '#q-app/wrappers';
 import VueAppleLogin from 'vue-apple-login';
 import { Platform, Screen } from 'quasar';
 import {
@@ -9,7 +9,7 @@ import { Platform, Dark } from 'quasar';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { useMainStore } from 'src/stores/main';
 
-export default boot(async ({ app, store }) => {
+export default defineBoot(async ({ app, store }) => {
   // this is used for non-ios devices
   // on android it's not possible to use a popup,
   // so we have a custom flow, similar to the flows for facebook/google on ios.

@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia';
 import { getIpInfoRequest } from 'src/api';
-import { IpInfo } from 'src/types/ip_info';
+import type { IpInfo } from 'src/types/ip_info';
 import { Geolocation } from '@capacitor/geolocation';
 //import HttpsAdapter from 'node-geocoder/lib/httpadapter/fetchadapter';
 import { Notify } from 'quasar';
 import { Screen, Platform } from 'quasar';
-import { RouteLocationNormalizedLoaded } from 'vue-router';
-import { LngLat, LngLatLike } from 'maplibre-gl';
+import type { RouteLocationNormalizedLoaded } from 'vue-router';
+import type { LngLatLike } from 'maplibre-gl';
+import { LngLat } from 'maplibre-gl';
 import { i18n } from 'src/boot/i18n';
 import { default as dayjs } from 'dayjs';
 import importLocale from 'src/import-locale';
@@ -51,7 +52,6 @@ interface MainStoreState {
   language: string;
   forceUpdate: number;
 }
-const localTips = localStorage.getItem('tips');
 
 export const useMainStore = defineStore('main', {
   state: (): MainStoreState => ({
@@ -85,7 +85,7 @@ export const useMainStore = defineStore('main', {
     groupEventsByMonth: true,
     compactView: true,
     routerHistory: [],
-    tips: (localTips && JSON.parse(localTips)) || {
+    tips: {
       hidePanelTip: true,
       oldAndroid: true,
     },

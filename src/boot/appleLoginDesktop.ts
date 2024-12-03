@@ -1,7 +1,6 @@
 import { boot } from 'quasar/wrappers';
 import VueAppleLogin from 'vue-apple-login';
 import { Platform } from 'quasar';
-import { platform } from 'os';
 
 export default boot(({ app }) => {
   // this is used for non-ios devices

@@ -95,7 +95,7 @@
 <script>
 import { mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
-import { OpenStreetMapProvider } from 'leaflet-geosearch';
+
 import _ from 'lodash';
 export default {
   props: { size: { type: String, default: 'md' } },
@@ -111,32 +111,46 @@ export default {
   },
   methods: {
     async search(query) {
-      if (query?.length > 0) {
-        this.loading = true;
-        const providerCity = new OpenStreetMapProvider({
-          params: {
-            limit: 5,
-            'accept-language': this.languagePref,
-          },
-        });
-        const providerCountry = new OpenStreetMapProvider({
-          params: { limit: 3, format: 'geocodejson', featureType: 'country' },
-        });
-        const [citySearchResponse, countrySearchResponse] = await Promise.all([
-          providerCity.search({ query }),
-          providerCountry.search({ query }),
-        ]);
+      console.log(process.env.CLIENT);
+      if (process.env.CLIENT) {
+        import('leaflet-geosearch')
+          .then(async ({ OpenStreetMapProvider }) => {
+            if (query?.length > 0) {
+              this.loading = true;
+              const providerCity = new OpenStreetMapProvider({
+                params: {
+                  limit: 5,
+                  'accept-language': this.languagePref,
+                },
+              });
+              const providerCountry = new OpenStreetMapProvider({
+                params: {
+                  limit: 3,
+                  format: 'geocodejson',
+                  featureType: 'country',
+                },
+              });
+              const [citySearchResponse, countrySearchResponse] =
+                await Promise.all([
+                  providerCity.search({ query }),
+                  providerCountry.search({ query }),
+                ]);
 
-        const combinedSearchResults = [
-          ...countrySearchResponse,
-          ...citySearchResponse,
-        ];
-        this.locationSearchResults = combinedSearchResults.map((res) => ({
-          label: res.label,
-          location: { lat: res.y, lng: res.x },
-        }));
+              const combinedSearchResults = [
+                ...countrySearchResponse,
+                ...citySearchResponse,
+              ];
+              this.locationSearchResults = combinedSearchResults.map((res) => ({
+                label: res.label,
+                location: { lat: res.y, lng: res.x },
+              }));
 
-        this.loading = false;
+              this.loading = false;
+            }
+          })
+          .catch((error) => {
+            console.error('Error loading leaflet-geosearch:', error);
+          });
       }
     },
     async locationSearchFilter(query, update, abort) {
