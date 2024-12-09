@@ -43,6 +43,8 @@ export default {
     ACCOUNT_DISABLED:
       'Account temporaneamente disabilitato. Contatta info@partymap.com',
     ACCOUNT_PENDING: 'Account non ancora attivato. Controlla la tua email!',
+    ACCOUNT_LOCKED:
+      "Troppe tentativi di accesso! Account bloccato. Utilizzare l'opzione «password dimenticata».",
     no_location:
       'Verifica che partymap.com abbia il permesso di accedere alla tua posizione.',
     ip_location:

@@ -46,7 +46,9 @@ export const useMapStore = defineStore('map', {
     showResults: (state): boolean => {
       return (state.mapMoving && state.blockUpdates) || !state.mapMoving;
     },
-
+    satellite3dMapStyleUrl: (): string => {
+      return 'https://maps.partymap.com/styles/satellite-hybrid-terrain/style.json';
+    },
     satelliteMapStyleUrl: (): string => {
       return 'https://maps.partymap.com/styles/satellite-hybrid-globe/style.json';
     },
@@ -85,6 +87,8 @@ export const useMapStore = defineStore('map', {
         return this.transportMapStyleUrl;
       } else if (state.mapStyle === 'classic') {
         return this.classicMapStyleUrl;
+      } else if (state.mapStyle === 'satellite-3d') {
+        return this.satellite3dMapStyleUrl;
       } else {
         return this.satelliteMapStyleUrl;
       }

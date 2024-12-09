@@ -44,6 +44,8 @@ export default {
       'Konto jest tymczasowo wyłączone. Skontaktuj się z info@partymap.com',
     ACCOUNT_PENDING:
       'Konto nie zostało aktywowane. Sprawdź swoją skrzynkę email!',
+    ACCOUNT_LOCKED:
+      "Zbyt wiele prób logowania! Konto zablokowane. Użyj opcji 'nie pamiętasz hasła'.",
     no_location:
       'Sprawdź, czy partymap.com ma uprawnienia do dostępu do twojej lokalizacji.',
     ip_location:

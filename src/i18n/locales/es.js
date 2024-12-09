@@ -44,6 +44,8 @@ export default {
       'La cuenta está temporalmente deshabilitada. Contacta con info@partymap.com',
     ACCOUNT_PENDING:
       'La cuenta no ha sido activada. Revisa tu correo electrónico!',
+    ACCOUNT_LOCKED:
+      '¡Demasiados intentos de inicio de sesión! Cuenta bloqueada. Utilice la opción «olvidé mi contraseña».',
     no_location:
       'Verifica que partymap.com tenga permiso para acceder a tu ubicación.',
     ip_location:

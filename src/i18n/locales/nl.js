@@ -43,6 +43,8 @@ export default {
     ACCOUNT_DISABLED:
       'Account is tijdelijk uitgeschakeld. Neem contact op met info@partymap.com',
     ACCOUNT_PENDING: 'Account is nog niet geactiveerd. Controleer uw e-mail!',
+    ACCOUNT_LOCKED:
+      "Te veel inlogpogingen! Account vergrendeld. Gebruik de optie 'wachtwoord vergeten'.",
     no_location: 'Controleer of partymap.com toegang heeft tot uw locatie.',
     ip_location:
       'Kan uw locatie niet krijgen \n\n Gebruik in plaats daarvan de locatie van het IP-adres...',

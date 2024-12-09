@@ -42,6 +42,8 @@ const translation = {
     ACCOUNT_DISABLED:
       'Account is temporarily disabled. Contact info@partymap.com',
     ACCOUNT_PENIDNG: 'Account has not been activated. Check your email!',
+    ACCOUNT_LOCKED:
+      "Too many login attempts! Account locked. Use the 'forgot password' option.",
     no_location:
       'Check that partymap.com has permission to access your location.',
     ip_location:

@@ -66,18 +66,31 @@
           class="more-menu"
           max-height="100vh"
         >
-          <q-item>
+          <div class="column q-pa-sm">
+            <div class="q-ma-sm inter bold">Help keep PartyMap updated!</div>
+
             <q-checkbox
               v-model="queryStore.controlDateUnconfirmed"
               label="Date unconfirmed"
             />
-          </q-item>
-          <q-item>
+
             <q-checkbox
               v-model="queryStore.controlEmptyLineup"
               label="Empty lineup"
             />
-          </q-item>
+
+            <div class="q-ma-sm inter bold">View options</div>
+            <q-toggle
+              v-model="mainStore.compactView"
+              :true-value="false"
+              :false-value="true"
+              label="Poster view"
+            />
+            <q-toggle
+              v-model="mainStore.groupEventsByMonth"
+              label="Group by Month"
+            />
+          </div>
         </q-menu>
       </q-btn>
       <div class="sidebar-content flex column no-wrap">

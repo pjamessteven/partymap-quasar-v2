@@ -44,6 +44,8 @@ export default {
       'アカウントは一時的に無効になっています。info@partymap.comまで連絡してください',
     ACCOUNT_PENIDNG:
       'アカウントがまだ有効化されていません。メールを確認してください!',
+    ACCOUNT_LOCKED:
+      'ログイン試行回数が多すぎます！アカウントがロックされました。「パスワードを忘れた」オプションを使用してください。',
     no_location:
       'partymap.comがあなたのロケーションにアクセスできることを確認してください。',
     ip_location:

@@ -42,6 +42,7 @@ export default {
     AUTH_FAIL: '登入憑證不正確',
     ACCOUNT_DISABLED: '帳戶暫時被禁用。請聯繫 info@partymap.com',
     ACCOUNT_PENDING: '帳戶尚未激活。請檢查您的電子郵箱!',
+    ACCOUNT_LOCKED: '登录尝试次数过多！账户已锁定。请使用“忘记密码”选项。',
     no_location: '確認 partymap.com 有權限存取您的位置。',
     ip_location: '無法取得您的位置！\n\n 使用 IP 地址位置代替...',
     network_error: '網絡錯誤！請檢查您的連接...',
