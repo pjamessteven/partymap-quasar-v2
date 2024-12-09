@@ -79,6 +79,15 @@ export default defineConfig(function (/* ctx */) {
     devServer: {
       // https: true
       open: true, // opens browser window automatically
+      proxy: {
+        '/api': {
+          target: 'https://api.partymap.com/', // Replace with your production server's URL
+          changeOrigin: true,
+          pathRewrite: {
+            '^/api': '', // Rewrites the URL prefix if needed
+          },
+        },
+      },
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
