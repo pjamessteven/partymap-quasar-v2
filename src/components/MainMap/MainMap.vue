@@ -301,6 +301,10 @@ const updateLocationMarker = (userLocation: LngLat) => {
 onMounted(async () => {
   queryStore.loadPoints();
 
+  if (focusMarker.value) {
+    setFocusMarker(focusMarker.value);
+  }
+
   if (map.map) {
     mapStateToStore();
 
@@ -882,23 +886,7 @@ watch(
 
 watch(focusMarker, (newval: LngLat | null) => {
   if (newval) {
-    blockUpdates.value = true;
-    blockPeekMap.value = true;
-    // save current map view so we can return to it
-    if (newval.lat && newval.lng && map.map) {
-      const currentZoom = map.map.getZoom();
-      mapStore.exploreMapView = {
-        latlng: map.map.getCenter(),
-        zoom: currentZoom,
-      };
-      blockUpdates.value = true;
-
-      flyTo({
-        center: newval,
-        padding: getEventPagePadding(),
-        zoom: currentZoom > 9 ? currentZoom : 9,
-      });
-    }
+    setFocusMarker(newval);
   } else {
     if (mapStore.exploreMapView)
       if (mainStore.sidebarPanel === 'nearby') {
@@ -915,6 +903,23 @@ watch(focusMarker, (newval: LngLat | null) => {
       }
   }
 });
+
+const setFocusMarker = (coords: LngLat) => {
+  blockUpdates.value = true;
+  blockPeekMap.value = true;
+  const currentZoom = map?.map?.getZoom();
+  mapStore.exploreMapView = {
+    latlng: map?.map?.getCenter(),
+    zoom: currentZoom,
+  };
+  blockUpdates.value = true;
+
+  flyTo({
+    center: coords,
+    padding: getEventPagePadding(),
+    zoom: currentZoom && currentZoom > 9 ? currentZoom : 9,
+  });
+};
 
 const pulsingDotSize = 86;
 const pulsingDot = {

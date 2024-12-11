@@ -261,6 +261,7 @@ export default {
       ],
       mapStyleOptions: [
         { label: this.$t('nav.satellite_map'), value: 'satellite' },
+        { label: this.$t('nav.satellite_map') + ' 3D', value: 'satellite-3d' },
         { label: 'Monochrome', value: 'monochrome' },
         { label: 'Classic', value: 'classic' },
       ],

@@ -246,7 +246,7 @@ export default {
         height: auto;
         max-width: 100%;
         width: 100%;
-        max-height: 400px;
+        max-height: 500px;
 
         object-fit: contain;
         display: block;
