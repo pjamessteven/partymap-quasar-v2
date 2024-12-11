@@ -108,12 +108,16 @@
         >
           <!-- Cluster count labels -->
           <mgl-symbol-layer
+            layer-id="clusters"
             @mouseenter="mouseEnterClusterPoint"
             @click="onClickCluster"
             @mousemove="cancelHoverTimeout"
             @mouseleave="mouseLeaveClusterPoint"
-            layer-id="clusters"
-            :filter="['has', 'point_count', ...currentEventFilter]"
+            :filter="
+              mappedPoints && currentEventFilter.length > 0
+                ? ['all', ['has', 'point_count'], currentEventFilter]
+                : ['has', 'point_count']
+            "
             :layout="clusterCountLayout"
             :paint="computedPaintStyle"
           />
@@ -121,7 +125,11 @@
           <!-- Unclustered points -->
           <mgl-symbol-layer
             layer-id="unclustered-points"
-            :filter="['!', ['has', 'point_count'], ...currentEventFilter]"
+            :filter="
+              mappedPoints && currentEventFilter.length > 0
+                ? ['all', ['!', ['has', 'point_count']], currentEventFilter]
+                : ['!', ['has', 'point_count']]
+            "
             :layout="unclusteredPointLayout"
             :paint="computedPaintStyle"
             @click="onClickPoint"
@@ -290,20 +298,6 @@ const updateLocationMarker = (userLocation: LngLat) => {
   });
 };
 
-watch(
-  () => mappedPoints.value,
-  () => {
-    console.log('DEBUG points1');
-
-    if (map.map) {
-      console.log('DEBUG points2');
-
-      // updateMarkers();
-    }
-  },
-  { deep: true }
-);
-
 onMounted(async () => {
   queryStore.loadPoints();
 
@@ -446,7 +440,6 @@ watch(
 );
 
 const movestart = (e: any) => {
-  console.log('ignore', e);
   if (e.event.ignoreMoveEvents) {
     return;
   }
@@ -475,7 +468,6 @@ const moving = (event) => {
 };
 
 const mapLoaded = (event) => {
-  console.log('MAPLOADED1');
   // set tilesize of satellite layer for 2x screens
   const landsat = map.map?.getSource('landsat');
   if (landsat && landsat.type === 'raster') {
@@ -545,7 +537,6 @@ const mapStateToStore = () => {
     const center = map.map.getCenter();
     const zoomLevel = map.map.getZoom();
     mapStore.mapBounds = getPaddedBounds(map.map, getDefaultPadding());
-    console.log(mapStore.mapBounds, 'bbb');
     mapStore.mapCenter = center;
     mapStore.mapZoomLevel = zoomLevel;
     mainStore.currentLocation = center;
@@ -638,7 +629,6 @@ const getNearbyPagePadding = (): PaddingOptions => {
 };
 
 const getDefaultPadding = (): PaddingOptions => {
-  console.log('get default pad');
   // default padding for explore page
   if (Screen.lt.sm) {
     return { top: 0, bottom: 150, left: 0, right: 0 };
@@ -654,7 +644,6 @@ const getPaddedBounds = (map: Map, padding: PaddingOptions) => {
   const bounds = map.getBounds();
 
   if (map.getZoom() > 4) {
-    console.log('apply padding');
     const pixelBounds = map.getContainer().getBoundingClientRect();
     const widthPx = pixelBounds.width;
     const heightPx = pixelBounds.height;
@@ -815,7 +804,7 @@ const onClickCluster = async (e: MapLayerMouseEvent) => {
 };
 
 const currentEventFilter = computed(() => {
-  if (focusMarker.value) {
+  if (focusMarker.value && mappedPoints.value) {
     return ['==', ['get', 'place_id'], focusMarker.value.place_id];
   } else return [];
 });
@@ -828,7 +817,7 @@ const searchEventFilter = computed(() => {
 
 const onClickPoint = (e: MapLayerMouseEvent) => {
   hoveredPointEvents.value = null;
-  console.log('click', e.features);
+
   const properties = e?.features?.[0]?.properties;
   if (properties?.events) {
     const events = JSON.parse(properties.events);
@@ -842,7 +831,6 @@ const onClickPoint = (e: MapLayerMouseEvent) => {
       });
     } else {
       // filter markers
-      console.log(properties.place_id, 'place');
       map.map?.setFilter('clusters', [
         '==',
         ['get', 'place_id'],
@@ -904,7 +892,6 @@ watch(focusMarker, (newval: LngLat | null) => {
         zoom: currentZoom,
       };
       blockUpdates.value = true;
-      console.log('NEWV FLY');
 
       flyTo({
         center: newval,

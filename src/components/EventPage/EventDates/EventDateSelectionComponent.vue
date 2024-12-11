@@ -1,7 +1,7 @@
 <template>
   <div class="event-dates-component flex column" :class="editing ? '' : ''">
     <div
-      v-if="this.event?.event_dates?.length > 1 || editing"
+      v-if="event?.event_dates?.length > 1 || editing"
       class="list-container flex column"
     >
       <div
@@ -73,7 +73,7 @@
         </q-card>
       </div>
       <CustomQScroll
-        v-if="this.event?.event_dates?.length > 0"
+        v-if="event?.event_dates?.length > 0"
         horizontal
         ref="scrollArea"
         style="height: 120px"
@@ -87,7 +87,7 @@
       >
         <div class="flex q-py-sm row no-wrap" :class="editing ? '' : 'q-pl-'">
           <EventDate
-            v-for="(ed, index) in this.event?.event_dates"
+            v-for="(ed, index) in event?.event_dates"
             :key="index"
             :expanded="index === selectedEventDateIndex"
             :next="index == 0"
@@ -249,30 +249,28 @@ export default {
     },
     scrollSelectedEdIntoView() {
       if (this.$refs.scrollArea)
-        console.log(this.selectedEventDateIndex, 'indexx');
-
-      if (this.selectedEventDateIndex > 0) {
-        if (this.$q.screen.gt.xs) {
-          // scroll to middle
-          this.$refs.scrollArea.setScrollPosition(
-            'horizontal',
-            this.selectedEventDateIndex * (180 + 18) - (180 + 18),
-            300
-          );
+        if (this.selectedEventDateIndex > 0) {
+          if (this.$q.screen.gt.xs) {
+            // scroll to middle
+            this.$refs.scrollArea.setScrollPosition(
+              'horizontal',
+              this.selectedEventDateIndex * (180 + 18) - (180 + 18),
+              300
+            );
+          } else {
+            // scroll so item is on the left
+            this.$refs.scrollArea.setScrollPosition(
+              'horizontal',
+              this.selectedEventDateIndex * (180 + 18),
+              300 // don't animate
+            );
+          }
         } else {
-          // scroll so item is on the left
           this.$refs.scrollArea.setScrollPosition(
             'horizontal',
-            this.selectedEventDateIndex * (180 + 18),
-            300 // don't animate
+            this.selectedEventDateIndex * (180 + 18)
           );
         }
-      } else {
-        this.$refs.scrollArea.setScrollPosition(
-          'horizontal',
-          this.selectedEventDateIndex * (180 + 18)
-        );
-      }
     },
   },
   computed: {

@@ -35,7 +35,7 @@
             <EventDatePoster
               v-for="(ed, index) in eventDates"
               :key="index"
-              :hideInfo="true"
+              :hideInfo="false"
               :event="ed"
             />
           </div>
@@ -76,7 +76,7 @@ export default {
 }
 
 .user-event-scroll-area {
-  height: 264px;
+  height: 280px;
   margin-bottom: -8px;
   mask-image: linear-gradient(
     to left,

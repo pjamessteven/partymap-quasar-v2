@@ -92,6 +92,7 @@
       :class="[inline ? 'q-mt-md' : '']"
       v-if="(!inline || showMap) && markerCoords && false"
     >
+      <!--
       <div class="map-container satellite-enabled">
         <UseDevicePixelRatio v-slot="{ pixelRatio: { pixelRatio } }">
           <mgl-map
@@ -115,6 +116,7 @@
           </mgl-map>
         </UseDevicePixelRatio>
       </div>
+      -->
     </div>
     <q-dialog
       v-model="showEditDialog"

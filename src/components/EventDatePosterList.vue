@@ -120,8 +120,11 @@ import { computed } from 'vue';
 import DateHeader from './DateHeader.vue';
 import EventDatePoster from './EventDatePoster.vue';
 import { useQuasar } from 'quasar';
+import { useI18n } from 'vue-i18n';
 
 const $q = useQuasar();
+
+const { t } = useI18n();
 
 const mainStore = useMainStore();
 
@@ -155,15 +158,15 @@ const gridColumns = computed(() => {
   if (main.showPanel) {
     if ($q.screen.gt.lg) {
       return `
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         `;
     } else if ($q.screen.gt.md) {
       return `
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         `;
     } else if ($q.screen.gt.xs) {
       return `
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         `;
     } else {
       return `
@@ -173,15 +176,15 @@ const gridColumns = computed(() => {
   } else {
     if ($q.screen.gt.lg) {
       return `
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         `;
     } else if ($q.screen.gt.md) {
       return `
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         `;
     } else if ($q.screen.gt.xs) {
       return `
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         `;
     } else {
       return `
@@ -193,16 +196,8 @@ const gridColumns = computed(() => {
 
 const computedTotalResultMessage = computed(() => {
   if ($q.screen.gt.xs) {
-    if (props.eventDatesTotal === 1) {
-      return props.eventDatesTotal + ' good time in this area';
-    } else if (props.eventDatesTotal > 1) {
-      return props.eventDatesTotal + ' good times in this area';
-    } else return null;
-  } else {
-    if (props.eventDatesTotal === 1) {
-      return props.eventDatesTotal + ' upcoming in this area';
-    } else if (props.eventDatesTotal > 1) {
-      return props.eventDatesTotal + ' good times in this area';
+    if (props.eventDatesTotal > 1) {
+      return props.eventDatesTotal + ' ' + t('nearby_view.in_this_area');
     } else return null;
   }
 });

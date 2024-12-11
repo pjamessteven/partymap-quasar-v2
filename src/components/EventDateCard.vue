@@ -8,7 +8,13 @@
     <transition appear enter-active-class="animated fadeIn slower">
       <router-link
         v-if="event"
-        style="text-decoration: none; color: inherit; z-index: 1"
+        style="
+          text-decoration: none;
+          color: inherit;
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+        "
         :to="{
           name: 'EventPage',
           params: {
@@ -25,7 +31,7 @@
             }),
             dateString: computedDateString,
             locationDescription: computedLocation,
-            description: event?.event.description,
+            description: event.event.description_t || event.event.description,
             tags: JSON.stringify(event?.event.event_tags),
           },
         }"
@@ -181,22 +187,16 @@
                 </div>
               </div>
             </div>
-            <div
-              v-if="$q.screen.gt.sm && event"
-              class="description grow flex ellipsis q-mb-sm q-pr-md items-center"
-              style="max-width: 100%"
-            >
-              {{ event.event.description_t || event.event.description }}
-            </div>
+
             <!-- scroll area here (qscroll or regular) area causes performance issues on android-->
             <CustomQScroll
               v-if="!$q.platform.is.android || true"
               horizontal
               style="min-height: 39px; margin-bottom: -8px"
-              class="q-mt-xs"
+              class="q-mb-md"
               :thumb-style="{
                 bottom: '-4px',
-                height: '8px',
+                height: '4px',
                 borderRadius: '0px',
               }"
             >
@@ -227,6 +227,21 @@
                 ></Tag>
               </div>
             </div>
+            <div
+              v-if="event.event && $q.screen.gt.sm"
+              class="description grow flex ellipsis q-pr-md q-mt-sm items-center"
+              style="max-width: 100%"
+            >
+              {{ event.event.description_t || event.event.description }}
+            </div>
+          </div>
+        </div>
+        <div class="q-px-md q-pb-sm q-mb-xs" v-if="event && $q.screen.lt.md">
+          <div
+            class="description grow flex ellipsis items-center"
+            style="max-width: 100%"
+          >
+            {{ event.event.description_t || event.event.description }}
           </div>
         </div>
       </router-link>
@@ -374,7 +389,7 @@ export default {
   .ed-card {
     // outline: 1px solid black;
     border-top: 1px solid rgba(48, 48, 48);
-    background: linear-gradient(black, $bi-2);
+    background: linear-gradient(black, $bi-4);
 
     .ed-card-bg {
       background: $bi-3;
@@ -410,7 +425,7 @@ export default {
 
     box-shadow: rgba(0, 0, 0, 0.12) 0px 3px 8px;
     font-smooth: always;
-    background: linear-gradient($bi-2, $bi-3);
+    background: linear-gradient($bi-2, rgb(100, 100, 100));
 
     .card-background {
       //background: #181818;
@@ -495,6 +510,21 @@ export default {
       // translate3d is a hack for safari to force gpu rendering of blur()
     }
   }
+  .description {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-height: 60px; // height of 3 lines of text
+
+    @supports (-webkit-line-clamp: 3) {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: initial;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+  }
   .ed-card-content {
     position: relative;
     transition: opacity 0.3s ease;
@@ -504,8 +534,10 @@ export default {
       -webkit-transform: translate3d(0, 0, 0);
       // translate3d is a hack for safari to force gpu rendering of blur()
     }
+
     .tag-container {
       :deep(.tag) {
+        font-size: small;
         background: transparent !important;
         border: 1px solid rgba(255, 255, 255, 0.48) !important;
       }
@@ -560,7 +592,7 @@ export default {
 }
 
 // sm
-@media only screen and (max-width: 599px) {
+@media only screen and (max-width: 1024px) {
   .ed-card {
     &:before {
       display: none;
@@ -568,6 +600,15 @@ export default {
     }
     &:hover {
       //transform: scale(1.01) translateY(0px);
+    }
+    .ed-card-content {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 9px;
+      margin-bottom: 8px;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 25px 20px -20px;
+    }
+    .description {
+      font-size: small;
     }
   }
 }
@@ -586,20 +627,6 @@ export default {
       .image-container {
         min-width: 144px;
         height: 203px;
-      }
-      .description {
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        max-height: 60px; // height of 3 lines of text
-        @supports (-webkit-line-clamp: 3) {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: initial;
-          display: -webkit-box;
-          -webkit-line-clamp: 3;
-          -webkit-box-orient: vertical;
-        }
       }
     }
   }

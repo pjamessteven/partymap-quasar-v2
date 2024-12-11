@@ -12,11 +12,15 @@
           query: {
             name: event.name.replace(/ /g, '_'),
             thumbXsUrl: imgThumbUrl,
+            description: event.event.description_t || event.event.description,
             location: JSON.stringify({
               lat: event.location.lat,
               lng: event.location.lng,
               place_id: event.location.place_id,
             }),
+            dateString: computedDateString,
+            locationDescription: computedLocation,
+            tags: JSON.stringify(event?.event.event_tags),
           },
         }"
       >
@@ -48,7 +52,7 @@
                 class="ed-poster-header flex row justify-between items-start no-wrap ellipsis"
               >
                 <div
-                  class="flex row items-baseline no-wrap inter bolder q-mr-sm ellipsis"
+                  class="flex row items-baseline no-wrap inter bold q-mr-sm ellipsis"
                 >
                   <span class="ellipsis">{{ event.name }}</span>
                   <q-icon
@@ -89,12 +93,12 @@
               </div>
             </div>
 
-            <div class="flex column ellipsis q-pa-md" v-if="!hideInfo">
+            <div class="flex column ellipsis q-pa-sm" v-if="!hideInfo">
               <div
                 class="ed-poster-header flex row justify-between items-start no-wrap ellipsis"
               >
                 <div
-                  class="flex row items-baseline no-wrap inter bolder q-mr-sm ellipsis"
+                  class="flex row items-baseline no-wrap inter bold q-mr-sm ellipsis"
                 >
                   <span class="ellipsis">{{ event.name }}</span>
                   <q-icon
@@ -121,7 +125,7 @@
                 class="flex column card-bottom-text q-mt-xs o-080"
                 style="font-weight: 400"
               >
-                <span>
+                <span v-if="false">
                   <q-icon name="las la-clock" class="q-mr-sm" />
                   <q-badge
                     v-if="event.cancelled"
@@ -160,11 +164,12 @@
                   </div>
                 </div>
                 <div class="ellipsis">
-                  <span v-if="event.location && event.location.locality">
+                  <span
+                    v-if="event.location && event.location.locality?.region"
+                  >
                     <q-icon name="las la-map-marker" class="q-mr-sm" />{{
-                      event.location.locality.long_name
-                    }},
-                    {{ event.location.locality.region.long_name }}
+                      event.location.locality.region.long_name
+                    }}, {{ event.location.locality.country.long_name }}
                   </span>
                   <span v-else>
                     <q-icon name="las la-map-marker" class="q-mr-sm" />{{
@@ -181,7 +186,11 @@
                 </div>
                 <div
                   class="tag-container flex row q-mt-sm no-wrap ellipsis"
-                  v-if="event?.event?.event_tags?.length > 0 && $q.screen.gt.xs"
+                  v-if="
+                    event?.event?.event_tags?.length > 0 &&
+                    $q.screen.gt.xs &&
+                    false
+                  "
                 >
                   <Tag
                     class="q-mr-xs"
@@ -310,6 +319,28 @@ export default {
     imgThumbXsUrl() {
       return this.event?.event?.cover_items?.[0]?.thumb_xxs_url;
     },
+    computedDateString() {
+      if (this.event?.date_confirmed) {
+        return this.localDateWithWeekday(this.event.start_naive, this.event.tz);
+      } else if (this.event) {
+        return this.monthYear(this.event.start_naive, this.event.tz);
+      } else return '';
+    },
+    computedLocation() {
+      if (this.event?.location?.locality) {
+        if (this.event.location.locality.region?.long_name) {
+          return (
+            this.event.location.locality.long_name +
+            ', ' +
+            this.event.location.locality.region.long_name
+          );
+        } else {
+          return this.event?.location?.locality?.long_name;
+        }
+      } else {
+        return this.event?.location?.name;
+      }
+    },
   },
   created() {
     // import common methods
@@ -378,7 +409,7 @@ export default {
   cursor: pointer;
   overflow: hidden;
   position: relative;
-  height: 256px;
+  height: 268px;
   @supports (font: -apple-system-body) and (-webkit-appearance: none) {
     -webkit-backface-visibility: hidden;
     -webkit-transform: translate3d(0, 0, 0);

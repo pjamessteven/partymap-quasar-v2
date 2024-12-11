@@ -5,8 +5,6 @@ import { config } from 'process';
 import 'qs';
 import qs from 'qs';
 import { Lang, Notify } from 'quasar';
-import common from 'src/assets/common';
-import { i18n } from 'src/boot/i18n';
 
 // axios.defaults.headers.common['Lang-Presf'] = 'cn';
 
@@ -34,8 +32,6 @@ const DIFY_USER =
     ? 'pjamessteven'
     : 'partymap';
 
-const { t } = i18n.global;
-
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.defaults.headers.common['Accept'] = 'application/json';
 
@@ -57,7 +53,7 @@ axios.interceptors.response.use(
     }
     return response;
   },
-  (error) => {
+  async (error) => {
     const ignoreErrorsForEndpoints = ['ip_lookup'];
 
     for (const endpoint of ignoreErrorsForEndpoints) {
@@ -78,6 +74,10 @@ axios.interceptors.response.use(
 
         const errorMessage = error.response.data.error.message;
         const errorCode = error.response.data.error.code;
+
+        const { i18n } = await import('src/boot/i18n');
+        const { t } = i18n.global;
+
         if (errorCode) {
           Notify.create({
             message: t('error_codes.' + errorCode),

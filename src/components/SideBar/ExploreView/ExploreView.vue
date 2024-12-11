@@ -423,7 +423,7 @@
 
                   <EventDatePosterList
                     v-if="!compactView"
-                    :groupByMonth="groupEventsByMonth && $q.screen.lt.sm"
+                    :groupByMonth="groupEventsByMonth"
                     :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
                     :eventDates="eventDates"
                     :hasNext="eventDatesHasNext"

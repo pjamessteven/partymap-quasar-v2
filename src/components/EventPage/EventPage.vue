@@ -1019,7 +1019,9 @@ const motionProperties = ref();
 const motionControls = ref();
 const motionTransitions = ref();
 
-const hiddenYPosition = window.innerHeight - window.innerHeight * 0.2;
+const hiddenYPosition = window
+  ? window.innerHeight - window.innerHeight * 0.2
+  : 0;
 
 const previousRouteIsExplore = computed(
   () =>
@@ -1505,19 +1507,19 @@ useMeta(() => {
         selectedEventDate.value?.start_naive,
         selectedEventDate.value?.tz
       ) +
+      ' ' +
       t('meta.on_partymap'),
     meta: {
       description: {
         name: 'description',
         content:
-          t('meta.more_about') +
           computedName?.value +
-          t('meta.in') +
+          ' ' +
           common.monthYear(
             selectedEventDate.value?.start_naive,
             selectedEventDate.value?.tz
           ) +
-          '! ' +
+          ': ' +
           event.value?.description,
       },
       keywords: {

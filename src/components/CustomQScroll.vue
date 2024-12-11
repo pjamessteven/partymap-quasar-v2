@@ -31,7 +31,6 @@ export default {
       this.$refs.scroll.setScrollPercentage(direction, offset, duration);
     },
     onScrollEnd() {
-      console.log('SCROLLEND');
       this.$emit('scrollend');
     },
   },

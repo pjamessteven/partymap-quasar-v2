@@ -8,19 +8,24 @@
         <q-space />
         <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
-
+      <q-card-section class="q-mt-md" style="">
+        {{ $t('about.5') }}
+      </q-card-section>
+      <q-separator />
       <q-list class="q-py-sm">
         <q-item clickable class="q-pa-md" @click="selectHost(true)">
           <q-item-section>
-            <q-item-label class="text-large inter bold q-mb-sm">
+            <q-item-label
+              class="text-large inter bold q-mb-sm flex items-center"
+            >
               {{ $t('add_event.i_am_host') }}
               &nbsp;<i class="mdi mdi-check-decagram-outline" />
             </q-item-label>
-            <q-item-label class="t3" @click="host = false">
+            <q-item-label class="t2" @click="host = false">
               {{ $t('add_event.i_am_host_msg') }}
             </q-item-label>
           </q-item-section>
-          <q-item-section avatar v-if="$q.screen.gt.xs">
+          <q-item-section avatar v-if="$q.screen.gt.xs || true">
             <q-icon name="mdi-chevron-right" />
           </q-item-section>
         </q-item>
@@ -30,11 +35,11 @@
             <q-item-label class="text-large inter bold q-mb-sm">
               {{ $t('add_event.event_i_know_about') }}
             </q-item-label>
-            <q-item-label class="t3">
+            <q-item-label class="t2">
               {{ $t('add_event.event_i_know_about_msg') }}
             </q-item-label>
           </q-item-section>
-          <q-item-section avatar v-if="$q.screen.gt.xs">
+          <q-item-section avatar v-if="$q.screen.gt.xs || true">
             <q-icon name="mdi-chevron-right" />
           </q-item-section>
         </q-item>
