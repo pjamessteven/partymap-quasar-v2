@@ -21,6 +21,7 @@ import { useMainStore } from './main';
 import { useMapStore } from './map';
 import { useAuthStore } from './auth';
 import { i18n } from 'src/boot/i18n';
+import { useLocalStorage } from '@vueuse/core';
 
 const { t } = i18n.global;
 // TODO: improve interface
@@ -166,7 +167,7 @@ export const useQueryStore = defineStore('query', {
     locationOptionsPage: 1,
     locationOptionsLoading: false,
 
-    points: [],
+    points: useLocalStorage('points', []),
     loadingPoints: false,
 
     userEventDates: [],
@@ -224,7 +225,6 @@ export const useQueryStore = defineStore('query', {
     },
     async loadPoints() {
       try {
-        this.loadingPoints = true;
         const pointsResponse = await getPointsRequest(
           this.controlDateRange.start,
           this.controlDateRange.end,

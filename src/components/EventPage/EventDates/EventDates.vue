@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!!event" class="flex column grow no-wrap">
+  <div v-if="!!event" class="event-dates flex column grow no-wrap">
     <!--
           <div class="flex row q-mb-lg q-gutter-sm q-pr-xl o-080">
             <q-btn
@@ -99,7 +99,7 @@
       </q-inner-loading>
     </div>
     <div
-      class="flex column"
+      class="flex column selected-event-date"
       v-else-if="!!selectedEventDate"
       :key="selectedEventDateIndex + 101"
       :class="{ 'q-px-md': $q.screen.lt.sm }"
@@ -110,7 +110,7 @@
         ><span v-else>{{ $t('event_dates.event_details') }}:</span>
       </div>
 
-      <q-list class="q-mb-md" style="position: relative">
+      <q-list class="q-mb-md event-date-components" style="position: relative">
         <div
           v-for="(component, index) in visibleComponents"
           :key="component.type"
@@ -122,9 +122,7 @@
           <component
             :is="component.type"
             v-bind="component.propsData"
-            class="q-py-md"
             :class="{
-              'q-pl-md': $q.screen.gt.xs,
               'q-my-sm': editing || showMoreFields,
             }"
           >
@@ -146,7 +144,6 @@
             (informationMissing || showMoreFields)
           "
           class="flex row items-center no-wrap link-hover ed-inline-card editing-outline q-py-md"
-          :class="{ 'q-pl-md': $q.screen.gt.xs }"
           @click="editing = true"
           style="cursor: pointer"
         >
@@ -159,7 +156,7 @@
             class="flex column q-ml-md t2"
             :class="{ 'text-large': $q.screen.gt.sm }"
           >
-            <u class="t4 q-ml-sm" v-if="!showMoreFields">{{
+            <u class="t4" v-if="!showMoreFields">{{
               currentUserIsHost
                 ? $t('event_dates.add_missing_information')
                 : $t('suggestions.improve_this_page')
@@ -436,6 +433,16 @@ export default {
   .q-btn {
     border-radius: 9px !important;
     opacity: 0.68;
+  }
+}
+.event-dates {
+  .selected-event-date {
+    .event-date-components {
+      :deep(.ed-inline-card) {
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+    }
   }
 }
 @media only screen and (max-width: 1023px) {

@@ -833,8 +833,8 @@ export default {
     facebook_page: 'Facebook-pagina',
     visit_website: 'Bezoek de website',
     get_tickets: 'Tickets kopen voor dit evenement',
-    buy_tickets: 'Geen prijs vermeld',
-    no_price_listed: 'Tickets kopen',
+    no_price_listed: 'Geen prijs vermeld',
+    buy_tickets: 'Tickets kopen',
     we_earn_commission:
       'We verdienen commissie op sommige tickets die via PartyMap.com worden gekocht - dit helpt ons draaiende te houden. Koop al uw tickets via ons xoxo',
     update_selected_date: 'De geselecteerde datum bijwerken',

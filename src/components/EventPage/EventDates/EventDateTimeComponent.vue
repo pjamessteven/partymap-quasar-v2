@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex column no-wrap calendar editing-outline"
+    class="flex column no-wrap calendar ed-inline-card editing-outline"
     :class="[
       inline ? 'inline' : '',
       editing || showMoreFields ? 'editing q-px-md' : '',
@@ -121,13 +121,13 @@
         size="2em"
         class="t3 q-ml-md"
         name="mdi-chevron-down"
-        v-if="expandable && !expanded"
+        v-if="expandable && !expanded && !editing"
       />
       <q-icon
         size="2em"
         class="t3 q-ml-md"
         name="mdi-chevron-up"
-        v-else-if="expandable && expanded"
+        v-else-if="expandable && expanded && !editing"
       />
     </div>
     <Calendar

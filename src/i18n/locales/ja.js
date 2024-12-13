@@ -806,8 +806,8 @@ export default {
     facebook_page: 'Facebookページ',
     visit_website: 'ウェブサイトを訪問',
     get_tickets: 'このイベントのチケットを購入',
-    buy_tickets: 'チケットを購入',
-    no_price_listed: '価格未設定',
+    no_price_listed: 'チケットを購入',
+    buy_tickets: '価格未設定',
     we_earn_commission:
       '一部のチケット購入では収益を得ています - これにより、運営を続けることができます。チケットはすべてこちらから購入してください xoxo',
     update_selected_date: '選択した日を更新',

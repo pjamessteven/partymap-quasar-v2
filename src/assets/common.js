@@ -584,6 +584,30 @@ export default {
       return '';
     }
   },
+  getTicketRetailerName: (url) => {
+    if (url.toLowerCase().indexOf('ticketmaster') > -1) {
+      return 'Ticketmaster';
+    } else if (url.toLowerCase().indexOf('moshtix') > -1) {
+      return 'Moshtix';
+    } else {
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'http://' + url;
+      }
+
+      // Create a URL object
+      const urlObj = new URL(url);
+
+      // Get the hostname (domain name)
+      let domain = urlObj.hostname;
+
+      // Remove the 'www' prefix if it exists
+      if (domain.startsWith('www.')) {
+        domain = domain.substring(4);
+      }
+
+      return domain;
+    }
+  },
   getDomainFromUrl: (url) => {
     // Add the prefix if it's missing
     if (!url.startsWith('http://') && !url.startsWith('https://')) {

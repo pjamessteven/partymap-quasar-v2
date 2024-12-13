@@ -1,7 +1,7 @@
 <template>
   <div v-if="!!event" class="flex column grow no-wrap">
     <div
-      class="inter bolder text-large t2 q-pr-md event-page-header"
+      class="inter bolder text-h6 t1 q-pr-md event-page-header"
       v-if="selectedEventDate?.artists?.length > 0 || lineupImages?.length > 0"
       :class="{ 'q-px-md': $q.screen.lt.sm }"
     >

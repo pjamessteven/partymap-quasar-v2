@@ -38,7 +38,7 @@
               class="nav-button primary"
               flat
               style="width: 190px"
-              :label="computedTicketSellerName"
+              :label="getTicketRetailerName(ticket.url)"
               icon="las la-external-link-alt"
               :class="$q.screen.gt.sm ? '' : 'flex grow'"
             />
@@ -70,14 +70,10 @@ export default {
   },
   methods: {},
   created() {
-    this.getDomainFromUrl = common.getDomainFromUrl;
+    this.getTicketRetailerName = common.getTicketRetailerName;
   },
   computed: {
     ...mapState(useEventStore, ['event', 'selectedEventDate']),
-
-    computedTicketSellerName() {
-      return this.getDomainFromUrl(this.selectedEventDate?.tickets?.[0]?.url);
-    },
   },
 };
 </script>

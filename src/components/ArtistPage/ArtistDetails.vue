@@ -9,46 +9,9 @@
           >
             {{ $t('artist_page.disambiguation') }}:
           </div>
-          <div
-            class="o-080 q-mt-lg"
-            v-if="artist && artist.disambiguation?.length > 0"
-          >
-            {{ artist.disambiguation_t || artist.disambiguation }}
-          </div>
 
           <div
-            class="q-mt-lg q-mb-sm metropolis bold o-080"
-            v-if="artist && artist.tags && artist.tags.length > 0 && !loading"
-          >
-            {{ $t('artist_page.tags') }}:
-          </div>
-          <!--
-            <div
-              class="o-060"
-              v-if="
-                artist &&
-                  ((artist.tags && artist.tags.length === 0) || !artist.tags) &&
-                  !loading
-              "
-            >
-              No tags for this artist yet.
-            </div>
-          -->
-          <div
-            class="flex row wrap q-gutter-xs q-mt-xs"
-            style="max-width: 100%"
-            v-if="artist && artist.tags"
-          >
-            <Tag
-              v-for="(at, index) in artist.tags"
-              :key="index"
-              :value="at.tag_t || at.tag"
-              :label="at.label"
-            ></Tag>
-          </div>
-
-          <div
-            class="q-mt-lg q-mb-sm metropolis bold o-080"
+            class="q-mt-lg q-mb-sm metropolis bolder t1 text-h6"
             v-if="computedDescription && computedDescription.length > 0"
           >
             {{ $t('artist_page.description') }}:
@@ -84,9 +47,28 @@
               {{ $t('artist_page.show_less') }}
             </span>
           </div>
+          <div
+            class="q-mt-lg metropolis bolder t1 text-h6"
+            v-if="artist && artist.tags && artist.tags.length > 0 && !loading"
+          >
+            {{ $t('artist_page.tags') }}:
+          </div>
 
           <div
-            class="q-mt-lg q-mb-sm metropolis bold o-080"
+            class="flex row wrap q-gutter-xs q-mt-xs"
+            style="max-width: 100%"
+            v-if="artist && artist.tags"
+          >
+            <Tag
+              v-for="(at, index) in artist.tags"
+              :key="index"
+              :value="at.tag_t || at.tag"
+              :label="at.label"
+            ></Tag>
+          </div>
+
+          <div
+            class="q-mt-lg q-mb-sm metropolis bolder t1 text-h6"
             v-if="urls && urls.length > 0"
           >
             {{ $t('artist_page.links') }}:

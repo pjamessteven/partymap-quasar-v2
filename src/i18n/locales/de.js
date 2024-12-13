@@ -833,8 +833,8 @@ export default {
     facebook_page: 'Facebook-Seite',
     visit_website: 'Website besuchen',
     get_tickets: 'Tickets für diese Veranstaltung erhalten',
-    buy_tickets: 'Kein Preis angegeben',
-    no_price_listed: 'Tickets kaufen',
+    no_price_listed: 'Kein Preis angegeben',
+    buy_tickets: 'Tickets kaufen',
     we_earn_commission:
       "Wir kriegen eine Provision bei einigen über PartyMap.com gekauften Tickets - das hilft uns, diese Plattform zu betreiben. Kauf' alle Deine Tickets über uns xoxo",
     update_selected_date: 'Ausgewähltes Datum aktualisieren',

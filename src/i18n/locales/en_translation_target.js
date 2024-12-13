@@ -824,8 +824,8 @@ const translation = {
     facebook_page: 'Facebook Page',
     visit_website: 'Visit website',
     get_tickets: 'Get tickets to this event',
-    buy_tickets: 'No price listed',
-    no_price_listed: 'Buy tickets',
+    no_price_listed: 'No price listed',
+    buy_tickets: 'Buy tickets',
     we_earn_commission: `We earn comission on some tickets bought through PartyMap.com - this helps
         keep us running. Buy all your tickets through us xoxo`,
     update_selected_date: 'Update the selected date',

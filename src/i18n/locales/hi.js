@@ -811,8 +811,8 @@ export default {
     facebook_page: 'फेसबुक पेज',
     visit_website: 'वेबसाइट पर जाएं',
     get_tickets: 'इस इवेंट के लिए टिकट प्राप्त करें',
-    buy_tickets: 'कोई मूल्य सूचीबद्ध नहीं',
-    no_price_listed: 'टिकट खरीदें',
+    no_price_listed: 'कोई मूल्य सूचीबद्ध नहीं',
+    buy_tickets: 'टिकट खरीदें',
     we_earn_commission:
       'हम कुछ टिकटों पर कमीशन कमाते हैं जो PartyMap.com के माध्यम से खरीदे जाते हैं - यह हमें चलाने में मदद करता है। हमारे माध्यम से सभी टिकट खरीदें xoxo',
     update_selected_date: 'चयनित तारीख को अपडेट करें',

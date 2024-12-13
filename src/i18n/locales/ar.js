@@ -790,8 +790,8 @@ export default {
     facebook_page: 'صفحة الفيسبوك',
     visit_website: 'زيارة الموقع',
     get_tickets: 'الحصول على تذاكر هذا الحدث',
-    buy_tickets: 'لا يوجد سعر مدرج',
-    no_price_listed: 'شراء التذاكر',
+    no_price_listed: 'لا يوجد سعر مدرج',
+    buy_tickets: 'شراء التذاكر',
     we_earn_commission:
       'نحن نربح عمولة على بعض التذاكر المشتراة عبر PartyMap.com - هذا يساعد\n        في إبقاءنا مستمرين. اشتر جميع تذاكرك من خلالنا xoxo',
     update_selected_date: 'تحديث التاريخ المختار',

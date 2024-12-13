@@ -825,8 +825,8 @@ export default {
     facebook_page: 'Strona na Facebooku',
     visit_website: 'Odwiedź stronę internetową',
     get_tickets: 'Kup bilety na to wydarzenie',
-    buy_tickets: 'Brak podanej ceny',
-    no_price_listed: 'Kup bilety',
+    no_price_listed: 'Brak podanej ceny',
+    buy_tickets: 'Kup bilety',
     we_earn_commission:
       'Zarabiamy prowizję za niektóre bilety kupione przez PartyMap.com - to pomaga nam funkcjonować. Kupuj wszystkie bilety przez nas xoxo',
     update_selected_date: 'Zaktualizuj wybraną datę',

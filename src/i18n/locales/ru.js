@@ -818,8 +818,8 @@ export default {
     facebook_page: 'Страница Facebook',
     visit_website: 'Посетить сайт',
     get_tickets: 'Купить билеты на это событие',
-    buy_tickets: 'Нет указанной цены',
-    no_price_listed: 'Купить билеты',
+    no_price_listed: 'Нет указанной цены',
+    buy_tickets: 'Купить билеты',
     we_earn_commission:
       'Мы зарабатываем комиссию на некоторых билетах, купленных через PartyMap.com - это помогает нам работать. Купите все билеты через нас xoxo',
     update_selected_date: 'Обновить выбранную дату',

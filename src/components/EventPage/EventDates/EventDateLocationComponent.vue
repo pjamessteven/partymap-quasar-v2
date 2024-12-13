@@ -77,13 +77,13 @@
           size="2em"
           class="t3 q-ml-md"
           name="mdi-chevron-down"
-          v-if="expandable && !expanded"
+          v-if="expandable && !expanded && !editing"
         />
         <q-icon
           size="2em"
           class="t3 q-ml-md"
           name="mdi-chevron-up"
-          v-else-if="expandable && expanded"
+          v-else-if="expandable && expanded && !editing"
         />
       </div>
     </div>
@@ -264,7 +264,7 @@ export default {
 }
 
 .ed-location {
-  width: 100%;
+  //width: 100%;
   .square-map {
     width: 100%;
     position: relative;

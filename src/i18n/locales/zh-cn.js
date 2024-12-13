@@ -769,8 +769,8 @@ export default {
     facebook_page: 'Facebook 页面',
     visit_website: '访问网站',
     get_tickets: '购买此活动的票',
-    buy_tickets: '没有列出价格',
-    no_price_listed: '购买票',
+    no_price_listed: '没有列出价格',
+    buy_tickets: '购买票',
     we_earn_commission:
       '我们通过 PartyMap.com 购买的一些票籍收入佣金 - 这有助于我们运营。请通过我们购买所有票籍 xoxo',
     update_selected_date: '更新选定的日期',

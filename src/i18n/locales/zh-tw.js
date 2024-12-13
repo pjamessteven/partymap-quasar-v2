@@ -773,8 +773,8 @@ export default {
     facebook_page: 'Facebook頁面',
     visit_website: '訪問網站',
     get_tickets: '購買此活動的票券',
-    buy_tickets: '購買票券',
-    no_price_listed: '無價格列出',
+    no_price_listed: '購買票券',
+    buy_tickets: '無價格列出',
     we_earn_commission:
       '我們在一些通過PartyMap.com購買的票券上賺取佣金 - 這有助於我們運營。請通過我們購買所有票券 xoxo',
     update_selected_date: '更新選定的日期',

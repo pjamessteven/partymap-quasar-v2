@@ -497,6 +497,7 @@ const mapLoaded = (event) => {
 const debouncedClearMarkersAndLoadPoints = debounce(
   async () => {
     points.value = [];
+    queryStore.loadingPoints = true;
     queryStore.loadPoints();
   },
   300,

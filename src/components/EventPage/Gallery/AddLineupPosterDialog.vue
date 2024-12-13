@@ -1,35 +1,37 @@
 <template>
-  <q-card class="upload-dialog q-pa-md">
-    <div class="flex row wrap items-center no-wrap q-mb-md">
+  <q-card class="dialog-card upload-dialog">
+    <div class="dialog-card-header flex row wrap items-center no-wrap q-mb-md">
       <div class="flex column">
         <div class="text-h6 card-title q-pr-md">
-          {{ $t(event.add_lineup_poster) }}
+          {{ $t('event.add_lineup_poster') }}
         </div>
       </div>
     </div>
-    <q-select
-      option-label="label"
-      style="max-width: 100%"
-      outlined
-      use-input
-      menu-anchor="top left"
-      menu-self="bottom left"
-      v-model="selectedDate"
-      emit-value
-      map-options
-      :options="eventDates"
-      :label="$t(event.event_date)"
-    >
-      <template v-slot:append>
-        <q-icon name="mdi-calendar-outline" class="q-pa-md" />
-      </template>
-    </q-select>
-    <MultipleMediaSelector
-      :showUploadButton="true"
-      @filesSelected="filesToUpload = $event"
-      @upload="uploadMedia"
-      :openDialogOnMount="true"
-    />
+    <div class="dialog-card-content q-pb-md q-px-md">
+      <q-select
+        option-label="label"
+        style="max-width: 100%"
+        outlined
+        use-input
+        menu-anchor="top left"
+        menu-self="bottom left"
+        v-model="selectedDate"
+        emit-value
+        map-options
+        :options="eventDates"
+        :label="$t('event.event_date')"
+      >
+        <template v-slot:append>
+          <q-icon name="mdi-calendar-outline" class="q-pa-md" />
+        </template>
+      </q-select>
+      <MultipleMediaSelector
+        :label="$t('add.select_drop')"
+        :showUploadButton="true"
+        @filesSelected="filesToUpload = $event"
+        @upload="uploadMedia"
+      />
+    </div>
   </q-card>
 </template>
 

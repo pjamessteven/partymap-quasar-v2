@@ -825,8 +825,8 @@ export default {
     facebook_page: 'Pagina Facebook',
     visit_website: 'Visita il sito web',
     get_tickets: 'Acquista biglietti per questo evento',
-    buy_tickets: 'Nessun prezzo indicato',
-    no_price_listed: 'Acquista biglietti',
+    no_price_listed: 'Nessun prezzo indicato',
+    buy_tickets: 'Acquista biglietti',
     we_earn_commission:
       'Guadagniamo una commissione su alcuni biglietti acquistati attraverso il sito - questo aiuta a mantenerci in attività. Acquista tutti i tuoi biglietti attraverso di noi xoxo',
     update_selected_date: 'Aggiorna la data selezionata',

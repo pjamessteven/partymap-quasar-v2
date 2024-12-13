@@ -34,6 +34,12 @@
           <div class="text-h4 metropolis bolder">
             <b>{{ computedName }}</b>
           </div>
+          <div
+            class="o-080 q-mt-xs"
+            v-if="artist && artist.disambiguation?.length > 0"
+          >
+            <i>{{ artist.disambiguation_t || artist.disambiguation }}</i>
+          </div>
         </div>
       </div>
       <div
@@ -55,12 +61,15 @@
           <div
             class="flex row no-wrap grow items-start justify-between q-pa-lg"
           >
-            <div class="flex column">
-              <div
-                class="text-h2 metropolis bolder"
-                style="color: white; z-index: 2"
-              >
+            <div class="flex column" style="color: white; z-index: 2">
+              <div class="text-h2 metropolis bolder">
                 {{ computedName }}
+              </div>
+              <div
+                class="o-080 q-mt-md text-large"
+                v-if="artist && artist.disambiguation?.length > 0"
+              >
+                <i>{{ artist.disambiguation_t || artist.disambiguation }}</i>
               </div>
             </div>
           </div>
@@ -102,10 +111,10 @@
             <div
               class="flex column events"
               v-if="artist && !loading"
-              :class="$q.screen.gt.sm ? ' q-px-lg' : ' q-mt-md q-px-md'"
+              :class="$q.screen.gt.sm ? 'q-mt-sm q-px-lg' : ' q-mt-md q-px-md'"
             >
               <div class="flex column" v-if="artist" style="max-width: 100%">
-                <div class="q-mb-md metropolis bold t2">
+                <div class="q-mb-md metropolis bolder t1 text-h6">
                   {{ $t('artist_page.upcoming_events') }}
                 </div>
                 <div
@@ -153,7 +162,7 @@
                   artist.past_event_dates.length > 0
                 "
               >
-                <div class="q-mt-lg q-mb-md metropolis bold t2">
+                <div class="q-mt-xl q-mb-md metropolis bolder t1 text-h6">
                   {{ $t('artist_page.past_events') }}:
                 </div>
                 <EventDateCard

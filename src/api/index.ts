@@ -11,7 +11,7 @@ import { Lang, Notify } from 'quasar';
 export const DEV_SERVER = process.env.NODE_ENV === 'development';
 
 export const API_URL = DEV_SERVER
-  ? // ? 'http://localhost:5000/api'
+  ? // 'http://localhost:5000/api'
     '/api'
   : 'https://api.partymap.com/api';
 
@@ -124,6 +124,7 @@ export function getFestivalInfo(
       withCredentials: false,
       headers: {
         Authorization: 'Bearer ' + process.env.DIFY_FESTIVAL_INFO_KEY,
+        lang: undefined,
       },
     }
   );
@@ -151,6 +152,7 @@ export function getGptArtists(
       withCredentials: false,
       headers: {
         Authorization: 'Bearer ' + process.env.DIFY_ARTISTS_KEY,
+        lang: undefined,
       },
     }
   );
@@ -177,6 +179,7 @@ export function getFestivalSummaries(
       withCredentials: false,
       headers: {
         Authorization: 'Bearer ' + process.env.DIFY_SUMMARIES_KEY,
+        lang: undefined,
       },
     }
   );
@@ -215,6 +218,9 @@ export function getMusicBrainzArtist(query) {
       query: query,
     },
     withCredentials: false,
+    headers: {
+      lang: undefined,
+    },
   });
 }
 
@@ -222,6 +228,9 @@ export function getMusicBrainzEvents(params) {
   return axios.get(`${MUSICBRAINZ_API_URL}/event/`, {
     params,
     withCredentials: false,
+    headers: {
+      lang: undefined,
+    },
   });
 }
 
@@ -231,6 +240,9 @@ export function getMusicBrainzPlace(query) {
       query,
     },
     withCredentials: false,
+    headers: {
+      lang: undefined,
+    },
   });
 }
 
@@ -247,6 +259,9 @@ export function getGooglePlacesAutocomplete(
       input: query,
       sessiontoken: sessionToken,
       location: location,
+    },
+    headers: {
+      lang: undefined,
     },
   });
 }

@@ -438,7 +438,7 @@
                                 flat
                                 no-caps
                                 icon="mdi-image-plus-outline"
-                                :label="t('event.add_photos')"
+                                :label="t('event.upload_images')"
                               >
                                 <q-menu
                                   transition-show="jump-down"
@@ -996,6 +996,7 @@ const mapStore = useMapStore();
 
 const timeAgo = common.timeAgo;
 const getDomainFromUrl = common.getDomainFromUrl;
+const getTicketRetailerName = common.getTicketRetailerName;
 
 const { currentUser, currentUserIsStaff } = storeToRefs(authStore);
 let {
@@ -1491,7 +1492,7 @@ const computedExternalUrlSubtitle = computed(() => {
 const computedTicketName = computed(() => {
   const ticketUrl = selectedEventDate.value?.tickets?.[0]?.url;
   if (ticketUrl) {
-    return getDomainFromUrl(ticketUrl);
+    return getTicketRetailerName(ticketUrl);
   } else {
     return null;
   }
