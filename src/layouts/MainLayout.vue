@@ -215,7 +215,7 @@ export default {
     const routeLocale = to.params.lang;
 
     let userLangPref;
-    if (process['client']) {
+    if (process.env.CLIENT) {
       userLangPref = localStorage.getItem('languagePref');
     }
 
