@@ -123,7 +123,9 @@
                     !artist.future_event_dates ||
                     (artist?.future_event_dates?.length === 0 && !loading)
                   "
-                ></div>
+                >
+                  {{ $t('artist_page.no_upcoming_events') }}
+                </div>
                 <div v-else></div>
                 <EventDateCard
                   style="max-width: 599px"
@@ -137,13 +139,14 @@
                 <q-btn
                   flat
                   no-caps
-                  class="nav-button soft-button-shadow q-mr-sm q-px-md q-mt-lg q-py-sm"
+                  class="nav-button q-mr-sm q-px-md q-mt-lg q-py-sm"
                   :class="$q.screen.gt.sm ? 'q-mt-lg' : ''"
                   @click="viewOnMap"
                   v-if="artist?.future_event_dates?.length > 0"
                 >
-                  {{ $t('artist_page.view_on_map') }}
-
+                  <div class="text-large metropolis bold">
+                    {{ $t('artist_page.view_on_map') }}
+                  </div>
                   <q-icon
                     name="mdi-chevron-right"
                     size="1rem"
@@ -233,6 +236,7 @@ import { createMetaMixin } from 'quasar';
 
 export default {
   name: 'ArtistPage',
+
   mixins: [
     createMetaMixin(function () {
       // "this" here refers to your component

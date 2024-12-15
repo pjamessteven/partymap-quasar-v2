@@ -51,6 +51,7 @@ interface MainStoreState {
   };
   language: string;
   forceUpdate: number;
+  isInitialLoad: boolean;
 }
 
 export const useMainStore = defineStore('main', {
@@ -91,6 +92,7 @@ export const useMainStore = defineStore('main', {
     },
     languagePref: useLocalStorage('languagePref', null),
     forceUpdate: 0,
+    isInitialLoad: true,
   }),
   getters: {
     desktopSidebarShowing: (state): boolean => {

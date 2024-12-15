@@ -1020,9 +1020,11 @@ const motionProperties = ref();
 const motionControls = ref();
 const motionTransitions = ref();
 
-const hiddenYPosition = window
-  ? window.innerHeight - window.innerHeight * 0.2
-  : 0;
+const hiddenYPosition = computed(() => {
+  return typeof window !== 'undefined'
+    ? window.innerHeight - window.innerHeight * 0.2
+    : 0;
+});
 
 const previousRouteIsExplore = computed(
   () =>
@@ -1227,7 +1229,7 @@ const getIcalFile = () => {
 const copyUrlInput = ref(null);
 
 const share = () => {
-  if (navigator.share) {
+  if (typeof navigator !== 'undefined' && navigator.share) {
     navigator.share({
       title: event.value?.name,
       text: t('event.check_out') + event.value?.name + t('event.on_partymap'),
@@ -1261,6 +1263,17 @@ const share = () => {
     }
   }
 };
+
+defineOptions({
+  async preFetch({ store, currentRoute }) {
+    const mainStore = useMainStore(store);
+    if (mainStore.isInitialLoad) {
+      const eventStore = useEventStore(store);
+      mainStore.isInitialLoad = false;
+      return eventStore.loadEvent(Number(currentRoute.params.id));
+    }
+  },
+});
 
 const load = async () => {
   loading.value = true;
@@ -1365,7 +1378,8 @@ onMounted(() => {
   // and every time it is re-inserted from the cache
   mainStore.sidebarOpacity = 0;
 
-  setupSpring();
+  //  setupSpring();
+  console.log('EVENT', event.value);
   if (scrollArea.value) {
     (scrollArea.value as any).setScrollPercentage('vertical', 0);
   }
@@ -1378,8 +1392,8 @@ onMounted(() => {
     setTimeout(() => {
       load();
     }, 300);
-  } else if (!eventAlreadyLoaded || true) {
-    event.value = null;
+  } else if (!eventAlreadyLoaded && !mainStore.isInitialLoad) {
+    // event.value = null;
     load();
   } else {
     mainStore.menubarOpacity = previousMenubarOpacity.value;

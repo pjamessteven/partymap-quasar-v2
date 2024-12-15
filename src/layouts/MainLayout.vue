@@ -115,8 +115,8 @@
         </Transition>
       </router-view>
       <NavigationBar
-        class="nav-bar"
-        v-if="$q.screen.lt.sm"
+        class="nav-bar mobile"
+        v-if="$q.screen.lt.sm && false"
         :style="
           (sidebarOpacity && $route.name === 'EventPage') ||
           $route.name === 'Explore' ||
@@ -153,7 +153,7 @@ export default {
     NavigationBar,
     ControlsComponent,
     MainMap: defineAsyncComponent(
-      () => import('/src/components/MainMap/MainMap.vue')
+      () => import('/src/components/MainMap/MainMap.vue'),
     ),
   },
   data() {
@@ -420,6 +420,11 @@ export default {
       top: 64px;
       width: 100%;
     }
+    .nav-bar {
+      &.mobile {
+        display: none;
+      }
+    }
     .sidebar-component-wrapper {
       position: relative;
       height: 100%;
@@ -524,6 +529,11 @@ export default {
     }
 
     .main-inner-layout {
+      .nav-bar {
+        &.mobile {
+          display: unset;
+        }
+      }
       .controls-component {
         position: absolute;
         z-index: 105;

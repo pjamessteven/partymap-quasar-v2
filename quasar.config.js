@@ -13,7 +13,7 @@ export default defineConfig(function (/* ctx */) {
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
-    // preFetch: true,
+    preFetch: true,
 
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
@@ -21,8 +21,8 @@ export default defineConfig(function (/* ctx */) {
     boot: [
       'i18n',
       'axios',
-      'addressbar-color',
       'dayjs',
+      { path: 'addressbar-color', server: false },
       { path: 'appleLoginDesktop', server: false },
       { path: 'safeAreaAndroid', server: false },
       { path: 'youtube', server: false },
@@ -179,6 +179,7 @@ export default defineConfig(function (/* ctx */) {
       // (gets superseded if process.env.PORT is specified at runtime)
 
       middlewares: [
+        'proxy',
         'render', // keep this as last one
       ],
     },
@@ -240,3 +241,47 @@ export default defineConfig(function (/* ctx */) {
     },
   };
 });
+
+/*
+async function generateCriticalCSS(ctx) {
+  const baseUrl = ctx.dev ? 'http://localhost:9100' : 'https://partymap.com';
+  const routes = ['/', '/artist', '/event']; // Add all your important routes
+
+  const viewports = [
+    { name: 'mobile', width: 375, height: 667 },
+    { name: 'desktop', width: 1920, height: 1080 },
+  ];
+
+  for (const route of routes) {
+    for (const viewport of viewports) {
+      await critical.generate({
+        base: 'dist/ssr/',
+        src: `${baseUrl}${route}`,
+        target: `dist/ssr/critical-${route.replace('/', '')}-${
+          viewport.name
+        }.css`,
+        width: viewport.width,
+        height: viewport.height,
+        inline: false,
+        ignore: {
+          atrule: ['@font-face'], // Ignore font-face rules to reduce CSS size
+        },
+        penthouse: {
+          timeout: 120000, // Increase timeout for larger pages
+        },
+      });
+
+      // Minify the generated CSS
+      const css = await fs.readFile(
+        `dist/ssr/critical-${route.replace('/', '')}-${viewport.name}.css`,
+        'utf8'
+      );
+      const minifiedCss = css.replace(/\s+/g, ' ').trim();
+      await fs.writeFile(
+        `dist/ssr/critical-${route.replace('/', '')}-${viewport.name}.css`,
+        minifiedCss
+      );
+    }
+  }
+}
+*/

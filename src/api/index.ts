@@ -1,19 +1,20 @@
 import { defaults } from 'autoprefixer';
-import axios from 'axios';
+import { api } from 'src/boot/axios.ts';
 import { config } from 'process';
 //var qs = require('qs')
 import 'qs';
 import qs from 'qs';
 import { Lang, Notify } from 'quasar';
 
-// axios.defaults.headers.common['Lang-Presf'] = 'cn';
+// api.defaults.headers.common['Lang-Presf'] = 'cn';
 
 export const DEV_SERVER = process.env.NODE_ENV === 'development';
 
-export const API_URL = DEV_SERVER
-  ? // 'http://localhost:5000/api'
-    '/api'
-  : 'https://api.partymap.com/api';
+export const API_URL =
+  DEV_SERVER && process.env.CLIENT
+    ? // 'http://localhost:5000/api'
+      '/api'
+    : 'https://api.partymap.com/api';
 
 export const PLACE_AUTOCOMPLETE_API_URL =
   'https://maps.googleapis.com/maps/api/place/autocomplete/json';
@@ -32,11 +33,11 @@ const DIFY_USER =
     ? 'pjamessteven'
     : 'partymap';
 
-axios.defaults.headers.common['Content-Type'] = 'application/json';
-axios.defaults.headers.common['Accept'] = 'application/json';
+api.defaults.headers.common['Content-Type'] = 'application/json';
+api.defaults.headers.common['Accept'] = 'application/json';
 
-axios.defaults.withCredentials = true;
-axios.interceptors.request.use((request) => {
+api.defaults.withCredentials = true;
+api.interceptors.request.use((request) => {
   if (process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line
     // console.log('Starting Request', request);
@@ -45,7 +46,7 @@ axios.interceptors.request.use((request) => {
   return request;
 });
 
-axios.interceptors.response.use(
+api.interceptors.response.use(
   (response) => {
     if (process.env.NODE_ENV === 'development') {
       // eslint-disable-next-line
@@ -110,7 +111,7 @@ export function getFestivalInfo(
   },
   abortSignal: AbortSignal
 ) {
-  return axios.post(
+  return api.post(
     `${DIFY_URL}/workflows/run`,
     {
       inputs: {
@@ -138,7 +139,7 @@ export function getGptArtists(
   },
   abortSignal: AbortSignal
 ) {
-  return axios.post(
+  return api.post(
     `${DIFY_URL}/workflows/run`,
     {
       inputs: {
@@ -165,7 +166,7 @@ export function getFestivalSummaries(
   },
   abortSignal: AbortSignal
 ) {
-  return axios.post(
+  return api.post(
     `${DIFY_URL}/workflows/run`,
     {
       inputs: {
@@ -188,7 +189,7 @@ export function getFestivalSummaries(
 // serpapi
 
 export function searchTicketmaster(params: any) {
-  return axios.get('https://app.ticketmaster.com/discovery/v2/events.json', {
+  return api.get('https://app.ticketmaster.com/discovery/v2/events.json', {
     params: {
       ...params,
       apikey: process.env.TICKET_MASTER_KEY,
@@ -198,7 +199,7 @@ export function searchTicketmaster(params: any) {
 }
 
 export function searchGoogleImages(query: string) {
-  return axios.get('https://serpapi.com/search.json', {
+  return api.get('https://serpapi.com/search.json', {
     params: {
       engine: 'google_images',
       hl: 'en',
@@ -213,7 +214,7 @@ export function searchGoogleImages(query: string) {
 // musicbrainz
 
 export function getMusicBrainzArtist(query) {
-  return axios.get(`${MUSICBRAINZ_API_URL}/artist`, {
+  return api.get(`${MUSICBRAINZ_API_URL}/artist`, {
     params: {
       query: query,
     },
@@ -225,7 +226,7 @@ export function getMusicBrainzArtist(query) {
 }
 
 export function getMusicBrainzEvents(params) {
-  return axios.get(`${MUSICBRAINZ_API_URL}/event/`, {
+  return api.get(`${MUSICBRAINZ_API_URL}/event/`, {
     params,
     withCredentials: false,
     headers: {
@@ -235,7 +236,7 @@ export function getMusicBrainzEvents(params) {
 }
 
 export function getMusicBrainzPlace(query) {
-  return axios.get(`${MUSICBRAINZ_API_URL}/place/`, {
+  return api.get(`${MUSICBRAINZ_API_URL}/place/`, {
     params: {
       query,
     },
@@ -253,7 +254,7 @@ export function getGooglePlacesAutocomplete(
   sessionToken = null,
   location = null
 ) {
-  return axios.get(`${PLACE_AUTOCOMPLETE_API_URL}`, {
+  return api.get(`${PLACE_AUTOCOMPLETE_API_URL}`, {
     params: {
       key: process.env.GMAPS_API_KEY,
       input: query,
@@ -279,7 +280,7 @@ export function getPointsRequest(
   dateUnconfirmed?: boolean,
   emptyLineup?: boolean
 ) {
-  return axios.get(`${API_URL}/location/points/`, {
+  return api.get(`${API_URL}/location/points/`, {
     params: {
       query: query,
       tags: tags,
@@ -308,7 +309,7 @@ export function getClustersRequest(
   min = null,
   max = null
 ) {
-  return axios.get(`${API_URL}/event/location/zoom_level/${zoomLevel}`, {
+  return api.get(`${API_URL}/event/location/zoom_level/${zoomLevel}`, {
     params: {
       tags: tags,
       min: min,
@@ -319,7 +320,7 @@ export function getClustersRequest(
 }
 
 export function getEventDatesRequest(params) {
-  return axios.get(`${API_URL}/date/`, {
+  return api.get(`${API_URL}/date/`, {
     params: params,
     paramsSerializer: (params) =>
       qs.stringify(params, {
@@ -330,23 +331,24 @@ export function getEventDatesRequest(params) {
 }
 
 export function getEventDateRequest(id) {
-  return axios.get(`${API_URL}/date/${id}`);
+  return api.get(`${API_URL}/date/${id}`);
 }
 
 // get single event
 
 export function getEventRequest(id) {
-  return axios.get(`${API_URL}/event/${id}`);
+  console.log('GET EVENT');
+  return api.get(`${API_URL}/event/${id}`);
 }
 
 export function getEventVersionsRequest(id, params) {
-  return axios.get(`${API_URL}/event/${id}/versions`, {
+  return api.get(`${API_URL}/event/${id}/versions`, {
     params: params,
   });
 }
 
 export function getEventRevisionsRequest(id, params) {
-  return axios.get(`${API_URL}/event/${id}/revisions/`, {
+  return api.get(`${API_URL}/event/${id}/revisions/`, {
     params: params,
   });
 }
@@ -354,15 +356,15 @@ export function getEventRevisionsRequest(id, params) {
 // get artist
 
 export function refreshArtistRequest(id) {
-  return axios.get(`${API_URL}/artist/${id}/refresh`);
+  return api.get(`${API_URL}/artist/${id}/refresh`);
 }
 
 export function getArtistRequest(id) {
-  return axios.get(`${API_URL}/artist/${id}`);
+  return api.get(`${API_URL}/artist/${id}`);
 }
 
 export function getArtistsRequest(params) {
-  return axios.get(`${API_URL}/artist/`, {
+  return api.get(`${API_URL}/artist/`, {
     params: params,
   });
 }
@@ -370,109 +372,109 @@ export function getArtistsRequest(params) {
 // activities
 
 export function getEventContributorsRequest(id, params) {
-  return axios.get(`${API_URL}/event/${id}/contributors`, {
+  return api.get(`${API_URL}/event/${id}/contributors`, {
     params: params,
   });
 }
 export function getEventActivityRequest(id, params) {
-  return axios.get(`${API_URL}/event/${id}/activity`, {
+  return api.get(`${API_URL}/event/${id}/activity`, {
     params: params,
   });
 }
 
 export function getActivitiesOfTransaction(id, params) {
-  return axios.get(`${API_URL}/activity/transaction/${id}/`, {
+  return api.get(`${API_URL}/activity/transaction/${id}/`, {
     params: params,
   });
 }
 
 export function revertEventActivityRequest(id) {
-  return axios.get(`${API_URL}/activity/${id}/revert/`);
+  return api.get(`${API_URL}/activity/${id}/revert/`);
 }
 
 // edit event
 
 export function editEventRequest(id, payload) {
-  return axios.put(`${API_URL}/event/${id}`, payload);
+  return api.put(`${API_URL}/event/${id}`, payload);
 }
 
 export function deleteEventRequest(id) {
-  return axios.delete(`${API_URL}/event/${id}`);
+  return api.delete(`${API_URL}/event/${id}`);
 }
 
 // event suggestions
 export function suggestEventEditRequest(id, payload) {
-  return axios.put(`${API_URL}/event/${id}/suggest`, payload);
+  return api.put(`${API_URL}/event/${id}/suggest`, payload);
 }
 
 export function suggestDeleteEventRequest(id) {
-  return axios.delete(`${API_URL}/event/${id}/suggest`);
+  return api.delete(`${API_URL}/event/${id}/suggest`);
 }
 
 // get single event date
 
 export function getEventDateRevisionsRequest(id) {
-  return axios.get(`${API_URL}/date/${id}/revisions/`);
+  return api.get(`${API_URL}/date/${id}/revisions/`);
 }
 
 export function editEventDateRequest(id, payload) {
-  return axios.put(`${API_URL}/date/${id}`, payload);
+  return api.put(`${API_URL}/date/${id}`, payload);
 }
 
 export function deleteEventDateRequest(id) {
-  return axios.delete(`${API_URL}/date/${id}`);
+  return api.delete(`${API_URL}/date/${id}`);
 }
 
 export function addEventDateRequest(eventId, payload) {
-  return axios.post(`${API_URL}/date/event/${eventId}`, payload);
+  return api.post(`${API_URL}/date/event/${eventId}`, payload);
 }
 
 // event date suggestions
 
 export function suggestSelectedEventDateEditRequest(id, payload) {
-  return axios.put(`${API_URL}/date/${id}/suggest`, payload);
+  return api.put(`${API_URL}/date/${id}/suggest`, payload);
 }
 
 export function suggestDeleteEventDateRequest(id, payload) {
-  return axios.delete(`${API_URL}/date/${id}/suggest`, { data: payload });
+  return api.delete(`${API_URL}/date/${id}/suggest`, { data: payload });
 }
 
 export function suggestAddEventDateRequest(eventId, payload) {
-  return axios.post(`${API_URL}/date/event/${eventId}/suggest`, payload);
+  return api.post(`${API_URL}/date/event/${eventId}/suggest`, payload);
 }
 
 export function getSuggestionsRequest(params) {
-  return axios.get(`${API_URL}/suggestions/`, { params: params });
+  return api.get(`${API_URL}/suggestions/`, { params: params });
 }
 
 export function updateSuggestionRequest(id, payload) {
-  return axios.put(`${API_URL}/suggestions/${id}/`, payload);
+  return api.put(`${API_URL}/suggestions/${id}/`, payload);
 }
 
 export function deleteSuggestionRequest(id) {
-  return axios.delete(`${API_URL}/suggestions/${id}/`);
+  return api.delete(`${API_URL}/suggestions/${id}/`);
 }
 
 // media items
 
 export function updateMediaItemRequest(id, payload) {
-  return axios.put(`${API_URL}/media/${id}`, payload);
+  return api.put(`${API_URL}/media/${id}`, payload);
 }
 
 export function deleteMediaItemRequest(id) {
-  return axios.delete(`${API_URL}/media/${id}`);
+  return api.delete(`${API_URL}/media/${id}`);
 }
 
 // query things
 
 export function getEventsRequest(params) {
-  return axios.get(`${API_URL}/event/`, {
+  return api.get(`${API_URL}/event/`, {
     params: params,
   });
 }
 
 export function getTagRequest(params) {
-  return axios.get(`${API_URL}/tag/`, {
+  return api.get(`${API_URL}/tag/`, {
     params: params,
   });
 }
@@ -480,156 +482,156 @@ export function getTagRequest(params) {
 // users
 
 export function confirmEmailRequest(token) {
-  return axios.post(`${API_URL}/user/confirm_email/${token}`);
+  return api.post(`${API_URL}/user/confirm_email/${token}`);
 }
 
 export function activateUserRequest(token) {
-  return axios.post(`${API_URL}/user/activate/${token}`);
+  return api.post(`${API_URL}/user/activate/${token}`);
 }
 
 export function registerRequest(userData) {
-  return axios.post(`${API_URL}/user/`, userData);
+  return api.post(`${API_URL}/user/`, userData);
 }
 
 export function editUserRequest(username, userData) {
-  return axios.put(`${API_URL}/user/${username}`, userData);
+  return api.put(`${API_URL}/user/${username}`, userData);
 }
 
 export function deleteUserRequest(username) {
-  return axios.delete(`${API_URL}/user/${username}`);
+  return api.delete(`${API_URL}/user/${username}`);
 }
 
 export function getUserRequest(username) {
-  return axios.get(`${API_URL}/user/${username}`);
+  return api.get(`${API_URL}/user/${username}`);
 }
 
 export function getUserFullProfileRequest(username) {
-  return axios.get(`${API_URL}/user/${username}/profile`);
+  return api.get(`${API_URL}/user/${username}/profile`);
 }
 
 export function getActivitiesRequest(params) {
-  return axios.get(`${API_URL}/activity`, {
+  return api.get(`${API_URL}/activity`, {
     params: params,
   });
 }
 // authentication
 
 export function logoutRequest() {
-  return axios.get(`${API_URL}/auth/logout/`);
+  return api.get(`${API_URL}/auth/logout/`);
 }
 
 export function loginRequest(payload) {
-  return axios.post(`${API_URL}/auth/login/`, payload);
+  return api.post(`${API_URL}/auth/login/`, payload);
 }
 
 export function appleLoginRequest(payload) {
-  return axios.post(`${API_URL}/auth/login/apple/`, payload);
+  return api.post(`${API_URL}/auth/login/apple/`, payload);
 }
 
 export function checkAuthenticatedRequest() {
-  return axios.get(`${API_URL}/auth/login/`);
+  return api.get(`${API_URL}/auth/login/`);
 }
 
 export function fetchEventDateRequest(eventId) {
-  return axios.get(`${API_URL}/date/${eventId}`);
+  return api.get(`${API_URL}/date/${eventId}`);
 }
 
 export function fetchEventDateIcsRequest(eventId) {
-  return axios.get(`${API_URL}/date/${eventId}/ics`);
+  return api.get(`${API_URL}/date/${eventId}/ics`);
 }
 
 export function requestPasswordResetRequest(identifier) {
-  return axios.get(`${API_URL}/user/${identifier}/request_pw_reset`);
+  return api.get(`${API_URL}/user/${identifier}/request_pw_reset`);
 }
 
 export function passwordResetRequest(token, body) {
-  return axios.post(`${API_URL}/user/reset_pw/${token}`, body);
+  return api.post(`${API_URL}/user/reset_pw/${token}`, body);
 }
 // authentication required
 
 export function toggleEventDateInterestedRequest(eventId) {
-  return axios.post(`${API_URL}/date/${eventId}/interested`);
+  return api.post(`${API_URL}/date/${eventId}/interested`);
 }
 
 export function toggleEventDateGoingRequest(eventId) {
-  return axios.post(`${API_URL}/date/${eventId}/going`);
+  return api.post(`${API_URL}/date/${eventId}/going`);
 }
 
 export function updateEventRequest(eventId, payload) {
-  return axios.put(`${API_URL}/event/${eventId}`, payload);
+  return api.put(`${API_URL}/event/${eventId}`, payload);
 }
 
 export function suggestUpdateEventRequest(eventId, payload) {
-  return axios.put(`${API_URL}/event/${eventId}/suggest`, payload);
+  return api.put(`${API_URL}/event/${eventId}/suggest`, payload);
 }
 
 export function voteEventImageRequest(id, vote) {
-  return axios.put(`${API_URL}/contribution/image/${id}`, {
+  return api.put(`${API_URL}/contribution/image/${id}`, {
     vote: vote,
   });
 }
 
 export function voteEventTagRequest(eventId, tagId, vote) {
-  return axios.put(`${API_URL}/event/${eventId}/tag/${tagId}/`, {
+  return api.put(`${API_URL}/event/${eventId}/tag/${tagId}/`, {
     vote: vote,
   });
 }
 
 export function submitReviewRequest(eventId, payload) {
-  return axios.post(`${API_URL}/contribution/event/${eventId}/`, payload);
+  return api.post(`${API_URL}/contribution/event/${eventId}/`, payload);
 }
 
 export function deleteReviewRequest(reviewId) {
-  return axios.delete(`${API_URL}/contribution/${reviewId}`);
+  return api.delete(`${API_URL}/contribution/${reviewId}`);
 }
 
 export function voteReviewRequest(reviewId, vote) {
-  return axios.put(`${API_URL}/contribution/${reviewId}`, {
+  return api.put(`${API_URL}/contribution/${reviewId}`, {
     vote: vote,
   });
 }
 
 export function addEventImageRequest(event, formData) {
-  return axios.put(`${API_URL}/event/${event.id}`, formData);
+  return api.put(`${API_URL}/event/${event.id}`, formData);
 }
 
 export function addEventRequest(event) {
-  return axios.post(`${API_URL}/event/`, event);
+  return api.post(`${API_URL}/event/`, event);
 }
 
 export function postFeedbackRequest(payload) {
-  return axios.post(`${API_URL}/feedback/`, payload);
+  return api.post(`${API_URL}/feedback/`, payload);
 }
 
 // reports
 
 export function postReportRequest(payload) {
-  return axios.post(`${API_URL}/report/`, payload);
+  return api.post(`${API_URL}/report/`, payload);
 }
 
 export function getReportsRequest(params) {
-  return axios.get(`${API_URL}/report/`, {
+  return api.get(`${API_URL}/report/`, {
     params: params,
   });
 }
 
 export function updateReportRequest(reportId, payload) {
-  return axios.put(`${API_URL}/report/${reportId}`, payload);
+  return api.put(`${API_URL}/report/${reportId}`, payload);
 }
 
 // localities
 
 export function getLocalitiesRequest() {
-  return axios.get(`${API_URL}/location/localities`);
+  return api.get(`${API_URL}/location/localities`);
 }
 
 export function getSearchSuggestionsRequest(params) {
-  return axios.get(`${API_URL}/search/`, {
+  return api.get(`${API_URL}/search/`, {
     params: params,
   });
 }
 // ip lookup
 
 export function getIpInfoRequest() {
-  return axios.get(`${API_URL}/services/ip_lookup`);
+  return api.get(`${API_URL}/services/ip_lookup`);
 }
