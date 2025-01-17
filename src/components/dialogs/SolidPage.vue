@@ -28,14 +28,14 @@
           >
             <div
               class="solid-page-content-width"
-              :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'"
+              :class="$q.screen.gt.xs ? 'q-px-lg' : ''"
             >
               <slot name="title" class=""></slot>
             </div>
           </div>
           <div
             class="q-pb-xl solid-page-content solid-page-content-width"
-            :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'"
+            :class="$q.screen.gt.xs ? 'q-px-lg' : ''"
           >
             <transition
               appear
@@ -49,7 +49,7 @@
         <div v-if="hasFooter" class="flex justify-center solid-page-footer">
           <div
             class="solid-page-content-width"
-            :class="$q.screen.gt.xs ? 'q-px-lg' : 'q-px-md'"
+            :class="$q.screen.gt.xs ? 'q-px-lg' : ''"
           >
             <slot name="footer"></slot>
           </div>

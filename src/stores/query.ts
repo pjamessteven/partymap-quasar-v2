@@ -240,7 +240,7 @@ export const useQueryStore = defineStore('query', {
 
           this.controlFavorites ? true : undefined,
           this.controlDateUnconfirmed,
-          this.controlEmptyLineup
+          this.controlEmptyLineup,
         );
         this.points = pointsResponse.data;
         this.loadingPoints = false;
@@ -253,7 +253,7 @@ export const useQueryStore = defineStore('query', {
     async loadUserEventDates(
       mode: string,
       tense: string,
-      username?: string | undefined
+      username?: string | undefined,
     ) {
       let _username = username;
       if (!username) {
@@ -297,14 +297,14 @@ export const useQueryStore = defineStore('query', {
 
           this.userEventDatesGroupedByMonth = groupEventDatesByMonth(
             {},
-            response.data.items
+            response.data.items,
           );
         } else {
           this.userEventDates = this.userEventDates.concat(response.data.items);
 
           this.userEventDatesGroupedByMonth = groupEventDatesByMonth(
             this.userEventDatesGroupedByMonth,
-            response.data.items
+            response.data.items,
           );
         }
         this.userEventDatesLoading = false;
@@ -316,7 +316,7 @@ export const useQueryStore = defineStore('query', {
         throw error;
       }
     },
-    async loadEventDates() {
+    async loadEventDates(useBounds, country, region) {
       try {
         const map = useMapStore();
         const main = useMainStore();
@@ -326,10 +326,11 @@ export const useQueryStore = defineStore('query', {
         const requestId = Math.random();
 
         this.eventDatesRequestId = requestId;
+        console.log('country', country, region);
         const response = await getEventDatesRequest({
           radius: undefined,
           bounds:
-            map.mapBounds && !this.controlFavorites
+            map.mapBounds && useBounds
               ? JSON.stringify({
                   _northEast: map.mapBounds._ne,
                   _southWest: map.mapBounds._sw,
@@ -351,8 +352,8 @@ export const useQueryStore = defineStore('query', {
           size_options: this.controlSize.length > 0 ? this.controlSize : null,
           date_min: this.controlDateRange.start,
           date_max: this.controlDateRange.end,
-          country_id: this.controlCountry?.short_name,
-          region_id: this.controlRegion?.id,
+          country_id: country,
+          region_name: region,
           locality_id: this.controlLocality?.id,
           query: undefined,
           favorites: main.sidebarPanel === 'favorites' ? true : undefined,
@@ -373,7 +374,7 @@ export const useQueryStore = defineStore('query', {
             this.eventDates = response.data.items;
             this.eventDatesGroupedByMonth = groupEventDatesByMonth(
               {},
-              response.data.items
+              response.data.items,
             );
             // these things are only returned on first page
             this.topTagsInArea = response.data.top_tags;
@@ -383,7 +384,7 @@ export const useQueryStore = defineStore('query', {
             this.eventDates = this.eventDates?.concat(response.data.items);
             groupEventDatesByMonth(
               this.eventDatesGroupedByMonth,
-              response.data.items
+              response.data.items,
             );
           }
           this.eventDatesLoading = false;
@@ -494,7 +495,7 @@ export const useQueryStore = defineStore('query', {
 
 export const groupEventDatesByMonth = (
   existingDates: { [key: number]: EventDate[] } = {},
-  eventDates: EventDate[]
+  eventDates: EventDate[],
 ) => {
   for (const ed of eventDates) {
     // assumes eventDates are sorted by time

@@ -3,7 +3,7 @@
     <div class="flex column browse-">
       <div
         class="text-h5 metropolis bolder"
-        :class="$q.screen.gt.xs ? 'q-px-lg q-mt-xl' : 'q-px-md q-mt-lg'"
+        :class="$q.screen.gt.xs ? 'q-px-lg ' : 'q-px-md '"
       >
         {{ title }}
       </div>
@@ -13,7 +13,7 @@
       >
         {{ tagline }}
       </div>
-      <div :class="$q.screen.gt.xs ? 'q-mt-lg' : 'q-mt-md'">
+      <div :class="$q.screen.gt.xs ? 'q-mt-lg q-mb-xl' : 'q-mt-md q-mb-lg'">
         <CustomQScroll
           horizontal
           class="user-event-scroll-area"

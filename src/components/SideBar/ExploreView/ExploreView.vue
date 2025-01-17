@@ -639,7 +639,7 @@ export default {
         !this.blockUpdates
       ) {
         try {
-          await this.loadEventDates();
+          await this.loadEventDates(true);
           //  await this.loadArtists();
         } catch (error) {}
       }
@@ -878,43 +878,6 @@ export default {
     },
     route() {
       return this.$route;
-    },
-    getTitleOpactity() {
-      let opacity = 1 - this.mainContentScrollPosition / 0;
-      let op1;
-      if (opacity < 0) {
-        op1 = 0;
-      } else {
-        op1 = opacity;
-      }
-      return `opacity: ${op1}`;
-    },
-    getBottomDivider() {
-      var opacity = 0 + this.mainContentScrollPosition / 150;
-      var op1, op2;
-      if (opacity > 0.09) {
-        op1 = 0.09;
-      } else {
-        op1 = opacity;
-      }
-      if (opacity > 0.065) {
-        op2 = 0.065;
-      } else {
-        op2 = opacity;
-      }
-      return `
-      box-shadow: 0 3px 6px 0 rgba(40, 40, 90, ${op1}), 0 1px 1px 0 rgba(0, 0, 0, ${op2});`;
-    },
-    getBottomDividerDark() {
-      var opacity = 0 + this.mainContentScrollPosition / 150;
-      var op;
-      if (opacity > 0.09) {
-        op = 0.09;
-      } else {
-        op = opacity;
-      }
-      return `
-      border-bottom: 1px solid rgba(255,255,255,${op});`;
     },
   },
   created() {

@@ -34,7 +34,7 @@
       </q-item-section>
       <q-item-section>
         <q-item-label class="inter bold text-large">
-          {{ $t('browse_page.all_countries') }}
+          {{ $t('browse_page.all_events') }}
         </q-item-label>
 
         <q-item-label caption
@@ -73,13 +73,13 @@
         </q-item-section>
         <q-item-section>
           <q-item-label
-            class="inter bold text-large"
+            class="inter bold"
             v-if="country.short_name !== 'ALL_COUNTRIES'"
             >{{
               countryCodes.find((x) => x.code == country.short_name)?.name
             }}</q-item-label
           >
-          <q-item-label v-else class="inter bold text-large">
+          <q-item-label v-else class="inter bold">
             {{ $t('browse_page.all_countries') }}
           </q-item-label>
 
@@ -103,7 +103,7 @@
           active-class="item-active"
         >
           <q-item-section>
-            <q-item-label class="inter bold text-large">
+            <q-item-label class="inter bold">
               {{ $t('browse_page.all_regions') }}
             </q-item-label>
 
@@ -129,7 +129,7 @@
           active-class="item-active"
         >
           <q-item-section>
-            <q-item-label class="inter bold text-large">{{
+            <q-item-label class="inter bold">{{
               region.long_name
             }}</q-item-label>
 
@@ -167,7 +167,7 @@ export default {
     if (countryCode) {
       await this.loadCountryRegions(countryCode);
       this.$nextTick(() => {
-        let element = this.$refs[`country-${countryCode}`][0];
+        let element = this.$refs[`country-${countryCode}`]?.[0];
         element?.$el.scrollIntoView({
           behavior: 'smooth',
           block: 'start', // 'start', 'center', 'end', or 'nearest'

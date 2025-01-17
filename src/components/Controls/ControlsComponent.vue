@@ -270,8 +270,8 @@ export default {
     ...mapActions(useMainStore, ['loadIpInfo', 'getFineLocation']),
     ...mapActions(useQueryStore, ['clearDateFilter']),
     goToExplore() {
-      this.sidebarPanel = 'explore';
-      if (this.$route.name !== 'Explore') {
+      // this.sidebarPanel = 'explore';
+      if (this.$route.name !== 'Explore' && this.$route.name !== 'BrowsePage') {
         this.$router.push({ name: 'Explore', query: { view: 'explore' } });
       }
     },
