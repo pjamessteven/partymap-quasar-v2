@@ -97,8 +97,8 @@ export default {
       this.darkModePref === 'true'
         ? true
         : this.darkModePref === 'false'
-        ? false
-        : this.darkModePref
+          ? false
+          : this.darkModePref,
     );
 
     // performance is like molassys on old versions of webview
@@ -121,7 +121,7 @@ export default {
             window
               .open(
                 'https://play.google.com/store/apps/details?id=com.google.android.webview',
-                '_blank'
+                '_blank',
               )
               .focus();
           });
@@ -201,9 +201,21 @@ body {
   height: 100%;
   max-height: 100%;
   overflow: hidden;
-  font-family: Inter, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto,
-    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Helvetica,
-    Arial, sans-serif !important;
+  font-family:
+    Inter,
+    BlinkMacSystemFont,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    Fira Sans,
+    Droid Sans,
+    Helvetica Neue,
+    Helvetica,
+    Arial,
+    sans-serif !important;
   //letter-spacing: unset !important;
   touch-action: none;
   overscroll-behavior-x: none;
@@ -332,8 +344,8 @@ body {
   }
 
   .vc-container {
-    border-color: rgba(0, 0, 0, 0.1);
-    background: #fafafa;
+    //border-color: rgba(0, 0, 0, 0.1);
+    //background: #fafafa;
   }
 
   .q-card__actions {
@@ -356,10 +368,6 @@ body {
 
   .solid-card {
     background: $b-2 !important;
-  }
-
-  .header {
-    background: white;
   }
 
   .auth-card {
@@ -415,7 +423,9 @@ body {
 
   .q-date {
     background: rgba(0, 0, 0, 0.05);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 1px rgba(0, 0, 0, 0.14),
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.2),
+      0 1px 1px rgba(0, 0, 0, 0.14),
       0 2px 1px -1px rgba(0, 0, 0, 0.12) !important;
   }
 
@@ -560,10 +570,6 @@ body {
     background-color: $bi-4;
   }
 
-  .header {
-    background: black;
-  }
-
   .q-list--bordered {
     border: 1px solid rgba(255, 255, 255, 0.05);
   }
@@ -573,8 +579,8 @@ body {
   }
 
   .vc-container {
-    border-color: rgb(26, 26, 26) !important;
-    background: $bi-3 !important;
+    border-color: rgb(50, 50, 50) !important;
+    background: transparent !important;
     :deep(.vc-day-content.is-disabled) {
       color: rgba(255, 255, 255, 0.2) !important;
     }
@@ -671,7 +677,8 @@ body {
     border-radius: 5px;
     // background-color: rgba(255, 255, 255, 0.07);
     min-height: 40px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.14),
+    box-shadow:
+      0 1px 1px rgba(0, 0, 0, 0.14),
       0 2px 1px -1px rgba(0, 0, 0, 0.12);
     color: rgba(255, 255, 255, 0.7);
   }
@@ -724,8 +731,8 @@ body {
   }
 
   .vc-container {
-    background-color: $bi-3;
-    border-color: rgb(26, 26, 26);
+    //background-color: $bi-3;
+    //border-color: rgb(26, 26, 26);
   }
   .q-field--dark .q-field__control::before {
     border-color: rgb(64, 64, 64);
@@ -799,7 +806,8 @@ body {
 
 .soft-button-shadow {
   &::before {
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 3px 0px,
+    box-shadow:
+      rgba(0, 0, 0, 0.15) 0px 1px 3px 0px,
       rgba(0, 0, 0, 0.1) 0px 1px 2px 0px !important;
   }
   .q-btn__wrapper::before {
@@ -808,7 +816,8 @@ body {
   }
 }
 .soft-shadow {
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 3px 0px,
+  box-shadow:
+    rgba(0, 0, 0, 0.15) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
 }
 
@@ -914,7 +923,7 @@ body {
 
 .q-notifications__list--top {
   @supports ((top: var(--safe-area-inset-top))) {
-    top: calc(var(--safe-area-inset-top));
+    top: calc(var(--safe-area-inset-top)) !important;
   }
 }
 .q-dialog {
@@ -988,13 +997,12 @@ body {
     width: 400px;
     margin-bottom: 48px;
     overflow: auto;
-    .header {
-    }
   }
 }
 
 .vc-container {
   //font-family: chicagoflf !important;
+  background: transparent !important;
   font-family: Inter;
   .vc-arrow {
     background: transparent !important;
@@ -1015,20 +1023,25 @@ body {
 
 // TAILWIND CSS SHADOWS
 .shadow {
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
 .shadow-md {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .shadow-lg {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 .shadow-xl {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 

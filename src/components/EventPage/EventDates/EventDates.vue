@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!!event" class="event-dates flex column grow no-wrap">
+  <div v-if="!!event" class="event-dates">
     <!--
           <div class="flex row q-mb-lg q-gutter-sm q-pr-xl o-080">
             <q-btn
@@ -19,7 +19,8 @@
           -->
 
     <div
-      class="inter bolder t1 text-large q-pr-md event-page-header"
+      :class="{ 'q-px-md': $q.screen.lt.sm }"
+      class="inter bolder t1 text-h6 q-pr-md event-page-header"
       v-if="computedImages?.length > 0"
     >
       <span v-if="selectedDateImages?.length > 0"
@@ -29,6 +30,7 @@
     </div>
 
     <CustomQScroll
+      :class="{ 'q-px-md': $q.screen.lt.sm }"
       class="q-mb-sm q-mt-sm"
       v-if="computedImages?.length > 0"
       horizontal
@@ -69,7 +71,7 @@
     <div
       class="flex row wrap items-center event-page-header"
       :class="{ 'q-mt-md': $q.screen.gt.sm, 'q-px-md': $q.screen.lt.sm }"
-      v-if="event.event_dates.length > 1"
+      v-if="event.event_dates.length > 1 && editing"
     >
       <div class="metropolis bolder text-h6 t1 q-pr-md">
         <span v-if="event.next_date">
@@ -84,7 +86,7 @@
       </span>
     </div>
 
-    <div v-if="(event && event.event_dates) || editing">
+    <div v-if="event && event.event_dates && editing">
       <EventDateSelectionComponent :editing="editing" />
     </div>
     <div
@@ -99,7 +101,7 @@
       </q-inner-loading>
     </div>
     <div
-      class="flex column selected-event-date"
+      class="selected-event-date"
       v-else-if="!!selectedEventDate"
       :key="selectedEventDateIndex + 101"
       :class="{ 'q-px-md': $q.screen.lt.sm }"
@@ -107,10 +109,10 @@
       <div class="metropolis bolder t1 text-h6 q-pr-md event-page-header">
         <span v-if="event.event_dates.length > 1"
           >{{ $t('event_dates.details') }}:</span
-        ><span v-else>{{ $t('event_dates.event_details') }}:</span>
+        ><span v-else>{{ $t('event_dates.event_details') }}</span>
       </div>
 
-      <q-list class="q-mb-md event-date-components" style="position: relative">
+      <q-list class="q-mb- event-date-components" style="position: relative">
         <div
           v-for="(component, index) in visibleComponents"
           :key="component.type"
@@ -127,45 +129,8 @@
             }"
           >
           </component>
-          <q-separator
-            v-if="
-              index === visibleComponents.length - 1 &&
-              !editing &&
-              !showMoreFields
-            "
-          />
         </div>
         <!-- SHOW MORE FIELDS -->
-        <div
-          v-if="
-            !!selectedEventDate &&
-            !editing &&
-            (!event.host || currentUserIsHost) &&
-            (informationMissing || showMoreFields)
-          "
-          class="flex row items-center no-wrap link-hover ed-inline-card editing-outline q-py-md"
-          @click="editing = true"
-          style="cursor: pointer"
-        >
-          <q-icon
-            size="2em"
-            :name="currentUserIsHost ? 'las la-edit' : 'las la-hand-peace'"
-            class="t4"
-          />
-          <div
-            class="flex column q-ml-md t2"
-            :class="{ 'text-large': $q.screen.gt.sm }"
-          >
-            <u class="t4" v-if="!showMoreFields">{{
-              currentUserIsHost
-                ? $t('event_dates.add_missing_information')
-                : $t('suggestions.improve_this_page')
-            }}</u>
-            <u class="t4 q-ml-sm" v-else>{{
-              $t('event_dates.hide_missing_information')
-            }}</u>
-          </div>
-        </div>
       </q-list>
     </div>
   </div>
@@ -247,7 +212,7 @@ export default {
     ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
     lineupImages() {
       return this.selectedEventDate?.media_items?.filter(
-        (x) => x.attributes?.isLineupImage
+        (x) => x.attributes?.isLineupImage,
       );
     },
     computedImages() {
@@ -259,7 +224,7 @@ export default {
     },
     selectedDateImages() {
       return this.selectedEventDate?.media_items?.filter(
-        (x) => !x.attributes?.isLineupImage
+        (x) => !x.attributes?.isLineupImage,
       );
     },
     allEventImages() {

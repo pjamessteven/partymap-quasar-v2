@@ -30,17 +30,17 @@
         v-if="computedExternalUrl"
       >
         <div
-          class="flex column justify-center"
+          class="flex column ellipsis justify-center"
           :class="$q.screen.gt.sm ? 'text-large' : ''"
           :style="editing ? 'pointer-events: none' : ''"
         >
           <a
-            class="t3 link-hover ellipsis q-mr-sm"
+            class="t3 link-hover q-mr-sm"
             :href="computedExternalUrl"
             style="text-decoration: none; line-break: anywhere"
             target="_blank"
           >
-            {{ computedExternalUrl }}
+            {{ urlSubstring }}
           </a>
         </div>
         <!--
@@ -70,7 +70,7 @@
             "
             :color="$q.dark.isActive ? 'white' : 'black'"
             icon="las la-external-link-alt"
-            :class="$q.screen.gt.sm ? '' : 'flex grow q-mt-sm'"
+            :class="$q.screen.gt.sm ? ' q-ml-sm' : 'flex grow q-mt-sm'"
           />
         </a>
       </div>

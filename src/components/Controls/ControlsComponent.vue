@@ -1,19 +1,20 @@
 <template>
   <div
-    class="desktop-search-component q-mt-md flex row items-center no-wrap"
+    class="controls-component q-mt-md flex row items-center no-wrap"
     :class="{
       'transport-map': mapStyle !== 'satellite',
       'overlaying-map': overlayingMap,
       'center-absolute': $route.name !== 'Explore' && $q.screen.gt.xs,
     }"
   >
+    <!--
     <div v-if="$q.screen.gt.sm" class="controls-wrapper flex no-wrap q-mr-sm">
       <div class="controls-wrapper-inner">
         <SearchComponent />
       </div>
     </div>
+    -->
     <CustomQScroll
-      v-else
       ref="scroll"
       horizontal
       class="control-scroll-area"
@@ -26,9 +27,7 @@
       <div class="scroll-inner flex row no-wrap items-center q-mr-md q-pl-xs">
         <div
           class="flex items-center no-wrap scroll-inner-inner"
-          v-show="
-            $q.screen.gt.md || ($q.screen.lt.lg && sidebarPanel === 'search')
-          "
+          v-show="$q.screen.lt.lg && sidebarPanel === 'search'"
         >
           <q-icon
             @click="() => $router.go(-1)"
@@ -51,7 +50,7 @@
         </div>
         <div
           class="flex row items-center no-wrap"
-          v-show="$q.screen.lt.md && sidebarPanel !== 'search'"
+          v-show="sidebarPanel !== 'search'"
         >
           <div
             class="separator vertical"
@@ -349,36 +348,36 @@ export default {
 
 <style lang="scss" scoped>
 .body--light {
-  .desktop-search-component {
+  .controls-component {
     .separator {
       color: $t-4;
     }
   }
 }
 .body--dark {
-  .desktop-search-component {
+  .controls-component {
     .separator {
       color: $ti-4;
     }
   }
 }
 
-.desktop-search-component {
-  z-index: 104;
+.controls-component {
+  z-index: 1000;
   position: absolute;
-  top: 8px;
-  padding-left: min(50vw, 568px);
+  top: 0px;
+  //margin-left: 64px;
   width: 100%;
   display: flex;
   pointer-events: none;
-  //max-width: 33vw;
-  justify-content: center;
+  pointer-events: none;
+  justify-content: start;
   //overflow-x: auto;
   //overflow-y: visible;
   &.center-absolute {
-    position: absolute;
-    width: 100%;
-    justify-content: center;
+    // position: absolute;
+    // width: 100%;
+    // justify-content: center;
   }
 
   .control-scroll-area {
@@ -388,10 +387,12 @@ export default {
       //justify-content: start;
       //padding-left: 256px;
       justify-content: center;
-      pointer-events: all;
       .separator {
         height: 16px;
         border-left: 1px solid;
+        .q-btn {
+          pointer-events: all;
+        }
       }
     }
   }
@@ -402,7 +403,7 @@ export default {
 }
 
 @media only screen and (max-width: 1023px) {
-  .desktop-search-component {
+  .controls-component {
     padding-left: 0px;
     top: 48px;
     z-index: 501;
@@ -431,7 +432,7 @@ export default {
 }
 
 @media only screen and (min-width: 600px) and (max-width: 1023px) {
-  .desktop-search-component {
+  .controls-component {
     top: 52px;
   }
 }
@@ -627,7 +628,7 @@ export default {
     transition: filter 0.3s ease;
 
     &:hover {
-      filter: brightness(1.2);
+      //filter: brightness(1);
     }
     .searchbar-wrapper {
       padding-left: 18px;

@@ -3,12 +3,14 @@
     class="button-light"
     flat
     :size="$q.screen.gt.xs ? '1em' : 'md'"
-    :label="$q.screen.gt.xs ? computedLabel : computedLabel"
-    :icon="computedIcon"
     icon-right="mdi-chevron-down"
     no-caps
     @click="() => (showingMenu = !showingMenu)"
   >
+    <div class="flex items-center no-wrap q-mr-md">
+      <q-icon :name="computedIcon" class="q-mr-md" />
+      {{ computedLabel }}
+    </div>
     <MenuWrapper
       :showing="showingMenu"
       @hide="() => (showingMenu = false)"

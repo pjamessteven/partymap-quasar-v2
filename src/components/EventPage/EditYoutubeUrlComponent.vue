@@ -106,7 +106,9 @@ export default {
                   persistent: false, // we want the user to not be able to close it
                 })
                 .onDismiss(() => {
-                  this.$emit('closeDialog');
+                  this.$nextTick(() => {
+                    this.$emit('closeDialog'); // close parent dialog
+                  });
                 });
               progressDialog.hide();
               this.loading = false;

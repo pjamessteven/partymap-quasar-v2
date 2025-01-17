@@ -31,6 +31,7 @@ import { mapState, mapActions } from 'pinia';
 
 import { useEventStore } from 'src/stores/event';
 import SelectTagsComponent from './SelectTagsComponent.vue';
+import SubmitSuggestionPrompt from 'components/EventPage/Suggestions/SubmitSuggestionPrompt.vue';
 
 export default {
   components: {
@@ -79,7 +80,7 @@ export default {
               ok: false,
             });
             try {
-              await suggestEventEdit({
+              await this.suggestEventEdit({
                 ...messageAndToken,
                 ...{ add_tags: this.tagsToAdd, remove_tags: this.tagsToRemove },
               });
@@ -91,8 +92,10 @@ export default {
                   persistent: false, // we want the user to not be able to close it
                 })
                 .onDismiss(() => {
-                  this.$emit('closeDialog'); // close parent dialog
-                  window.bus.$emit('closeDialog');
+                  this.$nextTick(() => {
+                    this.$emit('closeDialog'); // close parent dialog
+                    window.bus.$emit('closeDialog');
+                  });
                 });
             } catch (e) {}
             progressDialog.hide();

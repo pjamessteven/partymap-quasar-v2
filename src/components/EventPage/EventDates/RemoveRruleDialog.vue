@@ -77,7 +77,7 @@ export default {
             });
 
             try {
-              await suggestEventEdit({
+              await this.suggestEventEdit({
                 ...messageAndToken,
                 ...{ remove_rrule: true },
               });
@@ -103,7 +103,9 @@ export default {
                   // close dialog handled by emit on addeventdate component
                 })
                 .onCancel(() => {
-                  this.$emit('closeDialog');
+                  this.$nextTick(() => {
+                    this.$emit('closeDialog'); // close parent dialog
+                  });
                 });
             } catch (e) {}
             progressDialog.hide();

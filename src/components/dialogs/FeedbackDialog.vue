@@ -80,7 +80,9 @@ export default {
           .onDismiss(() => {
             this.feedback = null;
             this.contactEmail = null;
-            this.$emit('closeDialog');
+            this.$nextTick(() => {
+              this.$emit('closeDialog'); // close parent dialog
+            });
           });
       });
     },

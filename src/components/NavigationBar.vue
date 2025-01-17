@@ -14,6 +14,7 @@
         $q.screen.lt.sm && false
           ? $route.name === 'Explore' ||
             $route.name === 'UserPage' ||
+            $route.name === 'ActivityPage' ||
             $route.name === 'BrowsePage'
             ? undefined
             : 'transparent'
@@ -23,6 +24,7 @@
         $q.screen.lt.sm
           ? $route.name === 'Explore' ||
             $route.name === 'UserPage' ||
+            $route.name === 'ActivityPage' ||
             $route.name === 'BrowsePage'
             ? undefined
             : 'inactive-tab'
@@ -30,12 +32,13 @@
       "
     >
       <q-route-tab
-        :to="{ name: 'Explore', query: { view: 'nearby' } }"
+        v-show="false"
+        :to="{ name: 'Explore', query: { view: 'explore' } }"
         :class="{
           'q-tab--active': sidebarPanel == 'nearby',
         }"
         key="1"
-        name="nearby"
+        name="explore"
         content-class="tab"
         :label="$t('nav.home')"
         :ripple="false"
@@ -49,33 +52,52 @@
       />
 
       <q-route-tab
-        :to="{ query: { view: 'explore' }, name: 'Explore' }"
+        :to="{ query: { view: 'nearby' }, name: 'Explore' }"
         @click="() => (showPanel = false)"
         key="2"
-        name="explore"
+        name="nearby"
+        :label="$t('nav.explore')"
         :icon="
           $q.screen.lt.sm
-            ? sidebarPanel === 'explore'
-              ? 'mdi-earth'
-              : 'mdi-earth'
+            ? sidebarPanel === 'nearby'
+              ? 'mdi-crosshairs-gps'
+              : 'mdi-crosshairs'
             : undefined
         "
-        :label="$t('nav.explore')"
         content-class="tab"
+        :class="{
+          'q-tab--active q-router-link--active active-tab':
+            $route.name === 'Explore',
+        }"
         :ripple="false"
       />
 
       <q-route-tab
         :to="{ name: 'BrowsePage' }"
-        exact
         key="3"
-        name="browse"
         :label="$t('nav.browse')"
+        name="browse"
         :icon="
           $q.screen.lt.sm
             ? $route.name === 'BrowsePage'
-              ? 'mdi-pound'
-              : 'mdi-pound'
+              ? 'mdi-calendar-search'
+              : 'mdi-calendar-search-outline'
+            : undefined
+        "
+        content-class="tab"
+        :ripple="false"
+      />
+      <q-route-tab
+        :to="{ name: 'ActivityPage' }"
+        :label="$t('activity.activity')"
+        exact
+        key="4"
+        name="activity"
+        :icon="
+          $q.screen.lt.sm
+            ? $route.name === 'ActivityPage'
+              ? 'mdi-rss'
+              : 'mdi-rss'
             : undefined
         "
         content-class="tab"
@@ -91,6 +113,7 @@
       />
 
       <q-route-tab
+        :label="$t('nav.you')"
         :style="$q.screen.gt.xs ? 'margin-left: -2px' : ''"
         name="profile"
         key="5"
@@ -101,7 +124,6 @@
               : 'mdi-emoticon-cool-outline'
             : undefined
         "
-        :label="$t('nav.you')"
         content-class="tab"
         :ripple="false"
         :to="
@@ -250,6 +272,9 @@ export default {
         &:after {
           background-color: white;
         }
+        &.active-tab {
+          color: white !important;
+        }
       }
     }
   }
@@ -285,6 +310,9 @@ export default {
         &:before,
         &:after {
           background-color: black;
+        }
+        &.active-tab {
+          color: $ti-1 !important;
         }
       }
     }
@@ -331,12 +359,16 @@ export default {
       &:before {
         opacity: 0;
         transform: translateY(-$distance);
-        transition: transform 0s $easeOutBack, opacity 0s;
+        transition:
+          transform 0s $easeOutBack,
+          opacity 0s;
       }
       &:after {
         opacity: 0;
         transform: translateY($distance/2);
-        transition: transform $duration $easeOutBack, opacity $duration;
+        transition:
+          transform $duration $easeOutBack,
+          opacity $duration;
       }
 
       .q-focus-helper {
@@ -370,10 +402,14 @@ export default {
           transform: translateY(0);
         }
         &:before {
-          transition: transform $duration $easeOutBack, opacity $duration;
+          transition:
+            transform $duration $easeOutBack,
+            opacity $duration;
         }
         &:after {
-          transition: transform 0s $duration $easeOutBack, opacity 0s $duration;
+          transition:
+            transform 0s $duration $easeOutBack,
+            opacity 0s $duration;
         }
       }
     }
@@ -456,7 +492,7 @@ export default {
 
       .q-tab {
         flex-grow: 1;
-        min-height: 68px;
+        min-height: 72px;
         padding: 0px !important;
         opacity: 0.3 !important;
         margin: 0px 0px;
@@ -480,6 +516,7 @@ export default {
         }
         .q-tab__label {
           // font-weight: 600;
+          margin-top: 4px;
           font-size: 0.9em !important;
         }
       }

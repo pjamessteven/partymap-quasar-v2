@@ -27,7 +27,7 @@
           :disable="!hcaptchaToken && !currentUser && !devServer"
           color="primary"
           :label="$t('add.continue')"
-          v-on:click="onOKClick()"
+          @click="onOKClick"
         />
       </q-card-actions>
     </q-card>
@@ -64,14 +64,12 @@ export default {
       // on OK, it is REQUIRED to
       // emit "ok" event (with optional payload)
       // before hiding the QDialog
+      this.hide();
+
       this.$emit('ok', {
         message: this.message,
         hcaptcha_token: this.hcaptchaToken,
       });
-      // or with payload: this.$emit('ok', { ... })
-
-      // then hiding dialog
-      this.hide();
     },
 
     onCancelClick() {

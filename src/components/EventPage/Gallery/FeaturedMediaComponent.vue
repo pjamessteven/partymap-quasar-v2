@@ -1,8 +1,10 @@
 <template>
-  <div class="featured-media-component flex grow">
+  <div class="featured-media-component flex grow" :class="imageClass">
     <div
-      class="editing-overlay flex row justify-center items-center"
+      class="flex row justify-center items-center"
       v-if="editing"
+      :class="{ 'editing-overlay': !!loaded }"
+      style="width: 200px"
     >
       <q-btn
         outline
@@ -28,12 +30,6 @@
         ref="itemWrapperInner"
         @click="galleryIndex = 0"
       >
-        <div
-          class="no-media t4 flex items-center justify-center"
-          v-if="!logo && event"
-        >
-          <div>No logo image... add one?</div>
-        </div>
         <!--
         <video
           v-if="item?.v_low_url && item?.v_low_url.length > 0"
@@ -59,6 +55,7 @@
               logo?.thumb_xs_url ||
               logo?.thumb_url
             "
+            @load="loadThumb"
           />
         </transition>
         <transition appear enter-active-class="animated fadeIn slower">
@@ -136,9 +133,29 @@ export default {
       loaded: false,
       showFullscreen: false,
       showEditDialog: false,
+      imageClass: '',
     };
   },
-  methods: {},
+  methods: {
+    loadThumb(event) {
+      const img = event.target;
+
+      const tolerance = 15;
+      const veryWideRatio = 2;
+
+      const { naturalHeight: height, naturalWidth: width } = img;
+
+      if (Math.abs(height - width) <= tolerance) {
+        this.imageClass = 'squarish';
+      } else if (width / height >= veryWideRatio) {
+        this.imageClass = 'very-wide';
+      } else if (height > width) {
+        this.imageClass = 'tall';
+      } else {
+        this.imageClass = 'wide';
+      }
+    },
+  },
   watch: {},
   computed: {
     ...mapState(useEventStore, ['event', 'currentUserCanEdit']),
@@ -151,10 +168,10 @@ export default {
     otherImages() {
       const nextEventDateLineupImages =
         this.event?.next_date?.media_items.filter(
-          (x) => x.attributes?.isLineupImage
+          (x) => x.attributes?.isLineupImage,
         );
       const otherImages = this.event?.media_items?.filter(
-        (x) => !x?.attributes?.isLineupImage
+        (x) => !x?.attributes?.isLineupImage,
       );
       if (otherImages?.length > 0 && nextEventDateLineupImages?.length > 0) {
         return [
@@ -187,16 +204,19 @@ export default {
 
 <style lang="scss" scoped>
 .featured-media-component {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  max-width: 100%;
+  float: right;
+  // width: 100%;
 
+  margin-top: 48px;
+  margin-right: 48px;
+  margin-left: 24px;
+  margin-bottom: 32px;
+  position: relative;
   .editing-overlay {
     pointer-events: all;
     position: absolute;
     height: 100%;
-    width: 100%;
+    width: 100% !important;
     background: radial-gradient(rgba(0, 0, 0, 1), transparent 80%);
     z-index: 4;
     :deep(.q-btn) {
@@ -230,7 +250,8 @@ export default {
       cursor: pointer;
       // background: white;
       overflow: hidden;
-      filter: drop-shadow(1px 2px 78px rgba(0, 0, 0, 0.48));
+      filter: drop-shadow(1px 2px 16px rgba(0, 0, 0, 0.3));
+      border-radius: 18px !important;
       // border-radius: 18px !important;
 
       .no-media {
@@ -242,12 +263,11 @@ export default {
       img,
       video {
         cursor: pointer;
-        border-radius: 0px !important;
         height: auto;
         max-width: 100%;
+        height: 100%;
         width: 100%;
-        max-height: 500px;
-
+        object-position: right;
         object-fit: contain;
         display: block;
         transition: opacity 0.3s;
@@ -264,19 +284,113 @@ export default {
       }
     }
   }
+
+  &.tall {
+    width: 350px;
+
+    .item-wrapper {
+      .item-wrapper-inner {
+        img,
+        video {
+          max-height: 500px;
+        }
+      }
+    }
+  }
+  &.wide {
+    width: 450px;
+
+    .item-wrapper {
+      .item-wrapper-inner {
+        img,
+        video {
+          max-height: 500px;
+        }
+      }
+    }
+  }
+  &.very-wide {
+    width: 490px;
+
+    .item-wrapper {
+      .item-wrapper-inner {
+        img,
+        video {
+          max-height: 500px;
+        }
+      }
+    }
+  }
+  &.squarish {
+    width: 400px;
+  }
+}
+
+@media only screen and (min-width: 599px) and (max-width: 1024px) {
+  .featured-media-component {
+    &.tall {
+      width: 250px;
+
+      .item-wrapper {
+        .item-wrapper-inner {
+          img,
+          video {
+            max-height: 400px;
+          }
+        }
+      }
+    }
+    &.wide {
+      width: 390px;
+
+      .item-wrapper {
+        .item-wrapper-inner {
+          img,
+          video {
+            max-height: 400px;
+          }
+        }
+      }
+    }
+    &.very-wide {
+      width: 390px;
+
+      .item-wrapper {
+        .item-wrapper-inner {
+          img,
+          video {
+            max-height: 400px;
+          }
+        }
+      }
+    }
+    &.squarish {
+      width: 300px;
+    }
+  }
 }
 
 @media only screen and (max-width: 600px) {
   .featured-media-component {
     height: unset;
-    width: 100%;
+    width: 100% !important;
     min-height: unset;
+    position: relative;
+    float: unset;
+    margin-top: 24px;
+    margin-left: unset;
+    margin-right: unset;
+    margin-bottom: 16px;
     .item-wrapper {
+      height: unset !important;
+      width: 100% !important;
       .item-wrapper-inner {
         justify-content: flex-start;
         align-content: flex-start;
         border-radius: 18px;
-
+        max-width: unset;
+        max-width: 100%;
+        //max-height: 300px;
         img,
         video {
           border-radius: 18px;

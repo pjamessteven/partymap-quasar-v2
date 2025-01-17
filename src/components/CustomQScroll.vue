@@ -49,7 +49,7 @@ export default {
     } else {
       this.$refs.scroll.$el.firstElementChild.addEventListener(
         'scrollend',
-        this.onScrollEnd
+        this.onScrollEnd,
       );
     }
 
@@ -60,18 +60,18 @@ export default {
     if (this.$q.platform.is.ios && this.$refs.scroll.$el._vei) {
       this.$refs.scroll.$el.removeEventListener(
         'mouseleave',
-        this.$refs.scroll.$el._vei.onMouseleave
+        this.$refs.scroll.$el._vei.onMouseleave,
       );
       this.$refs.scroll.$el.removeEventListener(
         'mouseenter',
-        this.$refs.scroll.$el._vei.onMouseenter
+        this.$refs.scroll.$el._vei.onMouseenter,
       );
     }
   },
   beforeUnmount() {
     this.$refs.scroll.$el.firstElementChild.removeEventListener(
       'scrollend',
-      this.onScrollEnd()
+      this.onScrollEnd(),
     );
   },
 };

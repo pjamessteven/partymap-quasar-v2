@@ -1,7 +1,7 @@
 <template>
   <div class="ed-summary flex column" :class="{ transparent: !ed }">
     <div
-      class="flex row items-center ellipsis"
+      class="flex row no-wrap items-center ellipsis"
       :class="{ reverse: alignRight }"
     >
       <q-icon
@@ -14,7 +14,7 @@
         class="flex column"
         :class="$q.screen.gt.xs ? 'inter bold' : 'inter bold'"
       >
-        <div v-if="!!ed">
+        <div v-if="!!ed" class="flex wrap q-gutter-sm">
           <span>
             <span v-if="hasOccured">Past event in&nbsp;</span>
             <span v-if="ed?.date_confirmed == true">

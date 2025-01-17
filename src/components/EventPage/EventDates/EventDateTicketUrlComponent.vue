@@ -34,10 +34,11 @@
         </div>
       </div>
     </div>
-    <div v-else class="flex column no-wrap grow q-py-sm q-gutter-sm q-my-sm">
+    <div v-else class="flex column no-wrap grow q-pt-sm q-gutter-sm q-my-sm">
       <div class="flex row items-center no-wrap q-mb-md">
         <q-icon
-          :size="$q.screen.gt.sm ? '2em' : '1.5rem'"
+          v-if="false"
+          :size="$q.screen.gt.sm ? '1.7em' : '1.5rem'"
           :class="
             selectedEventDate.tickets && selectedEventDate.tickets.length > 0
               ? ' t2'
@@ -45,8 +46,8 @@
           "
           name="las la-ticket-alt"
         />
-        <div class="q-ml-md t2" :class="$q.screen.gt.sm ? 'text-large' : ''">
-          {{ $t('event_dates.get_tickets') }}!
+        <div class="t1 text-h6 bolder inter" :class="$q.screen.gt.sm ? '' : ''">
+          {{ $t('event.get_tickets') }}
         </div>
       </div>
       <div
@@ -113,6 +114,7 @@ Direct link when only one ticket available
       <div class="q-mb-sm q-mt-md t3">
         {{ $t('event_dates.we_earn_commission') }}
       </div>
+      <q-separator />
     </div>
     <q-dialog
       v-if="editing"
@@ -164,7 +166,7 @@ export default {
 }
 .body--dark {
   .ticket {
-    background: $bi-2;
+    background: $bi-3;
   }
 }
 .ticket {

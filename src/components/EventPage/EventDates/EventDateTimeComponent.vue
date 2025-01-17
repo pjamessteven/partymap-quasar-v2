@@ -32,7 +32,7 @@
               {{
                 localDateTimeLong(
                   selectedEventDate.start_naive,
-                  selectedEventDate.tz
+                  selectedEventDate.tz,
                 )
               }}
             </span>
@@ -40,7 +40,7 @@
               {{
                 localDateTimeShort(
                   selectedEventDate.start_naive,
-                  selectedEventDate.tz
+                  selectedEventDate.tz,
                 )
               }}
             </span>
@@ -49,7 +49,7 @@
               [{{
                 timeZoneAbbreviention(
                   selectedEventDate.start_naive,
-                  selectedEventDate.tz
+                  selectedEventDate.tz,
                 )
               }}]
             </span>
@@ -66,14 +66,14 @@
             <span v-if="$q.screen.gt.xs">{{
               localDateTimeLong(
                 selectedEventDate.end_naive,
-                selectedEventDate.tz
+                selectedEventDate.tz,
               )
             }}</span>
             <span v-else
               >{{
                 localDateTimeShort(
                   selectedEventDate.end_naive,
-                  selectedEventDate.tz
+                  selectedEventDate.tz,
                 )
               }}
             </span>
@@ -194,7 +194,7 @@ export default {
                   dayjs
                     .utc(this.selectedEventDate.start_naive)
                     .subtract(this.local.utcOffset(), 'm')
-                    .toDate()
+                    .toDate(),
                 );
               }
             }
@@ -224,7 +224,7 @@ export default {
     },
     dayClick(day) {
       this.selectedEventDateIndex = this.event.event_dates.findIndex(
-        (x) => x.id === day.attributes[0].customData.id
+        (x) => x.id === day.attributes[0].customData.id,
       );
       // eslint-disable-next-line
       this.selectedEventDate =
@@ -239,7 +239,7 @@ export default {
               dayjs
                 .utc(this.selectedEventDate.start_naive)
                 .subtract(this.local.utcOffset(), 'm')
-                .toDate()
+                .toDate(),
             );
           }
         }
@@ -259,7 +259,7 @@ export default {
     hasOccured() {
       return this.isInPast(
         this.selectedEventDate?.start_naive,
-        this.selectedEventDate.tz
+        this.selectedEventDate.tz,
       );
     },
     calendarSelectedEventDateRange() {
@@ -397,6 +397,8 @@ export default {
 .body--dark {
   .calendar {
     :deep(.vc-container) {
+      border-color: rgba(255, 255, 255, 0.1);
+
       .highlight-base-active {
         color: black !important;
       }
@@ -423,6 +425,7 @@ export default {
 .body--light {
   .calendar {
     :deep(.vc-container) {
+      border-color: rgba(0, 0, 0, 0.1);
       .highlight-base-active {
         color: white !important;
       }
@@ -450,20 +453,18 @@ export default {
   :deep(.vc-container) {
     min-height: 280px;
     min-width: 280px;
-    border-right: none;
-    border-left: none;
-    border-bottom: none;
-    border-radius: 0px;
-    border: none;
-    box-shadow: 0 0.5em 1em -0.125em rgba(0, 0, 0, 0.1),
-      0 0px 0 1px rgba(0, 0, 0, 0.02);
+    border-radius: 18px;
+    //border: none;
+    // box-shadow: 0 0.5em 1em -0.125em rgba(0, 0, 0, 0.1),
+    //   0 0px 0 1px rgba(0, 0, 0, 0.02);
   }
 }
 
 .inline {
   border: none;
   .vc-container {
-    box-shadow: 0 0.5em 1em -0.125em rgba(0, 0, 0, 0.1),
+    box-shadow:
+      0 0.5em 1em -0.125em rgba(0, 0, 0, 0.1),
       0 0px 0 1px rgba(0, 0, 0, 0.02);
   }
 }

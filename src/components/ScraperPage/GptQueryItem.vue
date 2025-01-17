@@ -51,7 +51,6 @@
 </template>
 <script setup>
 import { toRefs, watch, ref } from 'vue';
-import countryCodes from 'src/assets/country-code';
 import { getFestivalInfo } from 'src/api';
 import AbortController from 'axios';
 import { Notify } from 'quasar';
@@ -72,7 +71,7 @@ const load = async () => {
   try {
     const response = await getFestivalInfo(
       { name: name.value, country: country.value, year: year.value + '' },
-      abortController.value.signal
+      abortController.value.signal,
     );
     const eventJson = response.data?.data?.outputs?.json;
     if (eventJson) {

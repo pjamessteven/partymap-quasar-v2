@@ -12,14 +12,28 @@
     <div class="main-inner-layout">
       <MenuBar class="menubar" />
       <Transition
+        v-if="$q.screen.gt.sm && $route.name === 'Explore'"
+        appear
+        :enter-active-class="'animated fadeIn'"
+        :leave-active-class="'animated fadeOut'"
+      >
+        <DesktopSearchComponent
+          class="controls-component"
+          :overlayingMap="!showPanelBackground"
+          v-show="$route.name === 'Explore'"
+        />
+      </Transition>
+
+      <Transition
+        v-else
         appear
         :enter-active-class="'animated fadeIn'"
         :leave-active-class="'animated fadeOut'"
       >
         <ControlsComponent
           class="controls-component"
-          :overlayingMap="!showPanelBackground"
-          v-show="$route.name === 'Explore'"
+          :overlayingMap="!showPanelBackground && $route.name === 'Explore'"
+          v-show="$route.name === 'Explore' || $route.name === 'BrowsePage'"
         />
       </Transition>
       <div
@@ -116,11 +130,12 @@
       </router-view>
       <NavigationBar
         class="nav-bar mobile"
-        v-if="$q.screen.lt.sm && false"
+        v-if="$q.screen.lt.sm"
         :style="
           (sidebarOpacity && $route.name === 'EventPage') ||
           $route.name === 'Explore' ||
           $route.name === 'UserPage' ||
+          $route.name === 'ActivityPage' ||
           $route.name === 'BrowsePage'
             ? ''
             : 'display: none'
@@ -144,6 +159,7 @@ import { useMainStore } from 'src/stores/main';
 import { useEventStore } from 'src/stores/event';
 import { i18n, setI18nLanguage, loadLocaleMessages } from 'src/boot/i18n.ts';
 import { defineAsyncComponent } from 'vue';
+import DesktopSearchComponent from '../components/Controls/DesktopSearchComponent.vue';
 export default {
   components: {
     SideBar,
@@ -152,6 +168,7 @@ export default {
     MenuBarLogo,
     NavigationBar,
     ControlsComponent,
+    DesktopSearchComponent,
     MainMap: defineAsyncComponent(
       () => import('/src/components/MainMap/MainMap.vue'),
     ),
@@ -227,7 +244,10 @@ export default {
     }
     if (userLangPref) {
       next((vm) => {
-        vm.$router.replace({ ...to, params: { lang: userLangPref } });
+        vm.$router.replace({
+          ...to,
+          params: { ...to.params, lang: userLangPref },
+        });
       });
     } else {
       next();
@@ -361,6 +381,7 @@ export default {
     pointer-events: none;
     //will-change: auto;
     cursor: grab;
+    transition: all 0.35s ease-in;
     &.overlay-transition {
       transition: opacity 0.4s;
     }
@@ -408,7 +429,7 @@ export default {
       position: absolute;
 
       pointer-events: none;
-      z-index: 5000;
+      z-index: 4500;
     }
     .menubar-logo {
       position: absolute;
@@ -419,6 +440,9 @@ export default {
       z-index: 103;
       top: 64px;
       width: 100%;
+    }
+    .controls-component {
+      z-index: 5000;
     }
     .nav-bar {
       &.mobile {
@@ -536,7 +560,7 @@ export default {
       }
       .controls-component {
         position: absolute;
-        z-index: 105;
+        // z-index: 105;
         width: 100vw;
         max-width: 100vw;
         // android

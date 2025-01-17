@@ -46,7 +46,7 @@
           >
             <div
               class="flex row no-wrap items-center"
-              :class="{ 'reverse grow justify-between': $q.screen.lt.sm }"
+              :class="{ ' grow reverse justify-between': $q.screen.lt.sm }"
             >
               <div
                 class="flex row items-center no-wrap"
@@ -281,7 +281,7 @@
               v-if="currentUser && userEventDates?.length > 0"
             >
               <div
-                class="q-py-md location-header flex justify-between"
+                class="q-py-md location-header sticky flex justify-between"
                 :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-px-md'"
               >
                 <div class="text-">{{ $t('nearby_view.your_events') }}</div>
@@ -340,7 +340,7 @@
             <!-- tags -->
             <div class="flex column" v-if="nearbyTags?.length >= 10">
               <div
-                class="q-py-md location-header location-header-select flex justify-between items-center"
+                class="q-py-md location-header sticky location-header-select flex justify-between items-center"
                 :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
               >
                 <div class="text-">{{ $t('nearby_view.popular_tags') }}</div>
@@ -390,7 +390,7 @@
                     <div class="flex row no-wrap q-gutter-sm">
                       <div
                         v-for="(tag, index) in nearbyTags.filter(
-                          (x, i) => i % 2 === 0
+                          (x, i) => i % 2 === 0,
                         )"
                         :key="index"
                         @click="clickTag(tag)"
@@ -404,7 +404,7 @@
                     <div class="flex row no-wrap q-gutter-sm q-pt-sm">
                       <div
                         v-for="(tag, index) in nearbyTags.filter(
-                          (x, i) => i % 2 === 1
+                          (x, i) => i % 2 === 1,
                         )"
                         :key="index"
                         @click="clickTag(tag)"
@@ -422,7 +422,7 @@
             <!-- Display global tags if there's not many local tags-->
             <div class="flex column" v-else-if="tagOptions?.length > 0">
               <div
-                class="q-py-md location-header location-header-select flex justify-between items-center"
+                class="q-py-md location-header sticky location-header-select flex justify-between items-center"
                 :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
               >
                 <div>{{ $t('nearby_view.hot_tags_around_world') }}</div>
@@ -467,7 +467,7 @@
                     <div class="flex row no-wrap q-gutter-sm">
                       <div
                         v-for="(tag, index) in tagOptions.filter(
-                          (x, i) => i % 2
+                          (x, i) => i % 2,
                         )"
                         :key="index"
                         @click="clickTag(tag)"
@@ -481,7 +481,7 @@
                     <div class="flex row no-wrap q-gutter-sm q-pt-sm">
                       <div
                         v-for="(tag, index) in tagOptions.filter(
-                          (x, i) => i % 2 !== 1
+                          (x, i) => i % 2 !== 1,
                         )"
                         :key="index"
                         @click="clickTag(tag)"
@@ -499,7 +499,7 @@
             <!-- artists -->
             <div class="flex column" v-if="nearbyArtists?.length > 5">
               <div
-                class="location-header location-header-select flex justify-between items-center"
+                class="location-header location-header-select sticky flex justify-between items-center"
                 :class="
                   $q.screen.gt.sm
                     ? 'q-px-lg q-py-md'
@@ -524,7 +524,7 @@
               </div>
 
               <ArtistsComponent
-                :size="$q.screen.gt.md ? 'lg' : $q.screen.sm ? 'lg' : 'md'"
+                :size="$q.screen.gt.sm ? 'lg' : $q.screen.sm ? 'lg' : 'md'"
                 :artists="nearbyArtists"
                 :hasNext="nearbyArtistsHasNext"
                 :loadMore="debouncedLoadNearbyArtists"
@@ -540,7 +540,7 @@
 
             <div class="flex column" v-else-if="artistOptions?.length > 0">
               <div
-                class="q-pt-md q-pb-sm location-header location-header-select flex justify-between items-center"
+                class="q-pt-md q-pb-sm location-header location-header-select sticky flex justify-between items-center"
                 :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
               >
                 <div>{{ $t('nearby_view.top_artists_worldwide') }}</div>
@@ -566,7 +566,7 @@
                 :artists="artistOptions"
                 :hasNext="artistOptionsHasNext"
                 :loadMore="debouncedLoadArtistOptions"
-                :size="$q.screen.gt.xs ? 'lg' : 'md'"
+                :size="$q.screen.gt.sm ? 'lg' : 'md'"
                 :style="
                   $q.screen.gt.sm
                     ? 'margin-bottom: -16px; margin-top: -12px; z-index: 2000'
@@ -885,7 +885,7 @@ export default {
                 encodeURIComponent(key) + '=' + encodeURIComponent(params[key])
               );
             })
-            .join('&')
+            .join('&'),
       );
     },
 
@@ -1044,7 +1044,7 @@ export default {
       {
         leading: true,
         trailing: false,
-      }
+      },
     );
     this.debouncedLoadEventDates = _.debounce(this.loadEventDates, 150, {
       leading: true,

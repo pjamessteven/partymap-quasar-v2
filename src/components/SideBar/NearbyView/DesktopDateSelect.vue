@@ -120,7 +120,6 @@ export default {
       top: 8px;
       height: 100%;
       width: 100%;
-      content: 'Search places';
       // color: grey;
       font-weight: 800;
     }

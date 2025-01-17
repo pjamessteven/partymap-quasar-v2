@@ -5,13 +5,38 @@
       class="flex justify-between no-wrap sidebar"
       id="sidebar"
       v-bind:class="{
-        'shadow-strong': mapStore.mapStyle === 'satellite',
-        'sidebar-mobile-expanded':
-          mainStore.showPanelBackground && $q.screen.lt.md,
         iphone: $q.platform.is.iphone || $q.platform.is.ipod,
       }"
     >
-      <div class="sidebar-content flex column no-wrap">
+      <div
+        class="mobile-panel-handle"
+        :class="{ 'o-000': mainStore.showPanelBackground }"
+      >
+        <div class="handle-icon" />
+      </div>
+      <div class="drag-zone" ref="sidebarHandle"></div>
+      <div
+        class="mobile-panel-button flex row items-center"
+        v-if="$q.screen.lt.md && mainStore.showPanelBackground"
+      >
+        <q-icon
+          @click="hidePanel"
+          flat
+          :size="$q.screen.gt.sm ? '1.7rem' : '1.5rem'"
+          class="q-pa-md q-mr-sm t1"
+          :class="{ 'rotate-180': mainStore.showPanelBackground }"
+          name="mdi-chevron-up"
+          style="pointer-events: all"
+        />
+      </div>
+      <div
+        class="sidebar-content flex column no-wrap"
+        v-bind:class="{
+          'shadow-strong': mapStore.mapStyle === 'satellite',
+          'sidebar-mobile-expanded':
+            mainStore.showPanelBackground && $q.screen.lt.md,
+        }"
+      >
         <div
           style="height: 100%; width: 100%"
           class="sidebar-content-inner"
@@ -66,6 +91,7 @@ const $q = useQuasar();
 const route = useRoute();
 
 const sidebar = ref();
+const sidebarHandle = ref();
 const resizer = ref();
 const mainStore = useMainStore();
 const mapStore = useMapStore();
@@ -88,15 +114,10 @@ const hiddenYPosition = () => {
   if (
     mainStore.sidebarMinimized &&
     mainStore.sidebarPanel === 'explore' &&
-    $q.screen.gt.xs
-  )
-    return window.innerHeight - 62 - mainStore.safeAreaInsets.top - iosOffset;
-  else if (
-    mainStore.sidebarMinimized &&
-    mainStore.sidebarPanel === 'explore' &&
     $q.screen.lt.md
   )
-    return window.innerHeight - 126 - mainStore.safeAreaInsets.top - iosOffset;
+    // SM
+    return window.innerHeight - 156 - mainStore.safeAreaInsets.top - iosOffset;
 
   if (mainStore.sidebarPanel === 'nearby') {
     if ($q.screen.gt.xs) {
@@ -113,10 +134,10 @@ const hiddenYPosition = () => {
     return window.innerHeight - 260 - mainStore.safeAreaInsets.top;
   }
 
-  return window.innerHeight - 234 - mainStore.safeAreaInsets.top;
+  return window.innerHeight - 272 - mainStore.safeAreaInsets.top;
 };
 const showingYPosition = () => {
-  return $q.screen.lt.md ? 112 : 76;
+  return $q.screen.lt.md ? 90 : 76;
 };
 
 const showPanel = () => {
@@ -129,7 +150,7 @@ const showPanel = () => {
       stiffness: 600,
       damping: 50,
       mass: 1.8,
-    }
+    },
   );
   mainStore.showPanelBackground = true;
 
@@ -206,7 +227,9 @@ const dragHandler = ({
 }) => {
   if ($q.screen.lt.md) {
     if (!dragging) {
-      if (mainStore.showPanel && mainStore.enablePanelSwipeDown) {
+      console.log('top', event, y);
+
+      if (mainStore.showPanel) {
         if (y > 30) {
           hidePanel();
         } else {
@@ -214,22 +237,29 @@ const dragHandler = ({
         }
       } else if (!mainStore.showPanel) {
         if (mainStore.sidebarPanel === 'nearby' && y > 30) {
+          console.log(1);
           mainStore.sidebarPanel = 'explore';
           hidePanel();
           return;
         } else if (mainStore.sidebarMinimized && y < -30 && y > -256) {
+          console.log(2);
           // unminimize
           mainStore.sidebarMinimized = false;
           // hidePanel();
         } else if (mainStore.sidebarMinimized && y < -256) {
+          console.log(3);
           // show panel but keep minimized state
           showPanel();
         } else if (y < -30) {
-          // show panel from normal state
+          console.log(4);
+          // show pane from normal state
           showPanel();
         } else {
+          console.log(5);
           // minimize
-          mainStore.sidebarMinimized = true;
+          console.log(event, y);
+
+          // mainStore.sidebarMinimized = true;
           //hidePanel();
         }
       }
@@ -260,10 +290,11 @@ const dragHandler = ({
         {
           type: 'keyframes',
           duration: 0,
-        }
+        },
       );
     } else if (
-      mainStore.enablePanelSwipeDown &&
+      (mainStore.enablePanelSwipeDown ||
+        event.target.className == 'drag-z one') &&
       y + showingYPosition() > showingYPosition() &&
       mainStore.showPanel
     ) {
@@ -288,7 +319,7 @@ const dragHandler = ({
         {
           type: 'keyframes',
           duration: 0,
-        }
+        },
       );
     } else if (
       y + hiddenYPosition() > hiddenYPosition() &&
@@ -309,7 +340,7 @@ const dragHandler = ({
         {
           type: 'keyframes',
           duration: 0,
-        }
+        },
       );
     }
   }
@@ -320,6 +351,10 @@ useDrag(dragHandler, {
   axis: 'y',
 });
 
+useDrag(dragHandler, {
+  domTarget: sidebarHandle,
+  axis: 'y',
+});
 const setupSpring = (initialYPos: number) => {
   const { motionProperties: mp } = useMotionProperties(sidebar, {
     y: initialYPos,
@@ -333,14 +368,18 @@ onMounted(() => {
   setupSpring(
     mainStore.sidebarPanel === 'Explore'
       ? hiddenYPosition()
-      : showingYPosition()
+      : showingYPosition(),
   );
   hidePanel();
-  window.addEventListener('resize', () => {
-    if (!mainStore.showPanel) {
-      hidePanel();
-    }
-  });
+  window.addEventListener(
+    'resize',
+    () => {
+      if (!mainStore.showPanel) {
+        hidePanel();
+      }
+    },
+    { passive: true },
+  );
 });
 
 const lastx = ref();
@@ -374,14 +413,14 @@ watch(
     } else {
       hidePanel();
     }
-  }
+  },
 );
 
 watch(
   () => mainStore.sidebarMinimized,
   (to: string, from: string) => {
     hidePanel();
-  }
+  },
 );
 
 watch(
@@ -402,7 +441,7 @@ watch(
       hidePanel();
       mainStore.showPanel = false;
     }
-  }
+  },
 );
 </script>
 
@@ -410,16 +449,17 @@ watch(
 .body--dark {
   .sidebar-wrapper {
     .sidebar {
-      background: black;
-      border-top: 1px solid $bi-4;
-      &.sidebar-mobile-expanded {
-        border-top-color: black;
-      }
       &.shadow {
         border: 1px solid $bi-3;
       }
 
       .sidebar-content {
+        border-top: 1px solid $bi-4;
+
+        background: black;
+        &.sidebar-mobile-expanded {
+          border-top-color: black;
+        }
         .sidebar-content-inner {
           .sidebar-content-inner-shadow {
             background: $bi-1;
@@ -434,7 +474,6 @@ watch(
 .body--light {
   .sidebar-wrapper {
     .sidebar {
-      background: white;
       .sidebar-content {
         //background: rgba(100, 100, 100, 0.2);
         //backdrop-filter: blur(10px);
@@ -443,13 +482,14 @@ watch(
           //background: black;
         }
       }
-      box-shadow: rgba(0, 0, 0, 0.1) 1.95px -1.95px 3px !important;
-
-      &.shadow-strong {
-        box-shadow: rgba(0, 0, 0, 0.4) 1.95px -1.95px 5px !important;
-      }
-      &.sidebar-mobile-expanded {
-        box-shadow: none !important;
+      .sidebar-content {
+        box-shadow: rgba(0, 0, 0, 0.1) 1.95px -1.95px 3px !important;
+        &.shadow-strong {
+          box-shadow: rgba(0, 0, 0, 0.4) 1.95px -1.95px 5px !important;
+        }
+        &.sidebar-mobile-expanded {
+          box-shadow: none !important;
+        }
       }
     }
   }
@@ -476,8 +516,56 @@ watch(
     transition: width 0.4s ease;
     user-select: none;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     border-radius: 18px;
+    .drag-zone {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 1;
+      height: 74px;
+      width: 100%;
+      background: green;
+    }
+    .mobile-panel-handle {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      z-index: 5000;
+      width: 100%;
+      height: 32px;
+      margin-top: 8px;
+      margin-bottom: -16px;
+      transform: translate3d(0, 0, 0);
+      &.absolute {
+        position: absolute;
+        width: 100%;
+        top: 16px;
+      }
+      .handle-icon {
+        //margin-top: 14px;
+
+        width: 40px;
+        height: 2px;
+        background: rgb(200, 200, 200);
+      }
+      &.panel-showing {
+        //margin-bottom: -32px;
+
+        //margin-bottom: -18px;
+      }
+    }
+
+    .mobile-panel-button {
+      position: absolute;
+      right: 0px;
+      top: 24px;
+      z-index: 5000;
+      @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+        -webkit-transform: translate3d(0, 0, 0);
+      }
+    }
     .resizer {
       position: absolute;
       top: 50%;
@@ -518,11 +606,8 @@ watch(
     .sidebar-wrapper {
       .sidebar {
         box-shadow: none;
-        background: black;
 
         .sidebar-content {
-          background: black;
-
           .sidebar-content-inner {
             .sidebar-content-inner-shadow {
               background: black;
@@ -556,7 +641,6 @@ watch(
     padding: 0;
     overflow: hidden;
     box-shadow: none;
-    border-radius: 18px;
 
     .sidebar {
       box-shadow: none;
@@ -588,17 +672,11 @@ watch(
         padding-bottom: calc(180px + var(--safe-area-inset-top));
       }
 
-      &.sidebar-mobile-expanded {
-        //  transform: translate3d(0, 120px, 0);
-        //padding-bottom: 128px;
-        border-radius: 0px;
-        box-shadow: none !important;
-      }
-
       .sidebar-content {
+        border-radius: 18px;
+
         backdrop-filter: unset !important;
         padding-top: unset;
-        background: none !important;
 
         .sidebar-content-inner {
           overflow: hidden;
@@ -631,7 +709,7 @@ watch(
               padding-bottom: calc(180px - 8px + var(--safe-area-inset-top));
             }
             @media screen and (min-width: 376px) {
-              padding-bottom: calc(180px + var(--safe-area-inset-top));
+              padding-bottom: calc(168px + var(--safe-area-inset-top));
             }
           }
         }

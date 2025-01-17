@@ -260,7 +260,7 @@ export default {
     no_upcoming_events_in_area: 'No hay eventos próximos aquí',
   },
   nearby_view: {
-    near: 'Cerca',
+    near: 'Cerca de',
     message_1:
       'PartyMap es una plataforma impulsada por la comunidad y crowdsourced para encontrar fiestas y festivales en todo el mundo!',
     message_2:

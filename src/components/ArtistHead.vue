@@ -26,12 +26,7 @@
               :src="artist?.media_items[0].thumb_xs_url"
               v-if="artist?.media_items[0]"
             />
-            <q-icon
-              v-else
-              size="3em"
-              class="t3"
-              name="mdi-account-music-outline"
-            />
+            <q-icon v-else size="3em" name="mdi-account-music-outline" />
           </div>
           <div
             class="artist-name q-mt-sm t2 ellipsis"
@@ -88,9 +83,12 @@ export default {
       .artist-head-img {
         border-top: 1px solid rgba(48, 48, 48);
         border-bottom: 1px solid rgba(48, 48, 48, 0.4);
-        background: $bi-2;
-        box-shadow: 0 7px 4px -4px rgba(0, 0, 0, 0.4),
-          0 12px 10px 2px rgba(0, 0, 0, 0.3), 0 5px 16px 4px rgba(0, 0, 0, 0.5);
+        background: $bi-3;
+        box-shadow:
+          0 7px 4px -4px rgba(0, 0, 0, 0.4),
+          0 12px 10px 2px rgba(0, 0, 0, 0.3),
+          0 5px 16px 4px rgba(0, 0, 0, 0.5);
+        color: $ti-2;
       }
     }
     .card-bottom-background {
@@ -105,7 +103,10 @@ export default {
     }
     .artist-head {
       .artist-head-img {
-        background: $b-2;
+        //background: grey;
+        background: grey;
+
+        color: $ti-4;
         /*
         box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.1),
           0 6px 8px 2px rgba(0, 0, 0, 0.05), 0 5px 10px 4px rgba(0, 0, 0, 0.08);
@@ -202,7 +203,8 @@ export default {
       align-items: center;
       transition: all 0.3s ease;
       position: relative;
-      box-shadow: rgba(0, 0, 0, 0.1) 0px 6px 24px 0px,
+      box-shadow:
+        rgba(0, 0, 0, 0.1) 0px 6px 24px 0px,
         rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
       img {
         position: absolute;

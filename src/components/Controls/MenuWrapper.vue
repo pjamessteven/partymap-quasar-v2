@@ -13,7 +13,7 @@
     :offset="[0, 8]"
     max-height="600px"
   >
-    <div style="min-width: 200px; min-height: 200px">
+    <div style="min-width: 200px">
       <slot></slot>
     </div>
   </q-menu>

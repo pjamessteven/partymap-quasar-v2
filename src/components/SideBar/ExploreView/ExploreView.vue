@@ -10,17 +10,6 @@
       <q-separator />
     </div>
 
-    <div class="mobile-panel-button" v-if="$q.screen.lt.md">
-      <q-icon
-        @click="showPanel ? $emit('hidePanel') : $emit('showPanel')"
-        flat
-        :size="$q.screen.gt.sm ? '1.7rem' : '1.5rem'"
-        class="q-pa-md q-mr-sm t1"
-        :class="{ 'rotate-180': showPanelBackground }"
-        name="mdi-chevron-up"
-        style="pointer-events: all"
-      />
-    </div>
     <div class="event-list-inner">
       <div
         class="q-mb-md metropolis bold"
@@ -405,7 +394,7 @@
                   <ArtistsComponent
                     :class="$q.screen.gt.sm ? 'q-pl- q-mb-md ' : ''"
                     :artists="topArtistsInArea"
-                    :size="$q.screen.gt.md ? 'lg' : 'md'"
+                    :size="$q.screen.gt.sm ? 'lg' : 'md'"
                   />
                 </div>
 
@@ -685,9 +674,9 @@ export default {
     showPanel(newv) {
       if (newv) {
         this.enablePanelSwipeDown = true;
-      } else {
-        if (this.$refs) this.$refs.scroll.setScrollPercentage('vertical', 0);
-      }
+      } /*else {
+          if (this.$refs) this.$refs.scroll.setScrollPercentage('vertical', 0);
+        }*/
     },
     sidebarPanel(newv) {
       this.$refs.scroll.setScrollPercentage('vertical', 0);
@@ -826,7 +815,7 @@ export default {
     ]),
     topTagsWithoutSelected() {
       return this.topTagsInArea.filter(
-        (x) => this.controlTag.findIndex((y) => y.tag === x.tag) === -1
+        (x) => this.controlTag.findIndex((y) => y.tag === x.tag) === -1,
       );
     },
 
@@ -931,7 +920,7 @@ export default {
   created() {
     this.debouncedOnScrollMainContent = _.debounce(
       this.onScrollMainContent,
-      10
+      10,
     );
     this.debouncedGetInitalList = _.debounce(this.getInitialList, 150, {
       leading: false,
@@ -971,6 +960,7 @@ export default {
   //  font-style: italic;
   font-family: 'Metropolis';
   font-weight: 700;
+
   &:lang(ru) {
     font-family: 'InterDisplay';
   }
@@ -992,15 +982,7 @@ export default {
   //z-index: 3000;
   position: absolute;
   pointer-events: none;
-  .mobile-panel-button {
-    position: absolute;
-    right: 0px;
-    top: -4px;
-    z-index: 5000;
-    @supports (font: -apple-system-body) and (-webkit-appearance: none) {
-      -webkit-transform: translate3d(0, 0, 0);
-    }
-  }
+
   .event-list-inner {
     pointer-events: all;
     display: flex;

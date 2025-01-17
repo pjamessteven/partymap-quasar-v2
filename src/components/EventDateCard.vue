@@ -5,7 +5,7 @@
     @mouseenter="mouseEnter"
     @mouseleave="mouseLeave"
   >
-    <transition appear enter-active-class="animated fadeIn slower">
+    <transition appear enter-active-class="animated fadeIn slow">
       <router-link
         v-if="event"
         style="
@@ -43,7 +43,8 @@
         >
           <!-- mouseover.stop is to fix a stupid ios bug relating to q-scroll-area having a mouseover event and causing the user to have to double click on items-->
           <div
-            class="image-container flex justify-center items-center shadow-2xl"
+            class="image-container flex justify-center items-center shadow-2xl q-mr-md"
+            v-if="imgThumbUrl"
           >
             <transition appear enter-active-class="animated fadeIn slow">
               <img
@@ -54,17 +55,15 @@
             </transition>
             <transition appear enter-active-class="animated fadeIn slow">
               <img
+                ref="imgThumb"
                 :src="imgThumbUrl"
-                @load="() => (loadedImage = true)"
+                @load="onLoadedThumb"
                 v-show="loadedImage"
                 style="z-index: 3"
               />
             </transition>
           </div>
-          <div
-            class="flex column grow q-pl-md"
-            style="width: 100%; overflow: hidden"
-          >
+          <div class="flex column grow" style="width: 100%; overflow: hidden">
             <div
               class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
             >
@@ -132,7 +131,7 @@
                       relativeHumanTime(
                         event.start_naive,
                         event.end_naive,
-                        event.tz
+                        event.tz,
                       )
                     }}
                   </span>
@@ -180,7 +179,7 @@
                   <span v-if="event.distance != null" class="o-050 ellipsis"
                     >&nbsp;({{
                       Intl.NumberFormat().format(
-                        parseInt(Number(event.distance) / 1000)
+                        parseInt(Number(event.distance) / 1000),
                       )
                     }}{{ $t('event.km') }})</span
                   >
@@ -188,12 +187,19 @@
               </div>
             </div>
 
+            <div
+              v-if="event.event && $q.screen.gt.sm"
+              class="description grow flex ellipsis q-pr-md items-center"
+              style="max-width: 100%"
+            >
+              {{ event.event.description_t || event.event.description }}
+            </div>
             <!-- scroll area here (qscroll or regular) area causes performance issues on android-->
             <CustomQScroll
               v-if="!$q.platform.is.android || true"
               horizontal
               style="min-height: 39px; margin-bottom: -8px"
-              class="q-mb-md"
+              :class="$q.screen.gt.sm ? 'q-mt-md' : 'q-mt-xs'"
               :thumb-style="{
                 bottom: '-4px',
                 height: '4px',
@@ -226,13 +232,6 @@
                   :value="et.tag"
                 ></Tag>
               </div>
-            </div>
-            <div
-              v-if="event.event && $q.screen.gt.sm"
-              class="description grow flex ellipsis q-pr-md q-mt-sm items-center"
-              style="max-width: 100%"
-            >
-              {{ event.event.description_t || event.event.description }}
             </div>
           </div>
         </div>
@@ -298,6 +297,7 @@ import Tag from 'src/components/TagComponent.vue';
 import { mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import CustomQScroll from 'components/CustomQScroll.vue';
+//import ColorThief from 'colorthief/dist/color-thief.mjs';
 
 export default {
   components: {
@@ -315,6 +315,9 @@ export default {
     };
   },
   methods: {
+    onLoadedThumb() {
+      this.loadedImage = true;
+    },
     mouseEnter() {
       if (this.$q.screen.gt.xs && !this.isPopup)
         this.eventDateHoverMarker = {
@@ -388,8 +391,8 @@ export default {
 .body--dark {
   .ed-card {
     // outline: 1px solid black;
-    border-top: 1px solid rgba(48, 48, 48);
-    background: linear-gradient(black, $bi-4);
+    border-top: 1px solid rgba(86, 86, 86);
+    background: linear-gradient($bi-3, $bi-4);
 
     .ed-card-bg {
       background: $bi-3;
@@ -422,11 +425,12 @@ export default {
 .body--light {
   .ed-card {
     color: white;
+    border-top: 1px solid rgba(150, 150, 150);
 
     box-shadow: rgba(0, 0, 0, 0.12) 0px 3px 8px;
     font-smooth: always;
-    background: linear-gradient($bi-2, rgb(100, 100, 100));
-
+    //background: linear-gradient($bi-2, rgb(100, 100, 100));
+    background: linear-gradient($bi-3, rgb(48, 48, 48));
     .card-background {
       //background: #181818;
       opacity: 0.8;
@@ -452,6 +456,7 @@ export default {
 }
 
 .ed-card {
+  min-height: 238.5px;
   border: none;
   border-radius: 9px;
   direction: ltr;
@@ -498,12 +503,13 @@ export default {
   .ed-card-bg {
     //border-radius: 9px;
     z-index: 1;
-    filter: blur(50px);
+    filter: blur(100px);
     transform: rotate(180deg) scaleX(-1) scale(2);
     position: absolute;
     height: 100%;
     width: 100%;
 
+    mix-blend-mode: soft-light;
     /* Safari Only*/
     @supports (font: -apple-system-body) and (-webkit-appearance: none) {
       transform: rotate(180deg) scaleX(-1) scale(2) translate3d(0, 0, 0);

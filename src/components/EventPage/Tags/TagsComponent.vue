@@ -1,31 +1,32 @@
 <template>
-  <div
-    class="flex"
-    :class="editing ? 'editing' : ''"
-    @click="openAddTagDialog()"
-  >
+  <div :class="editing ? 'editing' : ''" @click="openAddTagDialog()">
     <div
-      class="editing-outline flex row no-wrap items-center inter"
+      class="editing-outline inter"
       :class="editing ? 'q-pa-md' : ''"
       :style="editing ? 'margin-left: 0px!important;' : ''"
     >
-      <div class="flex row wrap" :class="small ? 'q-gutter-xs' : 'q-gutter-sm'">
+      <div :class="small ? 'q-gutter-xs' : 'q-gutter-sm'">
         <Tag
           :small="small"
           v-for="(et, index) in computedTags"
           :key="index"
           :value="et.tag_t || et.tag"
-          style="pointer-events: none"
+          style="pointer-events: none; display: inline-flex"
         />
         <Tag
           v-if="!eventHasHost && !editing"
           :small="small"
+          style="display: inline-flex"
           :key="-1"
           :value="$t('event.add_tags') + ' +'"
           @click="() => (showAddTagDialog = true)"
         />
       </div>
-      <div style="color: white" v-if="editing && !computedTags.length == 0">
+      <div
+        style="color: white"
+        v-if="editing && !computedTags.length == 0"
+        @click="() => (showAddTagDialog = true)"
+      >
         {{ $t('event.add_tags') }}
       </div>
 

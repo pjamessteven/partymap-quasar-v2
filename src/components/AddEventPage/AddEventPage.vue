@@ -501,7 +501,7 @@
                     :eventName="event.name"
                     :eventCountry="
                       event.location?.address_components?.find(
-                        (x) => x.types.indexOf('country') > -1
+                        (x) => x.types.indexOf('country') > -1,
                       )?.long_name
                     "
                     :mode="'newEvent'"
@@ -831,7 +831,10 @@ export default {
             persistent: false, // we want the user to not be able to close it
           })
           .onDismiss(() => {
-            this.$emit('closeDialog');
+            this.$nextTick(() => {
+              this.$emit('closeDialog'); // close parent dialog
+              window.bus.$emit('closeDialog');
+            });
             // go to event page
             this.$router.push({
               name: 'EventPage',

@@ -17,7 +17,7 @@
         >
           {{ $t('event_dates.event_dates') }}:
         </div>
-        <q-card
+        <div
           class="flex row justify-start grow no-wrap schedule-msg-buttons q-mt-sm q-pa-md q-mb-md"
           v-if="editing"
           :class="$q.screen.gt.xs ? 'q-mr-xl' : ''"
@@ -48,7 +48,7 @@
                 style="white-space: nowrap"
                 class="q-ml-sm nav-button primary"
                 icon-right="las la-plus"
-                v-on:click="showAddEventDateDialog = true"
+                @click="() => (showAddEventDateDialog = true)"
               />
             </div>
           </div>
@@ -60,7 +60,7 @@
               style="white-space: nowrap"
               class="q-mr-sm soft-button-shadow"
               icon-right="las la-plus"
-              v-on:click="showAddEventDateDialog = true"
+              @click="() => (showAddEventDateDialog = true)"
             />
             <q-btn
               class="soft-button-shadow"
@@ -70,7 +70,7 @@
               :label="$t('event_dates.set_up_recurring_dates')"
             />
           </div>
-        </q-card>
+        </div>
       </div>
       <CustomQScroll
         v-if="event?.event_dates?.length > 0"
@@ -119,6 +119,7 @@
       transition-show="slide-up"
       transition-hide="slide-down"
     >
+      test
       <AddEventDateDialog v-on:closeDialog="showAddEventDateDialog = false" />
     </q-dialog>
   </div>
@@ -255,20 +256,20 @@ export default {
             this.$refs.scrollArea.setScrollPosition(
               'horizontal',
               this.selectedEventDateIndex * (180 + 18) - (180 + 18),
-              300
+              300,
             );
           } else {
             // scroll so item is on the left
             this.$refs.scrollArea.setScrollPosition(
               'horizontal',
               this.selectedEventDateIndex * (180 + 18),
-              300 // don't animate
+              300, // don't animate
             );
           }
         } else {
           this.$refs.scrollArea.setScrollPosition(
             'horizontal',
-            this.selectedEventDateIndex * (180 + 18)
+            this.selectedEventDateIndex * (180 + 18),
           );
         }
     },
@@ -299,7 +300,7 @@ export default {
       {
         leading: false,
         trailing: true,
-      }
+      },
     );
     // used to show the add date dialog after removing rrule.
     // regular events wont work because chain of q-dialogs in editrrulecomponent
@@ -325,8 +326,7 @@ export default {
   .event-dates-component {
     .schedule-msg-buttons {
       background: $bi-3;
-      border: rgba(255, 255, 255, 0.05);
-      border-radius: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
   }
   .show-more-button-container {
@@ -341,8 +341,7 @@ export default {
   .event-dates-component {
     .schedule-msg-buttons {
       //background: $b-3;
-      border: rgba(0, 0, 0, 0.05);
-      border-radius: 9px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
     }
   }
   .show-more-button-container {
@@ -355,6 +354,9 @@ export default {
 
 .event-dates-component {
   //overflow: hidden;
+  .schedule-msg-buttons {
+    border-radius: 18px;
+  }
   &.editing {
   }
   .editing-dialog {

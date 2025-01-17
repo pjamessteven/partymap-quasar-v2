@@ -139,8 +139,9 @@ export default {
 
           await this.deleteEventDate(this.ed.id);
           progressDialog.hide();
-          this.$emit('closeDialog'); // close parent dialog
-          // window.bus.$emit('closeDialog');
+          this.$nextTick(() => {
+            this.$emit('closeDialog'); // close parent dialog
+          });
         });
     },
   },
@@ -184,30 +185,26 @@ export default {
           position: absolute;
         }
       }
+      &.active-card {
+        background: rgba(48, 48, 48, 0.5);
+
+        //border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      }
+      &.inactive-card {
+        &:hover {
+          box-shadow: none;
+          background: rgba(48, 48, 48, 0.5);
+        }
+        .timeline-icon {
+          background: $bi-3;
+        }
+      }
     }
     &.editing {
       border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      border-radius: 9px !important;
-
-      .active-card {
-        background: $bi-3;
-        border-radius: 9px !important;
-
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-      }
     }
   }
 
-  .inactive-card {
-    &:hover {
-      box-shadow: none;
-      //border: 1px solid $bi-4;
-      background: $bi-3;
-    }
-    .timeline-icon {
-      background: $bi-3;
-    }
-  }
   .navigate-button {
     border: 1px solid rgba(255, 255, 255, 0.2);
     background: $bi-3;
@@ -229,16 +226,15 @@ export default {
           position: absolute;
         }
       }
+      &.active-card {
+        background: rgba(240, 240, 240, 0.6);
+        position: relative;
+        // border: 1px solid rgba(0, 0, 0, 0.1) !important;
+      }
     }
+
     &.editing {
       border: 1px solid rgba(0, 0, 0, 0.1) !important;
-      border-radius: 9px !important;
-
-      .active-card {
-        background: $b-2;
-        border: 1px solid rgba(0, 0, 0, 0.3) !important;
-        border-radius: 9px !important;
-      }
     }
   }
 
@@ -247,15 +243,7 @@ export default {
       opacity: 0;
     }
   }
-  .inactive-card {
-    &:hover {
-      box-shadow: none;
-      background: $b-3;
-      .timeline-icon-wrapper {
-        background: $b-3;
-      }
-    }
-  }
+
   .navigate-button {
     border: 1px solid rgba(0, 0, 0, 0.1);
     :deep(.q-btn__wrapper::before) {
@@ -278,6 +266,7 @@ export default {
   transition: all 150ms ease-in-out;
   cursor: pointer;
   margin-right: 18px;
+  border-radius: 18px;
   &:active {
     // transform: scale(1.05);
   }
@@ -299,21 +288,24 @@ export default {
     transition: all 300ms;
     background: transparent;
   }
-  .ed-inline {
-    border-radius: 9px !important;
 
-    &.editing {
-      border-radius: 9px !important;
-      overflow: hidden;
-    }
-  }
   .ed-inline-card {
     width: max-content;
     transition: all 0.5s;
     width: 180px;
     height: 102px;
     position: relative;
+    border-radius: 18px;
+    &.inactive-card {
+      &:hover {
+        box-shadow: none;
+        background: rgba(240, 240, 240, 0.6);
 
+        .timeline-icon-wrapper {
+          background: $b-3;
+        }
+      }
+    }
     .date-text {
       z-index: 2;
     }

@@ -279,7 +279,7 @@ export default {
         top: 12px;
         height: 100%;
         width: 100%;
-        content: 'Search places';
+        content: 'Search';
         // color: grey;
         font-weight: 800;
       }

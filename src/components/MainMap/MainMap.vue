@@ -105,6 +105,7 @@
           source-id="points"
           :data="mappedPoints"
           :cluster="true"
+          :clusterRadius="60"
         >
           <!-- Cluster count labels -->
           <mgl-symbol-layer
@@ -190,6 +191,7 @@ import type {
   Map,
   MapLayerMouseEvent,
   PaddingOptions,
+  Point,
 } from 'maplibre-gl';
 import { LngLatBounds, MapGeoJsonFeature } from 'maplibre-gl';
 import { storeToRefs } from 'pinia';
@@ -203,6 +205,7 @@ import { useI18n } from 'vue-i18n';
 import { CapacitorHttp } from '@capacitor/core';
 import markerImage from '/src/assets/marker-dark-shadow.webp';
 import clusterMarkerImage from '/src/assets/marker-dark-shadow-cluster7.webp';
+import { FeatureCollection, Geometry } from 'geojson';
 
 const { t } = useI18n();
 
@@ -246,7 +249,7 @@ const map = useMap();
 
 const delayedRouteName = ref();
 
-const mappedPoints = computed(() => ({
+const mappedPoints = computed<FeatureCollection<Geometry>>(() => ({
   type: 'FeatureCollection',
   features: points.value.map((x: any) => ({
     // TODO update type
@@ -271,31 +274,41 @@ const updateMarkers = () => {
 };
 
 const updateLocationMarker = (userLocation: LngLat) => {
-  map.map?.addSource('userLocation', {
-    type: 'geojson',
-    data: {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: [],
-          geometry: {
-            type: 'Point',
-            coordinates: [userLocation.lng, userLocation.lat],
-          },
+  const userLocationData: FeatureCollection<Geometry> = {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        properties: [],
+        geometry: {
+          type: 'Point',
+          coordinates: [userLocation.lng, userLocation.lat],
         },
-      ],
-    },
-  });
-  map.map?.addLayer({
-    id: 'userLocation',
-    type: 'symbol',
-    source: 'userLocation',
-    layout: {
-      'icon-image': 'pulsing-dot',
-      'icon-ignore-placement': true,
-    },
-  });
+      },
+    ],
+  };
+
+  const existingSource = map.map?.getSource(
+    'userLocation',
+  ) as maplibregl.GeoJSONSource;
+
+  if (existingSource) {
+    existingSource.setData(userLocationData);
+  } else {
+    map.map?.addSource('userLocation', {
+      type: 'geojson',
+      data: userLocationData,
+    });
+    map.map?.addLayer({
+      id: 'userLocation',
+      type: 'symbol',
+      source: 'userLocation',
+      layout: {
+        'icon-image': 'pulsing-dot',
+        'icon-ignore-placement': true,
+      },
+    });
+  }
 };
 
 onMounted(async () => {
@@ -337,7 +350,7 @@ onMounted(async () => {
           padding: getNearbyPagePadding(),
           duration: 0,
         },
-        { ignoreMoveEvents: true }
+        { ignoreMoveEvents: true },
       );
     } else {
       map.map?.easeTo(
@@ -345,7 +358,7 @@ onMounted(async () => {
           padding: getDefaultPadding(),
           duration: 0,
         },
-        { ignoreMoveEvents: true }
+        { ignoreMoveEvents: true },
       );
 
       if (Screen.gt.xs && mainStore.sidebarPanel == 'explore') {
@@ -376,7 +389,7 @@ watch(
         queryStore.loadPoints();
       }
     }
-  }
+  },
 );
 
 watch(
@@ -396,7 +409,7 @@ watch(
     if (newv) {
       updateLocationMarker(newv);
     }
-  }
+  },
 );
 
 watch(
@@ -424,7 +437,7 @@ watch(
         flyTo({ center: mainStore.userLocation });
       }
     }
-  }
+  },
 );
 
 watch(
@@ -440,28 +453,30 @@ watch(
   () => {
     debouncedClearMarkersAndLoadPoints();
   },
-  { deep: true }
+  { deep: true },
 );
 
 const movestart = (e: any) => {
-  if (e.event.ignoreMoveEvents) {
-    return;
-  }
-  if (!blockUpdates.value) {
-    mapStore.mapMoving = true;
-    mainStore.sidebarPanel = 'explore';
-    topTagsInArea.value = [];
-    topArtistsInArea.value = [];
-  }
-  if (!peekMap.value && !blockPeekMap.value) {
-    setTimeout(() => {
-      if (
-        delayedRouteName.value == 'EventPage' &&
-        $route.name === 'EventPage'
-      ) {
-        peekMap.value = true;
-      }
-    }, 300);
+  if ($route.name === 'EventPage' || $route.name === 'Explore') {
+    if (e.event.ignoreMoveEvents) {
+      return;
+    }
+    if (!blockUpdates.value) {
+      mapStore.mapMoving = true;
+      mainStore.sidebarPanel = 'explore';
+      topTagsInArea.value = [];
+      topArtistsInArea.value = [];
+    }
+    if (!peekMap.value && !blockPeekMap.value) {
+      setTimeout(() => {
+        if (
+          delayedRouteName.value == 'EventPage' &&
+          $route.name === 'EventPage'
+        ) {
+          peekMap.value = true;
+        }
+      }, 300);
+    }
   }
 };
 
@@ -501,7 +516,7 @@ const debouncedClearMarkersAndLoadPoints = debounce(
     queryStore.loadPoints();
   },
   300,
-  { leading: false, trailing: true }
+  { leading: false, trailing: true },
 );
 
 const debouncedReverseGeocode = debounce(
@@ -534,7 +549,7 @@ const debouncedReverseGeocode = debounce(
     }
   },
   500,
-  { leading: false, trailing: true }
+  { leading: false, trailing: true },
 );
 
 const mapStateToStore = () => {
@@ -549,25 +564,27 @@ const mapStateToStore = () => {
 };
 
 const moveend = (e: any) => {
-  if (e.ignoreMoveEvents) {
-    return;
-  }
-  mapStore.mapMoving = false;
-  blockPeekMap.value = false;
-  if (!blockUpdates.value) {
-    if (map.map) {
-      mapStateToStore();
-      // dont rev. geocode immediatly after selecting search result
-      if (!mainStore.currentLocationFromSearch && Screen.gt.xs)
-        debouncedReverseGeocode(mapStore.mapCenter, mapStore.mapZoomLevel);
+  if ($route.name === 'EventPage' || $route.name === 'Explore') {
+    if (e.ignoreMoveEvents) {
+      return;
     }
-    mainStore.currentLocationFromSearch = false;
-  } else {
-    nextTick(() => {
-      if ($route.name === 'Explore') {
-        blockUpdates.value = false;
+    mapStore.mapMoving = false;
+    blockPeekMap.value = false;
+    if (!blockUpdates.value) {
+      if (map.map) {
+        mapStateToStore();
+        // dont rev. geocode immediatly after selecting search result
+        if (!mainStore.currentLocationFromSearch && Screen.gt.xs)
+          debouncedReverseGeocode(mapStore.mapCenter, mapStore.mapZoomLevel);
       }
-    });
+      mainStore.currentLocationFromSearch = false;
+    } else {
+      nextTick(() => {
+        if ($route.name === 'Explore') {
+          blockUpdates.value = false;
+        }
+      });
+    }
   }
 };
 
@@ -578,10 +595,11 @@ const mapClick = () => {
       if (focusMarker.value) blockPeekMap.value = true;
       flyTo({ center: focusMarker.value, padding: getEventPagePadding() });
     } else {
-      if (mainStore.routerHistory.length > 0) {
+      console.log(mainStore.routerHistory);
+      if (mainStore.routerHistory.length > 2) {
         $router.go(-1);
       } else {
-        $router.push({ name: 'Explore' });
+        $router.push({ name: 'Explore', query: { view: 'explore' } });
       }
     }
   } else {
@@ -765,7 +783,7 @@ const mouseLeaveClusterPoint = (e: MapLayerMouseEvent) => {
 
 const showPopup = (
   eventsAtPoint: { event_id: number; name: string }[],
-  pointCoords
+  pointCoords,
 ) => {
   // show popup on large screens
   if (Screen.gt.sm) {
@@ -873,7 +891,7 @@ watch(
       map.map.scrollZoom.setWheelZoomRate(1 / 500);
       map.map.scrollZoom.setZoomRate(1 / 500);
     }
-  }
+  },
 );
 
 watch(
@@ -882,7 +900,7 @@ watch(
     if (newv && mainStore.currentLocationFromSearch) {
       flyTo({ center: newv });
     }
-  }
+  },
 );
 
 watch(focusMarker, (newval: LngLat | null) => {
@@ -1021,11 +1039,14 @@ const unclusteredPointLayout = {
   'text-font': ['Metropolis Regular'],
   'text-offset': [0, 2], // Offset text below the icon
   'text-allow-overlap': false,
-  'text-ignore-placement': false,
+  // 'text-ignore-placement': false,
   'text-anchor': 'top',
   'text-optional': true,
   //'icon-ignore-placement': true,
   'icon-allow-overlap': false,
+  'text-allow-overlap': true,
+  'text-ignore-placement': true,
+  'symbol-avoid-edges': false,
   'icon-image': 'marker-dark',
   'icon-size': [
     'interpolate',
@@ -1056,6 +1077,9 @@ const unclusteredPointLayout = {
 const clusterCountLayout = {
   ...unclusteredPointLayout,
   'text-field': '{point_count_abbreviated} ' + t('general.events'),
+  'text-allow-overlap': true,
+  'text-ignore-placement': true,
+  'symbol-avoid-edges': false,
   /*
   'text-font': ['Metropolis Bold'],
   'text-size': 15,

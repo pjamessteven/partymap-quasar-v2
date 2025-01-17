@@ -8,12 +8,18 @@ import { useMainStore } from './main';
 
 import { groupEventDatesByMonth } from './query';
 import { i18n } from 'src/boot/i18n';
+import { getCountriesRequest } from 'src/api';
+import { getCountryRegionsRequest } from 'src/api';
 
 const { t } = i18n.global;
 
 // TODO: improve interface
 
 interface BrowseState {
+  countries: {
+    short_name: string;
+    event_count: number;
+  }[];
   taggedEvents: {
     [key: string]: {
       eventDates: [EventDate, string][];
@@ -35,10 +41,27 @@ const startDate = dayjs().toISOString();
 
 export const useBrowseStore = defineStore('browse', {
   state: (): BrowseState => ({
+    countries: [],
     taggedEvents: {},
   }),
   getters: {},
   actions: {
+    async loadCountries() {
+      if (this.countries.length === 0) {
+        const response = await getCountriesRequest();
+        this.countries = response.data;
+      }
+    },
+    async loadCountryRegions(country_id) {
+      const country = this.countries.find((x) => x.short_name === country_id);
+      if (country) {
+        country.loading = true;
+        const response = await getCountryRegionsRequest(country_id);
+        country.regions = response.data;
+        country.loading = false;
+      }
+    },
+    async loadCountryLocalities() {},
     async loadEventDates(tag: string) {
       // already in object?
       let item = this.taggedEvents[tag];
@@ -74,13 +97,13 @@ export const useBrowseStore = defineStore('browse', {
           item.eventDates = response.data.items;
           item.eventDatesGroupedByMonth = groupEventDatesByMonth(
             {},
-            response.data.items
+            response.data.items,
           );
         } else {
           item.eventDates = item.eventDates?.concat(response.data.items);
           groupEventDatesByMonth(
             item.eventDatesGroupedByMonth,
-            response.data.items
+            response.data.items,
           );
         }
         item.eventDatesLoading = false;

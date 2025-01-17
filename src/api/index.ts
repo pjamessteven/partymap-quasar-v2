@@ -12,7 +12,7 @@ export const DEV_SERVER = process.env.NODE_ENV === 'development';
 
 export const API_URL =
   DEV_SERVER && process.env.CLIENT
-    ? // 'http://localhost:5000/api'
+    ? // ? 'http://localhost:5000/api'
       '/api'
     : 'https://api.partymap.com/api';
 
@@ -98,7 +98,7 @@ api.interceptors.response.use(
         // Something happened in setting up the request and triggered an Error
       }
     return Promise.reject(error);
-  }
+  },
 );
 
 // diffy
@@ -109,7 +109,7 @@ export function getFestivalInfo(
     country: string;
     year: string;
   },
-  abortSignal: AbortSignal
+  abortSignal: AbortSignal,
 ) {
   return api.post(
     `${DIFY_URL}/workflows/run`,
@@ -127,7 +127,7 @@ export function getFestivalInfo(
         Authorization: 'Bearer ' + process.env.DIFY_FESTIVAL_INFO_KEY,
         lang: undefined,
       },
-    }
+    },
   );
 }
 
@@ -137,7 +137,7 @@ export function getGptArtists(
     country: string;
     year: string;
   },
-  abortSignal: AbortSignal
+  abortSignal: AbortSignal,
 ) {
   return api.post(
     `${DIFY_URL}/workflows/run`,
@@ -155,7 +155,7 @@ export function getGptArtists(
         Authorization: 'Bearer ' + process.env.DIFY_ARTISTS_KEY,
         lang: undefined,
       },
-    }
+    },
   );
 }
 export function getFestivalSummaries(
@@ -164,7 +164,7 @@ export function getFestivalSummaries(
     country: string;
     year: string;
   },
-  abortSignal: AbortSignal
+  abortSignal: AbortSignal,
 ) {
   return api.post(
     `${DIFY_URL}/workflows/run`,
@@ -182,7 +182,7 @@ export function getFestivalSummaries(
         Authorization: 'Bearer ' + process.env.DIFY_SUMMARIES_KEY,
         lang: undefined,
       },
-    }
+    },
   );
 }
 
@@ -252,7 +252,7 @@ export function getMusicBrainzPlace(query) {
 export function getGooglePlacesAutocomplete(
   query,
   sessionToken = null,
-  location = null
+  location = null,
 ) {
   return api.get(`${PLACE_AUTOCOMPLETE_API_URL}`, {
     params: {
@@ -278,7 +278,7 @@ export function getPointsRequest(
   sizeOptions?: string[],
   favorites?: boolean,
   dateUnconfirmed?: boolean,
-  emptyLineup?: boolean
+  emptyLineup?: boolean,
 ) {
   return api.get(`${API_URL}/location/points/`, {
     params: {
@@ -307,7 +307,7 @@ export function getClustersRequest(
   bounds,
   tags = null,
   min = null,
-  max = null
+  max = null,
 ) {
   return api.get(`${API_URL}/event/location/zoom_level/${zoomLevel}`, {
     params: {
@@ -529,7 +529,9 @@ export function appleLoginRequest(payload) {
 }
 
 export function checkAuthenticatedRequest() {
-  return api.get(`${API_URL}/auth/login/`);
+  return api.get(`${API_URL}/auth/login/`, {
+    data: {},
+  });
 }
 
 export function fetchEventDateRequest(eventId) {
@@ -623,6 +625,14 @@ export function updateReportRequest(reportId, payload) {
 
 export function getLocalitiesRequest() {
   return api.get(`${API_URL}/location/localities`);
+}
+
+export function getCountriesRequest() {
+  return api.get(`${API_URL}/location/countries`);
+}
+
+export function getCountryRegionsRequest(country_id) {
+  return api.get(`${API_URL}/location/countries/${country_id}`);
 }
 
 export function getSearchSuggestionsRequest(params) {

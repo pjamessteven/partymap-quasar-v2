@@ -161,7 +161,7 @@ export default {
       artist.remove_date = true;
       artist.start_naive = null;
       const existingUpdateIndex = this.artistsToUpdate.findIndex(
-        (x) => x.name === artist.name
+        (x) => x.name === artist.name,
       );
       if (existingUpdateIndex >= 0) {
         this.artistsToUpdate[existingUpdateIndex] = artist;
@@ -173,7 +173,7 @@ export default {
     updateArtistDate(artist, newDate) {
       artist.start_naive = newDate;
       const existingUpdateIndex = this.artistsToUpdate.findIndex(
-        (x) => x.name === artist.name
+        (x) => x.name === artist.name,
       );
       if (existingUpdateIndex >= 0) {
         this.artistsToUpdate[existingUpdateIndex] = artist;
@@ -184,16 +184,16 @@ export default {
     },
     deleteArtist(artist) {
       const originalExistingIndex = this.originalArtistsList.findIndex(
-        (x) => x.name === artist.name
+        (x) => x.name === artist.name,
       );
       const existingIndex = this.artistsList.findIndex(
-        (x) => x.name === artist.name
+        (x) => x.name === artist.name,
       );
       const existingAddIndex = this.artistsToAdd.findIndex(
-        (x) => x.name === artist.name
+        (x) => x.name === artist.name,
       );
       const existingUpdateIndex = this.artistsToUpdate.findIndex(
-        (x) => x.name === artist.name
+        (x) => x.name === artist.name,
       );
 
       if (existingIndex >= 0) {
@@ -232,6 +232,7 @@ export default {
       var lists = [];
       // first get stages (need to rename to lists) that exist in artist list
       lists = this.artistsList.map((x) => x.stage);
+      lists = lists.filter((x) => !!x);
       lists = lists.sort((a, b) => a.localeCompare(b));
 
       lists = [...new Set(lists)]; // remove duplicates
@@ -377,7 +378,7 @@ export default {
       if (this.selectedList === 'main stage') {
         // if main stage is selected, show artists with no list('stage') assigned
         return this.artistsList.filter(
-          (x) => x.stage === 'main stage' || !x.stage
+          (x) => x.stage === 'main stage' || !x.stage,
         );
       } else {
         return this.artistsList.filter((x) => x.stage === this.selectedList);

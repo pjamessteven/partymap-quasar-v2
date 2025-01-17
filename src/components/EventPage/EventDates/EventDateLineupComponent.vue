@@ -1,14 +1,16 @@
 <template>
-  <div v-if="!!event" class="flex column grow no-wrap">
+  <div
+    v-if="selectedEventDate?.artists?.length > 0 || lineupImages?.length > 0"
+    class="lineup-component flex column grow no-wrap"
+  >
     <div
       class="inter bolder text-h6 t1 q-pr-md event-page-header"
-      v-if="selectedEventDate?.artists?.length > 0 || lineupImages?.length > 0"
       :class="{ 'q-px-md': $q.screen.lt.sm }"
     >
       {{ $t('event_dates.lineup') }}
     </div>
     <div
-      class="flex row no-wrap q-gutter-sm q-mt-sm"
+      class="flex row no-wrap q-gutter-sm"
       :class="{ 'q-mb-': $q.screen.gt.xs }"
       v-if="lineupImages?.length > 0"
     >
@@ -69,7 +71,7 @@ export default {
     ...mapState(useAuthStore, ['currentUser', 'currentUserIsStaff']),
     lineupImages() {
       return this.selectedEventDate?.media_items?.filter(
-        (x) => x.attributes?.isLineupImage
+        (x) => x.attributes?.isLineupImage,
       );
     },
   },
@@ -78,10 +80,37 @@ export default {
 
 <style lang="scss" scoped>
 .body--dark {
+  .lineup-component {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    //background: $bi-3;
+    :deep(.q-separator) {
+      opacity: 0.3;
+    }
+  }
 }
 .body--light {
+  .lineup-component {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+
+    //background: $b-2;
+    :deep(.q-separator) {
+      opacity: 0.6;
+    }
+  }
 }
 
+.lineup-component {
+  .event-page-header {
+    margin-left: 16px;
+  }
+}
 @media only screen and (max-width: 1023px) {
+  .lineup-component {
+    background: none !important;
+    border: none !important;
+    .event-page-header {
+      margin-left: unset;
+    }
+  }
 }
 </style>

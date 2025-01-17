@@ -61,27 +61,29 @@ export default {
       font-family: 'InterDisplay';
     }
   }
+
+  &:has(.date-header-wrapper[style*='top: 0px']) .date-header {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .body--light {
   .date-header {
-    background: white !important;
+    background: white;
   }
 }
 .body--dark {
   .date-header {
-    background: black !important;
+    background: black;
   }
 }
 @media only screen and (max-width: 599px) {
   .body--light {
     .date-header {
-      background: white !important;
     }
   }
   .body--dark {
     .date-header {
-      background: black !important;
     }
   }
   .date-header-wrapper {

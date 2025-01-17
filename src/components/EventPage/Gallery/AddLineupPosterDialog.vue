@@ -118,7 +118,7 @@ export default {
             {
               lineup_images: this.filesToUpload,
             },
-            this.selectedDate?.id
+            this.selectedDate?.id,
           );
           if (this.selectedDate.id === this.selectedEventDate.id) {
             // update current event date
@@ -154,7 +154,7 @@ export default {
                   lineup_images: this.filesToUpload,
                   ...messageAndToken,
                 },
-                this.selectedDate?.id
+                this.selectedDate?.id,
               );
 
               this.$q
@@ -165,7 +165,9 @@ export default {
                   persistent: false, // we want the user to not be able to close it
                 })
                 .onDismiss(() => {
-                  this.$emit('closeDialog');
+                  this.$nextTick(() => {
+                    this.$emit('closeDialog'); // close parent dialog
+                  });
                 });
             } catch (e) {}
 

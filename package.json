@@ -63,6 +63,7 @@
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@intlify/vite-plugin-vue-i18n": "^3.3.1",
     "@quasar/app-vite": "^2.0.2",
+    "@types/geojson": "^7946.0.15",
     "@types/node": "^12.20.21",
     "@types/node-geocoder": "^4.2.0",
     "@typescript-eslint/eslint-plugin": "^8.18.0",

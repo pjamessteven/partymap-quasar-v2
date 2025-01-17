@@ -88,7 +88,7 @@ export default {
     .featured-media-overlay {
       background: linear-gradient(
         0deg,
-        rgba(0, 0, 0, 0.68) 0%,
+        rgba(250, 250, 250, 0.3) 0%,
         rgba(0, 0, 0, 0) 150%
       );
     }
@@ -100,7 +100,7 @@ export default {
     .featured-media-overlay {
       background: linear-gradient(
         0deg,
-        rgba(0, 0, 0, 0.68) 0%,
+        rgba(255, 255, 255, 0) 0%,
         rgba(0, 0, 0, 0) 150%
       );
     }
@@ -110,7 +110,7 @@ export default {
 .featured-media {
   max-width: 100%;
   overflow: hidden;
-  min-height: 400px;
+  //min-height: 400px;
   .featured-media-overlay {
     position: absolute;
     pointer-events: none;

@@ -95,6 +95,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.description {
+  max-width: 550px;
+}
 @media only screen and (max-width: 1023px) {
 }
 </style>

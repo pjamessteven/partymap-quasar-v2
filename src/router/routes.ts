@@ -38,7 +38,7 @@ const routes: RouteRecordRaw[] = [
       },
 
       {
-        path: 'browse',
+        path: 'browse/:country?/:region?',
         name: 'BrowsePage',
         component: () => import('src/components/BrowsePage/BrowsePage.vue'),
         props: true,
@@ -48,6 +48,7 @@ const routes: RouteRecordRaw[] = [
           friendlyName: 'Browse',
         },
       },
+
       {
         path: 'activity',
         name: 'ActivityPage',

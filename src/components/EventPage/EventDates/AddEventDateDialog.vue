@@ -10,7 +10,7 @@
     </q-card-section>
     <q-card-section class="dialog-card-content">
       <q-card-section class="flex column no-wrap q-mt-sm">
-        <div class="flex row wrap items-baseline">
+        <div class="flex row no-wrap items-baseline">
           <q-icon left size="1em" name="las la-calendar-day" />
           <div class="flex column">
             <div class="card-title q-pr-md">
@@ -172,7 +172,7 @@
 
       <q-card-section
         class="flex row justify-between no-wrap"
-        v-if="currentUser.role >= 20"
+        v-if="currentUser?.role >= 20"
       >
         <div class="flex row wrap items-center">
           <q-icon left size="1em" name="las la-ticket-alt" />
@@ -182,7 +182,7 @@
         </div>
       </q-card-section>
 
-      <q-card-section class="q-pt-none q-ml-lg" v-if="currentUser.role >= 20">
+      <q-card-section class="q-pt-none q-ml-lg" v-if="currentUser?.role >= 20">
         <q-input
           outlined
           square
@@ -263,8 +263,8 @@ export default {
             // omit empty fields
             _.omitBy(
               this.eventDate,
-              (v) => _.isUndefined(v) || _.isNull(v) || v === ''
-            )
+              (v) => _.isUndefined(v) || _.isNull(v) || v === '',
+            ),
           );
           progressDialog.hide();
           this.$emit('closeDialog');
@@ -295,7 +295,7 @@ export default {
                 ...messageAndToken,
                 ..._.omitBy(
                   this.eventDate,
-                  (v) => _.isUndefined(v) || _.isNull(v) || v === ''
+                  (v) => _.isUndefined(v) || _.isNull(v) || v === '',
                 ),
               });
               progressDialog.hide();
@@ -308,7 +308,9 @@ export default {
                   persistent: false, // we want the user to not be able to close it
                 })
                 .onDismiss(() => {
-                  this.$emit('closeDialog');
+                  this.$nextTick(() => {
+                    this.$emit('closeDialog'); // close parent dialog
+                  });
                 });
             } catch (e) {
               progressDialog.hide();

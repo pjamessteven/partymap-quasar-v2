@@ -26,6 +26,22 @@
             'q-px-sm  q-mt-': $q.screen.lt.md,
           }"
         >
+          <!-- bit too slow when lots of items
+          <q-intersection
+            v-for="(date, index) in eventDatesGroupedByMonth[Number(yearMonth)]"
+            :key="index"
+            class="ed-intersection"
+            :style="$q.screen.gt.xs ? 'height: 238.5px' : 'height: 300px'"
+          >
+            <template v-slot:default>
+              <EventDateCard :key="index" :event="date" :short-date="true">
+              </EventDateCard>
+            </template>
+            <template v-slot:hidden>
+              <EventDateCard :key="index"> </EventDateCard>
+            </template>
+          </q-intersection>
+          -->
           <EventDateCard
             v-for="(date, index) in eventDatesGroupedByMonth[Number(yearMonth)]"
             :key="index"
