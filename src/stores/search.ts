@@ -2,12 +2,14 @@ import { defineStore } from 'pinia';
 
 interface SearchState {
   query: string | null;
-  searchbarShowing: boolean;
+  searchResults: [];
+  locationSearchResults: [];
 }
 export const useSearchStore = defineStore('search', {
   state: (): SearchState => ({
     query: null,
-    searchbarShowing: false,
+    searchResults: [],
+    locationSearchResults: [],
   }),
   getters: {},
   actions: {},

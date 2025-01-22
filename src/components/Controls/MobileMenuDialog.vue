@@ -1,5 +1,5 @@
 <template>
-  <q-dialog
+  <BackdropBlurDialog
     ref="dialog"
     transition-show="slide-up"
     transition-hide="slide-down"
@@ -13,15 +13,17 @@
         </div>
       </q-card>
     </div>
-  </q-dialog>
+  </BackdropBlurDialog>
 </template>
 
 <script>
+import BackdropBlurDialog from '../BackdropBlurDialog.vue';
 import MobileSwipeHandle from '../MobileSwipeHandle.vue';
 
 export default {
   components: {
     MobileSwipeHandle,
+    BackdropBlurDialog,
   },
   props: ['slot'], // bit of a hack, passing slot as a prop
   data() {

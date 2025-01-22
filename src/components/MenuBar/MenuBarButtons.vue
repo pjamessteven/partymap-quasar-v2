@@ -132,7 +132,7 @@
     </router-link>
 
     <q-btn
-      v-if="$q.screen.lt.md"
+      v-if="false"
       icon="las la-search"
       style="transform: scale(-1, 1)"
       @click="
@@ -431,12 +431,16 @@ export default {
     &:before {
       opacity: 0;
       transform: translateY(-$distance);
-      transition: transform 0s $easeOutBack, opacity 0s;
+      transition:
+        transform 0s $easeOutBack,
+        opacity 0s;
     }
     &:after {
       opacity: 0;
       transform: translateY($distance/2);
-      transition: transform $duration $easeOutBack, opacity $duration;
+      transition:
+        transform $duration $easeOutBack,
+        opacity $duration;
     }
     &:hover {
       &:before,
@@ -445,10 +449,14 @@ export default {
         transform: translateY(0);
       }
       &:before {
-        transition: transform $duration $easeOutBack, opacity $duration;
+        transition:
+          transform $duration $easeOutBack,
+          opacity $duration;
       }
       &:after {
-        transition: transform 0s $duration $easeOutBack, opacity 0s $duration;
+        transition:
+          transform 0s $duration $easeOutBack,
+          opacity 0s $duration;
       }
     }
   }

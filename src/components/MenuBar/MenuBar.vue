@@ -190,7 +190,7 @@ export default {
       if (this.routerHistory.length <= 2) return null;
       const previousRoute = this.routerHistory[this.routerHistory.length - 1];
       if (previousRoute) {
-        if (previousRoute.meta?.noBackNavigation) {
+        if (this.$route.meta?.noBackButton) {
           return null;
         } else return this.getPreviousRouteName(previousRoute);
       } else return null;

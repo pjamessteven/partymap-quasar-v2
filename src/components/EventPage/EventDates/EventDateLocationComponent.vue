@@ -118,14 +118,14 @@
       </div>
       -->
     </div>
-    <q-dialog
+    <BackdropBlurDialog
       v-model="showEditDialog"
       v-if="editing || showMoreFields"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <EditEventDateDialog :ed="selectedEventDate" mode="location" />
-    </q-dialog>
+    </BackdropBlurDialog>
   </div>
 </template>
 
@@ -135,10 +135,11 @@ import EditEventDateDialog from './EditEventDateDialog.vue';
 import { useEventStore } from 'src/stores/event';
 import { useMapStore } from 'src/stores/map';
 import { UseDevicePixelRatio } from '@vueuse/components';
+import BackdropBlurDialog from '../../BackdropBlurDialog.vue';
 
 export default {
   name: 'EventDateMap',
-  components: { EditEventDateDialog, UseDevicePixelRatio },
+  components: { EditEventDateDialog, UseDevicePixelRatio, BackdropBlurDialog },
   props: {
     editing: Boolean,
     inline: Boolean, // desktop and mobile (only show text, no map)
@@ -212,7 +213,7 @@ export default {
         ],
         {
           icon: this.defaultIcon,
-        }
+        },
       );
       this.markers = L.layerGroup([marker]);
       this.map.addLayer(this.markers);
@@ -269,7 +270,8 @@ export default {
     width: 100%;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 0.5em 1em -0.125em rgba(0, 0, 0, 0.1),
+    box-shadow:
+      0 0.5em 1em -0.125em rgba(0, 0, 0, 0.1),
       0 0px 0 1px rgba(0, 0, 0, 0.02);
     &:after {
       content: '';

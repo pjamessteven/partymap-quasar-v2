@@ -81,14 +81,14 @@
         </span>
       </div>
     </div>
-    <q-dialog
+    <BackdropBlurDialog
       v-if="editing || showMoreFields"
       v-model="showEditingDialog"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <EditEventDateDialog :ed="selectedEventDate" mode="description" />
-    </q-dialog>
+    </BackdropBlurDialog>
   </div>
 </template>
 
@@ -98,11 +98,13 @@ import EditEventDateDialog from './EditEventDateDialog.vue';
 import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
+import BackdropBlurDialog from '../../BackdropBlurDialog.vue';
 
 export default {
   name: 'EventDateDescriptionComponent',
   components: {
     EditEventDateDialog,
+    BackdropBlurDialog,
   },
   watch: {},
   data() {

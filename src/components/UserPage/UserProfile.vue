@@ -138,7 +138,7 @@
         </div>
       </div>
     </div>
-    <q-dialog
+    <BackdropBlurDialog
       v-model="showAvatarDialog"
       transition-show="jump-up"
       transition-hide="jump-down"
@@ -181,7 +181,7 @@
           </div>
         </q-card-section>
       </q-card>
-    </q-dialog>
+    </BackdropBlurDialog>
     <input
       :value="computedUrl"
       ref="copyProfileUrlInput"
@@ -199,8 +199,9 @@ import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useSearchStore } from 'src/stores/search';
 import { useMainStore } from 'src/stores/main';
 import { useAuthStore } from 'src/stores/auth';
+import BackdropBlurDialog from '../BackdropBlurDialog.vue';
 export default {
-  components: { MultipleMediaSelector },
+  components: { MultipleMediaSelector, BackdropBlurDialog },
   props: {
     username: { type: String, default: undefined },
   },
@@ -250,7 +251,7 @@ export default {
             .writeText(this.computedUrl)
             .then(() => this.$q.notify('Copied profile link to clipboard'))
             .catch(() =>
-              this.$q.notify('Sharing not supported in this browser :(')
+              this.$q.notify('Sharing not supported in this browser :('),
             );
         }
       }

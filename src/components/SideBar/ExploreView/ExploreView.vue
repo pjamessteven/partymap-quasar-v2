@@ -66,360 +66,330 @@
           "
         >
           <div class="flex column no-wrap scroll-content">
-            <div
-              class="flex row items-end q-mb-sm no-wrap"
-              :class="{
-                'q-px-lg q-mb-lg q-pb-sm': $q.screen.gt.sm,
-                'q-px-sm ': $q.screen.lt.md,
-              }"
-              v-if="$q.screen.gt.sm"
-            >
+            <div class="flex column top-section">
               <div
-                class="flex row items-center no-wrap"
-                :class="$q.screen.gt.sm ? 'q-mx-sm' : 'q-ml-xs'"
-                :style="
-                  $q.screen.gt.sm
-                    ? 'margin-left: -16px; '
-                    : 'margin-left: 0px; '
-                "
+                class="flex row items-end q-mb-sm no-wrap"
+                :class="{
+                  'q-px-lg q-mb-lg q-pb-': $q.screen.gt.sm,
+                  'q-px-sm ': $q.screen.lt.md,
+                }"
+                v-if="$q.screen.gt.sm"
               >
-                <q-icon
-                  name="las la-calendar"
-                  :class="$q.screen.gt.sm ? 'q-pa-md' : 'q-pa-sm'"
-                  size="sm"
-                />
-                <DesktopDateSelect />
-              </div>
-              <div class="flex row no-wrap items-end">
-                <router-link
-                  :to="{ name: 'Explore', query: { view: 'nearby' } }"
-                  style="text-decoration: none; color: inherit"
-                >
-                  <q-btn
-                    flat
-                    :class="$q.screen.gt.sm ? 'q-pa-md' : 'q-pa-sm'"
-                    style="border-radius: 100px !important"
-                  >
-                    <template v-slot:default>
-                      <q-icon size="sm" name="mdi-crosshairs-gps" />
-                    </template>
-                  </q-btn>
-                </router-link>
-
-                <NearbyCountrySelect />
-              </div>
-            </div>
-
-            <!-- selected artist (desktop only) -->
-            <div
-              class="flex column q-mb-md q-pt-sm"
-              v-if="controlArtist?.length > 0 && $q.screen.gt.sm"
-            >
-              <div
-                class="q-pb-md t1 header"
-                :class="$q.screen.gt.sm ? 'q-px-lg  t1' : ' t1 inter semibold'"
-              >
-                <div v-if="controlArtist.length === 1">
-                  {{ $t('explore_view.selected_artist') }}
-                </div>
-                <div v-else>{{ $t('explore_view.selected_artists') }}</div>
-              </div>
-              <div class="tag-scroll-area q-px-lg t1 flex justify-start">
                 <div
-                  v-for="(artist, index) in controlArtist"
-                  :key="-index"
-                  @click="clearArtists"
-                  class="tag tag-selected flex items-center no-wrap text- inter semibold"
-                  style="text-transform: capitalize"
-                  :class="$q.platform.is.ios ? 'no-hover' : ''"
+                  v-if="false"
+                  class="flex row items-center no-wrap"
+                  :class="$q.screen.gt.sm ? 'q-mx-sm' : 'q-ml-xs'"
+                  :style="
+                    $q.screen.gt.sm
+                      ? 'margin-left: -16px; '
+                      : 'margin-left: 0px; '
+                  "
                 >
                   <q-icon
-                    style="margin-left: -4px; font-size: 18px"
-                    name="mdi-close-circle q-mr-xs"
+                    name="las la-calendar"
+                    :class="$q.screen.gt.sm ? 'q-pa-md' : 'q-pa-sm'"
+                    size="sm"
+                    :style="
+                      $q.screen.gt.sm
+                        ? 'margin-right: -4px; '
+                        : 'margin-left: 0px; '
+                    "
                   />
-                  {{ artist.name }}
+                  <DesktopDateSelect />
+                </div>
+                <div class="flex row grow no-wrap items-start">
+                  <router-link
+                    :to="{ name: 'Explore', query: { view: 'nearby' } }"
+                    style="text-decoration: none; color: inherit"
+                  >
+                    <q-btn
+                      :style="
+                        $q.screen.gt.sm
+                          ? 'margin-right: -0px; margin-left: -8px '
+                          : 'margin-left: 0px; '
+                      "
+                      flat
+                      :class="$q.screen.gt.sm ? 'q-pa-md' : 'q-pa-sm'"
+                      style="border-radius: 100px !important"
+                    >
+                      <template v-slot:default>
+                        <q-icon size="sm" name="mdi-crosshairs-gps" />
+                      </template>
+                    </q-btn>
+                  </router-link>
+                  <div class="flex row items-center q-ml-xs">
+                    <div
+                      class="ellipsis text-h5 q-mr-sm"
+                      v-if="$q.screen.gt.sm"
+                    >
+                      <span class="metropolis bolder">
+                        {{ $t('nearby_view.upcoming_in') }}
+                      </span>
+                    </div>
+                    <NearbyCountrySelect class="q-mr-sm" />
+                  </div>
                 </div>
               </div>
+              <DesktopSearchComponent
+                style="position: relative"
+                v-if="$q.screen.gt.sm && false"
+                :fullWidth="true"
+                :class="{
+                  ' q-mb-lg q-px-lg': $q.screen.gt.sm,
+                  'q-px-md  q-mb-sm q-mt-md ': $q.screen.lt.md,
+                }"
+              />
+              <transition appear enter-active-class="animated fadeIn slow">
+                <div class="flex column" v-if="!isLoadingInitial">
+                  <!-- cities-->
+                  <div
+                    :style="$q.screen.gt.sm ? 'margin-top: 0px' : ''"
+                    class="flex column q-mb-lg"
+                    v-if="
+                      topRegionsInArea?.length > 2 &&
+                      mapZoomLevel < 7 &&
+                      $q.screen.gt.sm &&
+                      false
+                    "
+                  >
+                    <div
+                      class="q-pb-md q-mt-sm t1 header"
+                      v-if="false"
+                      :class="$q.screen.gt.sm ? 'q-px-lg  ' : ' '"
+                    >
+                      <div class="inter bolder text-large">Busy places:</div>
+                    </div>
+
+                    <div>
+                      <CustomQScroll
+                        horizontal
+                        class="tag-scroll-area"
+                        :style="
+                          topRegionsInArea.length > 14
+                            ? 'height: 72px'
+                            : 'height: 36px'
+                        "
+                        style="width: 100%"
+                        :thumb-style="
+                          $q.screen.gt.xs
+                            ? {
+                                borderRadius: '0px',
+                                bottom: '0px',
+                                height: '4px',
+                                marginLeft: '24px',
+                                paddingLeft: '16px',
+                              }
+                            : { bottom: '0px', height: '0px' }
+                        "
+                      >
+                        <div
+                          class="flex column inter bolder text-h6 q-pl-lg"
+                          style="word-break: keep-all; white-space: nowrap"
+                          :class="{
+                            t3: $q.dark.isActive,
+                            t4: !$q.dark.isActive,
+                          }"
+                        >
+                          <div class="flex row no-wrap q-gutter-sm q-pr-xl">
+                            <div
+                              v-for="(region, index) in computedRegions1"
+                              :key="index"
+                              @click="clickRegion(region)"
+                            >
+                              <span
+                                class="city"
+                                style="text-transform: capitalize"
+                                :class="$q.platform.is.ios ? 'no-hover' : ''"
+                              >
+                                {{ region.long_name }}
+                              </span>
+                              <span
+                                class="q-ml-sm"
+                                v-if="index < computedRegions1.length - 1"
+                                >·
+                              </span>
+                            </div>
+                          </div>
+
+                          <div
+                            class="flex row no-wrap q-gutter-sm q-pt-sm"
+                            v-if="computedRegions2.length > 0"
+                          >
+                            <div
+                              v-for="(region, index) in computedRegions2"
+                              :key="index"
+                              @click="clickRegion(region)"
+                            >
+                              <span
+                                style="text-transform: capitalize"
+                                :class="$q.platform.is.ios ? 'no-hover' : ''"
+                                class="city"
+                              >
+                                {{ region.long_name }}
+                              </span>
+                              <span
+                                class="q-ml-sm"
+                                v-if="index < computedRegions1.length - 1"
+                                >·
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </CustomQScroll>
+                    </div>
+                  </div>
+
+                  <!-- selected artist (desktop only) -->
+                  <div
+                    class="flex column q-mb-lg q-pt-sm"
+                    v-if="controlArtist?.length > 0 && $q.screen.gt.sm"
+                  >
+                    <div
+                      class="q-pb-md t1 header"
+                      :class="
+                        $q.screen.gt.sm ? 'q-px-lg  t1' : ' t1 inter semibold'
+                      "
+                    >
+                      <div v-if="controlArtist.length === 1">
+                        {{ $t('explore_view.selected_artist') }}
+                      </div>
+                      <div v-else>
+                        {{ $t('explore_view.selected_artists') }}
+                      </div>
+                    </div>
+                    <div class="tag-scroll-area q-px-lg t1 flex justify-start">
+                      <div
+                        v-for="(artist, index) in controlArtist"
+                        :key="-index"
+                        @click="clearArtists"
+                        class="tag tag-selected flex items-center no-wrap text- inter semibold"
+                        style="text-transform: capitalize"
+                        :class="$q.platform.is.ios ? 'no-hover' : ''"
+                      >
+                        <q-icon
+                          style="margin-left: -4px; font-size: 18px"
+                          name="mdi-close-circle q-mr-xs"
+                        />
+                        {{ artist.name }}
+                      </div>
+                    </div>
+                  </div>
+                  <!-- tags -->
+                  <div
+                    class="flex column"
+                    :class="{
+                      'q-mb-lg': $q.screen.gt.sm,
+                      'q-mb-md': $q.screen.lt.md,
+                    }"
+                    v-if="
+                      (topTagsInArea?.length > 0 || controlTag.length > 0) &&
+                      $q.screen.gt.sm
+                    "
+                  >
+                    <div
+                      class="q-pb-md header t1 header-select flex row no-wrap items-center justify-between"
+                      :class="{
+                        'q-px-lg': $q.screen.gt.sm,
+                        'q-px-md': $q.screen.lt.md,
+                      }"
+                    >
+                      <span class="">
+                        <span
+                          class=""
+                          v-if="topTagsInArea?.length && controlTag.length == 0"
+                        >
+                          {{ $t('explore_view.hot_tags') }}
+                        </span>
+                        <span v-else-if="controlTag.length === 1">
+                          {{ $t('explore_view.selected_tag') }}
+                        </span>
+                        <span v-else>
+                          {{ $t('explore_view.selected_tags') }}</span
+                        >:
+                      </span>
+                    </div>
+                    <TagExplorer
+                      mode="explore"
+                      :class="{
+                        'q-px-lg q-mb-sm': $q.screen.gt.sm,
+                        'q-px-md': $q.screen.lt.md,
+                      }"
+                    />
+                  </div>
+                  <div
+                    class="flex column"
+                    :style="
+                      $q.screen.gt.sm
+                        ? 'margin-top: 8px; margin-bottom: -8px'
+                        : ''
+                    "
+                    v-if="
+                      topArtistsInArea?.length > 5 &&
+                      $q.screen.gt.sm &&
+                      controlArtist.length === 0
+                    "
+                  >
+                    <div
+                      class="header header-select t1 justify-between flex no-wrap items-center"
+                      :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-px-md '"
+                    >
+                      <span>
+                        {{ $t('explore_view.high_profile_artists') }}:</span
+                      >
+                      <ControlSelect
+                        v-if="false"
+                        @clear="
+                          () => {
+                            controlTag = [];
+                          }
+                        "
+                        class="t2"
+                        :size="$q.screen.gt.sm ? 'sm' : 'xs'"
+                        :label="'All Artists'"
+                      >
+                        <template v-slot="{ showing, hide }">
+                          <ArtistControl :showing="showing" @hide="hide" />
+                        </template>
+                      </ControlSelect>
+                    </div>
+                    <ArtistsComponent
+                      :class="$q.screen.gt.sm ? 'q-pl- q-mb-md ' : ''"
+                      :artists="topArtistsInArea"
+                      :size="$q.screen.gt.sm ? 'lg' : 'md'"
+                    />
+                  </div>
+                </div>
+              </transition>
             </div>
 
             <transition appear enter-active-class="animated fadeIn slow">
-              <div class="flex column" v-if="!isLoadingInitial">
-                <!-- cities-->
-                <div
-                  :style="$q.screen.gt.sm ? 'margin-top: 0px' : ''"
-                  class="flex column q-mb-lg"
-                  v-if="
-                    topRegionsInArea?.length > 2 &&
-                    mapZoomLevel < 7 &&
-                    $q.screen.gt.sm
-                  "
-                >
-                  <div
-                    class="q-pb-md q-mt-sm t1 header"
-                    v-if="false"
-                    :class="$q.screen.gt.sm ? 'q-px-lg  ' : ' '"
-                  >
-                    <div class="inter bolder text-large">Busy places:</div>
-                  </div>
+              <div
+                class="flex column bottom-section"
+                v-if="!isLoadingInitial"
+                :class="{
+                  'q-px-sm ': $q.screen.lt.md,
+                }"
+              >
+                <EventDateList
+                  v-if="compactView"
+                  :groupByMonth="groupEventsByMonth"
+                  :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
+                  :eventDates="eventDates"
+                  :hasNext="eventDatesHasNext"
+                  :twoColumnsMd="$q.screen.sm"
+                  :loading="eventDatesLoading"
+                  :eventDatesTotal="eventDatesTotal"
+                />
 
-                  <div>
-                    <CustomQScroll
-                      horizontal
-                      class="tag-scroll-area"
-                      :style="
-                        topRegionsInArea.length > 14
-                          ? 'height: 72px'
-                          : 'height: 36px'
-                      "
-                      style="width: 100%"
-                      :thumb-style="
-                        $q.screen.gt.xs
-                          ? {
-                              borderRadius: '0px',
-                              bottom: '0px',
-                              height: '4px',
-                              marginLeft: '24px',
-                              paddingLeft: '16px',
-                            }
-                          : { bottom: '0px', height: '0px' }
-                      "
-                    >
-                      <div
-                        class="flex column inter bolder text-h6 q-pl-lg"
-                        style="word-break: keep-all; white-space: nowrap"
-                        :class="{
-                          t3: $q.dark.isActive,
-                          t4: !$q.dark.isActive,
-                        }"
-                      >
-                        <div class="flex row no-wrap q-gutter-sm q-pr-xl">
-                          <div
-                            v-for="(region, index) in computedRegions1"
-                            :key="index"
-                            @click="clickRegion(region)"
-                          >
-                            <span
-                              class="city"
-                              style="text-transform: capitalize"
-                              :class="$q.platform.is.ios ? 'no-hover' : ''"
-                            >
-                              {{ region.long_name }}
-                            </span>
-                            <span
-                              class="q-ml-sm"
-                              v-if="index < computedRegions1.length - 1"
-                              >·
-                            </span>
-                          </div>
-                        </div>
-
-                        <div
-                          class="flex row no-wrap q-gutter-sm q-pt-sm"
-                          v-if="computedRegions2.length > 0"
-                        >
-                          <div
-                            v-for="(region, index) in computedRegions2"
-                            :key="index"
-                            @click="clickRegion(region)"
-                          >
-                            <span
-                              style="text-transform: capitalize"
-                              :class="$q.platform.is.ios ? 'no-hover' : ''"
-                              class="city"
-                            >
-                              {{ region.long_name }}
-                            </span>
-                            <span
-                              class="q-ml-sm"
-                              v-if="index < computedRegions1.length - 1"
-                              >·
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </CustomQScroll>
-                  </div>
-                </div>
-                <!-- tags -->
-                <div
-                  class="flex column"
-                  :class="{
-                    'q-mb-lg': $q.screen.gt.sm,
-                    'q-mb-md': $q.screen.lt.md,
-                  }"
-                  v-if="
-                    (topTagsInArea?.length > 0 || controlTag.length > 0) &&
-                    $q.screen.gt.sm
-                  "
-                >
-                  <div
-                    class="q-pb-md header t1 header-select flex row no-wrap items-center justify-between"
-                    :class="{
-                      'q-px-lg': $q.screen.gt.sm,
-                      'q-px-md': $q.screen.lt.md,
-                    }"
-                  >
-                    <span class="">
-                      <span
-                        class=""
-                        v-if="topTagsInArea?.length && controlTag.length == 0"
-                      >
-                        {{ $t('explore_view.hot_tags') }}
-                      </span>
-                      <span v-else-if="controlTag.length === 1">
-                        {{ $t('explore_view.selected_tag') }}
-                      </span>
-                      <span v-else> {{ $t('explore_view.selected_tags') }}</span
-                      >:
-                    </span>
-                    <ControlSelect
-                      v-if="false"
-                      @clear="
-                        () => {
-                          controlTag = [];
-                        }
-                      "
-                      :size="$q.screen.gt.sm ? 'sm' : 'xs'"
-                      :label="'All Tags'"
-                    >
-                      <template v-slot="{ showing, hide }">
-                        <TagControl :showing="showing" @hide="hide" />
-                      </template>
-                    </ControlSelect>
-                  </div>
-
-                  <div>
-                    <CustomQScroll
-                      horizontal
-                      class="tag-scroll-area"
-                      :style="
-                        computedTotalTags > 14 ? 'height: 90px' : 'height: 45px'
-                      "
-                      style="width: 100%"
-                      :thumb-style="
-                        $q.screen.gt.xs
-                          ? {
-                              borderRadius: '0px',
-                              bottom: '0px',
-                              height: '4px',
-                              marginLeft: '24px',
-                              paddingLeft: '16px',
-                            }
-                          : { bottom: '0px', height: '0px' }
-                      "
-                    >
-                      <div
-                        class="flex column"
-                        :class="$q.screen.gt.sm ? 'q-pl-lg ' : 'q-pl-lg'"
-                      >
-                        <div class="flex row no-wrap q-gutter-sm q-pr-xl">
-                          <div
-                            v-for="(tag, index) in controlTag"
-                            :key="-index"
-                            @click="clickTag(tag)"
-                            class="tag tag-selected flex items-center no-wrap text- inter semibold"
-                            style="text-transform: capitalize"
-                            :class="$q.platform.is.ios ? 'no-hover' : ''"
-                          >
-                            <q-icon
-                              style="margin-left: -4px; font-size: 18px"
-                              name="mdi-close-circle q-mr-xs"
-                            />
-                            {{ tag.tag_t || tag.tag }}
-                          </div>
-                          <div
-                            v-for="(tag, index) in computedTags1"
-                            :key="index"
-                            @click="clickTag(tag)"
-                            class="tag t2 text- inter"
-                            style="text-transform: capitalize"
-                            :class="$q.platform.is.ios ? 'no-hover' : ''"
-                          >
-                            {{ tag.tag_t || tag.tag }}
-                          </div>
-                        </div>
-                        <div
-                          class="flex row no-wrap q-gutter-sm q-pt-sm"
-                          v-if="computedTags2.length > 0"
-                        >
-                          <div
-                            v-for="(tag, index) in computedTags2"
-                            :key="index"
-                            @click="clickTag(tag)"
-                            class="tag t2 inter"
-                            style="text-transform: capitalize"
-                            :class="$q.platform.is.ios ? 'no-hover' : ''"
-                          >
-                            {{ tag.tag_t || tag.tag }}
-                          </div>
-                        </div>
-                      </div>
-                    </CustomQScroll>
-                  </div>
-                </div>
-                <div
-                  class="flex column"
-                  :style="
-                    $q.screen.gt.sm
-                      ? 'margin-top: -8px; margin-bottom: -8px'
-                      : ''
-                  "
-                  v-if="
-                    topArtistsInArea?.length > 5 &&
-                    $q.screen.gt.sm &&
-                    controlArtist.length === 0
-                  "
-                >
-                  <div
-                    class="header header-select t1 justify-between flex no-wrap items-center"
-                    :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-px-md '"
-                  >
-                    <span> {{ $t('explore_view.high_profile_artists') }}:</span>
-                    <ControlSelect
-                      v-if="false"
-                      @clear="
-                        () => {
-                          controlTag = [];
-                        }
-                      "
-                      class="t2"
-                      :size="$q.screen.gt.sm ? 'sm' : 'xs'"
-                      :label="'All Artists'"
-                    >
-                      <template v-slot="{ showing, hide }">
-                        <ArtistControl :showing="showing" @hide="hide" />
-                      </template>
-                    </ControlSelect>
-                  </div>
-                  <ArtistsComponent
-                    :class="$q.screen.gt.sm ? 'q-pl- q-mb-md ' : ''"
-                    :artists="topArtistsInArea"
-                    :size="$q.screen.gt.sm ? 'lg' : 'md'"
-                  />
-                </div>
-
-                <div class="flex column q-px-sm">
-                  <EventDateList
-                    v-if="compactView"
-                    :groupByMonth="groupEventsByMonth"
-                    :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
-                    :eventDates="eventDates"
-                    :hasNext="eventDatesHasNext"
-                    :twoColumnsMd="$q.screen.sm"
-                    :loading="eventDatesLoading"
-                    :eventDatesTotal="eventDatesTotal"
-                  />
-
-                  <EventDatePosterList
-                    v-if="!compactView"
-                    :groupByMonth="groupEventsByMonth"
-                    :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
-                    :eventDates="eventDates"
-                    :hasNext="eventDatesHasNext"
-                    :loading="eventDatesLoading"
-                    :eventDatesTotal="eventDatesTotal"
-                  />
-                </div>
+                <EventDatePosterList
+                  v-if="!compactView"
+                  :groupByMonth="groupEventsByMonth"
+                  :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
+                  :eventDates="eventDates"
+                  :hasNext="eventDatesHasNext"
+                  :loading="eventDatesLoading"
+                  :eventDatesTotal="eventDatesTotal"
+                />
               </div>
             </transition>
           </div>
@@ -530,6 +500,8 @@ import DesktopDateSelect from '../NearbyView/DesktopDateSelect.vue';
 import ControlSelect from 'src/components/Controls/ControlSelect.vue';
 import TagControl from 'src/components/Controls/TagControl.vue';
 import ArtistControl from 'src/components/Controls/ArtistControl.vue';
+import DesktopSearchComponent from '../../Controls/DesktopSearchComponent.vue';
+import TagExplorer from '../../TagExplorer.vue';
 
 export default {
   components: {
@@ -544,6 +516,8 @@ export default {
     ControlSelect,
     TagControl,
     ArtistControl,
+    DesktopSearchComponent,
+    TagExplorer,
   },
 
   async mounted() {
@@ -602,20 +576,7 @@ export default {
         zoom: 7,
       });
     },
-    clickTag(tag) {
-      // force loading state after clicking to prevent glitchy feeling ui
-      this.eventDates = [];
-      this.eventDatesGroupedByMonth = {};
-      this.eventDatesLoading = true;
 
-      let index = this.controlTag?.findIndex((x) => x.tag === tag.tag);
-      if (index > -1) {
-        // tag already selected, remove tag
-        this.controlTag.splice(index, 1);
-      } else {
-        this.controlTag.push(tag);
-      }
-    },
     zoomOut() {
       toRaw(this.map).flyTo({ zoom: 1 });
       this.showPanel = false;
@@ -813,29 +774,7 @@ export default {
       'eventDatesLoading',
       'eventDatesGroupedByMonth',
     ]),
-    topTagsWithoutSelected() {
-      return this.topTagsInArea.filter(
-        (x) => this.controlTag.findIndex((y) => y.tag === x.tag) === -1,
-      );
-    },
 
-    computedTotalTags() {
-      return this.controlTag?.length + this.topTagsWithoutSelected.length;
-    },
-    computedTags1() {
-      if (this.topTagsWithoutSelected.length > 14) {
-        return this.topTagsWithoutSelected.filter((x, i) => i % 2);
-      } else {
-        return this.topTagsWithoutSelected;
-      }
-    },
-    computedTags2() {
-      if (this.topTagsWithoutSelected.length > 14) {
-        return this.topTagsWithoutSelected.filter((x, i) => i % 2 !== 1);
-      } else {
-        return [];
-      }
-    },
     computedRegions1() {
       if (this.topRegionsInArea.length > 14) {
         return this.topRegionsInArea.filter((x, i) => i % 2);
@@ -922,7 +861,7 @@ export default {
   //  font-family: 'Chicago';
   //  font-style: italic;
   font-family: 'Metropolis';
-  font-weight: 700;
+  font-weight: 800;
 
   &:lang(ru) {
     font-family: 'InterDisplay';
@@ -1010,26 +949,20 @@ export default {
       width: 100%;
       min-height: 100%;
       -webkit-overflow-scrolling: auto;
-
+      .top-section {
+        //position: sticky;
+        top: 0;
+      }
+      .bottom-section {
+        position: sticky;
+        top: 0;
+      }
       .tag-scroll-area {
         mask-image: linear-gradient(to left, transparent 0px, white 64px);
         width: 100%;
         .city {
           transition: all 0.3s;
           cursor: pointer;
-        }
-        .tag {
-          opacity: 1;
-          transition: all 0.3s ease;
-          white-space: nowrap;
-          cursor: pointer;
-          border-radius: 18px;
-          padding: 6px 12px;
-          border-radius: 18px;
-
-          &.selected {
-            text-decoration: underline;
-          }
         }
       }
     }
@@ -1065,21 +998,6 @@ export default {
           color: white;
         }
       }
-      .tag {
-        opacity: 1;
-        transition: all 0.3s ease;
-        background: black;
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        &:not(.no-hover) {
-          &:hover {
-            opacity: 1;
-            background: rgba(36, 36, 36, 1);
-          }
-        }
-        &.tag-selected {
-          background: $bi-3;
-        }
-      }
     }
   }
   .event-list-vertical {
@@ -1108,27 +1026,11 @@ export default {
 .body--light {
   .scroll-area {
     background: transparent;
+
     .tag-scroll-area {
       .city {
         &:hover {
           color: black;
-        }
-      }
-      .tag {
-        // opacity: 1
-        transition: all 0.3s ease;
-        background: rgba(255, 255, 255, 0);
-        border: 1px solid rgba(0, 0, 0, 0.15);
-        //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
-
-        //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px 0px;
-        &:not(.no-hover) {
-          &:hover {
-            background: rgba(0, 0, 0, 0.1);
-          }
-        }
-        &.tag-selected {
-          background: $b-2;
         }
       }
     }
@@ -1141,6 +1043,14 @@ export default {
 
     .event-list-inner {
       //background: white;
+
+      .scroll-content {
+        position: relative;
+
+        .bottom-section {
+          background: white;
+        }
+      }
     }
   }
   .header {

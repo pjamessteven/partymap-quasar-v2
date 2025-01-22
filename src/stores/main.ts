@@ -38,6 +38,7 @@ interface MainStoreState {
   fineLocation: boolean;
   userLocation: LngLatLike | null;
   userLocationCity: string | null;
+  unknownCityCoords: string;
   userLocationCountry: string | null;
   currentLocation: LngLatLike | null;
   currentLocationCity: string | null;
@@ -77,10 +78,11 @@ export const useMainStore = defineStore('main', {
     userLocationLoading: false,
     userLocation: null, // don't store in localStorage as this is sensitive
     userLocationCity: null,
+    unknownCityCoords: '',
     userLocationCountry: null,
     currentLocationFromSearch: false,
     currentLocation: null,
-    currentLocationCity: Screen.lt.sm ? '...' : t('nearby_view.in_this_area'),
+    currentLocationCity: Screen.lt.sm ? '...' : t('nearby_view.this_area'),
     currentLocationCountry: null,
     fineLocation: false,
     groupEventsByMonth: true,
@@ -113,7 +115,13 @@ export const useMainStore = defineStore('main', {
 
       try {
         await importLocale(localeString);
-        dayjs.locale(lowercaseLocale);
+        if (localeString === 'en') {
+          // handle en-US case with stupid mm/dd/yyyy formatting
+          const userLocale = navigator.language || 'en';
+          dayjs.locale(userLocale);
+        } else {
+          dayjs.locale(lowercaseLocale);
+        }
       } catch (e) {
         console.log('locale not supported', e);
         await import('dayjs/locale/en');
@@ -122,7 +130,8 @@ export const useMainStore = defineStore('main', {
     },
     restoreUserLocation() {
       this.currentLocation = this.userLocation;
-      this.currentLocationCity = this.userLocationCity;
+      this.currentLocationCity =
+        this.userLocationCity || t('nearby_view.this_area');
       this.currentLocationCountry = this.userLocationCountry;
     },
     persistTipsToLocalStorage() {
@@ -170,7 +179,7 @@ export const useMainStore = defineStore('main', {
             headers: {
               'user-agent': 'PartyMap <info@partymap.com>',
             },
-          }
+          },
         );
         const data = await response.json();
         const address = data.address;
@@ -208,7 +217,7 @@ export const useMainStore = defineStore('main', {
     },
     async getFineLocation() {
       let fineLocation;
-      let unknownCityCoords;
+
       try {
         fineLocation = await new Promise<LngLatLike>((resolve, reject) => {
           if (navigator.geolocation && !Platform.is.capacitor) {
@@ -217,12 +226,12 @@ export const useMainStore = defineStore('main', {
               async (position) => {
                 // show coords while loading place name
                 if (!this.userLocation) {
-                  unknownCityCoords =
+                  this.unknownCityCoords =
                     position.coords.latitude.toFixed(1) +
                     ', ' +
                     position.coords.longitude.toFixed(1);
                   //  this.currentLocationCity = unknownCityCoords;
-                  this.userLocationCity = unknownCityCoords;
+                  this.userLocationCity = this.unknownCityCoords;
                   this.currentLocationCity = this.userLocationCity;
                 }
 
@@ -234,20 +243,20 @@ export const useMainStore = defineStore('main', {
               () => {
                 reject(null);
               },
-              { timeout: 10000 }
+              { timeout: 10000 },
             );
           } else if (Platform.is.capacitor) {
             Geolocation.getCurrentPosition()
               .then(async (position) => {
                 // show coords while loading place name
                 if (!this.userLocation) {
-                  unknownCityCoords =
+                  this.unknownCityCoords =
                     position.coords.latitude.toFixed(1) +
                     ', ' +
                     position.coords.longitude.toFixed(1);
 
                   // this.currentLocationCity = unknownCityCoords;
-                  this.userLocationCity = unknownCityCoords;
+                  this.userLocationCity = this.unknownCityCoords;
                   this.currentLocationCity = this.userLocationCity;
                 }
 
@@ -276,9 +285,9 @@ export const useMainStore = defineStore('main', {
         this.currentLocation = fineLocation;
         this.currentLocationCountry = this.userLocationCountry;
         this.currentLocationCity = this.userLocationCity;
-
-        if (!this.currentLocationCity && unknownCityCoords) {
-          this.currentLocationCity = unknownCityCoords;
+        if (!this.currentLocationCity) {
+          //  this.currentLocationCity = this.unknownCityCoords;
+          this.currentLocationCity = t('nearby_view.this_area');
         }
 
         this.userLocationLoading = false;

@@ -101,27 +101,26 @@
       </CustomQScroll>
     </div>
 
-    <q-dialog v-model="showRemoveRruleWarningDialog">
+    <BackdropBlurDialog v-model="showRemoveRruleWarningDialog">
       <RemoveRruleDialog
         v-on:closeDialog="showRemoveRruleWarningDialog = false"
       />
-    </q-dialog>
+    </BackdropBlurDialog>
 
-    <q-dialog
+    <BackdropBlurDialog
       v-model="showManageRruleDialog"
       transition-show="fade-in"
       transition-hide=""
     >
       <EditRruleDialog @closeDialog="showManageRruleDialog = false" />
-    </q-dialog>
-    <q-dialog
+    </BackdropBlurDialog>
+    <BackdropBlurDialog
       v-model="showAddEventDateDialog"
       transition-show="slide-up"
       transition-hide="slide-down"
     >
-      test
       <AddEventDateDialog v-on:closeDialog="showAddEventDateDialog = false" />
-    </q-dialog>
+    </BackdropBlurDialog>
   </div>
 </template>
 
@@ -138,6 +137,7 @@ import { mapState, mapActions } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 
 import { scroll } from 'quasar';
+import BackdropBlurDialog from '../../BackdropBlurDialog.vue';
 
 const { getScrollTarget, setScrollPosition } = scroll;
 
@@ -158,6 +158,7 @@ export default {
     AddEventDateDialog,
     RemoveRruleDialog,
     CustomQScroll,
+    BackdropBlurDialog,
   },
   props: {
     eventDates: Array,

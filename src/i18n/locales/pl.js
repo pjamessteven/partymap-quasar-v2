@@ -297,7 +297,9 @@ export default {
     view_all: 'Wyświetl wszystko',
     waiting_for_location: 'Czekanie na lokalizację',
     any_dates: 'Dowolne daty',
-    in_this_area: 'W tej okolicy',
+    upcoming_in: 'Wkrótce w',
+    this_area: 'tym obszarze',
+    in_this_area: 'W tym obszarze',
   },
   explore_view: {
     finding_whats_good: 'Szukanie tego, co dobre...',

@@ -25,7 +25,7 @@
         <span v-else> {{ $t('event_dates.add_lineup') }} </span>
       </div>
     </div>
-    <q-dialog
+    <BackdropBlurDialog
       v-model="showEditingDialog"
       transition-show="jump-up"
       transition-hide="jump-down"
@@ -37,7 +37,7 @@
         :eventCountry="computedEventDateCountry"
         :eventYear="computedEventDateYear"
       />
-    </q-dialog>
+    </BackdropBlurDialog>
   </div>
 </template>
 
@@ -47,10 +47,13 @@ import SelectArtistsDialog from './Artists/SelectArtistsDialog.vue';
 import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import { default as dayjs } from 'dayjs';
+import BackdropBlurDialog from 'src/components/BackdropBlurDialog.vue';
+
 export default {
   name: 'EventDateAddArtistsComponent',
   components: {
     SelectArtistsDialog,
+    BackdropBlurDialog,
   },
   watch: {},
   data() {

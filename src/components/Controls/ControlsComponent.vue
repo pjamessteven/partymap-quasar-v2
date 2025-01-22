@@ -5,6 +5,7 @@
       'transport-map': mapStyle !== 'satellite',
       'overlaying-map': overlayingMap,
       'center-absolute': $route.name !== 'Explore' && $q.screen.gt.xs,
+      'explore-view': $route.name === 'Explore',
     }"
   >
     <!--
@@ -24,7 +25,10 @@
           : { bottom: '0px', marginLeft: '16px', height: '0px' }
       "
     >
-      <div class="scroll-inner flex row no-wrap items-center q-mr-md q-pl-xs">
+      <div
+        class="scroll-inner flex row no-wrap items-center q-mr-md q-pl-xs"
+        :class="{}"
+      >
         <div
           class="flex items-center no-wrap scroll-inner-inner"
           v-show="$q.screen.lt.lg && sidebarPanel === 'search'"
@@ -44,7 +48,7 @@
             }"
           >
             <div class="controls-wrapper-inner">
-              <SearchComponent />
+              <SearchComponent :autofocus="true" />
             </div>
           </div>
         </div>
@@ -69,7 +73,9 @@
             iconName="las la-calendar"
           >
             <template v-slot="{ showing, hide }">
-              <DateControl :showing="showing" @hide="hide" />
+              <MenuWrapper :showing="showing" @hide="hide">
+                <DateControl />
+              </MenuWrapper>
             </template>
           </ControlButton>
 
@@ -209,8 +215,11 @@ import TagControl from 'src/components/Controls/TagControl.vue';
 import CustomQScroll from 'components/CustomQScroll.vue';
 import SearchComponent from 'src/components/Search/SearchComponent.vue';
 import ControlButton from 'src/components/Controls/ControlButton.vue';
+import MenuWrapper from './MenuWrapper.vue';
+
 export default {
   components: {
+    MenuWrapper,
     CustomQScroll,
     ArtistControl,
     DateControl,
@@ -270,9 +279,14 @@ export default {
     ...mapActions(useMainStore, ['loadIpInfo', 'getFineLocation']),
     ...mapActions(useQueryStore, ['clearDateFilter']),
     goToExplore() {
-      // this.sidebarPanel = 'explore';
-      if (this.$route.name !== 'Explore' && this.$route.name !== 'BrowsePage') {
+      //this.sidebarPanel = 'explore';
+      if (this.$route.name === 'Explore') {
         this.$router.push({ name: 'Explore', query: { view: 'explore' } });
+      } else if (this.$route.name === 'FeaturedEvents') {
+        this.$router.push({
+          name: 'BrowseEventDateList',
+          params: { country: 'all' },
+        });
       }
     },
     clickLocation() {
@@ -314,7 +328,7 @@ export default {
       return this.$q.screen.gt.sm && this.windowWidth < 1124;
     },
     ...mapState(useMapStore, ['mapStyle']),
-    ...mapWritableState(useSearchStore, ['query', 'searchbarShowing']),
+    ...mapWritableState(useSearchStore, ['query']),
     ...mapWritableState(useMainStore, [
       'sidebarPanel',
       'showPanel',
@@ -374,6 +388,14 @@ export default {
   justify-content: start;
   //overflow-x: auto;
   //overflow-y: visible;
+  width: calc(100% - 568px);
+  padding-right: 114px;
+  padding-left: 8px;
+  transition: transform 0.3s;
+  transform: translate3d(calc(100vw / 2 - calc(633px / 2) + 100px), 0, 0);
+  &.explore-view {
+    transform: translate3d(568px, 0, 0);
+  }
   &.center-absolute {
     // position: absolute;
     // width: 100%;
@@ -384,10 +406,8 @@ export default {
     height: 48px;
     width: 100%;
     .scroll-inner {
-      //justify-content: start;
-      //padding-left: 256px;
-      justify-content: center;
       .separator {
+        justify-content: start;
         height: 16px;
         border-left: 1px solid;
         .q-btn {
@@ -407,11 +427,19 @@ export default {
     padding-left: 0px;
     top: 48px;
     z-index: 501;
-
+    transform: unset;
+    width: unset;
+    padding-right: unset;
+    &.explore-view {
+      transform: unset;
+    }
     .control-scroll-area {
       pointer-events: all;
 
       .scroll-inner {
+        justify-content: start;
+        padding-left: unset;
+
         .scroll-inner-inner {
           width: 100%;
           .mobile-search-wrapper {
@@ -446,7 +474,7 @@ export default {
     .controls-wrapper-inner {
       background: $b-2;
       color: $t-1;
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0);
 
       .button-control {
         &.active {
@@ -496,7 +524,7 @@ export default {
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         border-left: 1px solid rgba(255, 255, 255, 0.1);
         border-right: 1px solid rgba(255, 255, 255, 0.1);
-
+        //   border-color: transparent;
         .searchbar-wrapper {
           .searchbar-input {
             .q-field__inner {
@@ -563,7 +591,7 @@ export default {
       background: $bi-3;
 
       //background: rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0);
 
       .button-control {
         .q-btn__content {
@@ -588,11 +616,11 @@ export default {
       // box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
 
       .controls-wrapper-inner {
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        border-left: 1px solid rgba(255, 255, 255, 0.1);
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
-
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-left: 1px solid rgba(255, 255, 255, 0.05);
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+        //   border-color: transparent;
         background: linear-gradient(
           rgba(80, 80, 80, 0.6),
           rgba(80, 80, 80, 0.6)

@@ -4,7 +4,7 @@
       <q-spinner-puff size="300px" color="primary" />
     </q-inner-loading>
 
-    <q-dialog v-model="showUploadDialog">
+    <BackdropBlurDialog v-model="showUploadDialog">
       <q-card class="upload-dialog q-pa-md">
         <div class="flex row wrap items-center q-mb-md q-mb-lg">
           <q-icon left size="1.25em" name="las la-upload" />
@@ -28,7 +28,7 @@
           :openDialogOnMount="true"
         />
       </q-card>
-    </q-dialog>
+    </BackdropBlurDialog>
   </q-card>
 </template>
 
@@ -41,9 +41,10 @@ import SubmitSuggestionPrompt from 'components/EventPage/Suggestions/SubmitSugge
 import { mapState, mapActions } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
+import BackdropBlurDialog from '../../BackdropBlurDialog.vue';
 
 export default {
-  components: { MultipleMediaSelector },
+  components: { MultipleMediaSelector, BackdropBlurDialog },
   props: {
     editing: Boolean,
   },

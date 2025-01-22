@@ -18,6 +18,7 @@ interface NearbyState {
   nearbyTagsHasNext: boolean;
   nearbyTagsPage: number;
   nearbyTagsSuccess: boolean;
+  nearbyTagsLoading: boolean;
 
   nearbyArtists: Artist[];
   nearbyArtistsHasNext: boolean;
@@ -46,6 +47,7 @@ export const useNearbyStore = defineStore('nearby', {
     nearbyTagsHasNext: true,
     nearbyTagsPage: 1,
     nearbyTagsSuccess: false,
+    nearbyTagsLoading: false,
 
     nearbyArtists: [],
     nearbyArtistsHasNext: true,
@@ -70,67 +72,73 @@ export const useNearbyStore = defineStore('nearby', {
       const authStore = useAuthStore();
       const queryStore = useQueryStore();
 
-      this.loadingEverything = true;
+      if (!this.loadingEverything) {
+        this.loadingEverything = true;
 
-      this.nearbyArtistsPage = 1;
-      this.nearbyEventDatesPage = 1;
-      this.nearbyTagsPage = 1;
-      this.eventDatesPage = 1;
+        this.nearbyArtistsPage = 1;
+        this.nearbyEventDatesPage = 1;
+        this.nearbyTagsPage = 1;
+        this.eventDatesPage = 1;
 
-      this.nearbyArtists = [];
-      this.nearbyTags = [];
-      this.nearbyEventDates = [];
-      this.eventDates = [];
+        this.nearbyArtists = [];
+        this.nearbyTags = [];
+        this.nearbyEventDates = [];
+        this.eventDates = [];
 
-      // this first request will return the radius
-      // needed for the following requests
-      const main = useMainStore();
+        // this first request will return the radius
+        // needed for the following requests
+        const main = useMainStore();
 
-      try {
-        if (main.currentLocation) {
-          // first get nearby event dates as this returns and sets queryRadius
-          await this.loadNearbyEventDates();
-          // then do the following concurrently
-          await Promise.all([
-            this.loadNearbyArtists(),
-            this.loadNearbyTags(),
-            this.loadEventDates(),
-            authStore.currentUser
-              ? queryStore.loadUserEventDates('all', 'future')
-              : undefined,
-          ]);
-        } else {
-          await Promise.all([
-            this.loadEventDates(),
-            authStore.currentUser
-              ? queryStore.loadUserEventDates('all', 'future')
-              : undefined,
-          ]);
-        }
+        try {
+          if (main.currentLocation) {
+            // first get nearby event dates as this returns and sets queryRadius
+            await this.loadNearbyEventDates();
+            // then do the following concurrently
+            await Promise.all([
+              this.loadNearbyArtists(),
+              this.loadNearbyTags(),
+              //         this.loadEventDates(),
+              authStore.currentUser
+                ? queryStore.loadUserEventDates('all', 'future')
+                : undefined,
+            ]);
+          } else {
+            await Promise.all([
+              this.loadEventDates(),
+              authStore.currentUser
+                ? queryStore.loadUserEventDates('all', 'future')
+                : undefined,
+            ]);
+          }
 
-        // show global top tags/top artists if there are no few local results
-        if (
-          this.nearbyArtists.length < 6 ||
-          this.nearbyTags.length < 10 ||
-          !main.currentLocation
-        ) {
-          const queryStore = useQueryStore();
+          // show global top tags/top artists if there are no few local results
           if (
-            this.nearbyArtists.length < 6 &&
-            queryStore.artistOptions.length === 0
-          )
-            await queryStore.loadArtistOptions();
-          if (this.nearbyTags.length < 10 && queryStore.tagOptions.length === 0)
-            await queryStore.loadTagOptions();
+            this.nearbyArtists.length < 6 ||
+            this.nearbyTags.length < 10 ||
+            !main.currentLocation
+          ) {
+            const queryStore = useQueryStore();
+            if (
+              this.nearbyArtists.length < 6 &&
+              queryStore.artistOptions.length === 0
+            )
+              await queryStore.loadArtistOptions();
+            if (
+              this.nearbyTags.length < 10 &&
+              queryStore.tagOptions.length === 0
+            )
+              await queryStore.loadTagOptions();
+          }
+          this.loadingEverything = false;
+        } catch (e) {
+          this.loadingEverything = false;
         }
-        this.loadingEverything = false;
-      } catch (e) {
-        this.loadingEverything = false;
       }
     },
     async loadNearbyTags() {
       const main = useMainStore();
       try {
+        this.nearbyTagsLoading = true;
         const response = await getTagRequest({
           date_min: dayjs().toISOString(),
           date_max: null,
@@ -145,6 +153,8 @@ export const useNearbyStore = defineStore('nearby', {
         this.nearbyTagsHasNext = response.data.has_next;
         this.nearbyTagsPage += 1;
         this.nearbyTagsSuccess = true;
+        this.nearbyTagsLoading = false;
+
         return Promise.resolve();
       } catch (error) {
         throw error;
@@ -210,7 +220,7 @@ export const useNearbyStore = defineStore('nearby', {
           this.nearbyEventDates = response.data.items;
         } else {
           this.nearbyEventDates = this.nearbyEventDates.concat(
-            response.data.items
+            response.data.items,
           );
         }
 

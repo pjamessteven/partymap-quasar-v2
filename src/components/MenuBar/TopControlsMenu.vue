@@ -217,20 +217,20 @@
           </q-item>
         </div>
       </div>
-      <q-dialog
+      <BackdropBlurDialog
         v-model="showFeedbackDialog"
         transition-show="jump-up"
         transition-hide="jump-down"
       >
         <FeedbackDialog @closeDialog="showFeedbackDialog = false" />
-      </q-dialog>
-      <q-dialog
+      </BackdropBlurDialog>
+      <BackdropBlurDialog
         v-model="showAboutDialog"
         transition-show="jump-up"
         transition-hide="jump-down"
       >
         <AboutDialog />
-      </q-dialog>
+      </BackdropBlurDialog>
     </div>
   </div>
 </template>
@@ -244,9 +244,10 @@ import { useMainStore } from 'src/stores/main';
 import { useMapStore } from 'src/stores/map';
 import { i18n, setI18nLanguage, loadLocaleMessages } from 'src/boot/i18n.ts';
 import { supportedLocales } from 'src/i18n/index.mjs';
+import BackdropBlurDialog from '../BackdropBlurDialog.vue';
 export default {
   name: 'TopControlsMenu',
-  components: { FeedbackDialog, AboutDialog },
+  components: { FeedbackDialog, AboutDialog, BackdropBlurDialog },
   data() {
     return {
       logoutLoading: false,

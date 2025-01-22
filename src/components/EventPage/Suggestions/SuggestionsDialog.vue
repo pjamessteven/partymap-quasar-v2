@@ -55,7 +55,7 @@
                   {{
                     localDateTimeShort(
                       selectedEventDate.start_naive,
-                      selectedEventDate.tz
+                      selectedEventDate.tz,
                     )
                   }}
                 </div>
@@ -86,34 +86,34 @@
         </q-expansion-item>
       </q-list>
     </q-card-section>
-    <q-dialog
+    <BackdropBlurDialog
       :model-value="editMode === 'name'"
       @hide="editMode = null"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <EditNameDialog @closeDialog="closeDialog()" />
-    </q-dialog>
+    </BackdropBlurDialog>
 
-    <q-dialog
+    <BackdropBlurDialog
       :model-value="editMode === 'main_description'"
       @hide="editMode = null"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <EditSummaryDialog @closeDialog="closeDialog()" />
-    </q-dialog>
+    </BackdropBlurDialog>
 
-    <q-dialog
+    <BackdropBlurDialog
       :model-value="editMode === 'tags'"
       @hide="editMode = null"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <SelectTagsDialog @closeDialog="closeDialog()" />
-    </q-dialog>
+    </BackdropBlurDialog>
 
-    <q-dialog
+    <BackdropBlurDialog
       :model-value="editMode === 'addEventDate'"
       @hide="editMode = null"
       transition-show="jump-up"
@@ -123,27 +123,27 @@
         @closeDialog="closeDialog()"
         :suggestionMessageAndToken="messageAndToken"
       />
-    </q-dialog>
+    </BackdropBlurDialog>
 
-    <q-dialog
+    <BackdropBlurDialog
       :model-value="editMode === 'rrule'"
       @hide="editMode = null"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <EditRruleDialog @closeDialog="closeDialog()" />
-    </q-dialog>
+    </BackdropBlurDialog>
 
-    <q-dialog
+    <BackdropBlurDialog
       :model-value="editMode === 'remove_rrule'"
       @hide="editMode = null"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <RemoveRruleDialog @closeDialog="closeDialog()" />
-    </q-dialog>
+    </BackdropBlurDialog>
 
-    <q-dialog
+    <BackdropBlurDialog
       :model-value="dateEditMode != null"
       @hide="editmode = null"
       transition-show="jump-up"
@@ -155,16 +155,16 @@
         :mode="dateEditMode"
         :key="dateEditMode"
       />
-    </q-dialog>
-    <q-dialog
+    </BackdropBlurDialog>
+    <BackdropBlurDialog
       :model-value="editMode === 'media'"
       @hide="editmode = null"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <UploadNewLogoDialog @closeDialog="closeDialog()" />
-    </q-dialog>
-    <q-dialog
+    </BackdropBlurDialog>
+    <BackdropBlurDialog
       :model-value="editMode === 'artists'"
       @hide="editmode = null"
       transition-show="jump-up"
@@ -176,7 +176,7 @@
         :eventCountry="computedEventDateCountry"
         :eventYear="computedEventDateYear"
       />
-    </q-dialog>
+    </BackdropBlurDialog>
   </q-card>
 </template>
 
@@ -196,6 +196,7 @@ import UploadNewLogoDialog from 'src/components/EventPage/Gallery/UploadNewLogoD
 
 import { useEventStore } from 'src/stores/event';
 import { mapState } from 'pinia';
+import BackdropBlurDialog from '../../BackdropBlurDialog.vue';
 
 export default {
   name: 'SuggestionsDialog',
@@ -208,6 +209,7 @@ export default {
     EditSummaryDialog,
     EditNameDialog,
     UploadNewLogoDialog,
+    BackdropBlurDialog,
     SelectArtistsDialog,
   },
   data() {
@@ -267,7 +269,7 @@ export default {
     this.localDateTimeLong = common.localDateTimeLong;
     this.localDateTimeShort = common.localDateTimeShort;
     // used to show the add date dialog after removing rrule.
-    // regular events wont work because chain of q-dialogs in editrrulecomponent
+    // regular events wont work because chain of BackdropBlurDialogs in editrrulecomponent
     /*
     window.bus = new Vue({});
     window.bus.$on('addDate', (value) => {

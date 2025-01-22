@@ -291,6 +291,8 @@ export default {
     view_all: 'Просмотреть все',
     waiting_for_location: 'Ожидание местоположения',
     any_dates: 'Любые даты',
+    upcoming_in: 'Скоро в',
+    this_area: 'этом районе',
     in_this_area: 'В этом районе',
   },
   explore_view: {

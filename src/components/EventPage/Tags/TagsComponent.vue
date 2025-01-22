@@ -39,13 +39,13 @@
       />
     </div>
 
-    <q-dialog
+    <BackdropBlurDialog
       v-model="showAddTagDialog"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <SelectTagsDialog @closeDialog="showAddTagDialog = false" />
-    </q-dialog>
+    </BackdropBlurDialog>
   </div>
 </template>
 
@@ -54,11 +54,13 @@ import SelectTagsDialog from 'components/EventPage/Tags/SelectTagsDialog.vue';
 import Tag from 'components/EventPage/Tags/TagComponent.vue';
 import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
+import BackdropBlurDialog from '../../BackdropBlurDialog.vue';
 
 export default {
   components: {
     Tag,
     SelectTagsDialog,
+    BackdropBlurDialog,
   },
   props: {
     editing: Boolean,

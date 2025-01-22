@@ -275,7 +275,9 @@ export default {
     view_all: '查看所有',
     waiting_for_location: '等待位置',
     any_dates: '任何日期',
-    in_this_area: '在这个区域',
+    upcoming_in: '即将在',
+    this_area: '此区域',
+    in_this_area: '在此区域',
   },
   explore_view: {
     finding_whats_good: '找到什么好的...',

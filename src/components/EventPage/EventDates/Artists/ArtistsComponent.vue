@@ -92,7 +92,7 @@
       </div>
     </div>
 
-    <q-dialog
+    <BackdropBlurDialog
       v-if="editing || showMoreFields"
       v-model="showEditingDialog"
       transition-show="jump-up"
@@ -105,7 +105,7 @@
         :eventCountry="computedEventDateCountry"
         :eventYear="computedEventDateYear"
       />
-    </q-dialog>
+    </BackdropBlurDialog>
   </div>
 </template>
 
@@ -117,11 +117,13 @@ import SelectArtistsDialog from './SelectArtistsDialog.vue';
 import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import { default as dayjs } from 'dayjs';
+import BackdropBlurDialog from '../../../BackdropBlurDialog.vue';
 
 export default {
   name: 'ArtistsComponent',
   components: {
     SelectArtistsDialog,
+    BackdropBlurDialog,
     ArtistListItem,
   },
   watch: {
@@ -223,7 +225,7 @@ export default {
       if (this.selectedStage === 'main stage') {
         // if main stage is selected, show artists with no stage assigned
         return this.artistsList.filter(
-          (x) => x.stage === 'main stage' || !x.stage
+          (x) => x.stage === 'main stage' || !x.stage,
         );
       } else {
         return this.artistsList.filter((x) => x.stage === this.selectedStage);

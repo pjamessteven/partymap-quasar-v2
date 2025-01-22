@@ -8,6 +8,7 @@
 
     <div v-if="groupByMonth">
       <div
+        class="month-group"
         v-for="yearMonth in Object.keys(eventDatesGroupedByMonth).sort()"
         :key="yearMonth"
       >
@@ -22,8 +23,8 @@
           class="ed-card-grid q-pb-sm"
           :style="gridColumns"
           :class="{
-            'q-px-md q-mb-lg': $q.screen.gt.sm,
-            'q-px-sm  q-mt-': $q.screen.lt.md,
+            'q-px-lg q-mb-lg ': $q.screen.gt.sm,
+            'q-px-sm  q-pb-md': $q.screen.lt.md,
           }"
         >
           <!-- bit too slow when lots of items
@@ -57,7 +58,7 @@
         class="ed-card-grid q-pb-sm q-mt-xs"
         :style="gridColumns"
         :class="{
-          'q-px-md ': $q.screen.gt.sm,
+          'q-px-lg ': $q.screen.gt.sm,
           'q-px-sm  q-mt-': $q.screen.lt.md,
         }"
       >
@@ -212,6 +213,8 @@ const computedTotalResultMessage = computed(() => {
 });
 </script>
 <style lang="scss" scoped>
+.month-group {
+}
 .ed-card-grid {
   cursor: default;
   display: grid;

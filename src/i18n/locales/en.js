@@ -31,6 +31,7 @@ export default {
     search: 'Search',
     search_box_text: 'Search events, places, artists & tags',
     search_box_text_mobile: 'Search events, places & artists',
+    search_and_filter: 'Search and filter events',
     tags: 'Tags',
     events: 'Events',
     places: 'Places',
@@ -296,6 +297,8 @@ export default {
     view_all: 'View all',
     waiting_for_location: 'Waiting for location',
     any_dates: 'Any Dates',
+    upcoming_in: 'Upcoming in',
+    this_area: 'this area',
     in_this_area: 'In this area',
   },
   explore_view: {
@@ -326,12 +329,13 @@ export default {
     healing: 'Healing',
     healing_desc: 'Renew and transform...',
     all_events: 'All events',
+    all_events_world: 'All events around the world',
     all_worldwide: 'All events and festivals worldwide',
-    events_in: 'Events and festivals in',
     all_regions: 'All regions',
     upcoming_events: 'upcoming events',
     featured_events: 'Featured',
     by_country: 'By Country',
+    the_ultimate_calendar: 'The ultimate festival and party calendar for ', // for 2025
   },
   artist_page: {
     upcoming_events: 'Upcoming events',

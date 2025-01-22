@@ -44,7 +44,10 @@ export default {
             slot: this.$slots.default,
           },
         })
-        .onDismiss(() => this.$emit('hide'));
+        .onDismiss(() => {
+          console.log('HIDE');
+          this.$emit('hide');
+        });
     },
   },
 };

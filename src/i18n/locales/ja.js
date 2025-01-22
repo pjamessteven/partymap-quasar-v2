@@ -287,7 +287,9 @@ export default {
     view_all: 'すべて表示',
     waiting_for_location: '場所を待っています',
     any_dates: '任意の日付',
-    in_this_area: 'このエリア内で',
+    upcoming_in: '近日中に',
+    this_area: 'このエリア',
+    in_this_area: 'このエリアで',
   },
   explore_view: {
     finding_whats_good: '良いのを探す...',

@@ -292,6 +292,8 @@ export default {
     view_all: 'Alles weergeven',
     waiting_for_location: 'Wachten op locatie',
     any_dates: 'Elke datum',
+    upcoming_in: 'Binnenkort in',
+    this_area: 'dit gebied',
     in_this_area: 'In dit gebied',
   },
   explore_view: {

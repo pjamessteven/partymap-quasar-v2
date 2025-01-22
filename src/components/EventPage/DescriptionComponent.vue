@@ -54,13 +54,13 @@
         </div>
       </div>
     </div>
-    <q-dialog
+    <BackdropBlurDialog
       v-model="showEditingDialog"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <EditDescriptionDialog @closeDialog="showEditingDialog = false" />
-    </q-dialog>
+    </BackdropBlurDialog>
   </div>
 </template>
 
@@ -68,9 +68,9 @@
 import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import EditDescriptionDialog from './EditDescriptionDialog.vue';
-
+import BackdropBlurDialog from 'src/components/BackdropBlurDialog.vue';
 export default {
-  components: { EditDescriptionDialog },
+  components: { EditDescriptionDialog, BackdropBlurDialog },
   props: {
     editing: Boolean,
   },

@@ -26,6 +26,7 @@
         :input-style="$q.screen.gt.xs ? 'width: 169px;' : 'width: 250px'"
         input-class="country-select-input"
         behavior="menu"
+        :borderless="$q.screen.gt.sm"
         :class="{
           'loading-placeholder':
             (!query || query?.length === 0) &&
@@ -185,12 +186,6 @@ export default {
         this.inputValue = newv;
       }
     },
-    currentLocationCity(newv, oldv) {
-      if (oldv || (newv && !oldv)) {
-        this.previouslySelectedCity = oldv;
-        this.inputValue = newv;
-      }
-    },
   },
   computed: {
     ...mapWritableState(useMainStore, [
@@ -221,7 +216,7 @@ export default {
   .country-select {
     :deep(.q-field__control) {
       &:before {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.2);
       }
     }
   }
@@ -231,7 +226,7 @@ export default {
   .country-select {
     :deep(.q-field__control) {
       &:before {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        border-color: rgba(0, 0, 0, 0.2);
       }
     }
   }
@@ -255,7 +250,7 @@ export default {
       //text-transform: uppercase;
       // text-transform: uppercase;
 
-      max-width: 214px;
+      max-width: 300px;
 
       span {
         white-space: nowrap;
@@ -279,7 +274,7 @@ export default {
         top: 12px;
         height: 100%;
         width: 100%;
-        content: 'Search';
+        content: '';
         // color: grey;
         font-weight: 800;
       }
@@ -293,7 +288,7 @@ export default {
         top: 8px;
         height: 100%;
         width: 100%;
-        content: '...';
+        content: '';
         // color: grey;
         font-weight: 800;
       }

@@ -295,6 +295,8 @@ export default {
     view_all: 'Ver tudo',
     waiting_for_location: 'Aguardando localização',
     any_dates: 'Qualquer data',
+    upcoming_in: 'Em breve em',
+    this_area: 'esta área',
     in_this_area: 'Nesta área',
   },
   explore_view: {

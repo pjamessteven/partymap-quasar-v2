@@ -11,21 +11,24 @@
     />
     <div class="main-inner-layout">
       <MenuBar class="menubar" />
+
       <Transition
-        v-if="$q.screen.gt.sm && $route.name === 'Explore'"
         appear
         :enter-active-class="'animated fadeIn'"
         :leave-active-class="'animated fadeOut'"
       >
         <DesktopSearchComponent
           class="controls-component"
-          :overlayingMap="!showPanelBackground"
-          v-show="$route.name === 'Explore'"
+          v-if="$route.meta.showControls"
+          :overlayingMap="!showPanelBackground && $route.name === 'Explore'"
+          :class="{
+            'explore-view': $route.name === 'Explore',
+          }"
         />
       </Transition>
 
       <Transition
-        v-else
+        v-if="false"
         appear
         :enter-active-class="'animated fadeIn'"
         :leave-active-class="'animated fadeOut'"
@@ -33,7 +36,13 @@
         <ControlsComponent
           class="controls-component"
           :overlayingMap="!showPanelBackground && $route.name === 'Explore'"
-          v-show="$route.name === 'Explore' || $route.name === 'BrowsePage'"
+          v-if="
+            $route.name === 'Explore' ||
+            $route.name === 'BrowsePage' ||
+            $route.name === 'FeaturedEvents' ||
+            $route.name === 'BrowseEventDateList' ||
+            $route.name === 'CountryRegionList'
+          "
         />
       </Transition>
       <div
@@ -123,7 +132,15 @@
           "
           mode="in-out"
         >
-          <keep-alive :include="['BrowsePage', 'UserPage']">
+          <keep-alive
+            :include="[
+              'BrowsePage',
+              'FeaturedEvents',
+              'BrowseEventDateList',
+              'CountryRegionList',
+              'UserPage',
+            ]"
+          >
             <component :is="Component" />
           </keep-alive>
         </Transition>
@@ -136,7 +153,10 @@
           $route.name === 'Explore' ||
           $route.name === 'UserPage' ||
           $route.name === 'ActivityPage' ||
-          $route.name === 'BrowsePage'
+          $route.name === 'BrowsePage' ||
+          $route.name === 'FeaturedEvents' ||
+          $route.name === 'BrowseEventDateList' ||
+          $route.name === 'CountryRegionList'
             ? ''
             : 'display: none'
         "
@@ -443,6 +463,15 @@ export default {
     }
     .controls-component {
       z-index: 5000;
+      transition: transform 0.3s;
+      transform: translate3d(-150px, 0, 0);
+      padding-left: min(50vw, 568px);
+      position: absolute;
+      top: 8px;
+      // transform: translate3d(calc(100vw / 2 - calc(633px / 2) + 100px), 0, 0);
+      &.explore-view {
+        transform: translate3d(-0px, 0, 0);
+      }
     }
     .nav-bar {
       &.mobile {
@@ -560,9 +589,13 @@ export default {
       }
       .controls-component {
         position: absolute;
-        // z-index: 105;
+        padding-left: 16px;
         width: 100vw;
         max-width: 100vw;
+        transform: unset;
+        &.explore-view {
+          transform: unset;
+        }
         // android
         @supports ((top: var(--safe-area-inset-top))) {
           top: calc(48px + var(--safe-area-inset-top));

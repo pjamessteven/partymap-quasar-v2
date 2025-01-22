@@ -20,7 +20,7 @@ const routes: RouteRecordRaw[] = [
       auth: false,
       mapOverlay: true,
       friendlyName: 'Explore',
-      backNavigation: false,
+      showControls: true,
     },
     children: [
       {
@@ -31,14 +31,13 @@ const routes: RouteRecordRaw[] = [
         },
         props: true,
         meta: {
+          showControls: false,
           auth: false,
           mapOverlay: true,
-          backNavigation: true,
         },
       },
-
       {
-        path: 'browse/:country?/:region?',
+        path: 'browse',
         name: 'BrowsePage',
         component: () => import('src/components/BrowsePage/BrowsePage.vue'),
         props: true,
@@ -47,6 +46,49 @@ const routes: RouteRecordRaw[] = [
           mapOverlay: false,
           friendlyName: 'Browse',
         },
+        children: [
+          {
+            path: '',
+            name: 'FeaturedEvents',
+            component: () =>
+              import('src/components/BrowsePage/FeaturedEvents.vue'),
+            meta: {
+              auth: false,
+              mapOverlay: false,
+              showControls: true,
+              friendlyName: 'Featured',
+              noBackButton: true,
+            },
+          },
+          {
+            path: ':country/:region?',
+            name: 'BrowseEventDateList',
+            component: () =>
+              import('src/components/BrowsePage/BrowseEventDateList.vue'),
+            props: true,
+            meta: {
+              auth: false,
+              mapOverlay: false,
+              showControls: true,
+              noBackButton: true,
+              friendlyName: 'Browse',
+            },
+          },
+          {
+            path: 'countries',
+            name: 'CountryRegionList',
+            component: () =>
+              import('src/components/BrowsePage/CountryRegionList.vue'),
+            props: true,
+            meta: {
+              auth: false,
+              mapOverlay: false,
+              showControls: true,
+              friendlyName: 'Browse',
+              noBackButton: true,
+            },
+          },
+        ],
       },
 
       {
@@ -105,7 +147,6 @@ const routes: RouteRecordRaw[] = [
         props: true,
         meta: {
           mapOverlay: false,
-          backNavigation: true,
         },
       },
       {

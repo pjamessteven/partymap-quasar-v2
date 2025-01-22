@@ -290,6 +290,8 @@ export default {
     view_all: 'सभी देखें',
     waiting_for_location: 'स्थान की प्रतीक्षा कर रहे हैं',
     any_dates: 'कोई भी तिथियां',
+    upcoming_in: 'आने वाला है',
+    this_area: 'इस क्षेत्र में',
     in_this_area: 'इस क्षेत्र में',
   },
   explore_view: {

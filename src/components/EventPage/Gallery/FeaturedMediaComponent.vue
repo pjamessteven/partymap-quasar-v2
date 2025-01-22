@@ -92,10 +92,10 @@
       </div>
       -->
     </div>
-    <q-dialog v-model="showEditDialog" v-if="currentUserCanEdit">
+    <BackdropBlurDialog v-model="showEditDialog" v-if="currentUserCanEdit">
       <EditGalleryComponent @closeDialog="showEditDialog = false" />
-    </q-dialog>
-    <q-dialog
+    </BackdropBlurDialog>
+    <BackdropBlurDialog
       v-else
       :model-value="showEditDialog"
       @hide="showEditDialog = null"
@@ -103,7 +103,7 @@
       transition-hide="jump-down"
     >
       <UploadNewLogoDialog @closeDialog="() => (showEditDialog = false)" />
-    </q-dialog>
+    </BackdropBlurDialog>
   </div>
 </template>
 
@@ -115,11 +115,13 @@ import GalleryDialog from './GalleryDialog.vue';
 import { mapState, mapWritableState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import { useAuthStore } from 'src/stores/auth';
+import BackdropBlurDialog from '../../BackdropBlurDialog.vue';
 
 export default {
   components: {
     EditGalleryComponent,
     GalleryDialog,
+    BackdropBlurDialog,
     UploadNewLogoDialog,
   },
   props: {

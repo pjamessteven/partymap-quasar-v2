@@ -48,7 +48,7 @@
         <q-btn label="done" @click="closeDialog" color="primary" />
       </q-card-section>
     </div>
-    <q-dialog v-model="showUploadDialog">
+    <BackdropBlurDialog v-model="showUploadDialog">
       <q-card class="upload-dialog q-pa-md">
         <div class="flex row wrap items-center q-mb-md">
           <q-icon left size="1.25em" name="las la-upload" />
@@ -68,7 +68,7 @@
           :openDialogOnMount="true"
         />
       </q-card>
-    </q-dialog>
+    </BackdropBlurDialog>
   </q-card>
 </template>
 
@@ -78,9 +78,14 @@ import MultipleMediaSelector from 'components/MultipleMediaSelector.vue';
 
 import { useEventStore } from 'src/stores/event';
 import { mapState, mapActions } from 'pinia';
+import BackdropBlurDialog from '../../BackdropBlurDialog.vue';
 
 export default {
-  components: { EditGalleryListItem, MultipleMediaSelector },
+  components: {
+    EditGalleryListItem,
+    MultipleMediaSelector,
+    BackdropBlurDialog,
+  },
   props: {
     editing: Boolean,
   },

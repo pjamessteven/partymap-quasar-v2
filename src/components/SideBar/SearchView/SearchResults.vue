@@ -9,7 +9,9 @@
       v-if="searchResults?.length > 0 || searchLocationResults?.length > 0"
     >
       <q-list separator v-if="eventResults?.length > 0">
-        <div class="text-h6 metropolis bolder q-my-sm q-ml-sm">Events</div>
+        <div class="text-h6 metropolis bolder q-my-sm q-ml-sm">
+          {{ $t('search.events') }}
+        </div>
         <q-item
           clickable
           @click.stop="clickResult(result)"
@@ -30,7 +32,9 @@
         </q-item>
       </q-list>
       <q-list separator v-if="searchLocationResults?.length > 0">
-        <div class="text-h6 metropolis bolder q-my-sm q-ml-sm">Places</div>
+        <div class="text-h6 metropolis bolder q-my-sm q-ml-sm">
+          {{ $t('search.places') }}
+        </div>
         <q-item
           clickable
           @click.stop="clickLocationResult(result)"
@@ -48,7 +52,9 @@
         </q-item>
       </q-list>
       <q-list separator v-if="artistResults?.length > 0">
-        <div class="text-h6 metropolis bolder q-my-sm q-ml-sm">Artists</div>
+        <div class="text-h6 metropolis bolder q-my-sm q-ml-sm">
+          {{ $t('search.artists') }}
+        </div>
         <q-item
           clickable
           @click.stop="clickResult(result)"
@@ -70,7 +76,9 @@
       </q-list>
 
       <q-list separator v-if="tagResults?.length > 0">
-        <div class="text-h6 metropolis bolder q-my-sm q-ml-sm">Tags</div>
+        <div class="text-h6 metropolis bolder q-my-sm q-ml-sm">
+          {{ $t('search.tags') }}
+        </div>
         <q-item
           clickable
           @click.stop="clickResult(result)"
@@ -101,7 +109,7 @@ import { useSearchStore } from 'src/stores/search';
 import { useQueryStore } from 'src/stores/query';
 import { useMapStore } from 'src/stores/map';
 import { useNearbyStore } from 'src/stores/nearby';
-import { toRaw } from 'vue';
+
 export default {
   name: 'SearchResults',
 
@@ -136,7 +144,9 @@ export default {
       } else if (result.type === 'tag') {
         obj = { tag: result.result, count: 0 };
         this.controlTag = [obj];
-        this.sidebarPanel = 'explore';
+        if (this.route.name === 'Explore') {
+          this.sidebarPanel = 'explore';
+        }
       } else if (result.type === 'event') {
         this.$router.push({
           name: 'EventPage',
@@ -146,9 +156,13 @@ export default {
           },
         });
       }
+      this.$emit('closeDialog');
     },
 
     clickLocationResult(location) {
+      if (this.$route.name !== 'Explore') {
+        this.$router.push({ name: 'Explore', query: { view: 'explore' } });
+      }
       this.currentLocationFromSearch = true;
       this.currentLocation = {
         lat: parseFloat(location.location.lat),
@@ -163,11 +177,10 @@ export default {
       if (this.$q.screen.gt.xs) {
         this.showPanel = false;
       }
-      this.closeSearchBar();
-    },
-    closeSearchBar() {
+      // clear results and query
       this.query = '';
-      this.searchbarShowing = false;
+
+      this.$emit('closeDialog');
     },
   },
   computed: {
@@ -191,7 +204,7 @@ export default {
       'showPanel',
     ]),
     ...mapWritableState(useQueryStore, ['controlTag']),
-    ...mapWritableState(useSearchStore, ['query', 'searchbarShowing']),
+    ...mapWritableState(useSearchStore, ['query']),
   },
 };
 </script>

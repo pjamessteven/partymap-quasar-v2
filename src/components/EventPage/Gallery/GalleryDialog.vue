@@ -1,5 +1,5 @@
 <template>
-  <q-dialog
+  <BackdropBlurDialog
     :model-value="open"
     ref="dialog"
     @hide="$emit('onClose')"
@@ -134,7 +134,7 @@
         @closeDialog="showingReportDialog = false"
       />
     </q-dialog>
-  </q-dialog>
+  </BackdropBlurDialog>
 </template>
 
 <script>
@@ -142,9 +142,10 @@ import common from 'src/assets/common';
 import ReportDialog from 'components/EventPage/ReportDialog.vue';
 import { mapActions, mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
+import BackdropBlurDialog from '../../BackdropBlurDialog.vue';
 
 export default {
-  components: { ReportDialog },
+  components: { ReportDialog, BackdropBlurDialog },
   data() {
     return {
       loaded: [],
@@ -204,7 +205,7 @@ export default {
             () => {
               // on error
               progressDialog.hide();
-            }
+            },
           );
         });
     },

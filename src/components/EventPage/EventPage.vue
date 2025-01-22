@@ -1106,52 +1106,52 @@
       </div>
       <!-- hidden element for copying url -->
       <input :value="computedUrl" ref="copyUrlInput" style="display: none" />
-      <q-dialog v-model="showingReportDialog">
+      <BackdropBlurDialog v-model="showingReportDialog">
         <ReportDialog
           v-if="showingReportDialog"
           :mode="'reportEvent'"
           @closeDialog="showingReportDialog = false"
         />
-      </q-dialog>
-      <q-dialog v-model="showingClaimDialog">
+      </BackdropBlurDialog>
+      <BackdropBlurDialog v-model="showingClaimDialog">
         <ReportDialog
           @closeDialog="showingClaimDialog = false"
           :mode="'claimEvent'"
           v-if="showingClaimDialog"
         />
-      </q-dialog>
+      </BackdropBlurDialog>
 
-      <q-dialog v-model="showingSuggestionsDialog">
+      <BackdropBlurDialog v-model="showingSuggestionsDialog">
         <SuggestionsDialog
           v-if="showingSuggestionsDialog"
           @closeDialog="showingSuggestionsDialog = false"
         />
-      </q-dialog>
+      </BackdropBlurDialog>
 
-      <q-dialog v-model="showingAddEventPhotosDialog">
+      <BackdropBlurDialog v-model="showingAddEventPhotosDialog">
         <AddEventPhotosDialog
           v-if="showingAddEventPhotosDialog"
           @closeDialog="showingAddEventPhotosDialog = false"
         />
-      </q-dialog>
-      <q-dialog v-model="showingAddLineupPosterDialog">
+      </BackdropBlurDialog>
+      <BackdropBlurDialog v-model="showingAddLineupPosterDialog">
         <AddLineupPosterDialog
           v-if="showingAddLineupPosterDialog"
           @closeDialog="showingAddLineupPosterDialog = false"
         />
-      </q-dialog>
-      <q-dialog v-model="showingUploadNewLogoDialog">
+      </BackdropBlurDialog>
+      <BackdropBlurDialog v-model="showingUploadNewLogoDialog">
         <UploadNewLogoDialog
           v-if="showingUploadNewLogoDialog"
           @closeDialog="() => (showingUploadNewLogoDialog = false)"
         />
-      </q-dialog>
-      <q-dialog
+      </BackdropBlurDialog>
+      <BackdropBlurDialog
         v-model="showingTicketDialog"
         @closeDialog="() => (showingTicketDialog = false)"
       >
         <EventDateTicketUrlDialog v-if="showingTicketDialog" />
-      </q-dialog>
+      </BackdropBlurDialog>
     </div>
   </div>
 </template>
@@ -1172,7 +1172,7 @@ import CustomQScroll from 'components/CustomQScroll.vue';
 
 import _ from 'lodash';
 import common from 'assets/common';
-
+import BackdropBlurDialog from '../BackdropBlurDialog.vue';
 import DescriptionComponent from 'components/EventPage/DescriptionComponent.vue';
 import YoutubeVideoComponent from 'components/EventPage/YoutubeVideoComponent.vue';
 import SummaryComponent from 'components/EventPage/SummaryComponent.vue';
@@ -1829,7 +1829,7 @@ useMeta(() => {
 </script>
 
 <style lang="scss">
-.q-dialog {
+.BackdropBlurDialog {
   @media only screen and (max-width: 599px) {
     min-width: unset;
   }

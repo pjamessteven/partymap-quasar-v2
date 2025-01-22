@@ -38,7 +38,7 @@
         </q-item>
       </q-list>
     </q-card-section>
-    <q-dialog
+    <BackdropBlurDialog
       v-model="showCancelDateDialog"
       transition-show="jump-up"
       transition-hide="jump-down"
@@ -48,14 +48,14 @@
         :ed="selectedEventDate"
         mode="cancel"
       />
-    </q-dialog>
-    <q-dialog
+    </BackdropBlurDialog>
+    <BackdropBlurDialog
       v-model="showRemoveRruleDialog"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <RemoveRruleDialog v-on:closeDialog="showRemoveRruleDialog = false" />
-    </q-dialog>
+    </BackdropBlurDialog>
   </q-card>
 </template>
 
@@ -64,10 +64,11 @@ import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import EditEventDateDialog from './EditEventDateDialog.vue';
 import RemoveRruleDialog from './RemoveRruleDialog.vue';
+import BackdropBlurDialog from '../../BackdropBlurDialog.vue';
 
 export default {
   name: 'EventDateMarkCancelledDialog',
-  components: { EditEventDateDialog, RemoveRruleDialog },
+  components: { EditEventDateDialog, RemoveRruleDialog, BackdropBlurDialog },
   watch: {},
   data() {
     return { showRemoveRruleDialog: false, showCancelDateDialog: false };

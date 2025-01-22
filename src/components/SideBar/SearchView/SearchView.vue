@@ -1,62 +1,39 @@
 <template>
-  <div class="search-view main-content flex column grow no-wrap">
-    <!--
-    <div class="sidebar-header" v-if="$q.screen.gt.xs">
-      <div
-        class="chicago text-h4 q-mt-md q-pl-md"
-        :class="$q.screen.lt.sm ? ' ' : 'q-mb-sm'"
-      >
-        Search
-      </div>
-    </div>
-    -->
-    <div
-      class="flex column grow q-px-md"
-      style="position: relative !important"
-      :class="$q.screen.gt.xs ? 'q-px-lg ' : ''"
+  <div
+    class="search-view main-content flex column grow no-wrap"
+    :class="$q.screen.gt.xs ? 'q-px-lg ' : 'q-px-md'"
+  >
+    <SearchResults
+      v-if="!loading"
+      class="q-pb-md"
+      :search-results="searchResults"
+      :search-location-results="locationSearchResults"
+      @closeDialog="$emit('closeDialog')"
+    />
+    <transition
+      appear
+      enter-active-class="animated fadeIn faster"
+      leave-active-class="animated fadeOut faster"
     >
-      <!--
       <div
-        class="inter bolder t1"
-        :class="$q.screen.lt.sm ? 'q-mt-md q-my-md' : ' q-my-lg  text-h6'"
+        style="height: 50%"
+        v-if="
+          searchResults?.length == 0 &&
+          locationSearchResults?.length == 0 &&
+          query?.length > 0 &&
+          currentQuery === query &&
+          !loading
+        "
+        class="flex justify-center items-center t3"
       >
-        Search results
+        No results
       </div>
-
-
-    -->
-
-      <SearchResults
-        v-if="!loading"
-        class="q-pb-md"
-        :search-results="searchResults"
-        :search-location-results="locationSearchResults"
-      />
-      <transition
-        appear
-        enter-active-class="animated fadeIn faster"
-        leave-active-class="animated fadeOut faster"
-      >
-        <div
-          style="height: 50%"
-          v-if="
-            searchResults?.length == 0 &&
-            locationSearchResults?.length == 0 &&
-            query?.length > 0 &&
-            currentQuery === query &&
-            !loading
-          "
-          class="flex justify-center items-center t3"
-        >
-          No results
-        </div>
-      </transition>
-      <InnerLoading
-        v-if="loading"
-        :solid="false"
-        :style="$q.screen.gt.xs ? '' : 'height: 50%'"
-      />
-    </div>
+    </transition>
+    <InnerLoading
+      v-if="loading"
+      :solid="false"
+      :style="$q.screen.gt.xs ? 'height: 200px' : 'height: 50%'"
+    />
   </div>
 </template>
 
@@ -72,8 +49,6 @@ export default {
   components: { SearchResults, InnerLoading },
   data() {
     return {
-      searchResults: [],
-      locationSearchResults: [],
       loading: false,
       currentQuery: '',
     };
@@ -100,7 +75,7 @@ export default {
                   (res) => ({
                     label: res.label,
                     location: { lat: res.y, lng: res.x },
-                  })
+                  }),
                 );
               }
               this.loading = false;
@@ -126,7 +101,11 @@ export default {
     },
   },
   computed: {
-    ...mapWritableState(useSearchStore, ['query']),
+    ...mapWritableState(useSearchStore, [
+      'query',
+      'searchResults',
+      'locationSearchResults',
+    ]),
   },
   created() {
     this.debouncedSearch = _.debounce(this.search, 300, {

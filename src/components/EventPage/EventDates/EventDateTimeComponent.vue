@@ -147,20 +147,20 @@
       :available-dates="calendarAvailableDates"
       :attributes="computedCalendarAttributes"
     />
-    <q-dialog
+    <BackdropBlurDialog
       v-model="showEditDialog"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <EditEventDateDialog :ed="selectedEventDate" mode="date" />
-    </q-dialog>
-    <q-dialog
+    </BackdropBlurDialog>
+    <BackdropBlurDialog
       v-model="showMarkCancelledDialog"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <EventDateMarkCancelledDialog v-if="showMarkCancelledDialog" />
-    </q-dialog>
+    </BackdropBlurDialog>
   </div>
 </template>
 
@@ -173,6 +173,7 @@ import EditEventDateDialog from './EditEventDateDialog.vue';
 import EventDateMarkCancelledDialog from './EventDateMarkCancelledDialog.vue';
 import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
+import BackdropBlurDialog from '../../BackdropBlurDialog.vue';
 
 export default {
   name: 'EventDateTimeComponent',
@@ -180,6 +181,7 @@ export default {
     EditEventDateDialog,
     Calendar,
     EventDateMarkCancelledDialog,
+    BackdropBlurDialog,
   },
   watch: {
     calendarSelectedEventDateRange: {

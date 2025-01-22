@@ -10,26 +10,8 @@
       :model-value="sidebarPanel"
       @update:model-value="updateNav"
       no-caps
-      :indicator-color="
-        $q.screen.lt.sm && false
-          ? $route.name === 'Explore' ||
-            $route.name === 'UserPage' ||
-            $route.name === 'ActivityPage' ||
-            $route.name === 'BrowsePage'
-            ? undefined
-            : 'transparent'
-          : 'transparent'
-      "
-      :active-class="
-        $q.screen.lt.sm
-          ? $route.name === 'Explore' ||
-            $route.name === 'UserPage' ||
-            $route.name === 'ActivityPage' ||
-            $route.name === 'BrowsePage'
-            ? undefined
-            : 'inactive-tab'
-          : 'active-tab'
-      "
+      :indicator-color="'transparent'"
+      :active-class="'active-tab'"
     >
       <q-route-tab
         v-show="false"
@@ -73,7 +55,7 @@
       />
 
       <q-route-tab
-        :to="{ name: 'BrowsePage' }"
+        :to="{ name: 'FeaturedEvents' }"
         key="3"
         :label="$t('nav.browse')"
         name="browse"

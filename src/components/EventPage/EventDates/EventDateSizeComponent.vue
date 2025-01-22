@@ -27,13 +27,13 @@
         {{ $t('event_dates.add_size') }}
       </div>
     </div>
-    <q-dialog
+    <BackdropBlurDialog
       v-model="showEditingDialog"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <EditEventDateDialog :ed="selectedEventDate" mode="size" />
-    </q-dialog>
+    </BackdropBlurDialog>
   </div>
 </template>
 
@@ -42,11 +42,13 @@ import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 
 import EditEventDateDialog from './EditEventDateDialog.vue';
+import BackdropBlurDialog from '../../BackdropBlurDialog.vue';
 
 export default {
   name: 'EventDateSizeComponent',
   components: {
     EditEventDateDialog,
+    BackdropBlurDialog,
   },
   watch: {},
   data() {

@@ -1,5 +1,9 @@
 <template>
-  <q-dialog ref="dialog" transition-show="jump-up" transition-hide="jump-down">
+  <BackdropBlurDialog
+    ref="dialog"
+    transition-show="jump-up"
+    transition-hide="jump-down"
+  >
     <q-card class="q-dialog-plugin dialog-card">
       <q-card-section class="flex items-center dialog-card-header">
         <div class="text-h6 inter bolder">
@@ -45,16 +49,21 @@
         </q-item>
       </q-list>
     </q-card>
-  </q-dialog>
+  </BackdropBlurDialog>
 </template>
 
 <script>
+import BackdropBlurDialog from '../BackdropBlurDialog.vue';
+
 export default {
   name: 'AddEventDialog',
   data() {
     return {
       host: null,
     };
+  },
+  components: {
+    BackdropBlurDialog,
   },
   methods: {
     selectHost(bool) {

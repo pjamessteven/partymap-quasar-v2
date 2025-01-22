@@ -293,7 +293,9 @@ export default {
     view_all: 'Voir tout',
     waiting_for_location: 'En attente de la localisation',
     any_dates: 'Toutes dates',
-    in_this_area: 'Cette zone',
+    upcoming_in: 'À venir dans',
+    this_area: 'cette zone',
+    in_this_area: 'Dans cette zone',
   },
   explore_view: {
     finding_whats_good: 'Recherche de ce qui est bon...',

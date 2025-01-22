@@ -116,14 +116,14 @@ Direct link when only one ticket available
       </div>
       <q-separator />
     </div>
-    <q-dialog
+    <BackdropBlurDialog
       v-if="editing"
       v-model="showEditingDialog"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <EditEventDateDialog :ed="selectedEventDate" mode="ticketUrl" />
-    </q-dialog>
+    </BackdropBlurDialog>
   </div>
 </template>
 
@@ -134,12 +134,14 @@ import common from 'assets/common';
 
 import EditEventDateDialog from './EditEventDateDialog.vue';
 import EventDateTicketUrlDialog from './EventDateTicketUrlDialog.vue';
+import BackdropBlurDialog from '../../BackdropBlurDialog.vue';
 
 export default {
   name: 'EventDateTicketUrlComponent',
   components: {
     EditEventDateDialog,
     EventDateTicketUrlDialog,
+    BackdropBlurDialog,
   },
   watch: {},
   data() {

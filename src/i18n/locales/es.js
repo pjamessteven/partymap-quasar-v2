@@ -126,8 +126,8 @@ export default {
   auth: {
     login: 'Iniciar sesión',
     login_to_partymap: 'Iniciar sesión',
-    welcome_back: 'Bienvenido de nuevo!',
-    welcome: 'Bienvenido',
+    welcome_back: 'Bienvenido/a de nuevo!',
+    welcome: 'Bienvenido/a',
     logout: 'Cerrar sesión',
     password: 'Contraseña',
     password_confirm: 'Confirmar contraseña',
@@ -162,7 +162,7 @@ export default {
     continue: 'Continuar',
     account_activated: 'Cuenta activada',
     account_acctivated_msg:
-      'Bienvenido a PartyMap Ahora puedes iniciar sesión en tu cuenta.',
+      'Bienvenido/a a PartyMap Ahora puedes iniciar sesión en tu cuenta.',
     account_activate_error_title: 'Hmm...',
     account_activate_error_msg:
       'Hubo un problema al activar tu cuenta. Por favor, verifica que la URL sea correcta. Contacta a info@partymap.com para obtener soporte.',
@@ -260,7 +260,7 @@ export default {
     no_upcoming_events_in_area: 'No hay eventos próximos aquí',
   },
   nearby_view: {
-    near: 'Cerca de',
+    near: 'En',
     message_1:
       'PartyMap es una plataforma impulsada por la comunidad y crowdsourced para encontrar fiestas y festivales en todo el mundo!',
     message_2:
@@ -289,6 +289,8 @@ export default {
     view_all: 'Ver todo',
     waiting_for_location: 'Esperando ubicación',
     any_dates: 'Cuando sea',
+    upcoming_in: 'Próximamente en',
+    this_area: 'esta área',
     in_this_area: 'En esta área',
   },
   explore_view: {
@@ -1067,7 +1069,7 @@ export default {
     11: 'Donar',
     about: '¿Qué es esto?',
     welcome:
-      'Bienvenido al directorio universal de festivales de música, reuniones y cultura underground!',
+      'Bienvenido/a al directorio universal de festivales de música, reuniones y cultura underground!',
     i_hate_partymap: 'Odio PartyMap!',
     message_2:
       'Si tu evento ha sido listado por alguien y deseas que se elimine, busca el botón de informar al final de la página del evento.',

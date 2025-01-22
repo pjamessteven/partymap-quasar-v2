@@ -303,6 +303,9 @@ body {
     }
   }
 
+  .q-dialog__backdrop {
+    background: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.8));
+  }
   .sticky-header {
     background: white;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -576,6 +579,9 @@ body {
   .q-separator--dark {
     // background: none;
     // border-top: 1px solid rgb(26, 26, 26) !important;
+  }
+  .q-dialog__backdrop {
+    background: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.8));
   }
 
   .vc-container {
@@ -992,6 +998,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(4px) saturate(150%);
   .auth-card {
     margin-top: 48px;
     width: 400px;

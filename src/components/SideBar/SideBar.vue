@@ -105,12 +105,6 @@
               v-if="mainStore.sidebarPanel === 'explore'"
             />
           </keep-alive>
-          <keep-alive>
-            <SearchView
-              style="height: 100%; width: 100%"
-              v-if="mainStore.sidebarPanel === 'search'"
-            />
-          </keep-alive>
         </div>
       </div>
     </div>
@@ -119,7 +113,6 @@
 
 <script setup lang="ts">
 import ExploreView from './ExploreView/ExploreView.vue';
-import SearchView from './SearchView/SearchView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
 import { useMainStore } from 'src/stores/main';
 import { useQueryStore } from 'src/stores/query';
@@ -206,7 +199,8 @@ const showAddEventDialog = () => {
       //: 1px solid white;
       .desktop-controls-bg {
         // border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-        box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+        box-shadow:
+          rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
           rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
       }
       &.shadow {

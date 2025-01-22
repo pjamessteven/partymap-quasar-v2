@@ -288,7 +288,9 @@ export default {
     view_all: 'Visualizza tutti',
     waiting_for_location: 'In attesa della posizione',
     any_dates: 'Quando',
-    in_this_area: 'In questa zona',
+    upcoming_in: 'In arrivo in',
+    this_area: 'questa area',
+    in_this_area: 'In questa area',
   },
   explore_view: {
     finding_whats_good: 'Trova ciò che è buono...',

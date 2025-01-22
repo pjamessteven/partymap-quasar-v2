@@ -294,7 +294,9 @@ export default {
     view_all: 'Alle anzeigen',
     waiting_for_location: 'Warten auf Standort',
     any_dates: 'Alle Daten',
-    in_this_area: 'An diesem Ort',
+    upcoming_in: 'Demnächst in',
+    this_area: 'diesem Ort',
+    in_this_area: 'diesem Ort',
   },
   explore_view: {
     finding_whats_good: 'Hier steppt der Bär...',

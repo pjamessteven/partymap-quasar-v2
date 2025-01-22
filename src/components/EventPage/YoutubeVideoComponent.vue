@@ -39,13 +39,13 @@
         </div>
       </div>
     </div>
-    <q-dialog
+    <BackdropBlurDialog
       v-model="showEditingDialog"
       transition-show="jump-up"
       transition-hide="jump-down"
     >
       <EditYoutubeUrlComponent @closeDialog="showEditingDialog = false" />
-    </q-dialog>
+    </BackdropBlurDialog>
   </div>
 </template>
 
@@ -56,9 +56,10 @@ import EditYoutubeUrlComponent from './EditYoutubeUrlComponent.vue';
 //import LazyYoutubeVideo from 'vue-lazy-youtube-video';
 import { YoutubeIframe } from '@vue-youtube/component';
 import _ from 'lodash';
+import BackdropBlurDialog from 'src/components/BackdropBlurDialog.vue';
 
 export default {
-  components: { YoutubeIframe, EditYoutubeUrlComponent },
+  components: { YoutubeIframe, EditYoutubeUrlComponent, BackdropBlurDialog },
   props: {
     editing: Boolean,
   },

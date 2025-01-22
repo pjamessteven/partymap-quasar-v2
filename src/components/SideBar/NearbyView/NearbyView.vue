@@ -19,6 +19,7 @@
     >
       <div class="scroll-stuff flex column">
         <div
+          v-if="true"
           class="flex column mobile-location-header"
           style="width: 100%"
           :class="{
@@ -51,7 +52,7 @@
               <div
                 class="flex row items-center no-wrap"
                 :class="{
-                  ' q-mx-sm': $q.screen.gt.sm,
+                  ' q-mx-sm q-mr-lg': $q.screen.gt.sm,
                   'q-ml-xs': $q.screen.lt.md,
                 }"
                 :style="
@@ -59,26 +60,32 @@
                     ? 'margin-left: -16px; border-radius: 100px!important;'
                     : 'margin-left: 0px; border-radius: 100px!important;'
                 "
-                v-if="$q.screen.gt.sm"
+                v-if="$q.screen.gt.sm && false"
               >
                 <q-icon
                   name="las la-calendar"
                   :class="$q.screen.gt.sm ? ' q-pa-md' : 'q-pa-sm'"
                   size="sm"
+                  :style="
+                    $q.screen.gt.sm
+                      ? 'margin-right: -4px; '
+                      : 'margin-left: 0px; '
+                  "
                 />
                 <DesktopDateSelect />
               </div>
+
               <q-btn
                 flat
                 class=""
                 :class="{
                   'q-ml-md q-pa-sm': $q.screen.lt.sm,
-                  'q-pa-md': $q.screen.gt.xs,
+                  'q-pa-md q-ml-md q-mr-xs ': $q.screen.gt.xs,
                 }"
                 @click.stop="() => getFineLocation()"
                 :style="
                   $q.screen.gt.sm
-                    ? ' border-radius: 100px!important;'
+                    ? 'margin-left: -8px; border-radius: 100px!important;'
                     : 'margin-left: 0px; border-radius: 100px!important;'
                 "
               >
@@ -123,14 +130,20 @@
                   </q-tooltip>
                 </template>
               </q-btn>
+              <div class="ellipsis text-h5 q-mr-sm" v-if="$q.screen.gt.sm">
+                <span class="metropolis bolder">
+                  {{ $t('nearby_view.upcoming_in') }}
+                </span>
+              </div>
               <NearbyCountrySelect />
             </div>
           </div>
         </div>
+
         <div
           class="flex message"
           :class="{
-            ' q-mt-lg ': $q.screen.gt.xs,
+            ' q-mt-md ': $q.screen.gt.xs,
             'q-mx-lg q-mb-sm q-pb-xs': $q.screen.gt.sm,
             'q-mx-md q-mt-md  q-pb-xs ': $q.screen.lt.md,
           }"
@@ -214,6 +227,13 @@
             </div>
           </div>
         </div>
+        <DesktopSearchComponent
+          v-if="$q.screen.gt.sm && false"
+          :class="{
+            'q-px-lg  q-mb-md q-mt-md': $q.screen.gt.sm,
+            'q-px-sm  q-mt-xs q-mb-xs': $q.screen.lt.md,
+          }"
+        />
         <div
           v-if="$q.screen.lt.sm && false"
           class="nav-button-container flex row no-wrap q-px-md t1 q-mt-md"
@@ -344,80 +364,11 @@
                 :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
               >
                 <div class="text-">{{ $t('nearby_view.popular_tags') }}</div>
-
-                <ControlSelect
-                  v-if="false"
-                  class="t2"
-                  @clear="
-                    () => {
-                      controlTag = [];
-                    }
-                  "
-                  :size="$q.screen.gt.sm ? 'sm' : 'xs'"
-                  :label="'All Tags'"
-                >
-                  <template v-slot="{ showing, hide }">
-                    <TagControl :showing="showing" @hide="hide" />
-                  </template>
-                </ControlSelect>
               </div>
-              <div
-                class=""
-                :class="$q.screen.gt.sm ? 'q-mb-sm' : ''"
-                v-if="nearbyTags && nearbyTags.length > 0"
-              >
-                <CustomQScroll
-                  horizontal
-                  class="tag-scroll-area"
-                  style="width: 100%"
-                  :style="$q.screen.gt.sm ? 'margin-bottom: -8px' : ''"
-                  :thumb-style="
-                    $q.screen.gt.xs
-                      ? {
-                          borderRadius: '0px',
-                          bottom: '8px',
-                          height: '4px',
-                          paddingLeft: '16px',
-                          marginLeft: '24px',
-                        }
-                      : { bottom: '0px', height: '0px' }
-                  "
-                >
-                  <div
-                    class="flex column"
-                    :class="$q.screen.gt.sm ? 'q-px-lg ' : 'q-pl-md'"
-                  >
-                    <div class="flex row no-wrap q-gutter-sm">
-                      <div
-                        v-for="(tag, index) in nearbyTags.filter(
-                          (x, i) => i % 2 === 0,
-                        )"
-                        :key="index"
-                        @click="clickTag(tag)"
-                        class="tag t2"
-                        style="text-transform: capitalize"
-                        :class="$q.platform.is.ios ? 'no-hover' : ''"
-                      >
-                        {{ tag.tag_t || tag.tag }}
-                      </div>
-                    </div>
-                    <div class="flex row no-wrap q-gutter-sm q-pt-sm">
-                      <div
-                        v-for="(tag, index) in nearbyTags.filter(
-                          (x, i) => i % 2 === 1,
-                        )"
-                        :key="index"
-                        @click="clickTag(tag)"
-                        class="tag t2"
-                        style="text-transform: capitalize"
-                        :class="$q.platform.is.ios ? 'no-hover' : ''"
-                      >
-                        {{ tag.tag_t || tag.tag }}
-                      </div>
-                    </div>
-                  </div>
-                </CustomQScroll>
-              </div>
+              <TagExplorer
+                mode="nearby"
+                :class="$q.screen.gt.sm ? 'q-px-lg q-mb-md' : 'q-pl-md '"
+              />
             </div>
             <!-- Display global tags if there's not many local tags-->
             <div class="flex column" v-else-if="tagOptions?.length > 0">
@@ -426,75 +377,11 @@
                 :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
               >
                 <div>{{ $t('nearby_view.hot_tags_around_world') }}</div>
-                <ControlSelect
-                  v-if="false"
-                  class="t2"
-                  @clear="
-                    () => {
-                      controlTag = [];
-                    }
-                  "
-                  :size="$q.screen.gt.sm ? 'sm' : 'xs'"
-                  :label="'All Tags'"
-                >
-                  <template v-slot="{ showing, hide }">
-                    <TagControl :showing="showing" @hide="hide" />
-                  </template>
-                </ControlSelect>
               </div>
-              <div>
-                <CustomQScroll
-                  horizontal
-                  :style="$q.screen.gt.sm ? 'margin-bottom: 0px' : ''"
-                  class="tag-scroll-area"
-                  style="width: 100%"
-                  :thumb-style="
-                    $q.screen.gt.xs
-                      ? {
-                          borderRadius: '0px',
-                          bottom: '8px',
-                          height: '4px',
-                          paddingLeft: '16px',
-                          marginLeft: '24px',
-                        }
-                      : { bottom: '0px', height: '0px' }
-                  "
-                >
-                  <div
-                    class="flex column"
-                    :class="$q.screen.gt.sm ? 'q-px-lg ' : 'q-pl-md'"
-                  >
-                    <div class="flex row no-wrap q-gutter-sm">
-                      <div
-                        v-for="(tag, index) in tagOptions.filter(
-                          (x, i) => i % 2,
-                        )"
-                        :key="index"
-                        @click="clickTag(tag)"
-                        class="tag t2"
-                        style="text-transform: capitalize"
-                        :class="$q.platform.is.ios ? 'no-hover' : ''"
-                      >
-                        {{ tag.tag_t || tag.tag }}
-                      </div>
-                    </div>
-                    <div class="flex row no-wrap q-gutter-sm q-pt-sm">
-                      <div
-                        v-for="(tag, index) in tagOptions.filter(
-                          (x, i) => i % 2 !== 1,
-                        )"
-                        :key="index"
-                        @click="clickTag(tag)"
-                        class="tag t2"
-                        style="text-transform: capitalize"
-                        :class="$q.platform.is.ios ? 'no-hover' : ''"
-                      >
-                        {{ tag.tag_t || tag.tag }}
-                      </div>
-                    </div>
-                  </div>
-                </CustomQScroll>
-              </div>
+              <TagExplorer
+                mode="all"
+                :class="$q.screen.gt.sm ? 'q-px-lg q-mb-md' : 'q-pl-md '"
+              />
             </div>
             <!-- artists -->
             <div class="flex column" v-if="nearbyArtists?.length > 5">
@@ -615,7 +502,6 @@
                       -->
             </div>
             <EventDateList
-              class="q-mx-sm"
               v-if="nearbyEventDates && compactView"
               :groupByMonth="false"
               :eventDates="nearbyEventDates"
@@ -626,7 +512,6 @@
               :hideHeader="true"
             />
             <EventDatePosterList
-              class="q-mx-sm"
               v-if="nearbyEventDates && !compactView"
               :groupByMonth="false"
               :eventDates="nearbyEventDates"
@@ -674,7 +559,6 @@
             </div>
 
             <EventDateList
-              class="q-mx-sm"
               v-if="eventDates && compactView"
               :groupByMonth="false"
               :eventDates="eventDates"
@@ -683,7 +567,6 @@
               :hideHeader="true"
             />
             <EventDatePosterList
-              class="q-mx-sm"
               v-if="eventDates && !compactView"
               :groupByMonth="false"
               :eventDates="eventDates"
@@ -733,7 +616,10 @@ import ControlSelect from 'src/components/Controls/ControlSelect.vue';
 import TagControl from 'src/components/Controls/TagControl.vue';
 import ArtistControl from 'src/components/Controls/ArtistControl.vue';
 import { useMapStore } from 'src/stores/map';
+import DesktopSearchComponent from 'src/components/Controls/DesktopSearchComponent.vue';
+
 import _ from 'lodash';
+import TagExplorer from '../../TagExplorer.vue';
 
 export default {
   name: 'NearbyView',
@@ -750,7 +636,9 @@ export default {
     DesktopDateSelect,
     ControlSelect,
     TagControl,
+    DesktopSearchComponent,
     ArtistControl,
+    TagExplorer,
   },
   data() {
     return {
@@ -815,7 +703,6 @@ export default {
     ...mapActions(useQueryStore, ['loadArtistOptions', 'loadTagOptions']),
     ...mapActions(useNearbyStore, [
       'loadEverything',
-      'loadNearbyTags',
       'loadNearbyArtists',
       'loadNearbyEventDates',
       'loadEventDates',
@@ -889,21 +776,6 @@ export default {
       );
     },
 
-    clickTag(tag) {
-      // force loading state after clicking to prevent glitchy feeling ui
-      this.eventDates = [];
-      this.eventDatesGroupedByMonth = {};
-      this.eventDatesLoading = true;
-
-      let index = this.controlTag?.findIndex((x) => x.tag === tag.tag);
-      if (index > -1) {
-        // tag already selected, do nothing
-      } else {
-        this.controlTag.push(tag);
-      }
-      this.sidebarPanel = 'explore';
-    },
-
     loadEventDatePage(page) {
       // hidden pagination for SEO
       this.addParamsToLocation({ global_page: page });
@@ -915,17 +787,33 @@ export default {
   watch: {
     currentLocation: {
       handler: function (newval, oldval) {
-        if (this.$route.name === 'Explore') {
+        if (this.$route.name === 'Explore' && this.currentLocationFromSearch) {
           if (newval && !oldval) {
-            console.log('location 1');
             this.loadEverything();
             return;
           } else if (newval && oldval) {
-            const userLocationHasSignficantlyChanged =
+            const locationHasSignficantlyChanged =
               Math.round(newval.lat) !== Math.round(oldval.lat) ||
               Math.round(newval.lng) !== Math.round(oldval.lng);
-            if (userLocationHasSignficantlyChanged) {
-              console.log('location has_sig_changed');
+            if (locationHasSignficantlyChanged) {
+              this.loadEverything();
+            }
+          }
+        }
+      },
+      //deep: true,
+    },
+    userLocation: {
+      handler: function (newval, oldval) {
+        if (this.$route.name === 'Explore') {
+          if (newval && !oldval) {
+            this.loadEverything();
+            return;
+          } else if (newval && oldval) {
+            const locationHasSignficantlyChanged =
+              Math.round(newval.lat) !== Math.round(oldval.lat) ||
+              Math.round(newval.lng) !== Math.round(oldval.lng);
+            if (locationHasSignficantlyChanged) {
               this.loadEverything();
             }
           }
@@ -935,12 +823,8 @@ export default {
     },
     queryRadius: {
       handler: function (newval, oldval) {
-        console.log('qq qr', newval, oldval);
         if (oldval !== null && oldval != newval) {
-          console.log('location 2');
-
           this.loadEverything();
-          console.log('qq called', newval, oldval);
         }
       },
     },
@@ -1038,6 +922,10 @@ export default {
     window.prerenderReady = false;
   },
   created() {
+    this.debouncedLoadEverything = _.debounce(this.loadEverything, 300, {
+      leading: true,
+      trailing: false,
+    });
     this.debouncedLoadNearbyEventDates = _.debounce(
       this.loadNearbyEventDates,
       150,
@@ -1095,7 +983,7 @@ export default {
         this.sidebarPanelReady = true;
       }, 350);
     } else {
-      this.sidebarPanelReady = true;
+      this.sidebarPanelRedy = true;
     }
 
     // otherwise will change on route change
@@ -1108,10 +996,7 @@ export default {
       } catch {
         await this.loadIpInfo();
       }
-      if (this.eventDates?.length === 0) this.loadEverything();
-      else {
-        if (this.eventDates?.length === 0) this.loadEverything();
-      }
+      //if (this.eventDates?.length === 0) this.loadEverything();
     }
 
     if (this.$route.query.global_page) {
@@ -1251,6 +1136,7 @@ export default {
         z-index: 1000;
         width: 100%;
         font-weight: 700;
+        font-size: 1rem !important;
         font-family: 'Metropolis';
         &:lang(ru) {
           font-family: 'InterDisplay';
@@ -1345,8 +1231,6 @@ export default {
     }
   }
   .tag-scroll-area {
-    height: 88px;
-    mask-image: linear-gradient(to left, transparent 0px, white 64px);
     width: 100%;
     .tag {
       opacity: 1;

@@ -456,7 +456,7 @@ export default {
 }
 
 .ed-card {
-  min-height: 238.5px;
+  //min-height: 238.5px;
   border: none;
   border-radius: 9px;
   direction: ltr;

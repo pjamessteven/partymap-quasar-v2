@@ -4,7 +4,7 @@
       exact
       clickable
       :to="{
-        name: 'BrowsePage',
+        name: 'FeaturedEvents',
       }"
       active-class="item-active"
       exact-active-class="item-active"
@@ -21,7 +21,7 @@
     <q-item
       clickable
       :to="{
-        name: 'BrowsePage',
+        name: 'BrowseEventDateList',
         params: {
           country: 'all',
         },
@@ -47,7 +47,7 @@
     <q-expansion-item
       active-class="item-active"
       :to="{
-        name: 'BrowsePage',
+        name: 'BrowseEventDateList',
         params: {
           country: country.short_name,
         },
@@ -95,7 +95,7 @@
           exact
           clickable
           :to="{
-            name: 'BrowsePage',
+            name: 'BrowseEventDateList',
             params: {
               country: country.short_name,
             },
@@ -120,7 +120,7 @@
           :key="index"
           clickable
           :to="{
-            name: 'BrowsePage',
+            name: 'BrowseEventDateList',
             params: {
               country: country.short_name,
               region: region.long_name,

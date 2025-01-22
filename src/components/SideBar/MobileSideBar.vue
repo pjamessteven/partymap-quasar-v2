@@ -14,7 +14,7 @@
       >
         <div class="handle-icon" />
       </div>
-      <div class="drag-zone" ref="sidebarHandle"></div>
+
       <div
         class="mobile-panel-button flex row items-center"
         v-if="$q.screen.lt.md && mainStore.showPanelBackground"
@@ -54,12 +54,6 @@
               v-if="mainStore.sidebarPanel === 'explore'"
             />
           </keep-alive>
-          <keep-alive>
-            <SearchView
-              style="height: 100%; width: 100%"
-              v-if="mainStore.sidebarPanel === 'search'"
-            />
-          </keep-alive>
         </div>
       </div>
     </div>
@@ -71,7 +65,6 @@ import SearchComponent from 'src/components/Search/SearchComponent.vue';
 import TopControlsMenu from 'components/MenuBar/TopControlsMenu.vue';
 import { Lethargy } from 'lethargy-ts';
 import ExploreView from './ExploreView/ExploreView.vue';
-import SearchView from './SearchView/SearchView.vue';
 import NearbyView from './NearbyView/NearbyView.vue';
 import { useMainStore } from 'src/stores/main';
 import { useRouter, useRoute } from 'vue-router';
@@ -134,10 +127,10 @@ const hiddenYPosition = () => {
     return window.innerHeight - 260 - mainStore.safeAreaInsets.top;
   }
 
-  return window.innerHeight - 272 - mainStore.safeAreaInsets.top;
+  return window.innerHeight - 256 - mainStore.safeAreaInsets.top;
 };
 const showingYPosition = () => {
-  return $q.screen.lt.md ? 90 : 76;
+  return $q.screen.lt.md ? 82 : 76;
 };
 
 const showPanel = () => {
@@ -230,7 +223,7 @@ const dragHandler = ({
       console.log('top', event, y);
 
       if (mainStore.showPanel) {
-        if (y > 30) {
+        if (y > 30 && (mainStore.enablePanelSwipeDown || $q.platform.is.ios)) {
           hidePanel();
         } else {
           showPanel();
@@ -293,8 +286,7 @@ const dragHandler = ({
         },
       );
     } else if (
-      (mainStore.enablePanelSwipeDown ||
-        event.target.className == 'drag-z one') &&
+      mainStore.enablePanelSwipeDown &&
       y + showingYPosition() > showingYPosition() &&
       mainStore.showPanel
     ) {
@@ -351,10 +343,12 @@ useDrag(dragHandler, {
   axis: 'y',
 });
 
+/*
 useDrag(dragHandler, {
   domTarget: sidebarHandle,
   axis: 'y',
 });
+*/
 const setupSpring = (initialYPos: number) => {
   const { motionProperties: mp } = useMotionProperties(sidebar, {
     y: initialYPos,
@@ -518,7 +512,8 @@ watch(
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-radius: 18px;
+    border-top-right-radius: 18px;
+    border-top-left-radius: 18px;
     .drag-zone {
       position: absolute;
       left: 0;
@@ -657,7 +652,6 @@ watch(
       overflow: none;
       max-width: 100vw;
       width: 100vw;
-      border-radius: 18px;
       //box-shadow: rgba(0, 0, 0, 0.2) 8px 0px 48px 4px !important;
 
       will-change: opacity, transform; //important for smoothness on android
@@ -669,11 +663,12 @@ watch(
           0
         );
         */
-        padding-bottom: calc(180px + var(--safe-area-inset-top));
+        padding-bottom: calc(154px + var(--safe-area-inset-top));
       }
 
       .sidebar-content {
-        border-radius: 18px;
+        border-top-right-radius: 18px;
+        border-top-left-radius: 18px;
 
         backdrop-filter: unset !important;
         padding-top: unset;

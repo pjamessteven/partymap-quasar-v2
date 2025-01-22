@@ -1,5 +1,5 @@
 <template>
-  <q-dialog ref="dialog">
+  <BackdropBlurDialog ref="dialog">
     <q-card class="q-dialog-plugin dialog-card">
       <q-card-section
         class="header row items-center justify-between dialog-card-header"
@@ -32,16 +32,17 @@
         </q-item>
       </q-list>
     </q-card>
-  </q-dialog>
+  </BackdropBlurDialog>
 </template>
 
 <script>
 import { useMapStore } from 'src/stores/map';
 import { mapWritableState } from 'pinia';
+import BackdropBlurDialog from '../BackdropBlurDialog.vue';
 
 export default {
   name: 'EventSelectionComponent',
-  components: {},
+  components: { BackdropBlurDialog },
   watch: {},
   props: {
     data: Object,

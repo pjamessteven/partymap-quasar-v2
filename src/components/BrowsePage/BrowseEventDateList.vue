@@ -1,15 +1,40 @@
 <template>
   <div
     class="event-list-vertical shadow-0 main-content"
-    style="height: 100%; width: 100%; position: relative; overflow: hidden"
+    style="height: 100%; min-height: 100vh; width: 100%; position: relative"
   >
     <div class="event-list-inner">
-      <div
-        class="flex column grow no-wrap"
-        :class="$q.screen.gt.sm ? 'q-pt-sm' : ''"
-      >
+      <div class="flex column grow no-wrap" :class="$q.screen.gt.sm ? '' : ''">
+        <div class="flex column" v-if="$q.screen.gt.sm">
+          <div class="text-h5 inter bolder q-ml-lg">
+            <div
+              v-if="$route.params.country !== 'all'"
+              class="flex items-center"
+            >
+              {{ $t('nearby_view.upcoming_in') }}&nbsp;<span
+                v-if="$route.params.region"
+                >{{ $route.params.region }},&nbsp;</span
+              >{{
+                countryCodes.find((x) => x.code == $route.params.country)?.name
+              }}&nbsp;
+              <div style="font-size: 32pt" class="q-ml-xs">
+                {{
+                  countryCodes.find((x) => x.code == $route.params.country)
+                    ?.emoji_flag
+                }}
+              </div>
+            </div>
+            <span v-else>
+              {{ $t('browse_page.all_events_world') }}
+            </span>
+          </div>
+
+          <div class="inter text-large bold t3 q-ml-lg q-mt-sm q-mb-lg">
+            {{ $t('browse_page.the_ultimate_calendar') }} {{ currentYear }}!
+          </div>
+        </div>
         <div class="flex column" v-if="!isLoadingInitial">
-          <div class="flex column q-px-sm">
+          <div class="flex column">
             <EventDateList
               v-if="compactView"
               :groupByMonth="groupEventsByMonth"
@@ -39,10 +64,13 @@
         :style="
           $q.screen.lt.sm
             ? 'height: 144px; position: absolute; width: 100%; z-index: 500'
-            : 'height: 100%; padding-top: 96px; position: absolute; width: 100%; z-index: 500'
+            : 'height: 100vh;  margin-top: -96px; position: absolute; width: 100%; z-index: 5000'
         "
       >
-        <div class="flex column items-center no-wrap">
+        <div
+          style="height: 100px; width: 200px"
+          class="flex justify-center items-center"
+        >
           <div
             class="metropolis bold q-mb-md"
             :class="$q.screen.gt.xs && 'q-mt-xl'"
@@ -57,39 +85,37 @@
           >
             {{ $t('explore_view.nothing_coming_up') }}
           </div>
-          <div style="height: 20px; width: 200px" class="flex justify-center">
-            <q-linear-progress
-              v-if="isLoadingInitial"
-              class="linear-progress q-mt-md"
-              indeterminate
-              size="2px"
-              :color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
-              rounded
-              :style="$q.screen.gt.xs ? 'max-width: 200px' : 'max-width: 120px'"
-            />
-            <div
-              class="flex column no-wrap"
-              style="pointer-events: all"
-              v-else-if="noResults && !isLoadingInitial"
-            >
-              <div class="flex row no-wrap">
-                <q-btn
-                  no-caps
-                  style="border-radius: 48px !important; height: 40px"
-                  v-if="anyFiltersEnabled"
-                  class="button-plain flex items-center"
-                  @click="
-                    () => {
-                      clearAllFilters();
-                    }
-                  "
-                >
-                  <div class="flex items-center row no-wrap q-px-xs">
-                    <q-icon name="mdi-close" size="1rem" class="q-pr-md" />
-                    <div>{{ $t('explore_view.clear_filters') }}</div>
-                  </div>
-                </q-btn>
-              </div>
+          <q-linear-progress
+            v-if="isLoadingInitial"
+            class="linear-progress q-mt-md"
+            indeterminate
+            size="2px"
+            :color="$q.dark.isActive ? 'grey-6' : 'grey-8'"
+            rounded
+            :style="$q.screen.gt.xs ? 'max-width: 200px' : 'max-width: 120px'"
+          />
+          <div
+            class="flex column no-wrap"
+            style="pointer-events: all"
+            v-else-if="noResults && !isLoadingInitial"
+          >
+            <div class="flex row no-wrap">
+              <q-btn
+                no-caps
+                style="border-radius: 48px !important; height: 40px"
+                v-if="anyFiltersEnabled"
+                class="button-plain flex items-center"
+                @click="
+                  () => {
+                    clearAllFilters();
+                  }
+                "
+              >
+                <div class="flex items-center row no-wrap q-px-xs">
+                  <q-icon name="mdi-close" size="1rem" class="q-pr-md" />
+                  <div>{{ $t('explore_view.clear_filters') }}</div>
+                </div>
+              </q-btn>
             </div>
           </div>
         </div>
@@ -112,7 +138,8 @@ import { useMainStore } from 'src/stores/main';
 import { useAuthStore } from 'src/stores/auth';
 import { mapActions, mapWritableState, mapState } from 'pinia';
 import CustomQScroll from 'components/CustomQScroll.vue';
-
+import countryCodes from 'src/assets/country-code-emoji';
+import dayjs from 'dayjs';
 export default {
   components: {
     //ControlsComponent,
@@ -131,6 +158,7 @@ export default {
       headerYPosition: 0,
       year: 0,
       componentGroup: {},
+      currentYear: dayjs().year(),
     };
   },
   props: {
@@ -325,7 +353,10 @@ export default {
   beforeMount() {
     this.resetQueryState();
   },
+
   created() {
+    this.countryCodes = countryCodes;
+
     this.debouncedOnScrollMainContent = _.debounce(
       this.onScrollMainContent,
       10,

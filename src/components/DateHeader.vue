@@ -3,7 +3,7 @@
     <div
       class="date-header lex row no-wrap grow ellipsis"
       :class="{
-        ' q-px-md q-pb-md    t1   ': $q.screen.gt.sm,
+        ' q-pb-md q-px-lg    t1   ': $q.screen.gt.sm,
         'q-px-sm q-ml-xs q-py-md t1  ': $q.screen.lt.md,
       }"
     >
@@ -42,10 +42,13 @@ export default {
 <style lang="scss" scoped>
 .date-header-wrapper {
   position: sticky;
-  top: -1px;
+  top: 0px;
   width: 100%;
   z-index: 501;
-
+  //box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1);
+  //border-top-left-radius: 18px;
+  //border-top-right-radius: 18px;
+  //overflow: hidden;
   .date-header {
     height: 100%;
     position: relative;
@@ -87,6 +90,12 @@ export default {
     }
   }
   .date-header-wrapper {
+    top: 0px;
+    width: 100%;
+    z-index: 501;
+    box-shadow: unset;
+    border-top-left-radius: unset;
+    border-top-right-radius: unset;
     .date-header {
       //width: calc(100% - 64px) !important;
       //padding-right: 64px !important;

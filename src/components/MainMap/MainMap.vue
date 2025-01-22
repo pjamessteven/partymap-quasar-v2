@@ -99,7 +99,7 @@
         "
         :attribution-control="false"
       >
-        <mgl-navigation-control :position="'bottom-right'" />
+        <mgl-navigation-control :position="'bottom-right'" v-if="false" />
 
         <mgl-geo-json-source
           source-id="points"
@@ -522,7 +522,7 @@ const debouncedClearMarkersAndLoadPoints = debounce(
 const debouncedReverseGeocode = debounce(
   async (coords, zoom) => {
     if (zoom <= 4) {
-      mainStore.currentLocationCity = t('nearby_view.in_this_area');
+      mainStore.currentLocationCity = t('nearby_view.this_area');
     } else {
       const reverseGeo = await mainStore.reverseGecodeLocation(coords, zoom);
       if (reverseGeo.country || reverseGeo.city) {
