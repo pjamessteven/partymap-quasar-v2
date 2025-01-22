@@ -502,6 +502,7 @@
                       -->
             </div>
             <EventDateList
+              :class="{ 'q-px-sm': $q.screen.lt.md }"
               v-if="nearbyEventDates && compactView"
               :groupByMonth="false"
               :eventDates="nearbyEventDates"

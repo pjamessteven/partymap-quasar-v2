@@ -100,6 +100,7 @@ const routes: RouteRecordRaw[] = [
           auth: false,
           mapOverlay: false,
           friendlyName: 'Activity',
+          showControls: false,
         },
       },
       {
@@ -112,6 +113,7 @@ const routes: RouteRecordRaw[] = [
           auth: false,
           mapOverlay: false,
           friendlyName: 'Privacy',
+          showControls: false,
         },
       },
       {
@@ -124,6 +126,7 @@ const routes: RouteRecordRaw[] = [
           auth: false,
           mapOverlay: false,
           friendlyName: 'Support',
+          showControls: false,
         },
       },
       {
@@ -137,6 +140,8 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: false,
+          showControls: false,
+
           friendlyName: 'Privacy',
         },
       },
@@ -147,6 +152,7 @@ const routes: RouteRecordRaw[] = [
         props: true,
         meta: {
           mapOverlay: false,
+          showControls: false,
         },
       },
       {
@@ -157,6 +163,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: true,
+          showControls: false,
         },
       },
       {
@@ -166,6 +173,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: true,
+          showControls: false,
         },
       },
       {
@@ -175,6 +183,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: true,
+          showControls: false,
         },
       },
       {
@@ -185,6 +194,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: true,
+          showControls: false,
         },
       },
       {
@@ -194,6 +204,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: true,
+          showControls: false,
         },
       },
       {
@@ -203,6 +214,8 @@ const routes: RouteRecordRaw[] = [
         props: { host: true },
         meta: {
           auth: false,
+          showControls: false,
+
           mapOverlay: false,
         },
       },
@@ -214,6 +227,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: false,
+          showControls: false,
         },
       },
 
@@ -226,6 +240,7 @@ const routes: RouteRecordRaw[] = [
           auth: false,
           mapOverlay: false,
           friendlyName: 'Manage account',
+          showControls: false,
         },
       },
 
@@ -238,6 +253,7 @@ const routes: RouteRecordRaw[] = [
           auth: false,
           mapOverlay: false,
           friendlyName: 'User page',
+          showControls: false,
         },
       },
       {
@@ -248,6 +264,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: true,
+          showControls: false,
         },
       },
       {
@@ -259,6 +276,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: true,
+          showControls: false,
         },
       },
       {
@@ -271,6 +289,7 @@ const routes: RouteRecordRaw[] = [
           auth: false,
           mapOverlay: false,
           friendlyName: 'Admin',
+          showControls: false,
         },
       },
       {
@@ -283,6 +302,8 @@ const routes: RouteRecordRaw[] = [
         meta: {
           auth: false,
           mapOverlay: false,
+          showControls: false,
+
           friendlyName: 'Work Queue',
         },
       },

@@ -99,14 +99,14 @@ export default {
 .body--light {
   .artist-head-wrapper {
     .card-bottom-background {
-      background: $b-4;
+      background: $b-1;
     }
     .artist-head {
       .artist-head-img {
         //background: grey;
-        background: grey;
+        background: $b-1;
 
-        color: $ti-4;
+        color: $t-4;
         /*
         box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.1),
           0 6px 8px 2px rgba(0, 0, 0, 0.05), 0 5px 10px 4px rgba(0, 0, 0, 0.08);
@@ -204,8 +204,8 @@ export default {
       transition: all 0.3s ease;
       position: relative;
       box-shadow:
-        rgba(0, 0, 0, 0.1) 0px 6px 24px 0px,
-        rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+        rgba(0, 0, 0, 0.1) 0px 3px 12px 0px,
+        rgba(0, 0, 0, 0.07) 0px 0px 0px 1px;
       img {
         position: absolute;
         top: 50%;

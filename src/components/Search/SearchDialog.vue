@@ -384,7 +384,7 @@ export default {
       }
       :deep(.tag) {
         background: rgba(150, 150, 150, 0.68);
-        color: white;
+        color: white !important;
         &.selected {
           background: white;
           color: black;

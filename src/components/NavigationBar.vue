@@ -42,8 +42,8 @@
         :icon="
           $q.screen.lt.sm
             ? sidebarPanel === 'nearby'
-              ? 'mdi-crosshairs-gps'
-              : 'mdi-crosshairs'
+              ? 'mdi-earth'
+              : 'mdi-earth'
             : undefined
         "
         content-class="tab"
@@ -78,8 +78,8 @@
         :icon="
           $q.screen.lt.sm
             ? $route.name === 'ActivityPage'
-              ? 'mdi-rss'
-              : 'mdi-rss'
+              ? 'mdi-bell'
+              : 'mdi-bell-outline'
             : undefined
         "
         content-class="tab"
