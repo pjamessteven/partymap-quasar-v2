@@ -79,7 +79,6 @@ import SolidPage from 'src/components/dialogs/SolidPage.vue';
 import { useBrowseStore } from 'src/stores/browse';
 
 import InnerLoading from 'src/components/InnerLoading.vue';
-import ControlsComponent from '../Controls/ControlsComponent.vue';
 import CountryRegionList from './CountryRegionList.vue';
 import CustomQScroll from '../CustomQScroll.vue';
 import TypographyTabs from '../TypographyTabs.vue';
@@ -88,7 +87,6 @@ export default {
   components: {
     SolidPage,
     InnerLoading,
-    ControlsComponent,
     CountryRegionList,
     CustomQScroll,
     TypographyTabs,

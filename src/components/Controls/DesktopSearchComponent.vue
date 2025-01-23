@@ -248,8 +248,164 @@ export default {
 
 <style lang="scss" scoped>
 .body--light {
+  .desktop-search-component {
+    .controls-wrapper {
+      //box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.);
+
+      .controls-wrapper-inner {
+        background: $b-2;
+        color: $t-1;
+        border: 1px solid rgba(0, 0, 0, 0);
+
+        .button-control {
+          &.active {
+            background: white;
+            color: $t-1;
+          }
+          .q-btn__content {
+            .close-icon-wrapper {
+              background: $bi-4;
+              color: white;
+            }
+            .tag {
+              background: $b-1;
+              color: $t-1;
+            }
+          }
+        }
+      }
+    }
+    &.overlaying-map {
+      .separator {
+        color: $ti-4;
+      }
+      .controls-wrapper {
+        backdrop-filter: blur(40px);
+        //   box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+
+        .controls-wrapper-inner {
+          //background: rgba(255, 255, 255, 0.3);
+          background: linear-gradient(
+            rgba(110, 110, 110, 0.4),
+            rgba(120, 120, 120, 0.4)
+          );
+          color: $ti-1;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          border-left: 1px solid rgba(255, 255, 255, 0.1);
+          border-right: 1px solid rgba(255, 255, 255, 0.1);
+          .button-control {
+            .q-btn__content {
+              .tag {
+                background: rgba(255, 255, 255, 0.2);
+                color: $ti-1;
+              }
+            }
+          }
+        }
+      }
+    }
+    &.transport-map {
+      .controls-wrapper {
+        backdrop-filter: none;
+
+        .controls-wrapper-inner {
+          //border: 1px solid rgba(0, 0, 0, 0.1);
+          backdrop-filter: blur(2px);
+          color: $t-1;
+
+          .searchbar-wrapper {
+            .searchbar-input {
+              .q-field__inner {
+                .q-placeholder::placeholder {
+                  opacity: 1;
+                }
+                input {
+                  color: $t-1 !important;
+                }
+                .q-field__marginal {
+                  font-size: unset;
+                  color: $t-1 !important;
+                }
+              }
+            }
+          }
+        }
+      }
+      &.overlaying-map {
+        .controls-wrapper {
+          box-shadow: rgba(0, 0, 0, 0.2) 1.95px 1.95px 2.6px;
+
+          .controls-wrapper-inner {
+            //border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 1);
+          }
+        }
+      }
+    }
+  }
 }
 .body--dark {
+  .desktop-search-component {
+    .controls-wrapper {
+      .controls-wrapper-inner {
+        color: $ti-2;
+        background: $bi-3;
+
+        //background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0);
+
+        .button-control {
+          .q-btn__content {
+            .tag {
+              background: rgba(255, 255, 255, 0.2);
+              color: $ti-1;
+            }
+            .close-icon-wrapper {
+              background: $bi-4;
+              color: white;
+            }
+          }
+          &.active {
+            background: white;
+            color: $t-1;
+          }
+        }
+      }
+    }
+    &.overlaying-map {
+      .separator {
+        color: $ti-4;
+      }
+      .controls-wrapper {
+        backdrop-filter: blur(40px);
+        // box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
+
+        .controls-wrapper-inner {
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          border-left: 1px solid rgba(255, 255, 255, 0.05);
+          border-right: 1px solid rgba(255, 255, 255, 0.05);
+          //    border-color: transparent;
+          background: linear-gradient(
+            rgba(110, 110, 110, 0.4),
+            rgba(120, 120, 120, 0.4)
+          );
+          color: $ti-1;
+          //border: 1px solid rgba(255, 255, 255, 0.15);
+
+          .button-control {
+            .q-btn__content {
+              .tag {
+                background: rgba(255, 255, 255, 0.2);
+                color: $ti-1;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 .desktop-search-component {
@@ -261,45 +417,136 @@ export default {
 
   justify-content: center;
 
+  .controls-wrapper {
+    //z-index: 105;
+    justify-content: center;
+    position: relative;
+    border-radius: 48px;
+    overflow: hidden;
+    font-family: 'Metropolis';
+    &:lang(ru) {
+      font-family: 'InterDisplay';
+    }
+    .controls-wrapper-inner {
+      pointer-events: all;
+      overflow: hidden;
+      //transition: all 0.3s;
+      cursor: pointer;
+      // width: 510px;
+      height: 100%;
+      border-radius: 48px;
+
+      position: relative;
+      height: 44px;
+      align-content: center;
+      transition: filter 0.3s ease;
+
+      &:hover {
+        //filter: brightness(1);
+      }
+      .searchbar-wrapper {
+        padding-left: 18px;
+        padding-right: 18px;
+        margin-top: 2px;
+
+        .searchbar-input {
+          margin-top: -2px;
+
+          .q-field__inner {
+            .q-field__control::before {
+              border-color: transparent;
+              border: none;
+              font-size: larger;
+            }
+            .q-field__marginal {
+              font-size: unset;
+              font-size: larger;
+            }
+            input {
+              font-weight: 500;
+              font-size: 1rem;
+              letter-spacing: 0.5px;
+              font-family: 'Metropolis';
+              &:lang(ru) {
+                font-family: 'InterDisplay';
+              }
+            }
+          }
+        }
+      }
+
+      .q-btn::before {
+        box-shadow: none !important;
+      }
+      .button-control {
+        height: 42px;
+        display: flex;
+        align-items: baseline;
+        .button-label {
+          //font-size: 1em;
+          letter-spacing: 0.5px;
+          white-space: nowrap;
+          font-weight: 600;
+          margin-top: 1px;
+          //font-size: 0.9rem;
+        }
+        .q-btn__content {
+          // padding-left: 8px;
+          // padding-right: 8px;
+
+          .tag {
+            padding: 4px 12px;
+            font-size: 0.9rem;
+            text-transform: capitalize;
+            font-weight: 600;
+            font-family: Inter;
+            &:first-child {
+              margin-left: 6px;
+            }
+            &:not(:first-child) {
+              margin-left: 6px;
+            }
+          }
+
+          .close-icon-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 48px;
+            padding: 2px;
+            margin-right: 8px;
+            margin-left: -6px;
+          }
+
+          white-space: nowrap;
+        }
+      }
+
+      .location-button-wrapper {
+        position: absolute;
+        left: -80px;
+        top: 4px;
+        border-radius: 24px;
+        background: transparent;
+      }
+    }
+    &.search-wrapper {
+      .controls-wrapper-inner {
+        height: 44px;
+        align-content: center;
+      }
+    }
+  }
+
   :deep(.search-button) {
     .q-btn__content {
       width: 100%;
-
-      .tag {
-        padding: 4px 12px;
-        color: $ti-1;
-        font-size: 0.9rem;
-        text-transform: capitalize;
-        background: rgba(255, 255, 255, 0.2);
-        font-family: Inter;
-        &:first-child {
-          margin-left: 6px;
-        }
-        &:not(:first-child) {
-          margin-left: 6px;
-        }
-      }
     }
   }
   &.center-absolute {
     position: absolute;
     width: 100%;
     justify-content: center;
-  }
-
-  .control-scroll-area {
-    height: 48px;
-    width: 100%;
-    .scroll-inner {
-      //justify-content: start;
-      //padding-left: 256px;
-      justify-content: center;
-      pointer-events: all;
-      .separator {
-        height: 16px;
-        border-left: 1px solid;
-      }
-    }
   }
 }
 

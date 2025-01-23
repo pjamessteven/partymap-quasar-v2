@@ -27,24 +27,6 @@
         />
       </Transition>
 
-      <Transition
-        v-if="false"
-        appear
-        :enter-active-class="'animated fadeIn'"
-        :leave-active-class="'animated fadeOut'"
-      >
-        <ControlsComponent
-          class="controls-component"
-          :overlayingMap="!showPanelBackground && $route.name === 'Explore'"
-          v-if="
-            $route.name === 'Explore' ||
-            $route.name === 'BrowsePage' ||
-            $route.name === 'FeaturedEvents' ||
-            $route.name === 'BrowseEventDateList' ||
-            $route.name === 'CountryRegionList'
-          "
-        />
-      </Transition>
       <div
         class="sidebar-component-wrapper"
         :style="$q.screen.lt.md && computedSidebarOpacity"
@@ -169,7 +151,6 @@
 //import MainMap from 'src/components/MainMap/MainMap.vue';
 import SideBar from 'components/SideBar/SideBar.vue';
 import MenuBar from 'components/MenuBar/MenuBar.vue';
-import ControlsComponent from 'src/components/Controls/ControlsComponent.vue';
 import MenuBarLogo from 'src/components/MenuBar/MenuBarLogo.vue';
 import NavigationBar from 'src/components/NavigationBar.vue';
 import MobileSideBar from 'src/components/SideBar/MobileSideBar.vue';
@@ -187,7 +168,6 @@ export default {
     MenuBar,
     MenuBarLogo,
     NavigationBar,
-    ControlsComponent,
     DesktopSearchComponent,
     MainMap: defineAsyncComponent(
       () => import('/src/components/MainMap/MainMap.vue'),

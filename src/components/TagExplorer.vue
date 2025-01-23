@@ -73,11 +73,8 @@ export default {
           name: 'BrowseEventDateList',
           params: { country: 'all' },
         });
-      } else {
-        this.$router.push({
-          name: 'Explore',
-          query: { view: 'explore' },
-        });
+      } else if (this.$route.name === 'Explore') {
+        this.sidebarPanel = 'explore';
       }
     },
     loadMore() {

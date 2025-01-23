@@ -157,9 +157,10 @@
 import 'v-calendar/dist/style.css';
 
 import { default as dayjs } from 'dayjs';
-import { mapWritableState } from 'pinia';
+import { mapState, mapWritableState } from 'pinia';
 import { useQueryStore } from 'src/stores/query';
 import { DatePicker } from 'v-calendar';
+import { useMainStore } from '../../stores/main';
 
 export default {
   components: {
@@ -547,11 +548,8 @@ export default {
           name: 'BrowseEventDateList',
           params: { country: 'all' },
         });
-      } else {
-        this.$router.push({
-          name: 'Explore',
-          query: { view: 'explore' },
-        });
+      } else if (this.$route.name === 'Explore') {
+        this.sidebarPanel = 'explore';
       }
 
       this.$emit('hide');
@@ -615,6 +613,7 @@ export default {
     },
   },
   computed: {
+    ...mapWritableState(useMainStore, ['sidebarPanel']),
     ...mapWritableState(useQueryStore, [
       'controlDateRange',
       'controlDateRangeSelectedOption',

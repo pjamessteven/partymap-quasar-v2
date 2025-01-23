@@ -63,7 +63,7 @@
         class="event-date-center flex column grow no-wrap justify-center items-center"
         :style="
           $q.screen.lt.sm
-            ? 'height: 144px; position: absolute; width: 100%; z-index: 500'
+            ? 'height: 250px; position: absolute; width: 100%; z-index: 500'
             : 'height: 100vh;  margin-top: -96px; position: absolute; width: 100%; z-index: 5000'
         "
       >
@@ -78,13 +78,7 @@
           >
             {{ $t('explore_view.finding_whats_good') }}
           </div>
-          <div
-            class="metropolis bold q-mb-md"
-            :class="$q.screen.gt.xs && 'q-mt-xl q-pb-xs'"
-            v-else-if="!isLoadingInitial && noResults"
-          >
-            {{ $t('explore_view.nothing_coming_up') }}
-          </div>
+
           <q-linear-progress
             v-if="isLoadingInitial"
             class="linear-progress q-mt-md"
@@ -124,14 +118,9 @@
   </div>
 </template>
 <script>
-import { toRaw } from 'vue';
-
 import _ from 'lodash';
-//import ArtistProfile from 'components/ArtistProfile.vue';
-
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
-
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
 import { useMainStore } from 'src/stores/main';
@@ -140,10 +129,9 @@ import { mapActions, mapWritableState, mapState } from 'pinia';
 import CustomQScroll from 'components/CustomQScroll.vue';
 import countryCodes from 'src/assets/country-code-emoji';
 import dayjs from 'dayjs';
+
 export default {
   components: {
-    //ControlsComponent,
-    //ArtistProfile,
     EventDateList,
     EventDatePosterList,
     CustomQScroll,
