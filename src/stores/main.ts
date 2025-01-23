@@ -140,6 +140,7 @@ export const useMainStore = defineStore('main', {
     async loadIpInfo() {
       try {
         const response = await getIpInfoRequest();
+        console.log('resp', response);
         this.ipInfo = response.data as IpInfo;
         this.userLocation = {
           lat: response.data.lat,

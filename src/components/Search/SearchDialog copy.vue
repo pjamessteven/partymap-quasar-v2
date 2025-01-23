@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="search-dialog flex column no-wrap"
-    ref="searchDialog"
-    @click="clickAway"
-  >
+  <div class="search-dialog flex column no-wrap" @click="clickAway">
     <CustomQScroll
       vertical
       @scroll="onScroll"
@@ -84,7 +80,7 @@
           <SearchView
             class="search-results q-mt-lg"
             v-if="query?.length > 0"
-            @closeDialog="emit('hide')"
+            @closeDialog="$emit('hide')"
           />
 
           <div class="flex column" v-else>
@@ -101,7 +97,7 @@
                 class="date-control"
                 @click.stop
                 style="pointer-events: all"
-                @hide="emit('hide')"
+                @hide="$emit('hide')"
               />
             </div>
             <div
@@ -155,7 +151,7 @@
               class="flex column search-component q-px-md"
               style="width: 100%"
             >
-              <TagExplorer mode="explore" @tagSelected="emit('hide')" />
+              <TagExplorer mode="explore" @tagSelected="$emit('hide')" />
             </div>
 
             <div
@@ -168,7 +164,7 @@
               class="flex column search-component q-px-md q-mb-sm"
               style="width: 100%"
             >
-              <TagExplorer mode="all" @tagSelected="emit('hide')" />
+              <TagExplorer mode="all" @tagSelected="$emit('hide')" />
             </div>
 
             <div
@@ -225,296 +221,189 @@
       :showing="showingDateControl"
       @hide="showingDateControl = false"
     >
-      <DateControl @hide="handleDateControlHide" />
+      <DateControl
+        @hide="
+          () => {
+            showingDateControl = false;
+            $nextTick(() => $emit('hide'));
+          }
+        "
+      />
     </MenuWrapper>
   </div>
 </template>
 
-<script setup>
-import { ref, computed, watch, onMounted } from 'vue';
-import { storeToRefs } from 'pinia';
+<script>
+import { mapState, mapActions, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useSearchStore } from 'src/stores/search';
 import { useQueryStore } from 'src/stores/query';
 import DateControl from '../Controls/DateControl.vue';
+import ControlSelect from 'src/components/Controls/ControlSelect.vue';
 import CustomQScroll from '../CustomQScroll.vue';
 import SearchView from '../SideBar/SearchView/SearchView.vue';
 import TagExplorer from '../TagExplorer.vue';
-import dayjs from 'dayjs';
+import { default as dayjs } from 'dayjs';
 import MenuWrapper from '../Controls/MenuWrapper.vue';
-import { useI18n } from 'vue-i18n';
-import { Platform } from 'quasar';
 
-import { useDrag } from '@vueuse/gesture';
-
-import {
-  useMotionControls,
-  useMotionProperties,
-  useMotionTransitions,
-} from '@vueuse/motion';
-
-// Props
-const props = defineProps({
-  placeholder: String,
-  autofocus: Boolean,
-});
-
-// Emits
-const emit = defineEmits(['hide']);
-
-// Stores
-const mainStore = useMainStore();
-const searchStore = useSearchStore();
-const queryStore = useQueryStore();
-
-// Refs
-const searchDialog = ref();
-const motionProperties = ref();
-const motionControls = ref();
-const motionTransitions = ref();
-
-const dragHandler = ({
-  movement: [x, y],
-  dragging,
-  swipe: [swipeX, swipeY],
-  offset,
-  delta,
-  initial,
-  active,
-}) => {
-  if (scrollPercentage.value <= 0 && !inputFocused.value) {
-    if (swipeY == 1) {
-      //  clickAway();
-      // return;
-    }
-
-    if (!dragging) {
-      if (y > 100) {
-        motionTransitions.value.push(
-          'y',
-          window.innerHeight,
-          motionProperties.value,
-          {
-            type: 'spring',
-            stiffness: 600,
-            damping: 50,
-            mass: 1.8,
-          },
-        );
-        setTimeout(() => {
-          clickAway();
-        }, 300);
+export default {
+  components: {
+    DateControl,
+    ControlSelect,
+    CustomQScroll,
+    SearchView,
+    TagExplorer,
+    MenuWrapper,
+  },
+  props: ['placeholder', 'autofocus'],
+  data() {
+    return {
+      scrollPercentage: 0,
+      showingDateControl: false,
+      showSearch: false,
+      inputFocused: false,
+      previousSidebarPanel: '',
+      previousShowPanel: '',
+      sizeOptions: [
+        {
+          val: '0,1000',
+          label: this.$t('top_controls.less_than_one_thousand'),
+        },
+        {
+          val: '1000,5000',
+          label: '1000 - 5000 ' + this.$t('top_controls.people'),
+        },
+        {
+          val: '5000,20000',
+          label: '5000 - 20,000 ' + this.$t('top_controls.people'),
+        },
+        {
+          val: '20000,50000',
+          label: '20,000 - 50,000 ' + this.$t('top_controls.people'),
+        },
+        {
+          val: '50000,200000',
+          label: this.$t('top_controls.more_than_fifty_thousand'),
+        },
+      ],
+      durationOptions: [
+        { val: 1, label: this.$t('top_controls.one_day') },
+        { val: 2, label: this.$t('top_controls.two_days') },
+        { val: 3, label: this.$t('top_controls.three_days') },
+        { val: 4, label: this.$t('top_controls.four_days') },
+        { val: 5, label: this.$t('top_controls.five_days_plus') },
+      ],
+    };
+  },
+  watch: {
+    query(newv) {
+      if (newv?.length > 0) {
+      } else if (this.$q.screen.gt.xs) {
+        this.hideResultsAndPreviousPanel();
+      }
+    },
+  },
+  mounted() {},
+  methods: {
+    ...mapActions(useQueryStore, ['clearDateFilter']),
+    onScroll(info) {
+      this.scrollPercentage = info.verticalPercentage;
+      //  this.$refs.search.blur();
+    },
+    clickSize(size) {
+      const index = this.controlSize.findIndex((x) => x.val === size.val);
+      if (index === -1) {
+        this.controlSize.push(size);
       } else {
-        // bounce back to top
-        motionTransitions.value.push('y', 0, motionProperties.value, {
-          type: 'spring',
-          stiffness: 600,
-          damping: 50,
-          mass: 1.8,
-        });
+        this.controlSize.splice(index, 1);
       }
-      return;
-    }
-    // only allow dragging down
-    if (y > 0) {
-      // update motion position but don't animate
-      motionTransitions.value.push('y', y, motionProperties.value, {
-        type: 'keyframes',
-        duration: 0,
-      });
-    }
-  } else if (inputFocused.value) {
-    if (!dragging) {
-      clickAway();
-      return;
-    }
-  }
-};
-
-useDrag(dragHandler, {
-  domTarget: searchDialog,
-  axis: 'y',
-});
-
-// Destructure store refs
-const { sidebarPanel, showPanel, currentLocationFromSearch } =
-  storeToRefs(mainStore);
-
-const { query } = storeToRefs(searchStore);
-
-const {
-  controlSize,
-  controlDuration,
-  controlDateRange,
-  controlDateRangeSelectedOption,
-} = storeToRefs(queryStore);
-
-// Refs
-const scrollPercentage = ref(0);
-const showingDateControl = ref(false);
-const showSearch = ref(false);
-const inputFocused = ref(false);
-const scrollArea = ref(null);
-const search = ref(null);
-const { t } = useI18n();
-// Constants
-const sizeOptions = [
-  {
-    val: '0,1000',
-    label: t('top_controls.less_than_one_thousand'),
-  },
-  {
-    val: '1000,5000',
-    label: '1000 - 5000 ' + t('top_controls.people'),
-  },
-  {
-    val: '5000,20000',
-    label: '5000 - 20,000 ' + t('top_controls.people'),
-  },
-  {
-    val: '20000,50000',
-    label: '20,000 - 50,000 ' + t('top_controls.people'),
-  },
-  {
-    val: '50000,200000',
-    label: t('top_controls.more_than_fifty_thousand'),
-  },
-];
-
-const durationOptions = [
-  { val: 1, label: t('top_controls.one_day') },
-  { val: 2, label: t('top_controls.two_days') },
-  { val: 3, label: t('top_controls.three_days') },
-  { val: 4, label: t('top_controls.four_days') },
-  { val: 5, label: t('top_controls.five_days_plus') },
-];
-
-// Computed
-const thumbStyle = computed(() =>
-  $q.screen.gt.xs
-    ? {
-        bottom: '0px',
-        height: '8px',
-        marginLeft: '16px',
-        borderRadius: '0px',
+    },
+    clickDuration(duration) {
+      const index = this.controlDuration.findIndex(
+        (x) => x.val === duration.val,
+      );
+      if (index === -1) {
+        this.controlDuration.push(duration);
+      } else {
+        this.controlDuration.splice(index, 1);
       }
-    : { bottom: '0px', height: '0px', borderRadius: '0px', width: '4px' },
-);
+    },
+    clickAway() {
+      if (this.$q.platform.is.mobile && this.inputFocused) {
+        // hide keyboard if input is focused first
 
-const computedStartLabel = computed(() => {
-  if (
-    !controlDateRangeSelectedOption.value?.value ||
-    dayjs(controlDateRange.value.start).isSame(dayjs(), 'day')
-  ) {
-    return t('top_controls.today');
-  }
-  return dayjs(controlDateRange.value.start).format('L');
-});
-
-const computedEndLabel = computed(() => {
-  if (!controlDateRange.value.end) {
-    return t('top_controls.all_d');
-  }
-  return dayjs(controlDateRange.value.end).format('L');
-});
-
-// Watchers
-watch(query, (newv) => {
-  if (!newv?.length && $q.screen.gt.xs) {
-    hideResultsAndPreviousPanel();
-  }
-});
-
-// Methods
-function onScroll(info) {
-  scrollPercentage.value = info.verticalPercentage;
-}
-
-function clickSize(size) {
-  const index = controlSize.value.findIndex((x) => x.val === size.val);
-  if (index === -1) {
-    controlSize.value.push(size);
-  } else {
-    controlSize.value.splice(index, 1);
-  }
-}
-
-function clickDuration(duration) {
-  const index = controlDuration.value.findIndex((x) => x.val === duration.val);
-  if (index === -1) {
-    controlDuration.value.push(duration);
-  } else {
-    controlDuration.value.splice(index, 1);
-  }
-}
-
-function clickAway() {
-  if (Platform.is.mobile && inputFocused.value) {
-    search.value.blur();
-  } else {
-    emit('hide');
-  }
-}
-
-function swipeDown() {
-  if (scrollPercentage.value <= 0) {
-    clickAway();
-  }
-}
-
-function hideResultsAndPreviousPanel() {
-  if (sidebarPanel.value === 'search') {
-    sidebarPanel.value = mainStore.previousSidebarPanel;
-    if (sidebarPanel.value === 'explore') {
-      showPanel.value = false;
-    }
-  }
-}
-
-function clearSearch() {
-  query.value = null;
-  search.value.focus();
-}
-
-function handleDateControlHide() {
-  console.log('test1');
-  showingDateControl.value = false;
-
-  emit('hide');
-}
-
-function onSearchbarFocus() {
-  inputFocused.value = true;
-}
-
-function onSearchbarBlur() {
-  inputFocused.value = false;
-}
-
-const setupSpring = () => {
-  // start hidden
-  const { motionProperties: mp } = useMotionProperties(searchDialog, {
-    y: window.innerHeight,
-  });
-  motionProperties.value = mp;
-  motionControls.value = useMotionControls(motionProperties.value);
-  motionTransitions.value = useMotionTransitions();
-  // spring up
-  motionTransitions.value.push('y', 0, motionProperties.value, {
-    type: 'spring',
-    stiffness: 600,
-    damping: 50,
-    mass: 1.8,
-  });
+        this.$refs.search.blur();
+      } else {
+        this.$emit('hide');
+      }
+    },
+    swipeDown(event) {
+      if (this.scrollPercentage <= 0) {
+        this.clickAway();
+      } else {
+        //  event.preventDefault();
+        // return;
+      }
+    },
+    hideResultsAndPreviousPanel() {
+      if (this.sidebarPanel === 'search') {
+        // hide results and restore previous sidebar state
+        this.sidebarPanel = this.previousSidebarPanel;
+        if (this.sidebarPanel === 'explore') {
+          this.showPanel = false;
+        }
+      }
+    },
+    clearSearch() {
+      this.query = null;
+      this.$refs.search.focus();
+    },
+    onSearchbarFocus() {
+      this.inputFocused = true;
+    },
+    onSearchbarBlur() {
+      this.inputFocused = false;
+    },
+  },
+  computed: {
+    ...mapWritableState(useSearchStore, ['query']),
+    ...mapWritableState(useMainStore, [
+      'sidebarPanel',
+      'showPanel',
+      'currentLocationFromSearch',
+      'menubarOpacity',
+      'userLocationLoading',
+      'fineLocation',
+    ]),
+    ...mapWritableState(useQueryStore, [
+      'controlSize',
+      'controlTag',
+      'controlDuration',
+      'controlDateRange',
+      'controlDateRangeSelectedOption',
+      'tagOptions',
+      'tagOptionsHasNext',
+      'eventDatesGroupedByMonth',
+      'eventDates',
+      'eventDatesLoading',
+    ]),
+    computedStartLabel() {
+      if (
+        !this.controlDateRangeSelectedOption?.value ||
+        dayjs(this.controlDateRange.start).isSame(dayjs(), 'day')
+      ) {
+        return this.$t('top_controls.today');
+      }
+      return dayjs(this.controlDateRange.start).format('L');
+    },
+    computedEndLabel() {
+      if (!this.controlDateRange.end) {
+        return this.$t('top_controls.all_d');
+      }
+      return dayjs(this.controlDateRange.end).format('L');
+    },
+  },
 };
-
-onMounted(() => {
-  setupSpring();
-});
-// Export methods that might be needed externally
-defineExpose({
-  clearSearch,
-});
 </script>
 
 <style lang="scss" scoped>

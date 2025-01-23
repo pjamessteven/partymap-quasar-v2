@@ -598,7 +598,7 @@ export default {
       }
     },
     onScrollEnd() {
-      if (this.mainContentScrollPosition == 0) {
+      if (this.mainContentScrollPosition <= 0) {
         this.enablePanelSwipeDown = true;
       }
     },

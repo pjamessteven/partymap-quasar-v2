@@ -2,6 +2,7 @@
 import { createI18n } from 'vue-i18n';
 import { defineBoot } from '#q-app/wrappers';
 import getTranslations from 'src/import-translation';
+import { api } from 'src/boot/axios.ts';
 
 let locale;
 
@@ -57,13 +58,10 @@ export const setI18nLanguage = (i18n, locale) => {
   } else {
     i18n.global.locale.value = locale;
   }
-  /**
-   * NOTE:
-   * If you need to specify the language setting for headers, such as the `fetch` API, set it here.
-   * The following is an example for axios.
-   *
-   * axios.defaults.headers.common['Accept-Language'] = locale
-   */
+
+  // api.defaults.headers.common['Accept-Language'] = locale;
+  api.defaults.headers.common['lang'] = locale;
+
   document.querySelector('html').setAttribute('lang', locale);
 };
 

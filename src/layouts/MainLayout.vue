@@ -236,7 +236,7 @@ export default {
       userLangPref = localStorage.getItem('languagePref');
     }
 
-    const locale = userLangPref || routeLocale;
+    const locale = routeLocale || userLangPref;
     // set i18n language
     if (locale) {
       await loadLocaleMessages(i18n, locale);

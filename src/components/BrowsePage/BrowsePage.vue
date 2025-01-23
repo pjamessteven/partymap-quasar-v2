@@ -6,7 +6,7 @@
       </CustomQScroll>
     </div>
     <SolidPage>
-      <template v-slot>
+      <template v-slot="{ scrollPercentage }">
         <div
           class="flex column justify-center q-mb-xl"
           :class="$q.screen.gt.xs ? 'q-pb-xl q-mt-lg' : ''"
@@ -47,24 +47,14 @@
               :label="$t('browse_page.by_country')"
             >
             </q-route-tab>
-            <!--
-            <q-route-tab
-              style="display: none"
-              :name="country.code"
-              :to="{
-                name: 'BrowsePage',
-                params: {
-                  country: country.code,
-                },
-              }"
-              v-for="(country, index) in countryCodes"
-            >
-            </q-route-tab>
-            -->
           </TypographyTabs>
 
           <router-view v-slot="{ Component }">
-            <keep-alive :max="1"> <component :is="Component" /> </keep-alive
+            <keep-alive :max="1">
+              <component
+                :is="Component"
+                :scrollPercentage="scrollPercentage"
+              /> </keep-alive
           ></router-view>
         </div>
       </template>

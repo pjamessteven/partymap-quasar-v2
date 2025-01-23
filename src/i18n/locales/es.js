@@ -29,8 +29,10 @@ export default {
   },
   search: {
     search: 'Buscar',
-    search_box_text: 'Eventos, lugares, artistas y etiquetas',
-    search_box_text_mobile: 'Eventos, lugares, artistas y etiquetas',
+    search_box_text: 'Buscar eventos, lugares, artistas y etiquetas',
+    search_box_text_mobile: 'Buscar eventos, lugares y artistas',
+    search_and_filter: 'Buscar y filtrar eventos',
+    select_dates: 'Seleccionar fechas',
     tags: 'Etiquetas',
     events: 'Eventos',
     places: 'Lugares',
@@ -320,6 +322,15 @@ export default {
       'Festivales que enfatizan su esfuerzo por reducir su huella ambiental',
     healing: 'Sanación',
     healing_desc: 'Renueva y transforma...',
+    all_events: 'Todos los eventos',
+    all_events_world: 'Todos los eventos alrededor del mundo',
+    all_worldwide: 'Todos los eventos y festivales en el mundo',
+    all_regions: 'Todas las regiones',
+    upcoming_events: 'Próximos eventos',
+    featured_events: 'Destacados',
+    by_country: 'Por país',
+    the_ultimate_calendar:
+      'El calendario definitivo de festivales y fiestas para ',
   },
   artist_page: {
     upcoming_events: 'Próximos eventos:',

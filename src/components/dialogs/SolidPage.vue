@@ -42,7 +42,7 @@
               enter-active-class="animated fadeIn slow"
               leave-active-class="animated fadeOut"
             >
-              <slot></slot>
+              <slot :scrollPercentage="scrollPercentage"></slot>
             </transition>
           </div>
         </div>

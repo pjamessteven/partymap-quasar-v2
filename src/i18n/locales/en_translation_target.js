@@ -2,6 +2,7 @@ const translation = {
   general: {
     cancel: 'Cancel',
     OK: 'Ok',
+    no_changes: 'No changes to show.',
     save_changes: 'Save changes',
     undo: 'Undo',
     events: 'events',
@@ -293,6 +294,8 @@ const translation = {
     view_all: 'View all',
     waiting_for_location: 'Waiting for location',
     any_dates: 'Any Dates',
+    upcoming_in: 'Upcoming in',
+    this_area: 'this area',
     in_this_area: 'In this area',
   },
   explore_view: {
@@ -322,9 +325,17 @@ const translation = {
       'Festivals that emphasize their effort to reduce their environmental footprint',
     healing: 'Healing',
     healing_desc: 'Renew and transform...',
+    all_events: 'All events',
+    all_events_world: 'All events around the world',
+    all_worldwide: 'All events and festivals worldwide',
+    all_regions: 'All regions',
+    upcoming_events: 'upcoming events',
+    featured_events: 'Featured',
+    by_country: 'By Country',
+    the_ultimate_calendar: 'The ultimate festival and party calendar for ', // for 2025
   },
   artist_page: {
-    upcoming_events: 'Upcoming events:',
+    upcoming_events: 'Upcoming events',
     past_events: 'Past events',
     no_upcoming_events: 'No upcoming events for this artist.',
     view_on_map: 'View all upcoming on the map',

@@ -1097,6 +1097,10 @@ body {
     }
   }
 
+  .q-dialog__inner--minimized > div {
+    max-height: unset !important;
+  }
+
   .platform-android {
     .q-select__dialog {
       padding-top: var(--safe-area-inset-top) !important;

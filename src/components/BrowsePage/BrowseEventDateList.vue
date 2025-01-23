@@ -158,6 +158,10 @@ export default {
       type: String,
       default: undefined,
     },
+    scrollPercentage: {
+      type: Number,
+      default: undefined,
+    },
   },
   methods: {
     ...mapActions(useQueryStore, [
@@ -194,16 +198,16 @@ export default {
         } catch (error) {}
       }
     },
-
-    onScrollMainContent(info) {
-      this.mainContentScrollPosition = info.verticalPosition;
-      if (info.verticalPercentage > 0.99) {
-        // reached bottom
-        this.debouncedLoadMore();
-      }
-    },
   },
   watch: {
+    scrollPercentage: {
+      handler(newv) {
+        if (newv > 0.99) {
+          // reached bottom
+          this.debouncedLoadMore();
+        }
+      },
+    },
     $route: {
       handler(newv, oldv) {
         // we don't want to reload when navigating between eventpage and browse page
@@ -345,10 +349,6 @@ export default {
   created() {
     this.countryCodes = countryCodes;
 
-    this.debouncedOnScrollMainContent = _.debounce(
-      this.onScrollMainContent,
-      10,
-    );
     this.debouncedGetInitalList = _.debounce(this.getInitialList, 150, {
       leading: false,
       trailing: true,

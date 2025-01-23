@@ -32,6 +32,7 @@ export default {
     search_box_text: 'Search events, places, artists & tags',
     search_box_text_mobile: 'Search events, places & artists',
     search_and_filter: 'Search and filter events',
+    select_dates: 'Select dates',
     tags: 'Tags',
     events: 'Events',
     places: 'Places',

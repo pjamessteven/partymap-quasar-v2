@@ -110,7 +110,7 @@
               </div>
               <div v-else class="flex row items-center">
                 <div class="metropolis q-mx-sm" v-if="$q.screen.gt.sm">
-                  Select dates
+                  {{ $t('search.select_dates') }}
                 </div>
                 <div
                   class="q-mr-xs q-ml- flex items-center"

@@ -1328,7 +1328,10 @@ const dragHandler = ({
   delta,
   initial,
 }) => {
-  if (scrollPercentage.value <= 0 && enableSwipeDown.value) {
+  if (
+    scrollPercentage.value <= 0 &&
+    (mainStore.enablePanelSwipeDown || $q.platform.is.ios)
+  ) {
     if (swipeY == 1) {
       goBack();
       return;
