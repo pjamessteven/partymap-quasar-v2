@@ -411,9 +411,9 @@ export default {
   .body--dark {
     .navigation-bar {
       //background: black;
-      background: $bi-2;
+      background: black;
       //box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.8);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
 
       :deep(.q-tabs) {
         color: $ti-2 !important;

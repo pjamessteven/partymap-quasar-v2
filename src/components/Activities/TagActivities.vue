@@ -5,12 +5,12 @@
       <div class="flex row no-wrap items-center" v-if="activitiesByVerb.create">
         <b>{{ tc('activity.add_tag', activitiesByVerb?.create?.length) }} </b>
         <p />
-        <TagComponent
+        <Tag
           v-for="(activity, index) in activitiesByVerb.create"
           :value="activity.object_version.tag"
           class="q-ml-sm"
           :key="index"
-        ></TagComponent>
+        ></Tag>
       </div>
       <div
         class="flex row no-wrap items-center"
@@ -20,12 +20,12 @@
           >{{ tc('activity.remove_tag', activitiesByVerb?.delete?.length) }}
         </b>
 
-        <TagComponent
+        <Tag
           v-for="(activity, index) in activitiesByVerb.delete"
           :value="activity.object_version.tag"
           :key="index"
           class="q-ml-sm"
-        ></TagComponent>
+        ></Tag>
       </div>
     </div>
   </li>
@@ -35,7 +35,7 @@
 import { Activity } from 'src/types/autogen_types';
 import { computed, ref } from 'vue';
 import TransactionInfo from './TransactionInfo.vue';
-import TagComponent from '../TagComponent.vue';
+import Tag from '../Tag.vue';
 import { useI18n } from 'vue-i18n';
 
 const { t, tc } = useI18n();

@@ -257,28 +257,27 @@
                         {{ $t('explore_view.selected_artists') }}
                       </div>
                     </div>
-                    <div class="tag-scroll-area q-px-lg t1 flex justify-start">
-                      <div
+                    <div class="q-px-lg q-pt-xs t2 flex justify-start">
+                      <Tag
                         v-for="(artist, index) in controlArtist"
                         :key="-index"
                         @click="clearArtists"
-                        class="tag tag-selected flex items-center no-wrap text- inter semibold"
                         style="text-transform: capitalize"
-                        :class="$q.platform.is.ios ? 'no-hover' : ''"
+                        shadow
                       >
                         <q-icon
                           style="margin-left: -4px; font-size: 18px"
-                          name="mdi-close-circle q-mr-xs"
+                          name="mdi-close-circle q-mr-sm"
                         />
                         {{ artist.name }}
-                      </div>
+                      </Tag>
                     </div>
                   </div>
                   <!-- tags -->
                   <div
                     class="flex column"
                     :class="{
-                      'q-mb-lg': $q.screen.gt.sm,
+                      'q-mb-sm': $q.screen.gt.sm,
                       'q-mb-md': $q.screen.lt.md,
                     }"
                     v-if="
@@ -311,7 +310,7 @@
                     <TagExplorer
                       mode="explore"
                       :class="{
-                        'q-px-lg q-mb-sm': $q.screen.gt.sm,
+                        'q-px-lg': $q.screen.gt.sm,
                         'q-px-md': $q.screen.lt.md,
                       }"
                     />
@@ -336,21 +335,6 @@
                       <span>
                         {{ $t('explore_view.high_profile_artists') }}:</span
                       >
-                      <ControlSelect
-                        v-if="false"
-                        @clear="
-                          () => {
-                            controlTag = [];
-                          }
-                        "
-                        class="t2"
-                        :size="$q.screen.gt.sm ? 'sm' : 'xs'"
-                        :label="'All Artists'"
-                      >
-                        <template v-slot="{ showing, hide }">
-                          <ArtistControl :showing="showing" @hide="hide" />
-                        </template>
-                      </ControlSelect>
                     </div>
                     <ArtistsComponent
                       :class="$q.screen.gt.sm ? 'q-pl- q-mb-md ' : ''"
@@ -487,7 +471,6 @@ import _ from 'lodash';
 
 import EventDateList from 'src/components/EventDateList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
-//import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
 import ArtistsComponent from 'src/components/SideBar/ArtistsComponent.vue';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
@@ -497,27 +480,22 @@ import { mapActions, mapWritableState, mapState } from 'pinia';
 import CustomQScroll from 'components/CustomQScroll.vue';
 import NearbyCountrySelect from '../NearbyView/NearbyCountrySelect.vue';
 import DesktopDateSelect from '../NearbyView/DesktopDateSelect.vue';
-import ControlSelect from 'src/components/Controls/ControlSelect.vue';
 import TagControl from 'src/components/Controls/TagControl.vue';
-import ArtistControl from 'src/components/Controls/ArtistControl.vue';
 import DesktopSearchComponent from '../../Controls/DesktopSearchComponent.vue';
 import TagExplorer from '../../TagExplorer.vue';
-
+import Tag from 'src/components/Tag.vue';
 export default {
   components: {
-    //ControlsComponent,
-    //ArtistProfile,
     ArtistsComponent,
     EventDateList,
     EventDatePosterList,
     CustomQScroll,
     NearbyCountrySelect,
     DesktopDateSelect,
-    ControlSelect,
     TagControl,
-    ArtistControl,
     DesktopSearchComponent,
     TagExplorer,
+    Tag,
   },
 
   async mounted() {

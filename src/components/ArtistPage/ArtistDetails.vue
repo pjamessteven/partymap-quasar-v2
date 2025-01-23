@@ -64,6 +64,8 @@
               :key="index"
               :value="at.tag_t || at.tag"
               :label="at.label"
+              noInteraction
+              outlined
             ></Tag>
           </div>
 
@@ -88,7 +90,7 @@ import { toRaw } from 'vue';
 
 import _ from 'lodash';
 import ArtistUrl from './ArtistUrl.vue';
-import Tag from 'components/EventPage/Tags/TagComponent.vue';
+import Tag from 'components/Tag.vue';
 
 import { mapState, mapWritableState } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
@@ -184,7 +186,7 @@ export default {
             x.type === 'facebook' ||
             x.type === 'instagram' ||
             x.type === 'twitter' ||
-            x.type === 'official homepage'
+            x.type === 'official homepage',
         );
       } else {
         return [];

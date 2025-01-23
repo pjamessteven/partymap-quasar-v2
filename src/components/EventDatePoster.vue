@@ -86,7 +86,7 @@
                   relativeHumanTime(
                     event.start_naive,
                     event.end_naive,
-                    event.tz
+                    event.tz,
                   )
                 }}</span>
                 <span v-else>{{ $t('event_dates.date_tbc') }}</span>
@@ -137,7 +137,7 @@
                     relativeHumanTime(
                       event.start_naive,
                       event.end_naive,
-                      event.tz
+                      event.tz,
                     )
                   }}</span>
 
@@ -179,7 +179,7 @@
                   <span v-if="event.distance != null" class="o-070 ellipsis"
                     >&nbsp;({{
                       Intl.NumberFormat().format(
-                        parseInt(Number(event.distance) / 1000)
+                        parseInt(Number(event.distance) / 1000),
                       )
                     }}km)</span
                   >
@@ -210,7 +210,7 @@
 
 <script>
 import common, { localDayOfMonth } from 'assets/common';
-import Tag from 'src/components/TagComponent.vue';
+import Tag from 'src/components/Tag.vue';
 import { mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 
@@ -485,9 +485,12 @@ export default {
       height: 100%;
       position: relative;
       overflow: hidden;
-      box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-        rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-        rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+      box-shadow:
+        rgba(0, 0, 0, 0.25) 0px 54px 55px,
+        rgba(0, 0, 0, 0.12) 0px -12px 30px,
+        rgba(0, 0, 0, 0.12) 0px 4px 6px,
+        rgba(0, 0, 0, 0.17) 0px 12px 13px,
+        rgba(0, 0, 0, 0.09) 0px -3px 5px;
 
       img {
         position: absolute;

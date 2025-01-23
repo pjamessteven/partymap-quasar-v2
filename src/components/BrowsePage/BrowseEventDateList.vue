@@ -34,7 +34,7 @@
           </div>
         </div>
         <div class="flex column" v-if="!isLoadingInitial">
-          <div class="flex column">
+          <div class="flex column" :class="{ 'q-px-sm': $q.screen.lt.sm }">
             <EventDateList
               v-if="compactView"
               :groupByMonth="groupEventsByMonth"

@@ -121,6 +121,9 @@ export default {
 
 <style lang="scss" scoped>
 .body--dark {
+  .typography-tabs {
+    background: black;
+  }
 }
 
 .body--light {

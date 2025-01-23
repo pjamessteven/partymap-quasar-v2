@@ -198,7 +198,7 @@
             <CustomQScroll
               v-if="!$q.platform.is.android || true"
               horizontal
-              style="min-height: 39px; margin-bottom: -8px"
+              style="height: 39px; margin-bottom: -8px"
               :class="$q.screen.gt.sm ? 'q-mt-md' : 'q-mt-xs'"
               :thumb-style="{
                 bottom: '-4px',
@@ -207,15 +207,17 @@
               }"
             >
               <div
-                class="tag-container flex row no-wrap ellipsis q-pr-md"
+                class="tag-container flex row no-wrap q-pr-md"
                 v-if="event?.event?.event_tags?.length > 0"
               >
                 <Tag
-                  :small="true"
                   class="q-mr-xs o-060"
                   v-for="(et, index) in event.event.event_tags"
                   :key="index"
-                  :value="et.tag"
+                  :value="et.tag_t || et.tag"
+                  noInteraction
+                  outlined
+                  small
                 ></Tag>
               </div>
             </CustomQScroll>
@@ -229,7 +231,9 @@
                   class="q-mr-xs"
                   v-for="(et, index) in event.event.event_tags"
                   :key="index"
-                  :value="et.tag"
+                  :value="et.tag_t || et.tag"
+                  noInteraction
+                  outlined
                 ></Tag>
               </div>
             </div>
@@ -293,7 +297,7 @@
 
 <script>
 import common, { localDayOfMonth } from 'assets/common';
-import Tag from 'src/components/TagComponent.vue';
+import Tag from 'src/components/Tag.vue';
 import { mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import CustomQScroll from 'components/CustomQScroll.vue';

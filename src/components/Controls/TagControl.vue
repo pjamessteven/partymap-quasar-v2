@@ -147,7 +147,7 @@ import { mapActions, mapWritableState, mapState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
 import MenuWrapper from './MenuWrapper.vue';
-import Tag from 'components/EventPage/Tags/TagComponent.vue';
+import Tag from 'components/Tag.vue';
 import _ from 'lodash';
 
 export default {

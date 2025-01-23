@@ -12,6 +12,8 @@ PODS:
   - CapacitorCordova (6.2.0)
   - CapacitorGeolocation (6.0.2):
     - Capacitor
+  - CapacitorKeyboard (6.0.3):
+    - Capacitor
   - CapacitorSplashScreen (6.0.3):
     - Capacitor
   - CapacitorStatusBar (6.0.2):
@@ -27,6 +29,7 @@ DEPENDENCIES:
   - "CapacitorCommunityAppleSignIn (from `../../node_modules/@capacitor-community/apple-sign-in`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorGeolocation (from `../../node_modules/@capacitor/geolocation`)"
+  - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
   - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
@@ -46,6 +49,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorGeolocation:
     :path: "../../node_modules/@capacitor/geolocation"
+  CapacitorKeyboard:
+    :path: "../../node_modules/@capacitor/keyboard"
   CapacitorSplashScreen:
     :path: "../../node_modules/@capacitor/splash-screen"
   CapacitorStatusBar:
@@ -61,10 +66,11 @@ SPEC CHECKSUMS:
   CapacitorCommunityAppleSignIn: c8bba4ca8ff6ff843367ece13ee8af24e9266eb9
   CapacitorCordova: b33e7f4aa4ed105dd43283acdd940964374a87d9
   CapacitorGeolocation: 9db9e7ed7cfb5d5d8f01b108ab483ad9c9d2865d
+  CapacitorKeyboard: 460c6f9ec5e52c84f2742d5ce2e67bbc7ab0ebb0
   CapacitorSplashScreen: 68893659d77b5f82d753b3a70475082845e3039c
   CapacitorStatusBar: 3b9ac7d0684770522c532d1158a1434512ab1477
   CordovaPlugins: 08731213c63ccf137c576da2926bf4b3a8c40f17
 
-PODFILE CHECKSUM: 1118b69607271a3bc008afc4ec688d221422335d
+PODFILE CHECKSUM: d5bc1ceb7af791a19a991cb147b027f40e43c74b
 
 COCOAPODS: 1.16.2

@@ -1,22 +1,32 @@
 <template>
   <div class="tag-explorer flex row wrap q-gutter-sm">
     <div
-      v-for="(tag, index) in tags"
+      v-for="(tag, index) in selectedTags"
+      :key="index"
+      @click="clickTag(tag)"
+      class="tag t1 flex items-center selected"
+      style="text-transform: capitalize"
+      :class="{
+        'no-hover': $q.platform.is.ios,
+      }"
+    >
+      <q-icon
+        style="margin-left: -4px; font-size: 18px"
+        name="mdi-close-circle q-mr-sm"
+      />
+
+      {{ tag.tag_t || tag.tag }}
+    </div>
+    <div
+      v-for="(tag, index) in tagsWithoutSelected"
       :key="index"
       @click="clickTag(tag)"
       class="tag t1 flex items-center"
       style="text-transform: capitalize"
       :class="{
         'no-hover': $q.platform.is.ios,
-        selected: controlTag.indexOf(tag) > -1,
       }"
     >
-      <q-icon
-        style="margin-left: -4px; font-size: 18px"
-        name="mdi-close-circle q-mr-xs"
-        v-if="controlTag.indexOf(tag) > -1"
-      />
-
       {{ tag.tag_t || tag.tag }}
     </div>
     <div class="tag" v-if="hasNext" @click="loadMore">
@@ -31,7 +41,7 @@ import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useQueryStore } from 'src/stores/query';
 import { useMainStore } from 'src/stores/main';
 import { useNearbyStore } from 'src/stores/nearby';
-import { indexOf } from 'lodash';
+
 export default {
   props: ['mode'],
   data() {
@@ -52,8 +62,23 @@ export default {
         this.controlTag.splice(index, 1);
       } else {
         this.controlTag.push(tag);
+        this.$emit('tagSelected');
       }
-      this.sidebarPanel = 'explore';
+      if (
+        this.$route.name !== 'Explore' &&
+        this.$route.name !== 'BrowseEventDateList'
+      ) {
+        // go to browse page
+        this.$router.push({
+          name: 'BrowseEventDateList',
+          params: { country: 'all' },
+        });
+      } else {
+        this.$router.push({
+          name: 'Explore',
+          query: { view: 'explore' },
+        });
+      }
     },
     loadMore() {
       if (this.mode === 'all') {
@@ -69,6 +94,7 @@ export default {
     }
   },
   computed: {
+    ...mapWritableState(useMainStore, ['sidebarPanel']),
     ...mapWritableState(useQueryStore, [
       'controlTag',
       'tagOptions',
@@ -88,6 +114,20 @@ export default {
     ]),
     loading() {
       return this.nearbyTagsLoading || this.tagOptionsLoading;
+    },
+    tagsWithoutSelected() {
+      return this.tags.filter(
+        (x) => this.controlTag.findIndex((y) => x.tag === y.tag) == -1,
+      );
+    },
+    selectedTags() {
+      if (this.tags.length === 0) {
+        return this.controlTag;
+      } else {
+        return this.tags.filter(
+          (x) => this.controlTag.findIndex((y) => x.tag === y.tag) > -1,
+        );
+      }
     },
     tags() {
       if (this.mode == 'explore') {
@@ -137,33 +177,26 @@ export default {
     // opacity: 1
 
     transition: all 0.3s ease;
-    //background: rgba(0, 0, 0, 0.02);
-    //border: 1px solid rgba(0, 0, 0, 0.05);
+    // background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.02);
     //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
 
     //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px 0px;
     color: $t-2 !important;
+    /*
     box-shadow:
       rgba(9, 30, 66, 0.2) 0px 1px 1px,
       rgba(9, 30, 66, 0.07) 0px 0px 1px 1px;
+*/
+    box-shadow: rgba(14, 63, 126, 0.08) 0px 0px 0px 1px;
 
-    /*
-    box-shadow:
-      rgba(14, 63, 126, 0.07) 0px 0px 0px 1px,
-      rgba(42, 51, 70, 0.03) 0px 1px 1px -0.5px,
-      rgba(42, 51, 70, 0.04) 0px 2px 2px -1px,
-      rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px,
-      rgba(42, 51, 70, 0.03) 0px 5px 5px -2.5px,
-      rgba(42, 51, 70, 0.03) 0px 10px 10px -5px,
-      rgba(42, 51, 70, 0.03) 0px 24px 24px -8px;
-      */
     &:not(.no-hover) {
       &:hover {
         background: rgba(0, 0, 0, 0.1);
       }
     }
-    &.tag-selected {
-      background: $b-2;
+    &.selected {
+      background: $b-1;
     }
   }
 }
@@ -171,6 +204,7 @@ export default {
 .tag-explorer {
   pointer-events: none;
   padding-top: 2px;
+  padding-bottom: 16px;
   .tag {
     pointer-events: all;
     opacity: 1;

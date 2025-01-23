@@ -44,7 +44,7 @@
 import { Activity } from 'src/types/autogen_types';
 import { computed, ref } from 'vue';
 import TransactionInfo from './TransactionInfo.vue';
-import TagComponent from '../TagComponent.vue';
+
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();

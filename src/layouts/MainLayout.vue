@@ -465,7 +465,8 @@ export default {
       z-index: 5000;
       transition: transform 0.3s;
       transform: translate3d(-150px, 0, 0);
-      padding-left: min(50vw, 568px);
+      padding-left: min(50vw, 584px);
+      padding-right: 60px;
       position: absolute;
       top: 8px;
       // transform: translate3d(calc(100vw / 2 - calc(633px / 2) + 100px), 0, 0);
@@ -590,6 +591,8 @@ export default {
       .controls-component {
         position: absolute;
         padding-left: 16px;
+        padding-right: 16px;
+
         width: 100vw;
         max-width: 100vw;
         transform: unset;

@@ -11,6 +11,8 @@
           v-for="(et, index) in computedTags"
           :key="index"
           :value="et.tag_t || et.tag"
+          noInteraction
+          outlined
           style="pointer-events: none; display: inline-flex"
         />
         <Tag
@@ -18,6 +20,7 @@
           :small="small"
           style="display: inline-flex"
           :key="-1"
+          outlined
           :value="$t('event.add_tags') + ' +'"
           @click="() => (showAddTagDialog = true)"
         />
@@ -51,7 +54,7 @@
 
 <script>
 import SelectTagsDialog from 'components/EventPage/Tags/SelectTagsDialog.vue';
-import Tag from 'components/EventPage/Tags/TagComponent.vue';
+import Tag from 'components/Tag.vue';
 import { mapState } from 'pinia';
 import { useEventStore } from 'src/stores/event';
 import BackdropBlurDialog from '../../BackdropBlurDialog.vue';

@@ -516,8 +516,8 @@ export default {
       .controls-wrapper-inner {
         //background: rgba(255, 255, 255, 0.3);
         background: linear-gradient(
-          rgba(100, 100, 100, 0.68),
-          rgba(100, 100, 100, 0.68)
+          rgba(110, 110, 110, 0.4),
+          rgba(120, 120, 120, 0.4)
         );
         color: $ti-1;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -616,14 +616,14 @@ export default {
       // box-shadow: 0px 0px 26px -6px rgba(0, 0, 0, 0.2);
 
       .controls-wrapper-inner {
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         border-left: 1px solid rgba(255, 255, 255, 0.05);
         border-right: 1px solid rgba(255, 255, 255, 0.05);
-        //   border-color: transparent;
+        //    border-color: transparent;
         background: linear-gradient(
-          rgba(80, 80, 80, 0.6),
-          rgba(80, 80, 80, 0.6)
+          rgba(110, 110, 110, 0.4),
+          rgba(120, 120, 120, 0.4)
         );
         color: $ti-1;
         //border: 1px solid rgba(255, 255, 255, 0.15);

@@ -10,14 +10,14 @@
     >
       <div
         class="mobile-panel-handle"
-        :class="{ 'o-000': mainStore.showPanelBackground }"
+        :class="{ 'o-000': mainStore.showPanelBackground || true }"
       >
         <div class="handle-icon" />
       </div>
 
       <div
         class="mobile-panel-button flex row items-center"
-        v-if="$q.screen.lt.md && mainStore.showPanelBackground"
+        v-if="$q.screen.lt.md && mainStore.sidebarPanel === 'explore'"
       >
         <q-icon
           @click="hidePanel"
@@ -26,7 +26,11 @@
           class="q-pa-md q-mr-sm t1"
           :class="{ 'rotate-180': mainStore.showPanelBackground }"
           name="mdi-chevron-up"
-          style="pointer-events: all"
+          style="
+            pointer-events: all;
+            transition: all 0.3s;
+            will-change: transform;
+          "
         />
       </div>
       <div

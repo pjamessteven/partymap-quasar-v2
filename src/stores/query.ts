@@ -235,8 +235,12 @@ export const useQueryStore = defineStore('query', {
           this.controlArtist.length > 0
             ? this.controlArtist.map((artist) => artist.id)
             : undefined,
-          this.controlDuration.length > 0 ? this.controlDuration : undefined,
-          this.controlSize.length > 0 ? this.controlSize : undefined,
+          this.controlDuration.length > 0
+            ? this.controlDuration.map((x) => x.value)
+            : undefined,
+          this.controlSize.length > 0
+            ? this.controlSize.map((x) => x.value)
+            : undefined,
 
           this.controlFavorites ? true : undefined,
           this.controlDateUnconfirmed,
@@ -348,8 +352,13 @@ export const useQueryStore = defineStore('query', {
               ? this.controlArtist.map((artist) => artist.id)
               : undefined,
           duration_options:
-            this.controlDuration.length > 0 ? this.controlDuration : null,
-          size_options: this.controlSize.length > 0 ? this.controlSize : null,
+            this.controlDuration.length > 0
+              ? this.controlDuration.map((x) => x.value)
+              : null,
+          size_options:
+            this.controlSize.length > 0
+              ? this.controlSize.map((x) => x.value)
+              : null,
           date_min: this.controlDateRange.start,
           date_max: this.controlDateRange.end,
           country_id: country,

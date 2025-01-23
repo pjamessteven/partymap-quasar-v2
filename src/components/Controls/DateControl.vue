@@ -537,6 +537,23 @@ export default {
         label: label,
         value: 'custom',
       };
+
+      // go to browse or explore page
+      if (
+        this.$route.name !== 'Explore' &&
+        this.$route.name !== 'BrowseEventDateList'
+      ) {
+        this.$router.push({
+          name: 'BrowseEventDateList',
+          params: { country: 'all' },
+        });
+      } else {
+        this.$router.push({
+          name: 'Explore',
+          query: { view: 'explore' },
+        });
+      }
+
       this.$emit('hide');
     },
     getThisWeekendDateRange() {

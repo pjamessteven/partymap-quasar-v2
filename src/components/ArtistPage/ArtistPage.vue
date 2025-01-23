@@ -292,7 +292,7 @@ export default {
       }, 300);
       this.controlArtist = [this.artist];
 
-      //this.$router.push({ name: 'Explore', query: { view: 'explore' } });
+      this.$router.push({ name: 'Explore', query: { view: 'explore' } });
     },
     refreshArtist() {
       if (this.currentUser) {
@@ -304,7 +304,7 @@ export default {
           },
           () => {
             this.loading = false;
-          }
+          },
         );
       } else {
         this.$router.push({
@@ -441,7 +441,7 @@ export default {
             x.type === 'facebook' ||
             x.type === 'instagram' ||
             x.type === 'twitter' ||
-            x.type === 'official homepage'
+            x.type === 'official homepage',
         );
       } else {
         return [];

@@ -305,6 +305,7 @@ body {
 
   .q-dialog__backdrop {
     background: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.8));
+    //background: white;
   }
   .sticky-header {
     background: white;
@@ -581,6 +582,7 @@ body {
     // border-top: 1px solid rgb(26, 26, 26) !important;
   }
   .q-dialog__backdrop {
+    //background-color: black;
     background: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.8));
   }
 
@@ -758,17 +760,11 @@ body {
       background: $bi-2;
       border-radius: 9px;
       cursor: pointer;
-      .tag-inner-wrapper {
-        border-color: rgba(255, 255, 255, 0.5) !important;
-      }
     }
     .editing-outline {
       border: 1px dashed rgba(0, 0, 0, 0.3) !important;
       border-radius: 9px !important;
       cursor: pointer;
-      .tag-inner-wrapper {
-        border-color: rgba(255, 255, 255, 0.5) !important;
-      }
     }
   }
 

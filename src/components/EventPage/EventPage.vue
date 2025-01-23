@@ -2242,11 +2242,6 @@ a {
               }
               :deep(.tag) {
                 background: transparent !important;
-                //border: 1px solid rgba(255, 255, 255, 0.48) !important;
-                .tag-inner-wrapper {
-                  background: transparent;
-                  //border-color: rgba(0, 0, 0, 0.8) !important;
-                }
               }
             }
 

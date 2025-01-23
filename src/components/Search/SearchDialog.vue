@@ -1,7 +1,8 @@
 <template>
-  <div class="search-dialog flex column no-wrap" @click="$emit('hide')">
+  <div class="search-dialog flex column no-wrap" @click="clickAway">
     <CustomQScroll
       vertical
+      @scroll="onScroll"
       ref="scrollArea"
       style="height: 100%; width: 100%"
       :thumb-style="
@@ -20,7 +21,7 @@
           class="flex column search-column no-wrap"
           :class="{
             'q-py-xl ': $q.screen.gt.sm,
-            ' q-py-lg ': $q.screen.lt.md,
+            ' q-py-md ': $q.screen.lt.md,
           }"
         >
           <div class="q-px-md" :class="{ 'q-mb-sm': $q.screen.gt.sm }">
@@ -37,9 +38,10 @@
               rounded
               borderless
               bg-color="white"
-              style="height: 48px"
+              :style="$q.screen.gt.sm ? 'height: 48px' : 'height: 40px'"
               :autofocus="true"
               @focus="onSearchbarFocus()"
+              @blur="onSearchbarBlur()"
               @clear="clearSearch()"
               class="searchbar-input inter bold"
               v-model="query"
@@ -95,6 +97,7 @@
                 class="date-control"
                 @click.stop
                 style="pointer-events: all"
+                @hide="$emit('hide')"
               />
             </div>
             <div
@@ -103,18 +106,20 @@
               class="q-px-md search-component flex row no-wrap q-gutter-md"
             >
               <q-card
-                class="tag q-pa-sm grow flex row items-center no-wrap justify-between"
+                class="tag q-pa-xs grow flex row items-center no-wrap justify-between"
+                :class="{ selected: controlDateRangeSelectedOption?.value }"
                 @click.stop="showingDateControl = true"
-                style="border-radius: 50px !important; overflow: hidden"
+                style="
+                  border-radius: 50px !important;
+                  overflow: hidden;
+                  font-size: unset;
+                  padding: 4px 10px;
+                "
               >
-                <q-icon
-                  name="las la-calendar"
-                  size="sm"
-                  class="q-pa-xs q-ml-xs q-p"
-                />
+                <q-icon name="las la-calendar" size="sm" class="q-ml-xs q-p" />
                 <div class="flex row items-center grow justify-around q-px-md">
                   <div class="">
-                    <b> {{ computedStartLabel }}</b>
+                    {{ computedStartLabel }}
                   </div>
                   <q-icon
                     name="mdi-chevron-right"
@@ -122,7 +127,7 @@
                     class="q-pa-xs q-p"
                   />
                   <div>
-                    <b>{{ computedEndLabel }}</b>
+                    {{ computedEndLabel }}
                   </div>
                 </div>
                 <q-icon
@@ -146,7 +151,7 @@
               class="flex column search-component q-px-md"
               style="width: 100%"
             >
-              <TagExplorer mode="explore" />
+              <TagExplorer mode="explore" @tagSelected="$emit('hide')" />
             </div>
 
             <div
@@ -159,7 +164,7 @@
               class="flex column search-component q-px-md q-mb-sm"
               style="width: 100%"
             >
-              <TagExplorer mode="all" />
+              <TagExplorer mode="all" @tagSelected="$emit('hide')" />
             </div>
 
             <div
@@ -168,10 +173,7 @@
               Size
             </div>
 
-            <div
-              class="q-px-md search-component flex row q-gutter-sm q-mb-md"
-              @click.stop
-            >
+            <div class="q-px-md search-component flex row q-gutter-sm q-mb-md">
               <div
                 v-for="(size, index) in sizeOptions"
                 :key="index"
@@ -180,7 +182,8 @@
                 style="text-transform: capitalize"
                 :class="{
                   'no-hover': $q.platform.is.ios,
-                  selected: size.value === controlSize,
+                  selected:
+                    controlSize.findIndex((x) => x.val === size.val) > -1,
                 }"
               >
                 {{ size.label }}
@@ -192,7 +195,6 @@
             >
               Duration
             </div>
-
             <div class="q-px-md search-component flex row q-gutter-sm">
               <div
                 v-for="(duration, index) in durationOptions"
@@ -202,7 +204,9 @@
                 style="text-transform: capitalize"
                 :class="{
                   'no-hover': $q.platform.is.ios,
-                  'tag-selected': duration.value === controlDuration,
+                  selected:
+                    controlDuration.findIndex((x) => x.val === duration.val) >
+                    -1,
                 }"
               >
                 {{ duration.label }}
@@ -217,7 +221,14 @@
       :showing="showingDateControl"
       @hide="showingDateControl = false"
     >
-      <DateControl @hide="showingDateControl = false" />
+      <DateControl
+        @hide="
+          () => {
+            showingDateControl = false;
+            $nextTick(() => $emit('hide'));
+          }
+        "
+      />
     </MenuWrapper>
   </div>
 </template>
@@ -249,6 +260,7 @@ export default {
     return {
       showingDateControl: false,
       showSearch: false,
+      inputFocused: false,
       previousSidebarPanel: '',
       previousShowPanel: '',
       sizeOptions: [
@@ -293,9 +305,44 @@ export default {
   mounted() {},
   methods: {
     ...mapActions(useQueryStore, ['clearDateFilter']),
+    onScroll(info) {
+      this.scrollPercentage = info.verticalPercentage;
+      //  this.$refs.search.blur();
+    },
+    clickSize(size) {
+      const index = this.controlSize.findIndex((x) => x.val === size.val);
+      if (index === -1) {
+        this.controlSize.push(size);
+      } else {
+        this.controlSize.splice(index, 1);
+      }
+    },
+    clickDuration(duration) {
+      const index = this.controlDuration.findIndex(
+        (x) => x.val === duration.val,
+      );
+      if (index === -1) {
+        this.controlDuration.push(duration);
+      } else {
+        this.controlDuration.splice(index, 1);
+      }
+    },
+    clickAway() {
+      if (this.$q.platform.is.mobile && this.inputFocused) {
+        // hide keyboard if input is focused first
 
-    clickSize() {},
-    clickDuration() {},
+        this.$refs.search.blur();
+      } else {
+        this.$emit('hide');
+      }
+    },
+    swipeDown(event) {
+      if (this.scrollPercentage <= 0) {
+        this.clickAway();
+      } else {
+        event.stopPropagation();
+      }
+    },
     hideResultsAndPreviousPanel() {
       if (this.sidebarPanel === 'search') {
         // hide results and restore previous sidebar state
@@ -309,21 +356,11 @@ export default {
       this.query = null;
       this.$refs.search.focus();
     },
-    onSearchbarFocus() {},
-    clickTag(tag) {
-      // force loading state after clicking to prevent glitchy feeling ui
-      this.eventDates = [];
-      this.eventDatesGroupedByMonth = {};
-      this.eventDatesLoading = true;
-
-      let index = this.controlTag?.findIndex((x) => x.tag === tag.tag);
-      if (index > -1) {
-        // tag already selected, do nothing
-      } else {
-        this.controlTag.push(tag);
-      }
-      this.sidebarPanel = 'explore';
-      this.$emit('hide');
+    onSearchbarFocus() {
+      this.inputFocused = true;
+    },
+    onSearchbarBlur() {
+      this.inputFocused = false;
     },
   },
   computed: {
@@ -387,7 +424,7 @@ export default {
         color: white !important;
         &.selected {
           background: white;
-          color: black;
+          color: black !important;
         }
 
         border: 1px solid rgba(255, 255, 255, 0.05);
@@ -420,7 +457,7 @@ export default {
         }
       }
       :deep(.tag) {
-        background: rgba(80, 80, 80, 0.8);
+        background: rgba(80, 80, 80, 1);
 
         &.selected {
           background: white;
@@ -454,10 +491,10 @@ export default {
     pointer-events: none;
     overflow: visible;
     .date-control {
-      border-radius: 18px;
+      border-radius: 9px;
       :deep(.date-picker-container) {
-        border-top-right-radius: 18px;
-        border-bottom-right-radius: 18px;
+        border-top-right-radius: 9px;
+        border-bottom-right-radius: 9px;
       }
     }
     .search-header {
@@ -526,9 +563,15 @@ export default {
   .search-dialog {
     width: 100%;
     .search-column {
+      padding-bottom: 50vh;
+
       width: 100%;
-      .q-input {
+      :deep(.q-input) {
         width: 100%;
+        font-size: unset;
+      }
+
+      .q-input {
       }
     }
   }

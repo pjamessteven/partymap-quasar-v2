@@ -33,10 +33,10 @@
         <Tag
           v-for="(tag, index) in computedResults"
           :key="index"
-          :showIcons="true"
+          showIcons
           :value="tag.tag_t || tag.tag"
           :disabled="tagsList.indexOf(tag.tag) > -1"
-          v-on:selected="onSelectTag(tag.tag)"
+          @click="onSelectTag(tag.tag)"
         />
         <Tag
           v-if="
@@ -44,16 +44,16 @@
             computedResults.findIndex((tag) => tag.tag == query) === -1
           "
           :key="-1"
-          :showIcons="true"
+          showIcons
           :value="query"
           :disabled="tagsList.indexOf(query) > -1"
-          v-on:selected="onSelectTag(query)"
+          @click="onSelectTag(query)"
         />
         <Tag
           v-if="(!query || query.length == 0) && hasNext"
           :key="-2"
           :value="'...' + $t('event.show_more')"
-          v-on:selected="loadMoreTopTags()"
+          @click="loadMoreTopTags()"
         />
       </div>
     </div>
@@ -83,7 +83,7 @@
 
 <script>
 import { getTagRequest } from 'src/api';
-import Tag from 'components/EventPage/Tags/TagComponent.vue';
+import Tag from 'components/Tag.vue';
 import _ from 'lodash';
 export default {
   components: {
@@ -187,7 +187,7 @@ export default {
         },
         () => {
           this.hasNext = false;
-        }
+        },
       );
     },
   },

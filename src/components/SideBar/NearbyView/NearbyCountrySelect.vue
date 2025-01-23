@@ -1,6 +1,6 @@
 <template>
   <div
-    class="country-select flex"
+    class="country-select flex ellipsis"
     @click.capture="
       (event) => {
         inputValue = null;

@@ -4,7 +4,7 @@
   "server": {
     "androidScheme": "https",
     "hostname": "api.partymap.com",
-    "url": "http://169.254.75.191:9500"
+    "url": "http://169.254.173.205:9500"
   },
   "bundledWebRuntime": false,
   "npmClient": "yarn",
@@ -18,6 +18,10 @@
     },
     "SplashScreen": {
       "backgroundColor": "#282828"
+    },
+    "Keyboard": {
+      "resize": "none",
+      "preventScroll": false
     }
   },
   "ios": {

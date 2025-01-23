@@ -11,13 +11,9 @@
       class="controls-wrapper flex no-wrap"
       :style="fullWidth ? 'width: 100%' : ''"
     >
-      <div class="controls-wrapper-inner" style="width: 100%">
-        <!--
-        <SearchComponent />
-        -->
-
+      <div class="controls-wrapper-inner" style="width: 100%; overflow-x: auto">
         <q-btn
-          style="width: 100%"
+          style="min-width: 100%"
           :ripple="false"
           no-caps
           @click="showDialog = true"
@@ -27,18 +23,66 @@
             class="flex items-center no-wrap grow justify-between text-large metropolis"
             style="opacity: 0.9"
           >
-            <div class="flex items-center">
+            <div class="flex no-wrap items-center">
               <div
                 class="q-mr-xs q-ml- flex items-center"
                 style="transform: scale(-1, 1)"
               >
                 <q-icon size="22px" name="las la-search" />
               </div>
-              <div class="metropolis q-ml-sm">
+              <div
+                class="metropolis q-ml-sm"
+                v-if="
+                  (!controlTag.length &&
+                    !controlSize.length &&
+                    !controlDuration.length &&
+                    $q.screen.gt.sm) ||
+                  ($q.screen.lt.sm && !anyFiltersEnabled)
+                "
+              >
                 {{ $t('search.search_and_filter') }}
               </div>
+              <div class="flex row no-wrap">
+                <Tag
+                  v-if="
+                    controlDateRangeSelectedOption?.value && $q.screen.lt.md
+                  "
+                >
+                  {{ controlDateRangeSelectedOption.label }}
+                  <q-icon
+                    @click.stop="clearDateFilter"
+                    style="margin-right: -4px; font-size: 18px"
+                    name="mdi-close-circle q-ml-sm"
+                  />
+                </Tag>
+
+                <Tag v-for="(tag, index) in controlTag">
+                  {{ tag.tag_t || tag.tag }}
+                  <q-icon
+                    style="margin-right: -4px; font-size: 18px"
+                    name="mdi-close-circle q-ml-sm"
+                    @click.stop="clickTag(index)"
+                  />
+                </Tag>
+                <Tag v-for="(duration, index) in controlDuration">
+                  {{ duration.label }}
+                  <q-icon
+                    style="margin-right: -4px; font-size: 18px"
+                    name="mdi-close-circle q-ml-sm"
+                    @click.stop="controlDuration.splice(index, 1)"
+                  />
+                </Tag>
+                <Tag v-for="(size, index) in controlSize">
+                  {{ size.label }}
+                  <q-icon
+                    style="margin-right: -4px; font-size: 18px"
+                    name="mdi-close-circle q-ml-sm"
+                    @click.stop="controlSize.splice(index, 1)"
+                  />
+                </Tag>
+              </div>
             </div>
-            <div class="flex items-center">
+            <div class="flex no-wrap items-center">
               <q-separator
                 vertical
                 class="q-mx-md o-030"
@@ -50,15 +94,31 @@
               >
                 <q-icon size="22px" name="las la-calendar" />
               </div>
-              <div class="metropolis q-mx-sm" v-if="$q.screen.gt.sm">
-                Select dates
-              </div>
               <div
-                class="q-mr-xs q-ml- flex items-center"
-                style="transform: scale(-1, 1)"
-                v-if="$q.screen.gt.sm"
+                class="flex row q-ml-xs"
+                v-if="controlDateRangeSelectedOption?.value && $q.screen.gt.sm"
+                style="margin-right: -12px"
               >
-                <q-icon size="22px" name="mdi-chevron-down" />
+                <Tag>
+                  {{ controlDateRangeSelectedOption.label }}
+                  <q-icon
+                    @click.stop="clearDateFilter"
+                    style="margin-right: -4px; font-size: 18px"
+                    name="mdi-close-circle q-ml-sm"
+                  />
+                </Tag>
+              </div>
+              <div v-else class="flex row items-center">
+                <div class="metropolis q-mx-sm" v-if="$q.screen.gt.sm">
+                  Select dates
+                </div>
+                <div
+                  class="q-mr-xs q-ml- flex items-center"
+                  style="transform: scale(-1, 1)"
+                  v-if="$q.screen.gt.sm"
+                >
+                  <q-icon size="22px" name="mdi-chevron-down" />
+                </div>
               </div>
             </div>
           </div>
@@ -126,7 +186,7 @@
 </template>
 
 <script>
-import { mapState, mapWritableState } from 'pinia';
+import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useMapStore } from 'src/stores/map';
 import { useSearchStore } from 'src/stores/search';
@@ -136,12 +196,14 @@ import DateControl from 'src/components/Controls/DateControl.vue';
 import SearchComponent from 'src/components/Search/SearchComponent.vue';
 import BackdropBlurDialog from '../BackdropBlurDialog.vue';
 import SearchDialog from '../Search/SearchDialog.vue';
+import Tag from '../Tag.vue';
 export default {
   components: {
     SearchComponent,
     DateControl,
     BackdropBlurDialog,
     SearchDialog,
+    Tag,
   },
   props: ['overlayingMap', 'fullWidth'],
   data() {
@@ -149,11 +211,15 @@ export default {
   },
   watch: {},
   methods: {
+    ...mapActions(useQueryStore, ['clearDateFilter']),
     goToExplore() {
       this.sidebarPanel = 'explore';
       if (this.$route.name !== 'Explore') {
         this.$router.push({ name: 'Explore', query: { view: 'explore' } });
       }
+    },
+    clickTag(index) {
+      this.controlTag.splice(index, 1);
     },
   },
   computed: {
@@ -168,6 +234,13 @@ export default {
     ...mapWritableState(useQueryStore, [
       'controlDateRange',
       'controlDateRangeSelectedOption',
+      'anyFiltersEnabled',
+      'controlTag',
+      'controlSize',
+      'controlArtist',
+      'controlDuration',
+      'controlEmptyLineup',
+      'controlDateUnconfirmed',
     ]),
   },
 };
@@ -191,6 +264,21 @@ export default {
   :deep(.search-button) {
     .q-btn__content {
       width: 100%;
+
+      .tag {
+        padding: 4px 12px;
+        color: $ti-1;
+        font-size: 0.9rem;
+        text-transform: capitalize;
+        background: rgba(255, 255, 255, 0.2);
+        font-family: Inter;
+        &:first-child {
+          margin-left: 6px;
+        }
+        &:not(:first-child) {
+          margin-left: 6px;
+        }
+      }
     }
   }
   &.center-absolute {
@@ -227,7 +315,6 @@ export default {
     padding: 0 16px;
 
     .search-button {
-      width: 100%;
     }
 
     .controls-wrapper {

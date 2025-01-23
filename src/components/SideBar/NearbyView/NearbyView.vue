@@ -47,6 +47,7 @@
           >
             <div
               class="flex row no-wrap items-center"
+              style="max-width: 100%"
               :class="{ ' grow reverse justify-between': $q.screen.lt.sm }"
             >
               <div
@@ -86,7 +87,7 @@
                 :style="
                   $q.screen.gt.sm
                     ? 'margin-left: -8px; border-radius: 100px!important;'
-                    : 'margin-left: 0px; border-radius: 100px!important;'
+                    : 'margin-left: 8px; border-radius: 100px!important;'
                 "
               >
                 <template v-slot:default>
@@ -380,7 +381,7 @@
               </div>
               <TagExplorer
                 mode="all"
-                :class="$q.screen.gt.sm ? 'q-px-lg q-mb-md' : 'q-pl-md '"
+                :class="$q.screen.gt.sm ? 'q-px-lg q-mb-xs' : 'q-pl-md '"
               />
             </div>
             <!-- artists -->
@@ -417,7 +418,7 @@
                 :loadMore="debouncedLoadNearbyArtists"
                 :style="
                   $q.screen.gt.sm
-                    ? 'margin-bottom: -16px; margin-top: -12px; z-index: 999'
+                    ? 'margin-bottom: -8px; margin-top: -12px; z-index: 999'
                     : 'margin-bottom: -8px;'
                 "
               />
@@ -1136,7 +1137,7 @@ export default {
       .location-header {
         z-index: 1000;
         width: 100%;
-        font-weight: 700;
+        font-weight: 800;
         font-size: 1rem !important;
         font-family: 'Metropolis';
         &:lang(ru) {
