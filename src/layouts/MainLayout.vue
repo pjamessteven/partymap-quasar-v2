@@ -286,7 +286,7 @@ export default {
     },
     computedSidebarOverlayStyle() {
       if (!this.showPanelBackground) {
-        return 'opacity: 0; pointer-events: none;';
+        return 'opacity: 0; pointer-events: none!important; ';
       } else {
         return 'opacity: 1';
       }
@@ -421,7 +421,7 @@ export default {
       position: absolute;
       height: 100%;
       width: 100%;
-      pointer-events: all;
+      pointer-events: none;
       margin-top: calc(0px - var(--safe-area-inset-top)) !important;
     }
 

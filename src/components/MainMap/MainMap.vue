@@ -593,7 +593,6 @@ const mapClick = () => {
     if (mapStore.peekMap) {
       peekMap.value = false;
       if (focusMarker.value) blockPeekMap.value = true;
-      flyTo({ center: focusMarker.value, padding: getEventPagePadding() });
     } else {
       console.log(mainStore.routerHistory);
       if (mainStore.routerHistory.length > 2) {
@@ -883,6 +882,18 @@ const onClickPoint = (e: MapLayerMouseEvent) => {
     }
   }
 };
+
+watch(
+  () => mapStore.peekMap,
+  (to: boolean, from: boolean) => {
+    if (!to) {
+      blockPeekMap.value = true;
+      flyTo({ center: focusMarker.value, padding: getEventPagePadding() });
+    } else {
+      flyTo({ center: focusMarker.value, padding: getEventPagePadding() });
+    }
+  },
+);
 
 watch(
   () => map.isLoaded,

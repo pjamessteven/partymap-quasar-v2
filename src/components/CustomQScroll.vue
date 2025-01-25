@@ -87,6 +87,8 @@ export default {
 .custom-q-scroll {
   :deep(.scroll) {
     will-change: overflow;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: auto;
   }
   &.disable-scroll {
     // pointer-events: none;
