@@ -453,6 +453,7 @@ watch(query, (newv) => {
 // Methods
 function onScroll(info) {
   scrollPercentage.value = info.verticalPercentage;
+  search.value.blur();
 }
 
 function clickSize(size) {

@@ -88,6 +88,9 @@ export default {
     .card-bottom-background {
       background: $bi-3;
     }
+    .artist-head-background {
+      background: $bi-3;
+    }
   }
 }
 .body--light {
@@ -166,18 +169,20 @@ export default {
     .artist-head-background {
       border-radius: 100%;
       overflow: hidden;
-      height: 96px;
-      width: 96px;
+      height: auto;
       //height: 100%;
       width: 100%;
       display: flex;
-      flex-grow: 1;
       justify-content: center;
       align-items: center;
+      aspect-ratio: 1 / 1;
       transition: all 0.3s ease;
       opacity: 0.9;
       img {
         width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
       }
     }
   }

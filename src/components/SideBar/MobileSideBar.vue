@@ -510,7 +510,7 @@ watch(
     max-height: 100%;
     height: 100%;
     overflow: hidden;
-    pointer-events: all;
+    // pointer-events: all;
     transition: width 0.4s ease;
     user-select: none;
     display: flex;

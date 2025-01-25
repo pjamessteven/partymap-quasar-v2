@@ -2,7 +2,7 @@
   <BackdropBlurDialog ref="dialog">
     <q-card class="q-dialog-plugin dialog-card">
       <q-card-section
-        class="header row items-center justify-between dialog-card-header"
+        class="header row no-wrap items-center justify-between dialog-card-header"
       >
         <div class="flex column">
           <div class="text-h6">{{ data.name }}</div>

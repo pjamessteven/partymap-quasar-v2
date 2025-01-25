@@ -1,6 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
 import EventPage from 'src/components/EventPage/EventPage.vue';
 import Login from 'src/components/Auth/Login.vue';
+import MainLayout from 'src/layouts/MainLayout.vue';
 const routes: RouteRecordRaw[] = [
   {
     path: '/scraper',
@@ -15,7 +16,7 @@ const routes: RouteRecordRaw[] = [
     path: '/:lang?',
     name: 'Explore',
     props: true,
-    component: () => import('src/layouts/MainLayout.vue'),
+    component: MainLayout,
     meta: {
       auth: false,
       mapOverlay: true,

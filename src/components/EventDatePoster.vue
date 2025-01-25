@@ -436,12 +436,14 @@ export default {
   }
 
   .ed-poster-bg {
-    z-index: 1;
+    z-index: -1;
     filter: blur(12px);
     transform: rotate(180deg) scaleX(-1) scale(1.6);
     position: absolute;
     height: 100%;
     width: 100%;
+    will-change: transform, filter;
+
     /* Safari 10.1+ */
     @supports (font: -apple-system-body) and (-webkit-appearance: none) {
       transform: rotate(180deg) scaleX(-1) scale(1.6) translate3d(0, 0, 0);

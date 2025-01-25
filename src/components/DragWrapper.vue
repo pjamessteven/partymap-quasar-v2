@@ -4,8 +4,8 @@
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue';
+<script setup lang="ts">
+import { ref, onMounted, watch, toRefs } from 'vue';
 
 import { useDrag } from '@vueuse/gesture';
 
@@ -15,11 +15,19 @@ import {
   useMotionTransitions,
 } from '@vueuse/motion';
 
-// Props
-const { enableDrag, hiddenYPosition } = defineProps({
-  enableDrag: Boolean,
-  hiddenYPosition: Number,
-});
+const props = withDefaults(
+  defineProps<{
+    enableDrag?: boolean;
+    hiddenYPosition?: number;
+    showingYPosition?: number;
+  }>(),
+  {
+    enableDrag: true,
+    hiddenYPosition: () => window.innerHeight,
+    showingYPosition: 0,
+  },
+);
+const { enableDrag, hiddenYPosition, showingYPosition } = toRefs(props);
 
 // Emits
 const emit = defineEmits(['hide']);
@@ -30,18 +38,48 @@ const motionProperties = ref();
 const motionControls = ref();
 const motionTransitions = ref();
 
-function hide() {
-  motionTransitions.value.push('y', hiddenYPosition, motionProperties.value, {
-    type: 'spring',
-    stiffness: 600,
-    damping: 50,
-    mass: 1.8,
-  });
+watch(
+  () => showingYPosition.value,
+  (newValue, oldValue) => {
+    console.log('show', showingYPosition.value);
+    show();
+  },
+);
+
+function hideAndEmit() {
+  hide();
   setTimeout(() => {
     emit('hide');
   }, 200);
 }
 
+function hide() {
+  motionTransitions.value.push(
+    'y',
+    hiddenYPosition.value,
+    motionProperties.value,
+    {
+      type: 'spring',
+      stiffness: 600,
+      damping: 50,
+      mass: 1.8,
+    },
+  );
+}
+function show() {
+  // bounce back to top
+  motionTransitions.value.push(
+    'y',
+    showingYPosition.value,
+    motionProperties.value,
+    {
+      type: 'spring',
+      stiffness: 600,
+      damping: 50,
+      mass: 1.8,
+    },
+  );
+}
 const dragHandler = ({
   movement: [x, y],
   dragging,
@@ -51,23 +89,18 @@ const dragHandler = ({
   initial,
   active,
 }) => {
-  if (enableDrag) {
+  if (enableDrag.value) {
     if (swipeY == 1) {
-      hide();
+      hideAndEmit();
       return;
     }
 
     if (!dragging) {
       if (y > 100) {
-        hide();
+        hideAndEmit();
       } else {
         // bounce back to top
-        motionTransitions.value.push('y', 0, motionProperties.value, {
-          type: 'spring',
-          stiffness: 600,
-          damping: 50,
-          mass: 1.8,
-        });
+        show();
       }
       return;
     }
@@ -106,6 +139,10 @@ const setupSpring = () => {
 
 onMounted(() => {
   setupSpring();
+});
+
+defineExpose({
+  hide,
 });
 </script>
 

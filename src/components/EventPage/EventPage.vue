@@ -26,23 +26,19 @@
       class="event-page-content"
       :enableDrag="enableSwipeDown"
       :hiddenYPosition="hiddenYPosition"
+      :showingYPosition="showingYPosition"
+      ref="dragWrapper"
       @hide="goBack"
     >
-      <div
-        class="flex history-container col-4 col-xs-12 col-sm-6 col-md-5 col-lg-4 col-xl-4"
-        v-if="showingHistory"
-      >
-        <!--
-        <HistoryComponent @close="showingHistory = false" />
-        -->
-      </div>
       <CustomQScroll
         vertical
         ref="scrollArea"
         @scroll="onScrollMainContent"
         @scrollend="onScrollEnd"
         class="scroll-area flex grow"
-        :class="disableScroll ? 'disable-scroll' : ''"
+        :class="{
+          'disable-scroll': disableScroll || mapStore.peekMap,
+        }"
         :thumb-style="
           $q.screen.gt.xs
             ? {
@@ -62,8 +58,8 @@
         <div class="row flex grow main-row no-wrap justify-center">
           <div
             class="event-page-ios-overlay"
-            v-if="$q.platform.is.ios"
-            @click="$router.go(-1)"
+            v-if="$q.platform.is.ios && !mapStore.peekMap"
+            @click="mapStore.peekMap = true"
           />
           <div
             ref="contentCard"
@@ -73,7 +69,6 @@
               'col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12':
                 !showingHistory,
               shadow: mainStore.overlayOpacity === 0 || $q.screen.lt.sm,
-              'peek-map': mapStore.peekMap,
             }"
           >
             <div
@@ -992,7 +987,7 @@
                 v-if="!!event"
                 class="bottom-section flex"
                 :class="{
-                  'column  no-wrap q-pa-md q-py-lg q-pb-lg ': $q.screen.lt.sm,
+                  'column  no-wrap q-pa-md  ': $q.screen.lt.sm,
                   'row justify-between items-center': $q.screen.gt.xs,
                   'q-pa-xl': $q.screen.gt.sm,
                   'q-px-xl q-py-xl': $q.screen.gt.xs && $q.screen.lt.md,
@@ -1000,7 +995,7 @@
               >
                 <div
                   class="flex column"
-                  :class="$q.screen.gt.xs ? 'items-start' : ' q-pb-md'"
+                  :class="$q.screen.gt.xs ? 'items-start' : ' '"
                 >
                   <div class="t4">
                     <q-icon name="mdi-eye-outline" class="q-mr-sm" />{{
@@ -1051,34 +1046,34 @@
                     </div>
                   </div>
                 </div>
-                <div>
-                  <div
-                    v-if="
-                      !!selectedEventDate &&
-                      !editing &&
-                      (!event.host || currentUserIsHost)
+
+                <div
+                  v-if="
+                    $q.screen.gt.xs &&
+                    !!selectedEventDate &&
+                    !editing &&
+                    !event.host
+                  "
+                  class="flex row items-center no-wrap link-hover ed-inline-card editing-outline q-py-md"
+                  @click="editing = true"
+                  style="cursor: pointer"
+                >
+                  <q-icon
+                    size="2em"
+                    :name="
+                      currentUserIsHost ? 'las la-edit' : 'las la-hand-peace'
                     "
-                    class="flex row items-center no-wrap link-hover ed-inline-card editing-outline q-py-md"
-                    @click="editing = true"
-                    style="cursor: pointer"
+                    class="t4"
+                  />
+                  <div
+                    class="flex column q-ml-md t2"
+                    :class="{ 'text-large': $q.screen.gt.sm }"
                   >
-                    <q-icon
-                      size="2em"
-                      :name="
-                        currentUserIsHost ? 'las la-edit' : 'las la-hand-peace'
-                      "
-                      class="t4"
-                    />
-                    <div
-                      class="flex column q-ml-md t2"
-                      :class="{ 'text-large': $q.screen.gt.sm }"
-                    >
-                      <u class="t4">{{
-                        currentUserIsHost
-                          ? $t('event_dates.add_missing_information')
-                          : $t('suggestions.improve_this_page')
-                      }}</u>
-                    </div>
+                    <u class="t4">{{
+                      currentUserIsHost
+                        ? $t('event_dates.add_missing_information')
+                        : $t('suggestions.improve_this_page')
+                    }}</u>
                   </div>
                 </div>
               </div>
@@ -1280,11 +1275,19 @@ let {
 const scrollArea = ref<HTMLElement>();
 
 const eventPage = ref();
+const dragWrapper = ref();
 
 const mediaLoaded = () => {
   imageLoaded.value = true;
 };
 
+const showingYPosition = computed(() => {
+  if (mapStore.peekMap) {
+    return Math.max(window.innerHeight * 0.66 - 64, 0) - 128;
+  } else {
+    return 0;
+  }
+});
 const hiddenYPosition = computed(() => {
   return process.env.CLIENT ? window.innerHeight - window.innerHeight * 0.2 : 0;
 });
@@ -1308,14 +1311,6 @@ const clickBackground = () => {
 
 const swipeUp = () => {
   mapStore.peekMap = false;
-};
-
-const swipe = (event: any) => {
-  if (event.direction === 'up') {
-    swipeUp();
-  } else if (event.direction === 'down') {
-    goBack();
-  }
 };
 
 const deleteEvent = () => {
@@ -1357,6 +1352,11 @@ onBeforeRouteLeave((to, from, next) => {
   }
 });
 
+const animatedHide = () => {
+  dragWrapper.value?.hide();
+};
+
+// called once dragWrapper has hidden
 const goBack = () => {
   // if (this.$q.platform.is.android) event = null;
   //this.disableScroll = true; // helps animation be smoother on android
@@ -1366,10 +1366,6 @@ const goBack = () => {
   } else {
     router.push({ name: 'Explore' });
   }
-};
-
-const handleSwipe = () => {
-  goBack();
 };
 
 const onScrollMainContent = (info: any) => {
@@ -1954,12 +1950,12 @@ a {
   }
 
   .peek-address-wrapper {
+    pointer-events: none;
     position: absolute;
     top: 0px;
     left: 0px;
     width: 100%;
     .peek-address {
-      pointer-events: all;
       color: white;
       text-align: center;
       margin-top: 72px;
@@ -1976,7 +1972,17 @@ a {
   }
   .event-page-content {
     width: 100%;
-
+    &.peek-map {
+      /*
+      // 256px represents how high the top of the panel is from the bottom
+      transform: translate3d(
+        0,
+        calc(100vh - max(calc((100vh - 66vh) - 64px), 0px) - 256px),
+        0
+      ) !important;
+      cursor: pointer;
+      */
+    }
     .sticky-editing-footer {
       position: fixed;
       bottom: 0px;
@@ -1988,16 +1994,7 @@ a {
     :deep(.editing-outline) {
       border-color: white !important;
     }
-    .history-container {
-      z-index: 1;
-      position: sticky;
-      top: 0px;
-      left: 0px;
-      max-height: calc(100vh - 64px);
-      height: 100vh;
-      overflow-y: scroll;
-      box-shadow: 0px 0px 46px -6px rgba(0, 0, 0, 0.4);
-    }
+
     .scroll-area {
       height: 100%;
       overflow-x: hidden;
@@ -2009,6 +2006,7 @@ a {
           overflow: hidden !important;
         }
       }
+
       .main-row {
         position: relative;
         pointer-events: none;
@@ -2028,28 +2026,20 @@ a {
           //border: none !important;
           min-height: 100vh;
           position: relative;
-          pointer-events: all !important;
           padding-bottom: 0px;
           border-top-left-radius: 18px !important;
           border-top-right-radius: 18px !important;
           transition: transform 300ms;
 
-          &.peek-map {
-            // 256px represents how high the top of the panel is from the bottom
-            transform: translate3d(
-              0,
-              calc(100vh - max(calc((100vh - 66vh) - 64px), 0px) - 256px),
-              0
-            );
+          .peek-map-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 12;
             cursor: pointer;
-            .peek-map-overlay {
-              position: absolute;
-              width: 100%;
-              height: 100%;
-              z-index: 12;
-              cursor: pointer;
-            }
+            pointer-events: all !important;
           }
+
           &.shadow {
             box-shadow:
               rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
@@ -2063,6 +2053,8 @@ a {
             //box-shadow: 0px 0px 64px 32px rgba(0, 0, 0, 0.2) !important;
             overflow: hidden;
             position: relative;
+            pointer-events: all !important;
+
             .featured-media-component {
             }
             .ed-sidebar {

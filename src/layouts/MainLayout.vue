@@ -80,6 +80,7 @@
         v-bind:class="{
           'mobile-map-view-router': $q.screen.lt.sm,
           'event-router-ios': $q.platform.is.ios,
+          'peek-map': peekMap,
         }"
       >
         <Transition
@@ -263,6 +264,7 @@ export default {
       'blockUpdates',
       'focusMarker',
       'currentMapStyleUrl',
+      'peekMap',
     ]),
     ...mapWritableState(useMainStore, [
       'showSidebar',
@@ -466,12 +468,10 @@ export default {
         z-index: 104;
         opacity: 1;
         // transition: opacity 0.3s ease;
-        /*
-      &.hide {
-        opacity: 0;
-        pointer-events: none;
-      }
-      */
+
+        &.hide {
+          pointer-events: none;
+        }
       }
     }
     .main-layout-router {
@@ -487,6 +487,9 @@ export default {
       pointer-events: none;
       &.event-router-ios {
         pointer-events: all;
+        &.peek-map {
+          pointer-events: none;
+        }
       }
     }
 
