@@ -996,6 +996,7 @@ export default {
       try {
         await this.getFineLocation();
       } catch {
+        console.log('load ip info');
         await this.loadIpInfo();
       }
       //if (this.eventDates?.length === 0) this.loadEverything();

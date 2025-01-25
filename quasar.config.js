@@ -81,10 +81,10 @@ export default defineConfig(function (/* ctx */) {
       open: true, // opens browser window automatically
       proxy: {
         '/api': {
-          target: 'https://api.partymap.com/', // Replace with your production server's URL
+          // target: 'https://api.partymap.com/', // Replace with your production server's URL
           //          target: 'http://192.168.30.56:5000',
           //target: 'http://localhost:5000',
-          // target: 'http://172.20.10.2:5000',
+          target: 'http://172.20.10.2:5000',
           changeOrigin: true,
           pathRewrite: {
             '^/api': '', // Rewrites the URL prefix if needed

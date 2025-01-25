@@ -110,7 +110,11 @@ export default {
       'nearbyTagsLoading',
     ]),
     loading() {
-      return this.nearbyTagsLoading || this.tagOptionsLoading;
+      if (this.mode === 'nearby') {
+        return this.nearbyTagsLoading;
+      } else if (this.mode === 'all') {
+        return this.tagOptionsLoading;
+      }
     },
     tagsWithoutSelected() {
       return this.tags.filter(

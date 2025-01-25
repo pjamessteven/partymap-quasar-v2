@@ -5,18 +5,21 @@
         <CountryRegionList />
       </CustomQScroll>
     </div>
-    <SolidPage>
+    <SolidPage @scrollPercentage="scrollPercent = $event">
       <template v-slot="{ scrollPercentage }">
         <div
           class="flex column justify-center q-mb-xl"
           :class="$q.screen.gt.xs ? 'q-pb-xl q-mt-lg' : ''"
         >
           <TypographyTabs
+            :key="stickyTabs"
             v-show="$q.screen.lt.md"
             :model-value="tab"
             @update:model-value="tab = $event"
             class="typography-tabs"
-            :class="{ sticky: $route.name === 'CountryRegionList' }"
+            :class="{
+              sticky: $route.name === 'CountryRegionList',
+            }"
           >
             <q-route-tab
               exact
@@ -48,7 +51,6 @@
             >
             </q-route-tab>
           </TypographyTabs>
-
           <router-view v-slot="{ Component }">
             <keep-alive :max="1">
               <component
@@ -91,12 +93,24 @@ export default {
       ready: false,
       user: null,
       tab: null,
+      scrollPercent: 0,
+      stickyTabs: false,
     };
   },
   activated() {},
   async mounted() {},
   methods: { ...mapActions(useBrowseStore, ['loadEventDates']) },
-  watch: {},
+  /*
+  watch: {
+    scrollPercent: {
+      handler: function (newv, oldv) {
+        if (oldv > newv) {
+          this.stickyTabs = true;
+        } else {
+          this.stickyTabs = false;
+        }
+      },*/
+
   computed: {
     ...mapState(useBrowseStore, ['taggedEvents', 'countries']),
   },
@@ -150,12 +164,15 @@ export default {
     .typography-tabs {
       width: 100%;
       z-index: 1000;
+
+      position: relative; /* Initially, the header is positioned relative */
       :deep(.q-tabs__content) {
         // padding: 0 8px;
       }
       &.sticky {
         position: sticky;
         top: 0px;
+        left: 0;
       }
     }
     :deep(.q-tab-panels) {

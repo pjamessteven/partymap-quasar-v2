@@ -22,7 +22,12 @@
         </div>
       </div>
     </transition>
-    <div class="event-page-content">
+    <DragWrapper
+      class="event-page-content"
+      :enableDrag="enableSwipeDown"
+      :hiddenYPosition="hiddenYPosition"
+      @hide="goBack"
+    >
       <div
         class="flex history-container col-4 col-xs-12 col-sm-6 col-md-5 col-lg-4 col-xl-4"
         v-if="showingHistory"
@@ -75,7 +80,6 @@
               class="peek-map-overlay"
               @click="swipeUp"
               v-if="mapStore.peekMap"
-              v-touch-swipe="swipe"
             />
 
             <MobileSwipeHandle
@@ -1152,7 +1156,7 @@
       >
         <EventDateTicketUrlDialog v-if="showingTicketDialog" />
       </BackdropBlurDialog>
-    </div>
+    </DragWrapper>
   </div>
 </template>
 
@@ -1199,16 +1203,9 @@ import UploadNewLogoDialog from 'components/EventPage/Gallery/UploadNewLogoDialo
 
 import InnerLoading from 'components/InnerLoading.vue';
 import { useI18n } from 'vue-i18n';
-import { useDrag } from '@vueuse/gesture';
 import { useMeta } from 'quasar';
+import DragWrapper from '../DragWrapper.vue';
 
-import {
-  MotionVariants,
-  useMotionControls,
-  useMotionProperties,
-  useMotionTransitions,
-  useSpring,
-} from '@vueuse/motion';
 /*
   meta() {
     return {
@@ -1288,11 +1285,6 @@ const mediaLoaded = () => {
   imageLoaded.value = true;
 };
 
-const spring = ref();
-const motionProperties = ref();
-const motionControls = ref();
-const motionTransitions = ref();
-
 const hiddenYPosition = computed(() => {
   return process.env.CLIENT ? window.innerHeight - window.innerHeight * 0.2 : 0;
 });
@@ -1302,78 +1294,6 @@ const previousRouteIsExplore = computed(
     mainStore.routerHistory[mainStore.routerHistory.length - 1]?.name ===
     'Explore',
 );
-
-const setupSpring = () => {
-  // start hidden
-  const { motionProperties: mp } = useMotionProperties(eventPage, {
-    y: hiddenYPosition.value,
-  });
-  motionProperties.value = mp;
-  motionControls.value = useMotionControls(motionProperties.value);
-  motionTransitions.value = useMotionTransitions();
-  // spring up
-  motionTransitions.value.push('y', 0, motionProperties.value, {
-    type: 'spring',
-    stiffness: 600,
-    damping: 50,
-    mass: 1.8,
-  });
-};
-
-const dragHandler = ({
-  movement: [x, y],
-  dragging,
-  swipe: [swipeX, swipeY],
-  offset,
-  delta,
-  initial,
-}) => {
-  if (
-    scrollPercentage.value <= 0 &&
-    (mainStore.enablePanelSwipeDown || $q.platform.is.ios)
-  ) {
-    if (swipeY == 1) {
-      goBack();
-      return;
-    }
-
-    if (!dragging) {
-      if (y > 150) {
-        goBack();
-      } else {
-        // spring.value.set({ x: 0, y: 0, cursor: 'grab' });
-        motionTransitions.value.push('y', 0, motionProperties.value, {
-          type: 'spring',
-          stiffness: 600,
-          damping: 50,
-          mass: 1.8,
-        });
-      }
-      return;
-    }
-    // only allow dragging down
-    if (y > 0) {
-      if (
-        y > 150 &&
-        mainStore.routerHistory?.[mainStore.routerHistory.length - 1]?.name ===
-          'Explore'
-      ) {
-        // mainStore.sidebarOpacity = 1;
-      }
-      // update motion position but don't animate
-      motionTransitions.value.push('y', y, motionProperties.value, {
-        type: 'keyframes',
-        duration: 0,
-      });
-    }
-  }
-};
-
-useDrag(dragHandler, {
-  domTarget: eventPage,
-  axis: 'y',
-  //preventWindowScrollY: true,
-});
 
 const clickBackground = () => {
   /*
@@ -1419,19 +1339,7 @@ onBeforeRouteLeave((to, from, next) => {
   // transition out before going back on mobile
   if ($q.screen.lt.sm) {
     if ($q.platform.is.mobile) {
-      if (scrollPercentage.value <= 0)
-        motionTransitions.value.push(
-          'y',
-          hiddenYPosition.value,
-          motionProperties.value,
-          {
-            type: 'spring',
-            stiffness: 600,
-            damping: 50,
-            mass: 1.8,
-          },
-        );
-      mainStore.sidebarOpacity = 1;
+      if (scrollPercentage.value <= 0) mainStore.sidebarOpacity = 1;
 
       if (mainStore.showPanel) {
         mainStore.showPanelBackground = true;
@@ -1659,7 +1567,6 @@ onMounted(() => {
   // and every time it is re-inserted from the cache
   mainStore.sidebarOpacity = 0;
 
-  setupSpring();
   if (scrollArea.value) {
     (scrollArea.value as any).setScrollPercentage('vertical', 0);
   }
@@ -1680,27 +1587,6 @@ onMounted(() => {
   }
 
   disableScroll.value = true; // helps animation be smoother on android
-
-  // we need to reset spring state every time we open the event page on mobile
-
-  // if android then do this for performance
-  /*
-  if ($q.platform.is.mobile) {
-    setTimeout(
-      () =>
-        spring.value.set({
-          cursor: 'grabbing',
-          y: 0,
-        }),
-      500
-    );
-  } else {
-    spring.value.set({
-      cursor: 'grabbing',
-      y: 0,
-    });
-  }
-  */
 
   // ensure sidebar is transparent on mobile
 

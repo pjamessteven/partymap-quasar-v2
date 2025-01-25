@@ -3,48 +3,47 @@
     ref="dialog"
     transition-show="slide-up"
     transition-hide="slide-down"
+    :model-value="showing"
+    @hide="$emit('hide')"
   >
     <div class="flex column no-wrap menu">
-      <MobileSwipeHandle @swipe="hide()" :solidBg="true" />
+      <DragWrapper
+        :enableDrag="true"
+        :hiddenYPosition="hiddenYPosition"
+        @hide="$emit('hide')"
+      >
+        <MobileSwipeHandle @swipe="hide()" :solidBg="true" />
 
-      <q-card class="card">
-        <div class="component-wrapper">
-          <component :is="slot" />
-        </div>
-      </q-card>
+        <q-card class="card">
+          <div class="component-wrapper">
+            <slot />
+          </div>
+        </q-card>
+      </DragWrapper>
     </div>
   </BackdropBlurDialog>
 </template>
 
 <script>
 import BackdropBlurDialog from '../BackdropBlurDialog.vue';
+import DragWrapper from '../DragWrapper.vue';
 import MobileSwipeHandle from '../MobileSwipeHandle.vue';
 
 export default {
   components: {
     MobileSwipeHandle,
     BackdropBlurDialog,
+    DragWrapper,
   },
-  props: ['slot'], // bit of a hack, passing slot as a prop
+  props: ['showing'], // bit of a hack, passing slot as a prop
   data() {
-    return {};
+    return {
+      hiddenYPosition: window.innerHeight,
+    };
   },
   watch: {},
   computed: {},
-  methods: {
-    // following method is REQUIRED
-    // (don't change its name --> "show")
-    show() {
-      this.$refs.dialog.show();
-    },
-
-    // following method is REQUIRED
-    // (don't change its name --> "hide")
-    hide() {
-      console.log('hide');
-      this.$refs.dialog.hide();
-    },
-  },
+  methods: {},
 };
 </script>
 
@@ -79,6 +78,7 @@ export default {
   max-height: 600px;
   position: absolute;
   bottom: 0px;
+  overflow: visible;
   border-radius: 0px !important;
   .card {
     border: none;

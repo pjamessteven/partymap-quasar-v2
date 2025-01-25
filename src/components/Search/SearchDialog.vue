@@ -1,8 +1,10 @@
 <template>
-  <div
+  <DragWrapper
+    :hiddenYPosition="hiddenYPosition"
+    :enableDrag="scrollPercentage <= 0"
     class="search-dialog flex column no-wrap"
-    ref="searchDialog"
     @click="clickAway"
+    @hide="$emit('hide')"
   >
     <CustomQScroll
       vertical
@@ -17,7 +19,12 @@
               marginLeft: '16px',
               borderRadius: '0px',
             }
-          : { bottom: '0px', height: '0px', borderRadius: '0px', width: '4px' }
+          : {
+              bottom: '0px',
+              height: '0px',
+              borderRadius: '0px',
+              width: '4px',
+            }
       "
     >
       <div class="flex row justify-center grow">
@@ -107,7 +114,7 @@
             <div
               v-else
               style="pointer-events: all"
-              class="q-px-md search-component flex row no-wrap q-gutter-md"
+              class="q-px-md search-component flex row no-wrap q-gutter-m q-mb-sm"
             >
               <q-card
                 class="tag q-pa-xs grow flex row items-center no-wrap justify-between"
@@ -135,7 +142,7 @@
                   </div>
                 </div>
                 <q-icon
-                  @click.stop="clearDateFilter"
+                  @click.stop="queryStore.clearDateFilter"
                   style="font-size: 22px"
                   name="mdi-close-circle q-mr-xs"
                   v-if="controlDateRangeSelectedOption?.value"
@@ -144,16 +151,24 @@
             </div>
 
             <div
-              v-if="$q.screen.lt.sm && $route.name === 'Explore'"
+              v-if="
+                $q.screen.lt.sm &&
+                $route.name === 'Explore' &&
+                queryStore.topTagsInArea.length
+              "
               class="q-px-md search-header metropolis text-h5 bolder q-mt-lg q-mb-md"
             >
               {{ $t('top_controls.top_tags_in_area') }}
             </div>
             <div
-              v-if="$q.screen.lt.sm && $route.name === 'Explore'"
+              v-if="
+                $q.screen.lt.sm &&
+                $route.name === 'Explore' &&
+                queryStore.topTagsInArea.length
+              "
               @click.stop
               class="flex column search-component q-px-md"
-              style="width: 100%"
+              style="width: 100%; position: relative"
             >
               <TagExplorer mode="explore" @tagSelected="emit('hide')" />
             </div>
@@ -166,9 +181,16 @@
             <div
               @click.stop
               class="flex column search-component q-px-md q-mb-sm"
-              style="width: 100%"
+              style="width: 100%; min-height: 139px; position: relative"
             >
               <TagExplorer mode="all" @tagSelected="emit('hide')" />
+              <InnerLoading
+                :solid="false"
+                v-if="
+                  queryStore.tagOptionsLoading &&
+                  queryStore.tagOptions.length == 0
+                "
+              />
             </div>
 
             <div
@@ -227,7 +249,7 @@
     >
       <DateControl @hide="handleDateControlHide" />
     </MenuWrapper>
-  </div>
+  </DragWrapper>
 </template>
 
 <script setup>
@@ -245,13 +267,8 @@ import MenuWrapper from '../Controls/MenuWrapper.vue';
 import { useI18n } from 'vue-i18n';
 import { Platform } from 'quasar';
 
-import { useDrag } from '@vueuse/gesture';
-
-import {
-  useMotionControls,
-  useMotionProperties,
-  useMotionTransitions,
-} from '@vueuse/motion';
+import InnerLoading from '../InnerLoading.vue';
+import DragWrapper from '../DragWrapper.vue';
 
 // Props
 const props = defineProps({
@@ -267,12 +284,7 @@ const mainStore = useMainStore();
 const searchStore = useSearchStore();
 const queryStore = useQueryStore();
 
-// Refs
-const searchDialog = ref();
-const motionProperties = ref();
-const motionControls = ref();
-const motionTransitions = ref();
-
+/*
 const dragHandler = ({
   movement: [x, y],
   dragging,
@@ -325,6 +337,17 @@ const dragHandler = ({
     }
   } else if (inputFocused.value) {
     if (!dragging) {
+      motionTransitions.value.push(
+        'y',
+        window.innerHeight,
+        motionProperties.value,
+        {
+          type: 'spring',
+          stiffness: 600,
+          damping: 50,
+          mass: 1.8,
+        },
+      );
       clickAway();
       return;
     }
@@ -336,9 +359,10 @@ useDrag(dragHandler, {
   axis: 'y',
 });
 
+*/
+
 // Destructure store refs
-const { sidebarPanel, showPanel, currentLocationFromSearch } =
-  storeToRefs(mainStore);
+const { sidebarPanel, showPanel } = storeToRefs(mainStore);
 
 const { query } = storeToRefs(searchStore);
 
@@ -357,6 +381,7 @@ const inputFocused = ref(false);
 const scrollArea = ref(null);
 const search = ref(null);
 const { t } = useI18n();
+const hiddenYPosition = ref(window.innerHeight);
 // Constants
 const sizeOptions = [
   {
@@ -456,12 +481,6 @@ function clickAway() {
   }
 }
 
-function swipeDown() {
-  if (scrollPercentage.value <= 0) {
-    clickAway();
-  }
-}
-
 function hideResultsAndPreviousPanel() {
   if (sidebarPanel.value === 'search') {
     sidebarPanel.value = mainStore.previousSidebarPanel;
@@ -491,26 +510,6 @@ function onSearchbarBlur() {
   inputFocused.value = false;
 }
 
-const setupSpring = () => {
-  // start hidden
-  const { motionProperties: mp } = useMotionProperties(searchDialog, {
-    y: window.innerHeight,
-  });
-  motionProperties.value = mp;
-  motionControls.value = useMotionControls(motionProperties.value);
-  motionTransitions.value = useMotionTransitions();
-  // spring up
-  motionTransitions.value.push('y', 0, motionProperties.value, {
-    type: 'spring',
-    stiffness: 600,
-    damping: 50,
-    mass: 1.8,
-  });
-};
-
-onMounted(() => {
-  setupSpring();
-});
 // Export methods that might be needed externally
 defineExpose({
   clearSearch,
@@ -521,8 +520,6 @@ defineExpose({
 .body--light {
   .search-dialog {
     .search-column {
-      .search-header {
-      }
       .search-component {
         .date-control {
           background: white;

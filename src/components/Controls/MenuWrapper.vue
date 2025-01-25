@@ -17,26 +17,24 @@
       <slot></slot>
     </div>
   </q-menu>
-  <MobileMenu
-    :showing="showing"
+  <MobileMenuDialog
     v-else
+    :showing="showing"
     @scroll="onScroll($event)"
-    @hide="
-      {
-        onHide($event);
-      }
-    "
+    @hide="onHide($event)"
   >
     <slot></slot>
-  </MobileMenu>
+  </MobileMenuDialog>
 </template>
 
 <script>
-import MobileMenu from './MobileMenu.vue';
+//import MobileMenu from './MobileMenu.vue';
+import MobileMenuDialog from './MobileMenuDialog.vue';
 
 export default {
   components: {
-    MobileMenu,
+    //MobileMenu,
+    MobileMenuDialog,
   },
   props: {
     showing: { type: Boolean, default: false },
