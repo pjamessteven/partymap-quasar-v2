@@ -368,7 +368,7 @@
               </div>
               <TagExplorer
                 mode="nearby"
-                :class="$q.screen.gt.sm ? 'q-px-lg q-mb-md' : 'q-pl-md '"
+                :class="$q.screen.gt.sm ? 'q-px-lg q-mb-sm' : 'q-pl-md '"
               />
             </div>
             <!-- Display global tags if there's not many local tags-->
@@ -381,18 +381,14 @@
               </div>
               <TagExplorer
                 mode="all"
-                :class="$q.screen.gt.sm ? 'q-px-lg q-mb-xs' : 'q-pl-md '"
+                :class="$q.screen.gt.sm ? 'q-px-lg q-mb-sm' : 'q-pl-md '"
               />
             </div>
             <!-- artists -->
             <div class="flex column" v-if="nearbyArtists?.length > 5">
               <div
-                class="location-header location-header-select sticky flex justify-between items-center"
-                :class="
-                  $q.screen.gt.sm
-                    ? 'q-px-lg q-py-md'
-                    : 'q-pl-md q-pt-md q-pb-sm '
-                "
+                class="location-header q-py-md location-header-select sticky flex justify-between items-center"
+                :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
               >
                 <div>{{ $t('nearby_view.high_profile_artists') }}</div>
                 <ControlSelect
@@ -418,7 +414,7 @@
                 :loadMore="debouncedLoadNearbyArtists"
                 :style="
                   $q.screen.gt.sm
-                    ? 'margin-bottom: -8px; margin-top: -12px; z-index: 999'
+                    ? 'margin-bottom: -16px; '
                     : 'margin-bottom: -8px;'
                 "
               />
@@ -428,7 +424,7 @@
 
             <div class="flex column" v-else-if="artistOptions?.length > 0">
               <div
-                class="q-pt-md q-pb-sm location-header location-header-select sticky flex justify-between items-center"
+                class="q-py-md location-header location-header-select sticky flex justify-between items-center"
                 :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
               >
                 <div>{{ $t('nearby_view.top_artists_worldwide') }}</div>
@@ -450,14 +446,14 @@
               </div>
 
               <ArtistsComponent
-                :class="$q.screen.gt.sm ? 'q-pl-sm' : ''"
+                :class="$q.screen.gt.sm ? '' : ''"
                 :artists="artistOptions"
                 :hasNext="artistOptionsHasNext"
                 :loadMore="debouncedLoadArtistOptions"
                 :size="$q.screen.gt.sm ? 'lg' : 'md'"
                 :style="
                   $q.screen.gt.sm
-                    ? 'margin-bottom: -16px; margin-top: -12px; z-index: 2000'
+                    ? 'margin-bottom: -16px; '
                     : 'margin-bottom: -8px;'
                 "
               />
@@ -477,7 +473,7 @@
             </div>
             <div
               v-else-if="currentLocation"
-              class="location-header sticky q-py-sm q-mt-sm flex row items-center justify-between"
+              class="location-header sticky q-py-sm q-mt-md flex row items-center justify-between"
               :class="$q.screen.lt.md ? 'q-pl-md' : 'q-pl-lg'"
             >
               <div class="flex items-center">

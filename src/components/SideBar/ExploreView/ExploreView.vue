@@ -310,7 +310,7 @@
                     <TagExplorer
                       mode="explore"
                       :class="{
-                        'q-px-lg': $q.screen.gt.sm,
+                        'q-px-lg q-mb-sm': $q.screen.gt.sm,
                         'q-px-md': $q.screen.lt.md,
                       }"
                     />
@@ -337,7 +337,7 @@
                       >
                     </div>
                     <ArtistsComponent
-                      :class="$q.screen.gt.sm ? 'q-pl- q-mb-md ' : ''"
+                      :class="$q.screen.gt.sm ? 'q-mt-md q-mb-md ' : ''"
                       :artists="topArtistsInArea"
                       :size="$q.screen.gt.sm ? 'lg' : 'md'"
                     />

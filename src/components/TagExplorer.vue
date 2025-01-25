@@ -205,7 +205,7 @@ export default {
 .tag-explorer {
   pointer-events: none;
   padding-top: 2px;
-  padding-bottom: 16px;
+  padding-bottom: 8px;
   .tag {
     pointer-events: all;
     opacity: 1;
