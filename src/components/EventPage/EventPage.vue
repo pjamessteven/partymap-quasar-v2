@@ -987,7 +987,7 @@
                 v-if="!!event"
                 class="bottom-section flex"
                 :class="{
-                  'column  no-wrap q-pa-md  ': $q.screen.lt.sm,
+                  'column  no-wrap q-pa-md q-pb-lg ': $q.screen.lt.sm,
                   'row justify-between items-center': $q.screen.gt.xs,
                   'q-pa-xl': $q.screen.gt.sm,
                   'q-px-xl q-py-xl': $q.screen.gt.xs && $q.screen.lt.md,

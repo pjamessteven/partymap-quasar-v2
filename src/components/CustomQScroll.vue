@@ -44,7 +44,7 @@ export default {
         if (this.isScrolling) window.clearTimeout(this.isScrolling);
         this.isScrolling = setTimeout(() => {
           this.onScrollEnd(); // Trigger onScrollEnd after scroll stops
-        }, 150); // Adjust the timeout as needed
+        }, 10); // Adjust the timeout as needed
       });
     } else {
       this.$refs.scroll.$el.firstElementChild.addEventListener(
@@ -87,8 +87,11 @@ export default {
 .custom-q-scroll {
   :deep(.scroll) {
     will-change: overflow;
-    overscroll-behavior: none;
-    -webkit-overflow-scrolling: auto;
+
+    @supports (-webkit-overflow-scrolling: touch) {
+      overscroll-behavior: none;
+      -webkit-overflow-scrolling: touch;
+    }
   }
   &.disable-scroll {
     // pointer-events: none;

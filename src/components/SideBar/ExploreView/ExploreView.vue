@@ -13,7 +13,7 @@
     <div class="event-list-inner">
       <div
         class="q-mb-md metropolis bold"
-        style="position: absolute; left: 24px; top: 16px; font-weight: 600"
+        style="position: absolute; left: 24px; top: 16px; font-weight: 700"
         v-if="
           (isLoadingInitial || (mapMoving && !blockUpdates)) &&
           sidebarMinimized &&
@@ -23,8 +23,14 @@
         {{ $t('explore_view.finding_whats_good') }}
       </div>
       <div
-        class="inter q-mb-md"
-        style="position: absolute; left: 24px; top: 16px; font-weight: 700"
+        class="metropolis bold q-mb-md"
+        style="
+          position: absolute;
+          left: 24px;
+          top: 16px;
+          font-weight: 700;
+          z-index: 1;
+        "
         v-else-if="
           !isLoadingInitial &&
           (eventDatesTotal === 0 || !eventDates || eventDates?.length === 0) &&

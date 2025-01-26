@@ -13,4 +13,7 @@ export default defineConfig({
       project: 'javascript-vue',
     }),
   ],
+  resolve: {
+    preserveSymlinks: true,
+  },
 });

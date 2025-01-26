@@ -3,8 +3,7 @@
   "appName": "PartyMap",
   "server": {
     "androidScheme": "https",
-    "hostname": "api.partymap.com",
-    "url": "http://169.254.173.205:9500"
+    "hostname": "api.partymap.com"
   },
   "bundledWebRuntime": false,
   "npmClient": "yarn",

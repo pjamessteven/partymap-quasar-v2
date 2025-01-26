@@ -20,7 +20,15 @@
         v-if="$q.screen.lt.md && mainStore.sidebarPanel === 'explore'"
       >
         <q-icon
-          @click="hidePanel"
+          @click="
+            () => {
+              if (mainStore.showPanel) {
+                hidePanel();
+              } else {
+                showPanel();
+              }
+            }
+          "
           flat
           :size="$q.screen.gt.sm ? '1.7rem' : '1.5rem'"
           class="q-pa-md q-mr-sm t1"
@@ -114,7 +122,7 @@ const hiddenYPosition = () => {
     $q.screen.lt.md
   )
     // SM
-    return window.innerHeight - 156 - mainStore.safeAreaInsets.top - iosOffset;
+    return window.innerHeight - 152 - mainStore.safeAreaInsets.top - iosOffset;
 
   if (mainStore.sidebarPanel === 'nearby') {
     if ($q.screen.gt.xs) {
@@ -227,7 +235,7 @@ const dragHandler = ({
       console.log('top', event, y);
 
       if (mainStore.showPanel) {
-        if (y > 30 && (mainStore.enablePanelSwipeDown || $q.platform.is.ios)) {
+        if (y > 30 && mainStore.enablePanelSwipeDown) {
           hidePanel();
         } else {
           showPanel();
@@ -256,8 +264,7 @@ const dragHandler = ({
           // minimize
           console.log(event, y);
 
-          // mainStore.sidebarMinimized = true;
-          //hidePanel();
+          mainStore.sidebarMinimized = true;
         }
       }
 

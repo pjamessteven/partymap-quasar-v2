@@ -1,4 +1,5 @@
 import { defineConfig } from '#q-app/wrappers';
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 
 export default defineConfig(function (/* ctx */) {
   return {
@@ -72,7 +73,11 @@ export default defineConfig(function (/* ctx */) {
       // extendViteConf(viteConf) {},
       // viteVuePluginOptions: {},
 
-      vitePlugins: [],
+      vitePlugins: [
+        VueI18nPlugin({
+          /* options */
+        })
+      ],
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer

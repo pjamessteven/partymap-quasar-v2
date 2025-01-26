@@ -5,6 +5,7 @@
     class="search-dialog flex column no-wrap"
     @click="clickAway"
     @hide="$emit('hide')"
+    @onDrag="search.blur()"
   >
     <CustomQScroll
       vertical
@@ -453,7 +454,6 @@ watch(query, (newv) => {
 // Methods
 function onScroll(info) {
   scrollPercentage.value = info.verticalPercentage;
-  search.value.blur();
 }
 
 function clickSize(size) {

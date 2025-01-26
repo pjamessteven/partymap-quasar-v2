@@ -30,7 +30,7 @@ const props = withDefaults(
 const { enableDrag, hiddenYPosition, showingYPosition } = toRefs(props);
 
 // Emits
-const emit = defineEmits(['hide']);
+const emit = defineEmits(['hide', 'onDrag']);
 
 // Refs
 const dragWrapper = ref();
@@ -106,6 +106,7 @@ const dragHandler = ({
     }
     // only allow dragging down
     if (y > 0) {
+      emit('onDrag');
       // update motion position but don't animate
       motionTransitions.value.push('y', y, motionProperties.value, {
         type: 'keyframes',

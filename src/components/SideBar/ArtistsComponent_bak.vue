@@ -4,7 +4,7 @@
       horizontal
       ref="scrollArea"
       @scroll="onScrollMainContent"
-      :class="`artist-scroll-area size-${size}`"
+      class="artist-scroll-area"
       v-if="artists && artists.length > 0"
       :thumb-style="
         $q.screen.gt.xs
@@ -12,22 +12,19 @@
               borderRadius: '0px',
               bottom: '8px',
               height: '4px',
-              paddingLeft: '16px',
-              marginLeft: '24px',
+              marginLeft: '16px',
             }
           : { bottom: '0px', height: '0px' }
       "
       ><div>
         <div
-          class="flex row no-wrap q-pr-xl"
-          :class="$q.screen.lt.sm ? 'q-pl-' : 'q-pl-sm'"
+          class="flex row no-wrap q-gutter-md q-pr-xl"
+          :class="$q.screen.lt.sm ? 'q-pl-md' : 'q-pl-lg'"
         >
           <ArtistHead
-            class="artist-head"
             v-for="artist in $props.artists"
             :key="artist.id"
             :artist="artist"
-            :size="size"
           ></ArtistHead>
 
           <div
@@ -56,12 +53,10 @@ interface Props {
   hasNext: boolean;
   artists?: Artist[];
   loadMore: () => void;
-  size: 'sm' | 'md' | 'lg';
 }
 const props = withDefaults(defineProps<Props>(), {
   hasNext: () => false,
   artists: () => [],
-  size: () => 'lg',
 });
 
 console.log(props.artists);
@@ -85,17 +80,6 @@ function onScrollMainContent(info: {
 </script>
 
 <style lang="scss" scoped>
-@mixin decreasing-z-index($items: 10, $start-index: $items) {
-  $current-index: $start-index;
-
-  @for $i from 1 through $items {
-    &:nth-child(#{$i}) {
-      z-index: $current-index;
-    }
-    $current-index: $current-index - 1;
-  }
-}
-
 .body--dark {
   .pagination-icon {
     :deep(.q-icon) {
@@ -128,12 +112,6 @@ function onScrollMainContent(info: {
       white calc(100% - 16px),
       transparent 100%
     );*/
-    &.size-md {
-      height: 172px;
-    }
-    .artist-head {
-      @include decreasing-z-index(199);
-    }
   }
   .pagination-icon {
     z-index: 100;
@@ -146,13 +124,19 @@ function onScrollMainContent(info: {
   }
 }
 
+@media only screen and (min-width: 1921px) {
+  .scroll-area-wrapper {
+    .artist-scroll-area {
+      height: 186px;
+    }
+  }
+}
+
 @media only screen and (max-width: 599px) {
   .scroll-area-wrapper {
     .artist-scroll-area {
-      height: 172px;
+      height: 160px;
       mask-image: unset;
-      margin-top: -8px;
-      margin-bottom: -8px;
     }
   }
 }
