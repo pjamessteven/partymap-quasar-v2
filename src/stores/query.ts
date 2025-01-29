@@ -204,6 +204,13 @@ export const useQueryStore = defineStore('query', {
     },
   },
   actions: {
+    clearResults() {
+      this.eventDatesHasNext = true;
+      this.eventDatesPage = 1;
+      this.eventDatesTotal = null;
+      this.eventDates = []; // this is actually quite important
+      this.eventDatesGroupedByMonth = {};
+    },
     clearDateFilter() {
       this.controlDateRange = { start: dayjs().toISOString(), end: null };
       this.controlDateRangeSelectedOption = null;

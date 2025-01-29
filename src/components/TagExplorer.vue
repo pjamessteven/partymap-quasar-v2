@@ -49,13 +49,10 @@ export default {
   },
   methods: {
     ...mapActions(useNearbyStore, ['loadNearbyTags']),
-    ...mapActions(useQueryStore, ['loadTagOptions']),
+    ...mapActions(useQueryStore, ['loadTagOptions', 'clearResults']),
     clickTag(tag) {
       // force loading state after clicking to prevent glitchy feeling ui
-      this.eventDates = [];
-      this.eventDatesGroupedByMonth = {};
-      this.eventDatesLoading = true;
-
+      this.clearResults();
       let index = this.controlTag?.findIndex((x) => x.tag === tag.tag);
       if (index > -1) {
         // tag already selected, do nothing

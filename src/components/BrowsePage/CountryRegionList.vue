@@ -1,5 +1,5 @@
 <template>
-  <q-list>
+  <q-list v-if="countries.length > 0">
     <q-item
       exact
       clickable
@@ -60,9 +60,6 @@
       @update:model-value="clickExpansionItem(country)"
       :content-inset-level="1"
     >
-      <template v-slot:header-right>
-        <q-spinner-dots v-if="isLoading" color="primary" size="1em" />
-      </template>
       <template v-slot:header>
         <q-item-section avatar>
           <q-avatar left text-color="white" font-size="28pt">
@@ -87,6 +84,9 @@
             }}
           </q-item-label>
         </q-item-section>
+        <q-item-section side>
+          <q-spinner v-if="country.loading" color="primary" size="1.5em" />
+        </q-item-section>
       </template>
       <q-list>
         <q-item
@@ -106,7 +106,7 @@
             </q-item-label>
 
             <q-item-label caption
-              >{{ country.regions?.[0].event_count }}&nbsp;{{
+              >{{ country.regions?.[0]?.event_count }}&nbsp;{{
                 $t('browse_page.upcoming_events')
               }}
             </q-item-label>
@@ -141,6 +141,7 @@
       </q-list>
     </q-expansion-item>
   </q-list>
+  <InnerLoading v-else-if="$q.screen.lt.md" />
 </template>
 
 <script>
@@ -154,7 +155,7 @@ export default {
   components: {
     InnerLoading,
   },
-  props: {},
+  props: ['scrollPercentage'], // needs to be defined as BrowsePage router-view will parse to all children, and if not handled will cause performance issues
   data() {
     return { expanded: null };
   },

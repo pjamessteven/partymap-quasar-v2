@@ -14,18 +14,23 @@
                   <span>Feature your event on PartyMap</span>
                 </div>
 -->
+        <!--
         <q-intersection
           v-for="(tag, index) in Object.keys(taggedEvents)"
           :key="index"
           :style="$q.screen.gt.xs ? 'height: 400px' : 'height: 372px'"
         >
-          <BrowseTaggedEvents
-            :title="items[tag].title"
-            :tagline="items[tag].tagline"
-            :description="items[tag].description"
-            :eventDates="taggedEvents?.[tag]?.eventDates"
-          />
-        </q-intersection>
+        -->
+        <BrowseTaggedEvents
+          v-for="(tag, index) in Object.keys(taggedEvents)"
+          :key="index"
+          :title="items[tag].title"
+          :tagline="items[tag].tagline"
+          :description="items[tag].description"
+          :eventDates="taggedEvents?.[tag]?.eventDates"
+          :hasNext="taggedEvents?.[tag]?.eventDatesHasNext"
+          :tag="tag"
+        />
       </div>
       <InnerLoading :solid="false" v-else />
     </div>
@@ -45,7 +50,9 @@ export default {
     BrowseTaggedEvents,
     InnerLoading,
   },
-  props: {},
+  props: {
+    props: ['scrollPercentage'], // needs to be defined as BrowsePage router-view will parse to all children, and if not handled will cause performance issues
+  },
   data() {
     return {
       ready: false,

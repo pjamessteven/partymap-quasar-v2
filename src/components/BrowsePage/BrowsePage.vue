@@ -6,7 +6,7 @@
       </CustomQScroll>
     </div>
     <SolidPage @scrollPercentage="scrollPercent = $event">
-      <template v-slot="{ scrollPercentage }">
+      <template v-slot="{ scrollPercentage, resetScrollPosition }">
         <div
           class="flex column justify-center q-mb-xl"
           :class="$q.screen.gt.xs ? 'q-pb-xl q-mt-lg' : ''"
@@ -56,6 +56,7 @@
               <component
                 :is="Component"
                 :scrollPercentage="scrollPercentage"
+                :resetScrollPosition="resetScrollPosition"
               /> </keep-alive
           ></router-view>
         </div>

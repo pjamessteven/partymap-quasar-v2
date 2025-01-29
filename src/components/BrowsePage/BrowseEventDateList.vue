@@ -162,6 +162,10 @@ export default {
       type: Number,
       default: undefined,
     },
+    resetScrollPosition: {
+      type: Function,
+      default: undefined,
+    },
   },
   methods: {
     ...mapActions(useQueryStore, [
@@ -169,20 +173,15 @@ export default {
       'loadArtists',
       'loadMoreArtists',
       'clearAllFilters',
+      'clearResults',
     ]),
     ...mapActions(useMainStore, ['loadIpInfo', 'persistTipsToLocalStorage']),
-    resetQueryState() {
-      this.eventDatesHasNext = true;
-      this.eventDatesPage = 1;
-      this.eventDatesTotal = null;
-      this.eventDates = []; // this is actually quite important
-      this.eventDatesGroupedByMonth = {};
-    },
+
     async getInitialList() {
       // event date stuff
       // scroll to top
-      this.resetQueryState();
-
+      this.clearResults();
+      this.resetScrollPosition();
       this.loadMore();
     },
     async loadMore() {
@@ -343,7 +342,7 @@ export default {
     },
   },
   beforeMount() {
-    this.resetQueryState();
+    this.clearResults();
   },
 
   created() {

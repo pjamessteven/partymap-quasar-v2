@@ -42,7 +42,10 @@
               enter-active-class="animated fadeIn slow"
               leave-active-class="animated fadeOut"
             >
-              <slot :scrollPercentage="scrollPercentage"></slot>
+              <slot
+                :scrollPercentage="scrollPercentage"
+                :resetScrollPosition="resetScrollPosition"
+              ></slot>
             </transition>
           </div>
         </div>
@@ -79,6 +82,9 @@ export default {
       this.scrollPercentage = info.verticalPercentage;
       // trigger field validation errors once we scroll to the bottom of the page
       this.$emit('scrollPercentage', info.verticalPercentage);
+    },
+    resetScrollPosition() {
+      this.setScrollPercentage('vertical', 0);
     },
   },
   computed: {

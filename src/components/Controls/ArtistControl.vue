@@ -152,7 +152,7 @@ export default {
       // unload additional pages to reduce render load next time the dialog is opened
       this.artistOptions = this.artistOptions.slice(
         0,
-        this.artistOptionsPerPage
+        this.artistOptionsPerPage,
       );
       this.artistOptionsPage = 2;
       /*

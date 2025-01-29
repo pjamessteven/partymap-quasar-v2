@@ -47,7 +47,7 @@
       >
         <CustomQScroll
           vertical
-          @scroll="onScrollMainContent"
+          @scroll="debouncedOnScrollMainContent"
           @scrollend="onScrollEnd"
           ref="scroll"
           :thumb-style="
@@ -541,20 +541,18 @@ export default {
       'loadArtists',
       'loadMoreArtists',
       'clearAllFilters',
+      'clearResults',
     ]),
     ...mapActions(useMainStore, ['loadIpInfo', 'persistTipsToLocalStorage']),
     clearArtists() {
       // force loading state after clicking to prevent glitchy feeling ui
-      this.eventDates = [];
-      this.eventDatesGroupedByMonth = {};
-      this.eventDatesLoading = true;
-
+      this.clearResults();
       this.controlArtist = [];
     },
     clickRegion(region) {
       this.currentLocationCity = region.long_name;
       this.currentLocationFromSearch = true;
-      console.log(region);
+
       toRaw(this.map).flyTo({
         center: { lat: region.lat, lng: region.lng },
         zoom: 7,
