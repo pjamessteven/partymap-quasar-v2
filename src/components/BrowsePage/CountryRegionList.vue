@@ -75,9 +75,7 @@
           <q-item-label
             class="inter bold"
             v-if="country.short_name !== 'ALL_COUNTRIES'"
-            >{{
-              countryCodes.find((x) => x.code == country.short_name)?.name
-            }}</q-item-label
+            >{{ $t('countries.' + country.short_name) }}</q-item-label
           >
           <q-item-label v-else class="inter bold">
             {{ $t('browse_page.all_countries') }}

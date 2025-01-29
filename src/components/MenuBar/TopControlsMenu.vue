@@ -262,10 +262,11 @@ export default {
       ],
       mapStyleOptions: [
         { label: this.$t('nav.satellite_map'), value: 'satellite' },
-        { label: this.$t('nav.satellite_map') + ' 3D', value: 'satellite-3d' },
-        { label: 'Monochrome', value: 'monochrome' },
-        { label: 'Classic', value: 'classic' },
+        { label: this.$t('nav.highcontrast_map'), value: 'monochrome' },
+        { label: this.$t('nav.transport_map'), value: 'classic' },
       ],
+      // { label: this.$t('nav.satellite_map') + ' 3D', value: 'satellite-3d' },
+
       localeOptions: Object.values(supportedLocales),
     };
   },

@@ -11,6 +11,10 @@ export const supportedLocales = {
     label: '简体中文',
     value: 'zh-cn',
   },
+  hi: {
+    label: 'हिन्दी',
+    value: 'hi',
+  },
   ru: {
     label: 'Русский',
     value: 'ru',
@@ -39,10 +43,6 @@ export const supportedLocales = {
     label: 'Português',
     value: 'pt',
   },
-  'pt-br': {
-    label: 'Português (Brasil)',
-    value: 'pt-br',
-  },
   nl: {
     label: 'Nederlands',
     value: 'nl',
@@ -51,10 +51,30 @@ export const supportedLocales = {
     label: 'Polski',
     value: 'pl',
   },
-  hi: {
-    label: 'हिन्दी',
-    value: 'hi',
+  cs: {
+    label: 'Čeština',
+    value: 'cs',
   },
+  // display only langauges (no content translation)
+  /*
+  se: {
+    label: 'Svenska',
+    value: 'se',
+  },
+  fi: {
+    label: 'Suomeksi',
+    value: 'fi',
+  },
+  da: {
+    label: 'Dansk',
+    value: 'da',
+  },
+  */
+  mi: {
+    label: 'Māori',
+    value: 'mi',
+  },
+
   /*
   lv: {
     label: 'Latviešu',

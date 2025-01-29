@@ -27,6 +27,12 @@ export default async function getTranslations(locale) {
       return (await import('src/i18n/locales/nl.js')).default;
     case 'pl':
       return (await import('src/i18n/locales/pl.js')).default;
+    case 'hi':
+      return (await import('src/i18n/locales/hi.js')).default;
+    case 'cs':
+      return (await import('src/i18n/locales/cs.js')).default;
+    case 'mi':
+      return (await import('src/i18n/locales/mi.js')).default;
     /*
     case 'ar':
       return (await import('src/i18n/locales/ar.js')).default;
@@ -70,8 +76,7 @@ export default async function getTranslations(locale) {
       return (await import('src/i18n/locales/ko.js')).default;
     case 'hy-am':
       return (await import('src/i18n/locales/hy-am.js')).default;
-    case 'hi':
-      return (await import('src/i18n/locales/hi.js')).default;
+
     case 'hr':
       return (await import('src/i18n/locales/hr.js')).default;
     case 'id':
