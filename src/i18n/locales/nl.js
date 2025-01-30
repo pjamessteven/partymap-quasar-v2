@@ -12,20 +12,26 @@ export default {
     done: 'Klaar',
   },
   meta: {
-    main_title: 'PartyMap | Festivals en Underground Cultuur',
+    main_title: 'PartyMap - Festivals en Undergroundcultuur {year}',
     main_description:
-      'PartyMap is een community-gedreven platform voor het ontdekken van festivals en evenementen over de hele wereld en in de buurt. Verken de wereld en ontdek wat er te doen is!',
+      'Festivalkaart {year}. Ontdek de beste muziekfestivals, feesten en optredens die plaatsvinden in {year} en daarna. PartyMap is een gratis, gemeenschapsgestuurd platform. Verken de kaart en ontdek wat er bij jou in de buurt gebeurt!',
+    browse_title: 'PartyMap - Wereldwijde Festivalagenda {year}',
+    browse_description:
+      'Festivalagenda voor {year}. Ontdek de beste muziekfestivals, feesten en optredens die plaatsvinden in {year} en daarna. PartyMap is een gratis, gemeenschapsgestuurd platform. Verken de kaart en ontdek wat er bij jou in de buurt gebeurt!',
+    country_title: 'PartyMap: Festivalagenda {country} {year}',
+    country_description:
+      '{country} Festivalagenda {year}. Bekijk alle aankomende muziekfestivals, feesten en optredens in {country} in {year}. PartyMap is een gratis, gemeenschapsgestuurd platform. Verken de kaart en ontdek wat er bij jou in de buurt gebeurt!',
     main_tags:
       'Festival, Festivals, Kaart, Evenementen, Feest, Fiesta, Muziek, Muziekfestival, Muziekfestivals, Beste Muziekfestivals, Alle Muziekfestivals, Top Muziekfestivals, Lijst van muziekfestivals, lijst',
-    events_on_partymap: 'Evenementen op PartyMap',
-    upcoming_events_featuring: 'Aankomende festivals en evenementen met ',
+    upcoming_events_featuring:
+      'Aankomende festivals, optredens en feesten met {artist} in {year}. {artistDescription}',
     artist_page_tags:
-      'Festival, Festivals, Kaart, Evenementen, Feest, Fiesta, Muziek, Muziekfestival, Muziekfestivals, Beste Muziekfestivals, Alle Muziekfestivals, Top Muziekfestivals, Lijst van muziekfestivals, lijst, soundcloud, bandcamp, youtube',
+      'Festival, Festivals, Kaart, Evenementen, Feest, Fiesta, Muziek, Muziekfestival, Muziekfestivals, Beste Muziekfestivals, Alle Muziekfestivals, Top Muziekfestivals, Lijst van muziekfestivals, lijst, SoundCloud, Bandcamp, YouTube',
     on_partymap: 'op PartyMap',
     more_about: 'Meer over',
-    in: 'in ',
+    in: ' in ',
     event_page_tags:
-      'Festival, Festivals, Kaart, Evenementen, Feest, Fiesta, Muziek, Muziekfestival, Muziekfestivals, Beste Muziekfestivals, Alle Muziekfestivals, Top Muziekfestivals, Lijst van muziekfestivals, lijst',
+      'Festival, Festivals, Kaart, Evenementen, Feest, Fiesta, Muziek, Muziekfestival, Muziekfestivals, Beste Muziekfestivals, Alle Muziekfestivals, Top Muziekfestivals, Lijst van muziekfestivals, festivallijst, festivalkaart, muziekfestivallijst, muziekfestivalkaart',
   },
   search: {
     search: 'Zoeken',

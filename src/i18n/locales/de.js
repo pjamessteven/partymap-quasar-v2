@@ -12,20 +12,26 @@ export default {
     done: 'Fertig',
   },
   meta: {
-    main_title: 'PartyMap | Festivals und Underground-Kultur',
+    main_title: 'PartyMap - Festivals und Underground-Kultur {year}',
     main_description:
-      "Entdecke Festivals und Events in Deiner Nähe und auf der ganzen Welt. PartyMap ist eine Community-Plattform für alle. Schau' Dich um und finde das beste Event für Deinen Geschmack. ",
+      'Festivalkarte {year}. Entdecken Sie die besten Musikfestivals, Partys und Konzerte in {year} und darüber hinaus. PartyMap ist eine kostenlose Community-Plattform. Erkunden Sie die Karte und finden Sie Veranstaltungen in Ihrer Nähe!',
+    browse_title: 'PartyMap - Globaler Festivalkalender {year}',
+    browse_description:
+      'Festivalkalender für {year}. Entdecken Sie die besten Musikfestivals, Partys und Konzerte in {year} und darüber hinaus. PartyMap ist eine kostenlose Community-Plattform. Erkunden Sie die Karte und finden Sie Veranstaltungen in Ihrer Nähe!',
+    country_title: 'PartyMap: Festivalkalender {country} {year}',
+    country_description:
+      'Festivalkalender {country} {year}. Entdecken Sie alle kommenden Musikfestivals, Partys und Konzerte in {country} während {year}. PartyMap ist eine kostenlose Community-Plattform. Erkunden Sie die Karte und finden Sie Veranstaltungen in Ihrer Nähe!',
     main_tags:
-      'Festival, Festivals, Karte, Events, Party, Fiesta, Musik, music, Musikfestival, Musikfestivals, Beste Festivals, Alle Musikfestivals, all festivals, Alle Festivals, Festival Deutschland, Top Musikfestivals, Liste deutscher Musikfestivals, Liste',
-    events_on_partymap: 'Events auf der Karte',
-    upcoming_events_featuring: 'Kommende Festivals und Events mit ',
+      'Festival, Festivals, Karte, Veranstaltungen, Party, Fiesta, Musik, Musikfestival, Musikfestivals, Beste Musikfestivals, Alle Musikfestivals, Top-Musikfestivals, Liste der Musikfestivals, Liste',
+    upcoming_events_featuring:
+      'Kommende Festivals, Konzerte und Partys mit {artist} im Jahr {year}. {artistDescription}',
     artist_page_tags:
-      'Festival, Festivals, Karte, Events, Party, Fiesta, Musik, Musikfestival, Musikfestivals, Beste Musikfestivals, Alle Musikfestivals, Top Musikfestivals, Liste der Musikfestivals, Liste, soundcloud, bandcamp, youtube',
-    on_partymap: 'auf der Karte',
+      'Festival, Festivals, Karte, Veranstaltungen, Party, Fiesta, Musik, Musikfestival, Musikfestivals, Beste Musikfestivals, Alle Musikfestivals, Top-Musikfestivals, Liste der Musikfestivals, Liste, SoundCloud, Bandcamp, YouTube',
+    on_partymap: 'auf PartyMap',
     more_about: 'Mehr über',
-    in: 'in ',
+    in: ' in ',
     event_page_tags:
-      'Festival, Festivals, Karte, Events, Party, Fiesta, Musik, Musikfestival, Musikfestivals, Beste Musikfestivals, Alle Musikfestivals, Top Musikfestivals, Liste der Musikfestivals, Liste',
+      'Festival, Festivals, Karte, Veranstaltungen, Party, Fiesta, Musik, Musikfestival, Musikfestivals, Beste Musikfestivals, Alle Musikfestivals, Top-Musikfestivals, Liste der Musikfestivals, Festivalliste, Festivalkarte, Musikfestivalliste, Musikfestivalkarte',
   },
   search: {
     search: 'Suche',

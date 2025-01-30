@@ -15,6 +15,7 @@ import { Browser } from '@capacitor/browser';
 import { CapacitorCookies } from '@capacitor/core'; // leave this, even though unused, the import is needed for cookies to work on iOS
 import { createMetaMixin } from 'quasar';
 import { i18n } from 'src/boot/i18n.ts';
+import dayjs from 'dayjs';
 
 export default {
   components: { SplashScreen },
@@ -27,19 +28,20 @@ export default {
   },
   mixins: [
     createMetaMixin(function () {
-      // "this" here refers to your component
+      const year = dayjs().year();
       return {
-        // assuming `this.myTitle` exists in your mixed in component
-        title: this.$t('meta.main_title'),
+        title: this.$t('meta.main_title', { year: year }),
         meta: {
+          /*
           viewport: {
             name: 'viewport',
             content:
               'width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0,user-scalable=no;user-scalable=0;',
           }, // THIS META TAG ENABLES 'FAST TAPPING' ON IOS DEVICES
+          */
           description: {
             name: 'description',
-            content: this.$t('meta.main_description'),
+            content: this.$t('meta.main_description', { year }),
           },
           keywords: {
             name: 'keywords',

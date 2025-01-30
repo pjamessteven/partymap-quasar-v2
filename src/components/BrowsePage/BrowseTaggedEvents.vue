@@ -125,6 +125,7 @@ export default {
   data() {
     return {};
   },
+
   //mounted() {},
   methods: {
     ...mapActions(useBrowseStore, ['loadEventDates']),

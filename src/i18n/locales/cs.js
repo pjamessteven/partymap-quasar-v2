@@ -12,20 +12,26 @@ export default {
     done: 'Hotovo',
   },
   meta: {
-    main_title: 'PartyMap | Festivaly a undergroundová kultura',
+    main_title: 'PartyMap - Festivaly a undergroundová kultura {year}',
     main_description:
-      'Najděte festivaly a události ve vašem okolí a po celém světě. PartyMap je komunitní platforma pro každého. Prozkoumejte mapu a objevte, co je dobré!',
+      'Mapa festivalů {year}. Objevte nejlepší hudební festivaly, party a koncerty, které se konají v roce {year} a dále. PartyMap je bezplatná platforma založená na komunitě. Prozkoumejte mapu a zjistěte, co se děje ve vašem okolí!',
+    browse_title: 'PartyMap - Globální festivalový kalendář {year}',
+    browse_description:
+      'Festivalový kalendář pro rok {year}. Objevte nejlepší hudební festivaly, party a koncerty, které se konají v roce {year} a dále. PartyMap je bezplatná platforma založená na komunitě. Prozkoumejte mapu a zjistěte, co se děje ve vašem okolí!',
+    country_title: 'PartyMap: Festivalový kalendář {country} {year}',
+    country_description:
+      'Festivalový kalendář {country} {year}. Prohlédněte si všechny nadcházející hudební festivaly, party a koncerty v {country} během roku {year}. PartyMap je bezplatná platforma založená na komunitě. Prozkoumejte mapu a zjistěte, co se děje ve vašem okolí!',
     main_tags:
-      'Festival, Festivaly, Mapa, Události, Párty, Fiesta, Hudba, Hudební festival, Hudební festivaly, Nejlepší hudební festivaly, Všechny hudební festivaly, Top hudební festivaly, Seznam hudebních festivalů, seznam',
-    events_on_partymap: 'Události na PartyMap',
-    upcoming_events_featuring: 'Nadcházející festivaly a události s ', // jméno umělce
+      'Festival, Festivaly, Mapa, Události, Party, Fiesta, Hudba, Hudební festival, Hudební festivaly, Nejlepší hudební festivaly, Všechny hudební festivaly, Nejlepší hudební festivaly, Seznam hudebních festivalů, seznam',
+    upcoming_events_featuring:
+      'Nadcházející festivaly, koncerty a party s účastí {artist} v roce {year}. {artistDescription}',
     artist_page_tags:
-      'Festival, Festivaly, Mapa, Události, Párty, Fiesta, Hudba, Hudební festival, Hudební festivaly, Nejlepší hudební festivaly, Všechny hudební festivaly, Top hudební festivaly, Seznam hudebních festivalů, seznam, soundcloud, bandcamp, youtube',
+      'Festival, Festivaly, Mapa, Události, Party, Fiesta, Hudba, Hudební festival, Hudební festivaly, Nejlepší hudební festivaly, Všechny hudební festivaly, Nejlepší hudební festivaly, Seznam hudebních festivalů, seznam, soundcloud, bandcamp, youtube',
     on_partymap: 'na PartyMap',
-    more_about: 'Více o', // {{název události}},
+    more_about: 'Více o',
     in: ' v ',
     event_page_tags:
-      'Festival, Festivaly, Mapa, Události, Párty, Fiesta, Hudba, Hudební festival, Hudební festivaly, Nejlepší hudební festivaly, Všechny hudební festivaly, Top hudební festivaly, Seznam hudebních festivalů, seznam',
+      'Festival, Festivaly, Mapa, Události, Party, Fiesta, Hudba, Hudební festival, Hudební festivaly, Nejlepší hudební festivaly, Všechny hudební festivaly, Nejlepší hudební festivaly, Seznam hudebních festivalů, seznam festivalů, mapa festivalů, seznam hudebních festivalů, mapa hudebních festivalů',
   },
   search: {
     search: 'Hledat',

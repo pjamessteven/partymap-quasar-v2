@@ -12,20 +12,26 @@ export default {
     done: '完成',
   },
   meta: {
-    main_title: 'PartyMap |音乐节和地下文化',
+    main_title: 'PartyMap - {year} 年音乐节与地下文化',
     main_description:
-      'PartyMap 是一个社区驱动的平台，用于发现全球和您附近的音乐节和活动。探索世界，找到好的活动!',
+      '{year} 年音乐节地图。探索 {year} 年及未来最热门的音乐节、派对和演出。PartyMap 是一个免费的社区驱动平台。浏览地图，发现您附近的活动！',
+    browse_title: 'PartyMap - 全球音乐节日历 {year}',
+    browse_description:
+      '{year} 年音乐节日历。探索 {year} 年及未来最热门的音乐节、派对和演出。PartyMap 是一个免费的社区驱动平台。浏览地图，发现您附近的活动！',
+    country_title: 'PartyMap：{country} {year} 年音乐节日历',
+    country_description:
+      '{country} {year} 年音乐节日历。查看 {year} 年 {country} 所有即将举办的音乐节、派对和演出。PartyMap 是一个免费的社区驱动平台。浏览地图，发现您附近的活动！',
     main_tags:
-      '音乐节，音乐节，地图，活动，派对，音乐，音乐节，最佳音乐节，所有音乐节，顶级音乐节，音乐节列表，列表',
-    events_on_partymap: 'PartyMap上的活动',
-    upcoming_events_featuring: '即将举行的音乐节和活动',
+      '音乐节, 节日, 地图, 活动, 派对, 音乐, 最佳音乐节, 所有音乐节, 顶级音乐节, 音乐节列表, 地下文化',
+    upcoming_events_featuring:
+      '{year} 年即将举办由 {artist} 参与的音乐节、演出和派对。{artistDescription}',
     artist_page_tags:
-      '音乐节，音乐节，地图，活动，派对，音乐，音乐节，最佳音乐节，所有音乐节，顶级音乐节，音乐节列表，列表，soundcloud，bandcamp，youtube',
-    on_partymap: '在PartyMap上',
+      '音乐节, 节日, 地图, 活动, 派对, 音乐, 最佳音乐节, SoundCloud, Bandcamp, YouTube, 演出信息',
+    on_partymap: '在 PartyMap 上',
     more_about: '更多关于',
-    in: '在',
+    in: ' 在 ',
     event_page_tags:
-      '音乐节，音乐节，地图，活动，派对，音乐，音乐节，最佳音乐节，所有音乐节，顶级音乐节，音乐节列表，列表',
+      '音乐节, 节日, 地图, 活动, 派对, 音乐, 音乐节列表, 音乐节地图, 演出信息, 地下文化',
   },
   search: {
     search: '搜索',

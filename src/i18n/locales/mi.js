@@ -12,21 +12,26 @@ export default {
     done: 'Kua oti',
   },
   meta: {
-    main_title: 'PartyMap | Ngā Hui me te Ahurea Muna',
+    main_title: 'PartyMap - Ngā Hui me te Ahurea Muna {year}',
     main_description:
-      'Kimihia ngā hui me ngā huihuinga i tō rohe me te ao whānui. He pae hapori a PartyMap mō te katoa. Tirohia te mahere me te kimihia te mea pai!',
+      'Mahere hui {year}. Kimihia ngā hui puoro rongonui, ngā pāti me ngā mahi toi e heke mai ana i te tau {year} me ngā tau e heke mai. He wātū ā-hapori, utu kore a PartyMap. Tirohia te mahere me te rapu kaupapa e pātata ana ki a koe!',
+    browse_title: 'PartyMap - Maramataka Hui ā-Ao {year}',
+    browse_description:
+      'Maramataka hui mō {year}. Kimihia ngā hui puoro rongonui, ngā pāti me ngā mahi toi e heke mai ana i te tau {year} me ngā tau e heke mai. He wātū ā-hapori, utu kore a PartyMap. Tirohia te mahere me te rapu kaupapa e pātata ana ki a koe!',
+    country_title: 'PartyMap: Maramataka Hui o {country} {year}',
+    country_description:
+      'Maramataka hui o {country} {year}. Tirohia ngā hui puoro katoa, ngā pāti me ngā mahi toi e heke mai ana ki {country} i te tau {year}. He wātū ā-hapori, utu kore a PartyMap. Tirohia te mahere me te rapu kaupapa e pātata ana ki a koe!',
     main_tags:
-      'Hui, Ngā Hui, Mahere, Huihuinga, Pāti, Fiesta, Puoro, Hui Puoro, Ngā Hui Puoro, Ngā Hui Puoro Pai, Ngā Hui Puoro Katoa, Ngā Hui Puoro Runga, Rārangi o ngā hui puoro, rārangi',
-    events_on_partymap: 'Ngā Huihuinga i runga i a PartyMap',
+      'Hui, Ngā Hui, Mahere, Kaupapa, Pāti, Puoro, Hui Puoro, Ngā Hui Puoro Pai, Ngā Hui Puoro Katoa, Rārangi Hui Puoro',
     upcoming_events_featuring:
-      'Ngā hui me ngā huihuinga e haere ake nei e whai wāhi ana ', // ingoa o te kaitoi
+      'Ngā kaupapa e heke mai ana me {artist} i te tau {year}. {artistDescription}',
     artist_page_tags:
-      'Hui, Ngā Hui, Mahere, Huihuinga, Pāti, Fiesta, Puoro, Hui Puoro, Ngā Hui Puoro, Ngā Hui Puoro Pai, Ngā Hui Puoro Katoa, Ngā Hui Puoro Runga, Rārangi o ngā hui puoro, rārangi, soundcloud, bandcamp, youtube',
-    on_partymap: 'i runga i a PartyMap',
-    more_about: 'Ētahi atu mō', // {{event name}},
-    in: ' i ',
+      'Hui, Ngā Hui, Mahere, Kaupapa, Pāti, Puoro, Hui Puoro, SoundCloud, Bandcamp, YouTube',
+    on_partymap: 'i runga i PartyMap',
+    more_about: 'Ētahi atu kōrero mō',
+    in: ' ki ',
     event_page_tags:
-      'Hui, Ngā Hui, Mahere, Huihuinga, Pāti, Fiesta, Puoro, Hui Puoro, Ngā Hui Puoro, Ngā Hui Puoro Pai, Ngā Hui Puoro Katoa, Ngā Hui Puoro Runga, Rārangi o ngā hui puoro, rārangi',
+      'Hui, Ngā Hui, Mahere, Kaupapa, Pāti, Puoro, Hui Puoro, Rārangi Hui, Mahere Hui, Rārangi Hui Puoro',
   },
   search: {
     search: 'Rapu',

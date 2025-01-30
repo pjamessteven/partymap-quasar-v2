@@ -11,21 +11,20 @@ export default {
     share: 'Share',
     done: 'Done',
   },
-  meta: {
-    main_title: 'PartyMap | Festivals and Underground Culture ',
-    main_description:
-      "Find feativals and events in your area and around the world. PartyMap is a community platform for everybody. Explore the map and find what's good!",
-    main_tags:
-      'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list',
-    events_on_partymap: 'Events on PartyMap',
-    upcoming_events_featuring: 'Upcoming festivals and events featuring ', // name of artist
-    artist_page_tags:
-      'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list, soundcloud, bandcamp, youtube',
-    on_partymap: 'on PartyMap',
-    more_about: 'More about', // {{event name}},
-    in: ' in ',
-    event_page_tags:
-      'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list',
+  meta:   "meta": {
+    "main_title": "PartyMap - Festivaly a undergroundová kultura {year}",
+    "main_description": "Mapa festivalů {year}. Objevte nejlepší hudební festivaly, party a koncerty, které se konají v roce {year} a dále. PartyMap je bezplatná platforma založená na komunitě. Prozkoumejte mapu a zjistěte, co se děje ve vašem okolí!",
+    "browse_title": "PartyMap - Globální festivalový kalendář {year}",
+    "browse_description": "Festivalový kalendář pro rok {year}. Objevte nejlepší hudební festivaly, party a koncerty, které se konají v roce {year} a dále. PartyMap je bezplatná platforma založená na komunitě. Prozkoumejte mapu a zjistěte, co se děje ve vašem okolí!",
+    "country_title": "PartyMap: Festivalový kalendář {country} {year}",
+    "country_description": "Festivalový kalendář {country} {year}. Prohlédněte si všechny nadcházející hudební festivaly, party a koncerty v {country} během roku {year}. PartyMap je bezplatná platforma založená na komunitě. Prozkoumejte mapu a zjistěte, co se děje ve vašem okolí!",
+    "main_tags": "Festival, Festivaly, Mapa, Události, Party, Fiesta, Hudba, Hudební festival, Hudební festivaly, Nejlepší hudební festivaly, Všechny hudební festivaly, Nejlepší hudební festivaly, Seznam hudebních festivalů, seznam",
+    "upcoming_events_featuring": "Nadcházející festivaly, koncerty a party s účastí {artist} v roce {year}. {artistDescription}",
+    "artist_page_tags": "Festival, Festivaly, Mapa, Události, Party, Fiesta, Hudba, Hudební festival, Hudební festivaly, Nejlepší hudební festivaly, Všechny hudební festivaly, Nejlepší hudební festivaly, Seznam hudebních festivalů, seznam, soundcloud, bandcamp, youtube",
+    "on_partymap": "na PartyMap",
+    "more_about": "Více o",
+    "in": " v ",
+    "event_page_tags": "Festival, Festivaly, Mapa, Události, Party, Fiesta, Hudba, Hudební festival, Hudební festivaly, Nejlepší hudební festivaly, Všechny hudební festivaly, Nejlepší hudební festivaly, Seznam hudebních festivalů, seznam festivalů, mapa festivalů, seznam hudebních festivalů, mapa hudebních festivalů"
   },
   search: {
     search: 'Search',

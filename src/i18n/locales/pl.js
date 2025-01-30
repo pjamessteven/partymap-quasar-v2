@@ -12,20 +12,26 @@ export default {
     done: 'Gotowe',
   },
   meta: {
-    main_title: 'PartyMap | Festiwale i Kultura Underground',
+    main_title: 'PartyMap - Festiwale i Kultura Underground {year}',
     main_description:
-      'PartyMap to platforma zarządzana przez społeczność, służąca do odkrywania festiwali i wydarzeń na całym świecie i w Twojej okolicy. Odkrywaj świat i dowiedz się, co jest najlepsze!',
+      'Mapa festiwali {year}. Odkryj najlepsze festiwale muzyczne, imprezy i koncerty w {year} i kolejnych latach. PartyMap to darmowa platforma społecznościowa. Przeglądaj mapę i znajdź wydarzenia w Twojej okolicy!',
+    browse_title: 'PartyMap - Globalny Kalendarz Festiwali {year}',
+    browse_description:
+      'Kalendarz festiwali na {year} rok. Odkryj najlepsze festiwale muzyczne, imprezy i koncerty w {year} i kolejnych latach. PartyMap to darmowa platforma społecznościowa. Przeglądaj mapę i znajdź wydarzenia w Twojej okolicy!',
+    country_title: 'PartyMap: Kalendarz Festiwali {country} {year}',
+    country_description:
+      'Kalendarz festiwali {country} {year}. Przeglądaj wszystkie nadchodzące festiwale muzyczne, imprezy i koncerty w {country} w {year} roku. PartyMap to darmowa platforma społecznościowa. Przeglądaj mapę i znajdź wydarzenia w Twojej okolicy!',
     main_tags:
-      'Festiwal, Festiwale, Mapa, Wydarzenia, Impreza, Fiesta, Muzyka, Festiwal Muzyki, Festiwale Muzyki, Najlepsze Festiwale Muzyki, Wszystkie Festiwale Muzyki, Top Festiwale Muzyki, Lista festiwali muzyki, lista',
-    events_on_partymap: 'Wydarzenia na PartyMap',
-    upcoming_events_featuring: 'Nadchodzące festiwale i wydarzenia z udziałem ',
+      'Festiwal, Festiwale, Mapa, Wydarzenia, Impreza, Muzyka, Festiwal Muzyczny, Festiwale Muzyczne, Najlepsze Festiwale Muzyczne, Wszystkie Festiwale Muzyczne, Top Festiwale Muzyczne, Lista Festiwali Muzycznych',
+    upcoming_events_featuring:
+      'Nadchodzące festiwale, koncerty i imprezy z udziałem {artist} w {year}. {artistDescription}',
     artist_page_tags:
-      'Festiwal, Festiwale, Mapa, Wydarzenia, Impreza, Fiesta, Muzyka, Festiwal Muzyki, Festiwale Muzyki, Najlepsze Festiwale Muzyki, Wszystkie Festiwale Muzyki, Top Festiwale Muzyki, Lista festiwali muzyki, lista, soundcloud, bandcamp, youtube',
+      'Festiwal, Festiwale, Mapa, Wydarzenia, Impreza, Muzyka, Festiwal Muzyczny, Festiwale Muzyczne, SoundCloud, Bandcamp, YouTube',
     on_partymap: 'na PartyMap',
     more_about: 'Więcej o',
     in: ' w ',
     event_page_tags:
-      'Festiwal, Festiwale, Mapa, Wydarzenia, Impreza, Fiesta, Muzyka, Festiwal Muzyki, Festiwale Muzyki, Najlepsze Festiwale Muzyki, Wszystkie Festiwale Muzyki, Top Festiwale Muzyki, Lista festiwali muzyki, lista',
+      'Festiwal, Festiwale, Mapa, Wydarzenia, Impreza, Muzyka, Festiwal Muzyczny, Lista Festiwali, Mapa Festiwali, Lista Festiwali Muzycznych, Mapa Festiwali Muzycznych',
   },
   search: {
     search: 'Szukaj',

@@ -12,20 +12,26 @@ export default {
     done: '完成',
   },
   meta: {
-    main_title: 'PartyMap | 節慶和地下文化',
+    main_title: 'PartyMap - {year} 年音樂節與地下文化',
     main_description:
-      'PartyMap 是一個由社群驅動的平台，用於發現全球和您附近的節慶和活動。探索世界，找到最好的活動!',
+      '{year} 年音樂節地圖。探索 {year} 年及未來最熱門的音樂節、派對和演出活動。PartyMap 是一個免費的社群驅動平台。瀏覽地圖，發掘您附近的活動！',
+    browse_title: 'PartyMap - 全球音樂節日曆 {year}',
+    browse_description:
+      '{year} 年音樂節日曆。探索 {year} 年及未來最熱門的音樂節、派對和演出活動。PartyMap 是一個免費的社群驅動平台。瀏覽地圖，發掘您附近的活動！',
+    country_title: 'PartyMap：{country} {year} 年音樂節日曆',
+    country_description:
+      '{country} {year} 年音樂節日曆。查看 {year} 年 {country} 所有即將舉辦的音樂節、派對和演出活動。PartyMap 是一個免費的社群驅動平台。瀏覽地圖，發掘您附近的活動！',
     main_tags:
-      '節慶, 節慶, 地圖, 活動, 派對, 節日, 音樂, 音樂節, 音樂節慶, 最佳音樂節, 所有音樂節, 頂級音樂節, 音樂節列表, 列表',
-    events_on_partymap: 'PartyMap上的活動',
-    upcoming_events_featuring: '即將舉行的節慶和活動，特色是',
+      '音樂節, 節慶, 地圖, 活動, 派對, 音樂, 最佳音樂節, 所有音樂節, 頂級音樂節, 音樂節列表, 地下文化',
+    upcoming_events_featuring:
+      '{year} 年即將舉辦由 {artist} 參與的音樂節、演出和派對。{artistDescription}',
     artist_page_tags:
-      '節慶, 節慶, 地圖, 活動, 派對, 節日, 音樂, 音樂節, 音樂節慶, 最佳音樂節, 所有音樂節, 頂級音樂節, 音樂節列表, 列表, soundcloud, bandcamp, youtube',
-    on_partymap: '在PartyMap上',
+      '音樂節, 節慶, 地圖, 活動, 派對, 音樂, 最佳音樂節, SoundCloud, Bandcamp, YouTube, 演出資訊',
+    on_partymap: '在 PartyMap 上',
     more_about: '更多關於',
-    in: '在',
+    in: ' 於 ',
     event_page_tags:
-      '節慶, 節慶, 地圖, 活動, 派對, 節日, 音樂, 音樂節, 音樂節慶, 最佳音樂節, 所有音樂節, 頂級音樂節, 音樂節列表, 列表',
+      '音樂節, 節慶, 地圖, 活動, 派對, 音樂, 音樂節列表, 音樂節地圖, 演出資訊, 地下文化',
   },
   search: {
     search: '搜尋',

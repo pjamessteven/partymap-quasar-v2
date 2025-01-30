@@ -233,6 +233,7 @@ import { useQueryStore } from 'src/stores/query';
 import { useMapStore } from 'src/stores/map';
 import { useMainStore } from 'src/stores/main';
 import { createMetaMixin } from 'quasar';
+import dayjs from 'dayjs';
 
 export default {
   name: 'ArtistPage',
@@ -242,24 +243,28 @@ export default {
       // "this" here refers to your component
       return {
         // assuming `this.myTitle` exists in your mixed in component
-        title: this.computedName + ' ' + this.$t('meta.events_on_partymap'),
+        title: this.computedName + ' ' + this.$t('meta.on_partymap'),
         meta: {
           description: {
             name: 'description',
-            content:
-              this.$t('meta.upcoming_events_featuring') +
-                ' ' +
-                this.computedName +
-                this.artist?.disambiguation?.length >
-              0
-                ? '( ' + this.artist.disambiguation_t ||
-                  this.artist.disambiguation + ') '
-                : '' + '. ' + this.computedDescription,
+            content: this.$t('meta.upcoming_events_featuring', {
+              artist: this.computedName,
+              year: this.currentYear,
+              description:
+                this.artist?.disambiguation?.length > 0
+                  ? '( ' + this.artist.disambiguation_t ||
+                    this.artist.disambiguation + ') '
+                  : '' + '. ' + this.computedDescription,
+            }),
           },
           keywords: {
             name: 'keywords',
             content:
-              this.computedName + ', ' + this.$t('meta.artist_page_tags'),
+              this.computedName +
+              ', ' +
+              this.$t('meta.artist_page_tags') +
+              ', ' +
+              this.currentYear,
           },
         },
       };
@@ -278,6 +283,7 @@ export default {
       showFullDescription: false,
       loadedFullRes: false, // full resolution image loaded, hide smaller placeholder
       previousMenubarOpacity: 0,
+      currentYear: dayjs().year(),
     };
   },
   props: {

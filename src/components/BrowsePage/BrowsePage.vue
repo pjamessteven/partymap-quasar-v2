@@ -75,6 +75,7 @@ import InnerLoading from 'src/components/InnerLoading.vue';
 import CountryRegionList from './CountryRegionList.vue';
 import CustomQScroll from '../CustomQScroll.vue';
 import TypographyTabs from '../TypographyTabs.vue';
+
 export default {
   name: 'BrowsePage',
   components: {

@@ -7,21 +7,13 @@
       <div class="flex column grow no-wrap" :class="$q.screen.gt.sm ? '' : ''">
         <div class="flex column" v-if="$q.screen.gt.sm">
           <div class="text-h5 inter bolder q-ml-lg">
-            <div
-              v-if="$route.params.country !== 'all'"
-              class="flex items-center"
-            >
+            <div v-if="currentCountry" class="flex items-center">
               {{ $t('nearby_view.upcoming_in') }}&nbsp;<span
                 v-if="$route.params.region"
                 >{{ $route.params.region }},&nbsp;</span
-              >{{
-                countryCodes.find((x) => x.code == $route.params.country)?.name
-              }}&nbsp;
+              >{{ currentCountry?.name }}&nbsp;
               <div style="font-size: 32pt" class="q-ml-xs" v-if="false">
-                {{
-                  countryCodes.find((x) => x.code == $route.params.country)
-                    ?.emoji_flag
-                }}
+                {{ currentCountry?.emoji_flag }}
               </div>
             </div>
             <span v-else>
@@ -144,6 +136,7 @@ import { mapActions, mapWritableState, mapState } from 'pinia';
 import CustomQScroll from 'components/CustomQScroll.vue';
 import countryCodes from 'src/assets/country-code-emoji';
 import dayjs from 'dayjs';
+import { createMetaMixin } from 'quasar';
 
 export default {
   components: {
@@ -151,7 +144,51 @@ export default {
     EventDatePosterList,
     CustomQScroll,
   },
+  mixins: [
+    createMetaMixin(function () {
+      // "this" here refers to your component
+      const country = this.getCurrentCountry(this.$route.params.country);
 
+      const year = dayjs().year();
+      return {
+        // assuming `this.myTitle` exists in your mixed in component
+        title: country
+          ? this.$t('meta.country_title', {
+              country: country.name,
+              year,
+            })
+          : this.$t('meta.browse_title', { year }),
+        meta: {
+          viewport: {
+            name: 'viewport',
+            content:
+              'width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0,user-scalable=no;user-scalable=0;',
+          }, // THIS META TAG ENABLES 'FAST TAPPING' ON IOS DEVICES
+          description: {
+            name: 'description',
+            content: country
+              ? this.$t('meta.country_description', {
+                  country: country.name,
+                  year,
+                })
+              : this.$t('meta.browse_description', {
+                  year,
+                }),
+          },
+          keywords: {
+            name: 'keywords',
+          },
+          content: country
+            ? this.$t('meta.main_tags') +
+              ', ' +
+              country.name +
+              ', ' +
+              country.code
+            : this.$t('meta.main_tags'),
+        },
+      };
+    }),
+  ],
   async mounted() {
     this.getInitialList();
   },
@@ -217,6 +254,9 @@ export default {
       this.clearResults();
       this.eventDatesPage = page;
       this.loadEventDates();
+    },
+    getCurrentCountry(countryCode) {
+      return this.countryCodes?.find((x) => x.code == countryCode);
     },
   },
   watch: {
@@ -331,6 +371,11 @@ export default {
       'eventDatesLoading',
       'eventDatesGroupedByMonth',
     ]),
+    currentCountry() {
+      return this.countryCodes?.find(
+        (x) => x.code == this.$route.params.country,
+      );
+    },
     topTagsWithoutSelected() {
       return this.topTagsInArea.filter(
         (x) => this.controlTag.findIndex((y) => y.tag === x.tag) === -1,
