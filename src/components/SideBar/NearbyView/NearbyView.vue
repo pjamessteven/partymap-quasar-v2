@@ -381,7 +381,9 @@
               </div>
               <TagExplorer
                 mode="all"
-                :class="$q.screen.gt.sm ? 'q-px-lg q-mb-sm' : 'q-pl-md '"
+                :class="
+                  $q.screen.gt.sm ? 'q-px-lg q-mb-sm' : 'q-pl-md q-mb-sm '
+                "
               />
             </div>
             <!-- artists -->
@@ -408,14 +410,14 @@
               </div>
 
               <ArtistsComponent
-                :size="$q.screen.gt.sm ? 'lg' : $q.screen.sm ? 'lg' : 'md'"
+                :size="$q.screen.gt.sm ? 'lg' : $q.screen.sm ? 'lg' : 'lg'"
                 :artists="nearbyArtists"
                 :hasNext="nearbyArtistsHasNext"
                 :loadMore="debouncedLoadNearbyArtists"
                 :style="
                   $q.screen.gt.sm
                     ? 'margin-bottom: -16px; '
-                    : 'margin-bottom: -8px;'
+                    : 'margin-bottom: -16px; margin-top: -8px'
                 "
               />
             </div>
@@ -450,11 +452,11 @@
                 :artists="artistOptions"
                 :hasNext="artistOptionsHasNext"
                 :loadMore="debouncedLoadArtistOptions"
-                :size="$q.screen.gt.sm ? 'lg' : 'md'"
+                :size="$q.screen.gt.sm ? 'lg' : 'lg'"
                 :style="
                   $q.screen.gt.sm
                     ? 'margin-bottom: -16px; '
-                    : 'margin-bottom: -8px;'
+                    : 'margin-bottom: -16px; margin-top: -8px'
                 "
               />
             </div>
@@ -534,8 +536,8 @@
             <div
               class="location-header sticky q-pl-sm flex row items-center justify-between"
               :class="$q.screen.gt.sm ? 'q-mt-sm' : ''"
-              v-if="eventDates && eventDates?.length > 0"
               style="height: 56px"
+              v-if="nearbyEventDates?.length > 0"
             >
               <!--<div class="separator" /> -->
 
@@ -543,7 +545,7 @@
                 class="flex"
                 :class="$q.screen.gt.sm ? 'q-pl-md' : 'q-pl-sm'"
               >
-                <div class="ellipsis" v-if="eventDates">
+                <div class="ellipsis">
                   {{ $t('nearby_view.all_upcoming_events') }}:
                 </div>
               </div>
@@ -556,7 +558,17 @@
                       -->
             </div>
 
+            <div
+              v-if="
+                nearbyEventDates?.length > 0 &&
+                (!eventDates || eventDates?.length === 0)
+              "
+              style="position: relative; height: 200px; width: 100%"
+            >
+              <InnerLoading :solid="false" />
+            </div>
             <EventDateList
+              :class="{ 'q-px-sm': $q.screen.lt.md }"
               v-if="eventDates && compactView"
               :groupByMonth="false"
               :eventDates="eventDates"
@@ -566,6 +578,7 @@
             />
             <EventDatePosterList
               v-if="eventDates && !compactView"
+              :class="{ 'q-px-sm': $q.screen.lt.md }"
               :groupByMonth="false"
               :eventDates="eventDates"
               :hasNext="eventDatesHasNext && !nearbyEventDatesHasNext"
@@ -988,7 +1001,11 @@ export default {
 
     if (this.userLocation) {
       this.restoreUserLocation();
+      if (!this.nearbyEventDates || this.nearbyEventDates.length === 0) {
+        this.loadEverything();
+      }
     } else {
+      // setting location will trigger loadEverything()
       try {
         await this.getFineLocation();
       } catch {

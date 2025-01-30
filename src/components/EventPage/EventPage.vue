@@ -58,7 +58,7 @@
         <div class="row flex grow main-row no-wrap justify-center">
           <div
             class="event-page-ios-overlay"
-            v-if="$q.platform.is.ios && !mapStore.peekMap"
+            v-if="!mapStore.peekMap"
             @click="mapStore.peekMap = true"
           />
           <div
@@ -161,16 +161,14 @@
                       'q-mt-sm': $q.screen.lt.sm,
                     }"
                   >
-                    <transition appear enter-active-class="animated fadeIn ">
-                      <NextEventDateSummary
-                        :class="{
-                          'o-050': editing,
-                        }"
-                        class=""
-                        :ed="selectedEventDate"
-                        v-if="!!event || route.query.dateString"
-                      />
-                    </transition>
+                    <NextEventDateSummary
+                      :class="{
+                        'o-050': editing,
+                      }"
+                      class=""
+                      :ed="selectedEventDate"
+                      v-if="!!event || route.query.dateString"
+                    />
                   </div>
                   <div class="" v-if="false">
                     <div
@@ -426,7 +424,7 @@
                           class="button-light"
                           :label="t('event.edit')"
                           no-caps
-                          :icon="
+                          :icon-right="
                             $q.screen.gt.xs
                               ? 'mdi-square-edit-outline'
                               : undefined
@@ -684,7 +682,7 @@
                                   :class="
                                     $q.screen.gt.xs ? 'q-mr-sm' : 'q-mr-sm'
                                   "
-                                ></q-icon>
+                                />
                                 {{ t('event.save_to_device') }}
                               </q-btn>
 
@@ -757,7 +755,7 @@
                                 class="button-light"
                                 :label="t('event.edit')"
                                 no-caps
-                                :icon="
+                                :icon-right="
                                   $q.screen.gt.xs
                                     ? 'mdi-square-edit-outline'
                                     : undefined
@@ -1340,10 +1338,13 @@ onBeforeRouteLeave((to, from, next) => {
         mainStore.showPanelBackground = true;
         mainStore.sidebarOpacity = 1;
       }
+      next();
 
+      /*
       setTimeout(() => {
         next();
       }, 150);
+      */
     } else {
       next();
     }
@@ -1371,6 +1372,7 @@ const goBack = () => {
 const onScrollMainContent = (info: any) => {
   // console.log(info);
   // var height = window.innerHeight / 3 - 120; // this is the height of the gap between menu bar and top of event card
+
   scrollPercentage.value = info.verticalPercentage;
   let verticalPostion = info.verticalPosition;
   if (scrollPercentage.value > 0) {
@@ -1997,8 +1999,7 @@ a {
 
     .scroll-area {
       height: 100%;
-      overflow-x: hidden;
-      overflow-y: auto;
+
       // -webkit-overflow-scrolling: touch; // WOW THIS ACTUALLY HELPS ON IOS
 
       &.disable-scroll {
@@ -2017,6 +2018,7 @@ a {
           z-index: 0;
           pointer-events: all;
           margin-top: -64px;
+          cursor: pointer;
         }
 
         .content-card {
@@ -2091,12 +2093,7 @@ a {
                 height: 100%;
                 // color: white;
                 z-index: 2;
-                .mobile-hide-icon {
-                  position: absolute;
-                  right: 0px;
-                }
-                .tags-wrapper {
-                }
+
                 :deep(.q-btn) {
                   border: 1px solid rgba(255, 255, 255, 0.3);
                   background: rgba(255, 255, 255, 0.1) !important;
@@ -2130,6 +2127,9 @@ a {
               margin-top: -18px;
               min-height: 800px;
               position: relative;
+              .tags-wrapper {
+                max-width: 550px;
+              }
             }
             :deep(.event-page-header) {
               position: sticky;

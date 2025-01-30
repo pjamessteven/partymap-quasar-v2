@@ -13,7 +13,7 @@
       ref="scrollArea"
       style="height: 100%; width: 100%"
       :thumb-style="
-        $q.screen.gt.xs
+        Screen.gt.xs
           ? {
               bottom: '0px',
               height: '8px',
@@ -32,11 +32,11 @@
         <div
           class="flex column search-column no-wrap"
           :class="{
-            'q-py-xl ': $q.screen.gt.sm,
-            ' q-py-lg ': $q.screen.lt.md,
+            'q-py-xl ': Screen.gt.sm,
+            ' q-py-lg ': Screen.lt.md,
           }"
         >
-          <div class="q-px-md" :class="{ 'q-mb-sm': $q.screen.gt.sm }">
+          <div class="q-px-md" :class="{ 'q-mb-sm': Screen.gt.sm }">
             <q-input
               @keydown.esc="
                 () => {
@@ -50,8 +50,7 @@
               rounded
               borderless
               bg-color="white"
-              :style="$q.screen.gt.sm ? 'height: 48px' : 'height: 40px'"
-              :autofocus="true"
+              :style="Screen.gt.sm ? 'height: 48px' : 'height: 40px'"
               @focus="onSearchbarFocus()"
               @blur="onSearchbarBlur()"
               @clear="clearSearch()"
@@ -61,9 +60,9 @@
               :placeholder="
                 placeholder && false
                   ? placeholder
-                  : $q.screen.gt.xs
-                    ? $t('search.search_box_text')
-                    : $t('search.search_box_text_mobile')
+                  : Screen.gt.xs
+                    ? t('search.search_box_text')
+                    : t('search.search_box_text_mobile')
               "
             >
               <template v-slot:prepend>
@@ -99,12 +98,9 @@
             <div
               class="q-px-md search-header metropolis text-h5 bolder q-mt-lg q-mb-md"
             >
-              {{ $t('event.dates') }}
+              {{ t('event.dates') }}
             </div>
-            <div
-              class="q-px-md search-component q-mb-sm"
-              v-if="$q.screen.gt.sm"
-            >
+            <div class="q-px-md search-component q-mb-sm" v-if="Screen.gt.sm">
               <DateControl
                 class="date-control"
                 @click.stop
@@ -119,7 +115,10 @@
             >
               <q-card
                 class="tag q-pa-xs grow flex row items-center no-wrap justify-between"
-                :class="{ selected: controlDateRangeSelectedOption?.value }"
+                :class="{
+                  'no-hover': Platform.is.ios,
+                  selected: controlDateRangeSelectedOption?.value,
+                }"
                 @click.stop="showingDateControl = true"
                 style="
                   border-radius: 50px !important;
@@ -153,17 +152,17 @@
 
             <div
               v-if="
-                $q.screen.lt.sm &&
+                Screen.lt.sm &&
                 $route.name === 'Explore' &&
                 queryStore.topTagsInArea.length
               "
               class="q-px-md search-header metropolis text-h5 bolder q-mt-lg q-mb-md"
             >
-              {{ $t('top_controls.top_tags_in_area') }}
+              {{ t('top_controls.top_tags_in_area') }}
             </div>
             <div
               v-if="
-                $q.screen.lt.sm &&
+                Screen.lt.sm &&
                 $route.name === 'Explore' &&
                 queryStore.topTagsInArea.length
               "
@@ -177,7 +176,7 @@
             <div
               class="q-px-md search-header metropolis text-h5 bolder q-mt-lg q-mb-md"
             >
-              {{ $t('top_controls.top_tags_worldwide') }}
+              {{ t('top_controls.top_tags_worldwide') }}
             </div>
             <div
               @click.stop
@@ -197,7 +196,7 @@
             <div
               class="q-px-md search-header metropolis text-h5 bolder q-mt-lg q-mb-md"
             >
-              {{ $t('top_controls.size') }}
+              {{ t('top_controls.size') }}
             </div>
 
             <div class="q-px-md search-component flex row q-gutter-sm q-mb-md">
@@ -208,7 +207,7 @@
                 class="tag t2"
                 style="text-transform: capitalize"
                 :class="{
-                  'no-hover': $q.platform.is.ios,
+                  'no-hover': Platform.is.ios,
                   selected:
                     controlSize.findIndex((x) => x.val === size.val) > -1,
                 }"
@@ -220,7 +219,7 @@
             <div
               class="q-px-md search-header metropolis text-h5 bolder q-mt-lg q-mb-md"
             >
-              {{ $t('top_controls.duration') }}
+              {{ t('top_controls.duration') }}
             </div>
             <div class="q-px-md search-component flex row q-gutter-sm">
               <div
@@ -230,7 +229,7 @@
                 class="tag t2"
                 style="text-transform: capitalize"
                 :class="{
-                  'no-hover': $q.platform.is.ios,
+                  'no-hover': Platform.is.ios,
                   selected:
                     controlDuration.findIndex((x) => x.val === duration.val) >
                     -1,
@@ -244,7 +243,7 @@
       </div>
     </CustomQScroll>
     <MenuWrapper
-      v-if="$q.screen.lt.md"
+      v-if="Screen.lt.md"
       :showing="showingDateControl"
       @hide="showingDateControl = false"
     >
@@ -266,7 +265,7 @@ import TagExplorer from '../TagExplorer.vue';
 import dayjs from 'dayjs';
 import MenuWrapper from '../Controls/MenuWrapper.vue';
 import { useI18n } from 'vue-i18n';
-import { Platform } from 'quasar';
+import { Platform, Screen } from 'quasar';
 
 import InnerLoading from '../InnerLoading.vue';
 import DragWrapper from '../DragWrapper.vue';
@@ -284,83 +283,6 @@ const emit = defineEmits(['hide']);
 const mainStore = useMainStore();
 const searchStore = useSearchStore();
 const queryStore = useQueryStore();
-
-/*
-const dragHandler = ({
-  movement: [x, y],
-  dragging,
-  swipe: [swipeX, swipeY],
-  offset,
-  delta,
-  initial,
-  active,
-}) => {
-  if (scrollPercentage.value <= 0 && !inputFocused.value) {
-    if (swipeY == 1) {
-      //  clickAway();
-      // return;
-    }
-
-    if (!dragging) {
-      if (y > 100) {
-        motionTransitions.value.push(
-          'y',
-          window.innerHeight,
-          motionProperties.value,
-          {
-            type: 'spring',
-            stiffness: 600,
-            damping: 50,
-            mass: 1.8,
-          },
-        );
-        setTimeout(() => {
-          clickAway();
-        }, 300);
-      } else {
-        // bounce back to top
-        motionTransitions.value.push('y', 0, motionProperties.value, {
-          type: 'spring',
-          stiffness: 600,
-          damping: 50,
-          mass: 1.8,
-        });
-      }
-      return;
-    }
-    // only allow dragging down
-    if (y > 0) {
-      // update motion position but don't animate
-      motionTransitions.value.push('y', y, motionProperties.value, {
-        type: 'keyframes',
-        duration: 0,
-      });
-    }
-  } else if (inputFocused.value) {
-    if (!dragging) {
-      motionTransitions.value.push(
-        'y',
-        window.innerHeight,
-        motionProperties.value,
-        {
-          type: 'spring',
-          stiffness: 600,
-          damping: 50,
-          mass: 1.8,
-        },
-      );
-      clickAway();
-      return;
-    }
-  }
-};
-
-useDrag(dragHandler, {
-  domTarget: searchDialog,
-  axis: 'y',
-});
-
-*/
 
 // Destructure store refs
 const { sidebarPanel, showPanel } = storeToRefs(mainStore);
@@ -415,18 +337,6 @@ const durationOptions = [
   { val: 5, label: t('top_controls.five_days_plus') },
 ];
 
-// Computed
-const thumbStyle = computed(() =>
-  $q.screen.gt.xs
-    ? {
-        bottom: '0px',
-        height: '8px',
-        marginLeft: '16px',
-        borderRadius: '0px',
-      }
-    : { bottom: '0px', height: '0px', borderRadius: '0px', width: '4px' },
-);
-
 const computedStartLabel = computed(() => {
   if (
     !controlDateRangeSelectedOption.value?.value ||
@@ -446,9 +356,14 @@ const computedEndLabel = computed(() => {
 
 // Watchers
 watch(query, (newv) => {
-  if (!newv?.length && $q.screen.gt.xs) {
+  if (!newv?.length && Screen.gt.xs) {
     hideResultsAndPreviousPanel();
   }
+});
+
+onMounted(() => {
+  // wait for animation before showing keyboard
+  setTimeout(() => search.value.focus(), 500);
 });
 
 // Methods

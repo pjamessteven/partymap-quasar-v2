@@ -18,7 +18,7 @@
           {{ $t('event_dates.event_dates') }}:
         </div>
         <div
-          class="flex row justify-start grow no-wrap schedule-msg-buttons q-mt-sm q-pa-md q-mb-md"
+          class="flex row justify-start grow no-wrap schedule-msg-buttons q-mt-sm q-pa-md q-mb-sm"
           v-if="editing"
           :class="$q.screen.gt.xs ? 'q-mr-xl' : ''"
         >
@@ -32,7 +32,7 @@
                 color="red"
                 no-caps
                 @click="removeRrule"
-                :label="$t('event_dates.remove_schedule')"
+                :label="$t('edit_event.remove_schedule')"
               />
               <q-btn
                 class="soft-button-shadow q-ml-sm"
@@ -327,7 +327,7 @@ export default {
   .event-dates-component {
     .schedule-msg-buttons {
       background: $bi-3;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      //  border: 1px solid rgba(255, 255, 255, 0.05);
     }
   }
   .show-more-button-container {
@@ -341,8 +341,8 @@ export default {
 .body--light {
   .event-dates-component {
     .schedule-msg-buttons {
-      //background: $b-3;
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      background: $b-2;
+      //     border: 1px solid rgba(0, 0, 0, 0.1);
     }
   }
   .show-more-button-container {

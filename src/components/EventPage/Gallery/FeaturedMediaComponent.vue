@@ -92,11 +92,8 @@
       </div>
       -->
     </div>
-    <BackdropBlurDialog v-model="showEditDialog" v-if="currentUserCanEdit">
-      <EditGalleryComponent @closeDialog="showEditDialog = false" />
-    </BackdropBlurDialog>
+
     <BackdropBlurDialog
-      v-else
       :model-value="showEditDialog"
       @hide="showEditDialog = null"
       transition-show="jump-up"

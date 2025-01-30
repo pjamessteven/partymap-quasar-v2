@@ -1,23 +1,5 @@
 <template>
   <div v-if="!!event" class="event-dates">
-    <!--
-          <div class="flex row q-mb-lg q-gutter-sm q-pr-xl o-080">
-            <q-btn
-              icon="mdi-star-plus-outline"
-              label="Interested"
-              class="flex grow"
-            />
-            <q-btn
-              icon="mdi-star-plus-outline"
-              label="Going"
-              class="flex grow"
-            />
-            <q-btn icon="mdi-share" label="share" />
-
-            <q-btn icon="las la-cloud-download-alt" />
-          </div>
-          -->
-
     <div
       :class="{ 'q-px-md': $q.screen.lt.sm }"
       class="inter bolder t1 text-h6 q-pr-md event-page-header"
@@ -117,7 +99,7 @@
           v-for="(component, index) in visibleComponents"
           :key="component.type"
           class="flex column"
-          :class="editing || showMoreFields ? 'q-gutter-sm' : ''"
+          :class="editing || showMoreFields ? '' : ''"
         >
           <q-separator v-if="index > 0 && !editing && !showMoreFields" />
 
@@ -125,7 +107,7 @@
             :is="component.type"
             v-bind="component.propsData"
             :class="{
-              'q-my-sm': editing || showMoreFields,
+              'q-my-xs': editing || showMoreFields,
             }"
           >
           </component>

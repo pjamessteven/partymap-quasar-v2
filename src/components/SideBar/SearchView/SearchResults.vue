@@ -232,6 +232,7 @@ export default {
 
 .search-results {
   overflow-y: auto;
+  pointer-events: all;
 }
 @media only screen and (max-width: 599px) {
   .body--light {

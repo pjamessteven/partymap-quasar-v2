@@ -6,7 +6,7 @@
           :user="currentUser"
           :class="{
             'q-mt-lg q-mb-lg q-px-md': $q.screen.gt.xs,
-            'q-mx-sm  q-my-md q-mb-md': $q.screen.lt.sm,
+            'q-mx-md  q-my-md q-mb-md': $q.screen.lt.sm,
           }"
         />
         <div
@@ -40,6 +40,7 @@
           </div>
           <q-separator />
           <ActivityView
+            :class="$q.screen.lt.sm && 'q-px-md'"
             v-if="tab === 'all'"
             :scrollPercentage="scrollPercentage"
           />

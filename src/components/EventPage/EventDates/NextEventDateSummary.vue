@@ -111,7 +111,7 @@ export default {
 .ed-summary {
   opacity: 1;
 
-  transition: opacity 5s ease;
+  transition: opacity 1s ease;
   &.transparent {
     opacity: 0;
   }

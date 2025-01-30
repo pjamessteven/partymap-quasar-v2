@@ -14,15 +14,16 @@
       :active-class="'active-tab'"
     >
       <q-route-tab
-        v-show="false"
-        :to="{ name: 'Explore', query: { view: 'explore' } }"
+        :to="{ name: 'Explore', query: { view: 'nearby' } }"
         :class="{
           'q-tab--active': sidebarPanel == 'nearby',
+          'q-tab--active q-router-link--active active-tab':
+            sidebarPanel == 'explore' && $q.screen.gt.xs,
         }"
         key="1"
-        name="explore"
+        name="nearby"
         content-class="tab"
-        :label="$t('nav.home')"
+        :label="$q.screen.gt.xs ? $t('nav.explore') : $t('sidebar.location')"
         :ripple="false"
         :icon="
           $q.screen.lt.sm
@@ -34,10 +35,11 @@
       />
 
       <q-route-tab
-        :to="{ query: { view: 'nearby' }, name: 'Explore' }"
+        v-show="$q.screen.lt.sm"
+        :to="{ query: { view: 'explore' }, name: 'Explore' }"
         @click="() => (showPanel = false)"
         key="2"
-        name="nearby"
+        name="explore"
         :label="$t('nav.explore')"
         :icon="
           $q.screen.lt.sm
@@ -49,7 +51,7 @@
         content-class="tab"
         :class="{
           'q-tab--active q-router-link--active active-tab':
-            $route.name === 'Explore',
+            $route.name === 'Explore' && false,
         }"
         :ripple="false"
       />
@@ -70,6 +72,7 @@
         :ripple="false"
       />
       <q-route-tab
+        v-if="$q.screen.gt.xs"
         :to="{ name: 'ActivityPage' }"
         :label="$t('activity.activity')"
         exact

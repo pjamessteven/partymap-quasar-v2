@@ -110,11 +110,11 @@ const props = withDefaults(defineProps<Props>(), {
 const verb = computed(() => {
   const verb = props.activity.verb;
   if (verb === 'create') {
-    return t('activitiy.created_date');
+    return t('activity.created_date');
   } else if (verb === 'update') {
-    return t('activitiy.updated_date');
+    return t('activity.updated_date');
   } else if (verb === 'delete') {
-    return t('activitiy.deleted_date');
+    return t('activity.deleted_date');
   } else return verb;
 });
 
@@ -128,12 +128,12 @@ const computedChangeSet = computed(() => {
   if (changeset['start_naive']) {
     if (changeset['start_naive'][0]) {
       changeset['start_naive'][0] = common.localDateTimeLong(
-        changeset['start_naive'][0]
+        changeset['start_naive'][0],
       );
     }
     if (changeset['start_naive'][1]) {
       changeset['start_naive'][1] = common.localDateTimeLong(
-        changeset['start_naive'][1]
+        changeset['start_naive'][1],
       );
     }
     changeset['Start Date'] = changeset['start_naive'];
@@ -142,12 +142,12 @@ const computedChangeSet = computed(() => {
   if (changeset['end_naive']) {
     if (changeset['end_naive'][0]) {
       changeset['end_naive'][0] = common.localDateTimeLong(
-        changeset['end_naive'][0]
+        changeset['end_naive'][0],
       );
     }
     if (changeset['end_naive'][1]) {
       changeset['end_naive'][1] = common.localDateTimeLong(
-        changeset['end_naive'][1]
+        changeset['end_naive'][1],
       );
     }
     changeset['End Date'] = changeset['end_naive'];

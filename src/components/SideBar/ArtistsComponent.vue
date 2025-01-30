@@ -148,12 +148,6 @@ function onScrollMainContent(info: {
 
 @media only screen and (max-width: 599px) {
   .scroll-area-wrapper {
-    .artist-scroll-area {
-      height: 172px;
-      mask-image: unset;
-      margin-top: -8px;
-      margin-bottom: -8px;
-    }
   }
 }
 </style>

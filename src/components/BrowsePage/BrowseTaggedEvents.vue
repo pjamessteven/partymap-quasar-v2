@@ -158,12 +158,7 @@ export default {
   watch: {},
   computed: {
     ...mapState(useBrowseStore, ['taggedEvents']),
-    ...mapWritableState(useQueryStore, [
-      'controlTag',
-      'eventDates',
-      'eventDatesGroupedByMonth',
-      'eventDatesLoading',
-    ]),
+    ...mapWritableState(useQueryStore, ['controlTag']),
   },
   created() {
     this.debouncedOnScroll = _.debounce(this.onScroll, 10);

@@ -98,6 +98,7 @@ interface QueryState {
     [key: number]: EventDate[];
   };
   eventDatesPage: number;
+  eventDatesPages: number;
   eventDatesHasNext: boolean;
   eventDatesLoading: boolean;
   eventDatesRequestId: number | null;
@@ -180,6 +181,7 @@ export const useQueryStore = defineStore('query', {
     eventDatesGroupedByMonth: {},
     eventDatesHasNext: false,
     eventDatesPage: 1,
+    eventDatesPages: 1,
     eventDatesLoading: false,
     eventDatesRequestId: null,
     eventDatesTotal: null,
@@ -207,6 +209,7 @@ export const useQueryStore = defineStore('query', {
     clearResults() {
       this.eventDatesHasNext = true;
       this.eventDatesPage = 1;
+      this.eventDatesPages = 1;
       this.eventDatesTotal = null;
       this.eventDates = []; // this is actually quite important
       this.eventDatesGroupedByMonth = {};
@@ -406,6 +409,7 @@ export const useQueryStore = defineStore('query', {
           this.eventDatesLoading = false;
           this.eventDatesHasNext = response.data.has_next;
           this.eventDatesPage += 1;
+          this.eventDatesPages = response.data.pages;
           this.eventDatesTotal = response.data.total;
           return response.data.items;
         } else {

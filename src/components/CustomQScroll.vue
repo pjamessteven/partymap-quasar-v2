@@ -3,6 +3,7 @@
     class="custom-q-scroll"
     ref="scroll"
     v-bind="{ ...$attrs, ...$props }"
+    :visible="$q.platform.is.mobile ? false : undefined"
     :class="disableScroll && 'disable-scroll'"
     delay="0"
   >
@@ -33,6 +34,12 @@ export default {
     onScrollEnd() {
       this.$emit('scrollend');
     },
+    onScroll() {
+      if (this.isScrolling) window.clearTimeout(this.isScrolling);
+      this.isScrolling = setTimeout(() => {
+        this.onScrollEnd(); // Trigger onScrollEnd after scroll stops
+      }, 100); // Adjust the timeout as needed
+    },
   },
   computed: {},
 
@@ -40,12 +47,10 @@ export default {
     // safari doesn't support scrollend
 
     if (this.$q.platform.is.ios || this.$q.platform.is.safari) {
-      this.$refs.scroll.$el.firstElementChild.addEventListener('scroll', () => {
-        if (this.isScrolling) window.clearTimeout(this.isScrolling);
-        this.isScrolling = setTimeout(() => {
-          this.onScrollEnd(); // Trigger onScrollEnd after scroll stops
-        }, 10); // Adjust the timeout as needed
-      });
+      this.$refs.scroll.$el.firstElementChild.addEventListener(
+        'scroll',
+        this.onScroll,
+      );
     } else {
       this.$refs.scroll.$el.firstElementChild.addEventListener(
         'scrollend',
@@ -73,6 +78,12 @@ export default {
       'scrollend',
       this.onScrollEnd(),
     );
+    if (this.$q.platform.is.ios || this.$q.platform.is.safari) {
+      this.$refs.scroll.$el.firstElementChild.removeEventListener(
+        'scroll',
+        this.onScroll(),
+      );
+    }
   },
 };
 </script>
@@ -97,6 +108,13 @@ export default {
     // pointer-events: none;
     :deep(.scroll) {
       overflow: hidden !important;
+    }
+  }
+}
+@media only screen and (max-width: 599px) {
+  .custom-q-scroll {
+    :deep(.q-scrollarea__thumb) {
+      display: none;
     }
   }
 }

@@ -119,7 +119,7 @@
                       style="border-radius: 100px !important"
                     >
                       <template v-slot:default>
-                        <q-icon size="sm" name="mdi-crosshairs-gps" />
+                        <q-icon size="sm" name="mdi-crosshairs" />
                       </template>
                     </q-btn>
                   </router-link>

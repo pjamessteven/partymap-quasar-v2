@@ -1,7 +1,7 @@
 <template>
   <div class="main-layout">
     <q-no-ssr>
-      <MainMap :key="currentMapStyleUrl" />
+      <MainMap :key="currentMapStyleUrl" v-if="isMainMapLoaded" />
     </q-no-ssr>
     <div
       class="overlay"
@@ -189,7 +189,14 @@ export default {
     },
   },
   beforeRouteUpdate(to, from, next) {
-    if (from.name === 'Explore' && to.name !== 'Explore') {
+    if (to.name === 'EventPage' || to.name === 'Explore') {
+      this.isMainMapLoaded = true;
+    }
+
+    if (
+      (from.name === 'Explore' && to.name !== 'Explore') ||
+      (from.name === 'BrowseEventDateList' && to.name !== 'BrowseEventDateList')
+    ) {
       this.blockUpdates = true;
       // blockUpdates is re-enabled in Map.vue at map.
     }
@@ -197,8 +204,6 @@ export default {
       this.sidebarOpacity = 1;
       setTimeout(() => {
         this.overlayOpacityTransition = true;
-
-        //   this.blockUpdates = false; // not needed, causes problems with refreshoing list
       }, 500);
     }
 
@@ -257,6 +262,11 @@ export default {
   beforeMount() {
     // set date locale (best locale is chosen in i18n.ts boot file)
     this.setLocale(i18n.global.locale.value);
+  },
+  mounted() {
+    if (this.$route.name === 'EventPage' || this.$route.name === 'Explore') {
+      this.isMainMapLoaded = true;
+    }
   },
 
   computed: {

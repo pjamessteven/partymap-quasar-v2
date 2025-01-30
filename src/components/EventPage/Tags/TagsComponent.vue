@@ -16,7 +16,7 @@
           style="pointer-events: none; display: inline-flex"
         />
         <Tag
-          v-if="!eventHasHost && !editing"
+          v-if="!eventHasHost || editing"
           :small="small"
           style="display: inline-flex"
           :key="-1"

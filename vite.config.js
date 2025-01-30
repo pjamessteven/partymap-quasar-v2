@@ -12,6 +12,7 @@ export default defineConfig({
       org: 'partymap',
       project: 'javascript-vue',
     }),
+    vueDevTools(),
   ],
   resolve: {
     preserveSymlinks: true,

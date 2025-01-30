@@ -345,15 +345,17 @@ onMounted(async () => {
 
   if ($route.name !== 'EventPage') {
     if (mainStore.sidebarPanel === 'nearby') {
-      map.map?.easeTo(
+      map.map?.flyTo(
         {
           padding: getNearbyPagePadding(),
           duration: 0,
+          center: mainStore.userLocation || undefined,
+          zoom: mainStore.userLocation ? 7 : undefined,
         },
         { ignoreMoveEvents: true },
       );
     } else {
-      map.map?.easeTo(
+      map.map?.flyTo(
         {
           padding: getDefaultPadding(),
           duration: 0,
@@ -404,6 +406,7 @@ watch(
       flyTo({
         center: newv,
         padding: getNearbyPagePadding(),
+        zoom: 6,
       });
     }
     if (newv) {
@@ -420,6 +423,7 @@ watch(
       flyTo({
         center: mainStore.userLocation,
         padding: getNearbyPagePadding(),
+        zoom: 6,
       });
       if (Screen.lt.sm) {
         showPoints.value = false;
@@ -434,7 +438,7 @@ watch(
         !mainStore.currentLocationFromSearch &&
         Screen.lt.sm
       ) {
-        flyTo({ center: mainStore.userLocation });
+        flyTo({ center: mainStore.userLocation, zoom: 6 });
       }
     }
   },
@@ -593,6 +597,7 @@ const mapClick = () => {
     if (mapStore.peekMap) {
       peekMap.value = false;
       if (focusMarker.value) blockPeekMap.value = true;
+      $router.go(-1);
     } else {
       console.log(mainStore.routerHistory);
       if (mainStore.routerHistory.length > 2) {
@@ -610,7 +615,7 @@ const getEventPagePadding = (): PaddingOptions => {
   if (peekMap.value) {
     return {
       top: 0,
-      bottom: window.innerHeight / 2,
+      bottom: window.innerHeight / 4,
       left: 0,
       right: 0,
     };

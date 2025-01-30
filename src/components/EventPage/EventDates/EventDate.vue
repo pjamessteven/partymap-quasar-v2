@@ -6,13 +6,12 @@
     <q-btn
       @click="deleteEd"
       size="sm"
-      color="red"
       class="delete-button items-center justify-center flex"
       round
       v-if="editing"
       style="border-radius: 100px"
     >
-      <q-icon size="1em" name="las la-times" />
+      <q-icon size="1.5em" name="las la-times" />
     </q-btn>
     <div
       class="ed-inline-card flex column q-pa-sm justify-center align-center items-center"
@@ -50,8 +49,8 @@
         </div>
       </div>
       <div class="background" />
-      <div class="line" :style="getOpacity" v-if="!editing" />
-      <div class="flex timeline-icon-wrapper q-mt-md" v-if="!editing">
+      <div class="line" :style="getOpacity" />
+      <div class="flex timeline-icon-wrapper q-mt-md">
         <q-icon
           class="timeline-icon"
           v-if="event?.next_date?.id === ed.id"
@@ -186,7 +185,7 @@ export default {
         }
       }
       &.active-card {
-        background: rgba(48, 48, 48, 0.5);
+        //background: rgba(48, 48, 48, 0.5);
 
         //border: 1px solid rgba(255, 255, 255, 0.2) !important;
       }
@@ -201,7 +200,7 @@ export default {
       }
     }
     &.editing {
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      //  border: 1px solid rgba(255, 255, 255, 0.1) !important;
     }
   }
 
@@ -234,7 +233,7 @@ export default {
     }
 
     &.editing {
-      border: 1px solid rgba(0, 0, 0, 0.1) !important;
+      //  border: 1px solid rgba(0, 0, 0, 0.1) !important;
     }
   }
 

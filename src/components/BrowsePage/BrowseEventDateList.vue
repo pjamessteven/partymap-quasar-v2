@@ -17,7 +17,7 @@
               >{{
                 countryCodes.find((x) => x.code == $route.params.country)?.name
               }}&nbsp;
-              <div style="font-size: 32pt" class="q-ml-xs">
+              <div style="font-size: 32pt" class="q-ml-xs" v-if="false">
                 {{
                   countryCodes.find((x) => x.code == $route.params.country)
                     ?.emoji_flag
@@ -114,6 +114,21 @@
           </div>
         </div>
       </div>
+
+      <div
+        class="flex row justify-center q-my-md"
+        style="opacity: 0; margin-top: -16px"
+      >
+        <a
+          v-for="i in eventDatesPageNumbers"
+          :key="i"
+          class="link-hover q-mr-xs t3"
+          @click="loadEventDatePage(i)"
+          :class="i + 1 === eventDatesPage ? 'text-primary' : ''"
+        >
+          [{{ i }}]
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -196,6 +211,12 @@ export default {
           );
         } catch (error) {}
       }
+    },
+    // hidden pagination for SEO
+    loadEventDatePage(page) {
+      this.clearResults();
+      this.eventDatesPage = page;
+      this.loadEventDates();
     },
   },
   watch: {
@@ -302,6 +323,7 @@ export default {
       'eventDates',
       'eventDatesTotal',
       'eventDatesPage',
+      'eventDatesPages',
       'eventDatesHasNext',
       'artists',
       'artistsPage',
@@ -337,8 +359,13 @@ export default {
     isLoading() {
       return this.isLoadingInitial || this.eventDatesLoading;
     },
-    route() {
-      return this.$route;
+    // make array of page numbers for SEO
+    eventDatesPageNumbers() {
+      let pages = [];
+      for (let i = 1; i <= this.eventDatesPages; i++) {
+        pages.push(i);
+      }
+      return pages;
     },
   },
   beforeMount() {
