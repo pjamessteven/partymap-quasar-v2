@@ -11,20 +11,27 @@ export default {
     share: 'Share',
     done: 'Done',
   },
-  meta:   "meta": {
-    "main_title": "PartyMap - Festivaly a undergroundová kultura {year}",
-    "main_description": "Mapa festivalů {year}. Objevte nejlepší hudební festivaly, party a koncerty, které se konají v roce {year} a dále. PartyMap je bezplatná platforma založená na komunitě. Prozkoumejte mapu a zjistěte, co se děje ve vašem okolí!",
-    "browse_title": "PartyMap - Globální festivalový kalendář {year}",
-    "browse_description": "Festivalový kalendář pro rok {year}. Objevte nejlepší hudební festivaly, party a koncerty, které se konají v roce {year} a dále. PartyMap je bezplatná platforma založená na komunitě. Prozkoumejte mapu a zjistěte, co se děje ve vašem okolí!",
-    "country_title": "PartyMap: Festivalový kalendář {country} {year}",
-    "country_description": "Festivalový kalendář {country} {year}. Prohlédněte si všechny nadcházející hudební festivaly, party a koncerty v {country} během roku {year}. PartyMap je bezplatná platforma založená na komunitě. Prozkoumejte mapu a zjistěte, co se děje ve vašem okolí!",
-    "main_tags": "Festival, Festivaly, Mapa, Události, Party, Fiesta, Hudba, Hudební festival, Hudební festivaly, Nejlepší hudební festivaly, Všechny hudební festivaly, Nejlepší hudební festivaly, Seznam hudebních festivalů, seznam",
-    "upcoming_events_featuring": "Nadcházející festivaly, koncerty a party s účastí {artist} v roce {year}. {artistDescription}",
-    "artist_page_tags": "Festival, Festivaly, Mapa, Události, Party, Fiesta, Hudba, Hudební festival, Hudební festivaly, Nejlepší hudební festivaly, Všechny hudební festivaly, Nejlepší hudební festivaly, Seznam hudebních festivalů, seznam, soundcloud, bandcamp, youtube",
-    "on_partymap": "na PartyMap",
-    "more_about": "Více o",
-    "in": " v ",
-    "event_page_tags": "Festival, Festivaly, Mapa, Události, Party, Fiesta, Hudba, Hudební festival, Hudební festivaly, Nejlepší hudební festivaly, Všechny hudební festivaly, Nejlepší hudební festivaly, Seznam hudebních festivalů, seznam festivalů, mapa festivalů, seznam hudebních festivalů, mapa hudebních festivalů"
+  meta: {
+    main_title: 'PartyMap - Festivals and Underground Culture {year}',
+    main_description:
+      "Festival map {year}. Discover the top music festivals, parties and gigs coming up in {year} and beyond. PartyMap is a free, community-based platform. Explore the map and find out what's happening near you!",
+    browse_title: 'PartyMap - Global Festival Calendar {year}',
+    browse_description:
+      "Festival calendar for {year}. Discover the top music festivals, parties and gigs coming up in {year} and beyond. PartyMap is a free, community-based platform. Explore the map and find out what's happening near you!",
+    country_title: 'PartyMap: {country} Festival Calendar {year}',
+    country_description:
+      "{country} Festival calendar {year}. Browse all upcoming music festivals, parties and gigs in {country} in {year}. PartyMap is a free, community-based platform. Explore the map and find out what's happening near you!",
+    main_tags:
+      'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list',
+    upcoming_events_featuring:
+      'Upcoming festivals, gigs and parties featuring {artist} in {year}. {artistDescription}', // name of artist
+    artist_page_tags:
+      'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, list, soundcloud, bandcamp, youtube',
+    on_partymap: 'on PartyMap',
+    more_about: 'More about', // {{event name}},
+    in: ' in ',
+    event_page_tags:
+      'Festival, Festivals, Map, Events, Party, Fiesta, Music, Music Festival, Music Festivals, Best Music Festivals, All Music Festivals, Top Music Festivals, List of music festivals, festival list, festival map, music festival list, music festival map',
   },
   search: {
     search: 'Search',
