@@ -206,6 +206,8 @@
               borderless
               dense
               behavior="menu"
+              menu-self="bottom start"
+              :menu-offset="[0, 112]"
               class="flex grow"
               :model-value="currentLanguage"
               @update:model-value="setLanguage"

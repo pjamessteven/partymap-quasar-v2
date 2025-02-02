@@ -43,7 +43,7 @@
           <MobileSideBar
             class="sidebar-component"
             v-if="$q.screen.lt.md"
-            :class="{ hide: $q.screen.lt.sm && $route.name === 'EventPage' }"
+            :class="{ hide: $q.screen.lt.md && $route.name === 'EventPage' }"
           />
         </Transition>
         <Transition
@@ -481,6 +481,7 @@ export default {
 
         &.hide {
           pointer-events: none;
+          display: none;
         }
       }
     }
@@ -622,6 +623,21 @@ export default {
             (-webkit-appearance: none)
         ) {
           top: calc(48px + var(--safe-area-inset-top) - 8px);
+        }
+      }
+    }
+  }
+}
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
+  .native-mobile {
+    .main-inner-layout {
+      // ios specific padding for capcaitor app
+      .controls-component {
+        @supports (
+          (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
+            (-webkit-appearance: none)
+        ) {
+          top: calc(54px + var(--safe-area-inset-top) - 8px);
         }
       }
     }

@@ -985,7 +985,7 @@
                 v-if="!!event"
                 class="bottom-section flex"
                 :class="{
-                  'column  no-wrap q-pa-md q-pb-lg ': $q.screen.lt.sm,
+                  'column  no-wrap q-pa-md q-pb-xl ': $q.screen.lt.sm,
                   'row justify-between items-center': $q.screen.gt.xs,
                   'q-pa-xl': $q.screen.gt.sm,
                   'q-px-xl q-py-xl': $q.screen.gt.xs && $q.screen.lt.md,
@@ -1452,13 +1452,13 @@ const share = () => {
 };
 
 defineOptions({
-  async preFetch({ store, currentRoute }) {
+  preFetch: async ({ store, ssrContext, currentRoute }) => {
     const mainStore = useMainStore(store);
-    if (mainStore.isInitialLoad) {
-      const eventStore = useEventStore(store);
-      mainStore.isInitialLoad = false;
-      return eventStore.loadEvent(Number(currentRoute.params.id));
-    }
+    //if (mainStore.isInitialLoad) {
+    const eventStore = useEventStore(store);
+    //mainStore.isInitialLoad = false;
+    return eventStore.loadEvent(Number(currentRoute.params.id));
+    //}
   },
 });
 
@@ -2271,7 +2271,7 @@ a {
     max-width: 96vw !important;
   }
   .content-card {
-    max-width: 96vw !important;
+    //max-width: 1 !important;
 
     @supports (
       (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and

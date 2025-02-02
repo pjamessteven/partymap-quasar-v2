@@ -23,13 +23,17 @@
           />
         </div>
 
+        <div class="t3 q-mt-md" v-if="review.rating === 0">
+          {{ $t('reviews.select_rating') }}
+        </div>
         <q-rating
           v-model="review.rating"
           size="2em"
           :max="5"
           color="primary"
-          class="q-mt-md"
+          :class="review.rating > 0 ? 'q-mt-md' : 'q-mt-sm'"
         />
+
         <MultipleMediaSelector
           v-show="review.media_items?.length > 0"
           class="media-select q-mt-lg"
@@ -43,11 +47,8 @@
         </div>
         <div class="flex column" v-if="currentUser && review.text.length > 0">
           <div class="flex column items-start">
-            <div class="t2 q-mt-sm" v-if="review.rating === 0">
-              {{ $t('reviews.select_rating') }}
-            </div>
             <div
-              class="flex row justify-between items-end grow no-wrap"
+              class="flex row justify-between items-end grow wrap"
               style="width: 100%"
             >
               <q-select
@@ -55,6 +56,7 @@
                 option-label="label"
                 style="max-width: 100%"
                 outlined
+                dense
                 use-input
                 menu-anchor="top left"
                 menu-self="bottom left"
@@ -62,16 +64,16 @@
                 emit-value
                 map-options
                 :options="pastEventDates"
-                label="Select Event Date"
+                label="Select Date (optional)"
               >
                 <template v-slot:append>
                   <q-icon name="mdi-calendar-outline" class="q-pa-md" />
                 </template>
               </q-select>
               <q-btn
-                class="q-mt-md"
+                class="q-mt-md q-mr-md"
                 color="primary"
-                :disabled="review.rating === 0 || loading"
+                :disabled="loading"
                 @click="handleSubmitReview"
               >
                 {{ $t('reviews.submit') }}
@@ -80,8 +82,8 @@
           </div>
         </div>
         <q-btn
-          class="q-mt-md"
-          v-if="!currentUser && review.text.length > 0"
+          class="q-mt-md q-mr-md"
+          v-if="!currentUser"
           color="primary"
           @click="
             $router.push({

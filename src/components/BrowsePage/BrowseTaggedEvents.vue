@@ -43,7 +43,7 @@
           <q-icon size="2em" name="mdi-chevron-right" />
         </div>
       </div>
-      <div :class="$q.screen.gt.xs ? 'q-mt-lg q-mb-xl' : 'q-mt-md q-mb-lg'">
+      <div :class="$q.screen.gt.sm ? 'q-mt-lg q-mb-xl' : 'q-mt-md q-mb-lg'">
         <CustomQScroll
           horizontal
           @scroll="debouncedOnScroll"
@@ -181,6 +181,7 @@ export default {
 .user-event-scroll-area {
   height: 280px;
   margin-bottom: -8px;
+  /*
   mask-image: linear-gradient(
     to left,
     transparent 0px,
@@ -188,6 +189,7 @@ export default {
     white calc(100% - 16px),
     transparent 100%
   );
+  */
   width: 100%;
   :deep(.ed-poster) {
     width: 150px;

@@ -18,18 +18,20 @@
         class="flex column no-wrap scroll-content"
         :class="{
           'q-px-sm': $q.screen.lt.sm,
-          'q-px-sm': $q.screen.sm,
         }"
       >
         <div
           class="q-pt-sm q-mt-sm flex row no-wrap items-center control-bar"
-          :class="$q.screen.gt.xs ? 'q-pl-md q-mb-md' : ''"
+          :class="{
+            'q-pl-lg q-pr-md q-mb-sm': $q.screen.gt.sm,
+            'q-pl-sm': $q.screen.sm,
+          }"
         >
           <CustomQScroll
             ref="scroll"
             horizontal
             class="scroll-area grow"
-            :style="$q.screen.gt.xs ? 'height: 54px' : 'height: 44px'"
+            :style="$q.screen.gt.sm ? 'height: 54px' : 'height: 44px'"
             :thumb-style="
               $q.screen.gt.xs
                 ? { bottom: '2px', height: '4px' }
@@ -228,7 +230,7 @@
           </CustomQScroll>
           <EventDateViewOptions
             :showGroupByMonth="false"
-            v-if="$q.screen.gt.xs"
+            v-if="$q.screen.gt.sm"
             class="q-mb-sm"
           />
         </div>
@@ -341,7 +343,7 @@ export default {
           await this.loadUserEventDates(
             this.mode,
             this.tense,
-            this.username || this.currentUser.username
+            this.username || this.currentUser.username,
           );
           this.userEventDatesPage += 1;
           this.isLoadingDatesInitial = false;

@@ -25,7 +25,7 @@
           :class="{
             'q-px-lg  q-mb-sm': $q.screen.gt.sm,
             'q-px-md  q-mt-md ': $q.screen.lt.md,
-            'q-px-sm ': $q.screen.lt.md && $q.screen.gt.xs,
+            'q-px-sm q-mb-xs  ': $q.screen.lt.md && $q.screen.gt.xs,
           }"
         >
           <div
@@ -85,9 +85,9 @@
                 }"
                 @click.stop="() => getFineLocation()"
                 :style="
-                  $q.screen.gt.sm
+                  $q.screen.gt.xs
                     ? 'margin-left: -8px; border-radius: 100px!important;'
-                    : 'margin-left: 8px; border-radius: 100px!important;'
+                    : 'margin-left: 0px; border-radius: 100px!important;'
                 "
               >
                 <template v-slot:default>
@@ -145,6 +145,7 @@
           class="flex message"
           :class="{
             ' q-mt-md ': $q.screen.gt.xs,
+            ' q-mb-xs ': $q.screen.gt.xs && $q.screen.lt.md,
             'q-mx-lg q-mb-sm q-pb-xs': $q.screen.gt.sm,
             'q-mx-md q-mt-md  q-pb-xs ': $q.screen.lt.md,
           }"
@@ -153,7 +154,7 @@
           <div
             class="flex grow no-wrap justify-between t2 inter items-start"
             :class="{
-              'text-large  ': $q.screen.gt.sm,
+              'text-large  ': $q.screen.gt.xs,
             }"
           >
             <div class="flex grow">
@@ -171,7 +172,7 @@
           >
             <div
               :class="{
-                'text-large  ': $q.screen.gt.sm,
+                'text-large  ': $q.screen.gt.xs,
               }"
             >
               {{ $t('nearby_view.message_1') }}
@@ -358,107 +359,113 @@
                 <q-separator />
               </div>
             </div>
-            <!-- tags -->
-            <div class="flex column" v-if="nearbyTags?.length >= 10">
-              <div
-                class="q-py-md location-header sticky location-header-select flex justify-between items-center"
-                :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
-              >
-                <div class="text-">{{ $t('nearby_view.popular_tags') }}</div>
+            <div class="flex column" :class="{ reverse: $q.screen.lt.sm }">
+              <div>
+                <!-- tags -->
+                <div class="flex column" v-if="nearbyTags?.length >= 10">
+                  <div
+                    class="q-py-md location-header sticky location-header-select flex justify-between items-center"
+                    :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
+                  >
+                    <div class="text-">
+                      {{ $t('nearby_view.popular_tags') }}
+                    </div>
+                  </div>
+                  <TagExplorer
+                    mode="nearby"
+                    :class="$q.screen.gt.sm ? 'q-px-lg q-mb-sm' : 'q-pl-md q'"
+                  />
+                </div>
+                <!-- Display global tags if there's not many local tags-->
+                <div class="flex column" v-else-if="tagOptions?.length > 0">
+                  <div
+                    class="q-py-md location-header sticky location-header-select flex justify-between items-center"
+                    :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
+                  >
+                    <div>{{ $t('nearby_view.hot_tags_around_world') }}</div>
+                  </div>
+                  <TagExplorer
+                    mode="all"
+                    :class="$q.screen.gt.sm ? 'q-px-lg q-mb-sm' : 'q-pl-md  '"
+                  />
+                </div>
               </div>
-              <TagExplorer
-                mode="nearby"
-                :class="$q.screen.gt.sm ? 'q-px-lg q-mb-sm' : 'q-pl-md '"
-              />
-            </div>
-            <!-- Display global tags if there's not many local tags-->
-            <div class="flex column" v-else-if="tagOptions?.length > 0">
-              <div
-                class="q-py-md location-header sticky location-header-select flex justify-between items-center"
-                :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
-              >
-                <div>{{ $t('nearby_view.hot_tags_around_world') }}</div>
+              <div>
+                <!-- artists -->
+                <div class="flex column" v-if="nearbyArtists?.length > 5">
+                  <div
+                    class="location-header q-py-md location-header-select sticky flex justify-between items-center"
+                    :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
+                  >
+                    <div>{{ $t('nearby_view.high_profile_artists') }}</div>
+                    <ControlSelect
+                      v-if="false"
+                      @clear="
+                        () => {
+                          controlTag = [];
+                        }
+                      "
+                      :size="$q.screen.gt.sm ? 'sm' : 'xs'"
+                      :label="'All Artists'"
+                    >
+                      <template v-slot="{ showing, hide }">
+                        <ArtistControl :showing="showing" @hide="hide" />
+                      </template>
+                    </ControlSelect>
+                  </div>
+
+                  <ArtistsComponent
+                    :size="$q.screen.gt.sm ? 'lg' : $q.screen.sm ? 'lg' : 'lg'"
+                    :artists="nearbyArtists"
+                    :hasNext="nearbyArtistsHasNext"
+                    :loadMore="debouncedLoadNearbyArtists"
+                    :style="
+                      $q.screen.gt.sm
+                        ? 'margin-bottom: -16px; '
+                        : 'margin-bottom: -8px; margin-top: -8px'
+                    "
+                  />
+                </div>
+
+                <!-- Display global artists if there's not many local artists-->
+
+                <div class="flex column" v-else-if="artistOptions?.length > 0">
+                  <div
+                    class="q-py-md location-header location-header-select sticky flex justify-between items-center"
+                    :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
+                  >
+                    <div>{{ $t('nearby_view.top_artists_worldwide') }}</div>
+                    <ControlSelect
+                      v-if="false"
+                      @clear="
+                        () => {
+                          controlTag = [];
+                        }
+                      "
+                      :size="$q.screen.gt.sm ? 'sm' : 'xs'"
+                      :label="'All Artists'"
+                      iconName="las la-music"
+                    >
+                      <template v-slot="{ showing, hide }">
+                        <ArtistControl :showing="showing" @hide="hide" />
+                      </template>
+                    </ControlSelect>
+                  </div>
+
+                  <ArtistsComponent
+                    :class="$q.screen.gt.sm ? '' : ''"
+                    :artists="artistOptions"
+                    :hasNext="artistOptionsHasNext"
+                    :loadMore="debouncedLoadArtistOptions"
+                    :size="$q.screen.gt.sm ? 'lg' : 'lg'"
+                    :style="
+                      $q.screen.gt.sm
+                        ? 'margin-bottom: -16px; '
+                        : 'margin-bottom: -8px; margin-top: -8px'
+                    "
+                  />
+                </div>
               </div>
-              <TagExplorer
-                mode="all"
-                :class="
-                  $q.screen.gt.sm ? 'q-px-lg q-mb-sm' : 'q-pl-md q-mb-sm '
-                "
-              />
-            </div>
-            <!-- artists -->
-            <div class="flex column" v-if="nearbyArtists?.length > 5">
-              <div
-                class="location-header q-py-md location-header-select sticky flex justify-between items-center"
-                :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
-              >
-                <div>{{ $t('nearby_view.high_profile_artists') }}</div>
-                <ControlSelect
-                  v-if="false"
-                  @clear="
-                    () => {
-                      controlTag = [];
-                    }
-                  "
-                  :size="$q.screen.gt.sm ? 'sm' : 'xs'"
-                  :label="'All Artists'"
-                >
-                  <template v-slot="{ showing, hide }">
-                    <ArtistControl :showing="showing" @hide="hide" />
-                  </template>
-                </ControlSelect>
-              </div>
-
-              <ArtistsComponent
-                :size="$q.screen.gt.sm ? 'lg' : $q.screen.sm ? 'lg' : 'lg'"
-                :artists="nearbyArtists"
-                :hasNext="nearbyArtistsHasNext"
-                :loadMore="debouncedLoadNearbyArtists"
-                :style="
-                  $q.screen.gt.sm
-                    ? 'margin-bottom: -16px; '
-                    : 'margin-bottom: -16px; margin-top: -8px'
-                "
-              />
-            </div>
-
-            <!-- Display global artists if there's not many local artists-->
-
-            <div class="flex column" v-else-if="artistOptions?.length > 0">
-              <div
-                class="q-py-md location-header location-header-select sticky flex justify-between items-center"
-                :class="$q.screen.gt.sm ? 'q-px-lg' : 'q-pl-md '"
-              >
-                <div>{{ $t('nearby_view.top_artists_worldwide') }}</div>
-                <ControlSelect
-                  v-if="false"
-                  @clear="
-                    () => {
-                      controlTag = [];
-                    }
-                  "
-                  :size="$q.screen.gt.sm ? 'sm' : 'xs'"
-                  :label="'All Artists'"
-                  iconName="las la-music"
-                >
-                  <template v-slot="{ showing, hide }">
-                    <ArtistControl :showing="showing" @hide="hide" />
-                  </template>
-                </ControlSelect>
-              </div>
-
-              <ArtistsComponent
-                :class="$q.screen.gt.sm ? '' : ''"
-                :artists="artistOptions"
-                :hasNext="artistOptionsHasNext"
-                :loadMore="debouncedLoadArtistOptions"
-                :size="$q.screen.gt.sm ? 'lg' : 'lg'"
-                :style="
-                  $q.screen.gt.sm
-                    ? 'margin-bottom: -16px; '
-                    : 'margin-bottom: -16px; margin-top: -8px'
-                "
-              />
             </div>
             <!-- NEARBY EVENTS -->
 
@@ -512,6 +519,7 @@
               :hideHeader="true"
             />
             <EventDatePosterList
+              :class="{ 'q-px-sm': $q.screen.lt.md }"
               v-if="nearbyEventDates && !compactView"
               :groupByMonth="false"
               :eventDates="nearbyEventDates"

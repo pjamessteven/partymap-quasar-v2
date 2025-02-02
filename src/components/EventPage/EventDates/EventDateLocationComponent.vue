@@ -73,6 +73,7 @@
             </q-btn>
           </a>
         </div>
+        <!--
         <q-icon
           size="2em"
           class="t3 q-ml-md"
@@ -85,6 +86,7 @@
           name="mdi-chevron-up"
           v-else-if="expandable && expanded && !editing"
         />
+        -->
       </div>
     </div>
     <div

@@ -135,9 +135,8 @@ export default {
 
       App.addListener('appUrlOpen', async (event) => {
         Browser.close();
-
-        console.log('APP URL OPEN', event.url);
-        if (event.url.indexOf('?token=')) {
+        console.log('appUrlOpen', event.url);
+        if (event.url.indexOf('?token=') > -1) {
           this.loggingInWithToken = true;
 
           let token = event.url.split('?token=').pop();
@@ -162,6 +161,7 @@ export default {
           // app link
           slug = event.url.split('partymap://').pop();
         } else {
+          console.log('');
           slug = event.url.split('.com').pop();
         }
         if (slug) {
@@ -1086,6 +1086,16 @@ body {
     }
   }
 
+  // override quasar ios padding
+  body.q-ios-padding .q-dialog__inner {
+    padding: 0px !important;
+  }
+  body.q-ios-padding .fullscreen {
+    padding: 0px !important;
+  }
+  body.q-ios-padding .q-dialog__inner > div {
+    max-height: 100vh !important;
+  }
   .q-card {
     &.fullscreen-mobile-card {
       border: none !important;

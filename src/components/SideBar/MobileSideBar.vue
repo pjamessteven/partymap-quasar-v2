@@ -602,7 +602,11 @@ watch(
   .sidebar-wrapper {
     padding: 0 0px;
     .sidebar {
-      border-radius: 28px;
+      .sidebar-content {
+        border-top-right-radius: 28px;
+        border-top-left-radius: 28px;
+      }
+      overflow: hidden;
     }
   }
 }
@@ -715,7 +719,7 @@ watch(
               padding-bottom: calc(180px - 8px + var(--safe-area-inset-top));
             }
             @media screen and (min-width: 376px) {
-              padding-bottom: calc(168px + var(--safe-area-inset-top));
+              padding-bottom: calc(164px + var(--safe-area-inset-top));
             }
           }
         }

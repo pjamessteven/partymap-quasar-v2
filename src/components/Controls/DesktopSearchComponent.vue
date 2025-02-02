@@ -37,7 +37,7 @@
                     !controlSize.length &&
                     !controlDuration.length &&
                     $q.screen.gt.sm) ||
-                  ($q.screen.lt.sm && !anyFiltersEnabled)
+                  ($q.screen.lt.md && !anyFiltersEnabled)
                 "
               >
                 {{ $t('search.search_and_filter') }}
@@ -557,7 +557,7 @@ export default {
 @media only screen and (max-width: 1023px) {
   .desktop-search-component {
     padding-left: 0px;
-    top: 48px;
+    top: 44px;
     z-index: 501;
     padding: 0 16px;
 

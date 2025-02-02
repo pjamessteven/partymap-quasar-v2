@@ -28,14 +28,14 @@
           >
             <div
               class="solid-page-content-width"
-              :class="$q.screen.gt.xs ? 'q-px-lg' : ''"
+              :class="$q.screen.gt.sm ? 'q-px-lg' : ''"
             >
               <slot name="title" class=""></slot>
             </div>
           </div>
           <div
             class="q-pb-xl solid-page-content solid-page-content-width"
-            :class="$q.screen.gt.xs ? 'q-px-lg' : ''"
+            :class="$q.screen.gt.sm ? 'q-px-lg' : ''"
           >
             <transition
               appear
@@ -162,6 +162,8 @@ export default {
 // md
 @media only screen and (max-width: 1024px) {
   .solid-page {
+    padding-top: 56px;
+
     .solid-page-content-width {
       //padding: 0px 32px;
       //max-width: 800px;

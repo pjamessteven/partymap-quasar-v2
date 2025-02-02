@@ -642,6 +642,8 @@ const getEventPagePadding = (): PaddingOptions => {
 const getNearbyPagePadding = (): PaddingOptions => {
   // default padding for explore page
   if (Screen.lt.sm) {
+    let bottom = 150;
+
     return {
       top: 0,
       bottom:
@@ -658,12 +660,17 @@ const getNearbyPagePadding = (): PaddingOptions => {
 const getDefaultPadding = (): PaddingOptions => {
   // default padding for explore page
   if (Screen.lt.sm) {
-    return { top: 0, bottom: 150, left: 0, right: 0 };
+    let bottom = 150 - mainStore.safeAreaInsets.top;
+    return { top: 0, bottom, left: 0, right: 0 };
   } else if (Screen.gt.sm) {
     return { top: 0, bottom: 0, left: 568, right: 0 };
   } else {
     // lt.md
-    return { top: 0, bottom: 250, left: 0, right: 0 };
+    let bottom = 150;
+    if (Platform.is.capacitor) {
+      bottom -= mainStore.safeAreaInsets.top;
+    }
+    return { top: 0, bottom, left: 0, right: 0 };
   }
 };
 

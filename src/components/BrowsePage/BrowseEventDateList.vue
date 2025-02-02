@@ -26,14 +26,20 @@
           </div>
         </div>
         <div class="flex column" v-if="!isLoadingInitial">
-          <div class="flex column" :class="{ 'q-px-sm': $q.screen.lt.sm }">
+          <div
+            class="flex column"
+            :class="{
+              'q-px-sm': $q.screen.lt.md,
+              'q-pt-sm': $q.screen.lt.md && $q.screen.gt.xs,
+            }"
+          >
             <EventDateList
               v-if="compactView"
               :groupByMonth="groupEventsByMonth"
               :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
               :eventDates="eventDates"
               :hasNext="eventDatesHasNext"
-              :twoColumnsMd="$q.screen.gt.sm"
+              :twoColumnsMd="$q.screen.gt.xs"
               :loading="eventDatesLoading"
               :eventDatesTotal="eventDatesTotal"
             />

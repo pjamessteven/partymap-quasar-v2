@@ -9,7 +9,7 @@
       <template v-slot="{ scrollPercentage, resetScrollPosition }">
         <div
           class="flex column justify-center q-mb-xl"
-          :class="$q.screen.gt.xs ? 'q-pb-xl q-mt-lg' : ''"
+          :class="$q.screen.gt.sm ? 'q-pb-xl q-mt-lg' : ''"
         >
           <TypographyTabs
             :key="stickyTabs"
@@ -150,11 +150,27 @@ export default {
     top: 16px;
   }
 }
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 1023px) {
   .solid-page {
     :deep(.solid-page-content) {
       padding: 0px !important;
       margin-left: 250px;
+    }
+  }
+}
+@media only screen and (max-width: 1023px) {
+  .browse-page {
+    .typography-tabs {
+      width: 100%;
+      //padding: 0 96px;
+      :deep(.q-tabs__content) {
+        padding-left: 24px;
+        justify-content: flex-start !important;
+      }
+      .q-tab {
+        padding: 0 24px;
+        //  flex-grow: 1;
+      }
     }
   }
 }
@@ -169,7 +185,7 @@ export default {
 
       position: relative; /* Initially, the header is positioned relative */
       :deep(.q-tabs__content) {
-        // padding: 0 8px;
+        padding: 0 0px;
       }
       &.sticky {
         position: sticky;

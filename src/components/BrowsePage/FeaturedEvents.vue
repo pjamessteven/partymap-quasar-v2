@@ -2,7 +2,7 @@
   <div class="featured-events">
     <div
       class="flex column justify-center q-mb-xl"
-      :class="$q.screen.gt.xs ? 'q-pb-xl q-mt-md ' : 'q-mt-lg'"
+      :class="$q.screen.gt.sm ? 'q-pb-xl q-mt-md ' : 'q-mt-lg'"
     >
       <div class="flex column" v-if="ready">
         <!--

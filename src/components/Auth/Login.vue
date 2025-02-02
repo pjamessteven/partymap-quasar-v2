@@ -302,14 +302,14 @@ export default {
       this.loading = true;
 
       import('@capacitor-community/apple-sign-in')
-        .then((SignInWithApple) => {
+        .then(({ SignInWithApple }) => {
           SignInWithApple.authorize(options)
             .then(async (result) => {
               console.log('result', result);
               // Handle user information
               // Validate token with server and create new session
               const currentUser = await this.appleLogin(
-                result.response.identityToken
+                result.response.identityToken,
               );
               if (!currentUser.username) {
                 this.$router.replace({ name: 'ChooseUsername' });
@@ -331,7 +331,7 @@ export default {
         .catch((error) => {
           console.error(
             'Error importing @capacitor-community/apple-sign-in:',
-            error
+            error,
           );
         });
     },
@@ -401,7 +401,8 @@ export default {
 <style lang="scss" scoped>
 .apple-desktop-signin {
   cursor: pointer;
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 3px 0px,
+  box-shadow:
+    rgba(0, 0, 0, 0.15) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.1) 0px 1px 2px 0px !important;
   border-radius: 9px;
   overflow: hidden;

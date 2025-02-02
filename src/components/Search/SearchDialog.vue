@@ -100,7 +100,7 @@
             >
               {{ t('event.dates') }}
             </div>
-            <div class="q-px-md search-component q-mb-sm" v-if="Screen.gt.sm">
+            <div class="q-px-md search-component q-mb-sm" v-if="Screen.gt.xs">
               <DateControl
                 class="date-control"
                 @click.stop
@@ -152,7 +152,7 @@
 
             <div
               v-if="
-                Screen.lt.sm &&
+                Screen.lt.md &&
                 $route.name === 'Explore' &&
                 queryStore.topTagsInArea.length
               "
@@ -162,7 +162,7 @@
             </div>
             <div
               v-if="
-                Screen.lt.sm &&
+                Screen.lt.md &&
                 $route.name === 'Explore' &&
                 queryStore.topTagsInArea.length
               "
@@ -243,7 +243,7 @@
       </div>
     </CustomQScroll>
     <MenuWrapper
-      v-if="Screen.lt.md"
+      v-if="Screen.lt.sm"
       :showing="showingDateControl"
       @hide="showingDateControl = false"
     >
