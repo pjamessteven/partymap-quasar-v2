@@ -110,19 +110,22 @@ const currentYPos = ref(0);
 const lethargy = ref(new Lethargy({ sensitivity: 0.5 }));
 
 const hiddenYPosition = () => {
-  const iosOffset =
-    $q.platform.is.ios &&
-    $q.platform.is.capacitor &&
-    mainStore.safeAreaInsets.bottom
-      ? mainStore.safeAreaInsets.bottom - 24
-      : 0;
+  let offset;
+  if ($q.platform.is.capacitor && mainStore.safeAreaInsets.bottom) {
+    if ($q.platform.is.ios) {
+      offset = mainStore.safeAreaInsets.bottom - 24;
+    } else {
+      offset = mainStore.safeAreaInsets.bottom;
+    }
+  }
+
   if (
     mainStore.sidebarMinimized &&
     mainStore.sidebarPanel === 'explore' &&
     $q.screen.lt.md
   )
     // SM
-    return window.innerHeight - 152 - mainStore.safeAreaInsets.top - iosOffset;
+    return window.innerHeight - 152 - mainStore.safeAreaInsets.top - offset;
 
   if (mainStore.sidebarPanel === 'nearby') {
     if ($q.screen.gt.xs) {
@@ -132,14 +135,11 @@ const hiddenYPosition = () => {
     }
   }
 
-  if ($q.screen.gt.lg) {
-    return window.innerHeight - 362 - mainStore.safeAreaInsets.top;
-  }
   if ($q.screen.gt.xs) {
-    return window.innerHeight - 260 - mainStore.safeAreaInsets.top;
+    return window.innerHeight - 260 - mainStore.safeAreaInsets.top - offset;
   }
 
-  return window.innerHeight - 256 - mainStore.safeAreaInsets.top;
+  return window.innerHeight - 256 - mainStore.safeAreaInsets.top - offset;
 };
 const showingYPosition = () => {
   return $q.screen.lt.md ? 82 : 76;

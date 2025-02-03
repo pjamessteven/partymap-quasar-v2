@@ -24,12 +24,9 @@ export default defineBoot(async ({ app, store }) => {
     if (Platform.is.capacitor && Screen.lt.sm) {
       window.screen.orientation.lock('portrait');
     }
+
     // Display content under transparent status bar (Android only)
+
     StatusBar.setOverlaysWebView({ overlay: true });
-    if (Dark.isActive) {
-      StatusBar.setStyle({ style: Style.Dark });
-    } else {
-      StatusBar.setStyle({ style: Style.Light });
-    }
   }
 });

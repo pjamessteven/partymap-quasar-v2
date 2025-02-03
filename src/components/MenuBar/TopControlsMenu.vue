@@ -273,7 +273,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(useMainStore, ['setLocale']),
+    ...mapActions(useMainStore, ['setLocale', 'setDarkMode']),
     async setLanguage(lang) {
       await this.loadLocaleMessages(i18n, lang);
       this.setI18nLanguage(i18n, lang);
@@ -283,12 +283,6 @@ export default {
         ...this.$route,
         params: { lang },
       });
-    },
-    setDarkMode(value) {
-      // persist user preference in store
-      // (restored on mount in App.vue)
-      this.darkModePref = value;
-      this.$q.dark.set(value);
     },
     ...mapActions(useAuthStore, ['logout']),
     async handleLogout() {

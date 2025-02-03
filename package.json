@@ -25,6 +25,7 @@
     "@capacitor/geolocation": "^6.1.0",
     "@capacitor/status-bar": "^6.0.0",
     "@hcaptcha/vue3-hcaptcha": "^1.2.1",
+    "@hugotomazi/capacitor-navigation-bar": "^4.0.1",
     "@indoorequal/vue-maplibre-gl": "^7.7.0",
     "@intlify/unplugin-vue-i18n": "^6.0.3",
     "@popperjs/core": "^2.11.8",

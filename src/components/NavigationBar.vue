@@ -465,9 +465,21 @@ export default {
     bottom: 0;
     border-bottom: none !important;
     justify-content: unset;
-    @supports (top: var(--safe-area-inset-bottom)) {
-      padding-bottom: calc(var(--safe-area-inset-bottom) - 16px);
+
+    // ios specific top padding
+    @supports ((top: var(--safe-area-inset-bottom))) {
+      padding-bottom: calc(var(--safe-area-inset-bottom));
     }
+    // ios specific top padding
+    @supports (
+      (top: var(--safe-area-inset-bottom)) and (font: -apple-system-body) and
+        (-webkit-appearance: none)
+    ) {
+      @media only screen and (max-width: 599px) {
+        padding-bottom: calc(var(--safe-area-inset-top) -16px);
+      }
+    }
+
     :deep(.q-tabs) {
       width: 100%;
       position: relative;

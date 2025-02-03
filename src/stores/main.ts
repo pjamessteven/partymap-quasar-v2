@@ -4,7 +4,7 @@ import type { IpInfo } from 'src/types/ip_info';
 import { Geolocation } from '@capacitor/geolocation';
 //import HttpsAdapter from 'node-geocoder/lib/httpadapter/fetchadapter';
 import { Notify } from 'quasar';
-import { Screen, Platform } from 'quasar';
+import { Screen, Platform, Dark } from 'quasar';
 import type { RouteLocationNormalizedLoaded } from 'vue-router';
 import type { LngLatLike } from 'maplibre-gl';
 import { LngLat } from 'maplibre-gl';
@@ -13,6 +13,8 @@ import { default as dayjs } from 'dayjs';
 import importLocale from 'src/import-locale';
 import { useLocalStorage } from '@vueuse/core';
 import axios from 'axios';
+import { NavigationBar } from '@hugotomazi/capacitor-navigation-bar';
+
 const { t, locale } = i18n.global;
 
 interface MainStoreState {
@@ -105,6 +107,19 @@ export const useMainStore = defineStore('main', {
     },
   },
   actions: {
+    setDarkMode(val) {
+      // true | false | auto
+      Dark.set(val);
+      this.darkModePref = val;
+      // android nav bar color (API level < 35)
+      if (Platform.is.android && Platform.is.capacitor) {
+        if (Dark.isActive) {
+          NavigationBar.setColor({ color: '#000000', darkButtons: false });
+        } else {
+          NavigationBar.setColor({ color: '#FFFFFF', darkButtons: true });
+        }
+      }
+    },
     forceUpdate() {
       this.forceUpdate += 1;
     },

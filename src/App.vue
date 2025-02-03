@@ -16,7 +16,6 @@ import { CapacitorCookies } from '@capacitor/core'; // leave this, even though u
 import { createMetaMixin } from 'quasar';
 import { i18n } from 'src/boot/i18n.ts';
 import dayjs from 'dayjs';
-
 export default {
   components: { SplashScreen },
   name: 'App',
@@ -54,6 +53,7 @@ export default {
 
   methods: {
     ...mapActions(useAuthStore, ['checkAuthCookie', 'login']),
+    ...mapActions(useMainStore, ['setDarkMode']),
   },
   computed: {
     ...mapWritableState(useMainStore, [
@@ -94,6 +94,7 @@ export default {
   mounted() {
     document.documentElement.lang = this.currentLanguage;
 
+    this.setDarkMode(this.darkModePref); // restore user dark mode pref
     // dark mode setting
     this.$q.dark.set(
       this.darkModePref === 'true'
@@ -944,11 +945,10 @@ body {
       top: calc(var(--safe-area-inset-top));
     }
     @supports ((bottom: var(--safe-area-inset-bottom))) {
-      /*
+      // good for android but maybe not ios  idk
       height: calc(
         100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top)
       ) !important;
-       */
     }
   }
 }

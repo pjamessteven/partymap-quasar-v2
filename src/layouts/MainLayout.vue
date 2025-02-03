@@ -409,15 +409,18 @@ export default {
     width: 100%;
     // android
     @supports ((top: var(--safe-area-inset-top))) {
-      padding-top: var(--safe-area-inset-top);
+      @media only screen and (max-width: 599px) {
+        padding-top: var(--safe-area-inset-top);
+      }
     }
     // ios specific top padding
     @supports (
-        (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
-          (-webkit-appearance: none)
-      )
-      and (max-width: 599px) {
-      padding-top: calc(var(--safe-area-inset-top) - 8px);
+      (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
+        (-webkit-appearance: none)
+    ) {
+      @media only screen and (max-width: 599px) {
+        padding-top: calc(var(--safe-area-inset-top) - 8px);
+      }
     }
 
     @supports (top: var(--safe-area-inset-bottom)) {
@@ -460,7 +463,7 @@ export default {
       padding-left: min(50vw, 584px);
       padding-right: 60px;
       position: absolute;
-      top: 8px;
+      top: calc(8px + var(--safe-area-inset-top));
       // transform: translate3d(calc(100vw / 2 - calc(633px / 2) + 100px), 0, 0);
       &.explore-view {
         transform: translate3d(-0px, 0, 0);
@@ -637,7 +640,7 @@ export default {
           (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
             (-webkit-appearance: none)
         ) {
-          top: calc(54px + var(--safe-area-inset-top) - 8px);
+          top: calc(56px);
         }
       }
     }

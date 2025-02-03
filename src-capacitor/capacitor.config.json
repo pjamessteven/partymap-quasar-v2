@@ -4,7 +4,8 @@
   "server": {
     "androidScheme": "https",
     "hostname": "api.partymap.com",
-    "url": "http://172.20.10.2:9500"
+    "url": "http://192.168.1.115:9500",
+    "cleartext": true
   },
   "bundledWebRuntime": false,
   "npmClient": "yarn",
@@ -25,7 +26,7 @@
     }
   },
   "ios": {
-    "version": "1.3.0",
+    "version": "1.4.0",
     "limitsNavigationsToAppBoundDomains": true
   },
   "android": {

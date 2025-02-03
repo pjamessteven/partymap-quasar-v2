@@ -1149,6 +1149,11 @@
   dependencies:
     vue "^3.2.19"
 
+"@hugotomazi/capacitor-navigation-bar@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@hugotomazi/capacitor-navigation-bar/-/capacitor-navigation-bar-4.0.1.tgz#e67568a99da366eb12e32a837d4b6897dd7f8b8e"
+  integrity sha512-CtG9c2mxH1hxNvr8+PsoMhfKxoUkv17DQGqt82Y65gM4UARBe0Dp2fa8Eeo+ZzybJ1nRwSAiB4kEQ3nx5UpT1A==
+
 "@humanfs/core@^0.19.1":
   version "0.19.1"
   resolved "https://registry.yarnpkg.com/@humanfs/core/-/core-0.19.1.tgz#17c55ca7d426733fe3c561906b8173c336b40a77"
