@@ -63,11 +63,10 @@
           />
           <div
             ref="contentCard"
-            class="content-card flex column no-wrap"
+            class="content-card"
             :class="{
-              'col-12 no-margin-top': showingHistory,
               'col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12':
-                !showingHistory,
+                !showingHistory && false,
               shadow: mainStore.overlayOpacity === 0 || $q.screen.lt.sm,
             }"
           >
@@ -92,7 +91,6 @@
                   $q.screen.gt.xs
                 "
                 class="featured-media-component"
-                style="float: right; position: relative; z-index: 1"
                 :editing="editing"
                 :item="event?.media_items?.[0]"
                 @loaded="mediaLoaded"
@@ -1162,7 +1160,7 @@ import { useMapStore } from 'src/stores/map';
 import { useEventStore } from 'src/stores/event';
 
 import { computed, ref, onActivated, onDeactivated, onMounted } from 'vue';
-import { useQuasar } from 'quasar';
+import { Platform, useQuasar } from 'quasar';
 import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import CustomQScroll from 'components/CustomQScroll.vue';
@@ -1282,7 +1280,7 @@ const mediaLoaded = () => {
 const showingYPosition = computed(() => {
   if (mapStore.peekMap) {
     return Math.max(window.innerHeight * 0.66 - 64, 0) - 128;
-  } else {
+  } else if (Platform.is.ios || Platform.is.Android) {
     return 0;
   }
 });
@@ -2024,7 +2022,7 @@ a {
         .content-card {
           min-height: 2000px;
           margin-top: Max(calc((100vh - 66vh) - 64px), 0px);
-          max-width: 1024px;
+          width: 1024px;
           //border: none !important;
           min-height: 100vh;
           position: relative;
@@ -2032,7 +2030,7 @@ a {
           border-top-left-radius: 18px !important;
           border-top-right-radius: 18px !important;
           transition: transform 300ms;
-
+          overflow: hidden;
           .peek-map-overlay {
             position: absolute;
             width: 100%;
@@ -2053,11 +2051,14 @@ a {
             border-top-left-radius: 18px !important;
             border-top-right-radius: 18px !important;
             //box-shadow: 0px 0px 64px 32px rgba(0, 0, 0, 0.2) !important;
-            overflow: hidden;
+            //  overflow: hidden;
             position: relative;
             pointer-events: all !important;
 
             .featured-media-component {
+              float: right;
+              position: relative;
+              z-index: 2;
             }
             .ed-sidebar {
               float: right;
@@ -2075,6 +2076,7 @@ a {
             }
 
             .header {
+              z-index: 1;
               cursor: grab;
               position: relative;
               width: 100%;
@@ -2082,6 +2084,7 @@ a {
               max-height: min-content;
               background: #fafafa;
               //border-bottom: 1px solid #1a1a1a;
+
               .q-inner-loading {
                 background: none;
               }

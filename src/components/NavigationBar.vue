@@ -140,12 +140,6 @@ export default {
     return {};
   },
   methods: {
-    ...mapActions(useMainStore, ['loadIpInfo', 'getFineLocation']),
-    clickLocation() {
-      this.getFineLocation();
-      this.sidebarPanel = 'nearby';
-      this.showPanel = true;
-    },
     updateNav(val) {
       // sidebarpanel should always be set to something
       // if using vmodel it will change to null when route changes

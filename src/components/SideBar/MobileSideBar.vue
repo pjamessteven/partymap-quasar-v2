@@ -110,7 +110,7 @@ const currentYPos = ref(0);
 const lethargy = ref(new Lethargy({ sensitivity: 0.5 }));
 
 const hiddenYPosition = () => {
-  let offset;
+  let offset = 0;
   if ($q.platform.is.capacitor && mainStore.safeAreaInsets.bottom) {
     if ($q.platform.is.ios) {
       offset = mainStore.safeAreaInsets.bottom - 24;

@@ -276,10 +276,10 @@ export default {
   nearby_view: {
     near: 'Near',
     message_1: `PartyMap is a community-driven, crowd-sourced platform for finding
-            parties and festivals around the world!`,
-    message_2: `Anyone can submit an event that they know about, as long as the
-            information is already public. Anyone can also suggest changes
-            to an event if the information is out of date. No account needed!`,
+            parties and festivals around the world. `,
+    message_2: `- Anyone can submit a public event that they know about and think should be on PartyMap. 
+                - Anyone can edit event pages that don't have a verified host (all edits are moderated).
+             If you have a verified host account you can If if becomes out of date. No account needed!`,
     message_3: ' This is a work in progress... More features coming soon! ',
     app_store: 'PartyMap on the App Store',
     play_store: 'PartyMap on Google Play',

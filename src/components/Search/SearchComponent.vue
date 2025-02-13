@@ -90,7 +90,7 @@
                 :offset="[10, 10]"
               >
                 <span v-if="!fineLocation">
-                  {{ $t('nearby_view.rough_location') }}
+                  {{ $t('nearby_view.improve_location') }}
                 </span>
                 <span v-else>
                   {{ $t('nearby_view.improve_location') }}

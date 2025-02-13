@@ -640,7 +640,7 @@ export default {
           (top: var(--safe-area-inset-top)) and (font: -apple-system-body) and
             (-webkit-appearance: none)
         ) {
-          top: calc(56px);
+          top: calc(48px - 8px);
         }
       }
     }

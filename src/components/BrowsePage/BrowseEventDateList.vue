@@ -233,7 +233,7 @@ export default {
       'clearAllFilters',
       'clearResults',
     ]),
-    ...mapActions(useMainStore, ['loadIpInfo', 'persistTipsToLocalStorage']),
+    ...mapActions(useMainStore, ['persistTipsToLocalStorage']),
 
     async getInitialList() {
       // event date stuff

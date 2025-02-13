@@ -111,13 +111,13 @@ export const useMainStore = defineStore('main', {
       // true | false | auto
       Dark.set(val);
       this.darkModePref = val;
-      // android nav bar color (API level < 35)
       if (Platform.is.android && Platform.is.capacitor) {
         if (Dark.isActive) {
           NavigationBar.setColor({ color: '#000000', darkButtons: false });
         } else {
           NavigationBar.setColor({ color: '#FFFFFF', darkButtons: true });
         }
+        NavigationBar.setTransparency({ isTransparent: true });
       }
     },
     forceUpdate() {
@@ -311,7 +311,7 @@ export const useMainStore = defineStore('main', {
       } else {
         this.fineLocation = false;
         Notify.create({
-          message: t('error_codes.ip_location'),
+          message: t('error_codes.no_location'),
           icon: 'error',
           closeBtn: true,
         });

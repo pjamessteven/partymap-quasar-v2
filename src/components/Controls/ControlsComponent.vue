@@ -276,7 +276,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useMainStore, ['loadIpInfo', 'getFineLocation']),
     ...mapActions(useQueryStore, ['clearDateFilter']),
     goToExplore() {
       //this.sidebarPanel = 'explore';
@@ -289,10 +288,7 @@ export default {
         });
       }
     },
-    clickLocation() {
-      this.getFineLocation();
-      this.sidebarPanel = 'nearby';
-    },
+
   },
   computed: {
     computedTagLabel() {

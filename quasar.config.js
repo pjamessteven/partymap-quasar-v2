@@ -1,5 +1,5 @@
 import { defineConfig } from '#q-app/wrappers';
-import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 
 export default defineConfig(function (/* ctx */) {
   return {
@@ -76,7 +76,7 @@ export default defineConfig(function (/* ctx */) {
       vitePlugins: [
         VueI18nPlugin({
           /* options */
-        })
+        }),
       ],
     },
 
@@ -88,8 +88,8 @@ export default defineConfig(function (/* ctx */) {
         '/api': {
           // target: 'https://api.partymap.com/', // Replace with your production server's URL
           //          target: 'http://192.168.30.56:5000',
-          //target: 'http://localhost:5000',
-          target: 'http://172.20.10.2:5000',
+          target: 'http://localhost:5000',
+          //target: 'http://172.20.10.2:5000',
           changeOrigin: true,
           pathRewrite: {
             '^/api': '', // Rewrites the URL prefix if needed

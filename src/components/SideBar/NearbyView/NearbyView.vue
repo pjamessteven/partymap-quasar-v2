@@ -123,7 +123,7 @@
                     :offset="[10, 10]"
                   >
                     <span v-if="!fineLocation">
-                      {{ $t('nearby_view.rough_location') }}
+                      {{ $t('nearby_view.improve_location') }}
                     </span>
                     <span v-else>
                       {{ $t('nearby_view.improve_location') }}
@@ -474,6 +474,7 @@
               :class="$q.screen.gt.sm ? 'q-pl-lg t1' : 'q-pl-md t1'"
               v-if="
                 nearbyEventDates.length === 0 &&
+                eventDates.length === 0 &&
                 !loadingEverything &&
                 !nearbyEventDatesLoading
               "
@@ -481,7 +482,7 @@
               {{ $t('nearby_view.waiting_for_location') }}...
             </div>
             <div
-              v-else-if="currentLocation"
+              v-else-if="userLocation && fineLocation"
               class="location-header sticky q-py-sm q-mt-md flex row items-center justify-between"
               :class="$q.screen.lt.md ? 'q-pl-md' : 'q-pl-lg'"
             >
@@ -545,7 +546,10 @@
               class="location-header sticky q-pl-sm flex row items-center justify-between"
               :class="$q.screen.gt.sm ? 'q-mt-sm' : ''"
               style="height: 56px"
-              v-if="nearbyEventDates?.length > 0"
+              v-if="
+                (userLocation && nearbyEventDates?.length > 0) ||
+                eventDates?.length > 0
+              "
             >
               <!--<div class="separator" /> -->
 
@@ -767,7 +771,8 @@ export default {
       // infinite scrolling
 
       if (info.verticalPercentage === 1) {
-        if (this.nearbyEventDatesHasNext && this.currentLocation) {
+        if (this.nearbyEventDatesHasNext && this.userLocation) {
+          console.log('userloc', this.userLocation);
           this.debouncedLoadNearbyEventDates();
         } else if (this.eventDatesHasNext) {
           this.debouncedLoadEventDates();
@@ -1017,10 +1022,12 @@ export default {
       try {
         await this.getFineLocation();
       } catch {
-        console.log('load ip info');
-        await this.loadIpInfo();
+        // people don't like this
+        // because they've already explicitly said they don't want to give their location
+        // so this creeps them out
+        // await this.loadIpInfo();
+        if (this.eventDates?.length === 0) this.loadEverything();
       }
-      //if (this.eventDates?.length === 0) this.loadEverything();
     }
 
     if (this.$route.query.global_page) {

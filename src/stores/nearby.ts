@@ -90,7 +90,7 @@ export const useNearbyStore = defineStore('nearby', {
         const main = useMainStore();
 
         try {
-          if (main.currentLocation) {
+          if (main.userLocation) {
             // first get nearby event dates as this returns and sets queryRadius
             await this.loadNearbyEventDates();
             // then do the following concurrently
