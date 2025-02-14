@@ -2127,6 +2127,7 @@ a {
             }
 
             .main-content {
+              z-index: 1;
               margin-top: -18px;
               min-height: 800px;
               position: relative;
