@@ -6,6 +6,7 @@
         <q-select
           v-model="sortField"
           :options="sortOptions"
+          emit-value
           label="Sort by"
           dense
           outlined
@@ -17,7 +18,7 @@
           :label="sortDesc ? 'Descending' : 'Ascending'"
         />
       </div>
-      
+
       <q-list v-if="artists && artists.length > 0">
         <q-item v-for="(artist, index) in artists" :key="index">
           <q-item-section>
@@ -31,6 +32,7 @@
                     {{ artist.name }}
                   </router-link>
                 </q-item-label>
+
                 <q-item-label caption>
                   created {{ timeAgo(artist.created_at) }}
                   <span v-if="artist.creator">
@@ -109,8 +111,8 @@ export default {
       sortOptions: [
         { label: 'Created Date', value: 'created_at' },
         { label: 'Name', value: 'name' },
-        { label: 'Popularity', value: 'event_count' }
-      ]
+        { label: 'Popularity', value: 'event_count' },
+      ],
     };
   },
   watch: {
@@ -119,7 +121,7 @@ export default {
     },
     sortDesc() {
       this.refreshArtists();
-    }
+    },
   },
   mounted() {
     this.refreshArtists();
