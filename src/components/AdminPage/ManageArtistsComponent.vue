@@ -44,12 +44,10 @@
                     {{ artist.name }}
                   </router-link>
                 </q-item-label>
-
+                <q-item-label caption> mbid: {{ artist.mbid }} </q-item-label>
                 <q-item-label caption>
-                  created {{ timeAgo(artist.created_at) }}
-                </q-item-label>
-                <q-item-label caption>
-                  Events: {{ artist.event_count || 0 }}
+                  created {{ timeAgo(artist.created_at) }} -
+                  {{ artist.event_count || 0 }} upcoming events
                 </q-item-label>
               </div>
               <div class="controls">
@@ -128,7 +126,11 @@
 </template>
 
 <script>
-import { getArtistsRequest, deleteArtistRequest, refreshArtistRequest } from 'src/api';
+import {
+  getArtistsRequest,
+  deleteArtistRequest,
+  refreshArtistRequest,
+} from 'src/api';
 import { mapState } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
 import { debounce } from 'lodash';
@@ -226,25 +228,28 @@ export default {
         });
     },
     selectAllArtists() {
-      this.selectedArtists = this.artists.map(artist => artist.id);
+      this.selectedArtists = this.artists.map((artist) => artist.id);
     },
     refreshArtist(id) {
-      const artistIndex = this.artists.findIndex(a => a.id === id);
+      const artistIndex = this.artists.findIndex((a) => a.id === id);
       this.$set(this.artists[artistIndex], 'refreshing', true);
-      
-      refreshArtistRequest(id).then(() => {
-        this.$q.notify({
-          type: 'positive',
-          message: 'Artist refreshed successfully',
+      console.log('testing');
+      this.refreshArtistRequest(id)
+        .then(() => {
+          this.$q.notify({
+            type: 'positive',
+            message: 'Artist refreshed successfully',
+          });
+        })
+        .catch(() => {
+          this.$q.notify({
+            type: 'negative',
+            message: 'Failed to refresh artist',
+          });
+        })
+        .finally(() => {
+          this.$set(this.artists[artistIndex], 'refreshing', false);
         });
-      }).catch(() => {
-        this.$q.notify({
-          type: 'negative',
-          message: 'Failed to refresh artist',
-        });
-      }).finally(() => {
-        this.$set(this.artists[artistIndex], 'refreshing', false);
-      });
     },
     refreshSelectedArtists() {
       this.$q
@@ -276,7 +281,7 @@ export default {
               })
               .catch(() => {
                 completed++;
-              })
+              }),
           );
 
           Promise.all(refreshPromises)
