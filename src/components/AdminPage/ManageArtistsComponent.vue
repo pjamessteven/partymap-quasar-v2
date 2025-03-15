@@ -11,6 +11,7 @@
           placeholder="Search artists..."
           class="flex-grow"
         />
+
         <q-select
           v-model="sortField"
           :options="sortOptions"
@@ -26,11 +27,7 @@
         />
       </div>
 
-      <q-list
-        v-if="artists && artists.length > 0"
-        v-infinite-scroll="loadMore"
-        :infinite-scroll-disabled="!hasNext || loading"
-      >
+      <q-list v-if="artists && artists.length > 0">
         <q-item v-for="(artist, index) in artists" :key="index">
           <q-item-section>
             <div class="flex row grow justify-between no-wrap items-center">
@@ -46,18 +43,6 @@
 
                 <q-item-label caption>
                   created {{ timeAgo(artist.created_at) }}
-                  <span v-if="artist.creator">
-                    by
-                    <router-link
-                      class="link-hover"
-                      :to="{
-                        name: 'UserPage',
-                        params: { username: artist.creator.username },
-                      }"
-                    >
-                      {{ artist.creator.username }}
-                    </router-link>
-                  </span>
                 </q-item-label>
                 <q-item-label caption>
                   Events: {{ artist.event_count || 0 }}
@@ -130,6 +115,7 @@ export default {
   },
   watch: {
     sortField() {
+      console.log('fuck');
       this.debouncedRefresh();
     },
     sortDesc() {
@@ -139,8 +125,10 @@ export default {
       this.debouncedRefresh();
     },
   },
-  mounted() {
+  created() {
     this.debouncedRefresh = debounce(this.refreshArtists, 300);
+  },
+  mounted() {
     this.refreshArtists();
   },
   methods: {
@@ -191,7 +179,7 @@ export default {
     },
     loadMore() {
       if (!this.hasNext || this.loading) return;
-      
+
       this.page += 1;
       this.loading = true;
       getArtistsRequest({
