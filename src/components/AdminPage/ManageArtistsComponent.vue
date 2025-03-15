@@ -54,6 +54,17 @@
               </div>
               <div class="controls">
                 <q-btn
+                  color="blue"
+                  round
+                  size="sm"
+                  flat
+                  @click.stop="refreshArtist(artist.id)"
+                  :loading="artist.refreshing"
+                >
+                  <q-icon name="las la-sync" />
+                  <q-tooltip>Refresh artist data</q-tooltip>
+                </q-btn>
+                <q-btn
                   color="red"
                   round
                   size="sm"
@@ -61,6 +72,7 @@
                   @click.stop="deleteArtist(artist.id)"
                 >
                   <q-icon name="las la-trash" />
+                  <q-tooltip>Delete artist</q-tooltip>
                 </q-btn>
               </div>
             </div>
@@ -108,7 +120,7 @@
 </template>
 
 <script>
-import { getArtistsRequest, deleteArtistRequest } from 'src/api';
+import { getArtistsRequest, deleteArtistRequest, refreshArtistRequest } from 'src/api';
 import { mapState } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
 import { debounce } from 'lodash';
@@ -206,6 +218,24 @@ export default {
     },
     selectAllArtists() {
       this.selectedArtists = this.artists.map(artist => artist.id);
+    },
+    refreshArtist(id) {
+      const artistIndex = this.artists.findIndex(a => a.id === id);
+      this.$set(this.artists[artistIndex], 'refreshing', true);
+      
+      refreshArtistRequest(id).then(() => {
+        this.$q.notify({
+          type: 'positive',
+          message: 'Artist refreshed successfully',
+        });
+      }).catch(() => {
+        this.$q.notify({
+          type: 'negative',
+          message: 'Failed to refresh artist',
+        });
+      }).finally(() => {
+        this.$set(this.artists[artistIndex], 'refreshing', false);
+      });
     },
     deleteSelectedArtists() {
       this.$q
