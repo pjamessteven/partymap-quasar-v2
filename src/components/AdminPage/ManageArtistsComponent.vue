@@ -2,7 +2,15 @@
   <q-card>
     <q-card-section class="text-h6"> Artists: </q-card-section>
     <q-card-section>
-      <div class="q-mb-md">
+      <div class="q-mb-md flex items-center gap-4">
+        <q-input
+          v-model="searchQuery"
+          outlined
+          dense
+          debounce="300"
+          placeholder="Search artists..."
+          class="flex-grow"
+        />
         <q-select
           v-model="sortField"
           :options="sortOptions"
@@ -10,7 +18,6 @@
           label="Sort by"
           dense
           outlined
-          class="q-mr-sm"
           style="min-width: 150px"
         />
         <q-toggle
@@ -19,7 +26,11 @@
         />
       </div>
 
-      <q-list v-if="artists && artists.length > 0">
+      <q-list
+        v-if="artists && artists.length > 0"
+        v-infinite-scroll="loadMore"
+        :infinite-scroll-disabled="!hasNext || loading"
+      >
         <q-item v-for="(artist, index) in artists" :key="index">
           <q-item-section>
             <div class="flex row grow justify-between no-wrap items-center">
@@ -88,7 +99,7 @@
 import { getArtistsRequest, deleteArtistRequest } from 'src/api';
 import { mapState } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
-
+import { debounce } from 'lodash';
 import common from 'assets/common';
 
 export default {
@@ -106,6 +117,7 @@ export default {
       perPage: 10,
       hasNext: false,
       loading: false,
+      searchQuery: '',
       sortField: 'created_at',
       sortDesc: true,
       sortOptions: [
@@ -113,17 +125,22 @@ export default {
         { label: 'Name', value: 'name' },
         { label: 'Popularity', value: 'event_count' },
       ],
+      debouncedRefresh: null,
     };
   },
   watch: {
     sortField() {
-      this.refreshArtists();
+      this.debouncedRefresh();
     },
     sortDesc() {
-      this.refreshArtists();
+      this.debouncedRefresh();
+    },
+    searchQuery() {
+      this.debouncedRefresh();
     },
   },
   mounted() {
+    this.debouncedRefresh = debounce(this.refreshArtists, 300);
     this.refreshArtists();
   },
   methods: {
@@ -135,6 +152,7 @@ export default {
         sort: this.sortField,
         desc: this.sortDesc,
         per_page: this.perPage,
+        query: this.searchQuery || undefined,
       }).then((response) => {
         this.artists = response.data.items;
         this.loading = false;
@@ -172,6 +190,8 @@ export default {
         });
     },
     loadMore() {
+      if (!this.hasNext || this.loading) return;
+      
       this.page += 1;
       this.loading = true;
       getArtistsRequest({
@@ -179,6 +199,7 @@ export default {
         sort: this.sortField,
         desc: this.sortDesc,
         per_page: this.perPage,
+        query: this.searchQuery || undefined,
       }).then((response) => {
         this.loading = false;
         this.artists = [...this.artists, ...response.data.items];
