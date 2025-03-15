@@ -196,6 +196,7 @@ export default {
   },
   created() {
     this.timeAgo = common.timeAgo;
+    this.debouncedRefresh = debounce(this.refreshArtists, 300);
   },
 };
 </script>
