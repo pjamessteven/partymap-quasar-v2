@@ -115,7 +115,6 @@ export default {
   },
   watch: {
     sortField() {
-      console.log('fuck');
       this.debouncedRefresh();
     },
     sortDesc() {
@@ -124,9 +123,6 @@ export default {
     searchQuery() {
       this.debouncedRefresh();
     },
-  },
-  created() {
-    this.debouncedRefresh = debounce(this.refreshArtists, 300);
   },
   mounted() {
     this.refreshArtists();
@@ -195,7 +191,6 @@ export default {
       });
     },
   },
-  watch: {},
   computed: {
     ...mapState(useAuthStore, ['currentUser']),
   },
