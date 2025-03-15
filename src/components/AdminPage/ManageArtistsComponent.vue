@@ -232,7 +232,9 @@ export default {
     },
     refreshArtist(id) {
       const artistIndex = this.artists.findIndex((a) => a.id === id);
-      this.$set(this.artists[artistIndex], 'refreshing', true);
+      this.artists = this.artists.map(a => 
+        a.id === id ? {...a, refreshing: true} : a
+      );
       console.log('testing');
       this.refreshArtistRequest(id)
         .then(() => {
@@ -248,7 +250,9 @@ export default {
           });
         })
         .finally(() => {
-          this.$set(this.artists[artistIndex], 'refreshing', false);
+          this.artists = this.artists.map(a => 
+            a.id === id ? {...a, refreshing: false} : a
+          );
         });
     },
     refreshSelectedArtists() {
