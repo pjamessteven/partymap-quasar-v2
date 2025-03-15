@@ -78,7 +78,15 @@
       </q-list>
       <div class="t3 flex grow justify-center" v-else>No artists found</div>
     </q-card-section>
-    <q-card-actions style="position: sticky; bottom: 0">
+    <q-card-actions style="position: sticky; bottom: 0" class="q-gutter-sm">
+      <q-btn
+        v-if="selectedArtists.length > 0"
+        color="grey"
+        icon="las la-times-circle"
+        label="Unselect All"
+        @click="selectedArtists = []"
+        flat
+      />
       <q-btn
         v-if="selectedArtists.length > 0"
         color="red"
