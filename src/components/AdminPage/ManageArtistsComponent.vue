@@ -2,7 +2,7 @@
   <q-card>
     <q-card-section class="text-h6"> Artists: </q-card-section>
     <q-card-section>
-      <div class="q-mb-md flex items-center gap-4">
+      <div class="q-mb-md flex items-center q-gutter-sm">
         <q-input
           v-model="searchQuery"
           outlined
@@ -17,6 +17,7 @@
           :options="sortOptions"
           emit-value
           label="Sort by"
+          option-label="label"
           dense
           outlined
           style="min-width: 150px"
@@ -77,7 +78,7 @@
       </q-list>
       <div class="t3 flex grow justify-center" v-else>No artists found</div>
     </q-card-section>
-    <q-card-actions>
+    <q-card-actions style="position: sticky; bottom: 0">
       <q-btn
         v-if="selectedArtists.length > 0"
         color="red"
@@ -112,7 +113,7 @@ export default {
     return {
       artists: null,
       page: 1,
-      perPage: 10,
+      perPage: 50,
       hasNext: false,
       loading: false,
       searchQuery: '',
@@ -121,7 +122,8 @@ export default {
       sortOptions: [
         { label: 'Created Date', value: 'created_at' },
         { label: 'Name', value: 'name' },
-        { label: 'Popularity', value: 'event_count' },
+        { label: 'Upcoming event count', value: 'event_count' },
+        { label: 'Spotify rank', value: 'popularity' },
       ],
       debouncedRefresh: null,
       selectedArtists: [],
@@ -180,7 +182,7 @@ export default {
               progressDialog.hide();
               this.refreshArtists();
               this.selectedArtists = this.selectedArtists.filter(
-                (artistId) => artistId !== id
+                (artistId) => artistId !== id,
               );
             },
             () => {
@@ -200,9 +202,9 @@ export default {
         .onOk(() => {
           this.bulkDeleting = true;
           const deletePromises = this.selectedArtists.map((id) =>
-            deleteArtistRequest(id)
+            deleteArtistRequest(id),
           );
-          
+
           Promise.all(deletePromises)
             .then(() => {
               this.bulkDeleting = false;
