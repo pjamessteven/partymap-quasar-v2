@@ -88,6 +88,12 @@
         :loading="bulkDeleting"
       />
       <q-btn
+        color="primary"
+        icon="las la-check-square"
+        label="Select All"
+        @click="selectAllArtists"
+      />
+      <q-btn
         v-if="selectedArtists.length > 0"
         color="grey"
         icon="las la-times-circle"
@@ -197,6 +203,9 @@ export default {
             },
           );
         });
+    },
+    selectAllArtists() {
+      this.selectedArtists = this.artists.map(artist => artist.id);
     },
     deleteSelectedArtists() {
       this.$q
