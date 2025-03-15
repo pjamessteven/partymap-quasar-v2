@@ -81,19 +81,18 @@
     <q-card-actions style="position: sticky; bottom: 0" class="q-gutter-sm">
       <q-btn
         v-if="selectedArtists.length > 0"
-        color="grey"
-        icon="las la-times-circle"
-        label="Unselect All"
-        @click="selectedArtists = []"
-        flat
-      />
-      <q-btn
-        v-if="selectedArtists.length > 0"
         color="red"
         icon="las la-trash"
         label="Delete Selected"
         @click="deleteSelectedArtists"
         :loading="bulkDeleting"
+      />
+      <q-btn
+        v-if="selectedArtists.length > 0"
+        color="grey"
+        icon="las la-times-circle"
+        label="Unselect All"
+        @click="selectedArtists = []"
       />
     </q-card-actions>
     <q-inner-loading :showing="loading">
