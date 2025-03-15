@@ -93,6 +93,14 @@
     <q-card-actions style="position: sticky; bottom: 0" class="q-gutter-sm">
       <q-btn
         v-if="selectedArtists.length > 0"
+        color="blue"
+        icon="las la-sync"
+        label="Refresh Selected"
+        @click="refreshSelectedArtists"
+        :loading="bulkRefreshing"
+      />
+      <q-btn
+        v-if="selectedArtists.length > 0"
         color="red"
         icon="las la-trash"
         label="Delete Selected"
@@ -153,6 +161,7 @@ export default {
       debouncedRefresh: null,
       selectedArtists: [],
       bulkDeleting: false,
+      bulkRefreshing: false,
     };
   },
   watch: {
@@ -236,6 +245,59 @@ export default {
       }).finally(() => {
         this.$set(this.artists[artistIndex], 'refreshing', false);
       });
+    },
+    refreshSelectedArtists() {
+      this.$q
+        .dialog({
+          title: 'Refresh selected artists',
+          message: `Are you sure you want to refresh ${this.selectedArtists.length} artists?`,
+          color: 'primary',
+          persistent: false,
+        })
+        .onOk(() => {
+          this.bulkRefreshing = true;
+          const progressDialog = this.$q.dialog({
+            title: 'Refreshing...',
+            message: `0/${this.selectedArtists.length} completed`,
+            progress: 0,
+            persistent: true,
+            ok: false,
+          });
+
+          let completed = 0;
+          const refreshPromises = this.selectedArtists.map((id) =>
+            refreshArtistRequest(id)
+              .then(() => {
+                completed++;
+                progressDialog.update({
+                  message: `${completed}/${this.selectedArtists.length} completed`,
+                  progress: (completed / this.selectedArtists.length) * 100,
+                });
+              })
+              .catch(() => {
+                completed++;
+              })
+          );
+
+          Promise.all(refreshPromises)
+            .then(() => {
+              this.bulkRefreshing = false;
+              progressDialog.hide();
+              this.$q.notify({
+                type: 'positive',
+                message: `${this.selectedArtists.length} artists refreshed successfully`,
+              });
+              this.refreshArtists();
+            })
+            .catch(() => {
+              this.bulkRefreshing = false;
+              progressDialog.hide();
+              this.$q.notify({
+                type: 'negative',
+                message: 'Some artists failed to refresh',
+              });
+            });
+        });
     },
     deleteSelectedArtists() {
       this.$q
