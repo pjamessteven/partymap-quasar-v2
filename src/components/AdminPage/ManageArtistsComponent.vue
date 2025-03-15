@@ -28,7 +28,10 @@
       </div>
 
       <q-list v-if="artists && artists.length > 0">
-        <q-item v-for="(artist, index) in artists" :key="index">
+        <q-item v-for="(artist, index) in artists" :key="index" tag="label">
+          <q-item-section side>
+            <q-checkbox v-model="selectedArtists" :val="artist.id" />
+          </q-item-section>
           <q-item-section>
             <div class="flex row grow justify-between no-wrap items-center">
               <div class="flex column no-wrap">
@@ -54,7 +57,7 @@
                   round
                   size="sm"
                   flat
-                  @click="deleteArtist(artist.id)"
+                  @click.stop="deleteArtist(artist.id)"
                 >
                   <q-icon name="las la-trash" />
                 </q-btn>
@@ -74,6 +77,16 @@
       </q-list>
       <div class="t3 flex grow justify-center" v-else>No artists found</div>
     </q-card-section>
+    <q-card-actions>
+      <q-btn
+        v-if="selectedArtists.length > 0"
+        color="red"
+        icon="las la-trash"
+        label="Delete Selected"
+        @click="deleteSelectedArtists"
+        :loading="bulkDeleting"
+      />
+    </q-card-actions>
     <q-inner-loading :showing="loading">
       <q-spinner-ios :color="$q.dark.isActive ? 'white' : 'black'" size="2em" />
     </q-inner-loading>
@@ -111,6 +124,8 @@ export default {
         { label: 'Popularity', value: 'event_count' },
       ],
       debouncedRefresh: null,
+      selectedArtists: [],
+      bulkDeleting: false,
     };
   },
   watch: {
@@ -146,31 +161,57 @@ export default {
     deleteArtist(id) {
       this.$q
         .dialog({
-          title: 'Delete event',
+          title: 'Delete artist',
           message: 'Are you sure?',
           color: 'primary',
-          persistent: false, // we want the user to not be able to close it
+          persistent: false,
         })
         .onOk(() => {
           const progressDialog = this.$q.dialog({
-            title: 'Doo do doo..',
+            title: 'Deleting...',
             color: 'primary',
-            progress: true, // we enable default settings
+            progress: true,
             cancel: false,
-            persistent: true, // we want the user to not be able to close it
+            persistent: true,
             ok: false,
           });
-          deleteEventRequest(id).then(
+          deleteArtistRequest(id).then(
             () => {
               progressDialog.hide();
-              var indexToDelete = this.events.findIndex((x) => x.id === id);
-              this.events.splice(indexToDelete, 1);
+              this.refreshArtists();
+              this.selectedArtists = this.selectedArtists.filter(
+                (artistId) => artistId !== id
+              );
             },
             () => {
-              // on error
               progressDialog.hide();
             },
           );
+        });
+    },
+    deleteSelectedArtists() {
+      this.$q
+        .dialog({
+          title: 'Delete selected artists',
+          message: `Are you sure you want to delete ${this.selectedArtists.length} artists?`,
+          color: 'primary',
+          persistent: false,
+        })
+        .onOk(() => {
+          this.bulkDeleting = true;
+          const deletePromises = this.selectedArtists.map((id) =>
+            deleteArtistRequest(id)
+          );
+          
+          Promise.all(deletePromises)
+            .then(() => {
+              this.bulkDeleting = false;
+              this.refreshArtists();
+              this.selectedArtists = [];
+            })
+            .catch(() => {
+              this.bulkDeleting = false;
+            });
         });
     },
     loadMore() {
