@@ -224,9 +224,15 @@ export default {
   methods: {
     selectAll() {
       if (this.events && this.events.length > 0) {
-        this.events.forEach((event) => {
-          this.selectedEvents.add(event.id);
-        });
+        // If all visible events are already selected, clear selection
+        if (this.events.every(event => this.selectedEvents.has(event.id))) {
+          this.selectedEvents.clear();
+        } else {
+          // Otherwise select all visible events
+          this.events.forEach((event) => {
+            this.selectedEvents.add(event.id);
+          });
+        }
       }
     },
 
