@@ -7,6 +7,25 @@
         label="Show hidden only"
         class="q-ml-md"
       />
+      <q-input
+        v-model="searchQuery"
+        label="Search events"
+        class="q-mt-md"
+        @keyup.enter="refreshEvents"
+      />
+      <div class="row q-mt-md">
+        <q-select
+          v-model="sortField"
+          :options="sortOptions"
+          label="Sort by"
+          class="col"
+        />
+        <q-toggle
+          v-model="sortDesc"
+          label="Descending"
+          class="col q-ml-md"
+        />
+      </div>
     </q-card-section>
     <q-card-section class="">
       <q-list v-if="events && events.length > 0">
@@ -118,22 +137,19 @@ export default {
       hasNext: false,
       loading: false,
       showHiddenOnly: true,
+      searchQuery: '',
+      sortField: 'created_at',
+      sortDesc: true,
+      sortOptions: [
+        { label: 'Created Date', value: 'created_at' },
+        { label: 'Name', value: 'name' },
+        { label: 'ID', value: 'id' }
+      ]
     };
   },
   mounted() {
     // load user activities
-    this.loading = true;
-    getEventsRequest({
-      hidden: true,
-      page: this.page,
-      sort: 'created_at',
-      desc: true,
-      per_page: this.perPage,
-    }).then((response) => {
-      this.events = response.data.items;
-      this.loading = false;
-      this.hasNext = response.data.has_next;
-    });
+    this.loadEvents();
   },
   methods: {
     deleteEvent(id) {
@@ -179,37 +195,42 @@ export default {
     },
     loadMore() {
       this.page += 1;
+      this.loadEvents();
+    },
+    refreshEvents() {
+      this.page = 1;
+      this.events = null;
+      this.loadEvents();
+    },
+    loadEvents() {
       this.loading = true;
       getEventsRequest({
+        query: this.searchQuery || undefined,
         hidden: this.showHiddenOnly ? true : undefined,
         page: this.page,
-        sort: 'created_at',
-        desc: true,
-        per_page: 10,
+        sort: this.sortField,
+        desc: this.sortDesc,
+        per_page: this.perPage,
       }).then((response) => {
         this.loading = false;
-        this.events = [...this.events, ...response.data.items];
+        if (this.page === 1) {
+          this.events = response.data.items;
+        } else {
+          this.events = [...this.events, ...response.data.items];
+        }
         this.hasNext = response.data.has_next;
       });
     },
   },
   watch: {
     showHiddenOnly() {
-      // Reset pagination and reload events when filter changes
-      this.page = 1;
-      this.events = null;
-      this.loading = true;
-      getEventsRequest({
-        hidden: this.showHiddenOnly ? true : undefined,
-        page: this.page,
-        sort: 'created_at',
-        desc: true,
-        per_page: this.perPage,
-      }).then((response) => {
-        this.events = response.data.items;
-        this.loading = false;
-        this.hasNext = response.data.has_next;
-      });
+      this.refreshEvents();
+    },
+    sortField() {
+      this.refreshEvents();
+    },
+    sortDesc() {
+      this.refreshEvents();
     }
   },
   computed: {

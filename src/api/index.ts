@@ -471,9 +471,20 @@ export function deleteMediaItemRequest(id) {
 
 // query things
 
-export function getEventsRequest(params) {
+export function getEventsRequest(params: {
+  query?: string;
+  sort?: 'created_at' | 'name' | 'id';
+  desc?: boolean;
+  hidden?: boolean;
+  page?: number;
+  per_page?: number;
+}) {
   return api.get(`${API_URL}/event/`, {
-    params: params,
+    params: {
+      ...params,
+      sort: params.sort || 'created_at',
+      desc: params.desc || true
+    },
   });
 }
 
