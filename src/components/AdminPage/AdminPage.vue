@@ -28,6 +28,9 @@
               <q-tab name="events" no-caps>
                 <div class="text-large inter bold q-pa-sm">Events</div>
               </q-tab>
+              <q-tab name="artists" no-caps>
+                <div class="text-large inter bold q-pa-sm">Artists</div>
+              </q-tab>
               <q-tab name="suggestions" no-caps>
                 <div class="text-large inter bold q-pa-sm">Suggestions</div>
               </q-tab>
@@ -43,6 +46,7 @@
           v-if="tab === 'activity'"
           :scrollPercentage="scrollPercentage"
         />
+        <ManageArtistsComponent v-if="tab === 'artists'" class="q-mt-lg" />
         <PendingEventsComponent v-if="tab === 'events'" class="q-mt-lg" />
         <PendingReportsComponent v-if="tab === 'reports'" class="q-mt-lg" />
         <PendingSuggestionsComponent
@@ -63,6 +67,7 @@ import ActivityView from 'src/components/Activities/ActivityView.vue';
 import PendingEventsComponent from './PendingEventsComponent.vue';
 import PendingReportsComponent from './PendingReportsComponent.vue';
 import PendingSuggestionsComponent from './PendingSuggestionsComponent.vue';
+import ManageArtistsComponent from './ManageArtistsComponent.vue';
 export default {
   name: 'UserPage',
   components: {
@@ -71,6 +76,7 @@ export default {
     PendingEventsComponent,
     PendingReportsComponent,
     PendingSuggestionsComponent,
+    ManageArtistsComponent,
   },
   props: {
     username: {
