@@ -32,8 +32,11 @@
     <q-card-section class="">
       <q-list v-if="events && events.length > 0">
         <q-item v-for="(item, index) in events" :key="index" clickable @click="toggleSelectEvent(item.id)">
-          <q-item-section avatar>
-            <q-checkbox v-model="selectedEvents" :val="item.id" />
+          <q-item-section avatar @click.stop>
+            <q-checkbox 
+              :model-value="selectedEvents.has(item.id)"
+              @update:model-value="val => toggleSelectEvent(item.id, val)"
+            />
           </q-item-section>
           <q-item-section>
             <div class="flex row grow justify-between no-wrap items-center">
@@ -188,11 +191,21 @@ export default {
     this.loadEvents();
   },
   methods: {
-    toggleSelectEvent(id) {
-      if (this.selectedEvents.has(id)) {
-        this.selectedEvents.delete(id);
+    toggleSelectEvent(id, checked) {
+      if (checked === undefined) {
+        // Toggle if no value provided
+        if (this.selectedEvents.has(id)) {
+          this.selectedEvents.delete(id);
+        } else {
+          this.selectedEvents.add(id);
+        }
       } else {
-        this.selectedEvents.add(id);
+        // Set based on checkbox value
+        if (checked) {
+          this.selectedEvents.add(id);
+        } else {
+          this.selectedEvents.delete(id);
+        }
       }
     },
     
