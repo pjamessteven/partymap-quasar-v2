@@ -1,6 +1,13 @@
 <template>
   <q-card>
-    <q-card-section class="text-h6"> Pending events: </q-card-section>
+    <q-card-section class="text-h6"> 
+      Pending events:
+      <q-toggle
+        v-model="showHiddenOnly"
+        label="Show hidden only"
+        class="q-ml-md"
+      />
+    </q-card-section>
     <q-card-section class="">
       <q-list v-if="events && events.length > 0">
         <q-item v-for="(item, index) in events" :key="index">
@@ -110,6 +117,7 @@ export default {
       perPage: 10,
       hasNext: false,
       loading: false,
+      showHiddenOnly: true,
     };
   },
   mounted() {
@@ -173,7 +181,7 @@ export default {
       this.page += 1;
       this.loading = true;
       getEventsRequest({
-        hidden: true,
+        hidden: this.showHiddenOnly ? true : undefined,
         page: this.page,
         sort: 'created_at',
         desc: true,
@@ -185,7 +193,25 @@ export default {
       });
     },
   },
-  watch: {},
+  watch: {
+    showHiddenOnly() {
+      // Reset pagination and reload events when filter changes
+      this.page = 1;
+      this.events = null;
+      this.loading = true;
+      getEventsRequest({
+        hidden: this.showHiddenOnly ? true : undefined,
+        page: this.page,
+        sort: 'created_at',
+        desc: true,
+        per_page: this.perPage,
+      }).then((response) => {
+        this.events = response.data.items;
+        this.loading = false;
+        this.hasNext = response.data.has_next;
+      });
+    }
+  },
   computed: {
     ...mapState(useAuthStore, ['currentUser']),
   },
