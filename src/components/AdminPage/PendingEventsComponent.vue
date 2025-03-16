@@ -1,5 +1,5 @@
 <template>
-  <q-card class="column" style="height: 100%">
+  <q-card class="column events-card" style="height: 100%">
     <q-card-section class="text-h6">
       Pending events:
 
@@ -31,11 +31,16 @@
     </q-card-section>
     <q-card-section class="col" style="overflow: auto">
       <q-list v-if="events && events.length > 0">
-        <q-item v-for="(item, index) in events" :key="index" clickable @click="toggleSelectEvent(item.id)">
+        <q-item
+          v-for="(item, index) in events"
+          :key="index"
+          clickable
+          @click="toggleSelectEvent(item.id)"
+        >
           <q-item-section avatar @click.stop>
-            <q-checkbox 
+            <q-checkbox
               :model-value="selectedEvents.has(item.id)"
-              @update:model-value="val => toggleSelectEvent(item.id, val)"
+              @update:model-value="(val) => toggleSelectEvent(item.id, val)"
             />
           </q-item-section>
           <q-item-section>
@@ -112,33 +117,34 @@
       </q-list>
       <div class="t3 flex grow justify-center" v-else>No pending events :(</div>
     </q-card-section>
-    <q-footer v-show="selectedEvents.size > 0" class="bg-grey-8 text-white" bordered>
+
+    <div v-show="selectedEvents.size > 0" class="footer bg-grey-8 text-white">
       <q-toolbar>
         <q-toolbar-title>
           {{ selectedEvents.size }} event(s) selected
         </q-toolbar-title>
-        
-        <q-btn 
-          flat 
-          round 
-          icon="delete" 
+
+        <q-btn
+          flat
+          round
+          icon="delete"
           @click="bulkDelete"
           :disable="bulkProcessing"
         >
           <q-tooltip>Delete selected</q-tooltip>
         </q-btn>
-        
-        <q-btn 
-          flat 
-          round 
-          icon="check" 
+
+        <q-btn
+          flat
+          round
+          icon="check"
           @click="bulkApprove"
           :disable="bulkProcessing"
         >
           <q-tooltip>Approve selected</q-tooltip>
         </q-btn>
       </q-toolbar>
-    </q-footer>
+    </div>
 
     <q-inner-loading :showing="loading || bulkProcessing">
       <q-spinner-ios :color="$q.dark.isActive ? 'white' : 'black'" size="2em" />
@@ -183,7 +189,7 @@ export default {
       ],
       selectedEvents: new Set(),
       bulkProcessing: false,
-      bulkProgress: 0
+      bulkProgress: 0,
     };
   },
   mounted() {
@@ -208,91 +214,95 @@ export default {
         }
       }
     },
-    
+
     async bulkDelete() {
-      this.$q.dialog({
-        title: 'Delete Events',
-        message: `Are you sure you want to delete ${this.selectedEvents.size} events?`,
-        cancel: true,
-        persistent: true
-      }).onOk(async () => {
-        this.bulkProcessing = true;
-        this.bulkProgress = 0;
-        
-        const progressDialog = this.$q.dialog({
-          title: 'Deleting Events...',
-          message: this.bulkProgressMessage,
-          progress: true,
+      this.$q
+        .dialog({
+          title: 'Delete Events',
+          message: `Are you sure you want to delete ${this.selectedEvents.size} events?`,
+          cancel: true,
           persistent: true,
-          ok: false
-        });
-        
-        const total = this.selectedEvents.size;
-        let completed = 0;
-        
-        for (const id of this.selectedEvents) {
-          try {
-            await deleteEventRequest(id);
-            this.events = this.events.filter(event => event.id !== id);
-          } catch (error) {
-            console.error('Error deleting event:', error);
-          }
-          
-          completed++;
-          this.bulkProgress = Math.round((completed / total) * 100);
-          progressDialog.update({
-            message: this.bulkProgressMessage
+        })
+        .onOk(async () => {
+          this.bulkProcessing = true;
+          this.bulkProgress = 0;
+
+          const progressDialog = this.$q.dialog({
+            title: 'Deleting Events...',
+            message: this.bulkProgressMessage,
+            progress: true,
+            persistent: true,
+            ok: false,
           });
-        }
-        
-        this.selectedEvents.clear();
-        progressDialog.hide();
-        this.bulkProcessing = false;
-      });
+
+          const total = this.selectedEvents.size;
+          let completed = 0;
+
+          for (const id of this.selectedEvents) {
+            try {
+              await deleteEventRequest(id);
+              this.events = this.events.filter((event) => event.id !== id);
+            } catch (error) {
+              console.error('Error deleting event:', error);
+            }
+
+            completed++;
+            this.bulkProgress = Math.round((completed / total) * 100);
+            progressDialog.update({
+              message: this.bulkProgressMessage,
+            });
+          }
+
+          this.selectedEvents.clear();
+          progressDialog.hide();
+          this.bulkProcessing = false;
+        });
     },
-    
+
     async bulkApprove() {
-      this.$q.dialog({
-        title: 'Approve Events',
-        message: `Are you sure you want to approve ${this.selectedEvents.size} events?`,
-        cancel: true,
-        persistent: true
-      }).onOk(async () => {
-        this.bulkProcessing = true;
-        this.bulkProgress = 0;
-        
-        const progressDialog = this.$q.dialog({
-          title: 'Approving Events...',
-          message: this.bulkProgressMessage,
-          progress: true,
+      this.$q
+        .dialog({
+          title: 'Approve Events',
+          message: `Are you sure you want to approve ${this.selectedEvents.size} events?`,
+          cancel: true,
           persistent: true,
-          ok: false
-        });
-        
-        const total = this.selectedEvents.size;
-        let completed = 0;
-        
-        for (const id of this.selectedEvents) {
-          try {
-            await editEventRequest(id, { hidden: false });
-            this.events = this.events.filter(event => event.id !== id);
-          } catch (error) {
-            console.error('Error approving event:', error);
-          }
-          
-          completed++;
-          this.bulkProgress = Math.round((completed / total) * 100);
-          progressDialog.update({
-            message: this.bulkProgressMessage
+        })
+        .onOk(async () => {
+          this.bulkProcessing = true;
+          this.bulkProgress = 0;
+
+          const progressDialog = this.$q.dialog({
+            title: 'Approving Events...',
+            message: this.bulkProgressMessage,
+            progress: true,
+            persistent: true,
+            ok: false,
           });
-        }
-        
-        this.selectedEvents.clear();
-        progressDialog.hide();
-        this.bulkProcessing = false;
-      });
+
+          const total = this.selectedEvents.size;
+          let completed = 0;
+
+          for (const id of this.selectedEvents) {
+            try {
+              await editEventRequest(id, { hidden: false });
+              this.events = this.events.filter((event) => event.id !== id);
+            } catch (error) {
+              console.error('Error approving event:', error);
+            }
+
+            completed++;
+            this.bulkProgress = Math.round((completed / total) * 100);
+            progressDialog.update({
+              message: this.bulkProgressMessage,
+            });
+          }
+
+          this.selectedEvents.clear();
+          progressDialog.hide();
+          this.bulkProcessing = false;
+        });
     },
-    
+
     deleteEvent(id) {
       this.$q
         .dialog({
@@ -378,7 +388,7 @@ export default {
     ...mapState(useAuthStore, ['currentUser']),
     bulkProgressMessage() {
       return `Processing ${this.bulkProgress}% complete...`;
-    }
+    },
   },
   created() {
     this.timeAgo = common.timeAgo;
@@ -391,5 +401,14 @@ export default {
 }
 
 .body--light {
+}
+
+.events-card {
+  position: relative;
+  .footer {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+  }
 }
 </style>
