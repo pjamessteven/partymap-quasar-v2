@@ -333,7 +333,7 @@ export default {
         query: this.searchQuery || undefined,
         date_unconfirmed: this.showDateUnconfirmedOnly || undefined,
         empty_lineup: this.showEmptyLineupOnly || undefined,
-        date_min: this.dateMin || undefined,
+        date_min: this.dateMin ? new Date(this.dateMin).toISOString() : undefined,
         page: this.page,
         sort: this.sortField,
         desc: this.sortDesc,
