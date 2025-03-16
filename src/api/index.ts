@@ -369,6 +369,10 @@ export function getArtistsRequest(params) {
   });
 }
 
+export function deleteArtistRequest(id) {
+  return api.delete(`${API_URL}/artist/${id}`);
+}
+
 // activities
 
 export function getEventContributorsRequest(id, params) {
