@@ -27,6 +27,15 @@
           label="Show hidden only"
           style="font-size: small"
         />
+        <q-btn
+          flat
+          round
+          icon="mdi-select-all"
+          @click="selectAll"
+          :disable="!events || events.length === 0"
+        >
+          <q-tooltip>Select all</q-tooltip>
+        </q-btn>
       </div>
     </q-card-section>
     <q-card-section class="col" style="overflow: auto">
@@ -197,6 +206,14 @@ export default {
     this.loadEvents();
   },
   methods: {
+    selectAll() {
+      if (this.events && this.events.length > 0) {
+        this.events.forEach(event => {
+          this.selectedEvents.add(event.id);
+        });
+      }
+    },
+    
     toggleSelectEvent(id, checked) {
       if (checked === undefined) {
         // Toggle if no value provided
