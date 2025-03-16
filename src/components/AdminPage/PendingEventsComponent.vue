@@ -1,7 +1,7 @@
 <template>
   <q-card class="column events-card" style="height: 100%">
     <q-card-section class="text-h6">
-      Pending events:
+      All events:
 
       <div class="row q-mt-md q-gutter-sm">
         <q-input
@@ -18,15 +18,29 @@
           style="min-width: 200px"
         />
         <q-toggle
-          v-model="sortDesc"
-          label="Descending"
+          v-model="showDateUnconfirmedOnly"
+          label="Date unconfirmed"
+          style="font-size: small"
+        />
+        <q-toggle
+          v-model="showEmptyLineupOnly"
+          label="Empty lineup"
           style="font-size: small"
         />
         <q-toggle
           v-model="showHiddenOnly"
-          label="Show hidden only"
+          label="Pending"
           style="font-size: small"
         />
+        <q-btn
+          flat
+          round
+          icon="mdi-sort"
+          @click="() => (sortDesc = !sortDesc)"
+          :disable="!events || events.length === 0"
+        >
+          <q-tooltip>Select all</q-tooltip>
+        </q-btn>
         <q-btn
           flat
           round
@@ -188,6 +202,8 @@ export default {
       hasNext: false,
       loading: false,
       showHiddenOnly: true,
+      showDateUnconfirmedOnly: false,
+      showEmptyLineupOnly: false,
       searchQuery: '',
       sortField: 'created_at',
       sortDesc: true,
@@ -208,12 +224,12 @@ export default {
   methods: {
     selectAll() {
       if (this.events && this.events.length > 0) {
-        this.events.forEach(event => {
+        this.events.forEach((event) => {
           this.selectedEvents.add(event.id);
         });
       }
     },
-    
+
     toggleSelectEvent(id, checked) {
       if (checked === undefined) {
         // Toggle if no value provided
