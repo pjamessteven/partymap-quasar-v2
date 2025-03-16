@@ -18,13 +18,18 @@
           style="min-width: 100px"
         />
         <q-toggle
+          v-model="showEmptyLineupOnly"
+          label="No lineup"
+          style="font-size: small"
+        />
+        <q-toggle
           v-model="showDateUnconfirmedOnly"
           label="Date unconfirmed"
           style="font-size: small"
         />
         <q-toggle
-          v-model="showHiddenOnly"
-          label="Pending"
+          v-model="disctinct"
+          label="Distinct"
           style="font-size: small"
         />
         <q-btn
@@ -111,7 +116,9 @@
           />
         </div>
       </q-list>
-      <div class="t3 flex grow justify-center" v-else>No pending event dates :(</div>
+      <div class="t3 flex grow justify-center" v-else>
+        No pending event dates :(
+      </div>
     </q-card-section>
 
     <div v-show="selectedEvents.size > 0" class="footer bg-grey-8 text-white">
@@ -149,7 +156,11 @@
 </template>
 
 <script>
-import { getEventDatesRequest, deleteEventDateRequest, editEventDateRequest } from 'src/api';
+import {
+  getEventDatesRequest,
+  deleteEventDateRequest,
+  editEventDateRequest,
+} from 'src/api';
 import { mapState } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
 import common from 'assets/common';
@@ -169,16 +180,16 @@ export default {
       perPage: 10,
       hasNext: false,
       loading: false,
-      showHiddenOnly: true,
       showDateUnconfirmedOnly: false,
+      showEmptyLineupOnly: false,
+      disctinct: true,
       searchQuery: '',
+      tagQuery: '',
       sortField: 'created_at',
       sortDesc: true,
       sortOptions: [
         { label: 'Created Date', value: 'created_at' },
         { label: 'Start Date', value: 'start' },
-        { label: 'Name', value: 'name' },
-        { label: 'ID', value: 'id' },
       ],
       selectedEvents: new Set(),
       bulkProcessing: false,
@@ -191,10 +202,12 @@ export default {
   methods: {
     selectAll() {
       if (this.eventDates && this.eventDates.length > 0) {
-        if (this.eventDates.every(event => this.selectedEvents.has(event.id))) {
+        if (
+          this.eventDates.every((event) => this.selectedEvents.has(event.id))
+        ) {
           this.selectedEvents.clear();
         } else {
-          this.eventDates.forEach(event => {
+          this.eventDates.forEach((event) => {
             this.selectedEvents.add(event.id);
           });
         }
@@ -218,127 +231,81 @@ export default {
     },
 
     async bulkDelete() {
-      this.$q.dialog({
-        title: 'Delete Event Dates',
-        message: `Are you sure you want to delete ${this.selectedEvents.size} event dates?`,
-        cancel: true,
-        persistent: true
-      }).onOk(async () => {
-        this.bulkProcessing = true;
-        this.bulkProgress = 0;
-        
-        const progressDialog = this.$q.dialog({
-          title: 'Deleting Event Dates...',
-          message: this.bulkProgressMessage,
-          progress: true,
+      this.$q
+        .dialog({
+          title: 'Delete Event Dates',
+          message: `Are you sure you want to delete ${this.selectedEvents.size} event dates?`,
+          cancel: true,
           persistent: true,
-          ok: false
-        });
-        
-        const total = this.selectedEvents.size;
-        let completed = 0;
-        
-        for (const id of this.selectedEvents) {
-          try {
-            await deleteEventDateRequest(id);
-            this.eventDates = this.eventDates.filter(event => event.id !== id);
-          } catch (error) {
-            console.error('Error deleting event date:', error);
-          }
-          
-          completed++;
-          this.bulkProgress = Math.round((completed / total) * 100);
-          progressDialog.update({
-            message: this.bulkProgressMessage
-          });
-        }
-        
-        this.selectedEvents.clear();
-        progressDialog.hide();
-        this.bulkProcessing = false;
-      });
-    },
+        })
+        .onOk(async () => {
+          this.bulkProcessing = true;
+          this.bulkProgress = 0;
 
-    async bulkApprove() {
-      this.$q.dialog({
-        title: 'Approve Event Dates',
-        message: `Are you sure you want to approve ${this.selectedEvents.size} event dates?`,
-        cancel: true,
-        persistent: true
-      }).onOk(async () => {
-        this.bulkProcessing = true;
-        this.bulkProgress = 0;
-        
-        const progressDialog = this.$q.dialog({
-          title: 'Approving Event Dates...',
-          message: this.bulkProgressMessage,
-          progress: true,
-          persistent: true,
-          ok: false
-        });
-        
-        const total = this.selectedEvents.size;
-        let completed = 0;
-        
-        for (const id of this.selectedEvents) {
-          try {
-            await editEventDateRequest(id, { hidden: false });
-            this.eventDates = this.eventDates.filter(event => event.id !== id);
-          } catch (error) {
-            console.error('Error approving event date:', error);
-          }
-          
-          completed++;
-          this.bulkProgress = Math.round((completed / total) * 100);
-          progressDialog.update({
-            message: this.bulkProgressMessage
+          const progressDialog = this.$q.dialog({
+            title: 'Deleting Event Dates...',
+            message: this.bulkProgressMessage,
+            progress: true,
+            persistent: true,
+            ok: false,
           });
-        }
-        
-        this.selectedEvents.clear();
-        progressDialog.hide();
-        this.bulkProcessing = false;
-      });
+
+          const total = this.selectedEvents.size;
+          let completed = 0;
+
+          for (const id of this.selectedEvents) {
+            try {
+              await deleteEventDateRequest(id);
+              this.eventDates = this.eventDates.filter(
+                (event) => event.id !== id,
+              );
+            } catch (error) {
+              console.error('Error deleting event date:', error);
+            }
+
+            completed++;
+            this.bulkProgress = Math.round((completed / total) * 100);
+            progressDialog.update({
+              message: this.bulkProgressMessage,
+            });
+          }
+
+          this.selectedEvents.clear();
+          progressDialog.hide();
+          this.bulkProcessing = false;
+        });
     },
 
     deleteEventDate(id) {
-      this.$q.dialog({
-        title: 'Delete event date',
-        message: 'Are you sure?',
-        color: 'primary',
-        persistent: false,
-      }).onOk(() => {
-        const progressDialog = this.$q.dialog({
-          title: 'Deleting...',
+      this.$q
+        .dialog({
+          title: 'Delete event date',
+          message: 'Are you sure?',
           color: 'primary',
-          progress: true,
-          cancel: false,
-          persistent: true,
-          ok: false,
+          persistent: false,
+        })
+        .onOk(() => {
+          const progressDialog = this.$q.dialog({
+            title: 'Deleting...',
+            color: 'primary',
+            progress: true,
+            cancel: false,
+            persistent: true,
+            ok: false,
+          });
+          deleteEventDateRequest(id).then(
+            () => {
+              progressDialog.hide();
+              const indexToDelete = this.eventDates.findIndex(
+                (x) => x.id === id,
+              );
+              this.eventDates.splice(indexToDelete, 1);
+            },
+            () => {
+              progressDialog.hide();
+            },
+          );
         });
-        deleteEventDateRequest(id).then(
-          () => {
-            progressDialog.hide();
-            const indexToDelete = this.eventDates.findIndex(x => x.id === id);
-            this.eventDates.splice(indexToDelete, 1);
-          },
-          () => {
-            progressDialog.hide();
-          },
-        );
-      });
-    },
-
-    approveEventDate(id) {
-      editEventDateRequest(id, { hidden: false }).then(
-        () => {
-          const indexToDelete = this.eventDates.findIndex(x => x.id === id);
-          this.eventDates.splice(indexToDelete, 1);
-        },
-        () => {
-          // on error
-        },
-      );
     },
 
     loadMore() {
@@ -356,12 +323,14 @@ export default {
       this.loading = true;
       getEventDatesRequest({
         query: this.searchQuery || undefined,
-        hidden: this.showHiddenOnly ? true : undefined,
         date_unconfirmed: this.showDateUnconfirmedOnly || undefined,
+        empty_lineup: this.showEmptyLineupOnly || undefined,
         page: this.page,
         sort: this.sortField,
         desc: this.sortDesc,
         per_page: this.perPage,
+        disctinct: this.disctinct,
+        tags: this.tagQuery?.length ? [this.tagQuery] : undefined,
       }).then((response) => {
         this.loading = false;
         if (this.page === 1) {
@@ -375,9 +344,12 @@ export default {
 
     formatDate(dateString) {
       return new Date(dateString).toLocaleString();
-    }
+    },
   },
   watch: {
+    showEmptyLineupOnly() {
+      this.refreshEventDates();
+    },
     showHiddenOnly() {
       this.refreshEventDates();
     },
