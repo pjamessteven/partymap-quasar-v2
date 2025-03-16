@@ -1,29 +1,31 @@
 <template>
   <q-card>
-    <q-card-section class="text-h6"> 
+    <q-card-section class="text-h6">
       Pending events:
-      <q-toggle
-        v-model="showHiddenOnly"
-        label="Show hidden only"
-        class="q-ml-md"
-      />
-      <q-input
-        v-model="searchQuery"
-        label="Search events"
-        class="q-mt-md"
-        @keyup.enter="refreshEvents"
-      />
-      <div class="row q-mt-md">
+
+      <div class="row q-mt-md q-gutter-sm">
+        <q-input
+          v-model="searchQuery"
+          label="Search events"
+          class="grow"
+          @keyup.enter="refreshEvents"
+        />
         <q-select
+          emit-value
           v-model="sortField"
           :options="sortOptions"
           label="Sort by"
-          class="col"
+          style="min-width: 200px"
         />
         <q-toggle
           v-model="sortDesc"
           label="Descending"
-          class="col q-ml-md"
+          style="font-size: small"
+        />
+        <q-toggle
+          v-model="showHiddenOnly"
+          label="Show hidden only"
+          style="font-size: small"
         />
       </div>
     </q-card-section>
@@ -143,8 +145,8 @@ export default {
       sortOptions: [
         { label: 'Created Date', value: 'created_at' },
         { label: 'Name', value: 'name' },
-        { label: 'ID', value: 'id' }
-      ]
+        { label: 'ID', value: 'id' },
+      ],
     };
   },
   mounted() {
@@ -178,7 +180,7 @@ export default {
             () => {
               // on error
               progressDialog.hide();
-            }
+            },
           );
         });
     },
@@ -190,7 +192,7 @@ export default {
         },
         () => {
           // on error
-        }
+        },
       );
     },
     loadMore() {
@@ -231,7 +233,7 @@ export default {
     },
     sortDesc() {
       this.refreshEvents();
-    }
+    },
   },
   computed: {
     ...mapState(useAuthStore, ['currentUser']),
