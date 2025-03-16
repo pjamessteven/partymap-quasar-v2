@@ -1,5 +1,5 @@
 <template>
-  <q-card>
+  <q-card class="column" style="height: 100%">
     <q-card-section class="text-h6">
       Pending events:
 
@@ -29,7 +29,7 @@
         />
       </div>
     </q-card-section>
-    <q-card-section class="">
+    <q-card-section class="col" style="overflow: auto">
       <q-list v-if="events && events.length > 0">
         <q-item v-for="(item, index) in events" :key="index" clickable @click="toggleSelectEvent(item.id)">
           <q-item-section avatar @click.stop>
@@ -112,7 +112,7 @@
       </q-list>
       <div class="t3 flex grow justify-center" v-else>No pending events :(</div>
     </q-card-section>
-    <q-footer v-if="selectedEvents.size > 0" class="bg-grey-8 text-white">
+    <q-footer v-show="selectedEvents.size > 0" class="bg-grey-8 text-white" bordered>
       <q-toolbar>
         <q-toolbar-title>
           {{ selectedEvents.size }} event(s) selected
