@@ -37,6 +37,9 @@
               <q-tab name="reports" no-caps>
                 <div class="text-large inter bold q-pa-sm">Reports</div>
               </q-tab>
+              <q-tab name="event-dates" no-caps>
+                <div class="text-large inter bold q-pa-sm">Event Dates</div>
+              </q-tab>
             </q-tabs>
           </div>
           <q-separator />
@@ -53,6 +56,10 @@
           v-if="tab === 'suggestions'"
           class="q-mt-lg q-mb-xl"
         />
+        <PendingEventDatesComponent
+          v-if="tab === 'event-dates'"
+          class="q-mt-lg"
+        />
       </div>
     </template>
   </SolidPage>
@@ -68,6 +75,7 @@ import PendingEventsComponent from './PendingEventsComponent.vue';
 import PendingReportsComponent from './PendingReportsComponent.vue';
 import PendingSuggestionsComponent from './PendingSuggestionsComponent.vue';
 import ManageArtistsComponent from './ManageArtistsComponent.vue';
+import PendingEventDatesComponent from './PendingEventDatesComponent.vue';
 export default {
   name: 'UserPage',
   components: {
