@@ -32,6 +32,13 @@
           label="Distinct"
           style="font-size: small"
         />
+        <q-input
+          v-model="dateMin"
+          label="From date"
+          type="date"
+          style="min-width: 150px"
+          @update:model-value="refreshEventDates"
+        />
         <q-btn
           flat
           round
@@ -185,6 +192,7 @@ export default {
       disctinct: true,
       searchQuery: '',
       tagQuery: '',
+      dateMin: new Date().toISOString().split('T')[0], // Default to today's date
       sortField: 'created_at',
       sortDesc: true,
       sortOptions: [
@@ -325,6 +333,7 @@ export default {
         query: this.searchQuery || undefined,
         date_unconfirmed: this.showDateUnconfirmedOnly || undefined,
         empty_lineup: this.showEmptyLineupOnly || undefined,
+        date_min: this.dateMin || undefined,
         page: this.page,
         sort: this.sortField,
         desc: this.sortDesc,
