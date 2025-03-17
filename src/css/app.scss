@@ -1,533 +1,166 @@
-// app global css in SCSS form
-
-// Font imports
+// ==============================================
+// IMPORTS
+// ==============================================
 @import '/src/css/inter/inter.css';
 @import '/src/css/metropolis/metropolis.css';
 
-// Utility classes
-.grow {
-  flex-grow: 1;
-}
+// ==============================================
+// UTILITY CLASSES
+// ==============================================
 
-.card {
-  border-radius: 0;
-}
-
-.q-btn-group {
-  border-radius: 9px;
-  border: none !important;
-}
-
-// Font classes
-.inter {
-  font-family: 'Inter';
-
-  &.semibold {
-    font-weight: 500;
-  }
-  &.bold {
-    font-weight: 600;
-  }
-  &.bold2 {
-    font-weight: 700;
-  }
-  &.bolder {
-    font-weight: 800;
-  }
-}
-
-.metropolis {
-  font-family: 'Metropolis';
-
-  &.semibold {
-    font-weight: 500;
-  }
-  &.bold {
-    font-weight: 600;
-  }
-  &.bold2 {
-    font-weight: 700;
-  }
-  &.bolder {
-    font-weight: 800;
-  }
-
-  &:lang(ru) {
-    font-family: 'InterDisplay' !important;
-  }
-}
-
-.stratos {
-  font-family: 'stratos';
-
-  &.bold {
-    font-weight: 600;
-  }
-  &.bolder {
-    font-weight: 800;
-  }
-  &.black {
-    font-weight: 900;
-  }
-}
-
-.sans-serif {
-  font-family: sans-serif;
-}
-.serif {
-  font-family: serif;
-}
-
-// Opacity utilities
-.o-090 {
-  opacity: 0.9;
-}
-.o-080 {
-  opacity: 0.8;
-}
-.o-070 {
-  opacity: 0.7;
-}
-.o-060 {
-  opacity: 0.6;
-}
-.o-050 {
-  opacity: 0.5;
-}
-.o-040 {
-  opacity: 0.4;
-}
-.o-030 {
-  opacity: 0.3;
-}
-.o-020 {
-  opacity: 0.2;
-}
-.o-010 {
-  opacity: 0.1;
-}
-.o-000 {
-  opacity: 0;
-}
-
-.o-animated {
-  transition: opacity 0.3s;
-}
-
-.body--dark {
-  .sticky-input {
-    background: black;
-  }
-}
-
-.body--light {
-  .sticky-input {
-    background: white;
-  }
-}
-
+// Layout
+.grow { flex-grow: 1; }
 .sticky-input {
   position: sticky;
   z-index: 1;
   top: 0;
 }
-
 .control-menu {
   width: 100%;
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
 }
-
-.menubar {
-  z-index: 4500;
+.menubar { z-index: 4500; }
+.overlay-page {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  pointer-events: auto;
+  z-index: 4000;
+  overflow: auto;
 }
+.pointer-events-none { pointer-events: none !important; }
+.disabled { pointer-events: none; }
 
-.text-h2 {
-  font-weight: 700;
-}
-
-.text-h6,
-.text-h5,
-.text-h4,
-.text-h3,
-.text-h2,
-.text-h1 {
-  font-family: 'Metropolis';
-
-  &:lang(ru) {
-    font-family: 'InterDisplay' !important;
+// Borders
+.border-radius { border-radius: 9px !important; }
+.separator {
+  width: 100%;
+  border-top: 1px solid;
+  
+  &.vertical {
+    border-top: none;
+    border-left: 1px solid;
+    height: 100%;
+    width: unset;
   }
 }
 
+// Opacity
+.o-090 { opacity: 0.9; }
+.o-080 { opacity: 0.8; }
+.o-070 { opacity: 0.7; }
+.o-060 { opacity: 0.6; }
+.o-050 { opacity: 0.5; }
+.o-040 { opacity: 0.4; }
+.o-030 { opacity: 0.3; }
+.o-020 { opacity: 0.2; }
+.o-010 { opacity: 0.1; }
+.o-000 { opacity: 0; }
+.o-animated { transition: opacity 0.3s; }
+
+// Shadows
+.shadow {
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+.shadow-md {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.shadow-lg {
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+.shadow-xl {
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+.shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+.soft-shadow {
+  box-shadow:
+    rgba(0, 0, 0, 0.15) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+}
+
+// ==============================================
+// TYPOGRAPHY
+// ==============================================
+
+// Font Families
+.inter {
+  font-family: 'Inter';
+  &.semibold { font-weight: 500; }
+  &.bold { font-weight: 600; }
+  &.bold2 { font-weight: 700; }
+  &.bolder { font-weight: 800; }
+}
+
+.metropolis {
+  font-family: 'Metropolis';
+  &.semibold { font-weight: 500; }
+  &.bold { font-weight: 600; }
+  &.bold2 { font-weight: 700; }
+  &.bolder { font-weight: 800; }
+  &:lang(ru) { font-family: 'InterDisplay' !important; }
+}
+
+.stratos {
+  font-family: 'stratos';
+  &.bold { font-weight: 600; }
+  &.bolder { font-weight: 800; }
+  &.black { font-weight: 900; }
+}
+
+.sans-serif { font-family: sans-serif; }
+.serif { font-family: serif; }
+
+// Headings
+.text-h1, .text-h2, .text-h3, .text-h4, .text-h5, .text-h6 {
+  font-family: 'Metropolis';
+  &:lang(ru) { font-family: 'InterDisplay' !important; }
+}
+
+.text-h2 { font-weight: 700; }
 .text-h6 {
-  //font-size: 18px;
   font-weight: 500;
   line-height: 1.8rem;
-  //letter-spacing: 0.0125em;
   letter-spacing: unset !important;
 }
-.text-large {
-  font-size: 1rem;
-}
+.text-large { font-size: 1rem; }
 
-.dialog-card {
-  display: flex;
-  flex-direction: column;
-  .dialog-card-header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: relative;
-    top: 0px;
-    z-index: 100;
-    padding: 16px 16px;
-    font-weight: 700 !important;
-    .text-h6 {
-      font-weight: 700 !important;
-    }
-  }
-  .dialog-card-content {
-    overflow-y: auto;
-  }
-}
-
-.sticky-header {
-  position: sticky;
-  top: 0px;
-  z-index: 1000;
-}
-
-.body--light {
-  /* ... */
-  .dialog-card {
-    .dialog-card-header {
-      background: $b-2;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    }
-  }
-
-  .q-dialog__backdrop {
-    background: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.8));
-    //background: white;
-  }
-  .sticky-header {
-    background: white;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  }
-
-  .t1 {
-    color: $t-1;
-  }
-  .t2 {
-    color: $t-2;
-  }
-  .t3 {
-    color: $t-3;
-  }
-  .t4 {
-    color: $t-4;
-  }
-
-  .b1 {
-    background-color: $b-1;
-  }
-  .b2 {
-    background-color: $b-2;
-  }
-  .b3 {
-    background-color: $b-3;
-  }
-  .b4 {
-    background-color: $b-4;
-  }
-
-  .q-list--bordered {
-    border: 1px solid rgba(0, 0, 0, 0.05);
-  }
-
-  .q-card__actions {
-    background: $b-1;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-  }
-
-  .auth-card {
-    background: rgba(255, 255, 255, 1) !important;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-  }
-
-  .q-field--filled .q-field__control {
-    background: rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-  }
-
-  .title {
-    color: $t-1 !important;
-  }
-
-  .q-date__header {
-    color: black !important;
-  }
-
-  .q-date {
-    background: rgba(0, 0, 0, 0.05);
-    box-shadow:
-      0 1px 3px rgba(0, 0, 0, 0.2),
-      0 1px 1px rgba(0, 0, 0, 0.14),
-      0 2px 1px -1px rgba(0, 0, 0, 0.12) !important;
-  }
-
-  .q-card {
-    position: relative;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-  }
-
-  .button-light {
-    color: $t-1;
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    .q-btn__wrapper {
-      &:before {
-        box-shadow: none;
-      }
-    }
-  }
-
-  .button-plain {
-    color: $t-1;
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
-    transition: none;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-
-    &::before {
-      box-shadow: none !important;
-    }
-
-    .q-btn__wrapper {
-      &:before {
-        box-shadow: none;
-      }
-    }
-    &.active {
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      background: $b-3 !important;
-    }
-  }
-
-  .nav-button {
-    background: $b-3;
-    &:hover {
-      background: $b-4;
-    }
-  }
-
-  .separator {
-    border-color: rgba(0, 0, 0, 0.1);
-  }
-
-  .editing {
-    &.editing-outline {
-      border: 1px dashed rgba(0, 0, 0, 0.4) !important;
-      border-radius: 9px !important;
-      cursor: pointer;
-    }
-    .editing-outline {
-      border: 1px dashed rgba(0, 0, 0, 0.4) !important;
-      border-radius: 9px !important;
-      cursor: pointer;
-    }
-  }
-  .overlay-page {
-    background: linear-gradient(0deg, white, rgba(255, 255, 255, 0.8));
-  }
-
-  .swipe-nav-bar {
-    width: 40px;
-    height: 2px;
-    margin-bottom: 1px;
-    background-color: rgba(200, 200, 200, 1);
-    position: absolute;
-  }
-}
-
-// Dark theme styles
-.body--dark {
-  background: black !important;
-
-  // Text colors
-  .t1 {
-    color: $ti-1;
-  }
-  .t2 {
-    color: $ti-2;
-  }
-  .t3 {
-    color: $ti-3;
-  }
-  .t4 {
-    color: $ti-4;
-  }
-
-  // Background colors
-  .b1 {
-    background-color: $bi-1;
-  }
-  .b2 {
-    background-color: $bi-2;
-  }
-  .b3 {
-    background-color: $bi-3;
-  }
-  .b4 {
-    background-color: $bi-4;
-  }
-
-  // Cards
-  .dialog-card {
-    background: $bi-2 !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-
-    .dialog-card-header {
-      background: $bi-3 !important;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-    }
-  }
-
-  .auth-card {
-    background: rgba(0, 0, 0, 1) !important;
-  }
-
-  .q-card {
-    box-shadow: none;
-    border: 1px solid rgb(26, 26, 26);
-  }
-
-  // UI Elements
-  .sticky-header {
-    background: black;
-    border-bottom: 1px solid rgb(30, 30, 30);
-  }
-
-  .q-list--bordered {
-    border: 1px solid rgba(255, 255, 255, 0.05);
-  }
-
-  .q-dialog__backdrop {
-    background: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.8));
-  }
-
-  .q-field--dark .q-field__control::before {
-    border-color: rgb(64, 64, 64);
-  }
-
-  // Buttons
-  .button-light {
-    color: $ti-1;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
-
-    .q-btn__wrapper::before {
-      box-shadow: none;
-    }
-  }
-
-  .button-plain {
-    background: black;
-    color: $ti-1;
-    transition: none;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
-
-    &.active {
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: $bi-3 !important;
-    }
-  }
-
-  .nav-button {
-    background: $bi-3;
-    &:hover {
-      background: $bi-4;
-    }
-  }
-
-  // Calendar
-  .vc-container {
-    border-color: rgb(50, 50, 50) !important;
-    background: transparent !important;
-
-    :deep(.vc-day-content.is-disabled) {
-      color: rgba(255, 255, 255, 0.2) !important;
-    }
-
-    :deep(.vc-highlights) .vc-highlight {
-      background-color: rgba(255, 255, 255, 0.2) !important;
-    }
-  }
-
-  // Misc
-  .separator {
-    border-color: rgb(26, 26, 26);
-  }
-
-  .editing {
-    &.editing-outline {
-      border: 1px dashed rgba(255, 255, 255, 0.3) !important;
-      background: $bi-2;
-      border-radius: 9px;
-      cursor: pointer;
-    }
-  }
-
-  .overlay-page {
-    background: linear-gradient(0deg, black, rgba(0, 0, 0, 0.8));
-  }
-
-  .swipe-nav-bar {
-    width: 40px;
-    height: 2px;
-    background-color: rgb(36, 36, 36);
-    position: absolute;
-  }
-}
-
+// Links
 .link-hover {
   color: unset;
   cursor: pointer;
   text-decoration: none !important;
-  &:hover {
-    color: $primary !important;
-  }
-  &.underline {
-    text-decoration: underline !important;
-  }
-  &.primary {
-    color: $primary;
-  }
+  
+  &:hover { color: $primary !important; }
+  &.underline { text-decoration: underline !important; }
+  &.primary { color: $primary; }
 }
 
-.disabled {
-  pointer-events: none;
-}
-.pointer-events-none {
-  pointer-events: none !important;
-}
-// Button styles
+// ==============================================
+// COMPONENTS
+// ==============================================
+
+// Buttons
 .q-btn {
   font-size: 14px;
   border-radius: 9px !important;
   font-weight: 500;
-
-  .q-btn__content {
-    flex-wrap: nowrap;
-  }
-
-  &.q-btn--square {
-    border-radius: 0 !important;
-  }
+  
+  .q-btn__content { flex-wrap: nowrap; }
+  &.q-btn--square { border-radius: 0 !important; }
 }
 
-// Button variants
 .button-light {
   font-weight: 500;
   font-family: Inter;
@@ -546,21 +179,13 @@
   font-size: normal;
   border-radius: 9px !important;
   overflow: hidden;
-
-  .q-btn__wrapper {
-    padding: 0;
-  }
-
+  
+  .q-btn__wrapper { padding: 0; }
   .q-btn__content {
     white-space: nowrap;
-
-    .button-label {
-      padding: 0 12px;
-    }
-
-    .q-icon {
-      margin-right: -6px;
-    }
+    
+    .button-label { padding: 0 12px; }
+    .q-icon { margin-right: -6px; }
   }
 }
 
@@ -572,14 +197,13 @@
   flex-basis: 1;
   max-height: 56px;
   transition: all 0.3s;
-
+  
   &.primary {
     background: $primary !important;
     color: white;
   }
 }
 
-// Button shadows
 .soft-button-shadow {
   &::before {
     box-shadow:
@@ -588,92 +212,10 @@
   }
 }
 
-.soft-shadow {
-  box-shadow:
-    rgba(0, 0, 0, 0.15) 0px 1px 3px 0px,
-    rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
-}
-
-// Menu styles
-.q-menu {
-  border-radius: 9px !important;
-  font-size: small;
-  color: $t-1;
-
-  &.q-menu--dark {
-    box-shadow: none;
-    border: 1px solid $bi-4;
-    color: $ti-1;
-  }
-}
-
-.menu-wrapper {
-  max-height: 500px;
-}
-
-// Dialog styles
-.q-dialog {
-  @supports ((top: var(--safe-area-inset-top))) {
-    top: calc(var(--safe-area-inset-top));
-  }
-
-  @supports ((bottom: var(--safe-area-inset-bottom))) {
-    height: calc(
-      100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top)
-    );
-  }
-
-  .q-dialog__inner {
-    @supports ((top: var(--safe-area-inset-top))) {
-      top: calc(var(--safe-area-inset-top));
-    }
-
-    @supports ((bottom: var(--safe-area-inset-bottom))) {
-      height: calc(
-        100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top)
-      ) !important;
-    }
-
-    &.q-dialog__inner--minimized {
-      padding: 0;
-
-      > div {
-        max-height: 90vh;
-      }
-    }
-  }
-}
-
-// Input styles
-.q-input {
-  border-radius: 9px !important;
-}
-
-.q-field {
-  &__control {
-    overflow: hidden;
-  }
-
-  &--filled .q-field__control {
-    border-radius: 4px !important;
-  }
-}
-
-// Notifications
-.q-notifications__list--top {
-  @supports ((top: var(--safe-area-inset-top))) {
-    top: calc(var(--safe-area-inset-top)) !important;
-  }
-}
-
-// Scroll area
-.q-scrollarea__thumb {
-  z-index: 5000;
-}
-
-// Card styles
+// Cards
 .q-card {
   border-radius: 9px !important;
+  position: relative;
 }
 
 .edit-card {
@@ -681,34 +223,76 @@
   max-width: 460px;
 }
 
-// Separator
-.separator {
-  width: 100%;
-  border-top: 1px solid;
+.dialog-card {
+  display: flex;
+  flex-direction: column;
+  
+  .dialog-card-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+    top: 0px;
+    z-index: 100;
+    padding: 16px 16px;
+    font-weight: 700 !important;
+    
+    .text-h6 { font-weight: 700 !important; }
+  }
+  
+  .dialog-card-content { overflow-y: auto; }
+}
 
-  &.vertical {
-    border-top: none;
-    border-left: 1px solid;
-    height: 100%;
-    width: unset;
+.sticky-header {
+  position: sticky;
+  top: 0px;
+  z-index: 1000;
+}
+
+// Menus
+.q-menu {
+  border-radius: 9px !important;
+  font-size: small;
+  color: $t-1;
+  
+  &.q-menu--dark {
+    box-shadow: none;
+    border: 1px solid $bi-4;
+    color: $ti-1;
   }
 }
 
-// Utility classes
-.border-radius {
-  border-radius: 9px !important;
-}
+.menu-wrapper { max-height: 500px; }
 
-.q-item__section--avatar {
-  min-width: unset !important;
-}
-.overlay-page {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  pointer-events: auto;
-  z-index: 4000;
-  overflow: auto;
+// Dialogs
+.q-dialog {
+  @supports ((top: var(--safe-area-inset-top))) {
+    top: calc(var(--safe-area-inset-top));
+  }
+  
+  @supports ((bottom: var(--safe-area-inset-bottom))) {
+    height: calc(
+      100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top)
+    );
+  }
+  
+  .q-dialog__inner {
+    @supports ((top: var(--safe-area-inset-top))) {
+      top: calc(var(--safe-area-inset-top));
+    }
+    
+    @supports ((bottom: var(--safe-area-inset-bottom))) {
+      height: calc(
+        100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top)
+      ) !important;
+    }
+    
+    &.q-dialog__inner--minimized {
+      padding: 0;
+      
+      > div { max-height: 90vh; }
+    }
+  }
 }
 
 .dialog-page {
@@ -718,6 +302,7 @@
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(4px) saturate(150%);
+  
   .auth-card {
     margin-top: 48px;
     width: 400px;
@@ -726,81 +311,283 @@
   }
 }
 
+// Inputs
+.q-input { border-radius: 9px !important; }
+
+.q-field {
+  &__control { overflow: hidden; }
+  &--filled .q-field__control { border-radius: 4px !important; }
+}
+
+// Calendar
 .vc-container {
-  //font-family: chicagoflf !important;
   background: transparent !important;
   font-family: Inter;
-  .vc-arrow {
+  
+  .vc-arrow { background: transparent !important; }
+  .vc-title { background: transparent; }
+  .on-right { margin-left: unset !important; }
+  .on-left { margin-right: unset !important; }
+}
+
+// ==============================================
+// THEMES
+// ==============================================
+
+// Light Theme
+.body--light {
+  .sticky-input { background: white; }
+  
+  .dialog-card {
+    .dialog-card-header {
+      background: $b-2;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  .q-dialog__backdrop {
+    background: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.8));
+  }
+  
+  .sticky-header {
+    background: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  // Text Colors
+  .t1 { color: $t-1; }
+  .t2 { color: $t-2; }
+  .t3 { color: $t-3; }
+  .t4 { color: $t-4; }
+  
+  // Background Colors
+  .b1 { background-color: $b-1; }
+  .b2 { background-color: $b-2; }
+  .b3 { background-color: $b-3; }
+  .b4 { background-color: $b-4; }
+  
+  // Other Elements
+  .q-list--bordered { border: 1px solid rgba(0, 0, 0, 0.05); }
+  .q-card__actions {
+    background: $b-1;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .auth-card {
+    background: rgba(255, 255, 255, 1) !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .q-field--filled .q-field__control {
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .title { color: $t-1 !important; }
+  .q-date__header { color: black !important; }
+  
+  .q-date {
+    background: rgba(0, 0, 0, 0.05);
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.2),
+      0 1px 1px rgba(0, 0, 0, 0.14),
+      0 2px 1px -1px rgba(0, 0, 0, 0.12) !important;
+  }
+  
+  .q-card {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .button-light {
+    color: $t-1;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    
+    .q-btn__wrapper::before { box-shadow: none; }
+  }
+  
+  .button-plain {
+    color: $t-1;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
+    transition: none;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    
+    &::before { box-shadow: none !important; }
+    .q-btn__wrapper::before { box-shadow: none; }
+    
+    &.active {
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      background: $b-3 !important;
+    }
+  }
+  
+  .nav-button {
+    background: $b-3;
+    &:hover { background: $b-4; }
+  }
+  
+  .separator { border-color: rgba(0, 0, 0, 0.1); }
+  
+  .editing {
+    &.editing-outline {
+      border: 1px dashed rgba(0, 0, 0, 0.4) !important;
+      border-radius: 9px !important;
+      cursor: pointer;
+    }
+    
+    .editing-outline {
+      border: 1px dashed rgba(0, 0, 0, 0.4) !important;
+      border-radius: 9px !important;
+      cursor: pointer;
+    }
+  }
+  
+  .overlay-page {
+    background: linear-gradient(0deg, white, rgba(255, 255, 255, 0.8));
+  }
+  
+  .swipe-nav-bar {
+    width: 40px;
+    height: 2px;
+    margin-bottom: 1px;
+    background-color: rgba(200, 200, 200, 1);
+    position: absolute;
+  }
+}
+
+// Dark Theme
+.body--dark {
+  background: black !important;
+  
+  .sticky-input { background: black; }
+  
+  // Text Colors
+  .t1 { color: $ti-1; }
+  .t2 { color: $ti-2; }
+  .t3 { color: $ti-3; }
+  .t4 { color: $ti-4; }
+  
+  // Background Colors
+  .b1 { background-color: $bi-1; }
+  .b2 { background-color: $bi-2; }
+  .b3 { background-color: $bi-3; }
+  .b4 { background-color: $bi-4; }
+  
+  // Cards
+  .dialog-card {
+    background: $bi-2 !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    
+    .dialog-card-header {
+      background: $bi-3 !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    }
+  }
+  
+  .auth-card { background: rgba(0, 0, 0, 1) !important; }
+  .q-card {
+    box-shadow: none;
+    border: 1px solid rgb(26, 26, 26);
+  }
+  
+  // UI Elements
+  .sticky-header {
+    background: black;
+    border-bottom: 1px solid rgb(30, 30, 30);
+  }
+  
+  .q-list--bordered { border: 1px solid rgba(255, 255, 255, 0.05); }
+  .q-dialog__backdrop {
+    background: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.8));
+  }
+  
+  .q-field--dark .q-field__control::before {
+    border-color: rgb(64, 64, 64);
+  }
+  
+  // Buttons
+  .button-light {
+    color: $ti-1;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
+    
+    .q-btn__wrapper::before { box-shadow: none; }
+  }
+  
+  .button-plain {
+    background: black;
+    color: $ti-1;
+    transition: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
+    
+    &.active {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: $bi-3 !important;
+    }
+  }
+  
+  .nav-button {
+    background: $bi-3;
+    &:hover { background: $bi-4; }
+  }
+  
+  // Calendar
+  .vc-container {
+    border-color: rgb(50, 50, 50) !important;
     background: transparent !important;
+    
+    :deep(.vc-day-content.is-disabled) {
+      color: rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    :deep(.vc-highlights) .vc-highlight {
+      background-color: rgba(255, 255, 255, 0.2) !important;
+    }
   }
-  .vc-title {
-    background: transparent;
+  
+  // Misc
+  .separator { border-color: rgb(26, 26, 26); }
+  
+  .editing {
+    &.editing-outline {
+      border: 1px dashed rgba(255, 255, 255, 0.3) !important;
+      background: $bi-2;
+      border-radius: 9px;
+      cursor: pointer;
+    }
   }
-  .on-right {
-    // override quasar variable that causes ui artifacts
-    margin-left: unset !important;
+  
+  .overlay-page {
+    background: linear-gradient(0deg, black, rgba(0, 0, 0, 0.8));
   }
-  .on-left {
-    // override quasar variable that causes ui artifacts
-
-    margin-right: unset !important;
+  
+  .swipe-nav-bar {
+    width: 40px;
+    height: 2px;
+    background-color: rgb(36, 36, 36);
+    position: absolute;
   }
 }
 
-// TAILWIND CSS SHADOWS
-.shadow {
-  box-shadow:
-    0 1px 3px 0 rgba(0, 0, 0, 0.1),
-    0 1px 2px 0 rgba(0, 0, 0, 0.06);
-}
-
-.shadow-md {
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.shadow-lg {
-  box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-.shadow-xl {
-  box-shadow:
-    0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
-.shadow-2xl {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
-
-// Mobile styles
+// ==============================================
+// MOBILE STYLES
+// ==============================================
 @media only screen and (max-width: 599px) {
   // Theme adjustments
   .body--dark {
-    .q-dialog .menu {
-      color: $bi-2;
-    }
-    .dialog-page {
-      background: black;
-    }
+    .q-dialog .menu { color: $bi-2; }
+    .dialog-page { background: black; }
   }
-
+  
   .body--light {
-    .q-dialog .menu {
-      color: $b-2;
-    }
-    .dialog-page {
-      background: white;
-    }
+    .q-dialog .menu { color: $b-2; }
+    .dialog-page { background: white; }
   }
-
+  
   // Dialog and card adjustments
-  :deep(.q-dialog) .q-card {
-    max-width: 100vw;
-  }
-
+  :deep(.q-dialog) .q-card { max-width: 100vw; }
+  
   .q-card.fullscreen-mobile-card {
     border: none !important;
     box-shadow: none !important;
@@ -810,29 +597,21 @@
     max-height: unset !important;
     border-radius: 0 !important;
   }
-
+  
   // iOS specific overrides
   body.q-ios-padding {
-    .q-dialog__inner {
-      padding: 0 !important;
-    }
-
-    .fullscreen {
-      padding: 0 !important;
-    }
-
-    .q-dialog__inner > div {
-      max-height: 100vh !important;
-    }
+    .q-dialog__inner { padding: 0 !important; }
+    .fullscreen { padding: 0 !important; }
+    .q-dialog__inner > div { max-height: 100vh !important; }
   }
-
+  
   // Android specific overrides
   .platform-android {
     .q-select__dialog {
       padding-top: var(--safe-area-inset-top) !important;
     }
   }
-
+  
   // Edit card adjustments
   .edit-card {
     min-width: 100%;
@@ -841,7 +620,7 @@
     border-radius: 0 !important;
     border: none !important;
   }
-
+  
   // Auth dialog adjustments
   .dialog-page .auth-card {
     border: none !important;
@@ -850,7 +629,7 @@
     width: 100%;
     height: 100%;
     border-radius: 0 !important;
-
+    
     .dialog-card-header {
       width: 100%;
       align-items: center;
@@ -858,12 +637,10 @@
       text-align: center;
     }
   }
-
+  
   // Component adjustments
-  .tag {
-    font-size: 0.9em;
-  }
-
+  .tag { font-size: 0.9em; }
+  
   .component-wrapper {
     .control-menu {
       max-height: 400px;
