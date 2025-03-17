@@ -21,20 +21,36 @@
 // Font classes
 .inter {
   font-family: 'Inter';
-  
-  &.semibold { font-weight: 500; }
-  &.bold { font-weight: 600; }
-  &.bold2 { font-weight: 700; }
-  &.bolder { font-weight: 800; }
+
+  &.semibold {
+    font-weight: 500;
+  }
+  &.bold {
+    font-weight: 600;
+  }
+  &.bold2 {
+    font-weight: 700;
+  }
+  &.bolder {
+    font-weight: 800;
+  }
 }
 
 .metropolis {
   font-family: 'Metropolis';
-  
-  &.semibold { font-weight: 500; }
-  &.bold { font-weight: 600; }
-  &.bold2 { font-weight: 700; }
-  &.bolder { font-weight: 800; }
+
+  &.semibold {
+    font-weight: 500;
+  }
+  &.bold {
+    font-weight: 600;
+  }
+  &.bold2 {
+    font-weight: 700;
+  }
+  &.bolder {
+    font-weight: 800;
+  }
 
   &:lang(ru) {
     font-family: 'InterDisplay' !important;
@@ -43,26 +59,56 @@
 
 .stratos {
   font-family: 'stratos';
-  
-  &.bold { font-weight: 600; }
-  &.bolder { font-weight: 800; }
-  &.black { font-weight: 900; }
+
+  &.bold {
+    font-weight: 600;
+  }
+  &.bolder {
+    font-weight: 800;
+  }
+  &.black {
+    font-weight: 900;
+  }
 }
 
-.sans-serif { font-family: sans-serif; }
-.serif { font-family: serif; }
+.sans-serif {
+  font-family: sans-serif;
+}
+.serif {
+  font-family: serif;
+}
 
 // Opacity utilities
-.o-090 { opacity: 0.9; }
-.o-080 { opacity: 0.8; }
-.o-070 { opacity: 0.7; }
-.o-060 { opacity: 0.6; }
-.o-050 { opacity: 0.5; }
-.o-040 { opacity: 0.4; }
-.o-030 { opacity: 0.3; }
-.o-020 { opacity: 0.2; }
-.o-010 { opacity: 0.1; }
-.o-000 { opacity: 0; }
+.o-090 {
+  opacity: 0.9;
+}
+.o-080 {
+  opacity: 0.8;
+}
+.o-070 {
+  opacity: 0.7;
+}
+.o-060 {
+  opacity: 0.6;
+}
+.o-050 {
+  opacity: 0.5;
+}
+.o-040 {
+  opacity: 0.4;
+}
+.o-030 {
+  opacity: 0.3;
+}
+.o-020 {
+  opacity: 0.2;
+}
+.o-010 {
+  opacity: 0.1;
+}
+.o-000 {
+  opacity: 0;
+}
 
 .o-animated {
   transition: opacity 0.3s;
@@ -309,22 +355,38 @@
   background: black !important;
 
   // Text colors
-  .t1 { color: $ti-1; }
-  .t2 { color: $ti-2; }
-  .t3 { color: $ti-3; }
-  .t4 { color: $ti-4; }
+  .t1 {
+    color: $ti-1;
+  }
+  .t2 {
+    color: $ti-2;
+  }
+  .t3 {
+    color: $ti-3;
+  }
+  .t4 {
+    color: $ti-4;
+  }
 
   // Background colors
-  .b1 { background-color: $bi-1; }
-  .b2 { background-color: $bi-2; }
-  .b3 { background-color: $bi-3; }
-  .b4 { background-color: $bi-4; }
+  .b1 {
+    background-color: $bi-1;
+  }
+  .b2 {
+    background-color: $bi-2;
+  }
+  .b3 {
+    background-color: $bi-3;
+  }
+  .b4 {
+    background-color: $bi-4;
+  }
 
   // Cards
   .dialog-card {
     background: $bi-2 !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    
+
     .dialog-card-header {
       background: $bi-3 !important;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
@@ -363,7 +425,7 @@
     color: $ti-1;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
-    
+
     .q-btn__wrapper::before {
       box-shadow: none;
     }
@@ -393,11 +455,11 @@
   .vc-container {
     border-color: rgb(50, 50, 50) !important;
     background: transparent !important;
-    
+
     :deep(.vc-day-content.is-disabled) {
       color: rgba(255, 255, 255, 0.2) !important;
     }
-    
+
     :deep(.vc-highlights) .vc-highlight {
       background-color: rgba(255, 255, 255, 0.2) !important;
     }
@@ -455,11 +517,11 @@
   font-size: 14px;
   border-radius: 9px !important;
   font-weight: 500;
-  
+
   .q-btn__content {
     flex-wrap: nowrap;
   }
-  
+
   &.q-btn--square {
     border-radius: 0 !important;
   }
@@ -484,18 +546,18 @@
   font-size: normal;
   border-radius: 9px !important;
   overflow: hidden;
-  
+
   .q-btn__wrapper {
     padding: 0;
   }
-  
+
   .q-btn__content {
     white-space: nowrap;
-    
+
     .button-label {
       padding: 0 12px;
     }
-    
+
     .q-icon {
       margin-right: -6px;
     }
@@ -510,7 +572,7 @@
   flex-basis: 1;
   max-height: 56px;
   transition: all 0.3s;
-  
+
   &.primary {
     background: $primary !important;
     color: white;
@@ -537,7 +599,7 @@
   border-radius: 9px !important;
   font-size: small;
   color: $t-1;
-  
+
   &.q-menu--dark {
     box-shadow: none;
     border: 1px solid $bi-4;
@@ -554,23 +616,27 @@
   @supports ((top: var(--safe-area-inset-top))) {
     top: calc(var(--safe-area-inset-top));
   }
-  
+
   @supports ((bottom: var(--safe-area-inset-bottom))) {
-    height: calc(100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top));
+    height: calc(
+      100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top)
+    );
   }
 
   .q-dialog__inner {
     @supports ((top: var(--safe-area-inset-top))) {
       top: calc(var(--safe-area-inset-top));
     }
-    
+
     @supports ((bottom: var(--safe-area-inset-bottom))) {
-      height: calc(100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top)) !important;
+      height: calc(
+        100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top)
+      ) !important;
     }
-    
+
     &.q-dialog__inner--minimized {
       padding: 0;
-      
+
       > div {
         max-height: 90vh;
       }
@@ -587,7 +653,7 @@
   &__control {
     overflow: hidden;
   }
-  
+
   &--filled .q-field__control {
     border-radius: 4px !important;
   }
@@ -619,7 +685,7 @@
 .separator {
   width: 100%;
   border-top: 1px solid;
-  
+
   &.vertical {
     border-top: none;
     border-left: 1px solid;
@@ -750,11 +816,11 @@
     .q-dialog__inner {
       padding: 0 !important;
     }
-    
+
     .fullscreen {
       padding: 0 !important;
     }
-    
+
     .q-dialog__inner > div {
       max-height: 100vh !important;
     }
