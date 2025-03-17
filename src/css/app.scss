@@ -288,9 +288,12 @@
     }
     
     &.q-dialog__inner--minimized {
-      padding: 0;
+      padding: 16px;
       
-      > div { max-height: 90vh; }
+      > div { 
+        max-height: 90vh;
+        margin: 0 auto;
+      }
     }
   }
 }
