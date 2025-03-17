@@ -289,10 +289,13 @@
     
     &.q-dialog__inner--minimized {
       padding: 16px;
+      display: flex;
+      justify-content: center;
       
       > div { 
         max-height: 90vh;
-        margin: 0 auto;
+        max-width: 95vw;
+        width: 100%;
       }
     }
   }
