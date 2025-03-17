@@ -1,46 +1,16 @@
 // app global css in SCSS form
 
+// Font imports
 @import '/src/css/inter/inter.css';
 @import '/src/css/metropolis/metropolis.css';
-/*
-@import '/src/css/chicago/chicago.css';
-//@import '/src/css/metropolis/inter.css';
 
-.chicago {
-  font-family: chicago;
-  //font-style: italic;
-  &.bold {
-    font-weight: 700;
-  }
-  &.lower {
-    text-transform: lowercase;
-  }
-  &.upper {
-    text-transform: uppercase;
-  }
-  &.regular {
-    font-style: unset;
-  }
-}
-  */
-
-.card {
-  border-radius: 0px;
-}
-
+// Utility classes
 .grow {
   flex-grow: 1;
 }
 
-.q-field {
-  //  border-radius: 0px!important;
-  .q-field__control {
-    //  border-radius: 0px!important;
-  }
-}
-
-.q-btn {
-  //  border-radius: 0px!important;
+.card {
+  border-radius: 0;
 }
 
 .q-btn-group {
@@ -48,36 +18,23 @@
   border: none !important;
 }
 
+// Font classes
 .inter {
   font-family: 'Inter';
-  &.semibold {
-    font-weight: 500;
-  }
-  &.bold {
-    font-weight: 600;
-  }
-  &.bold2 {
-    font-weight: 700;
-  }
-  &.bolder {
-    font-weight: 800;
-  }
+  
+  &.semibold { font-weight: 500; }
+  &.bold { font-weight: 600; }
+  &.bold2 { font-weight: 700; }
+  &.bolder { font-weight: 800; }
 }
 
 .metropolis {
   font-family: 'Metropolis';
-  &.semibold {
-    font-weight: 500;
-  }
-  &.bold {
-    font-weight: 600;
-  }
-  &.bold2 {
-    font-weight: 700;
-  }
-  &.bolder {
-    font-weight: 800;
-  }
+  
+  &.semibold { font-weight: 500; }
+  &.bold { font-weight: 600; }
+  &.bold2 { font-weight: 700; }
+  &.bolder { font-weight: 800; }
 
   &:lang(ru) {
     font-family: 'InterDisplay' !important;
@@ -86,57 +43,26 @@
 
 .stratos {
   font-family: 'stratos';
-  &.bold {
-    font-weight: 600;
-  }
-  &.bolder {
-    font-weight: 800;
-  }
-  &.black {
-    font-weight: 900;
-  }
+  
+  &.bold { font-weight: 600; }
+  &.bolder { font-weight: 800; }
+  &.black { font-weight: 900; }
 }
 
-// declare a class which applies it
+.sans-serif { font-family: sans-serif; }
+.serif { font-family: serif; }
 
-.sans-serif {
-  font-family: sans-serif;
-}
-
-.serif {
-  font-family: serif;
-}
-
-.o-090 {
-  opacity: 0.9;
-}
-.o-080 {
-  opacity: 0.8;
-}
-.o-070 {
-  opacity: 0.7;
-}
-.o-060 {
-  opacity: 0.6;
-}
-.o-050 {
-  opacity: 0.5;
-}
-.o-040 {
-  opacity: 0.4;
-}
-.o-030 {
-  opacity: 0.3;
-}
-.o-020 {
-  opacity: 0.2;
-}
-.o-010 {
-  opacity: 0.1;
-}
-.o-000 {
-  opacity: 0;
-}
+// Opacity utilities
+.o-090 { opacity: 0.9; }
+.o-080 { opacity: 0.8; }
+.o-070 { opacity: 0.7; }
+.o-060 { opacity: 0.6; }
+.o-050 { opacity: 0.5; }
+.o-040 { opacity: 0.4; }
+.o-030 { opacity: 0.3; }
+.o-020 { opacity: 0.2; }
+.o-010 { opacity: 0.1; }
+.o-000 { opacity: 0; }
 
 .o-animated {
   transition: opacity 0.3s;
@@ -564,15 +490,18 @@
 .pointer-events-none {
   pointer-events: none !important;
 }
+// Button styles
 .q-btn {
   font-size: 14px;
   border-radius: 9px !important;
   font-weight: 500;
+  
   .q-btn__content {
     flex-wrap: nowrap;
   }
+  
   &.q-btn--square {
-    border-radius: 0px !important;
+    border-radius: 0 !important;
   }
 }
 
@@ -720,11 +649,9 @@
   }
 }
 
+// Card styles
 .q-card {
   border-radius: 9px !important;
-}
-.q-item__section--avatar {
-  min-width: unset !important;
 }
 
 .edit-card {
@@ -732,21 +659,26 @@
   max-width: 460px;
 }
 
+// Separator
 .separator {
   width: 100%;
-  border-top-style: solid;
-  border-top-width: 1px;
+  border-top: 1px solid;
+  
   &.vertical {
-    border-top-style: none;
-    border-top-width: none;
-    border-left-style: solid;
-    border-left-width: 1px;
+    border-top: none;
+    border-left: 1px solid;
     height: 100%;
     width: unset;
   }
 }
+
+// Utility classes
 .border-radius {
   border-radius: 9px !important;
+}
+
+.q-item__section--avatar {
+  min-width: unset !important;
 }
 .overlay-page {
   width: 100%;
