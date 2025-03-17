@@ -234,13 +234,6 @@ body {
 .menubar {
   z-index: 4500;
 }
-.pswp {
-  z-index: 5000 !important;
-}
-
-.disabled-opacity {
-  opacity: 0.5;
-}
 
 .text-h2 {
   font-weight: 700;
