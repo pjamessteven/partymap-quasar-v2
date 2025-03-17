@@ -465,38 +465,7 @@
   }
 }
 
-.soft-button-shadow {
-  &::before {
-    box-shadow:
-      rgba(0, 0, 0, 0.15) 0px 1px 3px 0px,
-      rgba(0, 0, 0, 0.1) 0px 1px 2px 0px !important;
-  }
-  .q-btn__wrapper::before {
-    // this would be a nice shadow if it worked
-    //box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
-  }
-}
-.soft-shadow {
-  box-shadow:
-    rgba(0, 0, 0, 0.15) 0px 1px 3px 0px,
-    rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
-}
-
-.nav-button {
-  font-weight: 500;
-  cursor: pointer;
-  border-radius: 9px;
-  flex-grow: 0;
-  flex-basis: 1;
-  max-height: 56px;
-  transition: all 0.3s;
-  &.primary {
-    background: $primary !important;
-    color: white;
-  }
-  //dth: 264px;
-}
-
+// Button variants
 .button-light {
   font-weight: 500;
   font-family: Inter;
@@ -508,105 +477,132 @@
 }
 
 .button-plain {
-  padding: 0px 12px;
+  padding: 0 12px;
   font-weight: 500;
   font-family: Inter;
   text-transform: capitalize;
   font-size: normal;
   border-radius: 9px !important;
   overflow: hidden;
-  &.active {
-    // font-weight: 600;
-  }
-
+  
   .q-btn__wrapper {
     padding: 0;
   }
+  
   .q-btn__content {
-    .button-label {
-      padding: 0px 12px;
-    }
     white-space: nowrap;
+    
+    .button-label {
+      padding: 0 12px;
+    }
+    
     .q-icon {
       margin-right: -6px;
     }
   }
 }
 
+.nav-button {
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 9px;
+  flex-grow: 0;
+  flex-basis: 1;
+  max-height: 56px;
+  transition: all 0.3s;
+  
+  &.primary {
+    background: $primary !important;
+    color: white;
+  }
+}
+
+// Button shadows
+.soft-button-shadow {
+  &::before {
+    box-shadow:
+      rgba(0, 0, 0, 0.15) 0px 1px 3px 0px,
+      rgba(0, 0, 0, 0.1) 0px 1px 2px 0px !important;
+  }
+}
+
+.soft-shadow {
+  box-shadow:
+    rgba(0, 0, 0, 0.15) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+}
+
+// Menu styles
 .q-menu {
   border-radius: 9px !important;
-  //max-height: 100vh !important;
-  /*
-  max-width: unset !important;
-  max-height: unset !important;
-  overflow-x: auto;
-  overflow-y: auto;
-  */
-  //font-family: chicagoflf;
-  //font-weight: 100;
   font-size: small;
   color: $t-1;
-  border-radius: 0px;
-  //font-family: chicagoflf;
-  //text-transform: lowercase;
+  
+  &.q-menu--dark {
+    box-shadow: none;
+    border: 1px solid $bi-4;
+    color: $ti-1;
+  }
 }
+
 .menu-wrapper {
   max-height: 500px;
 }
 
-.q-menu--dark {
-  box-shadow: none;
-  border: 1px solid $bi-4;
-  color: $ti-1;
+// Dialog styles
+.q-dialog {
+  @supports ((top: var(--safe-area-inset-top))) {
+    top: calc(var(--safe-area-inset-top));
+  }
+  
+  @supports ((bottom: var(--safe-area-inset-bottom))) {
+    height: calc(100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top));
+  }
+
+  .q-dialog__inner {
+    @supports ((top: var(--safe-area-inset-top))) {
+      top: calc(var(--safe-area-inset-top));
+    }
+    
+    @supports ((bottom: var(--safe-area-inset-bottom))) {
+      height: calc(100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top)) !important;
+    }
+    
+    &--minimized {
+      padding: 0;
+      
+      > div {
+        max-height: 90vh;
+      }
+    }
+  }
 }
+
+// Input styles
 .q-input {
   border-radius: 9px !important;
 }
-.q-scrollarea__thumb {
-  z-index: 5000;
-}
-.q-field__control {
-  //border-radius: 9px !important;
-  overflow: hidden;
-}
-.q-field--filled .q-field__control {
-  border-radius: 4px !important;
-}
-.q-dialog__inner > div {
-  // border-radius: 0px !important;
-}
-.q-dialog__inner--minimized > div {
-  max-height: 90vh;
-}
-.q-dialog__inner--minimized {
-  padding: 0px;
+
+.q-field {
+  &__control {
+    overflow: hidden;
+  }
+  
+  &--filled .q-field__control {
+    border-radius: 4px !important;
+  }
 }
 
+// Notifications
 .q-notifications__list--top {
   @supports ((top: var(--safe-area-inset-top))) {
     top: calc(var(--safe-area-inset-top)) !important;
   }
 }
-.q-dialog {
-  @supports ((top: var(--safe-area-inset-top))) {
-    top: calc(var(--safe-area-inset-top));
-  }
-  @supports ((bottom: var(--safe-area-inset-bottom))) {
-    height: calc(
-      100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top)
-    );
-  }
-  .q-dialog__inner {
-    @supports ((top: var(--safe-area-inset-top))) {
-      top: calc(var(--safe-area-inset-top));
-    }
-    @supports ((bottom: var(--safe-area-inset-bottom))) {
-      // good for android but maybe not ios  idk
-      height: calc(
-        100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top)
-      ) !important;
-    }
-  }
+
+// Scroll area
+.q-scrollarea__thumb {
+  z-index: 5000;
 }
 
 // Card styles
