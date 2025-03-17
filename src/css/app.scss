@@ -568,7 +568,7 @@
       height: calc(100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top)) !important;
     }
     
-    &.q-dialog__inner--minimized {
+    &--minimized {
       padding: 0;
       
       > div {
