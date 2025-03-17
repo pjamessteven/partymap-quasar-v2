@@ -304,44 +304,46 @@
   }
 }
 
+// Dark theme styles
 .body--dark {
   background: black !important;
 
+  // Text colors
+  .t1 { color: $ti-1; }
+  .t2 { color: $ti-2; }
+  .t3 { color: $ti-3; }
+  .t4 { color: $ti-4; }
+
+  // Background colors
+  .b1 { background-color: $bi-1; }
+  .b2 { background-color: $bi-2; }
+  .b3 { background-color: $bi-3; }
+  .b4 { background-color: $bi-4; }
+
+  // Cards
   .dialog-card {
     background: $bi-2 !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    
     .dialog-card-header {
       background: $bi-3 !important;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
     }
   }
+
+  .auth-card {
+    background: rgba(0, 0, 0, 1) !important;
+  }
+
+  .q-card {
+    box-shadow: none;
+    border: 1px solid rgb(26, 26, 26);
+  }
+
+  // UI Elements
   .sticky-header {
     background: black;
     border-bottom: 1px solid rgb(30, 30, 30);
-  }
-  .t1 {
-    color: $ti-1;
-  }
-  .t2 {
-    color: $ti-2;
-  }
-  .t3 {
-    color: $ti-3;
-  }
-  .t4 {
-    color: $ti-4;
-  }
-  .b1 {
-    background-color: $bi-1;
-  }
-  .b2 {
-    background-color: $bi-2;
-  }
-  .b3 {
-    background-color: $bi-3;
-  }
-  .b4 {
-    background-color: $bi-4;
   }
 
   .q-list--bordered {
@@ -352,51 +354,30 @@
     background: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.8));
   }
 
-  .vc-container {
-    border-color: rgb(50, 50, 50) !important;
-    background: transparent !important;
-    :deep(.vc-day-content.is-disabled) {
-      color: rgba(255, 255, 255, 0.2) !important;
-    }
-    :deep(.vc-highlights) {
-      .vc-highlight {
-        background-color: rgba(255, 255, 255, 0.2) !important;
-      }
-    }
-    .vc-day {
-      .is-disabled {
-        color: rgba(255, 255, 255, 0.2) !important;
-      }
-    }
+  .q-field--dark .q-field__control::before {
+    border-color: rgb(64, 64, 64);
   }
 
+  // Buttons
   .button-light {
     color: $ti-1;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
-    .q-btn__wrapper {
-      &:before {
-        box-shadow: none;
-      }
+    
+    .q-btn__wrapper::before {
+      box-shadow: none;
     }
   }
 
   .button-plain {
     background: black;
     color: $ti-1;
-
     transition: none;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
 
-    .q-btn__wrapper {
-      &:before {
-        box-shadow: none;
-      }
-    }
     &.active {
       border: 1px solid rgba(255, 255, 255, 0.1);
-
       background: $bi-3 !important;
     }
   }
@@ -408,44 +389,21 @@
     }
   }
 
-  .dialog-card {
-    background: $bi-2;
-    .dialog-card-header {
-      background: $bi-2;
+  // Calendar
+  .vc-container {
+    border-color: rgb(50, 50, 50) !important;
+    background: transparent !important;
+    
+    :deep(.vc-day-content.is-disabled) {
+      color: rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    :deep(.vc-highlights) .vc-highlight {
+      background-color: rgba(255, 255, 255, 0.2) !important;
     }
   }
 
-  .auth-card {
-    background: rgba(0, 0, 0, 1) !important;
-  }
-
-  .button {
-    border: 1px solid $ti-3 !important;
-    border-radius: 5px;
-    // background-color: rgba(255, 255, 255, 0.07);
-    min-height: 40px;
-    box-shadow:
-      0 1px 1px rgba(0, 0, 0, 0.14),
-      0 2px 1px -1px rgba(0, 0, 0, 0.12);
-    color: rgba(255, 255, 255, 0.7);
-  }
-
-  .swipe-nav-bar {
-    width: 40px;
-    height: 2px;
-    background-color: rgb(36, 36, 36);
-    position: absolute;
-  }
-
-  .q-card {
-    box-shadow: none;
-    border: 1px solid rgb(26, 26, 26);
-  }
-
-  .q-field--dark .q-field__control::before {
-    border-color: rgb(64, 64, 64);
-  }
-
+  // Misc
   .separator {
     border-color: rgb(26, 26, 26);
   }
@@ -457,15 +415,17 @@
       border-radius: 9px;
       cursor: pointer;
     }
-    .editing-outline {
-      border: 1px dashed rgba(0, 0, 0, 0.3) !important;
-      border-radius: 9px !important;
-      cursor: pointer;
-    }
   }
 
   .overlay-page {
     background: linear-gradient(0deg, black, rgba(0, 0, 0, 0.8));
+  }
+
+  .swipe-nav-bar {
+    width: 40px;
+    height: 2px;
+    background-color: rgb(36, 36, 36);
+    position: absolute;
   }
 }
 
@@ -753,109 +713,100 @@
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
-// sm
+// Mobile styles
 @media only screen and (max-width: 599px) {
-  html {
-    // font-size: 0.9rem !important;
-  }
-
+  // Theme adjustments
   .body--dark {
-    .q-dialog {
-      .menu {
-        color: $bi-2;
-      }
+    .q-dialog .menu {
+      color: $bi-2;
     }
     .dialog-page {
       background: black;
     }
   }
+
   .body--light {
-    .q-dialog {
-      .menu {
-        color: $b-2;
-      }
+    .q-dialog .menu {
+      color: $b-2;
     }
     .dialog-page {
       background: white;
     }
   }
-  :deep(.q-dialog) {
-    .q-card {
-      max-width: 100vw;
-    }
+
+  // Dialog and card adjustments
+  :deep(.q-dialog) .q-card {
+    max-width: 100vw;
   }
 
-  // override quasar ios padding
-  body.q-ios-padding .q-dialog__inner {
-    padding: 0px !important;
-  }
-  body.q-ios-padding .fullscreen {
-    padding: 0px !important;
-  }
-  body.q-ios-padding .q-dialog__inner > div {
-    max-height: 100vh !important;
-  }
-  .q-card {
-    &.fullscreen-mobile-card {
-      border: none !important;
-      box-shadow: none !important;
-      margin-top: unset;
-      margin-bottom: unset;
-      width: 100%;
-      height: 100%;
-      max-height: unset !important;
-      border-radius: 0px !important;
-    }
-  }
-
-  .q-dialog__inner--minimized > div {
+  .q-card.fullscreen-mobile-card {
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0;
+    width: 100%;
+    height: 100%;
     max-height: unset !important;
+    border-radius: 0 !important;
   }
 
+  // iOS specific overrides
+  body.q-ios-padding {
+    .q-dialog__inner {
+      padding: 0 !important;
+    }
+    
+    .fullscreen {
+      padding: 0 !important;
+    }
+    
+    .q-dialog__inner > div {
+      max-height: 100vh !important;
+    }
+  }
+
+  // Android specific overrides
   .platform-android {
     .q-select__dialog {
       padding-top: var(--safe-area-inset-top) !important;
     }
   }
 
+  // Edit card adjustments
   .edit-card {
     min-width: 100%;
     max-width: 100%;
     min-height: 100%;
-    border-radius: 0px !important;
+    border-radius: 0 !important;
     border: none !important;
   }
 
-  .dialog-page {
-    .auth-card {
-      border: none !important;
-      box-shadow: none !important;
-      margin-top: unset;
-      margin-bottom: unset;
-      width: 100%;
-      height: 100%;
-      //padding-top: calc(var(--safe-area-inset-top));
+  // Auth dialog adjustments
+  .dialog-page .auth-card {
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0 !important;
 
-      border-radius: 0px !important;
-      .dialog-card-header {
-        width: 100%;
-        align-items: center;
-        display: flex;
-        text-align: center;
-      }
+    .dialog-card-header {
+      width: 100%;
+      align-items: center;
+      display: flex;
+      text-align: center;
     }
   }
 
+  // Component adjustments
   .tag {
     font-size: 0.9em;
   }
+
   .component-wrapper {
-    .sticky-input {
-    }
     .control-menu {
       max-height: 400px;
-      padding-left: 0px;
-      padding-right: 0px;
+      padding-left: 0;
+      padding-right: 0;
     }
   }
 }
