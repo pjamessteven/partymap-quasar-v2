@@ -85,6 +85,7 @@ export default {
     PendingReportsComponent,
     PendingSuggestionsComponent,
     ManageArtistsComponent,
+    PendingEventDatesComponent,
   },
   props: {
     username: {
