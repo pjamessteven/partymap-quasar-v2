@@ -292,6 +292,78 @@ const routes: RouteRecordRaw[] = [
           friendlyName: 'Admin',
           showControls: false,
         },
+        children: [
+          {
+            path: '',
+            redirect: { name: 'AdminEvents' }
+          },
+          {
+            path: 'activity',
+            name: 'AdminActivity',
+            component: () => import('src/components/Activities/ActivityView.vue'),
+            meta: {
+              auth: false,
+              mapOverlay: false,
+              friendlyName: 'Admin Activity',
+              showControls: false,
+            }
+          },
+          {
+            path: 'events',
+            name: 'AdminEvents',
+            component: () => import('src/components/AdminPage/PendingEventsComponent.vue'),
+            meta: {
+              auth: false,
+              mapOverlay: false,
+              friendlyName: 'Admin Events',
+              showControls: false,
+            }
+          },
+          {
+            path: 'artists',
+            name: 'AdminArtists',
+            component: () => import('src/components/AdminPage/ManageArtistsComponent.vue'),
+            meta: {
+              auth: false,
+              mapOverlay: false,
+              friendlyName: 'Admin Artists',
+              showControls: false,
+            }
+          },
+          {
+            path: 'suggestions',
+            name: 'AdminSuggestions',
+            component: () => import('src/components/AdminPage/PendingSuggestionsComponent.vue'),
+            meta: {
+              auth: false,
+              mapOverlay: false,
+              friendlyName: 'Admin Suggestions',
+              showControls: false,
+            }
+          },
+          {
+            path: 'reports',
+            name: 'AdminReports',
+            component: () => import('src/components/AdminPage/PendingReportsComponent.vue'),
+            meta: {
+              auth: false,
+              mapOverlay: false,
+              friendlyName: 'Admin Reports',
+              showControls: false,
+            }
+          },
+          {
+            path: 'event-dates',
+            name: 'AdminEventDates',
+            component: () => import('src/components/AdminPage/PendingEventDatesComponent.vue'),
+            meta: {
+              auth: false,
+              mapOverlay: false,
+              friendlyName: 'Admin Event Dates',
+              showControls: false,
+            }
+          }
+        ]
       },
       {
         path: 'todo',

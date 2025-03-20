@@ -21,6 +21,7 @@
               align="left"
               :breakpoint="0"
               style="width: 100%"
+              @update:model-value="updateRoute"
             >
               <q-tab name="activity" no-caps>
                 <div class="text-large inter bold q-pa-sm">Activity</div>
@@ -45,21 +46,7 @@
           <q-separator />
         </div>
 
-        <ActivityView
-          v-if="tab === 'activity'"
-          :scrollPercentage="scrollPercentage"
-        />
-        <ManageArtistsComponent v-if="tab === 'artists'" class="q-mt-lg" />
-        <PendingEventsComponent v-if="tab === 'events'" class="q-mt-lg" />
-        <PendingReportsComponent v-if="tab === 'reports'" class="q-mt-lg" />
-        <PendingSuggestionsComponent
-          v-if="tab === 'suggestions'"
-          class="q-mt-lg q-mb-xl"
-        />
-        <PendingEventDatesComponent
-          v-if="tab === 'event-dates'"
-          class="q-mt-lg"
-        />
+        <router-view :scrollPercentage="scrollPercentage" class="q-mt-lg" />
       </div>
     </template>
   </SolidPage>
@@ -97,7 +84,7 @@ export default {
       scrollPercentage: 0,
       user: null,
       loading: false,
-      tab: 'events',
+      tab: this.$route.name?.replace('Admin', '').toLowerCase() || 'events',
     };
   },
   mounted() {
@@ -117,7 +104,11 @@ export default {
       });
     }*/
   },
-  methods: {},
+  methods: {
+    updateRoute(tab) {
+      this.$router.push({ name: `Admin${tab.charAt(0).toUpperCase() + tab.slice(1)}` });
+    }
+  },
   watch: {},
   computed: {
     ...mapState(useAuthStore, ['currentUser']),
