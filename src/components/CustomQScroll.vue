@@ -2,7 +2,7 @@
   <div
     class="custom-scroll"
     ref="scroll"
-    :class="{ 'disable-scroll': disableScroll }"
+    :class="{ 'disable-scroll': disableScroll, vertical, horizontal }"
     @scroll="handleScroll($event)"
   >
     <slot></slot>
@@ -15,12 +15,12 @@ export default {
     disableScroll: Boolean,
     vertical: {
       type: Boolean,
-      default: true
+      default: true,
     },
     horizontal: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -52,10 +52,11 @@ export default {
           (scrollElement.scrollHeight - scrollElement.clientHeight)) *
         100;
       const horizontalPosition = this.horizontal ? scrollElement.scrollLeft : 0;
-      const horizontalPercentage = this.horizontal ?
-        (horizontalPosition /
-          (scrollElement.scrollWidth - scrollElement.clientWidth)) *
-        100 : 0;
+      const horizontalPercentage = this.horizontal
+        ? (horizontalPosition /
+            (scrollElement.scrollWidth - scrollElement.clientWidth)) *
+          100
+        : 0;
 
       this.$emit('onScroll', {
         verticalPosition,
@@ -89,17 +90,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.body--light {
+}
+
+.body--dark {
+}
 .custom-scroll {
   width: 100%;
   height: 100%;
-  overflow-y: v-bind(vertical ? 'auto' : 'hidden');
-  overflow-x: v-bind(horizontal ? 'auto' : 'hidden');
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 
   &.disable-scroll {
     overflow: hidden !important;
     pointer-events: none;
+  }
+
+  &.vertical {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  &.horizontal {
+    overflow-y: hidden;
+    overflow-x: auto;
   }
 }
 
