@@ -963,7 +963,7 @@ export default {
     },
     getIcalFile() {
       window.location.assign(
-        `${API_URL}/date/${this.selectedEventDate.id}/ics`
+        `${API_URL}/date/${this.selectedEventDate.id}/ics`,
       );
     },
     share() {
@@ -998,7 +998,7 @@ export default {
             .writeText(this.computedUrl)
             .then(() => this.$q.notify('Copied event link to clipboard'))
             .catch(() =>
-              this.$q.notify('Sharing not supported in this browser :(')
+              this.$q.notify('Sharing not supported in this browser :('),
             );
         }
       }
@@ -1074,7 +1074,7 @@ export default {
           this.selectedEventDateIndex = lastIndex;
           // if no next date, set current event to be the most recent one
           const eventDateResponse = await this.loadEventDate(
-            this.event?.event_dates?.[lastIndex]?.id + ''
+            this.event?.event_dates?.[lastIndex]?.id + '',
           );
           this.focusMarker = {
             lat: eventDateResponse.data.location.lat,
@@ -1290,7 +1290,7 @@ export default {
       {
         leading: false,
         trailing: true,
-      }
+      },
     );
   },
 
@@ -1523,7 +1523,7 @@ a {
       color: white;
       text-align: center;
       margin-top: 72px;
-      max-width: 1024px;
+      max-width: 1023px;
     }
   }
   .event-page-overlay {
@@ -1569,7 +1569,7 @@ a {
         .content-card {
           min-height: 2000px;
           margin-top: Max(calc((100vh - 66vh) - 64px), 0px);
-          max-width: 1024px;
+          max-width: 1023px;
           //border: none !important;
           min-height: 100vh;
           position: relative;
@@ -1595,7 +1595,8 @@ a {
             }
           }
           &.shadow {
-            box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
+            box-shadow:
+              rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
               rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
               rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
           }
@@ -1655,10 +1656,6 @@ a {
               :deep(.tag) {
                 background: transparent !important;
                 border: 1px solid rgba(255, 255, 255, 0.48) !important;
-                .tag-inner-wrapper {
-                  background: transparent;
-                  //border-color: rgba(0, 0, 0, 0.8) !important;
-                }
               }
             }
 
@@ -1689,7 +1686,8 @@ a {
                 position: relative;
 
                 .q-btn-group {
-                  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+                  box-shadow:
+                    rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
                     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
                 }
               }
@@ -1742,17 +1740,17 @@ a {
 }
 @media only screen and (min-width: 1023px) {
   .peek-address {
-    max-width: 1024px !important;
+    max-width: 1023px !important;
   }
   .content-card {
-    max-width: 1024px !important;
+    max-width: 1023px !important;
   }
   .sticky-editing-footer-inner {
-    max-width: 1024px;
+    max-width: 1023px;
   }
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 1023px) {
   .peek-address {
     max-width: 96vw !important;
   }

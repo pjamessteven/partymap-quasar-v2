@@ -248,7 +248,7 @@
                 </div>
                 -->
         <transition appear enter-active-class="animated fadeIn slower">
-          <EventDateList
+          <EventDateCardList
             v-if="userEventDates && compactView && !isLoadingDatesInitial"
             :groupByMonth="$q.screen.lt.md"
             :eventDatesGroupedByMonth="userEventDatesGroupedByMonth"
@@ -278,7 +278,7 @@
 </template>
 <script>
 import _ from 'lodash';
-import EventDateList from 'src/components/EventDateList.vue';
+import EventDateCardList from 'src/components/EventDateCardList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
 import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
 import CustomQScroll from 'components/CustomQScroll.vue';
@@ -294,7 +294,7 @@ import InnerLoading from 'src/components/InnerLoading.vue';
 export default {
   components: {
     // ArtistProfile,
-    EventDateList,
+    EventDateCardList,
     EventDatePosterList,
     EventDateViewOptions,
     MenuWrapper,

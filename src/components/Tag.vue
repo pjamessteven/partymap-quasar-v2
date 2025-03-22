@@ -74,6 +74,8 @@ export default {
   .tag {
     //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
     background: $b-2;
+    // box-shadow: rgba(14, 63, 126, 0.08) 0px 0px 0px 1px;
+
     &:hover {
       background: $b-2;
       // box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 3px 0px;
@@ -109,7 +111,7 @@ export default {
   border-radius: 100px;
   transition: all 0.3s;
   padding: 6px 12px;
-
+  white-space: nowrap;
   &.selected {
     background: $primary !important;
     color: $ti-1 !important;

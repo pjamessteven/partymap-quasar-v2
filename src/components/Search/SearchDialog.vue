@@ -3,12 +3,12 @@
     :hiddenYPosition="hiddenYPosition"
     :enableDrag="scrollPercentage <= 0"
     class="search-dialog flex column no-wrap"
-    @click="clickAway"
     @hide="$emit('hide')"
     @onDrag="search.blur()"
   >
     <CustomQScroll
       vertical
+      @click="clickAway"
       @scroll="onScroll"
       ref="scrollArea"
       style="height: 100%; width: 100%"
@@ -238,6 +238,46 @@
                 {{ duration.label }}
               </div>
             </div>
+            <div
+              class="q-px-md search-header metropolis text-h5 bolder q-mt-lg q-mb-md"
+              v-if="authStore.currentUserIsStaff"
+            >
+              Admin
+            </div>
+            <div
+              class="q-px-md search-component flex row q-gutter-sm"
+              v-if="authStore.currentUserIsStaff"
+            >
+              <div
+                :key="1"
+                @click="
+                  queryStore.controlDateUnconfirmed =
+                    !queryStore.controlDateUnconfirmed
+                "
+                class="tag t2"
+                style="text-transform: capitalize"
+                :class="{
+                  'no-hover': Platform.is.ios,
+                  selected: queryStore.controlDateUnconfirmed,
+                }"
+              >
+                Date unconfirmed
+              </div>
+              <div
+                :key="2"
+                @click="
+                  queryStore.controlEmptyLineup = !queryStore.controlEmptyLineup
+                "
+                class="tag t2"
+                style="text-transform: capitalize"
+                :class="{
+                  'no-hover': Platform.is.ios,
+                  selected: queryStore.controlEmptyLineup,
+                }"
+              >
+                Lineup missing
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -258,6 +298,7 @@ import { storeToRefs } from 'pinia';
 import { useMainStore } from 'src/stores/main';
 import { useSearchStore } from 'src/stores/search';
 import { useQueryStore } from 'src/stores/query';
+import { useAuthStore } from 'src/stores/auth';
 import DateControl from '../Controls/DateControl.vue';
 import CustomQScroll from '../CustomQScroll.vue';
 import SearchView from '../SideBar/SearchView/SearchView.vue';
@@ -283,7 +324,7 @@ const emit = defineEmits(['hide']);
 const mainStore = useMainStore();
 const searchStore = useSearchStore();
 const queryStore = useQueryStore();
-
+const authStore = useAuthStore();
 // Destructure store refs
 const { sidebarPanel, showPanel } = storeToRefs(mainStore);
 
@@ -509,7 +550,7 @@ defineExpose({
   height: 100vh;
   width: 100vw;
   max-width: unset;
-  max-height: unset;
+  max-height: unset !important;
   overflow: hidden;
   overflow-y: auto;
   position: relative;

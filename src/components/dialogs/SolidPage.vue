@@ -15,7 +15,7 @@
         class="solid-page-scroll-area flex grow"
         stye="width: 100%;"
       >
-        <div class="flex justify-center" style="width: 100%">
+        <div class="flex column no-wrap items-center" style="width: 100%">
           <div
             v-if="$slots.title"
             class="solid-page-title flex justify-center inter bolder"
@@ -23,7 +23,7 @@
             :class="
               $q.screen.gt.xs
                 ? 'q-pt-xl q-pb-sm text-h4'
-                : ' q-pt-md q-pb-md text-h5'
+                : 'q-pt-md q-pb-md text-h5'
             "
           >
             <div
@@ -143,9 +143,9 @@ export default {
     justify-content: center;
   }
   .solid-page-content-width {
-    width: 1000%;
-    max-width: 960px;
-    min-width: 50vw;
+    width: 1024px;
+    //max-width: 11024px;
+    //min-width: 50vw;
   }
   .solid-page-footer {
     width: 100%;
@@ -155,12 +155,12 @@ export default {
 @media only screen and (max-width: 1440px) {
   .solid-page {
     .solid-page-content-width {
-      max-width: 1024px;
+      max-width: 1023px;
     }
   }
 }
 // md
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 1023px) {
   .solid-page {
     padding-top: 56px;
 

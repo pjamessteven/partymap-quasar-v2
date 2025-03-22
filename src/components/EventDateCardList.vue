@@ -1,15 +1,14 @@
 <template>
-  <div class="flex column" style="width: 100%">
+  <div class="flex column">
     <DateHeader
       v-if="!hideHeader && !groupByMonth && eventDatesTotal > 0"
       class="total-result-header"
       :altLabel="computedTotalResultMessage"
     />
 
-    <div v-if="groupByMonth" style="width: 100%">
+    <div v-if="groupByMonth">
       <div
-        class="month-group q-pb-lg"
-        style="width: 100%"
+        class="month-group"
         v-for="yearMonth in Object.keys(eventDatesGroupedByMonth).sort()"
         :key="yearMonth"
       >
@@ -20,22 +19,57 @@
           :date="eventDatesGroupedByMonth[Number(yearMonth)]?.[0].start_naive"
         >
         </DateHeader>
-        <div class="flex column" style="width: 100%">
-          <EventDateListItem
-            :event="date"
-            :key="index"
+        <div
+          class="ed-card-grid q-pb-sm"
+          :style="gridColumns"
+          :class="{
+            'q-px-lg q-mb-lg ': $q.screen.gt.sm,
+            'q-px-sm  q-pb-md': $q.screen.lt.md,
+          }"
+        >
+          <!-- bit too slow when lots of items
+          <q-intersection
             v-for="(date, index) in eventDatesGroupedByMonth[Number(yearMonth)]"
-          />
+            :key="index"
+            class="ed-intersection"
+            :style="$q.screen.gt.xs ? 'height: 238.5px' : 'height: 300px'"
+          >
+            <template v-slot:default>
+              <EventDateCard :key="index" :event="date" :short-date="true">
+              </EventDateCard>
+            </template>
+            <template v-slot:hidden>
+              <EventDateCard :key="index"> </EventDateCard>
+            </template>
+          </q-intersection>
+          -->
+          <EventDateCard
+            v-for="(date, index) in eventDatesGroupedByMonth[Number(yearMonth)]"
+            :key="index"
+            :event="date"
+            :short-date="true"
+          >
+          </EventDateCard>
         </div>
       </div>
     </div>
-
-    <div v-else class="flex column" style="width: 100%">
-      <EventDateListItem
-        :event="date"
-        :key="index"
-        v-for="(date, index) in eventDates"
-      />
+    <div v-else>
+      <div
+        class="ed-card-grid q-pb-sm q-mt-xs"
+        :style="gridColumns"
+        :class="{
+          'q-px-lg ': $q.screen.gt.sm,
+          'q-px-sm  q-mt-': $q.screen.lt.md,
+        }"
+      >
+        <EventDateCard
+          v-for="(date, index) in eventDates"
+          :key="index"
+          :event="date"
+          :short-date="true"
+        >
+        </EventDateCard>
+      </div>
     </div>
     <div class="row justify-center">
       <q-linear-progress
@@ -102,7 +136,6 @@ import DateHeader from './DateHeader.vue';
 import EventDateCard from './EventDateCard.vue';
 import { useQuasar } from 'quasar';
 import { default as dayjs } from 'dayjs';
-import EventDateListItem from './EventDateListItem.vue';
 const $q = useQuasar();
 
 const main = useMainStore();

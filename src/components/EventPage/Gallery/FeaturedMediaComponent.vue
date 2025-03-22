@@ -325,7 +325,7 @@ export default {
   }
 }
 
-@media only screen and (min-width: 599px) and (max-width: 1024px) {
+@media only screen and (min-width: 599px) and (max-width: 1023px) {
   .featured-media-component {
     &.tall {
       width: 250px;

@@ -88,7 +88,7 @@ export const useBrowseStore = defineStore('browse', {
             : null,
           tags: [tag],
           date_min: startDate,
-          sort_option: 'date',
+          sort: 'start',
           page: item.eventDatesPage,
           per_page: Screen.lt.sm ? 10 : 20,
           distinct: true,

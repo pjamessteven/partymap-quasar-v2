@@ -487,7 +487,7 @@ export default {
     // height: 200px;
 
     .header-content {
-      max-width: 1024px;
+      max-width: 1023px;
       position: relative;
 
       .tag {
@@ -567,7 +567,7 @@ export default {
     }
   }
   .main-content {
-    max-width: 1024px;
+    max-width: 1023px;
     padding-right: 332px;
     .ed-card {
       max-width: 599px;

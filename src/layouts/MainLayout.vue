@@ -461,7 +461,7 @@ export default {
       transition: transform 0.3s;
       transform: translate3d(-150px, 0, 0);
       padding-left: min(50vw, 584px);
-      padding-right: 60px;
+      padding-right: 36px;
       position: absolute;
       top: calc(8px + var(--safe-area-inset-top));
       // transform: translate3d(calc(100vw / 2 - calc(633px / 2) + 100px), 0, 0);
@@ -500,6 +500,8 @@ export default {
       z-index: 4000 !important;
       pointer-events: none;
       &.event-router-ios {
+        //pointer-events;
+        touch-action: all;
         pointer-events: all;
         &.peek-map {
           pointer-events: none;
@@ -546,7 +548,7 @@ export default {
     //opacity: 0;
   }
 }
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 1023px) {
   .body--dark {
     .main-layout {
       .overlay {
@@ -631,7 +633,7 @@ export default {
     }
   }
 }
-@media only screen and (min-width: 600px) and (max-width: 1024px) {
+@media only screen and (min-width: 600px) and (max-width: 1023px) {
   .native-mobile {
     .main-inner-layout {
       // ios specific padding for capcaitor app

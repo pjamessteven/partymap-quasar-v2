@@ -4,18 +4,19 @@
       All event dates:
 
       <div class="row q-mt-md q-gutter-sm">
-        <q-input
-          v-model="searchQuery"
-          label="Search event dates"
-          class="grow"
-          @keyup.enter="refreshEventDates"
-        />
         <q-select
           emit-value
           v-model="sortField"
           :options="sortOptions"
           label="Sort by"
           style="min-width: 100px"
+        />
+        <q-input
+          v-model="dateMin"
+          label="From date"
+          type="date"
+          style="min-width: 150px"
+          @update:model-value="refreshEventDates"
         />
         <q-toggle
           v-model="showEmptyLineupOnly"
@@ -32,13 +33,7 @@
           label="Distinct"
           style="font-size: small"
         />
-        <q-input
-          v-model="dateMin"
-          label="From date"
-          type="date"
-          style="min-width: 150px"
-          @update:model-value="refreshEventDates"
-        />
+
         <q-btn
           flat
           round
@@ -86,9 +81,6 @@
                 <q-item-label caption>
                   {{ formatDate(item.start) }} - {{ formatDate(item.end) }}
                 </q-item-label>
-                <q-item-label caption>
-                  Created {{ timeAgo(item.created_at) }}
-                </q-item-label>
               </div>
               <div class="controls">
                 <q-btn
@@ -99,15 +91,6 @@
                   @click="deleteEventDate(item.id)"
                 >
                   <q-icon name="las la-trash" />
-                </q-btn>
-                <q-btn
-                  color="green"
-                  round
-                  size="sm"
-                  flat
-                  @click="approveEventDate(item.id)"
-                >
-                  <q-icon name="las la-check" />
                 </q-btn>
               </div>
             </div>
@@ -143,16 +126,6 @@
         >
           <q-tooltip>Delete selected</q-tooltip>
         </q-btn>
-
-        <q-btn
-          flat
-          round
-          icon="check"
-          @click="bulkApprove"
-          :disable="bulkProcessing"
-        >
-          <q-tooltip>Approve selected</q-tooltip>
-        </q-btn>
       </q-toolbar>
     </div>
 
@@ -184,7 +157,7 @@ export default {
     return {
       eventDates: null,
       page: 1,
-      perPage: 10,
+      perPage: 100,
       hasNext: false,
       loading: false,
       showDateUnconfirmedOnly: false,
@@ -193,8 +166,8 @@ export default {
       searchQuery: '',
       tagQuery: '',
       dateMin: new Date().toISOString().split('T')[0], // Default to today's date
-      sortField: 'created_at',
-      sortDesc: true,
+      sortField: 'start',
+      sortDesc: false,
       sortOptions: [
         { label: 'Created Date', value: 'created_at' },
         { label: 'Start Date', value: 'start' },
@@ -333,7 +306,9 @@ export default {
         query: this.searchQuery || undefined,
         date_unconfirmed: this.showDateUnconfirmedOnly || undefined,
         empty_lineup: this.showEmptyLineupOnly || undefined,
-        date_min: this.dateMin ? new Date(this.dateMin).toISOString() : undefined,
+        date_min: this.dateMin
+          ? new Date(this.dateMin).toISOString()
+          : undefined,
         page: this.page,
         sort: this.sortField,
         desc: this.sortDesc,
@@ -369,6 +344,12 @@ export default {
       this.refreshEventDates();
     },
     sortDesc() {
+      this.refreshEventDates();
+    },
+    distinct() {
+      this.refreshEventDates();
+    },
+    dateMin() {
       this.refreshEventDates();
     },
   },

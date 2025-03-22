@@ -30,6 +30,13 @@
           <div
             class="image-container flex justify-center items-center shadow-2xl"
           >
+            <q-icon
+              v-if="!imgThumbUrl"
+              name="las la-calendar"
+              size="6em"
+              class="o-070"
+              style="z-index: 2"
+            />
             <transition appear enter-active-class="animated fadeIn slower">
               <img
                 style="transform: scale(1.1); z-index: 2"
@@ -275,7 +282,7 @@ export default {
 
         `;
       } else {
-        return `background: linear-gradient(rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0)),  url("${this.imgThumbXsUrl}");
+        return `background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),  url("${this.imgThumbXsUrl}");
           background-size: cover;
           display: inline-block;
           background-position: center;

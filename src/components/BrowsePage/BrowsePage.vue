@@ -9,7 +9,7 @@
       <template v-slot="{ scrollPercentage, resetScrollPosition }">
         <div
           class="flex column justify-center q-mb-xl"
-          :class="$q.screen.gt.sm ? 'q-pb-xl q-mt-lg' : ''"
+          :class="$q.screen.gt.sm ? 'q-pb-xl ' : ''"
         >
           <TypographyTabs
             :key="stickyTabs"

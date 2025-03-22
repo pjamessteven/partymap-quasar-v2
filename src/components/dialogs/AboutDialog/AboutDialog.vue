@@ -33,7 +33,7 @@
 
       <p></p>
       {{ $t('about.9') }}
-      <a href="https://discord.gg/BD7BwrZA">Discord</a>
+      <a href="https://discord.gg/25NAyaAp5N">Discord</a>
       <p />
       {{ $t('about.10') }}
       <p />

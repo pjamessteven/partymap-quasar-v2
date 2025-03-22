@@ -294,7 +294,7 @@ export const useQueryStore = defineStore('query', {
               ? dayjs().add(10, 'years').toISOString()
               : dayjs().toISOString(),
           query: undefined,
-          sort_option: 'date',
+          sort: 'start',
           page: this.userEventDatesPage,
           per_page: 20,
           distinct: true,
@@ -376,7 +376,7 @@ export const useQueryStore = defineStore('query', {
           locality_id: this.controlLocality?.id,
           query: undefined,
           favorites: main.sidebarPanel === 'favorites' ? true : undefined,
-          sort_option: 'date',
+          sort: 'start',
           page: this.eventDatesPage,
           per_page: Screen.lt.sm ? 10 : 20,
           distinct: true,

@@ -41,7 +41,6 @@ const motionTransitions = ref();
 watch(
   () => showingYPosition.value,
   (newValue, oldValue) => {
-    console.log('show', showingYPosition.value);
     show();
   },
 );
@@ -90,12 +89,15 @@ const dragHandler = ({
   active,
 }) => {
   if (enableDrag.value) {
+    console.log(1);
     if (swipeY == 1) {
       hideAndEmit();
       return;
     }
 
     if (!dragging) {
+      console.log(2);
+
       if (y > 100) {
         hideAndEmit();
       } else {
@@ -106,6 +108,8 @@ const dragHandler = ({
     }
     // only allow dragging down
     if (y > 0) {
+      console.log(3);
+
       emit('onDrag');
       // update motion position but don't animate
       motionTransitions.value.push('y', y, motionProperties.value, {

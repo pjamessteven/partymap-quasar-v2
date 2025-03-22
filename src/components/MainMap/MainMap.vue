@@ -599,7 +599,6 @@ const mapClick = () => {
       if (focusMarker.value) blockPeekMap.value = true;
       $router.go(-1);
     } else {
-      console.log(mainStore.routerHistory);
       if (mainStore.routerHistory.length > 2) {
         $router.go(-1);
       } else {
@@ -614,10 +613,8 @@ const mapClick = () => {
 const getEventPagePadding = (): PaddingOptions => {
   if (peekMap.value) {
     return {
-      top: 0,
+      ...getDefaultPadding(),
       bottom: window.innerHeight / 4,
-      left: 0,
-      right: 0,
     };
   }
   if (Screen.lt.sm) {

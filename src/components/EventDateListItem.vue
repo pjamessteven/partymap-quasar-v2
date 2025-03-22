@@ -1,51 +1,57 @@
 <template>
   <div
     class="ed-card"
+    style="width: 100%"
     :class="{ isPopup }"
     @mouseenter="mouseEnter"
     @mouseleave="mouseLeave"
   >
-    <transition appear enter-active-class="animated fadeIn slow">
-      <router-link
-        v-if="event"
-        style="
-          text-decoration: none;
-          color: inherit;
-          z-index: 1;
-          display: flex;
-          flex-direction: column;
-        "
-        :to="{
-          name: 'EventPage',
-          params: {
-            id: event?.event_id,
-            eventDateId: event?.id,
-          },
-          query: {
-            name: event?.name.replace(/ /g, '_'),
-            thumbXsUrl: imgThumbUrl,
-            location: JSON.stringify({
-              lat: event?.location.lat,
-              lng: event?.location.lng,
-              place_id: event?.location.place_id,
-            }),
-            dateString: computedDateString,
-            locationDescription: computedLocation,
-            description: event.event.description_t || event.event.description,
-            tags: JSON.stringify(event?.event.event_tags),
-          },
-        }"
+    <router-link
+      v-if="event"
+      style="
+        text-decoration: none;
+        color: inherit;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+      "
+      :to="{
+        name: 'EventPage',
+        params: {
+          id: event?.event_id,
+          eventDateId: event?.id,
+        },
+        query: {
+          name: event?.name.replace(/ /g, '_'),
+          thumbXsUrl: imgThumbUrl,
+          location: JSON.stringify({
+            lat: event?.location.lat,
+            lng: event?.location.lng,
+            place_id: event?.location.place_id,
+          }),
+          dateString: computedDateString,
+          locationDescription: computedLocation,
+          description: event.event.description_t || event.event.description,
+          tags: JSON.stringify(event?.event.event_tags),
+        },
+      }"
+    >
+      <div
+        class="ed-card-content flex row grow justify-between items-center no-wrap q-py-sm q-pl-lg"
+        style="width: 100%"
       >
-        <div class="ed-card-bg" :style="getBottomBgImgStyle()" />
-        <div
-          class="ed-card-content flex row no-wrap q-py-md q-pl-md"
-          style="width: 100%"
-        >
-          <!-- mouseover.stop is to fix a stupid ios bug relating to q-scroll-area having a mouseover event and causing the user to have to double click on items-->
+        <!-- mouseover.stop is to fix a stupid ios bug relating to q-scroll-area having a mouseover event and causing the user to have to double click on items-->
+        <div class="flex row grow items-start no-wrap shrink">
           <div
-            class="image-container flex justify-center items-center shadow-2xl q-mr-md"
-            v-if="imgThumbUrl"
+            class="image-container flex justify-center items-center shadow-md q-mr-md"
           >
+            <q-icon
+              v-if="!imgThumbUrl"
+              name="las la-calendar"
+              size="2em"
+              class="o-070"
+              style="z-index: 2"
+            />
             <transition appear enter-active-class="animated fadeIn slow">
               <img
                 style="filter: blur(2px); transform: scale(1.2); z-index: 2"
@@ -63,18 +69,20 @@
               />
             </transition>
           </div>
-          <div class="flex column grow" style="width: 100%; overflow: hidden">
+          <div class="flex column grow ellipsis">
             <div
-              class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
+              class="ed-card-header ellipsis flex row justify-between items-start no-wrap ellipsis"
             >
               <div
                 class="flex row items-baseline no-wrap metropolis bold q-mr-sm ellipsis"
                 :class="{
-                  'text-large q-mb-sm': $q.screen.gt.sm,
+                  ' q-mb-xs': $q.screen.gt.sm,
                   'q-mb-xs': $q.screen.lt.md,
                 }"
               >
-                <span class="ellipsis">{{ event?.name || name }}</span>
+                <span class="ellipsis" style="max-width: 250px">{{
+                  event?.name || name
+                }}</span>
                 <q-icon
                   class="q-ml-sm o-080"
                   name="mdi-check-decagram"
@@ -96,8 +104,8 @@
             </div>
 
             <div
-              class="flex column justify-center card-bottom-text o-070 q-mb-sm q-pr-md"
-              style="font-weight: 400; width: 100%"
+              class="flex row grow justify-between no-wrap card-bottom-text o-070 q-pr-md"
+              style="font-weight: 400; font-size: smaller"
               v-if="event"
             >
               <!--
@@ -116,17 +124,10 @@
             </span>
           </div>
 -->
-              <div class="flex column ellipsis" style="width: 100%">
+              <div class="flex column grow ellipsis">
                 <span>
                   <q-icon name="las la-clock" class="q-mr-sm" />
-                  <!--
-                  <q-badge
-                    v-if="event.cancelled"
-                    class="q-my-xs"
-                    color="red"
-                    :label="$t('event_dates.cancelled')"
-                  />
--->
+
                   <span
                     v-if="event.cancelled"
                     class="text-bold"
@@ -143,6 +144,17 @@
                       )
                     }}
                   </span>
+                  -
+                  <span v-if="event.date_confirmed">
+                    {{ localDateWithWeekday(event.start_naive, event.tz) }}
+                  </span>
+                  <span v-else>
+                    {{ monthYear(event.start_naive, event.tz)
+                    }}<span class="o-060"
+                      >&nbsp;({{ $t('event_dates.tbc') }})</span
+                    >
+                  </span>
+
                   <span
                     v-if="
                       event.event.rrule &&
@@ -160,24 +172,8 @@
                     }}</span>
                   </span>
                 </span>
-                <div
-                  class="flex row items-center no-wrap ellipsis"
-                  style="width: 100%; text-transform: capitalize"
-                >
-                  <q-icon name="las la-calendar" class="q-mr-sm" />
-                  <div class="flex row no-wrap ellipsis">
-                    <span v-if="event.date_confirmed">
-                      {{ localDateWithWeekday(event.start_naive, event.tz) }}
-                    </span>
-                    <span v-else>
-                      {{ monthYear(event.start_naive, event.tz)
-                      }}<span class="o-060"
-                        >&nbsp;({{ $t('event_dates.tbc') }})</span
-                      >
-                    </span>
-                  </div>
-                </div>
-                <div style="width: 100%" class="ellipsis">
+
+                <div class="ellipsis">
                   <span v-if="computedLocation" class="ellipsis">
                     <q-icon name="las la-map-marker" class="q-mr-sm" />{{
                       computedLocation
@@ -192,114 +188,36 @@
                     }}{{ $t('event.km') }})</span
                   >
                 </div>
-              </div>
-            </div>
 
-            <div
-              v-if="event.event && $q.screen.gt.sm"
-              class="description grow flex ellipsis q-pr-md items-center"
-              style="max-width: 100%"
-            >
-              {{ event.event.description_t || event.event.description }}
-            </div>
-            <!-- scroll area here (qscroll or regular) area causes performance issues on android-->
-            <CustomQScroll
-              v-if="!$q.platform.is.android || true"
-              horizontal
-              style="height: 39px; margin-bottom: -8px"
-              :class="$q.screen.gt.sm ? 'q-mt-md' : 'q-mt-xs'"
-              :thumb-style="{
-                bottom: '-4px',
-                height: '4px',
-                borderRadius: '0px',
-              }"
-            >
-              <div
-                class="tag-container flex row no-wrap q-pr-md"
-                v-if="event?.event?.event_tags?.length > 0"
-              >
-                <Tag
-                  class="q-mr-xs o-060"
-                  v-for="(et, index) in event.event.event_tags"
-                  :key="index"
-                  :value="et.tag_t || et.tag"
-                  noInteraction
-                  outlined
-                  small
-                ></Tag>
+                <div class="flex row no-wrap items-center">
+                  <q-icon name="las la-hashtag" class="q-mr-sm" />
+
+                  <CustomQScroll
+                    v-if="event?.event?.event_tags?.length > 0"
+                    horizontal
+                    style="height: 18px; margin-bottom: 0px; width: 100%"
+                    :thumb-style="{
+                      bottom: '-4px',
+                      height: '4px',
+                      borderRadius: '0px',
+                    }"
+                  >
+                    <div class="tag-container flex row no-wrap q-pr-md">
+                      <span v-for="(et, index) in event.event.event_tags"
+                        >{{ et.tag_t || et.tag
+                        }}<span v-if="index < event.event.event_tags.length - 1"
+                          >,&nbsp;</span
+                        ></span
+                      >
+                    </div>
+                  </CustomQScroll>
+                </div>
               </div>
-            </CustomQScroll>
-            <div v-else class="flex">
-              <div
-                class="tag-container flex row no-wrap"
-                style="overflow-x: hidden"
-                v-if="event?.event?.event_tags?.length > 0"
-              >
-                <Tag
-                  class="q-mr-xs"
-                  v-for="(et, index) in event.event.event_tags"
-                  :key="index"
-                  :value="et.tag_t || et.tag"
-                  noInteraction
-                  outlined
-                ></Tag>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="q-px-md q-pb-sm q-mb-xs" v-if="event && $q.screen.lt.md">
-          <div
-            class="description grow flex ellipsis items-center"
-            style="max-width: 100%"
-          >
-            {{ event.event.description_t || event.event.description }}
-          </div>
-        </div>
-      </router-link>
-    </transition>
-    <div
-      v-if="isPopup"
-      style="
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        left: 0;
-        top: 0;
-        z-index: 0;
-      "
-    >
-      <div
-        class="ed-card-content flex row no-wrap q-py-md q-pl-md"
-        style="width: 100%"
-      >
-        <div
-          class="image-container flex justify-center items-center shadow-2xl"
-        >
-          <img
-            style="filter: blur(2px); transform: scale(1.2)"
-            class="image not-loaded"
-          />
-        </div>
-        <div
-          class="flex column grow q-pl-md"
-          style="width: 100%; overflow: hidden"
-        >
-          <div
-            class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
-          >
-            <div
-              class="flex row items-baseline no-wrap metropolis bold q-mr-sm ellipsis"
-              :class="{
-                'text-large q-mb-sm': $q.screen.gt.sm,
-                'q-mb-xs': $q.screen.lt.md,
-              }"
-            >
-              <span class="ellipsis">{{ event?.name || name }}</span>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </router-link>
   </div>
 </template>
 
@@ -341,19 +259,6 @@ export default {
     mouseLeave() {
       this.eventDateHoverMarker = null;
     },
-    getBottomBgImgStyle() {
-      if (this.$q.dark.isActive) {
-        return `background-image:  url("${this.imgThumbXsUrl}");
-        background-size: cover;
-        display: inline-block;
-        `;
-      } else {
-        return `background-image:  url("${this.imgThumbXsUrl}");
-          background-size: cover;
-          display: inline-block;
-          `;
-      }
-    },
   },
   computed: {
     ...mapWritableState(useMapStore, ['eventDateHoverMarker', 'focusMarker']),
@@ -376,7 +281,7 @@ export default {
           return (
             this.event.location.locality.long_name +
             ', ' +
-            this.event.location.locality.region.long_name
+            this.event.location.locality.country.long_name
           );
         } else {
           return this.event?.location?.locality?.long_name;
@@ -403,12 +308,12 @@ export default {
 .body--dark {
   .ed-card {
     // outline: 1px solid black;
-    border-top: 1px solid rgba(64, 64, 64);
-    background: linear-gradient($bi-2, $bi-3);
+    // border-top: 1px solid rgba(30, 30, 30);
+    // background: linear-gradient($bi-3, $bi-3);
 
     .ed-card-bg {
       background: $bi-3;
-      opacity: 0.2;
+      opacity: 0.4;
     }
     .ed-card-content {
       .image-container {
@@ -428,37 +333,33 @@ export default {
 
   .tag-container {
     .tag {
-      color: $ti-1 !important;
-      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      //color: $ti-1 !important;
+      // border: 1px solid rgba(255, 255, 255, 0.2) !important;
     }
   }
 }
 
 .body--light {
   .ed-card {
-    color: white;
-    border-top: 1px solid rgba(150, 150, 150);
+    // border-top: 1px solid rgba(220, 220, 220);
 
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 3px 8px;
     font-smooth: always;
-    //background: linear-gradient($bi-2, rgb(100, 100, 100));
-    background: linear-gradient($bi-3, rgb(48, 48, 48));
     .card-background {
-      //background: #181818;
+      background: #181818;
       opacity: 0.8;
       transition: opacity 0.2s ease;
     }
+    &:hover {
+      background: $b-2;
+    }
     .ed-card-bg {
-      opacity: 0.2;
-      background: white;
+      opacity: 0.4;
+
       transition: opacity 0.2s ease;
     }
     .ed-card-content {
-      border-top: 1px solid (rgba(255, 255, 255, 0.2));
-
-      color: white !important;
       .image-container {
-        background: $bi-3;
+        background: $b-4;
       }
     }
 
@@ -470,7 +371,7 @@ export default {
 .ed-card {
   //min-height: 238.5px;
   border: none;
-  border-radius: 9px;
+
   direction: ltr;
   display: flex;
   flex-direction: column;
@@ -553,14 +454,6 @@ export default {
       // translate3d is a hack for safari to force gpu rendering of blur()
     }
 
-    .tag-container {
-      :deep(.tag) {
-        font-size: small;
-        background: transparent !important;
-        border: 1px solid rgba(255, 255, 255, 0.48) !important;
-      }
-    }
-
     .ed-card-header {
       //font-size: 1rem;
       max-width: 100%;
@@ -579,10 +472,9 @@ export default {
       position: relative;
       overflow: hidden;
       //border-radius: 100%;
-      width: 90px;
-      height: 127px;
+      width: 68px;
+      height: 88px;
       // aspect-ratio: 595 / 842; (this causes serious slowness on ios)
-      min-width: 90px;
       z-index: 1;
       border-radius: 9px;
 
@@ -643,8 +535,6 @@ export default {
     }
     .ed-card-content {
       .image-container {
-        min-width: 144px;
-        height: 203px;
       }
     }
   }

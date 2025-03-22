@@ -165,7 +165,7 @@ export default {
       }
     }
     &.selected {
-      background: $bi-3;
+      background: $bi-4;
     }
   }
 }
@@ -175,8 +175,8 @@ export default {
     // opacity: 1
 
     transition: all 0.3s ease;
-    // background: rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.02);
+    //background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
 
     //box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px 0px;
@@ -186,7 +186,7 @@ export default {
       rgba(9, 30, 66, 0.2) 0px 1px 1px,
       rgba(9, 30, 66, 0.07) 0px 0px 1px 1px;
 */
-    box-shadow: rgba(14, 63, 126, 0.08) 0px 0px 0px 1px;
+    //   box-shadow: rgba(14, 63, 126, 0.08) 0px 0px 0px 1px;
 
     &:not(.no-hover) {
       &:hover {
@@ -194,7 +194,7 @@ export default {
       }
     }
     &.selected {
-      background: $b-1;
+      background: $b-4;
     }
   }
 }

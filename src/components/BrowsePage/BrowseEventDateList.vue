@@ -5,7 +5,10 @@
   >
     <div class="event-list-inner">
       <div class="flex column grow no-wrap" :class="$q.screen.gt.sm ? '' : ''">
-        <div class="flex column" v-if="$q.screen.gt.sm">
+        <div
+          class="event-list-header b1 q-pt-xl flex column"
+          v-if="$q.screen.gt.sm"
+        >
           <div class="text-h5 inter bolder q-ml-lg">
             <div v-if="currentCountry" class="flex items-center">
               {{ $t('nearby_view.upcoming_in') }}&nbsp;<span
@@ -25,6 +28,15 @@
             {{ $t('browse_page.the_ultimate_calendar') }} {{ currentYear }}!
           </div>
         </div>
+        <div class="tags q-mb-sm" v-if="!isLoadingInitial">
+          <TagExplorer
+            mode="explore"
+            :class="{
+              'q-px-lg q-mb-sm': $q.screen.gt.sm,
+              'q-px-md': $q.screen.lt.md,
+            }"
+          />
+        </div>
         <div class="flex column" v-if="!isLoadingInitial">
           <div
             class="flex column"
@@ -33,7 +45,7 @@
               'q-pt-sm': $q.screen.lt.md && $q.screen.gt.xs,
             }"
           >
-            <EventDateList
+            <EventDateCardList
               v-if="compactView"
               :groupByMonth="groupEventsByMonth"
               :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
@@ -132,7 +144,7 @@
 </template>
 <script>
 import _ from 'lodash';
-import EventDateList from 'src/components/EventDateList.vue';
+import EventDateCardList from 'src/components/EventDateCardList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
 import { useMapStore } from 'src/stores/map';
 import { useQueryStore } from 'src/stores/query';
@@ -143,12 +155,14 @@ import CustomQScroll from 'components/CustomQScroll.vue';
 import countryCodes from 'src/assets/country-code-emoji';
 import dayjs from 'dayjs';
 import { createMetaMixin } from 'quasar';
+import TagExplorer from '../TagExplorer.vue';
 
 export default {
   components: {
-    EventDateList,
+    EventDateCardList,
     EventDatePosterList,
     CustomQScroll,
+    TagExplorer,
   },
   mixins: [
     createMetaMixin(function () {
@@ -477,6 +491,14 @@ export default {
     height: 100%;
     transition: all 0.3s;
     position: relative;
+    .event-list-header {
+      position: sticky;
+      top: -38px;
+      z-index: 1000;
+    }
+    :deep(.date-header-wrapper) {
+      top: 96px;
+    }
     .view-options {
       position: absolute;
       right: 64px;

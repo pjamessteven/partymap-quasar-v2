@@ -7,6 +7,7 @@
     }"
     :key="id"
   >
+    <div class="map-overlay" v-if="false" />
     <transition appear enter-active-class="animated fadeIn slow">
       <div
         class="peek-address-wrapper flex row justify-center"
@@ -22,58 +23,62 @@
         </div>
       </div>
     </transition>
-    <DragWrapper
-      class="event-page-content"
-      :enableDrag="enableSwipeDown"
-      :hiddenYPosition="hiddenYPosition"
-      :showingYPosition="showingYPosition"
-      ref="dragWrapper"
-      @hide="goBack"
+
+    <CustomQScroll
+      vertical
+      ref="scrollArea"
+      @scroll="onScrollMainContent"
+      @scrollend="onScrollEnd"
+      class="event-page-content scroll-area flex grow"
+      :class="{
+        'disable-scroll': disableScroll || mapStore.peekMap,
+      }"
+      :thumb-style="
+        $q.screen.gt.xs
+          ? {
+              bottom: '0px',
+              height: '8px',
+              marginLeft: '16px',
+              borderRadius: '0px',
+            }
+          : {
+              bottom: '0px',
+              height: '0px',
+              borderRadius: '0px',
+              width: '4px',
+            }
+      "
     >
-      <CustomQScroll
-        vertical
-        ref="scrollArea"
-        @scroll="onScrollMainContent"
-        @scrollend="onScrollEnd"
-        class="scroll-area flex grow"
-        :class="{
-          'disable-scroll': disableScroll || mapStore.peekMap,
-        }"
-        :thumb-style="
-          $q.screen.gt.xs
-            ? {
-                bottom: '0px',
-                height: '8px',
-                marginLeft: '16px',
-                borderRadius: '0px',
-              }
-            : {
-                bottom: '0px',
-                height: '0px',
-                borderRadius: '0px',
-                width: '4px',
-              }
-        "
-      >
-        <div class="row flex grow main-row no-wrap justify-center">
-          <div
-            class="event-page-ios-overlay"
-            v-if="!mapStore.peekMap"
-            @click="mapStore.peekMap = true"
-          />
-          <div
-            ref="contentCard"
-            class="content-card"
-            :class="{
-              'col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12':
-                !showingHistory && false,
-              shadow: mainStore.overlayOpacity === 0 || $q.screen.lt.sm,
-            }"
-          >
+      <div class="row flex grow main-row no-wrap justify-center">
+        <div
+          class="peek-map-trigger-overlay"
+          v-if="!mapStore.peekMap"
+          @click="goBack"
+          draggable="true"
+          @touchmove="mapStore.peekMap = true"
+          @wheel.stop="mapStore.peekMap = true"
+          @dragstart="() => (mapStore.peekMap = true)"
+        />
+        <DragWrapper
+          :enableDrag="enableSwipeDown"
+          :hiddenYPosition="hiddenYPosition"
+          :showingYPosition="showingYPosition"
+          @hide="goBack"
+          ref="dragWrapper"
+          class="content-card"
+          :class="{
+            'col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12':
+              !showingHistory && false,
+            shadow: mainStore.overlayOpacity === 0 || $q.screen.lt.sm,
+          }"
+        >
+          <div>
             <div
               class="peek-map-overlay"
               @click="swipeUp"
-              v-if="mapStore.peekMap"
+              @wheel="mapStore.peekMap = false"
+              v-show="mapStore.peekMap"
+              @touchmove="mapStore.peekMap = false"
             />
 
             <MobileSwipeHandle
@@ -1075,79 +1080,79 @@
               </div>
             </div>
           </div>
-        </div>
-      </CustomQScroll>
-      <div class="sticky-editing-footer flex row justify-center" v-if="editing">
-        <div
-          class="sticky-editing-footer-inner col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12"
-        >
-          <div class="flex justify-end q-pa-md">
-            <q-btn
-              color="primary"
-              text-color="white"
-              label="Finished editing"
-              no-caps
-              :icon="$q.screen.gt.xs ? 'mdi-check' : undefined"
-              :style="
-                $q.dark.isActive
-                  ? 'border-right: 1px solid rgba(255,255,255,0.05)'
-                  : 'border-right: 1px solid rgba(0,0,0,0.05)'
-              "
-              :size="$q.screen.gt.xs ? 'md' : 'md'"
-              @click="editing = !editing"
-            />
-          </div>
+        </DragWrapper>
+      </div>
+    </CustomQScroll>
+    <div class="sticky-editing-footer flex row justify-center" v-if="editing">
+      <div
+        class="sticky-editing-footer-inner col-8 col-sm-12 col-md-10 col-lg-10 col-xl-8 col-xs-12"
+      >
+        <div class="flex justify-end q-pa-md">
+          <q-btn
+            color="primary"
+            text-color="white"
+            label="Finished editing"
+            no-caps
+            :icon="$q.screen.gt.xs ? 'mdi-check' : undefined"
+            :style="
+              $q.dark.isActive
+                ? 'border-right: 1px solid rgba(255,255,255,0.05)'
+                : 'border-right: 1px solid rgba(0,0,0,0.05)'
+            "
+            :size="$q.screen.gt.xs ? 'md' : 'md'"
+            @click="editing = !editing"
+          />
         </div>
       </div>
-      <!-- hidden element for copying url -->
-      <input :value="computedUrl" ref="copyUrlInput" style="display: none" />
-      <BackdropBlurDialog v-model="showingReportDialog">
-        <ReportDialog
-          v-if="showingReportDialog"
-          :mode="'reportEvent'"
-          @closeDialog="showingReportDialog = false"
-        />
-      </BackdropBlurDialog>
-      <BackdropBlurDialog v-model="showingClaimDialog">
-        <ReportDialog
-          @closeDialog="showingClaimDialog = false"
-          :mode="'claimEvent'"
-          v-if="showingClaimDialog"
-        />
-      </BackdropBlurDialog>
+    </div>
+    <!-- hidden element for copying url -->
+    <input :value="computedUrl" ref="copyUrlInput" style="display: none" />
+    <BackdropBlurDialog v-model="showingReportDialog">
+      <ReportDialog
+        v-if="showingReportDialog"
+        :mode="'reportEvent'"
+        @closeDialog="showingReportDialog = false"
+      />
+    </BackdropBlurDialog>
+    <BackdropBlurDialog v-model="showingClaimDialog">
+      <ReportDialog
+        @closeDialog="showingClaimDialog = false"
+        :mode="'claimEvent'"
+        v-if="showingClaimDialog"
+      />
+    </BackdropBlurDialog>
 
-      <BackdropBlurDialog v-model="showingSuggestionsDialog">
-        <SuggestionsDialog
-          v-if="showingSuggestionsDialog"
-          @closeDialog="showingSuggestionsDialog = false"
-        />
-      </BackdropBlurDialog>
+    <BackdropBlurDialog v-model="showingSuggestionsDialog">
+      <SuggestionsDialog
+        v-if="showingSuggestionsDialog"
+        @closeDialog="showingSuggestionsDialog = false"
+      />
+    </BackdropBlurDialog>
 
-      <BackdropBlurDialog v-model="showingAddEventPhotosDialog">
-        <AddEventPhotosDialog
-          v-if="showingAddEventPhotosDialog"
-          @closeDialog="showingAddEventPhotosDialog = false"
-        />
-      </BackdropBlurDialog>
-      <BackdropBlurDialog v-model="showingAddLineupPosterDialog">
-        <AddLineupPosterDialog
-          v-if="showingAddLineupPosterDialog"
-          @closeDialog="showingAddLineupPosterDialog = false"
-        />
-      </BackdropBlurDialog>
-      <BackdropBlurDialog v-model="showingUploadNewLogoDialog">
-        <UploadNewLogoDialog
-          v-if="showingUploadNewLogoDialog"
-          @closeDialog="() => (showingUploadNewLogoDialog = false)"
-        />
-      </BackdropBlurDialog>
-      <BackdropBlurDialog
-        v-model="showingTicketDialog"
-        @closeDialog="() => (showingTicketDialog = false)"
-      >
-        <EventDateTicketUrlDialog v-if="showingTicketDialog" />
-      </BackdropBlurDialog>
-    </DragWrapper>
+    <BackdropBlurDialog v-model="showingAddEventPhotosDialog">
+      <AddEventPhotosDialog
+        v-if="showingAddEventPhotosDialog"
+        @closeDialog="showingAddEventPhotosDialog = false"
+      />
+    </BackdropBlurDialog>
+    <BackdropBlurDialog v-model="showingAddLineupPosterDialog">
+      <AddLineupPosterDialog
+        v-if="showingAddLineupPosterDialog"
+        @closeDialog="showingAddLineupPosterDialog = false"
+      />
+    </BackdropBlurDialog>
+    <BackdropBlurDialog v-model="showingUploadNewLogoDialog">
+      <UploadNewLogoDialog
+        v-if="showingUploadNewLogoDialog"
+        @closeDialog="() => (showingUploadNewLogoDialog = false)"
+      />
+    </BackdropBlurDialog>
+    <BackdropBlurDialog
+      v-model="showingTicketDialog"
+      @closeDialog="() => (showingTicketDialog = false)"
+    >
+      <EventDateTicketUrlDialog v-if="showingTicketDialog" />
+    </BackdropBlurDialog>
   </div>
 </template>
 
@@ -1196,6 +1201,7 @@ import InnerLoading from 'components/InnerLoading.vue';
 import { useI18n } from 'vue-i18n';
 import { useMeta } from 'quasar';
 import DragWrapper from '../DragWrapper.vue';
+import { nextTick } from 'process';
 
 /*
   meta() {
@@ -1268,7 +1274,7 @@ let {
   editing,
 } = storeToRefs(eventStore);
 
-const scrollArea = ref<HTMLElement>();
+const scrollArea = ref<any>();
 
 const eventPage = ref();
 const dragWrapper = ref();
@@ -1277,10 +1283,27 @@ const mediaLoaded = () => {
   imageLoaded.value = true;
 };
 
+const onTouch = (e) => {
+  if (!e.target.closest('.content-card')) {
+    e.preventDefault(); // Prevents iOS from capturing the touch
+    // Get all elements with the class name
+    if (scrollArea.value) {
+      console.log('set none', scrollArea.value);
+      scrollArea.value.$el.style.pointerEvents = 'none';
+    }
+  } else {
+    if (scrollArea.value) {
+      console.log('set all');
+
+      scrollArea.value.$el.style.pointerEvents = 'all';
+    }
+  }
+};
+
 const showingYPosition = computed(() => {
   if (mapStore.peekMap) {
     return Math.max(window.innerHeight * 0.66 - 64, 0) - 128;
-  } else if (Platform.is.ios || Platform.is.Android) {
+  } else if (Platform.is.ios || Platform.is.android) {
     return 0;
   }
 });
@@ -1796,8 +1819,9 @@ a {
     -webkit-backface-visibility: hidden;
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
-
+    position: relative;
     will-change: tranform;
+
     .scroll-area {
       .edit-event-dates {
         background: $bi-2;
@@ -1830,10 +1854,8 @@ a {
 .body--light {
   .event-page {
     background: transparent;
-    .event-page-content {
-      :deep(.editing-outline) {
-        border-color: grey !important;
-      }
+    :deep(.editing-outline) {
+      border-color: grey !important;
     }
     .history-container {
       background: $b-1;
@@ -1942,6 +1964,16 @@ a {
 .event-page {
   //transform: translate3d(0, 0, 0);
   //backface-visibility: hidden;
+
+  .map-overlay {
+    pointer-events: all;
+    z-index: 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+
   &.desktop-sidebar-padding {
     padding-left: 512px;
     .peek-address-wrapper {
@@ -1959,7 +1991,7 @@ a {
       color: white;
       text-align: center;
       margin-top: 72px;
-      max-width: 1024px;
+      max-width: 1023px;
     }
   }
 
@@ -1970,8 +2002,10 @@ a {
     position: absolute;
     z-index: -1;
   }
-  .event-page-content {
+  .scroll-area {
+    z-index: 2;
     width: 100%;
+    height: 100%;
     &.peek-map {
       /*
       // 256px represents how high the top of the panel is from the bottom
@@ -1995,186 +2029,182 @@ a {
       border-color: white !important;
     }
 
-    .scroll-area {
-      height: 100%;
+    // -webkit-overflow-scrolling: touch; // WOW THIS ACTUALLY HELPS ON IOS
 
-      // -webkit-overflow-scrolling: touch; // WOW THIS ACTUALLY HELPS ON IOS
+    &.disable-scroll {
+      :deep(.scroll) {
+        overflow: hidden !important;
+      }
+    }
 
-      &.disable-scroll {
-        :deep(.scroll) {
-          overflow: hidden !important;
-        }
+    .main-row {
+      position: relative;
+      pointer-events: none;
+      .peek-map-trigger-overlay {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 0;
+        pointer-events: all;
+        margin-top: -64px;
+        cursor: pointer;
       }
 
-      .main-row {
+      .content-card {
+        min-height: 2000px;
+        margin-top: Max(calc((100vh - 66vh) - 64px), 0px);
+        width: 1024px;
+        //border: none !important;
+        min-height: 100vh;
         position: relative;
-        pointer-events: none;
-        .event-page-ios-overlay {
+        padding-bottom: 0px;
+        border-top-left-radius: 18px !important;
+        border-top-right-radius: 18px !important;
+        //transition: transform 300ms;
+        overflow: hidden;
+        .peek-map-overlay {
+          position: absolute;
           width: 100%;
           height: 100%;
-          position: absolute;
-          z-index: 0;
-          pointer-events: all;
-          margin-top: -64px;
+          z-index: 12;
           cursor: pointer;
+          pointer-events: all !important;
         }
 
-        .content-card {
-          min-height: 2000px;
-          margin-top: Max(calc((100vh - 66vh) - 64px), 0px);
-          width: 1024px;
-          //border: none !important;
-          min-height: 100vh;
-          position: relative;
-          padding-bottom: 0px;
+        &.shadow {
+          box-shadow:
+            rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
+            rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
+            rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
+        }
+        .content {
+          height: 100%;
           border-top-left-radius: 18px !important;
           border-top-right-radius: 18px !important;
-          transition: transform 300ms;
-          overflow: hidden;
-          .peek-map-overlay {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 12;
-            cursor: pointer;
-            pointer-events: all !important;
-          }
+          //box-shadow: 0px 0px 64px 32px rgba(0, 0, 0, 0.2) !important;
+          //  overflow: hidden;
+          position: relative;
+          pointer-events: all !important;
 
-          &.shadow {
-            box-shadow:
-              rgba(0, 0, 0, 0.2) 0px 0px 46px -6px,
-              rgba(0, 0, 0, 0.2) 10px -10px 46px -6px,
-              rgba(0, 0, 0, 0.2) -10px -10px 40px -6px !important;
-          }
-          .content {
-            height: 100%;
-            border-top-left-radius: 18px !important;
-            border-top-right-radius: 18px !important;
-            //box-shadow: 0px 0px 64px 32px rgba(0, 0, 0, 0.2) !important;
-            //  overflow: hidden;
+          .featured-media-component {
+            float: right;
             position: relative;
-            pointer-events: all !important;
+            z-index: 2;
+          }
+          .ed-sidebar {
+            float: right;
+            clear: right;
+            margin-left: 48px;
+            //margin-right: 48px;
+            margin-top: 16px;
+            //margin-left: 48px;
+          }
+          .event-dates {
+            clear: left;
+          }
+          &.no-margin-top {
+            margin-top: 0px;
+          }
 
-            .featured-media-component {
-              float: right;
+          .header {
+            z-index: 1;
+            cursor: grab;
+            position: relative;
+            width: 100%;
+            padding-bottom: 18px;
+            max-height: min-content;
+            background: #fafafa;
+            //border-bottom: 1px solid #1a1a1a;
+
+            .q-inner-loading {
+              background: none;
+            }
+
+            .header-content {
+              //min-height: Min(66vh, 440px);
+
               position: relative;
+              height: 100%;
+              // color: white;
               z-index: 2;
-            }
-            .ed-sidebar {
-              float: right;
-              clear: right;
-              margin-left: 48px;
-              //margin-right: 48px;
-              margin-top: 16px;
-              //margin-left: 48px;
-            }
-            .event-dates {
-              clear: left;
-            }
-            &.no-margin-top {
-              margin-top: 0px;
-            }
 
-            .header {
-              z-index: 1;
-              cursor: grab;
-              position: relative;
-              width: 100%;
-              padding-bottom: 18px;
-              max-height: min-content;
-              background: #fafafa;
-              //border-bottom: 1px solid #1a1a1a;
-
-              .q-inner-loading {
-                background: none;
-              }
-
-              .header-content {
-                //min-height: Min(66vh, 440px);
-
-                position: relative;
-                height: 100%;
-                // color: white;
-                z-index: 2;
-
-                :deep(.q-btn) {
-                  border: 1px solid rgba(255, 255, 255, 0.3);
-                  background: rgba(255, 255, 255, 0.1) !important;
-                  color: white !important;
-                  span {
-                    text-align: start !important;
-                  }
-                }
-                .event-buttons {
-                  // height: 36px;
-                  width: 100%;
-                  .event-buttons-scroll {
-                    height: 36px;
-                  }
-                }
-              }
-              .featured-media {
-                position: absolute;
-                top: 0px;
-                left: 0px;
-                z-index: 0;
-                width: 100%;
-                height: 100%;
-              }
-              :deep(.tag) {
-                background: transparent !important;
-              }
-            }
-
-            .main-content {
-              z-index: 1;
-              margin-top: -18px;
-              min-height: 800px;
-              position: relative;
-              .tags-wrapper {
-                max-width: 550px;
-              }
-            }
-            :deep(.event-page-header) {
-              position: sticky;
-              top: 0px;
-              padding-bottom: 16px;
-              padding-top: 16px;
-              z-index: 1;
-            }
-            .bottom-section {
-              clear: both;
-              position: relative;
-              .page-views {
-                .page-view-char {
-                  display: inline-block;
-                  padding: 4px;
-                  font-weight: bold;
-                  border: 1px solid grey;
-                  &:not(:first-child) {
-                    border-left: none;
-                  }
+              :deep(.q-btn) {
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                background: rgba(255, 255, 255, 0.1) !important;
+                color: white !important;
+                span {
+                  text-align: start !important;
                 }
               }
               .event-buttons {
-                position: relative;
-
-                .q-btn-group {
-                  box-shadow:
-                    rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
-                    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+                // height: 36px;
+                width: 100%;
+                .event-buttons-scroll {
+                  height: 36px;
                 }
+              }
+            }
+            .featured-media {
+              position: absolute;
+              top: 0px;
+              left: 0px;
+              z-index: 0;
+              width: 100%;
+              height: 100%;
+            }
+            :deep(.tag) {
+              background: transparent !important;
+            }
+          }
+
+          .main-content {
+            z-index: 1;
+            margin-top: -18px;
+            min-height: 800px;
+            position: relative;
+            .tags-wrapper {
+              max-width: 550px;
+            }
+          }
+          :deep(.event-page-header) {
+            position: sticky;
+            top: 0px;
+            padding-bottom: 16px;
+            padding-top: 16px;
+            z-index: 1;
+          }
+          .bottom-section {
+            clear: both;
+            position: relative;
+            .page-views {
+              .page-view-char {
+                display: inline-block;
+                padding: 4px;
+                font-weight: bold;
+                border: 1px solid grey;
+                &:not(:first-child) {
+                  border-left: none;
+                }
+              }
+            }
+            .event-buttons {
+              position: relative;
+
+              .q-btn-group {
+                box-shadow:
+                  rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+                  rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
               }
             }
           }
         }
-        .clickable-background {
-          position: absolute;
-          height: 100%;
-          width: 100vw;
-          top: 0;
-          cursor: grab;
-        }
+      }
+      .clickable-background {
+        position: absolute;
+        height: 100%;
+        width: 100vw;
+        top: 0;
+        cursor: grab;
       }
     }
   }
@@ -2214,10 +2244,10 @@ a {
 }
 @media only screen and (min-width: 1023px) {
   .peek-address {
-    max-width: 1024px !important;
+    max-width: 1023px !important;
   }
   .content-card {
-    max-width: 1024px !important;
+    max-width: 1023px !important;
 
     .lineup-component {
       float: right;
@@ -2266,11 +2296,11 @@ a {
     }
   }
   .sticky-editing-footer-inner {
-    max-width: 1024px;
+    max-width: 1023px;
   }
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 1023px) {
   .peek-address {
     max-width: 96vw !important;
   }
@@ -2315,48 +2345,46 @@ a {
     }
   }
   .event-page {
-    .event-page-content {
-      .sticky-editing-footer-inner {
-        max-width: 100vw;
+    .sticky-editing-footer-inner {
+      max-width: 100vw;
+    }
+    .scroll-area {
+      //height: 100%;
+      .featured-media {
+        overflow: hidden;
       }
-      .scroll-area {
+      .main-row {
+        //z-index: 0;
         //height: 100%;
-        .featured-media {
-          overflow: hidden;
-        }
-        .main-row {
-          //z-index: 0;
-          //height: 100%;
-          .content-card {
-            //max-height: calc(100% - 66vh);
-            min-height: 100%;
-            min-height: 100vh;
-            margin-top: Max(calc(100% - 66%), 0px);
-            border: none;
-            max-width: 100vw !important;
+        .content-card {
+          //max-height: calc(100% - 66vh);
+          min-height: 100%;
+          min-height: 100vh;
+          margin-top: Max(calc(100% - 66%), 0px);
+          border: none;
+          max-width: 100vw !important;
 
-            //overflow: hidden;
-            .content {
-              //overflow-y: hidden;
-              &.mobile-scroll-enable {
-                //overflow-y: scroll;
-              }
-              .main-content {
-                border: none !important;
-                border-top-left-radius: 18px;
-                border-top-right-radius: 18px;
-              }
+          //overflow: hidden;
+          .content {
+            //overflow-y: hidden;
+            &.mobile-scroll-enable {
+              //overflow-y: scroll;
             }
-            .mobile-swipe-handle {
-              position: sticky;
-              top: 0;
+            .main-content {
+              border: none !important;
+              border-top-left-radius: 18px;
+              border-top-right-radius: 18px;
             }
-            .event-dates-component {
-              border: none;
-            }
-            .header {
-              // background: green !important;
-            }
+          }
+          .mobile-swipe-handle {
+            position: sticky;
+            top: 0;
+          }
+          .event-dates-component {
+            border: none;
+          }
+          .header {
+            // background: green !important;
           }
         }
       }

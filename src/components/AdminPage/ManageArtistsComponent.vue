@@ -232,11 +232,11 @@ export default {
     },
     refreshArtist(id) {
       const artistIndex = this.artists.findIndex((a) => a.id === id);
-      this.artists = this.artists.map(a => 
-        a.id === id ? {...a, refreshing: true} : a
+      this.artists = this.artists.map((a) =>
+        a.id === id ? { ...a, refreshing: true } : a,
       );
       console.log('testing');
-      this.refreshArtistRequest(id)
+      refreshArtistRequest(id)
         .then(() => {
           this.$q.notify({
             type: 'positive',
@@ -250,8 +250,8 @@ export default {
           });
         })
         .finally(() => {
-          this.artists = this.artists.map(a => 
-            a.id === id ? {...a, refreshing: false} : a
+          this.artists = this.artists.map((a) =>
+            a.id === id ? { ...a, refreshing: false } : a,
           );
         });
     },

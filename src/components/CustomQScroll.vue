@@ -1,178 +1,133 @@
 <template>
-  <div
-    class="custom-scroll"
+  <q-scroll-area
+    class="custom-q-scroll"
     ref="scroll"
-    :class="{ 'disable-scroll': disableScroll, vertical, horizontal }"
-    @scroll="handleScroll($event)"
+    v-bind="{ ...$attrs, ...$props }"
+    :visible="$q.platform.is.mobile ? false : undefined"
+    :class="disableScroll && 'disable-scroll'"
+    delay="0"
+    @click.stop
   >
     <slot></slot>
-  </div>
+  </q-scroll-area>
 </template>
 
 <script>
 export default {
-  props: {
-    disableScroll: Boolean,
-    vertical: {
-      type: Boolean,
-      default: true,
-    },
-    horizontal: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  props: ['disableScroll'],
   data() {
-    return {
-      isScrolling: null,
-      scrollElement: null,
-    };
+    return { isScrolling: null };
+  },
+  watch: {
+    disableScroll: function (newv) {
+      if (!newv) {
+        // this.$refs.scroll.$el.children[0].focus();
+      }
+    },
   },
   methods: {
-    setScrollPosition(offset, duration) {
-      this.scrollElement.scrollTo({
-        top: offset,
-        behavior: duration ? 'smooth' : 'auto',
-      });
+    setScrollPosition(direction, offset, duration) {
+      this.$refs.scroll.setScrollPosition(direction, offset, duration);
     },
-    setScrollPercentage(percentage, duration) {
-      const maxScroll =
-        this.scrollElement.scrollHeight - this.scrollElement.clientHeight;
-      const offset = maxScroll * (percentage / 100);
-      this.setScrollPosition(offset, duration);
+    setScrollPercentage(direction, offset, duration) {
+      this.$refs.scroll.setScrollPercentage(direction, offset, duration);
     },
     onScrollEnd() {
       this.$emit('scrollend');
     },
-    handleScroll(event) {
-      const scrollElement = event.target;
-      const verticalPosition = scrollElement.scrollTop;
-      const verticalPercentage =
-        (verticalPosition /
-          (scrollElement.scrollHeight - scrollElement.clientHeight)) *
-        100;
-      const horizontalPosition = this.horizontal ? scrollElement.scrollLeft : 0;
-      const horizontalPercentage = this.horizontal
-        ? (horizontalPosition /
-            (scrollElement.scrollWidth - scrollElement.clientWidth)) *
-          100
-        : 0;
-
-      this.$emit('onScroll', {
-        verticalPosition,
-        verticalPercentage,
-        horizontalPosition,
-        horizontalPercentage,
-      });
-
+    onScroll() {
       if (this.isScrolling) window.clearTimeout(this.isScrolling);
       this.isScrolling = setTimeout(() => {
-        this.onScrollEnd();
-      }, 100);
+        this.onScrollEnd(); // Trigger onScrollEnd after scroll stops
+      }, 100); // Adjust the timeout as needed
     },
   },
+  computed: {},
+
   mounted() {
-    this.scrollElement = this.$refs.scroll;
+    // safari doesn't support scrollend
+
     if (this.$q.platform.is.ios || this.$q.platform.is.safari) {
-      this.scrollElement.addEventListener('scroll', this.handleScroll);
+      this.$refs.scroll.$el.firstElementChild.addEventListener(
+        'scroll',
+        this.onScroll,
+      );
     } else {
-      this.scrollElement.addEventListener('scrollend', this.onScrollEnd);
+      this.$refs.scroll.$el.firstElementChild.addEventListener(
+        'scrollend',
+        this.onScrollEnd,
+      );
+    }
+
+    // on ios, the mouseover event in the q-scroll component causes users
+    // to have to click twice on their target
+    // so we remove these events
+
+    if (this.$q.platform.is.ios && this.$refs.scroll.$el._vei) {
+      this.$refs.scroll.$el.removeEventListener(
+        'mouseleave',
+        this.$refs.scroll.$el._vei.onMouseleave,
+      );
+      this.$refs.scroll.$el.removeEventListener(
+        'mouseenter',
+        this.$refs.scroll.$el._vei.onMouseenter,
+      );
     }
   },
   beforeUnmount() {
+    this.$refs.scroll.$el.firstElementChild.removeEventListener(
+      'scrollend',
+      this.onScrollEnd(),
+    );
     if (this.$q.platform.is.ios || this.$q.platform.is.safari) {
-      this.scrollElement.removeEventListener('scroll', this.handleScroll);
-    } else {
-      this.scrollElement.removeEventListener('scrollend', this.onScrollEnd);
+      this.$refs.scroll.$el.firstElementChild.removeEventListener(
+        'scroll',
+        this.onScroll(),
+      );
     }
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.body--dark {
+}
+
 .body--light {
 }
 
-.body--dark {
-}
-.custom-scroll {
-  width: 100%;
-  height: 100%;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-
+.custom-q-scroll {
+  :deep(.q-scrollarea__bar) {
+    pointer-events: all;
+  }
+  :deep(.q-scrollarea__thumb) {
+    background: rgba(0, 0, 0, 0) !important; /* Dark translucent thumb */
+    backdrop-filter: blur(4px) contrast(0.8) invert(50%);
+    -webkit-backdrop-filter: blur(4px) contrast(1.2) invert(50%);
+    opacity: 1;
+    &:hover {
+      backdrop-filter: blur(4px) contrast(1.2) invert(60%);
+      -webkit-backdrop-filter: blur(4px) contrast(1.2) invert(50%);
+    }
+  }
+  :deep(.scroll) {
+    will-change: overflow;
+    @supports (-webkit-overflow-scrolling: touch) {
+      overscroll-behavior: none;
+      -webkit-overflow-scrolling: touch;
+    }
+  }
   &.disable-scroll {
-    overflow: hidden !important;
-    pointer-events: none;
-  }
-
-  &.vertical {
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-
-  &.horizontal {
-    overflow-y: hidden;
-    overflow-x: auto;
-  }
-
-  /* Scrollbar styling */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 3px;
-    transition: background 0.2s ease;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.3);
-  }
-}
-
-.body--light {
-  .custom-scroll {
-    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
-
-    &::-webkit-scrollbar-thumb {
-      background: rgba(0, 0, 0, 0.2);
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-      background: rgba(0, 0, 0, 0.3);
+    // pointer-events: none;
+    :deep(.scroll) {
+      overflow: hidden !important;
     }
   }
 }
-
-.body--dark {
-  .custom-scroll {
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-
-    &::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.3);
-    }
-  }
-}
-
 @media only screen and (max-width: 599px) {
-  .custom-scroll {
-    scrollbar-width: none; /* Firefox */
-    &::-webkit-scrollbar {
-      display: none; /* Safari and Chrome */
+  .custom-q-scroll {
+    :deep(.q-scrollarea__thumb) {
+      display: none;
     }
   }
 }

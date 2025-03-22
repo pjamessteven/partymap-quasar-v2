@@ -508,7 +508,7 @@
                       />
                       -->
             </div>
-            <EventDateList
+            <EventDateCardList
               :class="{ 'q-px-sm': $q.screen.lt.md }"
               v-if="nearbyEventDates && compactView"
               :groupByMonth="false"
@@ -579,7 +579,7 @@
             >
               <InnerLoading :solid="false" />
             </div>
-            <EventDateList
+            <EventDateCardList
               :class="{ 'q-px-sm': $q.screen.lt.md }"
               v-if="eventDates && compactView"
               :groupByMonth="false"
@@ -627,7 +627,7 @@ import { useMainStore } from 'src/stores/main';
 import { useNearbyStore } from 'src/stores/nearby';
 import NearbyCountrySelect from './NearbyCountrySelect.vue';
 import AddEventDialog from 'components/dialogs/AddEventDialog.vue';
-import EventDateList from 'src/components/EventDateList.vue';
+import EventDateCardList from 'src/components/EventDateCardList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
 //import EventDateViewOptions from 'src/components/EventDateViewOptions.vue';
 import InnerLoading from 'src/components/InnerLoading.vue';
@@ -649,7 +649,6 @@ export default {
   components: {
     CustomQScroll,
     ArtistsComponent,
-    EventDateList,
     EventDatePosterList,
     EventDatePoster,
     // EventDateViewOptions,
@@ -661,6 +660,7 @@ export default {
     TagControl,
     DesktopSearchComponent,
     ArtistControl,
+    EventDateCardList,
     TagExplorer,
   },
   data() {
@@ -1302,7 +1302,7 @@ export default {
   }
 }
 
-@media only screen and (min-width: 600px) and (max-width: 1024px) {
+@media only screen and (min-width: 600px) and (max-width: 1023px) {
   .nearby-page {
     .scroll-area {
       .scroll-stuff {

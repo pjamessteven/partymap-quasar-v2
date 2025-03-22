@@ -480,18 +480,24 @@ export function getEventsRequest(params: {
   per_page?: number;
 }) {
   return api.get(`${API_URL}/event/`, {
-    params: {
-      ...params,
-      sort: params.sort || 'created_at',
-      desc: params.desc || true
-    },
+    params,
   });
 }
+
+// tags
 
 export function getTagRequest(params) {
   return api.get(`${API_URL}/tag/`, {
     params: params,
   });
+}
+
+export function deleteTagRequest(id) {
+  return api.delete(`${API_URL}/tag/${id}`);
+}
+
+export function updateTagTranslationsRequest(id, translations) {
+  return api.put(`${API_URL}/tag/${id}/translations`, translations);
 }
 
 // users

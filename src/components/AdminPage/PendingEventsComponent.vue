@@ -15,18 +15,9 @@
           v-model="sortField"
           :options="sortOptions"
           label="Sort by"
-          style="min-width: 200px"
+          style="min-width: 100px"
         />
-        <q-toggle
-          v-model="showDateUnconfirmedOnly"
-          label="Date unconfirmed"
-          style="font-size: small"
-        />
-        <q-toggle
-          v-model="showEmptyLineupOnly"
-          label="Empty lineup"
-          style="font-size: small"
-        />
+
         <q-toggle
           v-model="showHiddenOnly"
           label="Pending"
@@ -116,6 +107,7 @@
                   <q-icon name="las la-trash" />
                 </q-btn>
                 <q-btn
+                  v-if="item.hidden"
                   color="green"
                   round
                   size="sm"
@@ -198,7 +190,7 @@ export default {
     return {
       events: null,
       page: 1,
-      perPage: 10,
+      perPage: 100,
       hasNext: false,
       loading: false,
       showHiddenOnly: true,
@@ -225,7 +217,7 @@ export default {
     selectAll() {
       if (this.events && this.events.length > 0) {
         // If all visible events are already selected, clear selection
-        if (this.events.every(event => this.selectedEvents.has(event.id))) {
+        if (this.events.every((event) => this.selectedEvents.has(event.id))) {
           this.selectedEvents.clear();
         } else {
           // Otherwise select all visible events

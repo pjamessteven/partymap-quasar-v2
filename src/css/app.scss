@@ -9,7 +9,9 @@
 // ==============================================
 
 // Layout
-.grow { flex-grow: 1; }
+.grow {
+  flex-grow: 1;
+}
 .sticky-input {
   position: sticky;
   z-index: 1;
@@ -21,7 +23,9 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
-.menubar { z-index: 4500; }
+.menubar {
+  z-index: 4500;
+}
 .overlay-page {
   width: 100%;
   height: 100%;
@@ -30,15 +34,21 @@
   z-index: 4000;
   overflow: auto;
 }
-.pointer-events-none { pointer-events: none !important; }
-.disabled { pointer-events: none; }
+.pointer-events-none {
+  pointer-events: none !important;
+}
+.disabled {
+  pointer-events: none;
+}
 
 // Borders
-.border-radius { border-radius: 9px !important; }
+.border-radius {
+  border-radius: 9px !important;
+}
 .separator {
   width: 100%;
   border-top: 1px solid;
-  
+
   &.vertical {
     border-top: none;
     border-left: 1px solid;
@@ -48,17 +58,39 @@
 }
 
 // Opacity
-.o-090 { opacity: 0.9; }
-.o-080 { opacity: 0.8; }
-.o-070 { opacity: 0.7; }
-.o-060 { opacity: 0.6; }
-.o-050 { opacity: 0.5; }
-.o-040 { opacity: 0.4; }
-.o-030 { opacity: 0.3; }
-.o-020 { opacity: 0.2; }
-.o-010 { opacity: 0.1; }
-.o-000 { opacity: 0; }
-.o-animated { transition: opacity 0.3s; }
+.o-090 {
+  opacity: 0.9;
+}
+.o-080 {
+  opacity: 0.8;
+}
+.o-070 {
+  opacity: 0.7;
+}
+.o-060 {
+  opacity: 0.6;
+}
+.o-050 {
+  opacity: 0.5;
+}
+.o-040 {
+  opacity: 0.4;
+}
+.o-030 {
+  opacity: 0.3;
+}
+.o-020 {
+  opacity: 0.2;
+}
+.o-010 {
+  opacity: 0.1;
+}
+.o-000 {
+  opacity: 0;
+}
+.o-animated {
+  transition: opacity 0.3s;
+}
 
 // Shadows
 .shadow {
@@ -97,54 +129,99 @@
 // Font Families
 .inter {
   font-family: 'Inter';
-  &.semibold { font-weight: 500; }
-  &.bold { font-weight: 600; }
-  &.bold2 { font-weight: 700; }
-  &.bolder { font-weight: 800; }
+  &.semibold {
+    font-weight: 500;
+  }
+  &.bold {
+    font-weight: 600;
+  }
+  &.bold2 {
+    font-weight: 700;
+  }
+  &.bolder {
+    font-weight: 800;
+  }
 }
 
 .metropolis {
   font-family: 'Metropolis';
-  &.semibold { font-weight: 500; }
-  &.bold { font-weight: 600; }
-  &.bold2 { font-weight: 700; }
-  &.bolder { font-weight: 800; }
-  &:lang(ru) { font-family: 'InterDisplay' !important; }
+  &.semibold {
+    font-weight: 500;
+  }
+  &.bold {
+    font-weight: 600;
+  }
+  &.bold2 {
+    font-weight: 700;
+  }
+  &.bolder {
+    font-weight: 800;
+  }
+  &:lang(ru) {
+    font-family: 'InterDisplay' !important;
+  }
 }
 
 .stratos {
   font-family: 'stratos';
-  &.bold { font-weight: 600; }
-  &.bolder { font-weight: 800; }
-  &.black { font-weight: 900; }
+  &.bold {
+    font-weight: 600;
+  }
+  &.bolder {
+    font-weight: 800;
+  }
+  &.black {
+    font-weight: 900;
+  }
 }
 
-.sans-serif { font-family: sans-serif; }
-.serif { font-family: serif; }
+.sans-serif {
+  font-family: sans-serif;
+}
+.serif {
+  font-family: serif;
+}
 
 // Headings
-.text-h1, .text-h2, .text-h3, .text-h4, .text-h5, .text-h6 {
+.text-h1,
+.text-h2,
+.text-h3,
+.text-h4,
+.text-h5,
+.text-h6 {
   font-family: 'Metropolis';
-  &:lang(ru) { font-family: 'InterDisplay' !important; }
+  &:lang(ru) {
+    font-family: 'InterDisplay' !important;
+  }
 }
 
-.text-h2 { font-weight: 700; }
+.text-h2 {
+  font-weight: 700;
+}
 .text-h6 {
   font-weight: 500;
   line-height: 1.8rem;
   letter-spacing: unset !important;
 }
-.text-large { font-size: 1rem; }
+.text-large {
+  font-size: 1rem;
+}
 
 // Links
 .link-hover {
   color: unset;
   cursor: pointer;
   text-decoration: none !important;
-  
-  &:hover { color: $primary !important; }
-  &.underline { text-decoration: underline !important; }
-  &.primary { color: $primary; }
+
+  &:hover {
+    color: $primary !important;
+  }
+  &.underline {
+    text-decoration: underline !important;
+  }
+  &.primary {
+    color: $primary;
+  }
 }
 
 // ==============================================
@@ -156,9 +233,13 @@
   font-size: 14px;
   border-radius: 9px !important;
   font-weight: 500;
-  
-  .q-btn__content { flex-wrap: nowrap; }
-  &.q-btn--square { border-radius: 0 !important; }
+
+  .q-btn__content {
+    flex-wrap: nowrap;
+  }
+  &.q-btn--square {
+    border-radius: 0 !important;
+  }
 }
 
 .button-light {
@@ -179,13 +260,19 @@
   font-size: normal;
   border-radius: 9px !important;
   overflow: hidden;
-  
-  .q-btn__wrapper { padding: 0; }
+
+  .q-btn__wrapper {
+    padding: 0;
+  }
   .q-btn__content {
     white-space: nowrap;
-    
-    .button-label { padding: 0 12px; }
-    .q-icon { margin-right: -6px; }
+
+    .button-label {
+      padding: 0 12px;
+    }
+    .q-icon {
+      margin-right: -6px;
+    }
   }
 }
 
@@ -197,7 +284,7 @@
   flex-basis: 1;
   max-height: 56px;
   transition: all 0.3s;
-  
+
   &.primary {
     background: $primary !important;
     color: white;
@@ -226,7 +313,7 @@
 .dialog-card {
   display: flex;
   flex-direction: column;
-  
+
   .dialog-card-header {
     display: flex;
     flex-direction: row;
@@ -236,11 +323,15 @@
     z-index: 100;
     padding: 16px 16px;
     font-weight: 700 !important;
-    
-    .text-h6 { font-weight: 700 !important; }
+
+    .text-h6 {
+      font-weight: 700 !important;
+    }
   }
-  
-  .dialog-card-content { overflow-y: auto; }
+
+  .dialog-card-content {
+    overflow-y: auto;
+  }
 }
 
 .sticky-header {
@@ -254,7 +345,7 @@
   border-radius: 9px !important;
   font-size: small;
   color: $t-1;
-  
+
   &.q-menu--dark {
     box-shadow: none;
     border: 1px solid $bi-4;
@@ -262,40 +353,40 @@
   }
 }
 
-.menu-wrapper { max-height: 500px; }
+.menu-wrapper {
+  max-height: 500px;
+}
 
 // Dialogs
 .q-dialog {
   @supports ((top: var(--safe-area-inset-top))) {
     top: calc(var(--safe-area-inset-top));
   }
-  
+
   @supports ((bottom: var(--safe-area-inset-bottom))) {
     height: calc(
       100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top)
     );
   }
-  
+
   .q-dialog__inner {
     @supports ((top: var(--safe-area-inset-top))) {
       top: calc(var(--safe-area-inset-top));
     }
-    
+
     @supports ((bottom: var(--safe-area-inset-bottom))) {
       height: calc(
         100% - var(--safe-area-inset-bottom) - var(--safe-area-inset-top)
       ) !important;
     }
-    
+
     &.q-dialog__inner--minimized {
-      padding: 16px;
+      padding: 0px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      
-      > div { 
-        max-height: 90vh;
-        max-width: 95vw;
+
+      > div {
         width: 100%;
         margin: 0 auto;
       }
@@ -310,7 +401,7 @@
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(4px) saturate(150%);
-  
+
   .auth-card {
     margin-top: 48px;
     width: 400px;
@@ -320,22 +411,36 @@
 }
 
 // Inputs
-.q-input { border-radius: 9px !important; }
+.q-input {
+  border-radius: 9px !important;
+}
 
 .q-field {
-  &__control { overflow: hidden; }
-  &--filled .q-field__control { border-radius: 4px !important; }
+  &__control {
+    overflow: hidden;
+  }
+  &--filled .q-field__control {
+    border-radius: 4px !important;
+  }
 }
 
 // Calendar
 .vc-container {
   background: transparent !important;
   font-family: Inter;
-  
-  .vc-arrow { background: transparent !important; }
-  .vc-title { background: transparent; }
-  .on-right { margin-left: unset !important; }
-  .on-left { margin-right: unset !important; }
+
+  .vc-arrow {
+    background: transparent !important;
+  }
+  .vc-title {
+    background: transparent;
+  }
+  .on-right {
+    margin-left: unset !important;
+  }
+  .on-left {
+    margin-right: unset !important;
+  }
 }
 
 // ==============================================
@@ -344,56 +449,80 @@
 
 // Light Theme
 .body--light {
-  .sticky-input { background: white; }
-  
+  .sticky-input {
+    background: white;
+  }
+
   .dialog-card {
     .dialog-card-header {
       background: $b-2;
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
   }
-  
+
   .q-dialog__backdrop {
     background: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.8));
   }
-  
+
   .sticky-header {
     background: white;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
-  
+
   // Text Colors
-  .t1 { color: $t-1; }
-  .t2 { color: $t-2; }
-  .t3 { color: $t-3; }
-  .t4 { color: $t-4; }
-  
+  .t1 {
+    color: $t-1;
+  }
+  .t2 {
+    color: $t-2;
+  }
+  .t3 {
+    color: $t-3;
+  }
+  .t4 {
+    color: $t-4;
+  }
+
   // Background Colors
-  .b1 { background-color: $b-1; }
-  .b2 { background-color: $b-2; }
-  .b3 { background-color: $b-3; }
-  .b4 { background-color: $b-4; }
-  
+  .b1 {
+    background-color: $b-1;
+  }
+  .b2 {
+    background-color: $b-2;
+  }
+  .b3 {
+    background-color: $b-3;
+  }
+  .b4 {
+    background-color: $b-4;
+  }
+
   // Other Elements
-  .q-list--bordered { border: 1px solid rgba(0, 0, 0, 0.05); }
+  .q-list--bordered {
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
   .q-card__actions {
     background: $b-1;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
   }
-  
+
   .auth-card {
     background: rgba(255, 255, 255, 1) !important;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
   }
-  
+
   .q-field--filled .q-field__control {
     background: rgba(0, 0, 0, 0.05);
     border: 1px solid rgba(0, 0, 0, 0.05);
   }
-  
-  .title { color: $t-1 !important; }
-  .q-date__header { color: black !important; }
-  
+
+  .title {
+    color: $t-1 !important;
+  }
+  .q-date__header {
+    color: black !important;
+  }
+
   .q-date {
     background: rgba(0, 0, 0, 0.05);
     box-shadow:
@@ -401,59 +530,69 @@
       0 1px 1px rgba(0, 0, 0, 0.14),
       0 2px 1px -1px rgba(0, 0, 0, 0.12) !important;
   }
-  
+
   .q-card {
     border: 1px solid rgba(0, 0, 0, 0.1);
   }
-  
+
   .button-light {
     color: $t-1;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
     border: 1px solid rgba(0, 0, 0, 0.1);
-    
-    .q-btn__wrapper::before { box-shadow: none; }
+
+    .q-btn__wrapper::before {
+      box-shadow: none;
+    }
   }
-  
+
   .button-plain {
     color: $t-1;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
     transition: none;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    
-    &::before { box-shadow: none !important; }
-    .q-btn__wrapper::before { box-shadow: none; }
-    
+
+    &::before {
+      box-shadow: none !important;
+    }
+    .q-btn__wrapper::before {
+      box-shadow: none;
+    }
+
     &.active {
       border: 1px solid rgba(0, 0, 0, 0.1);
       background: $b-3 !important;
     }
   }
-  
+
   .nav-button {
     background: $b-3;
-    &:hover { background: $b-4; }
+    &:hover {
+      background: $b-4;
+    }
   }
-  
-  .separator { border-color: rgba(0, 0, 0, 0.1); }
-  
+
+  .separator {
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+
   .editing {
     &.editing-outline {
       border: 1px dashed rgba(0, 0, 0, 0.4) !important;
       border-radius: 9px !important;
       cursor: pointer;
     }
-    
+
     .editing-outline {
       border: 1px dashed rgba(0, 0, 0, 0.4) !important;
       border-radius: 9px !important;
       cursor: pointer;
     }
   }
-  
+
   .overlay-page {
     background: linear-gradient(0deg, white, rgba(255, 255, 255, 0.8));
   }
-  
+
   .swipe-nav-bar {
     width: 40px;
     height: 2px;
@@ -466,97 +605,125 @@
 // Dark Theme
 .body--dark {
   background: black !important;
-  
-  .sticky-input { background: black; }
-  
+
+  .sticky-input {
+    background: black;
+  }
+
   // Text Colors
-  .t1 { color: $ti-1; }
-  .t2 { color: $ti-2; }
-  .t3 { color: $ti-3; }
-  .t4 { color: $ti-4; }
-  
+  .t1 {
+    color: $ti-1;
+  }
+  .t2 {
+    color: $ti-2;
+  }
+  .t3 {
+    color: $ti-3;
+  }
+  .t4 {
+    color: $ti-4;
+  }
+
   // Background Colors
-  .b1 { background-color: $bi-1; }
-  .b2 { background-color: $bi-2; }
-  .b3 { background-color: $bi-3; }
-  .b4 { background-color: $bi-4; }
-  
+  .b1 {
+    background-color: $bi-1;
+  }
+  .b2 {
+    background-color: $bi-2;
+  }
+  .b3 {
+    background-color: $bi-3;
+  }
+  .b4 {
+    background-color: $bi-4;
+  }
+
   // Cards
   .dialog-card {
     background: $bi-2 !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    
+
     .dialog-card-header {
       background: $bi-3 !important;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
     }
   }
-  
-  .auth-card { background: rgba(0, 0, 0, 1) !important; }
+
+  .auth-card {
+    background: rgba(0, 0, 0, 1) !important;
+  }
   .q-card {
     box-shadow: none;
     border: 1px solid rgb(26, 26, 26);
   }
-  
+
   // UI Elements
   .sticky-header {
     background: black;
     border-bottom: 1px solid rgb(30, 30, 30);
   }
-  
-  .q-list--bordered { border: 1px solid rgba(255, 255, 255, 0.05); }
+
+  .q-list--bordered {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
   .q-dialog__backdrop {
     background: linear-gradient(rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.8));
   }
-  
+
   .q-field--dark .q-field__control::before {
     border-color: rgb(64, 64, 64);
   }
-  
+
   // Buttons
   .button-light {
     color: $ti-1;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
-    
-    .q-btn__wrapper::before { box-shadow: none; }
+
+    .q-btn__wrapper::before {
+      box-shadow: none;
+    }
   }
-  
+
   .button-plain {
     background: black;
     color: $ti-1;
     transition: none;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 2px 0px;
-    
+
     &.active {
       border: 1px solid rgba(255, 255, 255, 0.1);
       background: $bi-3 !important;
     }
   }
-  
+
   .nav-button {
     background: $bi-3;
-    &:hover { background: $bi-4; }
+    &:hover {
+      background: $bi-4;
+    }
   }
-  
+
   // Calendar
   .vc-container {
     border-color: rgb(50, 50, 50) !important;
     background: transparent !important;
-    
+
     :deep(.vc-day-content.is-disabled) {
       color: rgba(255, 255, 255, 0.2) !important;
     }
-    
+
     :deep(.vc-highlights) .vc-highlight {
       background-color: rgba(255, 255, 255, 0.2) !important;
     }
   }
-  
+
   // Misc
-  .separator { border-color: rgb(26, 26, 26); }
-  
+  .separator {
+    border-color: rgb(26, 26, 26);
+  }
+
   .editing {
     &.editing-outline {
       border: 1px dashed rgba(255, 255, 255, 0.3) !important;
@@ -565,11 +732,11 @@
       cursor: pointer;
     }
   }
-  
+
   .overlay-page {
     background: linear-gradient(0deg, black, rgba(0, 0, 0, 0.8));
   }
-  
+
   .swipe-nav-bar {
     width: 40px;
     height: 2px;
@@ -584,18 +751,28 @@
 @media only screen and (max-width: 599px) {
   // Theme adjustments
   .body--dark {
-    .q-dialog .menu { color: $bi-2; }
-    .dialog-page { background: black; }
+    .q-dialog .menu {
+      color: $bi-2;
+    }
+    .dialog-page {
+      background: black;
+    }
   }
-  
+
   .body--light {
-    .q-dialog .menu { color: $b-2; }
-    .dialog-page { background: white; }
+    .q-dialog .menu {
+      color: $b-2;
+    }
+    .dialog-page {
+      background: white;
+    }
   }
-  
+
   // Dialog and card adjustments
-  :deep(.q-dialog) .q-card { max-width: 100vw; }
-  
+  :deep(.q-dialog) .q-card {
+    max-width: 100vw;
+  }
+
   .q-card.fullscreen-mobile-card {
     border: none !important;
     box-shadow: none !important;
@@ -605,21 +782,27 @@
     max-height: unset !important;
     border-radius: 0 !important;
   }
-  
+
   // iOS specific overrides
   body.q-ios-padding {
-    .q-dialog__inner { padding: 0 !important; }
-    .fullscreen { padding: 0 !important; }
-    .q-dialog__inner > div { max-height: 100vh !important; }
+    .q-dialog__inner {
+      padding: 0 !important;
+    }
+    .fullscreen {
+      padding: 0 !important;
+    }
+    .q-dialog__inner > div {
+      max-height: 100vh !important;
+    }
   }
-  
+
   // Android specific overrides
   .platform-android {
     .q-select__dialog {
       padding-top: var(--safe-area-inset-top) !important;
     }
   }
-  
+
   // Edit card adjustments
   .edit-card {
     min-width: 100%;
@@ -628,7 +811,7 @@
     border-radius: 0 !important;
     border: none !important;
   }
-  
+
   // Auth dialog adjustments
   .dialog-page .auth-card {
     border: none !important;
@@ -637,7 +820,7 @@
     width: 100%;
     height: 100%;
     border-radius: 0 !important;
-    
+
     .dialog-card-header {
       width: 100%;
       align-items: center;
@@ -645,10 +828,12 @@
       text-align: center;
     }
   }
-  
+
   // Component adjustments
-  .tag { font-size: 0.9em; }
-  
+  .tag {
+    font-size: 0.9em;
+  }
+
   .component-wrapper {
     .control-menu {
       max-height: 400px;

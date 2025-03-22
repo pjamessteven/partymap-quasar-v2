@@ -44,6 +44,7 @@
       <div
         class="flex column grow no-wrap"
         :class="$q.screen.gt.sm ? 'q-pt-sm' : ''"
+        style="height: 100%"
       >
         <CustomQScroll
           vertical
@@ -360,7 +361,7 @@
                   'q-px-sm ': $q.screen.lt.md,
                 }"
               >
-                <EventDateList
+                <EventDateCardList
                   v-if="compactView"
                   :groupByMonth="groupEventsByMonth"
                   :eventDatesGroupedByMonth="eventDatesGroupedByMonth"
@@ -475,7 +476,7 @@ import { toRaw } from 'vue';
 import _ from 'lodash';
 //import ArtistProfile from 'components/ArtistProfile.vue';
 
-import EventDateList from 'src/components/EventDateList.vue';
+import EventDateCardList from 'src/components/EventDateCardList.vue';
 import EventDatePosterList from 'src/components/EventDatePosterList.vue';
 import ArtistsComponent from 'src/components/SideBar/ArtistsComponent.vue';
 import { useMapStore } from 'src/stores/map';
@@ -493,7 +494,7 @@ import Tag from 'src/components/Tag.vue';
 export default {
   components: {
     ArtistsComponent,
-    EventDateList,
+    EventDateCardList,
     EventDatePosterList,
     CustomQScroll,
     NearbyCountrySelect,
@@ -592,6 +593,7 @@ export default {
     },
 
     onScrollMainContent(info) {
+      console.log('info', info);
       this.mainContentScrollPosition = info.verticalPosition;
       if (info.verticalPosition > 0) {
         this.enablePanelSwipeDown = false;
@@ -950,6 +952,9 @@ export default {
     }
     :deep(.q-scrollarea__thumb) {
       z-index: 5000;
+    }
+    :deep(.q-scrollarea__content) {
+      width: 100%;
     }
   }
 
