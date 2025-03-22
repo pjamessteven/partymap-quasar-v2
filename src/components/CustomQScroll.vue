@@ -1,120 +1,83 @@
 <template>
-  <q-scroll-area
-    class="custom-q-scroll"
+  <div
+    class="custom-scroll"
     ref="scroll"
-    v-bind="{ ...$attrs, ...$props }"
-    :visible="$q.platform.is.mobile ? false : undefined"
-    :class="disableScroll && 'disable-scroll'"
-    delay="0"
+    :class="{ 'disable-scroll': disableScroll }"
+    @scroll="handleScroll"
   >
     <slot></slot>
-  </q-scroll-area>
+  </div>
 </template>
 
 <script>
 export default {
   props: ['disableScroll'],
   data() {
-    return { isScrolling: null };
-  },
-  watch: {
-    disableScroll: function (newv) {
-      if (!newv) {
-        // this.$refs.scroll.$el.children[0].focus();
-      }
-    },
+    return { 
+      isScrolling: null,
+      scrollElement: null
+    };
   },
   methods: {
-    setScrollPosition(direction, offset, duration) {
-      this.$refs.scroll.setScrollPosition(direction, offset, duration);
+    setScrollPosition(offset, duration) {
+      this.scrollElement.scrollTo({
+        top: offset,
+        behavior: duration ? 'smooth' : 'auto'
+      });
     },
-    setScrollPercentage(direction, offset, duration) {
-      this.$refs.scroll.setScrollPercentage(direction, offset, duration);
+    setScrollPercentage(percentage, duration) {
+      const maxScroll = this.scrollElement.scrollHeight - this.scrollElement.clientHeight;
+      const offset = maxScroll * (percentage / 100);
+      this.setScrollPosition(offset, duration);
     },
     onScrollEnd() {
       this.$emit('scrollend');
     },
-    onScroll() {
+    handleScroll() {
       if (this.isScrolling) window.clearTimeout(this.isScrolling);
       this.isScrolling = setTimeout(() => {
-        this.onScrollEnd(); // Trigger onScrollEnd after scroll stops
-      }, 100); // Adjust the timeout as needed
-    },
-  },
-  computed: {},
-
-  mounted() {
-    // safari doesn't support scrollend
-
-    if (this.$q.platform.is.ios || this.$q.platform.is.safari) {
-      this.$refs.scroll.$el.firstElementChild.addEventListener(
-        'scroll',
-        this.onScroll,
-      );
-    } else {
-      this.$refs.scroll.$el.firstElementChild.addEventListener(
-        'scrollend',
-        this.onScrollEnd,
-      );
+        this.onScrollEnd();
+      }, 100);
     }
-
-    // on ios, the mouseover event in the q-scroll component causes users
-    // to have to click twice on their target
-    // so we remove these events
-
-    if (this.$q.platform.is.ios && this.$refs.scroll.$el._vei) {
-      this.$refs.scroll.$el.removeEventListener(
-        'mouseleave',
-        this.$refs.scroll.$el._vei.onMouseleave,
-      );
-      this.$refs.scroll.$el.removeEventListener(
-        'mouseenter',
-        this.$refs.scroll.$el._vei.onMouseenter,
-      );
+  },
+  mounted() {
+    this.scrollElement = this.$refs.scroll;
+    if (this.$q.platform.is.ios || this.$q.platform.is.safari) {
+      this.scrollElement.addEventListener('scroll', this.handleScroll);
+    } else {
+      this.scrollElement.addEventListener('scrollend', this.onScrollEnd);
     }
   },
   beforeUnmount() {
-    this.$refs.scroll.$el.firstElementChild.removeEventListener(
-      'scrollend',
-      this.onScrollEnd(),
-    );
     if (this.$q.platform.is.ios || this.$q.platform.is.safari) {
-      this.$refs.scroll.$el.firstElementChild.removeEventListener(
-        'scroll',
-        this.onScroll(),
-      );
+      this.scrollElement.removeEventListener('scroll', this.handleScroll);
+    } else {
+      this.scrollElement.removeEventListener('scrollend', this.onScrollEnd);
     }
-  },
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-.body--dark {
-}
-
-.body--light {
-}
-
-.custom-q-scroll {
-  :deep(.scroll) {
-    will-change: overflow;
-
-    @supports (-webkit-overflow-scrolling: touch) {
-      overscroll-behavior: none;
-      -webkit-overflow-scrolling: touch;
-    }
-  }
+.custom-scroll {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  
   &.disable-scroll {
-    // pointer-events: none;
-    :deep(.scroll) {
-      overflow: hidden !important;
-    }
+    overflow: hidden !important;
+    pointer-events: none;
   }
 }
+
 @media only screen and (max-width: 599px) {
-  .custom-q-scroll {
-    :deep(.q-scrollarea__thumb) {
-      display: none;
+  .custom-scroll {
+    scrollbar-width: none; /* Firefox */
+    &::-webkit-scrollbar {
+      display: none; /* Safari and Chrome */
     }
   }
 }
