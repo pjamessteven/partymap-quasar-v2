@@ -1,6 +1,6 @@
 <template>
   <div
-    class="custom-scroll flex column no-wrap"
+    class="custom-scroll"
     ref="scroll"
     :class="{ 'disable-scroll': disableScroll }"
     @scroll="handleScroll($event)"
@@ -37,17 +37,23 @@ export default {
     handleScroll(event) {
       const scrollElement = event.target;
       const verticalPosition = scrollElement.scrollTop;
-      const verticalPercentage = (verticalPosition / (scrollElement.scrollHeight - scrollElement.clientHeight)) * 100;
+      const verticalPercentage =
+        (verticalPosition /
+          (scrollElement.scrollHeight - scrollElement.clientHeight)) *
+        100;
       const horizontalPosition = scrollElement.scrollLeft;
-      const horizontalPercentage = (horizontalPosition / (scrollElement.scrollWidth - scrollElement.clientWidth)) * 100;
-      
-      this.$emit('scroll', {
+      const horizontalPercentage =
+        (horizontalPosition /
+          (scrollElement.scrollWidth - scrollElement.clientWidth)) *
+        100;
+
+      this.$emit('onScroll', {
         verticalPosition,
         verticalPercentage,
-        horizontalPosition, 
-        horizontalPercentage
+        horizontalPosition,
+        horizontalPercentage,
       });
-      
+
       if (this.isScrolling) window.clearTimeout(this.isScrolling);
       this.isScrolling = setTimeout(() => {
         this.onScrollEnd();
