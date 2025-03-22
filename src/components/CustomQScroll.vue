@@ -11,7 +11,17 @@
 
 <script>
 export default {
-  props: ['disableScroll'],
+  props: {
+    disableScroll: Boolean,
+    vertical: {
+      type: Boolean,
+      default: true
+    },
+    horizontal: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       isScrolling: null,
@@ -41,11 +51,11 @@ export default {
         (verticalPosition /
           (scrollElement.scrollHeight - scrollElement.clientHeight)) *
         100;
-      const horizontalPosition = scrollElement.scrollLeft;
-      const horizontalPercentage =
+      const horizontalPosition = this.horizontal ? scrollElement.scrollLeft : 0;
+      const horizontalPercentage = this.horizontal ?
         (horizontalPosition /
           (scrollElement.scrollWidth - scrollElement.clientWidth)) *
-        100;
+        100 : 0;
 
       this.$emit('onScroll', {
         verticalPosition,
@@ -82,8 +92,8 @@ export default {
 .custom-scroll {
   width: 100%;
   height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow-y: v-bind(vertical ? 'auto' : 'hidden');
+  overflow-x: v-bind(horizontal ? 'auto' : 'hidden');
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 
