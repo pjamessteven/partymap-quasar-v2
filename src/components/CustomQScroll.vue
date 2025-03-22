@@ -1,9 +1,9 @@
 <template>
   <div
-    class="custom-scroll"
+    class="custom-scroll flex column no-wrap"
     ref="scroll"
     :class="{ 'disable-scroll': disableScroll }"
-    @scroll="handleScroll"
+    @scroll="handleScroll($event)"
   >
     <slot></slot>
   </div>
@@ -13,32 +13,34 @@
 export default {
   props: ['disableScroll'],
   data() {
-    return { 
+    return {
       isScrolling: null,
-      scrollElement: null
+      scrollElement: null,
     };
   },
   methods: {
     setScrollPosition(offset, duration) {
       this.scrollElement.scrollTo({
         top: offset,
-        behavior: duration ? 'smooth' : 'auto'
+        behavior: duration ? 'smooth' : 'auto',
       });
     },
     setScrollPercentage(percentage, duration) {
-      const maxScroll = this.scrollElement.scrollHeight - this.scrollElement.clientHeight;
+      const maxScroll =
+        this.scrollElement.scrollHeight - this.scrollElement.clientHeight;
       const offset = maxScroll * (percentage / 100);
       this.setScrollPosition(offset, duration);
     },
     onScrollEnd() {
       this.$emit('scrollend');
     },
-    handleScroll() {
+    handleScroll(event) {
+      this.$emit('scroll', event);
       if (this.isScrolling) window.clearTimeout(this.isScrolling);
       this.isScrolling = setTimeout(() => {
         this.onScrollEnd();
       }, 100);
-    }
+    },
   },
   mounted() {
     this.scrollElement = this.$refs.scroll;
@@ -54,7 +56,7 @@ export default {
     } else {
       this.scrollElement.removeEventListener('scrollend', this.onScrollEnd);
     }
-  }
+  },
 };
 </script>
 
@@ -66,7 +68,7 @@ export default {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
-  
+
   &.disable-scroll {
     overflow: hidden !important;
     pointer-events: none;
