@@ -35,7 +35,19 @@ export default {
       this.$emit('scrollend');
     },
     handleScroll(event) {
-      this.$emit('scroll', event);
+      const scrollElement = event.target;
+      const verticalPosition = scrollElement.scrollTop;
+      const verticalPercentage = (verticalPosition / (scrollElement.scrollHeight - scrollElement.clientHeight)) * 100;
+      const horizontalPosition = scrollElement.scrollLeft;
+      const horizontalPercentage = (horizontalPosition / (scrollElement.scrollWidth - scrollElement.clientWidth)) * 100;
+      
+      this.$emit('scroll', {
+        verticalPosition,
+        verticalPercentage,
+        horizontalPosition, 
+        horizontalPercentage
+      });
+      
       if (this.isScrolling) window.clearTimeout(this.isScrolling);
       this.isScrolling = setTimeout(() => {
         this.onScrollEnd();
