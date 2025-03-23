@@ -337,7 +337,6 @@ export function getEventDateRequest(id) {
 // get single event
 
 export function getEventRequest(id) {
-  console.log('GET EVENT');
   return api.get(`${API_URL}/event/${id}`);
 }
 

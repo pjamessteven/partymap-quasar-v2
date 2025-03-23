@@ -58,7 +58,7 @@
         :right="alignRight"
       />
       <div :class="$q.screen.gt.xs ? 'inter semibold' : 'inter semibold'">
-        {{ $route?.query?.locationDescription || ed?.location.name || '...' }}
+        {{ $route?.query?.locationDescription || location || '...' }}
       </div>
     </div>
   </div>
@@ -77,20 +77,16 @@ export default {
     hasOccured() {
       return this.isInPast(this.ed?.end);
     },
+    location() {
+      return this.getGeneralLocationString(this.ed.location);
+    },
   },
   created() {
     // import common methods
     this.relativeHumanTime = common.relativeHumanTime;
-    this.localTime = common.localTime;
-    this.localDate = common.localDate;
-    this.localDay = common.localDay;
-    this.localDateTimeLong = common.localDateTimeLong;
-    this.localDateLong = common.localDateLong;
-    this.localTimeCompact = common.localTimeCompact;
-    this.timeZoneAbbreviention = common.timeZoneAbbreviention;
     this.monthYear = common.monthYear;
     this.isInPast = common.isInPast;
-    this.localDateWithWeekday = common.localDateWithWeekday;
+    this.getGeneralLocationString = common.getGeneralLocationString;
   },
 };
 </script>

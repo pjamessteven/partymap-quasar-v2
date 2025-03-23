@@ -309,7 +309,8 @@
               >
                 <InnerLoading
                   :solid="false"
-                  :fixed="true"
+                  :fixed="false"
+                  style="margin-top: -15vh"
                   v-if="
                     loading &&
                     !route.query?.thumbXsUrl &&
@@ -1472,6 +1473,7 @@ const share = () => {
   }
 };
 
+/*
 defineOptions({
   preFetch: async ({ store, ssrContext, currentRoute }) => {
     const mainStore = useMainStore(store);
@@ -1482,6 +1484,7 @@ defineOptions({
     //}
   },
 });
+*/
 
 const load = async () => {
   loading.value = true;
@@ -1582,6 +1585,7 @@ onBeforeRouteLeave(() => {
 });
 */
 onMounted(() => {
+  console.log('test');
   // called on initial mount
   // and every time it is re-inserted from the cache
   mainStore.sidebarOpacity = 0;

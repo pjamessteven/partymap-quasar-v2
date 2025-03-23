@@ -393,7 +393,7 @@ export default {
         img,
         video {
           border-radius: 18px;
-
+          object-position: left;
           width: 100%;
           filter: none;
         }

@@ -371,27 +371,7 @@ export default {
       } else return '';
     },
     computedLocation() {
-      if (this.event?.location?.locality) {
-        if (this.event.location.locality.region?.long_name) {
-          if (this.event.location.locality.country.short_name === 'US') {
-            return (
-              this.event.location.locality.long_name +
-              ', ' +
-              this.event.location.locality.region.long_name
-            );
-          } else {
-            return (
-              this.event.location.locality.long_name +
-              ', ' +
-              this.event.location.locality.country.long_name
-            );
-          }
-        } else {
-          return this.event?.location?.locality?.long_name;
-        }
-      } else {
-        return this.event?.location?.name;
-      }
+      return this.getGeneralLocationString(this.event.location);
     },
   },
   created() {
@@ -399,10 +379,10 @@ export default {
     this.relativeHumanTime = common.relativeHumanTime;
     this.localDateWithWeekday = common.localDateWithWeekday;
     this.monthYear = common.monthYear;
-    this.timeZoneAbbreviention = common.timeZoneAbbreviention;
     this.simplifiedRecurringPattern = common.simplifiedRecurringPattern;
     this.localDayOfMonth = localDayOfMonth;
     this.localDay = common.localDay;
+    this.getGeneralLocationString = common.getGeneralLocationString;
   },
 };
 </script>
