@@ -184,16 +184,32 @@ export default {
 
     return dayjs.tz(t1, timezone).fromNow();
   },
-  localDateTimeLong: function (t, tz) {
-    var m = dayjs.tz(t, tz);
-    return m.format('dddd') + ', ' + m.format('LLL');
+  localDateTimeLong: function (t, localize) {
+    if (localize) {
+      m = dayjs.utc(t).local();
+    } else {
+      var m = dayjs(t);
+    }
+    let dateString = m.format('dddd') + ', ' + m.format('LLL');
+    if (localize) {
+      dateString += ' [' + dayjs.tz.guess() + ']';
+    }
+    return dateString;
   },
-  localDateTimeShort: function (t, tz) {
-    var m = dayjs.tz(t, tz);
-    return m.format('ddd') + ' ' + m.format('lll');
+  localDateTimeShort: function (t, localize) {
+    if (localize) {
+      m = dayjs.utc(t).local();
+    } else {
+      var m = dayjs(t);
+    }
+    let dateString = m.format('ddd') + ' ' + m.format('lll');
+    if (localize) {
+      dateString += ' [' + dayjs.tz.guess() + ']';
+    }
+    return dateString;
   },
-  isInPast: function (t, tz) {
-    var m = dayjs.tz(t, tz);
+  isInPast: function (t) {
+    let m = dayjs.utc(t).local();
     return m.isBefore(dayjs());
   },
   month: function (t, tz) {

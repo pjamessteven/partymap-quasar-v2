@@ -1,7 +1,19 @@
 <template>
   <div class="browse-page">
     <div class="region-list" v-if="$q.screen.gt.sm">
-      <CustomQScroll style="width: 100%; height: 100%">
+      <CustomQScroll
+        style="width: 100%; height: 100%"
+        :thumb-style="
+          $q.screen.gt.xs
+            ? {
+                bottom: '0px',
+                height: '8px',
+                marginLeft: '16px',
+                borderRadius: '0px',
+              }
+            : {}
+        "
+      >
         <CountryRegionList />
       </CustomQScroll>
     </div>

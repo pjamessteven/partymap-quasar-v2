@@ -5,20 +5,20 @@
       :class="{ reverse: alignRight }"
     >
       <q-icon
-        name="las la-calendar"
+        name="las la-clock"
         size="1.25em"
         :left="!alignRight"
         :right="alignRight"
       />
       <div
         class="flex column"
-        :class="$q.screen.gt.xs ? 'inter bold' : 'inter bold'"
+        :class="$q.screen.gt.xs ? 'inter semibold' : 'inter semibold'"
       >
         <div v-if="!!ed" class="flex wrap q-gutter-sm">
           <span>
             <span v-if="hasOccured">Past event in&nbsp;</span>
             <span v-if="ed?.date_confirmed == true">
-              {{ localDateWithWeekday(ed?.start_naive, ed?.tz) }}
+              {{ relativeHumanTime(ed.start_naive, ed.end_naive, ed.tz) }}
             </span>
             <span v-else-if="!ed?.date_confirmed">
               {{ monthYear(ed?.start_naive, ed?.tz) }}&nbsp;<span
@@ -57,7 +57,7 @@
         :left="!alignRight"
         :right="alignRight"
       />
-      <div :class="$q.screen.gt.xs ? 'inter bold' : 'inter bold'">
+      <div :class="$q.screen.gt.xs ? 'inter semibold' : 'inter semibold'">
         {{ $route?.query?.locationDescription || ed?.location.name || '...' }}
       </div>
     </div>
@@ -75,7 +75,7 @@ export default {
   props: { ed: Object, alignRight: Boolean },
   computed: {
     hasOccured() {
-      return this.isInPast(this.ed?.start_naive, this.ed?.tz);
+      return this.isInPast(this.ed?.end);
     },
   },
   created() {

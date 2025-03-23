@@ -11,10 +11,10 @@
       class="flex row no-wrap grow items-center justify-between"
       v-if="inline && selectedEventDate != null"
     >
-      <div class="flex row items-start no-wrap">
+      <div class="flex row items-center no-wrap">
         <q-icon
           class="t2"
-          name="las la-clock"
+          name="las la-calendar"
           :size="$q.screen.gt.sm ? '2em' : '1.5rem'"
         />
 
@@ -29,20 +29,10 @@
             >
 
             <span v-if="$q.screen.gt.xs">
-              {{
-                localDateTimeLong(
-                  selectedEventDate.start_naive,
-                  selectedEventDate.tz,
-                )
-              }}
+              {{ localDateTimeLong(selectedEventDate.start_naive) }}
             </span>
             <span v-else>
-              {{
-                localDateTimeShort(
-                  selectedEventDate.start_naive,
-                  selectedEventDate.tz,
-                )
-              }}
+              {{ localDateTimeShort(selectedEventDate.start_naive) }}
             </span>
 
             <span class="t4">
@@ -53,6 +43,15 @@
                 )
               }}]
             </span>
+            <q-tooltip
+              :content-class="
+                $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
+              "
+              :offset="[10, 10]"
+              style="font-size: unset !important"
+            >
+              {{ localDateTimeLong(selectedEventDate.start, true) }}
+            </q-tooltip>
           </div>
           <div
             v-if="
@@ -64,19 +63,20 @@
           >
             <span>{{ $t('event_dates.ends') }}&nbsp;</span>
             <span v-if="$q.screen.gt.xs">{{
-              localDateTimeLong(
-                selectedEventDate.end_naive,
-                selectedEventDate.tz,
-              )
+              localDateTimeLong(selectedEventDate.end_naive)
             }}</span>
             <span v-else
-              >{{
-                localDateTimeShort(
-                  selectedEventDate.end_naive,
-                  selectedEventDate.tz,
-                )
-              }}
+              >{{ localDateTimeShort(selectedEventDate.end_naive) }}
             </span>
+            <q-tooltip
+              :content-class="
+                $q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'
+              "
+              :offset="[10, 10]"
+              style="font-size: unset !important"
+            >
+              {{ localDateTimeLong(selectedEventDate.end, true) }}
+            </q-tooltip>
           </div>
         </div>
         <div
@@ -259,10 +259,7 @@ export default {
       'selectedEventDateIndex',
     ]),
     hasOccured() {
-      return this.isInPast(
-        this.selectedEventDate?.start_naive,
-        this.selectedEventDate.tz,
-      );
+      return this.isInPast(this.selectedEventDate?.end);
     },
     calendarSelectedEventDateRange() {
       // THIS ASSUMES THAT THE INPUT IS A NAIVE DATETIME STRING
@@ -380,6 +377,7 @@ export default {
     this.delayedMoveToCurrentDate();
   },
   created() {
+    this.dayjs = dayjs;
     this.relativeHumanTime = common.relativeHumanTime;
     this.localDateTimeLong = common.localDateTimeLong;
     this.localDateTimeShort = common.localDateTimeShort;

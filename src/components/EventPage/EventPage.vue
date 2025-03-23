@@ -2029,9 +2029,10 @@ a {
       border-color: white !important;
     }
 
-    // -webkit-overflow-scrolling: touch; // WOW THIS ACTUALLY HELPS ON IOS
-
+    -webkit-overflow-scrolling: touch; // WOW THIS ACTUALLY HELPS ON IOS
+    pointer-events: all;
     &.disable-scroll {
+      pointer-events: none;
       :deep(.scroll) {
         overflow: hidden !important;
       }
@@ -2280,7 +2281,7 @@ a {
       overflow: hidden !important;
       .q-btn {
         width: 100%;
-        font-size: 1em;
+        // font-size: 0.9em !important;
         padding: 10px 18px !important;
         border-radius: 8px !important;
         border: none;
@@ -2290,7 +2291,7 @@ a {
         }
         :deep(.q-btn__content) {
           justify-content: space-between;
-          font-size: 1rem;
+          //font-size: 1rem;
         }
       }
     }

@@ -79,7 +79,6 @@
         class="main-layout-router event-router"
         v-bind:class="{
           'mobile-map-view-router': $q.screen.lt.sm,
-          'event-router-ios': $q.platform.is.ios,
           'peek-map': peekMap,
         }"
       >
@@ -498,15 +497,8 @@ export default {
     }
     .event-router {
       z-index: 4000 !important;
+
       pointer-events: none;
-      &.event-router-ios {
-        //pointer-events;
-        touch-action: all;
-        pointer-events: all;
-        &.peek-map {
-          pointer-events: none;
-        }
-      }
     }
 
     .mobile-map-view-router {

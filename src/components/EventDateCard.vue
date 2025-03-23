@@ -373,11 +373,19 @@ export default {
     computedLocation() {
       if (this.event?.location?.locality) {
         if (this.event.location.locality.region?.long_name) {
-          return (
-            this.event.location.locality.long_name +
-            ', ' +
-            this.event.location.locality.region.long_name
-          );
+          if (this.event.location.locality.country.short_name === 'US') {
+            return (
+              this.event.location.locality.long_name +
+              ', ' +
+              this.event.location.locality.region.long_name
+            );
+          } else {
+            return (
+              this.event.location.locality.long_name +
+              ', ' +
+              this.event.location.locality.country.long_name
+            );
+          }
         } else {
           return this.event?.location?.locality?.long_name;
         }

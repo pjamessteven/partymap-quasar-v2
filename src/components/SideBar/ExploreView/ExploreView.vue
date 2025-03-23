@@ -58,7 +58,7 @@
                   height: '8px',
                   right: '0px',
                   borderRadius: '0px',
-                  width: '12px',
+                  width: '10px',
                 }
               : {
                   marginTop: '52px',

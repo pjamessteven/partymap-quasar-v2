@@ -10,7 +10,7 @@
     }"
     @click="editing || showMoreFields ? (showEditDialog = true) : expand()"
   >
-    <div class="flex row grow no-wrap">
+    <div class="flex row items-center grow no-wrap">
       <q-icon
         :size="$q.screen.gt.sm ? '2em' : '1.5rem'"
         class="t2"

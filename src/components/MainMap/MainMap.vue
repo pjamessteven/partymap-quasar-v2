@@ -471,16 +471,6 @@ const movestart = (e: any) => {
       topTagsInArea.value = [];
       topArtistsInArea.value = [];
     }
-    if (!peekMap.value && !blockPeekMap.value) {
-      setTimeout(() => {
-        if (
-          delayedRouteName.value == 'EventPage' &&
-          $route.name === 'EventPage'
-        ) {
-          peekMap.value = true;
-        }
-      }, 300);
-    }
   }
 };
 

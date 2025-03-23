@@ -165,7 +165,7 @@
       <div v-if="mode === 'delete'">
         {{ $t('event_dates.delete_are_you_sure') }}
         <p />
-        <b>{{ localDateTimeLong(ed.start, ed.tz) }}</b>
+        <b>{{ localDateTimeLong(ed.start_naive) }}</b>
 
         <q-card-actions align="right" class="q-mt-md">
           <q-btn flat color="primary" label="Cancel" v-close-popup />

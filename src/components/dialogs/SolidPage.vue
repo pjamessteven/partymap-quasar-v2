@@ -10,7 +10,7 @@
         :thumb-style="{
           borderRadius: '0px',
           right: $q.screen.gt.xs ? '0px' : '-16px',
-          width: $q.screen.gt.xs ? '12px' : '4px',
+          width: $q.screen.gt.xs ? '10px' : '4px',
         }"
         class="solid-page-scroll-area flex grow"
         stye="width: 100%;"
