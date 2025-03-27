@@ -63,6 +63,8 @@
             >
             </q-route-tab>
           </TypographyTabs>
+          <NearbyViewSimple />
+          <FeaturedEvents />
           <router-view v-slot="{ Component }">
             <keep-alive :max="1">
               <component
@@ -87,6 +89,8 @@ import InnerLoading from 'src/components/InnerLoading.vue';
 import CountryRegionList from './CountryRegionList.vue';
 import CustomQScroll from '../CustomQScroll.vue';
 import TypographyTabs from '../TypographyTabs.vue';
+import NearbyViewSimple from '../SideBar/NearbyView/NearbyViewSimple.vue';
+import FeaturedEvents from './FeaturedEvents.vue';
 
 export default {
   name: 'BrowsePage',
@@ -96,6 +100,8 @@ export default {
     CountryRegionList,
     CustomQScroll,
     TypographyTabs,
+    NearbyViewSimple,
+    FeaturedEvents,
   },
   props: {
     username: {

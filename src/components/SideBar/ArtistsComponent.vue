@@ -6,17 +6,6 @@
       @scroll="onScrollMainContent"
       :class="`artist-scroll-area size-${size}`"
       v-if="artists && artists.length > 0"
-      :thumb-style="
-        $q.screen.gt.xs
-          ? {
-              borderRadius: '0px',
-              bottom: '8px',
-              height: '4px',
-              paddingLeft: '16px',
-              marginLeft: '24px',
-            }
-          : { bottom: '0px', height: '0px' }
-      "
       ><div>
         <div
           class="flex row no-wrap q-pr-xl"
@@ -118,7 +107,7 @@ function onScrollMainContent(info: {
   width: 100%;
   overflow: hidden;
   .artist-scroll-area {
-    height: 196px;
+    height: 208px;
     width: 100%;
     /*
     mask-image: linear-gradient(

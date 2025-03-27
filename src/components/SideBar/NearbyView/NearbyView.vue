@@ -327,16 +327,6 @@
                   horizontal
                   class="user-event-scroll-area"
                   style="width: 100%"
-                  :thumb-style="
-                    $q.screen.gt.sm
-                      ? {
-                          bottom: '0px',
-                          height: '4px',
-                          borderRadius: '0px',
-                          marginLeft: '24px',
-                        }
-                      : { bottom: '0px', height: '0px' }
-                  "
                 >
                   <div
                     class="flex row no-wrap q-gutter-md"
@@ -352,9 +342,7 @@
                 </CustomQScroll>
               </div>
               <div
-                :class="
-                  $q.screen.lt.md ? 'q-px-md ' : 'q-px-lg q-mt-sm q-mb-sm'
-                "
+                :class="$q.screen.lt.md ? 'q-px-md ' : 'q-px-lg q-mt- q-mb-sm'"
               >
                 <q-separator />
               </div>
@@ -1256,7 +1244,7 @@ export default {
 
   .user-event-scroll-area {
     mask-image: unset;
-    height: 280px;
+    height: 294px;
     :deep(.ed-poster) {
       max-width: 150px;
     }

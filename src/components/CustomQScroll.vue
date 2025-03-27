@@ -4,7 +4,11 @@
     ref="scroll"
     v-bind="{ ...$attrs, ...$props }"
     :visible="$q.platform.is.mobile ? false : undefined"
-    :class="disableScroll && 'disable-scroll'"
+    :class="{
+      'disable-scroll': disableScroll,
+      vertical,
+      horizontal,
+    }"
     delay="0"
     @click.stop
   >
@@ -13,8 +17,14 @@
 </template>
 
 <script>
+import { JsonProvider } from 'leaflet-geosearch';
+
 export default {
-  props: ['disableScroll'],
+  props: {
+    disableScroll: Boolean,
+    vertical: Boolean,
+    horizontal: Boolean,
+  },
   data() {
     return { isScrolling: null };
   },
@@ -97,21 +107,48 @@ export default {
 }
 
 .custom-q-scroll {
+  /*
   :deep(.q-scrollarea__bar) {
     pointer-events: all;
   }
   :deep(.q-scrollarea__thumb) {
-    background: rgba(0, 0, 0, 0) !important; /* Dark translucent thumb */
+    display: none;
     backdrop-filter: blur(4px) contrast(0.8) invert(50%);
     -webkit-backdrop-filter: blur(4px) contrast(1.2) invert(50%);
     opacity: 1;
+    margin-right: 2px;
+    width: 8px !important;
+    border-radius: 20px !important;
+    overflow: hidden;
     &:hover {
       backdrop-filter: blur(4px) contrast(1.2) invert(60%);
       -webkit-backdrop-filter: blur(4px) contrast(1.2) invert(50%);
     }
   }
+  */
+  :deep(.q-scrollarea__bar) {
+    display: none;
+  }
+  :deep(.q-scrollarea__thumb) {
+    display: none;
+  }
+  :deep(.q-scrollarea__container) {
+    scrollbar-width: auto !important;
+  }
+  &.horizontal {
+    :deep(.q-scrollarea__container) {
+      overflow-y: hidden !important;
+    }
+  }
+  &.vertical {
+    :deep(.q-scrollarea__container) {
+      overflow-x: hidden;
+    }
+  }
+
   :deep(.scroll) {
     will-change: overflow;
+    pointer-events: all;
     @supports (-webkit-overflow-scrolling: touch) {
       overscroll-behavior: none;
       -webkit-overflow-scrolling: touch;
@@ -124,6 +161,7 @@ export default {
     }
   }
 }
+
 @media only screen and (max-width: 599px) {
   .custom-q-scroll {
     :deep(.q-scrollarea__thumb) {
