@@ -319,10 +319,6 @@ export default {
     CustomQScroll,
     motion, // Register motion component
   },
-  components: {
-    Tag,
-    CustomQScroll,
-  },
   props: {
     event: Object,
     isPopup: Boolean,
