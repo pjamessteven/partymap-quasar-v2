@@ -42,7 +42,8 @@
           style="width: 100%"
         >
           <!-- mouseover.stop is to fix a stupid ios bug relating to q-scroll-area having a mouseover event and causing the user to have to double click on items-->
-          <div
+          <motion.div
+            :layout-id="'event-image-' + event.event_id + '-' + imgThumbUrl"
             class="image-container flex justify-center items-center shadow-2xl q-mr-md"
             v-if="imgThumbUrl"
           >
