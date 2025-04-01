@@ -317,7 +317,7 @@ export default {
   components: {
     Tag,
     CustomQScroll,
-    motion, // Register motion component
+    // motion removed from here
   },
   props: {
     event: Object,
@@ -386,6 +386,12 @@ export default {
     this.localDayOfMonth = localDayOfMonth;
     this.localDay = common.localDay;
     this.getGeneralLocationString = common.getGeneralLocationString;
+  },
+  setup() {
+    // Expose motion to the template context
+    return {
+      motion,
+    };
   },
 };
 </script>
