@@ -103,7 +103,21 @@
               />
 
               <div class="header">
+                <motion.div
+                  :layout-id="
+                    'event-image-' + props.id + '-' + route.query?.thumbXsUrl
+                  "
+                  v-if="route.query?.thumbXsUrl"
+                  class="featured-media-motion-wrapper"
+                >
+                  <FeaturedMediaBackground
+                    :thumbXsUrl="route.query?.thumbXsUrl as any as string"
+                    class="featured-media"
+                    :editing="editing"
+                  />
+                </motion.div>
                 <FeaturedMediaBackground
+                  v-else
                   :thumbXsUrl="route.query?.thumbXsUrl as any as string"
                   class="featured-media"
                   :editing="editing"
@@ -1203,6 +1217,7 @@ import { useI18n } from 'vue-i18n';
 import { useMeta } from 'quasar';
 import DragWrapper from '../DragWrapper.vue';
 import { nextTick } from 'process';
+import { motion } from 'motion-v';
 
 /*
   meta() {

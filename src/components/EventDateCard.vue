@@ -62,7 +62,7 @@
                 style="z-index: 3"
               />
             </transition>
-          </div>
+          </motion.div>
           <div class="flex column grow" style="width: 100%; overflow: hidden">
             <div
               class="ed-card-header flex row justify-between items-start no-wrap ellipsis"
@@ -309,9 +309,15 @@ import Tag from 'src/components/Tag.vue';
 import { mapWritableState } from 'pinia';
 import { useMapStore } from 'src/stores/map';
 import CustomQScroll from 'components/CustomQScroll.vue';
+import { motion } from 'motion-v';
 //import ColorThief from 'colorthief/dist/color-thief.mjs';
 
 export default {
+  components: {
+    Tag,
+    CustomQScroll,
+    motion, // Register motion component
+  },
   components: {
     Tag,
     CustomQScroll,
