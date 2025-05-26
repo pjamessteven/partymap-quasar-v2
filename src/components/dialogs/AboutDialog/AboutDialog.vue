@@ -89,6 +89,12 @@
           @click="showTermsAndConditionsDialog = true"
           >{{ $t('about.read_terms_and_conditions') }}</a
         >
+        &nbsp;
+        <a
+          class="link-hover underline q-ml-sm"
+          @click="showMetricsDialog = true"
+          >Site Metrics</a
+        >
       </div>
       <q-card-section
         class="flex column items-center justify-center q-pb-none q-mt-lg"
@@ -121,6 +127,13 @@
       <TermsAndConditionsDialog />
     </q-dialog>
     <q-dialog
+      v-model="showMetricsDialog"
+      transition-show="jump-up"
+      transition-hide="jump-down"
+    >
+      <MetricsDialog />
+    </q-dialog>
+    <q-dialog
       v-model="showRigsOut"
       transition-show="jump-up"
       transition-hide="jump-down"
@@ -147,6 +160,7 @@
 import TermsAndConditionsDialog from './TermsAndConditionsDialog.vue';
 import PrivacyPolicyDialog from './PrivacyPolicyDialog.vue';
 import FeedbackDialog from 'components/dialogs/FeedbackDialog.vue';
+import MetricsDialog from './MetricsDialog.vue';
 
 export default {
   name: 'AboutDialog',
@@ -154,6 +168,7 @@ export default {
     TermsAndConditionsDialog,
     PrivacyPolicyDialog,
     FeedbackDialog,
+    MetricsDialog,
   },
   data() {
     return {
@@ -162,6 +177,7 @@ export default {
       showTermsAndConditionsDialog: false,
       showFeedbackDialog: false,
       showRigsOut: false,
+      showMetricsDialog: false,
     };
   },
   methods: {},

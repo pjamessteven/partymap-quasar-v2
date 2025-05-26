@@ -657,11 +657,27 @@ export function getCountryRegionsRequest(country_id) {
 
 export function getSearchSuggestionsRequest(params) {
   return api.get(`${API_URL}/search/`, {
-    params: params,
+    params,
   });
 }
 // ip lookup
 
 export function getIpInfoRequest() {
   return api.get(`${API_URL}/services/ip_lookup`);
+}
+
+// metrics
+
+// ip lookup
+
+export function getUrlMetrics(params) {
+  return api.get(`${API_URL}/metrics/urls`, {
+    params,
+  });
+}
+
+export function getCountryMetrics(params) {
+  return api.get(`${API_URL}/metrics/countries`, {
+    params,
+  });
 }
